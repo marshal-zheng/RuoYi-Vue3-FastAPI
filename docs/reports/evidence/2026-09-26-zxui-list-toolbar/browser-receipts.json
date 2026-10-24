@@ -1,0 +1,679 @@
+[
+  {
+    "stage": "before",
+    "page": "user",
+    "filters": [
+      {
+        "client": 536,
+        "scroll": 1064,
+        "width": 536,
+        "wrap": "nowrap"
+      }
+    ],
+    "toolbarScroll": 1064,
+    "toolbarWidth": 536,
+    "viewport": 1024
+  },
+  {
+    "page": "user",
+    "stage": "after",
+    "gap": "14px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 176,
+            "width": 240
+          },
+          {
+            "top": 176,
+            "width": 240
+          },
+          {
+            "top": 220,
+            "width": 240
+          },
+          {
+            "top": 266,
+            "width": 308
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 536,
+        "width": 536,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 310,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "army-pine",
+    "toolbarScroll": 536,
+    "toolbarWidth": 536,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1024
+  },
+  {
+    "page": "user-wide-search",
+    "stage": "after",
+    "gap": "14px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 177,
+            "width": 240
+          },
+          {
+            "top": 177,
+            "width": 240
+          },
+          {
+            "top": 176,
+            "width": 240
+          },
+          {
+            "top": 222,
+            "width": 308
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 966,
+        "width": 966,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 176,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "army-pine",
+    "toolbarScroll": 1240,
+    "toolbarWidth": 1240,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1728
+  },
+  {
+    "page": "role-wide",
+    "stage": "after",
+    "gap": "14px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          }
+        ],
+        "class": "zx-list-toolbar__actions",
+        "scroll": 362,
+        "width": 362,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 138,
+            "width": 240
+          },
+          {
+            "top": 137,
+            "width": 160
+          },
+          {
+            "top": 138,
+            "width": 240
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 801,
+        "width": 801,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 137,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "army-pine",
+    "toolbarScroll": 1451,
+    "toolbarWidth": 1451,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1728
+  },
+  {
+    "page": "role-768",
+    "stage": "after",
+    "gap": "14px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          }
+        ],
+        "class": "zx-list-toolbar__actions",
+        "scroll": 362,
+        "width": 362,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 184,
+            "width": 240
+          },
+          {
+            "top": 183,
+            "width": 160
+          },
+          {
+            "top": 229,
+            "width": 240
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 417,
+        "width": 417,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 183,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "army-pine",
+    "toolbarScroll": 691,
+    "toolbarWidth": 691,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 768
+  },
+  {
+    "page": "role-390",
+    "stage": "after",
+    "gap": "14px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 137,
+            "width": 80
+          },
+          {
+            "top": 183,
+            "width": 80
+          }
+        ],
+        "class": "zx-list-toolbar__actions",
+        "scroll": 313,
+        "width": 313,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 229,
+            "width": 240
+          },
+          {
+            "top": 273,
+            "width": 160
+          },
+          {
+            "top": 319,
+            "width": 240
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 313,
+        "width": 313,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 363,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "army-pine",
+    "toolbarScroll": 313,
+    "toolbarWidth": 313,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 390
+  },
+  {
+    "page": "role-default-light",
+    "stage": "after",
+    "gap": "16px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 80
+          },
+          {
+            "top": 141,
+            "width": 80
+          },
+          {
+            "top": 141,
+            "width": 80
+          },
+          {
+            "top": 141,
+            "width": 80
+          }
+        ],
+        "class": "zx-list-toolbar__actions",
+        "scroll": 368,
+        "width": 368,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 240
+          },
+          {
+            "top": 141,
+            "width": 160
+          },
+          {
+            "top": 141,
+            "width": 240
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 932,
+        "width": 932,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "default",
+    "toolbarScroll": 1592,
+    "toolbarWidth": 1592,
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1728
+  },
+  {
+    "check": "default-light-colors",
+    "buttonFill": "color(srgb 0.25 0.55 0.98)",
+    "buttonText": "color(srgb 0 0 0)",
+    "text": "color(srgb 0.12 0.14 0.18)",
+    "themeText": "color(srgb 0.12 0.14 0.18 / 1)"
+  },
+  {
+    "page": "role-tech-blue-dark",
+    "stage": "after",
+    "gap": "16px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 80
+          },
+          {
+            "top": 141,
+            "width": 80
+          },
+          {
+            "top": 141,
+            "width": 80
+          },
+          {
+            "top": 141,
+            "width": 80
+          }
+        ],
+        "class": "zx-list-toolbar__actions",
+        "scroll": 368,
+        "width": 368,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 240
+          },
+          {
+            "top": 141,
+            "width": 160
+          },
+          {
+            "top": 141,
+            "width": 240
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 932,
+        "width": 932,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "tech-blue",
+    "toolbarScroll": 1592,
+    "toolbarWidth": 1592,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1728
+  },
+  {
+    "page": "dept-wide",
+    "stage": "after",
+    "gap": "16px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 60
+          },
+          {
+            "top": 141,
+            "width": 93
+          }
+        ],
+        "class": "zx-list-toolbar__actions",
+        "scroll": 169,
+        "width": 169,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 200
+          },
+          {
+            "top": 141,
+            "width": 200
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 1131,
+        "width": 1131,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "tech-blue",
+    "toolbarScroll": 1592,
+    "toolbarWidth": 1592,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1728
+  },
+  {
+    "page": "dept-390",
+    "stage": "after",
+    "gap": "16px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 141,
+            "width": 60
+          },
+          {
+            "top": 141,
+            "width": 93
+          }
+        ],
+        "class": "zx-list-toolbar__actions",
+        "scroll": 169,
+        "width": 169,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 189,
+            "width": 200
+          },
+          {
+            "top": 237,
+            "width": 200
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 308,
+        "width": 308,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 285,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "tech-blue",
+    "toolbarScroll": 308,
+    "toolbarWidth": 308,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 390
+  },
+  {
+    "page": "user-final-1024",
+    "stage": "after",
+    "gap": "14px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 176,
+            "width": 240
+          },
+          {
+            "top": 176,
+            "width": 240
+          },
+          {
+            "top": 220,
+            "width": 240
+          },
+          {
+            "top": 266,
+            "width": 308
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 536,
+        "width": 536,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 310,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "army-pine",
+    "toolbarScroll": 536,
+    "toolbarWidth": 536,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1024
+  },
+  {
+    "page": "user-final-wide",
+    "stage": "after",
+    "gap": "14px",
+    "groups": [
+      {
+        "children": [
+          {
+            "top": 177,
+            "width": 240
+          },
+          {
+            "top": 177,
+            "width": 240
+          },
+          {
+            "top": 176,
+            "width": 240
+          },
+          {
+            "top": 222,
+            "width": 308
+          }
+        ],
+        "class": "zx-list-toolbar__filters",
+        "scroll": 966,
+        "width": 966,
+        "wrap": "wrap"
+      },
+      {
+        "children": [
+          {
+            "top": 176,
+            "width": 260
+          }
+        ],
+        "class": "zx-list-toolbar__search",
+        "scroll": 260,
+        "width": 260,
+        "wrap": "wrap"
+      }
+    ],
+    "theme": "army-pine",
+    "toolbarScroll": 1240,
+    "toolbarWidth": 1240,
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "viewport": 1728
+  },
+  {
+    "check": "user-search",
+    "containsAdmin": true,
+    "query": "admin",
+    "total": "共 1 条"
+  },
+  {
+    "check": "user-search-reset",
+    "query": "",
+    "total": "共 2 条"
+  }
+]

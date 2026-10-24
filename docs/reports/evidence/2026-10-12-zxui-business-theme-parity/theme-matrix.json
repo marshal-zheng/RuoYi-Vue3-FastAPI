@@ -1,0 +1,308 @@
+[
+  {
+    "id": "default",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.93003 0.933104 0.939252)",
+      "expected": "color(srgb 0.93003 0.933104 0.939252)",
+      "text": "color(srgb 0.12 0.14 0.18)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 1 1 1)",
+      "expected": "color(srgb 1 1 1)",
+      "text": "color(srgb 0.12 0.14 0.18)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "default",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.15438 0.168893 0.197219)",
+      "expected": "color(srgb 0.15438 0.168893 0.197219)",
+      "text": "color(srgb 0.93 0.95 0.98)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.08 0.09 0.115)",
+      "expected": "color(srgb 0.08 0.09 0.115)",
+      "text": "color(srgb 0.93 0.95 0.98)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "defense-green",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.922301 0.939008 0.902227)",
+      "expected": "color(srgb 0.922301 0.939008 0.902227)",
+      "text": "color(srgb 0.1166 0.127 0.1019)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9825 0.9878 0.9755)",
+      "expected": "color(srgb 0.9825 0.9878 0.9755)",
+      "text": "color(srgb 0.1166 0.127 0.1019)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "defense-green",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.187458 0.231384 0.165245)",
+      "expected": "color(srgb 0.187458 0.231384 0.165245)",
+      "text": "color(srgb 0.9234 0.9617 0.9109)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.155 0.19 0.14)",
+      "expected": "color(srgb 0.155 0.19 0.14)",
+      "text": "color(srgb 0.9234 0.9617 0.9109)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "army-pine",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.921715 0.935678 0.923171)",
+      "expected": "color(srgb 0.921715 0.935678 0.923171)",
+      "text": "color(srgb 0.1179 0.125 0.1143)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9863 0.9898 0.9845)",
+      "expected": "color(srgb 0.9863 0.9898 0.9845)",
+      "text": "color(srgb 0.1179 0.125 0.1143)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "army-pine",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.169795 0.217534 0.192595)",
+      "expected": "color(srgb 0.169795 0.217534 0.192595)",
+      "text": "color(srgb 0.9181 0.9591 0.9446)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.14 0.18 0.16)",
+      "expected": "color(srgb 0.14 0.18 0.16)",
+      "text": "color(srgb 0.9181 0.9591 0.9446)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "air-gray",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.921631 0.931451 0.943938)",
+      "expected": "color(srgb 0.921631 0.931451 0.943938)",
+      "text": "color(srgb 0.1189 0.1224 0.1295)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9904 0.9922 0.9957)",
+      "expected": "color(srgb 0.9904 0.9922 0.9957)",
+      "text": "color(srgb 0.1189 0.1224 0.1295)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "air-gray",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.152482 0.202634 0.279012)",
+      "expected": "color(srgb 0.152482 0.202634 0.279012)",
+      "text": "color(srgb 0.9185 0.9504 1)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.13 0.17 0.24)",
+      "expected": "color(srgb 0.13 0.17 0.24)",
+      "text": "color(srgb 0.9185 0.9504 1)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "pap-olive",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.925358 0.926114 0.898434)",
+      "expected": "color(srgb 0.925358 0.926114 0.898434)",
+      "text": "color(srgb 0.1272 0.1234 0.0981)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9879 0.9861 0.9738)",
+      "expected": "color(srgb 0.9879 0.9861 0.9738)",
+      "text": "color(srgb 0.1272 0.1234 0.0981)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "pap-olive",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.182208 0.204308 0.143456)",
+      "expected": "color(srgb 0.182208 0.204308 0.143456)",
+      "text": "color(srgb 0.9312 0.9597 0.9048)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.15 0.17 0.12)",
+      "expected": "color(srgb 0.15 0.17 0.12)",
+      "text": "color(srgb 0.9312 0.9597 0.9048)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "rocket-moss",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.920429 0.920598 0.887411)",
+      "expected": "color(srgb 0.920429 0.920598 0.887411)",
+      "text": "color(srgb 0.1334 0.1222 0.0856)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9872 0.9819 0.9643)",
+      "expected": "color(srgb 0.9872 0.9819 0.9643)",
+      "text": "color(srgb 0.1334 0.1222 0.0856)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "rocket-moss",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.140382 0.201234 0.161782)",
+      "expected": "color(srgb 0.140382 0.201234 0.161782)",
+      "text": "color(srgb 0.9091 0.9638 0.9345)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.12 0.17 0.14)",
+      "expected": "color(srgb 0.12 0.17 0.14)",
+      "text": "color(srgb 0.9091 0.9638 0.9345)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "factory-blue",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.908153 0.929759 0.952046)",
+      "expected": "color(srgb 0.908153 0.929759 0.952046)",
+      "text": "color(srgb 0.1135 0.1242 0.1313)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9853 0.9905 0.9941)",
+      "expected": "color(srgb 0.9853 0.9905 0.9941)",
+      "text": "color(srgb 0.1135 0.1242 0.1313)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "factory-blue",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.129393 0.187519 0.263095)",
+      "expected": "color(srgb 0.129393 0.187519 0.263095)",
+      "text": "color(srgb 0.9152 0.9517 1)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.115 0.16 0.22)",
+      "expected": "color(srgb 0.115 0.16 0.22)",
+      "text": "color(srgb 0.9152 0.9517 1)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "tech-blue",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.926173 0.968667 0.9972)",
+      "expected": "color(srgb 0.926173 0.968667 0.9972)",
+      "text": "color(srgb 0.1057 0.123 0.1546)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9919 1 1)",
+      "expected": "color(srgb 0.9919 1 1)",
+      "text": "color(srgb 0.1057 0.123 0.1546)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "tech-blue",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.068278 0.192582 0.434364)",
+      "expected": "color(srgb 0.068278 0.192582 0.434364)",
+      "text": "color(srgb 0.9217 0.9491 1)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.05 0.14 0.36)",
+      "expected": "color(srgb 0.05 0.14 0.36)",
+      "text": "color(srgb 0.9217 0.9491 1)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "industrial-blue",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.868686 0.922949 0.993827)",
+      "expected": "color(srgb 0.868686 0.922949 0.993827)",
+      "text": "color(srgb 0.1008 0.1236 0.1604)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.9417 0.9594 0.9878)",
+      "expected": "color(srgb 0.9417 0.9594 0.9878)",
+      "text": "color(srgb 0.1008 0.1236 0.1604)",
+      "matches": true
+    },
+    "searchInside": true
+  },
+  {
+    "id": "industrial-blue",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "header": {
+      "background": "color(srgb 0.0870243 0.185662 0.318528)",
+      "expected": "color(srgb 0.0870243 0.185662 0.318528)",
+      "text": "color(srgb 0.9165 0.9512 1)",
+      "matches": true
+    },
+    "sidebar": {
+      "background": "color(srgb 0.062 0.1389 0.2519)",
+      "expected": "color(srgb 0.062 0.1389 0.2519)",
+      "text": "color(srgb 0.9165 0.9512 1)",
+      "matches": true
+    },
+    "searchInside": true
+  }
+]

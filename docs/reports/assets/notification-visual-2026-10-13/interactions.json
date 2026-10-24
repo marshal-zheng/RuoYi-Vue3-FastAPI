@@ -1,0 +1,656 @@
+{
+  "busy": "true",
+  "disabled": true,
+  "action": {
+    "clicks": 1,
+    "cards": 0,
+    "hosts": 4
+  },
+  "slot": {
+    "clicks": 2,
+    "cards": 0,
+    "hosts": 2
+  },
+  "keyboard": [
+    {
+      "text": "部分完成共 10 项，成功 8 项，失败 2 项",
+      "bottom": 16
+    }
+  ],
+  "close": 0,
+  "failure": {
+    "attempts": 1,
+    "errors": [
+      "Error: QA controlled action failure"
+    ],
+    "hosts": 1,
+    "disabled": false
+  },
+  "recovery": {
+    "attempts": 2,
+    "closed": 1,
+    "hosts": 0
+  },
+  "hover": {
+    "hosts": 1,
+    "closed": 0
+  },
+  "timer": {
+    "hosts": 0,
+    "closed": 1
+  },
+  "corners": [
+    {
+      "text": "top-left\n原生定位保留",
+      "left": 16,
+      "right": 1064,
+      "top": 40,
+      "bottom": 876
+    },
+    {
+      "text": "top-right\n原生定位保留",
+      "left": 1064,
+      "right": 16,
+      "top": 40,
+      "bottom": 876
+    },
+    {
+      "text": "bottom-left\n原生定位保留",
+      "left": 16,
+      "right": 1064,
+      "top": 876,
+      "bottom": 40
+    },
+    {
+      "text": "bottom-right\n原生定位保留",
+      "left": 1064,
+      "right": 16,
+      "top": 876,
+      "bottom": 40
+    }
+  ],
+  "mobile": {
+    "viewport": [
+      375,
+      667
+    ],
+    "rect": {
+      "x": 16,
+      "y": 16,
+      "width": 343,
+      "height": 635,
+      "top": 16,
+      "right": 359,
+      "bottom": 651,
+      "left": 16
+    },
+    "body": [
+      555,
+      840,
+      279,
+      279
+    ],
+    "close": {
+      "x": 298,
+      "y": 32,
+      "width": 44,
+      "height": 44,
+      "top": 32,
+      "right": 342,
+      "bottom": 76,
+      "left": 298
+    },
+    "action": {
+      "x": 354,
+      "y": 88,
+      "width": 74,
+      "height": 44,
+      "top": 88,
+      "right": 428,
+      "bottom": 132,
+      "left": 354
+    },
+    "fit": true,
+    "pointer": true
+  },
+  "mobileAfter": {
+    "rect": {
+      "x": 16,
+      "y": 16,
+      "width": 343,
+      "height": 635,
+      "top": 16,
+      "right": 359,
+      "bottom": 651,
+      "left": 16
+    },
+    "body": [
+      503,
+      840,
+      279,
+      279
+    ],
+    "close": {
+      "x": 298,
+      "y": 32,
+      "width": 44,
+      "height": 44,
+      "top": 32,
+      "right": 342,
+      "bottom": 76,
+      "left": 298
+    },
+    "action": {
+      "x": 268,
+      "y": 591,
+      "width": 74,
+      "height": 44,
+      "top": 591,
+      "right": 342,
+      "bottom": 635,
+      "left": 268
+    },
+    "fit": true
+  },
+  "mobileScroll": {
+    "scrollTop": 337,
+    "actionBottom": 635
+  },
+  "mobileAction": {
+    "clicked": true,
+    "hosts": 0
+  },
+  "contentVariants": [
+    {
+      "text": "函数标题\nVNode 正文",
+      "role": "status",
+      "width": 360,
+      "close": "关闭通知",
+      "iconVisible": true,
+      "z": "2034"
+    },
+    {
+      "text": "仅标题",
+      "role": "status",
+      "width": 360,
+      "close": "关闭通知",
+      "iconVisible": false,
+      "z": "2036"
+    },
+    {
+      "text": "不传标题的正文",
+      "role": "status",
+      "width": 360,
+      "close": "关闭通知",
+      "iconVisible": false,
+      "z": "2038"
+    },
+    {
+      "text": "标题 Slot 优先\n正文 Slot 优先",
+      "role": "alert",
+      "width": 400,
+      "close": "结束通知",
+      "iconVisible": true,
+      "z": "2200"
+    }
+  ],
+  "template": "模板标题 Slot\n模板正文 Slot\n完成",
+  "templateClosed": true,
+  "presenter": [
+    {
+      "text": "已受理\n请求已受理，可稍后查看进度",
+      "theme": "rocket-moss",
+      "descriptionHeight": 24,
+      "whiteSpace": "pre-line"
+    },
+    {
+      "text": "部分完成\n共 10 项，成功 8 项，失败 2 项",
+      "theme": "rocket-moss",
+      "descriptionHeight": 24,
+      "whiteSpace": "pre-line"
+    },
+    {
+      "text": "请求过于频繁\n请稍后再试\n请在 30 秒后重试\nRequest ID: req-qa-123\nTrace ID: trace-qa-456",
+      "theme": "rocket-moss",
+      "descriptionHeight": 96,
+      "whiteSpace": "pre-line"
+    }
+  ],
+  "final": {
+    "dark": {
+      "theme": "rocket-moss",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "items": [
+        {
+          "height": 80,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            41,
+            52,
+            40,
+            255
+          ],
+          "title": [
+            232,
+            246,
+            238,
+            255
+          ],
+          "body": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "icon": [
+            194,
+            227,
+            201,
+            255
+          ],
+          "close": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "status",
+          "closeLabel": "关闭通知"
+        },
+        {
+          "height": 80,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            41,
+            52,
+            40,
+            255
+          ],
+          "title": [
+            232,
+            246,
+            238,
+            255
+          ],
+          "body": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "icon": [
+            230,
+            223,
+            183,
+            255
+          ],
+          "close": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "alert",
+          "closeLabel": "关闭通知"
+        },
+        {
+          "height": 114,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            41,
+            52,
+            40,
+            255
+          ],
+          "title": [
+            232,
+            246,
+            238,
+            255
+          ],
+          "body": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "icon": [
+            237,
+            204,
+            195,
+            255
+          ],
+          "close": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "alert",
+          "closeLabel": "关闭通知"
+        },
+        {
+          "height": 138,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            41,
+            52,
+            40,
+            255
+          ],
+          "title": [
+            232,
+            246,
+            238,
+            255
+          ],
+          "body": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "icon": [
+            205,
+            222,
+            222,
+            255
+          ],
+          "close": [
+            180,
+            193,
+            186,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "status",
+          "closeLabel": "关闭通知"
+        }
+      ]
+    },
+    "light": {
+      "theme": "rocket-moss",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "items": [
+        {
+          "height": 80,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            248,
+            245,
+            235,
+            255
+          ],
+          "title": [
+            34,
+            31,
+            22,
+            255
+          ],
+          "body": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "icon": [
+            42,
+            68,
+            40,
+            255
+          ],
+          "close": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "status",
+          "closeLabel": "关闭通知"
+        },
+        {
+          "height": 80,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            248,
+            245,
+            235,
+            255
+          ],
+          "title": [
+            34,
+            31,
+            22,
+            255
+          ],
+          "body": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "icon": [
+            87,
+            66,
+            22,
+            255
+          ],
+          "close": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "alert",
+          "closeLabel": "关闭通知"
+        },
+        {
+          "height": 114,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            248,
+            245,
+            235,
+            255
+          ],
+          "title": [
+            34,
+            31,
+            22,
+            255
+          ],
+          "body": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "icon": [
+            87,
+            41,
+            31,
+            255
+          ],
+          "close": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "alert",
+          "closeLabel": "关闭通知"
+        },
+        {
+          "height": 138,
+          "width": 360,
+          "gap": 16,
+          "fit": true,
+          "overflow": false,
+          "background": [
+            248,
+            245,
+            235,
+            255
+          ],
+          "title": [
+            34,
+            31,
+            22,
+            255
+          ],
+          "body": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "icon": [
+            57,
+            62,
+            60,
+            255
+          ],
+          "close": [
+            88,
+            85,
+            75,
+            255
+          ],
+          "font": "14px",
+          "weight": "600",
+          "padding": [
+            "13px",
+            "16px"
+          ],
+          "iconDelta": 0,
+          "closeDelta": 0,
+          "role": "status",
+          "closeLabel": "关闭通知"
+        }
+      ]
+    }
+  },
+  "reducedMotion": {
+    "requested": true,
+    "duration": "0.14s, 0.14s, 0.14s, 0.14s, 0.14s, 0.14s",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "role": {
+    "menuNodes": 4,
+    "loading": false,
+    "menuText": "系统管理\n系统监控\n系统工具\n工程管理",
+    "saveDisabled": false
+  },
+  "reducedMotionAfter": {
+    "requested": true,
+    "duration": "0s",
+    "presentationDuration": "0s"
+  },
+  "landscape": {
+    "viewport": [
+      667,
+      375
+    ],
+    "rect": {
+      "x": 291,
+      "y": 16,
+      "width": 360,
+      "height": 343,
+      "top": 16,
+      "right": 651,
+      "bottom": 359,
+      "left": 291
+    },
+    "action": {
+      "x": 560,
+      "y": 319,
+      "width": 74,
+      "height": 26,
+      "top": 319,
+      "right": 634,
+      "bottom": 345,
+      "left": 560
+    },
+    "scroll": [
+      253,
+      480
+    ],
+    "fit": true
+  }
+}

@@ -1,0 +1,2018 @@
+[
+  {
+    "id": "default",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.475 0.685 0.986 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 6.361,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.565 0.576 0.6)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.6955 0.7031999999999999 0.72 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 6.813,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.902 0.635 0.235)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.9314 0.7444999999999999 0.46449999999999997 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.593,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.475 0.685 0.986 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 6.361,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.159 0.263 0.42)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.925 0.9550000000000001 0.998 / 1)",
+          "hoverForeground": "color(srgb 0.15899999999999997 0.263 0.42 / 1)",
+          "ratio": 9.798,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.159 0.263 0.42)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.925 0.9550000000000001 0.998 / 1)",
+          "hoverForeground": "color(srgb 0.15899999999999997 0.263 0.42 / 1)",
+          "ratio": 9.798,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 6.361,
+          "text": "1"
+        }
+      ],
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.159 0.263 0.42)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 9.661,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.12 0.14 0.18)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.925 0.9550000000000001 0.998 / 1)",
+        "hoverForeground": "color(srgb 0.15899999999999997 0.263 0.42 / 1)",
+        "ratio": 15.366,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.25 0.55 0.98)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.475 0.685 0.986 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 6.361,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "default",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.1984 0.4084 0.7093999999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 6.361,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.565 0.576 0.6)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.41889999999999994 0.4265999999999999 0.44339999999999996 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 6.813,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.902 0.635 0.235)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.6547999999999999 0.4678999999999999 0.18789999999999998 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.593,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.1984 0.4084 0.7093999999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 6.361,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.726 0.83 0.98)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.09519999999999999 0.12519999999999998 0.16819999999999996 / 1)",
+          "hoverForeground": "color(srgb 0.726 0.83 0.98 / 1)",
+          "ratio": 11.229,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.726 0.83 0.98)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.09519999999999999 0.12519999999999998 0.16819999999999996 / 1)",
+          "hoverForeground": "color(srgb 0.726 0.83 0.98 / 1)",
+          "ratio": 11.229,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 6.361,
+          "text": "1"
+        }
+      ],
+      "theme": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.726 0.83 0.98)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 10.045,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.096 0.1101 0.1383)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.93 0.95 0.98)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.09519999999999999 0.12519999999999998 0.16819999999999996 / 1)",
+        "hoverForeground": "color(srgb 0.726 0.83 0.98 / 1)",
+        "ratio": 15.198,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.25 0.55 0.98)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.1984 0.4084 0.7093999999999999 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 6.361,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "defense-green",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.345 0.465 0.215)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.53682 0.6222 0.44401999999999997 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.137,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.44 0.52 0.58)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.6033200000000001 0.6607 0.6995199999999999 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.452,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.82 0.58 0.09)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.86932 0.7026999999999999 0.35652 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.956,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.345 0.465 0.215)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.53682 0.6222 0.44401999999999997 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.137,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.18512 0.2284 0.13583)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.9204600000000001 0.9366 0.90206 / 1)",
+          "hoverForeground": "color(srgb 0.18512 0.2284 0.13583 / 1)",
+          "ratio": 11.231,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.18512 0.2284 0.13583)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.9204600000000001 0.9366 0.90206 / 1)",
+          "hoverForeground": "color(srgb 0.18512 0.2284 0.13583 / 1)",
+          "ratio": 11.231,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.345 0.465 0.215)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 5.137,
+          "text": "1"
+        }
+      ],
+      "theme": "defense-green",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.18512 0.2284 0.13583)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 11.074,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.965754 0.974686 0.953954)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1166 0.127 0.1019)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.9204600000000001 0.9366 0.90206 / 1)",
+        "hoverForeground": "color(srgb 0.18512 0.2284 0.13583 / 1)",
+        "ratio": 15.405,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.345 0.465 0.215)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.53682 0.6222 0.44401999999999997 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 5.137,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "defense-green",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.525 0.66 0.41)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.39777 0.50118 0.31429999999999997 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.837,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.56 0.65 0.72)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.42227000000000003 0.49417999999999995 0.5313 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.289,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.88 0.66 0.21)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.64627 0.50118 0.17429999999999998 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.858,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.525 0.66 0.41)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.39777 0.50118 0.31429999999999997 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.837,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.80388 0.87119 0.76063)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.14331 0.18353999999999998 0.12289999999999998 / 1)",
+          "hoverForeground": "color(srgb 0.8038799999999999 0.8711899999999999 0.76063 / 1)",
+          "ratio": 8.832,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.80388 0.87119 0.76063)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.14331 0.18353999999999998 0.12289999999999998 / 1)",
+          "hoverForeground": "color(srgb 0.8038799999999999 0.8711899999999999 0.76063 / 1)",
+          "ratio": 8.832,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.525 0.66 0.41)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 7.837,
+          "text": "1"
+        }
+      ],
+      "theme": "defense-green",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.80388 0.87119 0.76063)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 7.703,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.1756 0.2138 0.1615)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9234 0.9617 0.9109)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.14331 0.18353999999999998 0.12289999999999998 / 1)",
+        "hoverForeground": "color(srgb 0.8038799999999999 0.8711899999999999 0.76063 / 1)",
+        "ratio": 11.193,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.525 0.66 0.41)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.39777 0.50118 0.31429999999999997 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 7.837,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "army-pine",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.28 0.4 0.34)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.4915 0.5764 0.53305 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 6.348,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.44 0.52 0.58)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.6034999999999999 0.6604 0.70105 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.452,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.82 0.58 0.09)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.8694999999999999 0.7023999999999999 0.35805 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.956,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.28 0.4 0.34)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.4915 0.5764 0.53305 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 6.348,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.16653 0.2075 0.18201)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.9145 0.9292 0.9191500000000001 / 1)",
+          "hoverForeground": "color(srgb 0.16653 0.2075 0.18201 / 1)",
+          "ratio": 12.038,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.16653 0.2075 0.18201)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.9145 0.9292 0.9191500000000001 / 1)",
+          "hoverForeground": "color(srgb 0.16653 0.2075 0.18201 / 1)",
+          "ratio": 12.038,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.28 0.4 0.34)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 6.348,
+          "text": "1"
+        }
+      ],
+      "theme": "army-pine",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.16653 0.2075 0.18201)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 11.871,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.970016 0.975998 0.967066)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1179 0.125 0.1143)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.9145 0.9292 0.9191500000000001 / 1)",
+        "hoverForeground": "color(srgb 0.16653 0.2075 0.18201 / 1)",
+        "ratio": 15.519,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.28 0.4 0.34)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.4915 0.5764 0.53305 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 6.348,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "army-pine",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.5 0.62 0.54)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.37729999999999997 0.47021 0.41124 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 7.173,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.56 0.65 0.72)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.4193 0.49121 0.53724 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.289,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.88 0.66 0.21)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.6433 0.49821 0.18023999999999998 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.858,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.5 0.62 0.54)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.37729999999999997 0.47021 0.41124 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 7.173,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.79267 0.85737 0.82322)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.1319 0.17063 0.15372 / 1)",
+          "hoverForeground": "color(srgb 0.79267 0.85737 0.82322 / 1)",
+          "ratio": 8.944,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.79267 0.85737 0.82322)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.1319 0.17063 0.15372 / 1)",
+          "hoverForeground": "color(srgb 0.79267 0.85737 0.82322 / 1)",
+          "ratio": 8.944,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.5 0.62 0.54)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 7.173,
+          "text": "1"
+        }
+      ],
+      "theme": "army-pine",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.79267 0.85737 0.82322)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 7.819,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.1615 0.2038 0.1815)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9181 0.9591 0.9446)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.1319 0.17063 0.15372 / 1)",
+        "hoverForeground": "color(srgb 0.79267 0.85737 0.82322 / 1)",
+        "ratio": 11.553,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.5 0.62 0.54)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.37729999999999997 0.47021 0.41124 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 7.173,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "air-gray",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.22 0.32 0.42)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.44962 0.52007 0.591 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.151,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0 0.49 0.62)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.29562 0.63907 0.731 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 4.745,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.78 0.45 0.03)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.8416199999999999 0.61107 0.318 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.87,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.22 0.32 0.42)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.44962 0.52007 0.591 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.151,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.14923 0.18168 0.21665)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.9088600000000001 0.9202100000000001 0.933 / 1)",
+          "hoverForeground": "color(srgb 0.14923 0.18168 0.21665 / 1)",
+          "ratio": 13.024,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.14923 0.18168 0.21665)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.9088600000000001 0.9202100000000001 0.933 / 1)",
+          "hoverForeground": "color(srgb 0.14923 0.18168 0.21665 / 1)",
+          "ratio": 13.024,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.22 0.32 0.42)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 8.151,
+          "text": "1"
+        }
+      ],
+      "theme": "air-gray",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.14923 0.18168 0.21665)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 12.843,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.974442 0.977474 0.983374)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1189 0.1224 0.1295)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.9088600000000001 0.9202100000000001 0.933 / 1)",
+        "hoverForeground": "color(srgb 0.14923 0.18168 0.21665 / 1)",
+        "ratio": 15.654,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.22 0.32 0.42)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.44962 0.52007 0.591 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 8.151,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "air-gray",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.46 0.6 0.78)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.34633 0.45324 0.5940599999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 7.141,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.16 0.72 0.92)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.13632999999999998 0.53724 0.69206 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.111,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.96 0.65 0.14)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.6963299999999999 0.48823999999999995 0.14606 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 10.337,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.46 0.6 0.78)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.34633 0.45324 0.5940599999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 7.141,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.78095 0.84528 0.934)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.11899000000000001 0.15971999999999997 0.22218 / 1)",
+          "hoverForeground": "color(srgb 0.7809499999999999 0.84528 0.9339999999999999 / 1)",
+          "ratio": 8.962,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.78095 0.84528 0.934)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.11899000000000001 0.15971999999999997 0.22218 / 1)",
+          "hoverForeground": "color(srgb 0.7809499999999999 0.84528 0.9339999999999999 / 1)",
+          "ratio": 8.962,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.46 0.6 0.78)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 7.141,
+          "text": "1"
+        }
+      ],
+      "theme": "air-gray",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.78095 0.84528 0.934)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 7.856,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.1474 0.1938 0.2684)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9185 0.9504 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.11899000000000001 0.15971999999999997 0.22218 / 1)",
+        "hoverForeground": "color(srgb 0.7809499999999999 0.84528 0.9339999999999999 / 1)",
+        "ratio": 11.598,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.46 0.6 0.78)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.34633 0.45324 0.5940599999999999 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 7.141,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "pap-olive",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.27 0.32 0.2)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.48567 0.5202199999999999 0.43306999999999995 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.418,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.44 0.52 0.58)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.60467 0.66022 0.69907 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.452,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.82 0.58 0.09)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.8706699999999999 0.70222 0.35607 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.956,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.27 0.32 0.2)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.48567 0.5202199999999999 0.43306999999999995 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.418,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.17004 0.18238 0.12867)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.91701 0.9206600000000001 0.8992100000000001 / 1)",
+          "hoverForeground": "color(srgb 0.17004 0.18238 0.12867 / 1)",
+          "ratio": 12.92,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.17004 0.18238 0.12867)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.91701 0.9206600000000001 0.8992100000000001 / 1)",
+          "hoverForeground": "color(srgb 0.17004 0.18238 0.12867 / 1)",
+          "ratio": 12.92,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.27 0.32 0.2)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 8.418,
+          "text": "1"
+        }
+      ],
+      "theme": "pap-olive",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.17004 0.18238 0.12867)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 12.594,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.974686 0.971736 0.951004)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1272 0.1234 0.0981)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.91701 0.9206600000000001 0.8992100000000001 / 1)",
+        "hoverForeground": "color(srgb 0.17004 0.18238 0.12867 / 1)",
+        "ratio": 15.418,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.27 0.32 0.2)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.48567 0.5202199999999999 0.43306999999999995 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 8.418,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "pap-olive",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.52 0.58 0.38)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.39427 0.44221 0.29033 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 6.393,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.56 0.65 0.72)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.42227000000000003 0.49121 0.52833 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.289,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.88 0.66 0.21)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.64627 0.49821 0.17132999999999998 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.858,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.52 0.58 0.38)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.39427 0.44221 0.29033 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 6.393,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.80784 0.84579 0.74736)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.14281 0.16663 0.11099 / 1)",
+          "hoverForeground": "color(srgb 0.80784 0.84579 0.74736 / 1)",
+          "ratio": 8.909,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.80784 0.84579 0.74736)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.14281 0.16663 0.11099 / 1)",
+          "hoverForeground": "color(srgb 0.80784 0.84579 0.74736 / 1)",
+          "ratio": 8.909,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.52 0.58 0.38)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 6.393,
+          "text": "1"
+        }
+      ],
+      "theme": "pap-olive",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.80784 0.84579 0.74736)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 8.15,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.1756 0.1956 0.1392)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9312 0.9597 0.9048)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.14281 0.16663 0.11099 / 1)",
+        "hoverForeground": "color(srgb 0.80784 0.84579 0.74736 / 1)",
+        "ratio": 11.824,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.52 0.58 0.38)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.39427 0.44221 0.29033 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 6.393,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "rocket-moss",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.18 0.3 0.22)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.42348 0.50613 0.4456 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.457,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.44 0.52 0.58)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.60548 0.66013 0.6976 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.452,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.82 0.58 0.09)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.87148 0.7021299999999999 0.35459999999999997 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.956,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.18 0.3 0.22)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.42348 0.50613 0.4456 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.457,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.14738 0.17554 0.12592)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.91044 0.91839 0.8968 / 1)",
+          "hoverForeground": "color(srgb 0.14737999999999998 0.17553999999999997 0.12592 / 1)",
+          "ratio": 13.258,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.14738 0.17554 0.12592)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.91044 0.91839 0.8968 / 1)",
+          "hoverForeground": "color(srgb 0.14737999999999998 0.17553999999999997 0.12592 / 1)",
+          "ratio": 13.258,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.18 0.3 0.22)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 9.457,
+          "text": "1"
+        }
+      ],
+      "theme": "rocket-moss",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.14738 0.17554 0.12592)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 12.928,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.97616 0.96731 0.937646)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1334 0.1222 0.0856)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.91044 0.91839 0.8968 / 1)",
+        "hoverForeground": "color(srgb 0.14737999999999998 0.17553999999999997 0.12592 / 1)",
+        "ratio": 15.296,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.18 0.3 0.22)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.42348 0.50613 0.4456 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 9.457,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "rocket-moss",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.4 0.58 0.44)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.30133 0.43923999999999996 0.33533 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 6.03,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.56 0.65 0.72)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.41333000000000003 0.48823999999999995 0.53133 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.289,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.88 0.66 0.21)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.63733 0.49523999999999996 0.17432999999999998 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.858,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.4 0.58 0.44)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.30133 0.43923999999999996 0.33533 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 6.03,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.75637 0.84866 0.78615)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.10399 0.15771999999999997 0.12599 / 1)",
+          "hoverForeground": "color(srgb 0.75637 0.84866 0.78615 / 1)",
+          "ratio": 9.018,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.75637 0.84866 0.78615)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.10399 0.15771999999999997 0.12599 / 1)",
+          "hoverForeground": "color(srgb 0.75637 0.84866 0.78615 / 1)",
+          "ratio": 9.018,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.4 0.58 0.44)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 6.03,
+          "text": "1"
+        }
+      ],
+      "theme": "rocket-moss",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.75637 0.84866 0.78615)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 8.305,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.1374 0.1938 0.1574)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9091 0.9638 0.9345)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.10399 0.15771999999999997 0.12599 / 1)",
+        "hoverForeground": "color(srgb 0.75637 0.84866 0.78615 / 1)",
+        "ratio": 12.15,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.4 0.58 0.44)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.30133 0.43923999999999996 0.33533 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 6.03,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "factory-blue",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.12 0.31 0.55)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.37895999999999996 0.51331 0.68221 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.213,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0 0.49 0.62)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.29496 0.63931 0.7312099999999999 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 4.745,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.78 0.45 0.03)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.8409599999999999 0.61131 0.31821 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.87,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.12 0.31 0.55)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.37895999999999996 0.51331 0.68221 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 8.213,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.11545 0.17994 0.25691)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.89688 0.91993 0.9466300000000001 / 1)",
+          "hoverForeground": "color(srgb 0.11545 0.17994 0.25690999999999997 / 1)",
+          "ratio": 13.078,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.11545 0.17994 0.25691)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.89688 0.91993 0.9466300000000001 / 1)",
+          "hoverForeground": "color(srgb 0.11545 0.17994 0.25690999999999997 / 1)",
+          "ratio": 13.078,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.12 0.31 0.55)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 8.213,
+          "text": "1"
+        }
+      ],
+      "theme": "factory-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.11545 0.17994 0.25691)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 12.756,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.967476 0.976408 0.982308)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1135 0.1242 0.1313)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.89688 0.91993 0.9466300000000001 / 1)",
+        "hoverForeground": "color(srgb 0.11545 0.17994 0.25690999999999997 / 1)",
+        "ratio": 15.559,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.12 0.31 0.55)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.37895999999999996 0.51331 0.68221 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 8.213,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "factory-blue",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.23 0.47 0.7)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.18383 0.36371 0.5410299999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 4.656,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.16 0.72 0.92)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.13482999999999998 0.53871 0.69503 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.111,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.96 0.65 0.14)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.69483 0.48971 0.14903 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 10.337,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.23 0.47 0.7)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.18383 0.36371 0.5410299999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 4.656,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.70964 0.80719 0.91)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.09149 0.15113 0.22308999999999998 / 1)",
+          "hoverForeground": "color(srgb 0.70964 0.80719 0.9099999999999999 / 1)",
+          "ratio": 8.535,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.70964 0.80719 0.91)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.09149 0.15113 0.22308999999999998 / 1)",
+          "hoverForeground": "color(srgb 0.70964 0.80719 0.9099999999999999 / 1)",
+          "ratio": 8.535,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.23 0.47 0.7)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 4.656,
+          "text": "1"
+        }
+      ],
+      "theme": "factory-blue",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.70964 0.80719 0.91)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 7.732,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.1301 0.1783 0.2415)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9152 0.9517 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.09149 0.15113 0.22308999999999998 / 1)",
+        "hoverForeground": "color(srgb 0.70964 0.80719 0.9099999999999999 / 1)",
+        "ratio": 12.334,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.23 0.47 0.7)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.18383 0.36371 0.5410299999999999 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 4.656,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "tech-blue",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.086 0.365 1)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.35417 0.55175 1 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.19,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.06 0.55 0.85)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.33597 0.68125 0.895 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.786,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.9 0.5 0.05)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.92397 0.64625 0.33499999999999996 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.415,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.086 0.365 1)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.35417 0.55175 1 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 5.19,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.09979 0.1956 0.40822)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.8905099999999999 0.92525 1 / 1)",
+          "hoverForeground": "color(srgb 0.09978999999999999 0.1956 0.40821999999999997 / 1)",
+          "ratio": 12.092,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.09979 0.1956 0.40822)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.8905099999999999 0.92525 1 / 1)",
+          "hoverForeground": "color(srgb 0.09978999999999999 0.1956 0.40821999999999997 / 1)",
+          "ratio": 12.092,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.086 0.365 1)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 5.19,
+          "text": "1"
+        }
+      ],
+      "theme": "tech-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.09979 0.1956 0.40822)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 11.925,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.977068 0.9919 1)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1057 0.123 0.1546)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.8905099999999999 0.92525 1 / 1)",
+        "hoverForeground": "color(srgb 0.09978999999999999 0.1956 0.40821999999999997 / 1)",
+        "ratio": 16.079,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.086 0.365 1)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.35417 0.55175 1 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 5.19,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "tech-blue",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.13 0.47 0.98)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.09793 0.35590999999999995 0.76667 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 5.124,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.3 0.72 1)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.21692999999999998 0.53091 0.78067 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 9.578,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 1 0.62 0.15)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.70693 0.46091 0.18567 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 10.178,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.13 0.47 0.98)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.09793 0.35590999999999995 0.76667 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 5.124,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.68419 0.80537 0.994)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.03379 0.12773 0.3400099999999999 / 1)",
+          "hoverForeground": "color(srgb 0.68419 0.80537 0.994 / 1)",
+          "ratio": 8.608,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.68419 0.80537 0.994)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.03379 0.12773 0.3400099999999999 / 1)",
+          "hoverForeground": "color(srgb 0.68419 0.80537 0.994 / 1)",
+          "ratio": 8.608,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.13 0.47 0.98)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 5.124,
+          "text": "1"
+        }
+      ],
+      "theme": "tech-blue",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.68419 0.80537 0.994)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 7.561,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.0546 0.1574 0.3948)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9217 0.9491 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.03379 0.12773 0.3400099999999999 / 1)",
+        "hoverForeground": "color(srgb 0.68419 0.80537 0.994 / 1)",
+        "ratio": 12.367,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.13 0.47 0.98)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 0 0 0)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.09793 0.35590999999999995 0.76667 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 5.124,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "industrial-blue",
+    "mode": "light",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.40392999999999996 0.5905199999999999 0.972 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 4.649,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.1 0.48 0.88)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.36193 0.63252 0.9159999999999999 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 4.927,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.82 0.52 0.08)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.8659299999999999 0.66052 0.356 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 7.058,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.40392999999999996 0.5905199999999999 0.972 / 1)",
+          "hoverForeground": "color(srgb 0 0 0 / 1)",
+          "ratio": 4.649,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.11856 0.21252 0.40028)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.89179 0.93156 0.996 / 1)",
+          "hoverForeground": "color(srgb 0.11856 0.21252 0.40027999999999997 / 1)",
+          "ratio": 10.402,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.11856 0.21252 0.40028)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.89179 0.93156 0.996 / 1)",
+          "hoverForeground": "color(srgb 0.11856 0.21252 0.40027999999999997 / 1)",
+          "ratio": 10.402,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 4.649,
+          "text": "1"
+        }
+      ],
+      "theme": "industrial-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.11856 0.21252 0.40028)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 10.123,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.916006 0.945752 0.993362)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.1008 0.1236 0.1604)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.89179 0.93156 0.996 / 1)",
+        "hoverForeground": "color(srgb 0.11856 0.21252 0.40027999999999997 / 1)",
+        "ratio": 14.5,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.16 0.42 0.96)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.40392999999999996 0.5905199999999999 0.972 / 1)",
+        "hoverForeground": "color(srgb 0 0 0 / 1)",
+        "ratio": 4.649,
+        "text": "创建"
+      }
+    ]
+  },
+  {
+    "id": "industrial-blue",
+    "mode": "dark",
+    "main": {
+      "samples": [
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "classes": "el-button el-button--primary el-button--default zx-btn",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.11875 0.32265 0.7333799999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 4.649,
+          "text": "新增用户"
+        },
+        {
+          "background": "color(srgb 0.1 0.48 0.88)",
+          "classes": "el-button el-button--info el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.07675 0.36465 0.67738 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 4.927,
+          "text": "导入"
+        },
+        {
+          "background": "color(srgb 0.82 0.52 0.08)",
+          "classes": "el-button el-button--warning el-button--default zx-btn",
+          "foreground": "color(srgb 0 0 0)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.58075 0.39265 0.11737999999999998 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 7.058,
+          "text": "导出"
+        },
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "classes": "el-button el-button--primary el-button--default zx-search__button",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.11875 0.32265 0.7333799999999999 / 1)",
+          "hoverForeground": "color(srgb 1 1 1 / 1)",
+          "ratio": 4.649,
+          "text": "Search"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.68955 0.79184 0.988)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.03625 0.12794999999999998 0.28013999999999994 / 1)",
+          "hoverForeground": "color(srgb 0.68955 0.79184 0.988 / 1)",
+          "ratio": 9.048,
+          "text": "修改"
+        },
+        {
+          "background": "rgba(0, 0, 0, 0)",
+          "classes": "el-button el-button--text el-button--default zx-btn",
+          "foreground": "color(srgb 0.68955 0.79184 0.988)",
+          "hover": false,
+          "hoverBackground": "color(srgb 0.03625 0.12794999999999998 0.28013999999999994 / 1)",
+          "hoverForeground": "color(srgb 0.68955 0.79184 0.988 / 1)",
+          "ratio": 9.048,
+          "text": "分配角色"
+        },
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "classes": "is-active number",
+          "foreground": "color(srgb 1 1 1)",
+          "hover": false,
+          "hoverBackground": "",
+          "hoverForeground": "",
+          "ratio": 4.649,
+          "text": "1"
+        }
+      ],
+      "theme": "industrial-blue",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    "dialog": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "classes": "el-radio__label",
+        "foreground": "color(srgb 0.68955 0.79184 0.988)",
+        "hover": false,
+        "hoverBackground": "",
+        "hoverForeground": "",
+        "ratio": 8.227,
+        "text": "正常"
+      },
+      {
+        "background": "color(srgb 0.07551 0.15297 0.267234)",
+        "classes": "el-button el-button--default zx-btn",
+        "foreground": "color(srgb 0.9165 0.9512 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.03625 0.12794999999999998 0.28013999999999994 / 1)",
+        "hoverForeground": "color(srgb 0.68955 0.79184 0.988 / 1)",
+        "ratio": 13.335,
+        "text": "取消"
+      },
+      {
+        "background": "color(srgb 0.16 0.42 0.96)",
+        "classes": "el-button el-button--primary el-button--default zx-btn",
+        "foreground": "color(srgb 1 1 1)",
+        "hover": false,
+        "hoverBackground": "color(srgb 0.11875 0.32265 0.7333799999999999 / 1)",
+        "hoverForeground": "color(srgb 1 1 1 / 1)",
+        "ratio": 4.649,
+        "text": "创建"
+      }
+    ]
+  }
+]

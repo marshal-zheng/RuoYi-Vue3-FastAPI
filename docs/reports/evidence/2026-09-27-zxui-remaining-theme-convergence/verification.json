@@ -1,0 +1,61 @@
+{
+  "businessFiles": [
+    "src/assets/styles/vxe-theme.css",
+    "src/components/business/Dag/components/DagDnd.vue",
+    "src/components/business/Dag/components/DagGraphControl.vue",
+    "src/components/business/Dag/index.vue",
+    "src/components/business/Dag/shapes/DagNode.vue",
+    "src/components/business/Device/selector/FileTypeSelector.vue",
+    "src/components/business/ZxFlow/components/XFlowBackground.vue",
+    "src/components/business/ZxFlow/components/XFlowContextMenu.vue",
+    "src/components/business/ZxFlow/components/XFlowControl.vue",
+    "src/components/business/ZxFlow/components/XFlowGraph.vue",
+    "src/components/business/ZxFlow/components/XFlowGrid.vue",
+    "src/components/business/ZxFlow/components/XFlowMinimap.vue",
+    "src/components/business/ZxFlow/composables/useGraphTheme.ts",
+    "src/components/ui/Editor/index.vue",
+    "src/layout/components/Navbar.vue",
+    "src/plugins/vxe-table.ts",
+    "src/theme/ZxThemePresetSwitch.vue",
+    "src/views/device/detail.vue",
+    "src/views/error/401.vue",
+    "src/views/error/404.vue",
+    "src/views/project/components/selector/FileTypeSelector.vue",
+    "src/views/tool/build/RightPanel.vue",
+    "src/views/tool/build/index.vue",
+    "tests/fixtures/theme-consumers/App.vue",
+    "tests/fixtures/theme-consumers/index.html",
+    "vite.config.ts",
+    "vite/zxui-theme-packages.ts",
+    "package.json",
+    "yarn.lock"
+  ],
+  "libraryTests": 42,
+  "businessStandardsTests": 14,
+  "newTests": 2,
+  "businessTypecheck": "passed",
+  "scopedBusinessLint": {
+    "errors": 0,
+    "warnings": 63
+  },
+  "libraryScopedLint": "passed",
+  "sourceBuild": "passed",
+  "installedBuild": "passed",
+  "themeStateCount": 18,
+  "navbarWidths": [
+    768,
+    390,
+    320
+  ],
+  "installedCssMatchesSource": true,
+  "installedCssSha256": "158de5897802c5f8fb1ed7073e9dd9cacba7648c9adde6caf5ffa0e4105c5da5",
+  "restoredPreference": {
+    "theme": "army-pine",
+    "mode": "dark",
+    "density": "default"
+  },
+  "browserCoverageLimits": [
+    "Historical project DAG and version-specific preview not visited; shared consumer behavior covered by the in-memory fixture.",
+    "No full-site or forced-colors accessibility certification."
+  ]
+}

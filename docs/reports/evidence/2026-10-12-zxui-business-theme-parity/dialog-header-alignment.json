@@ -1,0 +1,124 @@
+{
+  "before": {
+    "title": {
+      "x": 301,
+      "y": 255.609375,
+      "width": 72,
+      "height": 24,
+      "centerY": 267.609375
+    },
+    "close": {
+      "x": 1111,
+      "y": 243.609375,
+      "width": 48,
+      "height": 48,
+      "centerY": 267.609375
+    },
+    "closeIcon": {
+      "x": 1127,
+      "y": 257.609375,
+      "width": 16,
+      "height": 16,
+      "centerY": 265.609375
+    },
+    "header": {
+      "x": 281,
+      "y": 237.609375,
+      "width": 878,
+      "height": 61,
+      "centerY": 268.109375
+    },
+    "delta": -2,
+    "fullscreenCount": 1,
+    "closeStyle": {
+      "position": "absolute",
+      "top": "6px",
+      "width": "48px"
+    },
+    "headerStyle": {
+      "padding": "12px 56px 12px 20px",
+      "minHeight": "60px"
+    },
+    "titleStyle": {
+      "fontSize": "18px",
+      "lineHeight": "24px"
+    }
+  },
+  "after": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "close": {
+        "width": 36,
+        "height": 36
+      },
+      "delta": 0,
+      "fullscreenCount": 0,
+      "panel": {
+        "x": 280,
+        "y": 262.609375,
+        "width": 880,
+        "height": 474.78125
+      },
+      "fits": true
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "close": {
+        "width": 44,
+        "height": 44
+      },
+      "delta": 0,
+      "fullscreenCount": 0,
+      "panel": {
+        "x": 16,
+        "y": 51.609375,
+        "width": 358,
+        "height": 740.765625
+      },
+      "fits": true
+    },
+    "cssLayoutProbes": [
+      {
+        "name": "long-title",
+        "titleHeight": 48,
+        "headingHeight": 48,
+        "closeDelta": 0,
+        "headerPadding": "12px 12px 12px 16px",
+        "headerWidth": 356,
+        "headerScrollWidth": 356
+      },
+      {
+        "name": "custom-padding",
+        "titleHeight": 24,
+        "headingHeight": 24,
+        "closeDelta": 0,
+        "headerPadding": "24px 32px",
+        "headerWidth": 356,
+        "headerScrollWidth": 356
+      },
+      {
+        "name": "subtitle",
+        "titleHeight": 24,
+        "headingHeight": 47.5,
+        "closeDelta": 0,
+        "headerPadding": "12px 12px 12px 16px",
+        "headerWidth": 356,
+        "headerScrollWidth": 356
+      }
+    ],
+    "doubleClickFullscreen": false,
+    "keyboardClose": true,
+    "escapeClose": true
+  },
+  "pageErrors": [],
+  "priorContextSessionReplacementDiagnostics": [
+    "Error: 用户token已失效，请重新登录",
+    "Error: 用户token已失效，请重新登录"
+  ]
+}

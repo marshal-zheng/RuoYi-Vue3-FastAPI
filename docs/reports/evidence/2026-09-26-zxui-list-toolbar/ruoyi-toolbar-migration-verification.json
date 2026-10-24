@@ -1,0 +1,163 @@
+[
+  {
+    "file": "src/views/system/config/components/ConfigList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/device/category/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/device/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/tool/gen/importTable.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/monitor/logininfor/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/protocol/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/dict/components/DictList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/post/components/PostList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/role/authUser.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/monitor/online/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/dict/data.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/tool/gen/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/role/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/dept/components/DeptList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/monitor/job/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/menu/components/MenuList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/project/components/ProjectList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/project/components/VersionList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/monitor/audit/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/notice/components/NoticeList.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/components/business/Monitor/OperlogGrid.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/system/user/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  },
+  {
+    "file": "src/views/project/index.vue",
+    "beforeErrors": 49,
+    "afterErrors": 49,
+    "newMessages": [],
+    "controlsAndScriptsUnchanged": true
+  }
+]

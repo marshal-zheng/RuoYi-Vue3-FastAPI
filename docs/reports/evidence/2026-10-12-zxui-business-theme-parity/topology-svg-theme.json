@@ -1,0 +1,56 @@
+[
+  {
+    "mode": "dark",
+    "ports": [
+      {
+        "fillAttribute": "var(--zx-semantic-surface-field-fill)",
+        "fill": "color(srgb 0.0546 0.1574 0.3948)",
+        "strokeAttribute": "var(--zx-semantic-accent-base)",
+        "stroke": "color(srgb 0.13 0.47 0.98)"
+      },
+      {
+        "fillAttribute": "var(--zx-semantic-surface-field-fill)",
+        "fill": "color(srgb 0.0546 0.1574 0.3948)",
+        "strokeAttribute": "var(--zx-semantic-accent-base)",
+        "stroke": "color(srgb 0.13 0.47 0.98)"
+      }
+    ],
+    "edge": [
+      {
+        "stroke": "transparent",
+        "computed": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "stroke": "var(--zx-semantic-border-default)",
+        "computed": "color(srgb 0.25 0.66 0.96 / 0.64)"
+      }
+    ]
+  },
+  {
+    "mode": "light",
+    "ports": [
+      {
+        "fillAttribute": "var(--zx-semantic-surface-field-fill)",
+        "fill": "color(srgb 0.977068 0.9919 1)",
+        "strokeAttribute": "var(--zx-semantic-accent-base)",
+        "stroke": "color(srgb 0.086 0.365 1)"
+      },
+      {
+        "fillAttribute": "var(--zx-semantic-surface-field-fill)",
+        "fill": "color(srgb 0.977068 0.9919 1)",
+        "strokeAttribute": "var(--zx-semantic-accent-base)",
+        "stroke": "color(srgb 0.086 0.365 1)"
+      }
+    ],
+    "edge": [
+      {
+        "stroke": "transparent",
+        "computed": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "stroke": "var(--zx-semantic-border-default)",
+        "computed": "color(srgb 0.25 0.66 0.96 / 0.42)"
+      }
+    ]
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "before": {
+    "iconSize": 16,
+    "rightGap": 18,
+    "verticalOffset": 0
+  },
+  "after": {
+    "frameHeight": 30,
+    "iconSize": 18,
+    "rightGap": 9,
+    "verticalOffset": 0,
+    "buttonWidth": 34,
+    "buttonHeight": 28,
+    "buttonMargin": "0px",
+    "iconCenter": 1381
+  },
+  "withClear": {
+    "frameHeight": 30,
+    "iconSize": 18,
+    "rightGap": 9,
+    "verticalOffset": 0,
+    "buttonWidth": 34,
+    "buttonHeight": 28,
+    "buttonMargin": "0px",
+    "iconCenter": 1381
+  },
+  "positionStable": true,
+  "exampleGeometry": [
+    {
+      "placeholder": "输入框内搜索",
+      "inside": true,
+      "iconSize": 18,
+      "rightGap": 9,
+      "verticalOffset": 0,
+      "disabled": false
+    },
+    {
+      "placeholder": "Small",
+      "inside": true,
+      "iconSize": 16,
+      "rightGap": 6,
+      "verticalOffset": 0,
+      "disabled": false
+    },
+    {
+      "placeholder": "Large",
+      "inside": true,
+      "iconSize": 20,
+      "rightGap": 12,
+      "verticalOffset": 0,
+      "disabled": false
+    },
+    {
+      "placeholder": "加载中",
+      "inside": true,
+      "iconSize": 18,
+      "rightGap": 9,
+      "verticalOffset": 0,
+      "disabled": true
+    },
+    {
+      "placeholder": "禁用状态",
+      "inside": true,
+      "iconSize": 18,
+      "rightGap": 9,
+      "verticalOffset": 0,
+      "disabled": true
+    },
+    {
+      "placeholder": "单个组件覆盖全局配置",
+      "inside": false,
+      "iconSize": 16,
+      "rightGap": -31,
+      "verticalOffset": 0,
+      "disabled": false
+    }
+  ],
+  "clearRequest": {
+    "url": "http://localhost/api/system/user/list?userName=&page=1&pageSize=10",
+    "status": 200
+  }
+}

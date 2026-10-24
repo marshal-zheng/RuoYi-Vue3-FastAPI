@@ -1,0 +1,1538 @@
+{
+  "scope": "Generated CSS numeric verification; not browser visual acceptance",
+  "states": 90,
+  "minimumContrast": 5.59,
+  "existingPaletteChanged": [],
+  "results": [
+    {
+      "theme": "air-gray",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.46,
+      "after": 8.53,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6027,
+        0.65345,
+        0.705
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "light",
+      "type": "success",
+      "before": 2.1,
+      "after": 10.01,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.5527,
+        0.7434499999999999,
+        0.65
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.38,
+      "after": 8.83,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.8927,
+        0.57345,
+        0.575
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "light",
+      "type": "info",
+      "before": 2.1,
+      "after": 9.99,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.4927,
+        0.73845,
+        0.8049999999999999
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.86,
+      "after": 11.32,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.8827,
+        0.71845,
+        0.51
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "dark",
+      "type": "primary",
+      "before": 3.01,
+      "after": 6.98,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.27055,
+        0.3554,
+        0.4701
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "dark",
+      "type": "success",
+      "before": 3.58,
+      "after": 5.86,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.19555,
+        0.4379,
+        0.3501
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "dark",
+      "type": "danger",
+      "before": 2.69,
+      "after": 7.81,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.5175,
+        0.23395,
+        0.241
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "dark",
+      "type": "info",
+      "before": 3.48,
+      "after": 6.03,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.12055,
+        0.4154,
+        0.5401
+      ]
+    },
+    {
+      "theme": "air-gray",
+      "mode": "dark",
+      "type": "warning",
+      "before": 3.73,
+      "after": 5.63,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.52055,
+        0.3804,
+        0.1501
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.24,
+      "after": 9.38,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6325000000000001,
+        0.694,
+        0.6617500000000001
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "light",
+      "type": "success",
+      "before": 1.83,
+      "after": 11.46,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6125,
+        0.794,
+        0.65175
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.16,
+      "after": 9.7,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9025,
+        0.619,
+        0.59675
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "light",
+      "type": "info",
+      "before": 1.85,
+      "after": 11.37,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.7125,
+        0.754,
+        0.78175
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.62,
+      "after": 12.98,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9025,
+        0.784,
+        0.5367500000000001
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "dark",
+      "type": "primary",
+      "before": 3.04,
+      "after": 6.9,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.2955,
+        0.37035,
+        0.3254
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "dark",
+      "type": "success",
+      "before": 3.43,
+      "after": 6.12,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.2555,
+        0.42035,
+        0.2804
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "dark",
+      "type": "danger",
+      "before": 2.97,
+      "after": 7.07,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.532,
+        0.27225,
+        0.23925000000000002
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "dark",
+      "type": "info",
+      "before": 3.33,
+      "after": 6.3,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.3255,
+        0.38535,
+        0.4154
+      ]
+    },
+    {
+      "theme": "army-pine",
+      "mode": "dark",
+      "type": "warning",
+      "before": 3.69,
+      "after": 5.69,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.4855,
+        0.39035000000000003,
+        0.1604
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "light",
+      "type": "primary",
+      "before": 11.94,
+      "after": 11.94,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.625,
+        0.775,
+        0.99
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "light",
+      "type": "success",
+      "before": 14.12,
+      "after": 14.12,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.702,
+        0.8805000000000001,
+        0.6135
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "light",
+      "type": "danger",
+      "before": 10.09,
+      "after": 10.09,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9299999999999999,
+        0.625,
+        0.62
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "light",
+      "type": "info",
+      "before": 12.66,
+      "after": 12.66,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.7825,
+        0.788,
+        0.8
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "light",
+      "type": "warning",
+      "before": 14.35,
+      "after": 14.35,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9510000000000001,
+        0.8175,
+        0.6174999999999999
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "dark",
+      "type": "primary",
+      "before": 2.6,
+      "after": 8.09,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.164,
+        0.314,
+        0.529
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "dark",
+      "type": "success",
+      "before": 3.33,
+      "after": 6.3,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.24100000000000002,
+        0.4195,
+        0.1525
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "dark",
+      "type": "danger",
+      "before": 2.86,
+      "after": 7.35,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.514,
+        0.264,
+        0.259
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "dark",
+      "type": "info",
+      "before": 2.74,
+      "after": 7.65,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.32149999999999995,
+        0.32699999999999996,
+        0.33899999999999997
+      ]
+    },
+    {
+      "theme": "default",
+      "mode": "dark",
+      "type": "warning",
+      "before": 3.4,
+      "after": 6.19,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.49,
+        0.3565,
+        0.1565
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.07,
+      "after": 10.12,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6647000000000001,
+        0.727,
+        0.5967
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "light",
+      "type": "success",
+      "before": 1.83,
+      "after": 11.47,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6122000000000001,
+        0.7945,
+        0.6492
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.16,
+      "after": 9.71,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9022,
+        0.6194999999999999,
+        0.5942000000000001
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "light",
+      "type": "info",
+      "before": 1.85,
+      "after": 11.38,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.7122,
+        0.7545,
+        0.7792
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.62,
+      "after": 12.99,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9022,
+        0.7845,
+        0.5342
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "dark",
+      "type": "primary",
+      "before": 3.27,
+      "after": 6.43,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.31295,
+        0.3953,
+        0.2505
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "dark",
+      "type": "success",
+      "before": 3.48,
+      "after": 6.03,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.26045,
+        0.4253,
+        0.2705
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "dark",
+      "type": "danger",
+      "before": 3.02,
+      "after": 6.96,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.53695,
+        0.2772,
+        0.22935
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "dark",
+      "type": "info",
+      "before": 3.38,
+      "after": 6.21,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.33045,
+        0.3903,
+        0.40549999999999997
+      ]
+    },
+    {
+      "theme": "defense-green",
+      "mode": "dark",
+      "type": "warning",
+      "before": 3.76,
+      "after": 5.59,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.49045,
+        0.3953,
+        0.1505
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.52,
+      "after": 8.34,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.5516,
+        0.64885,
+        0.7703500000000001
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "light",
+      "type": "success",
+      "before": 2.1,
+      "after": 10.01,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.5516,
+        0.74385,
+        0.65035
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.38,
+      "after": 8.83,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.8916,
+        0.57385,
+        0.57535
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "light",
+      "type": "info",
+      "before": 2.1,
+      "after": 9.99,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.4916,
+        0.73885,
+        0.80535
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.86,
+      "after": 11.32,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.8815999999999999,
+        0.71885,
+        0.51035
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "dark",
+      "type": "primary",
+      "before": 9.08,
+      "after": 9.08,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.15305000000000002,
+        0.29285,
+        0.43505
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "dark",
+      "type": "success",
+      "before": 5.81,
+      "after": 5.81,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.19305,
+        0.44035,
+        0.35505000000000003
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "dark",
+      "type": "danger",
+      "before": 7.8,
+      "after": 7.8,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.515,
+        0.2364,
+        0.24595
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "dark",
+      "type": "info",
+      "before": 5.98,
+      "after": 5.98,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.11805,
+        0.41785,
+        0.54505
+      ]
+    },
+    {
+      "theme": "factory-blue",
+      "mode": "dark",
+      "type": "warning",
+      "before": 5.61,
+      "after": 5.61,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.51805,
+        0.38285,
+        0.15505000000000002
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.09,
+      "after": 10.07,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.56655,
+        0.7041999999999999,
+        0.98
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "light",
+      "type": "success",
+      "before": 1.98,
+      "after": 10.59,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.52655,
+        0.7692,
+        0.71
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.35,
+      "after": 8.95,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.8765499999999999,
+        0.5841999999999999,
+        0.62
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "light",
+      "type": "info",
+      "before": 2.01,
+      "after": 10.44,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.53655,
+        0.7342,
+        0.94
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.71,
+      "after": 12.25,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.89655,
+        0.7542,
+        0.54
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "dark",
+      "type": "primary",
+      "before": 9.37,
+      "after": 9.37,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.09125,
+        0.25775,
+        0.5823
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "dark",
+      "type": "success",
+      "before": 8.94,
+      "after": 8.94,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.051250000000000004,
+        0.32275000000000004,
+        0.3123
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "dark",
+      "type": "danger",
+      "before": 8.24,
+      "after": 8.24,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.47785,
+        0.23060000000000003,
+        0.29575
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "dark",
+      "type": "info",
+      "before": 8.92,
+      "after": 8.92,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.06125,
+        0.28775,
+        0.5423
+      ]
+    },
+    {
+      "theme": "industrial-blue",
+      "mode": "dark",
+      "type": "warning",
+      "before": 7.61,
+      "after": 7.61,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.42124999999999996,
+        0.30775,
+        0.1423
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.48,
+      "after": 8.45,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6294500000000001,
+        0.6537000000000001,
+        0.58845
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "light",
+      "type": "success",
+      "before": 1.83,
+      "after": 11.46,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6144499999999999,
+        0.7937000000000001,
+        0.64845
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.16,
+      "after": 9.71,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.90445,
+        0.6187,
+        0.59345
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "light",
+      "type": "info",
+      "before": 1.85,
+      "after": 11.37,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.71445,
+        0.7537,
+        0.77845
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.62,
+      "after": 12.99,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.90445,
+        0.7837000000000001,
+        0.53345
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "dark",
+      "type": "primary",
+      "before": 2.84,
+      "after": 7.4,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.31045,
+        0.35035,
+        0.23055
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "dark",
+      "type": "success",
+      "before": 3.43,
+      "after": 6.13,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.26045,
+        0.42035,
+        0.26555
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "dark",
+      "type": "danger",
+      "before": 2.98,
+      "after": 7.04,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.53695,
+        0.27225,
+        0.22440000000000002
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "dark",
+      "type": "info",
+      "before": 3.33,
+      "after": 6.31,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.33045,
+        0.38535,
+        0.40054999999999996
+      ]
+    },
+    {
+      "theme": "pap-olive",
+      "mode": "dark",
+      "type": "warning",
+      "before": 3.71,
+      "after": 5.67,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.49045,
+        0.39035000000000003,
+        0.14555
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.61,
+      "after": 8.06,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.5858,
+        0.64355,
+        0.596
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "light",
+      "type": "success",
+      "before": 1.83,
+      "after": 11.46,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.6158,
+        0.79355,
+        0.646
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.16,
+      "after": 9.71,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9057999999999999,
+        0.6185499999999999,
+        0.591
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "light",
+      "type": "info",
+      "before": 1.85,
+      "after": 11.37,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.7158,
+        0.7535499999999999,
+        0.776
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.62,
+      "after": 12.99,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9057999999999999,
+        0.78355,
+        0.531
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "dark",
+      "type": "primary",
+      "before": 2.67,
+      "after": 7.85,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.23555,
+        0.3454,
+        0.26555
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "dark",
+      "type": "success",
+      "before": 3.35,
+      "after": 6.26,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.24555,
+        0.4154,
+        0.27055
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "dark",
+      "type": "danger",
+      "before": 2.89,
+      "after": 7.26,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.52205,
+        0.2673,
+        0.22940000000000002
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "dark",
+      "type": "info",
+      "before": 3.25,
+      "after": 6.46,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.31555,
+        0.3804,
+        0.40554999999999997
+      ]
+    },
+    {
+      "theme": "rocket-moss",
+      "mode": "dark",
+      "type": "warning",
+      "before": 3.6,
+      "after": 5.83,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.47555000000000003,
+        0.3854,
+        0.15055
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "light",
+      "type": "primary",
+      "before": 2.23,
+      "after": 9.42,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.53295,
+        0.67625,
+        1.0
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "light",
+      "type": "success",
+      "before": 1.85,
+      "after": 11.35,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.51495,
+        0.80375,
+        0.7
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "light",
+      "type": "danger",
+      "before": 2.14,
+      "after": 9.79,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9399500000000001,
+        0.60375,
+        0.61
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "light",
+      "type": "info",
+      "before": 1.89,
+      "after": 11.1,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.51995,
+        0.76875,
+        0.925
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "light",
+      "type": "warning",
+      "before": 1.7,
+      "after": 12.37,
+      "foreground": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "background": [
+        0.9399500000000001,
+        0.74375,
+        0.525
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "dark",
+      "type": "primary",
+      "before": 2.44,
+      "after": 8.6,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.07655,
+        0.27985,
+        0.62445
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "dark",
+      "type": "success",
+      "before": 3.62,
+      "after": 5.8,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.09155,
+        0.44485,
+        0.40945
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "dark",
+      "type": "danger",
+      "before": 2.82,
+      "after": 7.46,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.51155,
+        0.2514,
+        0.32509999999999994
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "dark",
+      "type": "info",
+      "before": 3.56,
+      "after": 5.89,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.16155,
+        0.40485,
+        0.63445
+      ]
+    },
+    {
+      "theme": "tech-blue",
+      "mode": "dark",
+      "type": "warning",
+      "before": 3.49,
+      "after": 6.02,
+      "foreground": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "background": [
+        0.51155,
+        0.35485,
+        0.20944999999999997
+      ]
+    }
+  ]
+}

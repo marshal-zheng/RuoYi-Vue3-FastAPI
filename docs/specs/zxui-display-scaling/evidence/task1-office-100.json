@@ -1,0 +1,126 @@
+{
+  "environment": {
+    "dpr": 2,
+    "height": 992,
+    "theme": "default",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "width": 1728
+  },
+  "office100DefaultDensity": {
+    "input": {
+      "fontSize": "14px",
+      "height": 32,
+      "padding": "1px 11px",
+      "width": 196
+    },
+    "main": {
+      "fontSize": "16px",
+      "height": 908,
+      "padding": "20px",
+      "width": 1528
+    },
+    "navbar": {
+      "fontSize": "16px",
+      "height": 50,
+      "padding": "0px",
+      "width": 1526
+    },
+    "pagination": {
+      "fontSize": "14px",
+      "height": 32,
+      "padding": "0px",
+      "width": 449.5703125
+    },
+    "rootFont": "16px",
+    "sidebar": {
+      "fontSize": "0px",
+      "height": 992,
+      "padding": "0px",
+      "width": 200
+    },
+    "tableRow": {
+      "fontSize": "14px",
+      "height": 49,
+      "padding": "0px",
+      "width": 1240
+    },
+    "theme": "default",
+    "toolbar": {
+      "fontSize": "16px",
+      "height": 112,
+      "padding": "16px 0px",
+      "width": 1240
+    },
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "office100ObservedComfortableDensity": {
+    "list": {
+      "input": {
+        "fontSize": "14px",
+        "height": 36,
+        "padding": "1px 11px",
+        "width": 196
+      },
+      "main": {
+        "fontSize": "16px",
+        "height": 908,
+        "padding": "20px",
+        "width": 1528
+      },
+      "navbar": {
+        "fontSize": "16px",
+        "height": 50,
+        "padding": "0px",
+        "width": 1526
+      },
+      "pagination": {
+        "fontSize": "14px",
+        "height": 36,
+        "padding": "0px",
+        "width": 449.5703125
+      },
+      "rootFont": "16px",
+      "sidebar": {
+        "fontSize": "0px",
+        "height": 992,
+        "padding": "0px",
+        "width": 200
+      },
+      "tableRow": {
+        "fontSize": "14px",
+        "height": 53,
+        "padding": "0px",
+        "width": 1240
+      },
+      "tags": null,
+      "theme": "default",
+      "toolbar": {
+        "fontSize": "16px",
+        "height": 132,
+        "padding": "20px 0px",
+        "width": 1240
+      },
+      "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+    },
+    "form": {
+      "dialog": {
+        "fontSize": "16px",
+        "height": 0,
+        "padding": "0px",
+        "width": 0
+      },
+      "formItem": null,
+      "input": null,
+      "label": null,
+      "layout": null
+    }
+  },
+  "sourceBaseline": {
+    "epLegacySize": "small/default/large from size Cookie",
+    "zxuiSize": "default",
+    "formLabelWidth": "100px",
+    "formColumnGap": "20px",
+    "formMinColumnWidth": "280px"
+  },
+  "caveat": "New-user dialog did not open because existing auth token expired. Display scale is not implemented."
+}

@@ -1,0 +1,10 @@
+{
+  "sidebarWidth": 200,
+  "theme": "army-pine",
+  "url": "http://localhost/system/user",
+  "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+  "viewport": {
+    "height": 992,
+    "width": 1728
+  }
+}

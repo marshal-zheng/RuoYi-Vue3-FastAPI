@@ -1,0 +1,10532 @@
+[
+  {
+    "theme": "rocket-moss",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          194,
+          227,
+          201,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          230,
+          223,
+          183,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          237,
+          204,
+          195,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          205,
+          222,
+          222,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "rocket-moss-dark-compact.png"
+  },
+  {
+    "theme": "rocket-moss",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          194,
+          227,
+          201,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          230,
+          223,
+          183,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          237,
+          204,
+          195,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          205,
+          222,
+          222,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "rocket-moss-dark-default.png"
+  },
+  {
+    "theme": "rocket-moss",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          194,
+          227,
+          201,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          230,
+          223,
+          183,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          237,
+          204,
+          195,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          41,
+          52,
+          40,
+          255
+        ],
+        "title": [
+          232,
+          246,
+          238,
+          255
+        ],
+        "body": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "icon": [
+          205,
+          222,
+          222,
+          255
+        ],
+        "close": [
+          180,
+          193,
+          186,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "rocket-moss-dark-comfortable.png"
+  },
+  {
+    "theme": "rocket-moss",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          42,
+          68,
+          40,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          87,
+          66,
+          22,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          87,
+          41,
+          31,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          57,
+          62,
+          60,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "rocket-moss-light-compact.png"
+  },
+  {
+    "theme": "rocket-moss",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          42,
+          68,
+          40,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          87,
+          66,
+          22,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          87,
+          41,
+          31,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          57,
+          62,
+          60,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "rocket-moss-light-default.png"
+  },
+  {
+    "theme": "rocket-moss",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          42,
+          68,
+          40,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          87,
+          66,
+          22,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          87,
+          41,
+          31,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          245,
+          235,
+          255
+        ],
+        "title": [
+          34,
+          31,
+          22,
+          255
+        ],
+        "body": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "icon": [
+          57,
+          62,
+          60,
+          255
+        ],
+        "close": [
+          88,
+          85,
+          75,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "rocket-moss-light-comfortable.png"
+  },
+  {
+    "theme": "default",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          197,
+          228,
+          192,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          235,
+          218,
+          193,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          239,
+          204,
+          209,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          209,
+          214,
+          221,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "default-dark-compact.png"
+  },
+  {
+    "theme": "default",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          197,
+          228,
+          192,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          235,
+          218,
+          193,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          239,
+          204,
+          209,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          209,
+          214,
+          221,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "default-dark-default.png"
+  },
+  {
+    "theme": "default",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          197,
+          228,
+          192,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          235,
+          218,
+          193,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          239,
+          204,
+          209,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          30,
+          33,
+          41,
+          255
+        ],
+        "title": [
+          237,
+          242,
+          250,
+          255
+        ],
+        "body": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "icon": [
+          209,
+          214,
+          221,
+          255
+        ],
+        "close": [
+          171,
+          181,
+          199,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "default-dark-comfortable.png"
+  },
+  {
+    "theme": "default",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          52,
+          83,
+          49,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          90,
+          74,
+          50,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          87,
+          44,
+          50,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          65,
+          69,
+          78,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "default-light-compact.png"
+  },
+  {
+    "theme": "default",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          52,
+          83,
+          49,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          90,
+          74,
+          50,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          87,
+          44,
+          50,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          65,
+          69,
+          78,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "default-light-default.png"
+  },
+  {
+    "theme": "default",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          52,
+          83,
+          49,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          90,
+          74,
+          50,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          87,
+          44,
+          50,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          252,
+          252,
+          253,
+          255
+        ],
+        "title": [
+          31,
+          36,
+          46,
+          255
+        ],
+        "body": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "icon": [
+          65,
+          69,
+          78,
+          255
+        ],
+        "close": [
+          89,
+          97,
+          110,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "default-light-comfortable.png"
+  },
+  {
+    "theme": "tech-blue",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          177,
+          231,
+          221,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          241,
+          217,
+          190,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          241,
+          201,
+          208,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          187,
+          224,
+          255,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "tech-blue-dark-compact.png"
+  },
+  {
+    "theme": "tech-blue",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          177,
+          231,
+          221,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          241,
+          217,
+          190,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          241,
+          201,
+          208,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          187,
+          224,
+          255,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "tech-blue-dark-default.png"
+  },
+  {
+    "theme": "tech-blue",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          177,
+          231,
+          221,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          241,
+          217,
+          190,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          241,
+          201,
+          208,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          20,
+          46,
+          106,
+          255
+        ],
+        "title": [
+          235,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "icon": [
+          187,
+          224,
+          255,
+          255
+        ],
+        "close": [
+          178,
+          190,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "tech-blue-dark-comfortable.png"
+  },
+  {
+    "theme": "tech-blue",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          23,
+          69,
+          58,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          88,
+          60,
+          31,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          88,
+          39,
+          44,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          23,
+          64,
+          93,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "tech-blue-light-compact.png"
+  },
+  {
+    "theme": "tech-blue",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          23,
+          69,
+          58,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          88,
+          60,
+          31,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          88,
+          39,
+          44,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          23,
+          64,
+          93,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "tech-blue-light-default.png"
+  },
+  {
+    "theme": "tech-blue",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          23,
+          69,
+          58,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          88,
+          60,
+          31,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          88,
+          39,
+          44,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          252,
+          254,
+          255
+        ],
+        "title": [
+          27,
+          31,
+          39,
+          255
+        ],
+        "body": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "icon": [
+          23,
+          64,
+          93,
+          255
+        ],
+        "close": [
+          80,
+          85,
+          95,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "tech-blue-light-comfortable.png"
+  },
+  {
+    "theme": "defense-green",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          197,
+          227,
+          197,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          232,
+          222,
+          179,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          239,
+          204,
+          191,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          208,
+          221,
+          218,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "defense-green-dark-compact.png"
+  },
+  {
+    "theme": "defense-green",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          197,
+          227,
+          197,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          232,
+          222,
+          179,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          239,
+          204,
+          191,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          208,
+          221,
+          218,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "defense-green-dark-default.png"
+  },
+  {
+    "theme": "defense-green",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          197,
+          227,
+          197,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          232,
+          222,
+          179,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          239,
+          204,
+          191,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          60,
+          46,
+          255
+        ],
+        "title": [
+          235,
+          245,
+          232,
+          255
+        ],
+        "body": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "icon": [
+          208,
+          221,
+          218,
+          255
+        ],
+        "close": [
+          183,
+          193,
+          180,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "defense-green-dark-comfortable.png"
+  },
+  {
+    "theme": "defense-green",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          39,
+          69,
+          43,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          84,
+          67,
+          25,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          84,
+          42,
+          34,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          54,
+          62,
+          63,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "defense-green-light-compact.png"
+  },
+  {
+    "theme": "defense-green",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          39,
+          69,
+          43,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          84,
+          67,
+          25,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          84,
+          42,
+          34,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          54,
+          62,
+          63,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "defense-green-light-default.png"
+  },
+  {
+    "theme": "defense-green",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          39,
+          69,
+          43,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          84,
+          67,
+          25,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          84,
+          42,
+          34,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          245,
+          248,
+          242,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          26,
+          255
+        ],
+        "body": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "icon": [
+          54,
+          62,
+          63,
+          255
+        ],
+        "close": [
+          83,
+          87,
+          79,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "defense-green-light-comfortable.png"
+  },
+  {
+    "theme": "army-pine",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          196,
+          226,
+          203,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          231,
+          222,
+          185,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          238,
+          204,
+          197,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          207,
+          221,
+          224,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "army-pine-dark-compact.png"
+  },
+  {
+    "theme": "army-pine",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          196,
+          226,
+          203,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          231,
+          222,
+          185,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          238,
+          204,
+          197,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          207,
+          221,
+          224,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "army-pine-dark-default.png"
+  },
+  {
+    "theme": "army-pine",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          196,
+          226,
+          203,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          231,
+          222,
+          185,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          238,
+          204,
+          197,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          46,
+          57,
+          52,
+          255
+        ],
+        "title": [
+          234,
+          245,
+          241,
+          255
+        ],
+        "body": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "icon": [
+          207,
+          221,
+          224,
+          255
+        ],
+        "close": [
+          182,
+          192,
+          189,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "army-pine-dark-comfortable.png"
+  },
+  {
+    "theme": "army-pine",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          39,
+          68,
+          45,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          84,
+          67,
+          27,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          84,
+          41,
+          36,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          55,
+          62,
+          65,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "army-pine-light-compact.png"
+  },
+  {
+    "theme": "army-pine",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          39,
+          68,
+          45,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          84,
+          67,
+          27,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          84,
+          41,
+          36,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          55,
+          62,
+          65,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "army-pine-light-default.png"
+  },
+  {
+    "theme": "army-pine",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          39,
+          68,
+          45,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          84,
+          67,
+          27,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          84,
+          41,
+          36,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          246,
+          248,
+          246,
+          255
+        ],
+        "title": [
+          30,
+          32,
+          29,
+          255
+        ],
+        "body": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "icon": [
+          55,
+          62,
+          65,
+          255
+        ],
+        "close": [
+          84,
+          86,
+          83,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "army-pine-light-comfortable.png"
+  },
+  {
+    "theme": "air-gray",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          188,
+          228,
+          220,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          237,
+          219,
+          189,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          237,
+          197,
+          203,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          176,
+          225,
+          249,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "air-gray-dark-compact.png"
+  },
+  {
+    "theme": "air-gray",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          188,
+          228,
+          220,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          237,
+          219,
+          189,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          237,
+          197,
+          203,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          176,
+          225,
+          249,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "air-gray-dark-default.png"
+  },
+  {
+    "theme": "air-gray",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          188,
+          228,
+          220,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          237,
+          219,
+          189,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          237,
+          197,
+          203,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          43,
+          55,
+          73,
+          255
+        ],
+        "title": [
+          234,
+          242,
+          255,
+          255
+        ],
+        "body": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "icon": [
+          176,
+          225,
+          249,
+          255
+        ],
+        "close": [
+          180,
+          190,
+          208,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "air-gray-dark-comfortable.png"
+  },
+  {
+    "theme": "air-gray",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          30,
+          60,
+          47,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          81,
+          56,
+          25,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          82,
+          34,
+          35,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          21,
+          59,
+          71,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "air-gray-light-compact.png"
+  },
+  {
+    "theme": "air-gray",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          30,
+          60,
+          47,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          81,
+          56,
+          25,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          82,
+          34,
+          35,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          21,
+          59,
+          71,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "air-gray-light-default.png"
+  },
+  {
+    "theme": "air-gray",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          30,
+          60,
+          47,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          81,
+          56,
+          25,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          82,
+          34,
+          35,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          248,
+          250,
+          255
+        ],
+        "title": [
+          30,
+          31,
+          33,
+          255
+        ],
+        "body": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "icon": [
+          21,
+          59,
+          71,
+          255
+        ],
+        "close": [
+          84,
+          85,
+          87,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "air-gray-light-comfortable.png"
+  },
+  {
+    "theme": "pap-olive",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          198,
+          226,
+          196,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          234,
+          222,
+          178,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          241,
+          204,
+          190,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          209,
+          221,
+          217,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "pap-olive-dark-compact.png"
+  },
+  {
+    "theme": "pap-olive",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          198,
+          226,
+          196,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          234,
+          222,
+          178,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          241,
+          204,
+          190,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          209,
+          221,
+          217,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "pap-olive-dark-default.png"
+  },
+  {
+    "theme": "pap-olive",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          198,
+          226,
+          196,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          234,
+          222,
+          178,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          241,
+          204,
+          190,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          50,
+          53,
+          36,
+          255
+        ],
+        "title": [
+          237,
+          245,
+          231,
+          255
+        ],
+        "body": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "icon": [
+          209,
+          221,
+          217,
+          255
+        ],
+        "close": [
+          185,
+          192,
+          179,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "pap-olive-dark-comfortable.png"
+  },
+  {
+    "theme": "pap-olive",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          41,
+          68,
+          42,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 76,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          85,
+          66,
+          24,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 110,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          85,
+          41,
+          34,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 134,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          56,
+          62,
+          62,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "11px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "pap-olive-light-compact.png"
+  },
+  {
+    "theme": "pap-olive",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          41,
+          68,
+          42,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 80,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          85,
+          66,
+          24,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 114,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          85,
+          41,
+          34,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 138,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          56,
+          62,
+          62,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "13px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "pap-olive-light-default.png"
+  },
+  {
+    "theme": "pap-olive",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          41,
+          68,
+          42,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 84,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          85,
+          66,
+          24,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 118,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          85,
+          41,
+          34,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 142,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          248,
+          246,
+          238,
+          255
+        ],
+        "title": [
+          32,
+          31,
+          25,
+          255
+        ],
+        "body": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "icon": [
+          56,
+          62,
+          62,
+          255
+        ],
+        "close": [
+          87,
+          86,
+          78,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "15px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "pap-olive-light-comfortable.png"
+  },
+  {
+    "theme": "industrial-blue",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          170,
+          212,
+          211,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          226,
+          210,
+          185,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          235,
+          198,
+          208,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          171,
+          207,
+          246,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "industrial-blue-dark-compact.png"
+  },
+  {
+    "theme": "industrial-blue",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          170,
+          212,
+          211,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          226,
+          210,
+          185,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          235,
+          198,
+          208,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          171,
+          207,
+          246,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "industrial-blue-dark-default.png"
+  },
+  {
+    "theme": "industrial-blue",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          170,
+          212,
+          211,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          226,
+          210,
+          185,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          235,
+          198,
+          208,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          21,
+          43,
+          74,
+          255
+        ],
+        "title": [
+          234,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "icon": [
+          171,
+          207,
+          246,
+          255
+        ],
+        "close": [
+          176,
+          191,
+          213,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "industrial-blue-dark-comfortable.png"
+  },
+  {
+    "theme": "industrial-blue",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          24,
+          64,
+          61,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          81,
+          62,
+          35,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          78,
+          36,
+          47,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          26,
+          59,
+          96,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "industrial-blue-light-compact.png"
+  },
+  {
+    "theme": "industrial-blue",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          24,
+          64,
+          61,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          81,
+          62,
+          35,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          78,
+          36,
+          47,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          26,
+          59,
+          96,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "industrial-blue-light-default.png"
+  },
+  {
+    "theme": "industrial-blue",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          24,
+          64,
+          61,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          81,
+          62,
+          35,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          78,
+          36,
+          47,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          230,
+          240,
+          253,
+          255
+        ],
+        "title": [
+          26,
+          32,
+          41,
+          255
+        ],
+        "body": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "icon": [
+          26,
+          59,
+          96,
+          255
+        ],
+        "close": [
+          79,
+          86,
+          97,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "industrial-blue-light-comfortable.png"
+  },
+  {
+    "theme": "factory-blue",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          187,
+          228,
+          220,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          237,
+          220,
+          189,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          236,
+          197,
+          203,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          176,
+          225,
+          249,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "factory-blue-dark-compact.png"
+  },
+  {
+    "theme": "factory-blue",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          187,
+          228,
+          220,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          237,
+          220,
+          189,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          236,
+          197,
+          203,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          176,
+          225,
+          249,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "factory-blue-dark-default.png"
+  },
+  {
+    "theme": "factory-blue",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          187,
+          228,
+          220,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          237,
+          220,
+          189,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          236,
+          197,
+          203,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          34,
+          50,
+          67,
+          255
+        ],
+        "title": [
+          233,
+          243,
+          255,
+          255
+        ],
+        "body": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "icon": [
+          176,
+          225,
+          249,
+          255
+        ],
+        "close": [
+          177,
+          191,
+          210,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "factory-blue-dark-comfortable.png"
+  },
+  {
+    "theme": "factory-blue",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          29,
+          60,
+          47,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 78,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          80,
+          57,
+          26,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 112,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          81,
+          34,
+          36,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 136,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          20,
+          60,
+          71,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "12px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "factory-blue-light-compact.png"
+  },
+  {
+    "theme": "factory-blue",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          29,
+          60,
+          47,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 82,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          80,
+          57,
+          26,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 116,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          81,
+          34,
+          36,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 140,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          20,
+          60,
+          71,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "14px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "factory-blue-light-default.png"
+  },
+  {
+    "theme": "factory-blue",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+    "items": [
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          29,
+          60,
+          47,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 86,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          80,
+          57,
+          26,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 120,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          81,
+          34,
+          36,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "alert",
+        "closeLabel": "关闭通知"
+      },
+      {
+        "height": 144,
+        "width": 360,
+        "gap": 16,
+        "fit": true,
+        "overflow": false,
+        "background": [
+          243,
+          248,
+          251,
+          255
+        ],
+        "title": [
+          29,
+          32,
+          33,
+          255
+        ],
+        "body": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "icon": [
+          20,
+          60,
+          71,
+          255
+        ],
+        "close": [
+          83,
+          86,
+          88,
+          255
+        ],
+        "font": "14px",
+        "weight": "600",
+        "padding": [
+          "16px",
+          "16px"
+        ],
+        "iconDelta": 0,
+        "closeDelta": 0,
+        "role": "status",
+        "closeLabel": "关闭通知"
+      }
+    ],
+    "file": "factory-blue-light-comfortable.png"
+  }
+]

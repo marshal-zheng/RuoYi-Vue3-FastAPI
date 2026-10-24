@@ -1,0 +1,140 @@
+[
+  {
+    "label": "grid-current-hover",
+    "cells": [
+      {
+        "class": "el-table_1_column_1 el-table-column--selection el-table-fixed-column--left el-table__cell",
+        "fill": "color(srgb 0.1615 0.2038 0.1815)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_1_column_2 el-table-fixed-column--left is-last-column el-table__cell",
+        "fill": "color(srgb 0.1615 0.2038 0.1815)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_1_column_3 el-table__cell",
+        "fill": "color(srgb 0.5 0.62 0.54 / 0.16)",
+        "layer": "none",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_1_column_4 el-table__cell",
+        "fill": "color(srgb 0.5 0.62 0.54 / 0.16)",
+        "layer": "none",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_1_column_5 el-table-fixed-column--right is-first-column el-table__cell",
+        "fill": "color(srgb 0.1615 0.2038 0.1815)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      }
+    ],
+    "rowClass": "el-table__row current-row el-table__row--striped hover-row",
+    "actualWrapped": true
+  },
+  {
+    "label": "grid-horizontal-scroll",
+    "client": 760,
+    "fixed": [
+      {
+        "class": "el-table_1_column_1 el-table-column--selection el-table-fixed-column--left el-table__cell",
+        "fill": "color(srgb 0.1615 0.2038 0.1815)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.11), color(srgb 0.5 0.62 0.54 / 0.11))",
+        "left": 484,
+        "right": 532
+      },
+      {
+        "class": "el-table_1_column_2 el-table-fixed-column--left is-last-column el-table__cell",
+        "fill": "color(srgb 0.1615 0.2038 0.1815)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.11), color(srgb 0.5 0.62 0.54 / 0.11))",
+        "left": 532,
+        "right": 692
+      },
+      {
+        "class": "el-table_1_column_5 el-table-fixed-column--right is-first-column el-table__cell",
+        "fill": "color(srgb 0.1615 0.2038 0.1815)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.11), color(srgb 0.5 0.62 0.54 / 0.11))",
+        "left": 1084,
+        "right": 1244
+      }
+    ],
+    "scroll": 948,
+    "scrollLeft": 188,
+    "tableLeft": 484,
+    "tableRight": 1244,
+    "actualWrapped": true
+  },
+  {
+    "label": "raw-current-hover",
+    "actualWrapped": false,
+    "cells": [
+      {
+        "class": "el-table_2_column_6 el-table-column--selection el-table-fixed-column--left el-table__cell",
+        "fill": "color(srgb 0.14 0.18 0.16)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_2_column_7 el-table-fixed-column--left is-last-column el-table__cell",
+        "fill": "color(srgb 0.14 0.18 0.16)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_2_column_8 el-table__cell",
+        "fill": "color(srgb 0.5 0.62 0.54 / 0.16)",
+        "layer": "none",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_2_column_9 el-table__cell",
+        "fill": "color(srgb 0.5 0.62 0.54 / 0.16)",
+        "layer": "none",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      },
+      {
+        "class": "el-table_2_column_10 el-table-fixed-column--right is-first-column el-table__cell",
+        "fill": "color(srgb 0.14 0.18 0.16)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "selectedHover": "color(srgb 0.5 0.62 0.54 / 0.16)"
+      }
+    ],
+    "rowClass": "el-table__row current-row el-table__row--striped hover-row"
+  },
+  {
+    "label": "raw-horizontal-scroll",
+    "actualWrapped": false,
+    "client": 760,
+    "fixed": [
+      {
+        "class": "el-table_2_column_6 el-table-column--selection el-table-fixed-column--left el-table__cell",
+        "fill": "color(srgb 0.14 0.18 0.16)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "left": 484,
+        "right": 532
+      },
+      {
+        "class": "el-table_2_column_7 el-table-fixed-column--left is-last-column el-table__cell",
+        "fill": "color(srgb 0.14 0.18 0.16)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "left": 532,
+        "right": 692
+      },
+      {
+        "class": "el-table_2_column_10 el-table-fixed-column--right is-first-column el-table__cell",
+        "fill": "color(srgb 0.14 0.18 0.16)",
+        "layer": "linear-gradient(color(srgb 0.5 0.62 0.54 / 0.16), color(srgb 0.5 0.62 0.54 / 0.16))",
+        "left": 1084,
+        "right": 1244
+      }
+    ],
+    "scroll": 948,
+    "scrollLeft": 188,
+    "tableLeft": 484,
+    "tableRight": 1244
+  }
+]

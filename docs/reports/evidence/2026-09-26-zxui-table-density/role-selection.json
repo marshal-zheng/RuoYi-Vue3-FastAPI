@@ -1,0 +1,31 @@
+{
+  "page": "/system/role",
+  "checked": [
+    false,
+    true,
+    true,
+    true
+  ],
+  "toolbarButtons": [
+    {
+      "disabled": false,
+      "text": "新增"
+    },
+    {
+      "disabled": false,
+      "text": "修改"
+    },
+    {
+      "disabled": false,
+      "text": "删除"
+    },
+    {
+      "disabled": false,
+      "text": "导出"
+    },
+    {
+      "disabled": false,
+      "text": ""
+    }
+  ]
+}

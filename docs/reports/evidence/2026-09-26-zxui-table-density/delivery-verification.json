@@ -1,0 +1,10 @@
+{
+  "installedStyleMatchesGeneratedSource": true,
+  "styleSha256": "088932840eb7c7c92d5ade9d8c55ad17b7111ba8fe345ab2708d6fce2d6b4c41",
+  "matrixCount": 18,
+  "actualWrapperMatchesExpected": true,
+  "allTextFullyVisible": true,
+  "densityMonotonicForEveryWrapperAndSize": true,
+  "fixedColumnsRemainAtTableEdgesAfterScroll": true,
+  "candidate": "vendor/zxio-zxui-3.0.0-next.0-table.20260926.tgz"
+}

@@ -1,0 +1,510 @@
+{
+  "url": "http://localhost/system/user",
+  "checks": [
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:49b32d46664e6c2b4b8e079415463ee208ab5216aa2c186f81080e6a1fb1065d",
+          "href": "http://localhost/zx-theme-assets/49b32d46664e6c2b4b8e079415463ee208ab5216aa2c186f81080e6a1fb1065d.css",
+          "integrity": "sha256-SbMtRmZObCtLjgeUFUY+4girUhaqLBhvgQgOah+xBl0="
+        },
+        {
+          "hash": "sha256:f46f2e7c60a69829127a288b3cbc0627e7dfa7e449291151af47234169316355",
+          "href": "http://localhost/zx-theme-assets/f46f2e7c60a69829127a288b3cbc0627e7dfa7e449291151af47234169316355.css",
+          "integrity": "sha256-9G8ufGCmmCkSeiiLPLwGJ+ffp+RJKRFRr0cjQWkxY1U="
+        },
+        {
+          "hash": "sha256:af0551ecdc679a3cfcb610aa156baea1444b05af226c7c62eca7501aeafcb9db",
+          "href": "http://localhost/zx-theme-assets/af0551ecdc679a3cfcb610aa156baea1444b05af226c7c62eca7501aeafcb9db.css",
+          "integrity": "sha256-rwVR7Nxnmjz8thCqFWuuoURLBa8ibHxi7KdQGur8uds="
+        }
+      ],
+      "sidebar": "color(srgb 1 1 1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.25 0.55 0.98)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:49b32d46664e6c2b4b8e079415463ee208ab5216aa2c186f81080e6a1fb1065d",
+          "href": "http://localhost/zx-theme-assets/49b32d46664e6c2b4b8e079415463ee208ab5216aa2c186f81080e6a1fb1065d.css",
+          "integrity": "sha256-SbMtRmZObCtLjgeUFUY+4girUhaqLBhvgQgOah+xBl0="
+        },
+        {
+          "hash": "sha256:9fb538948e8d95b9d504861e6fb57c31c3a3d0a4ccb3e1edf9c2801aa78edb33",
+          "href": "http://localhost/zx-theme-assets/9fb538948e8d95b9d504861e6fb57c31c3a3d0a4ccb3e1edf9c2801aa78edb33.css",
+          "integrity": "sha256-n7U4lI6NlbnVBIYeb7V8McOj0KTMs+Ht+cKAGqeO2zM="
+        },
+        {
+          "hash": "sha256:43d0b2489d0af00f5091c5b4fbacfbe7dc9ef8f57705d1f68405207150904699",
+          "href": "http://localhost/zx-theme-assets/43d0b2489d0af00f5091c5b4fbacfbe7dc9ef8f57705d1f68405207150904699.css",
+          "integrity": "sha256-Q9CySJ0K8A9QkcW0+6z759ye+PV3BdH2hAUgcVCQRpk="
+        }
+      ],
+      "sidebar": "color(srgb 0.08 0.09 0.115)",
+      "theme": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.345 0.465 0.215)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:f8502662a83472917727e005ee7af347d5dbfe9c3f70727945b4b2591d8e2d87",
+          "href": "http://localhost/zx-theme-assets/f8502662a83472917727e005ee7af347d5dbfe9c3f70727945b4b2591d8e2d87.css",
+          "integrity": "sha256-+FAmYqg0cpF3J+AF7nrzR9Xb/pw/cHJ5RbSyWR2OLYc="
+        },
+        {
+          "hash": "sha256:f6ffde60970215451dd179bcb19ac1debe9a370a4e7abc7eb9e425603d20add1",
+          "href": "http://localhost/zx-theme-assets/f6ffde60970215451dd179bcb19ac1debe9a370a4e7abc7eb9e425603d20add1.css",
+          "integrity": "sha256-9v/eYJcCFUUd0Xm8sZrB3r6aNwpOerx+ueQlYD0grdE="
+        },
+        {
+          "hash": "sha256:199b348ea57c868ebd788a23d44cf2aca79f03df5e0746ec6cf40fb19ef7e385",
+          "href": "http://localhost/zx-theme-assets/199b348ea57c868ebd788a23d44cf2aca79f03df5e0746ec6cf40fb19ef7e385.css",
+          "integrity": "sha256-GZs0jqV8ho69eIoj1EzyrKefA99eB0bsbPQPsZ7344U="
+        }
+      ],
+      "sidebar": "color(srgb 0.9825 0.9878 0.9755)",
+      "theme": "defense-green",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.525 0.66 0.41)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:f8502662a83472917727e005ee7af347d5dbfe9c3f70727945b4b2591d8e2d87",
+          "href": "http://localhost/zx-theme-assets/f8502662a83472917727e005ee7af347d5dbfe9c3f70727945b4b2591d8e2d87.css",
+          "integrity": "sha256-+FAmYqg0cpF3J+AF7nrzR9Xb/pw/cHJ5RbSyWR2OLYc="
+        },
+        {
+          "hash": "sha256:1c786696c6a85d7c1cf5a3734be0cd92248c14647ca6964aa5706be6521e751d",
+          "href": "http://localhost/zx-theme-assets/1c786696c6a85d7c1cf5a3734be0cd92248c14647ca6964aa5706be6521e751d.css",
+          "integrity": "sha256-HHhmlsaoXXwc9aNzS+DNkiSMFGR8ppZKpXBr5lIedR0="
+        },
+        {
+          "hash": "sha256:f53e0b90b03099bbea796b67e718828cc21e64353b9e53bf11597181e8be8362",
+          "href": "http://localhost/zx-theme-assets/f53e0b90b03099bbea796b67e718828cc21e64353b9e53bf11597181e8be8362.css",
+          "integrity": "sha256-9T4LkLAwmbvqeWtn5xiCjMIeZDU7nlO/EVlxgei+g2I="
+        }
+      ],
+      "sidebar": "color(srgb 0.155 0.19 0.14)",
+      "theme": "defense-green",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.28 0.4 0.34)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:0dfba9c63049bb723b7d224eb3a96397996d8b394636973a07b3e60e6dba8171",
+          "href": "http://localhost/zx-theme-assets/0dfba9c63049bb723b7d224eb3a96397996d8b394636973a07b3e60e6dba8171.css",
+          "integrity": "sha256-DfupxjBJu3I7fSJOs6ljl5ltizlGNpc6B7PmDm26gXE="
+        },
+        {
+          "hash": "sha256:a19433f31cbf8cfd7a4924600cc0294eeecca71dce84c56127bf58ba76c5ea71",
+          "href": "http://localhost/zx-theme-assets/a19433f31cbf8cfd7a4924600cc0294eeecca71dce84c56127bf58ba76c5ea71.css",
+          "integrity": "sha256-oZQz8xy/jP16SSRgDMApTu7Mpx3OhMVhJ79YunbF6nE="
+        },
+        {
+          "hash": "sha256:a9f427bf416bf38f1c00e21cf3f444aedb3dae2736399fdf57e490fefe360c61",
+          "href": "http://localhost/zx-theme-assets/a9f427bf416bf38f1c00e21cf3f444aedb3dae2736399fdf57e490fefe360c61.css",
+          "integrity": "sha256-qfQnv0Fr848cAOIc8/RErts9ric2OZ/fV+SQ/v42DGE="
+        }
+      ],
+      "sidebar": "color(srgb 0.9863 0.9898 0.9845)",
+      "theme": "army-pine",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.5 0.62 0.54)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:0dfba9c63049bb723b7d224eb3a96397996d8b394636973a07b3e60e6dba8171",
+          "href": "http://localhost/zx-theme-assets/0dfba9c63049bb723b7d224eb3a96397996d8b394636973a07b3e60e6dba8171.css",
+          "integrity": "sha256-DfupxjBJu3I7fSJOs6ljl5ltizlGNpc6B7PmDm26gXE="
+        },
+        {
+          "hash": "sha256:48396faee0177ad08c3ff9cbc682c28253200b0517d1bb8047c471e7a1b646e5",
+          "href": "http://localhost/zx-theme-assets/48396faee0177ad08c3ff9cbc682c28253200b0517d1bb8047c471e7a1b646e5.css",
+          "integrity": "sha256-SDlvruAXetCMP/nLxoLCglMgCwUX0buAR8Rx56G2RuU="
+        },
+        {
+          "hash": "sha256:66b3e8bfed00165000cf8ca041d1f2c895664fe4b580897ff4749479d2ff7fc0",
+          "href": "http://localhost/zx-theme-assets/66b3e8bfed00165000cf8ca041d1f2c895664fe4b580897ff4749479d2ff7fc0.css",
+          "integrity": "sha256-ZrPov+0AFlAAz4ygQdHyyJVmT+S1gIl/9HSUedL/f8A="
+        }
+      ],
+      "sidebar": "color(srgb 0.14 0.18 0.16)",
+      "theme": "army-pine",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.22 0.32 0.42)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:05684860578ee5f0c04c8ccd58a12740e24f8d6d4a838797b09d8c28e4ee7b8b",
+          "href": "http://localhost/zx-theme-assets/05684860578ee5f0c04c8ccd58a12740e24f8d6d4a838797b09d8c28e4ee7b8b.css",
+          "integrity": "sha256-BWhIYFeO5fDATIzNWKEnQOJPjW1Kg4eXsJ2MKOTue4s="
+        },
+        {
+          "hash": "sha256:0c3bec865e1695a447b53d8bdb614507a520c5994e68ed8ae8cbf8eff4f3f9d6",
+          "href": "http://localhost/zx-theme-assets/0c3bec865e1695a447b53d8bdb614507a520c5994e68ed8ae8cbf8eff4f3f9d6.css",
+          "integrity": "sha256-DDvshl4WlaRHtT2L22FFB6UgxZlOaO2K6Mv47/Tz+dY="
+        },
+        {
+          "hash": "sha256:8c60f5ee9002aeed0d4401483e0d1f29ffdd707f972681df2dfac1b4a2c3142e",
+          "href": "http://localhost/zx-theme-assets/8c60f5ee9002aeed0d4401483e0d1f29ffdd707f972681df2dfac1b4a2c3142e.css",
+          "integrity": "sha256-jGD17pACru0NRAFIPg0fKf/dcH+XJoHfLfrBtKLDFC4="
+        }
+      ],
+      "sidebar": "color(srgb 0.9904 0.9922 0.9957)",
+      "theme": "air-gray",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.46 0.6 0.78)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:05684860578ee5f0c04c8ccd58a12740e24f8d6d4a838797b09d8c28e4ee7b8b",
+          "href": "http://localhost/zx-theme-assets/05684860578ee5f0c04c8ccd58a12740e24f8d6d4a838797b09d8c28e4ee7b8b.css",
+          "integrity": "sha256-BWhIYFeO5fDATIzNWKEnQOJPjW1Kg4eXsJ2MKOTue4s="
+        },
+        {
+          "hash": "sha256:97ee59535885918eb06149cca3c9031aa6f5ba07eff3411999abfd2afc502e9a",
+          "href": "http://localhost/zx-theme-assets/97ee59535885918eb06149cca3c9031aa6f5ba07eff3411999abfd2afc502e9a.css",
+          "integrity": "sha256-l+5ZU1iFkY6wYUnMo8kDGqb1ugfv80EZmav9KvxQLpo="
+        },
+        {
+          "hash": "sha256:a7ece3639216827c3d090dfa08d532be81ea05f6c8571431c694b288c2efab1a",
+          "href": "http://localhost/zx-theme-assets/a7ece3639216827c3d090dfa08d532be81ea05f6c8571431c694b288c2efab1a.css",
+          "integrity": "sha256-p+zjY5IWgnw9CQ36CNUyvoHqBfbIVxQxxpSyiMLvqxo="
+        }
+      ],
+      "sidebar": "color(srgb 0.13 0.17 0.24)",
+      "theme": "air-gray",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.27 0.32 0.2)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:ee0f2caadd1ef4980746f7ea5f01b18a01676351481acac16704226383ed4b69",
+          "href": "http://localhost/zx-theme-assets/ee0f2caadd1ef4980746f7ea5f01b18a01676351481acac16704226383ed4b69.css",
+          "integrity": "sha256-7g8sqt0e9JgHRvfqXwGxigFnY1FIGsrBZwQiY4PtS2k="
+        },
+        {
+          "hash": "sha256:d5c7abf3ec6a8e0a40ce480782e8f48037d71e8fdc2b21e5ac71d5f13a538f08",
+          "href": "http://localhost/zx-theme-assets/d5c7abf3ec6a8e0a40ce480782e8f48037d71e8fdc2b21e5ac71d5f13a538f08.css",
+          "integrity": "sha256-1cer8+xqjgpAzkgHguj0gDfXHo/cKyHlrHHV8TpTjwg="
+        },
+        {
+          "hash": "sha256:752bb3df786ed9d0cbdd052812fd0d1d0fc3b30a1e1982d9394a86811060c24a",
+          "href": "http://localhost/zx-theme-assets/752bb3df786ed9d0cbdd052812fd0d1d0fc3b30a1e1982d9394a86811060c24a.css",
+          "integrity": "sha256-dSuz33hu2dDL3QUoEv0NHQ/DswoeGYLZOUqGgRBgwko="
+        }
+      ],
+      "sidebar": "color(srgb 0.9879 0.9861 0.9738)",
+      "theme": "pap-olive",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.52 0.58 0.38)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:ee0f2caadd1ef4980746f7ea5f01b18a01676351481acac16704226383ed4b69",
+          "href": "http://localhost/zx-theme-assets/ee0f2caadd1ef4980746f7ea5f01b18a01676351481acac16704226383ed4b69.css",
+          "integrity": "sha256-7g8sqt0e9JgHRvfqXwGxigFnY1FIGsrBZwQiY4PtS2k="
+        },
+        {
+          "hash": "sha256:f8fefc67872f3220af2b49cc29ff675c0f8dab62a0c850fd0e48dce392d8cc06",
+          "href": "http://localhost/zx-theme-assets/f8fefc67872f3220af2b49cc29ff675c0f8dab62a0c850fd0e48dce392d8cc06.css",
+          "integrity": "sha256-+P78Z4cvMiCvK0nMKf9nXA+Nq2KgyFD9Dkjc45LYzAY="
+        },
+        {
+          "hash": "sha256:0cb5ecb5397606e6a4ffb20995d57d5198f0d567a2ee736f9229bf52dc504250",
+          "href": "http://localhost/zx-theme-assets/0cb5ecb5397606e6a4ffb20995d57d5198f0d567a2ee736f9229bf52dc504250.css",
+          "integrity": "sha256-DLXstTl2Buak/7IJldV9UZjw1Wei7nNvkim/UtxQQlA="
+        }
+      ],
+      "sidebar": "color(srgb 0.15 0.17 0.12)",
+      "theme": "pap-olive",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.18 0.3 0.22)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:ef09b9892db161af8af1d694ad06713557d6892bb36c70c3e85512a4c4bcfff6",
+          "href": "http://localhost/zx-theme-assets/ef09b9892db161af8af1d694ad06713557d6892bb36c70c3e85512a4c4bcfff6.css",
+          "integrity": "sha256-7wm5iS2xYa+K8daUrQZxNVfWiSuzbHDD6FUSpMS8//Y="
+        },
+        {
+          "hash": "sha256:76b76219255a5227e6b7db8a60284daf00140c8ba61524ae98a0ec6a2d1336f1",
+          "href": "http://localhost/zx-theme-assets/76b76219255a5227e6b7db8a60284daf00140c8ba61524ae98a0ec6a2d1336f1.css",
+          "integrity": "sha256-drdiGSVaUifmt9uKYChNrwAUDIumFSSumKDsai0TNvE="
+        },
+        {
+          "hash": "sha256:1e92a9cd705cac0a6a6637ba248c9e57aa89f8d69601b3bda28da707f3d3244c",
+          "href": "http://localhost/zx-theme-assets/1e92a9cd705cac0a6a6637ba248c9e57aa89f8d69601b3bda28da707f3d3244c.css",
+          "integrity": "sha256-HpKpzXBcrApqZje6JIyeV6qJ+NaWAbO9oo2nB/PTJEw="
+        }
+      ],
+      "sidebar": "color(srgb 0.9872 0.9819 0.9643)",
+      "theme": "rocket-moss",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.4 0.58 0.44)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:ef09b9892db161af8af1d694ad06713557d6892bb36c70c3e85512a4c4bcfff6",
+          "href": "http://localhost/zx-theme-assets/ef09b9892db161af8af1d694ad06713557d6892bb36c70c3e85512a4c4bcfff6.css",
+          "integrity": "sha256-7wm5iS2xYa+K8daUrQZxNVfWiSuzbHDD6FUSpMS8//Y="
+        },
+        {
+          "hash": "sha256:3f3e9a8f4dd6ff8ebeb2069f2eb174de5bd11f086f5adc87731a1f305f613902",
+          "href": "http://localhost/zx-theme-assets/3f3e9a8f4dd6ff8ebeb2069f2eb174de5bd11f086f5adc87731a1f305f613902.css",
+          "integrity": "sha256-Pz6aj03W/46+sgafLrF03lvRHwhvWtyHcxofMF9hOQI="
+        },
+        {
+          "hash": "sha256:7974817427a74fcbb8467dfe9913fdadfb1410c43b0fe2ddf7f25e1383b38b87",
+          "href": "http://localhost/zx-theme-assets/7974817427a74fcbb8467dfe9913fdadfb1410c43b0fe2ddf7f25e1383b38b87.css",
+          "integrity": "sha256-eXSBdCenT8u4Rn3+mRP9rfsUEMQ7D+Ld9/JeE4Ozi4c="
+        }
+      ],
+      "sidebar": "color(srgb 0.12 0.17 0.14)",
+      "theme": "rocket-moss",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.12 0.31 0.55)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:323ad5c4d72ec9ae9a1fa69e41272842505821a13c8ab3d028a2cd56cefd5cac",
+          "href": "http://localhost/zx-theme-assets/323ad5c4d72ec9ae9a1fa69e41272842505821a13c8ab3d028a2cd56cefd5cac.css",
+          "integrity": "sha256-MjrVxNcuya6aH6aeQScoQlBYIaE8irPQKKLNVs79XKw="
+        },
+        {
+          "hash": "sha256:cad0ddd1f75de249b0da764d6f28882438c49c6472d96dd3633c6af040a73518",
+          "href": "http://localhost/zx-theme-assets/cad0ddd1f75de249b0da764d6f28882438c49c6472d96dd3633c6af040a73518.css",
+          "integrity": "sha256-ytDd0fdd4kmw2nZNbyiIJDjEnGRy2W3TYzxq8ECnNRg="
+        },
+        {
+          "hash": "sha256:5188b5b597cd656c4e13c4b2f9ab8e1f7cafe3122301042de806a72a1061c97d",
+          "href": "http://localhost/zx-theme-assets/5188b5b597cd656c4e13c4b2f9ab8e1f7cafe3122301042de806a72a1061c97d.css",
+          "integrity": "sha256-UYi1tZfNZWxOE8Sy+auOH3yv4xIjAQQt6AanKhBhyX0="
+        }
+      ],
+      "sidebar": "color(srgb 0.9853 0.9905 0.9941)",
+      "theme": "factory-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.23 0.47 0.7)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:323ad5c4d72ec9ae9a1fa69e41272842505821a13c8ab3d028a2cd56cefd5cac",
+          "href": "http://localhost/zx-theme-assets/323ad5c4d72ec9ae9a1fa69e41272842505821a13c8ab3d028a2cd56cefd5cac.css",
+          "integrity": "sha256-MjrVxNcuya6aH6aeQScoQlBYIaE8irPQKKLNVs79XKw="
+        },
+        {
+          "hash": "sha256:fc35c8e76392863087e121a085f80e1bfbcf07c93b804696da877b8c386b633c",
+          "href": "http://localhost/zx-theme-assets/fc35c8e76392863087e121a085f80e1bfbcf07c93b804696da877b8c386b633c.css",
+          "integrity": "sha256-/DXI52OShjCH4SGghfgOG/vPB8k7gEaW2od7jDhrYzw="
+        },
+        {
+          "hash": "sha256:ee80c910867438b22bb8768bd7c6f44a7ac9a6b28b0654ca662d7604075f6f61",
+          "href": "http://localhost/zx-theme-assets/ee80c910867438b22bb8768bd7c6f44a7ac9a6b28b0654ca662d7604075f6f61.css",
+          "integrity": "sha256-7oDJEIZ0OLIruHaL18b0SnrJprKLBlTKZi12BAdfb2E="
+        }
+      ],
+      "sidebar": "color(srgb 0.115 0.16 0.22)",
+      "theme": "factory-blue",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.086 0.365 1)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:30edf3f654bcef04b74b1b096746b9c2588df369c5fc47612ab397fdfccf3d45",
+          "href": "http://localhost/zx-theme-assets/30edf3f654bcef04b74b1b096746b9c2588df369c5fc47612ab397fdfccf3d45.css",
+          "integrity": "sha256-MO3z9lS87wS3SxsJZ0a5wliN82nF/EdhKrOX/fzPPUU="
+        },
+        {
+          "hash": "sha256:3bf042665d3c58a26349343722219241b4b2996b3c936f14edb283b4541c6389",
+          "href": "http://localhost/zx-theme-assets/3bf042665d3c58a26349343722219241b4b2996b3c936f14edb283b4541c6389.css",
+          "integrity": "sha256-O/BCZl08WKJjSTQ3IiGSQbSymWs8k28U7bKDtFQcY4k="
+        },
+        {
+          "hash": "sha256:e8079eadef763c425e426995803467ee7688f05312c7ed45342caf7560a519fb",
+          "href": "http://localhost/zx-theme-assets/e8079eadef763c425e426995803467ee7688f05312c7ed45342caf7560a519fb.css",
+          "integrity": "sha256-6Aeere92PEJeQmmVgDRn7naI8FMSx+1FNCyvdWClGfs="
+        }
+      ],
+      "sidebar": "color(srgb 0.9919 1 1)",
+      "theme": "tech-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.13 0.47 0.98)",
+          "color": "color(srgb 0 0 0)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:30edf3f654bcef04b74b1b096746b9c2588df369c5fc47612ab397fdfccf3d45",
+          "href": "http://localhost/zx-theme-assets/30edf3f654bcef04b74b1b096746b9c2588df369c5fc47612ab397fdfccf3d45.css",
+          "integrity": "sha256-MO3z9lS87wS3SxsJZ0a5wliN82nF/EdhKrOX/fzPPUU="
+        },
+        {
+          "hash": "sha256:91ec26616bc9d54274794daac496757b8872833455021aeb712f9a92e192cb68",
+          "href": "http://localhost/zx-theme-assets/91ec26616bc9d54274794daac496757b8872833455021aeb712f9a92e192cb68.css",
+          "integrity": "sha256-kewmYWvJ1UJ0eU2qxJZ1e4hygzRVAhrrcS+akuGSy2g="
+        },
+        {
+          "hash": "sha256:6cc5a78a9ba33eee89310a3be0a2a28c1892fb3fc6637a644043fc090f1ba90e",
+          "href": "http://localhost/zx-theme-assets/6cc5a78a9ba33eee89310a3be0a2a28c1892fb3fc6637a644043fc090f1ba90e.css",
+          "integrity": "sha256-bMWnipujPu6JMQo74KKijBiS+z/GY3pkQEP8CQ8bqQ4="
+        }
+      ],
+      "sidebar": "color(srgb 0.05 0.14 0.36)",
+      "theme": "tech-blue",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:cff793326813ce7b9a2a150f275f84083abe67ac126bc768d413ef4a2b22c2b4",
+          "href": "http://localhost/zx-theme-assets/cff793326813ce7b9a2a150f275f84083abe67ac126bc768d413ef4a2b22c2b4.css",
+          "integrity": "sha256-z/eTMmgTznuaKhUPJ1+ECDq+Z6wSa8do1BPvSisiwrQ="
+        },
+        {
+          "hash": "sha256:4af2dff180af8a24f27e32eb03c1e40469959c80325c4e77c651782133515307",
+          "href": "http://localhost/zx-theme-assets/4af2dff180af8a24f27e32eb03c1e40469959c80325c4e77c651782133515307.css",
+          "integrity": "sha256-SvLf8YCviiTyfjLrA8HkBGmVnIAyXE53xlF4ITNRUwc="
+        },
+        {
+          "hash": "sha256:bb90ffe13f1d158646d624ce0ca3adbf51aa85c92f8cc67c6ba8f1de1995e24d",
+          "href": "http://localhost/zx-theme-assets/bb90ffe13f1d158646d624ce0ca3adbf51aa85c92f8cc67c6ba8f1de1995e24d.css",
+          "integrity": "sha256-u5D/4T8dFYZG1iTODKOtv1GqhckvjMZ8a6jx3hmV4k0="
+        }
+      ],
+      "sidebar": "color(srgb 0.9417 0.9594 0.9878)",
+      "theme": "industrial-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "button": [
+        {
+          "background": "color(srgb 0.16 0.42 0.96)",
+          "color": "color(srgb 1 1 1)"
+        }
+      ],
+      "links": [
+        {
+          "hash": "sha256:cff793326813ce7b9a2a150f275f84083abe67ac126bc768d413ef4a2b22c2b4",
+          "href": "http://localhost/zx-theme-assets/cff793326813ce7b9a2a150f275f84083abe67ac126bc768d413ef4a2b22c2b4.css",
+          "integrity": "sha256-z/eTMmgTznuaKhUPJ1+ECDq+Z6wSa8do1BPvSisiwrQ="
+        },
+        {
+          "hash": "sha256:ecfc77bd13c9ac2623e2357db8f636b9714cf0cea19f58ba343d7bd573726e5b",
+          "href": "http://localhost/zx-theme-assets/ecfc77bd13c9ac2623e2357db8f636b9714cf0cea19f58ba343d7bd573726e5b.css",
+          "integrity": "sha256-7Px3vRPJrCYj4jV9uPY2uXFM8M6hn1i6ND171XNybls="
+        },
+        {
+          "hash": "sha256:e483b5658430f20e5f8dab5f80da8ed48615550f9959ba20c228e2ad742bf1da",
+          "href": "http://localhost/zx-theme-assets/e483b5658430f20e5f8dab5f80da8ed48615550f9959ba20c228e2ad742bf1da.css",
+          "integrity": "sha256-5IO1ZYQw8g5fjatfgNqO1IYVVQ+ZWbogwijirXQr8do="
+        }
+      ],
+      "sidebar": "color(srgb 0.062 0.1389 0.2519)",
+      "theme": "industrial-blue",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    }
+  ],
+  "note": "18 UI theme/mode switches; computed sidebar/button styles and selected asset links. No stylesheet load-state claim from the DOM proxy."
+}

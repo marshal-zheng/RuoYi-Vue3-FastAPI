@@ -1,0 +1,63 @@
+{
+  "registrations": [
+    {
+      "theme": "air-gray",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "army-pine",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "default",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "defense-green",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "factory-blue",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "industrial-blue",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "pap-olive",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "rocket-moss",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    },
+    {
+      "theme": "tech-blue",
+      "elementPlus": "2.4.0",
+      "tailwind": "1.6.0"
+    }
+  ],
+  "assets": [
+    {
+      "export": "./element-plus.css",
+      "asset": "zx-theme-assets/0bfc13c49b56d93c97c630e2177791dc780086996483568949f7b179e91ebe15.css",
+      "sha256": "sha256:0bfc13c49b56d93c97c630e2177791dc780086996483568949f7b179e91ebe15",
+      "disabledRolePresent": true
+    },
+    {
+      "export": "./theme.css",
+      "asset": "zx-theme-assets/5324b5dfdbc2178e8932a4e42fb974c1a8a9d8c34f43035f87212307746f11c7.css",
+      "sha256": "sha256:5324b5dfdbc2178e8932a4e42fb974c1a8a9d8c34f43035f87212307746f11c7",
+      "disabledRolePresent": true
+    }
+  ]
+}

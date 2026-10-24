@@ -1,0 +1,82 @@
+{
+  "before": {
+    "rules": [
+      "username",
+      "password"
+    ],
+    "validateOnRuleChange": true,
+    "modelHasValues": {
+      "username": false,
+      "password": false
+    },
+    "errors": [
+      "请输入您的账号",
+      "请输入您的密码"
+    ]
+  },
+  "after": {
+    "initial": {
+      "captchaStatus": true,
+      "usernamePopulated": false,
+      "passwordPopulated": false,
+      "errorStates": 0,
+      "errorMessages": []
+    },
+    "emptySubmit": {
+      "errorStates": 2,
+      "errorMessages": [
+        "请输入您的账号",
+        "请输入您的密码"
+      ]
+    },
+    "usernameFilled": {
+      "usernamePopulated": true,
+      "errorFields": [
+        "password"
+      ]
+    },
+    "filled": {
+      "usernamePopulated": true,
+      "passwordPopulated": true,
+      "errorStates": 0,
+      "errorMessages": []
+    },
+    "rememberedAccount": {
+      "username": "admin",
+      "passwordPopulated": false,
+      "rememberMe": true,
+      "errorStates": 0
+    },
+    "rememberedSubmit": {
+      "errorFields": [
+        "password"
+      ],
+      "messages": [
+        "请输入您的密码"
+      ]
+    },
+    "passwordReveal": {
+      "type": "text",
+      "populated": true
+    },
+    "fit": {
+      "card": {
+        "x": 852.5,
+        "y": 305.796875,
+        "width": 448,
+        "height": 388.390625
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "fits": true
+    },
+    "login": {
+      "httpStatus": 200,
+      "requestCount": 1,
+      "destination": "/system/user"
+    }
+  },
+  "pageErrors": []
+}

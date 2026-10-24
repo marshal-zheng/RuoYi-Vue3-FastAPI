@@ -1,0 +1,594 @@
+[
+  {
+    "label": "user-default-after",
+    "page": "/system/user",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1374 0.1938 0.1574)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1374 0.1938 0.1574)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              }
+            ],
+            "height": 47
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1374 0.1938 0.1574)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1374 0.1938 0.1574)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              }
+            ],
+            "height": 47
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.140382 0.201234 0.161782)",
+            "height": 39,
+            "line": "24px",
+            "padding": "7px 0px"
+          },
+          {
+            "fill": "color(srgb 0.140382 0.201234 0.161782)",
+            "height": 39,
+            "line": "24px",
+            "padding": "7px 0px"
+          }
+        ],
+        "spacing": "7px"
+      }
+    ],
+    "theme": "rocket-moss",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "user-army-compact",
+    "page": "/system/user",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 43,
+                "line": "24px",
+                "padding": "5px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 43,
+                "line": "24px",
+                "padding": "5px 0px"
+              }
+            ],
+            "height": 43
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 43,
+                "line": "24px",
+                "padding": "5px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 43,
+                "line": "24px",
+                "padding": "5px 0px"
+              }
+            ],
+            "height": 43
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.169795 0.217534 0.192595)",
+            "height": 35,
+            "line": "24px",
+            "padding": "5px 0px"
+          },
+          {
+            "fill": "color(srgb 0.169795 0.217534 0.192595)",
+            "height": 35,
+            "line": "24px",
+            "padding": "5px 0px"
+          }
+        ],
+        "spacing": "5px"
+      }
+    ],
+    "theme": "army-pine",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "user-army-comfortable",
+    "page": "/system/user",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 51,
+                "line": "24px",
+                "padding": "9px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 51,
+                "line": "24px",
+                "padding": "9px 0px"
+              }
+            ],
+            "height": 51
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 51,
+                "line": "24px",
+                "padding": "9px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 51,
+                "line": "24px",
+                "padding": "9px 0px"
+              }
+            ],
+            "height": 51
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.169795 0.217534 0.192595)",
+            "height": 43,
+            "line": "24px",
+            "padding": "9px 0px"
+          },
+          {
+            "fill": "color(srgb 0.169795 0.217534 0.192595)",
+            "height": 43,
+            "line": "24px",
+            "padding": "9px 0px"
+          }
+        ],
+        "spacing": "9px"
+      }
+    ],
+    "theme": "army-pine",
+    "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "role-default-light-compact",
+    "page": "/system/role",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 45,
+                "line": "24px",
+                "padding": "6px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 45,
+                "line": "24px",
+                "padding": "6px 0px"
+              }
+            ],
+            "height": 45
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 45,
+                "line": "24px",
+                "padding": "6px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 45,
+                "line": "24px",
+                "padding": "6px 0px"
+              }
+            ],
+            "height": 45
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 37,
+            "line": "24px",
+            "padding": "6px 0px"
+          },
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 37,
+            "line": "24px",
+            "padding": "6px 0px"
+          }
+        ],
+        "spacing": "6px"
+      }
+    ],
+    "theme": "default",
+    "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "role-default-light-default",
+    "page": "/system/role",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 49,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 49,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 49
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 49,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 49,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 49
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 41,
+            "line": "24px",
+            "padding": "8px 0px"
+          },
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 41,
+            "line": "24px",
+            "padding": "8px 0px"
+          }
+        ],
+        "spacing": "8px"
+      }
+    ],
+    "theme": "default",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "role-default-light-comfortable",
+    "page": "/system/role",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 53,
+                "line": "24px",
+                "padding": "10px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 53,
+                "line": "24px",
+                "padding": "10px 0px"
+              }
+            ],
+            "height": 53
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 53,
+                "line": "24px",
+                "padding": "10px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 53,
+                "line": "24px",
+                "padding": "10px 0px"
+              }
+            ],
+            "height": 53
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 45,
+            "line": "24px",
+            "padding": "10px 0px"
+          },
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 45,
+            "line": "24px",
+            "padding": "10px 0px"
+          }
+        ],
+        "spacing": "10px"
+      }
+    ],
+    "theme": "default",
+    "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "loginlog-default-light-default",
+    "page": "/system/log/logininfor",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 42.3828125
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 42.3828125
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.991 0.9928 0.9964)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 42.3828125
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 41,
+            "line": "24px",
+            "padding": "8px 0px"
+          },
+          {
+            "fill": "color(srgb 0.93003 0.933104 0.939252)",
+            "height": 41,
+            "line": "24px",
+            "padding": "8px 0px"
+          }
+        ],
+        "spacing": "8px"
+      }
+    ],
+    "theme": "default",
+    "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "loginlog-default-dark-default",
+    "page": "/system/log/logininfor",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.096 0.1101 0.1383)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.096 0.1101 0.1383)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 42.3828125
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.096 0.1101 0.1383)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.096 0.1101 0.1383)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 42.3828125
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.096 0.1101 0.1383)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              },
+              {
+                "fill": "color(srgb 0.096 0.1101 0.1383)",
+                "height": 42.3828125,
+                "line": "24px",
+                "padding": "8px 0px"
+              }
+            ],
+            "height": 42.3828125
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.15438 0.168893 0.197219)",
+            "height": 41,
+            "line": "24px",
+            "padding": "8px 0px"
+          },
+          {
+            "fill": "color(srgb 0.15438 0.168893 0.197219)",
+            "height": 41,
+            "line": "24px",
+            "padding": "8px 0px"
+          }
+        ],
+        "spacing": "8px"
+      }
+    ],
+    "theme": "default",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+  },
+  {
+    "label": "user-army-dark-default-final",
+    "page": "/system/user",
+    "tables": [
+      {
+        "body": [
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              }
+            ],
+            "height": 47
+          },
+          {
+            "cells": [
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              },
+              {
+                "fill": "color(srgb 0.1615 0.2038 0.1815)",
+                "height": 47,
+                "line": "24px",
+                "padding": "7px 0px"
+              }
+            ],
+            "height": 47
+          }
+        ],
+        "font": "14px",
+        "header": [
+          {
+            "fill": "color(srgb 0.169795 0.217534 0.192595)",
+            "height": 39,
+            "line": "24px",
+            "padding": "7px 0px"
+          },
+          {
+            "fill": "color(srgb 0.169795 0.217534 0.192595)",
+            "height": 39,
+            "line": "24px",
+            "padding": "7px 0px"
+          }
+        ],
+        "spacing": "7px"
+      }
+    ],
+    "theme": "army-pine",
+    "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+  }
+]

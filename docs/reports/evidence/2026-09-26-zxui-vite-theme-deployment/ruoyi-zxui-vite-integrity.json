@@ -1,0 +1,29 @@
+{
+  "checks": [
+    {
+      "mode": "source",
+      "root": "/tmp/ruoyi-zxui-vite-build",
+      "themes": 9,
+      "verifiedEntries": 2934,
+      "sha256": true,
+      "SRI": true,
+      "bytes": true
+    },
+    {
+      "mode": "installed",
+      "root": "/tmp/ruoyi-zxui-vite-installed-build",
+      "themes": 9,
+      "verifiedEntries": 2934,
+      "sha256": true,
+      "SRI": true,
+      "bytes": true
+    }
+  ],
+  "sourceAndInstalledMapsIdentical": true,
+  "installedFullApplicationBuild": {
+    "outDir": "/tmp/ruoyi-zxui-vite-vendor-app-build",
+    "themes": 9,
+    "verifiedEntries": 2934,
+    "mapIdenticalToSource": true
+  }
+}

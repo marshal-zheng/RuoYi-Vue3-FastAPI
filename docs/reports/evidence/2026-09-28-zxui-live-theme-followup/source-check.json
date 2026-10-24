@@ -1,0 +1,152 @@
+{
+  "verification": "Vite SFC/style transforms and token presence only; not browser rendering, lint, build, or a test suite",
+  "modules": [
+    {
+      "file": "components/ui/Pagination/index.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/ui/IconSelect/index.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/ui/ImageUpload/index.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/ui/FileUpload/index.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/ui/ImagePreview/index.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "layout/components/Copyright/index.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/business/Protocol/ImportFileDialog.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/business/Protocol/templates/RS422ProtocolTemplate.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/business/Protocol/templates/EthernetProtocolTemplate.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/business/Protocol/templates/CANProtocolTemplate.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "components/business/Protocol/templates/Protocol1553BTemplate.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "views/project/components/ProtocolConfigDrawer.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "views/project/components/VersionList.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "views/project/topo.vue",
+      "status": 200,
+      "styles": 1,
+      "result": "pass"
+    },
+    {
+      "file": "views/tool/gen/editTable.vue",
+      "status": 200,
+      "styles": 0,
+      "result": "pass"
+    }
+  ],
+  "themes": [
+    {
+      "theme": "theme-air-gray",
+      "missing": []
+    },
+    {
+      "theme": "theme-army-pine",
+      "missing": []
+    },
+    {
+      "theme": "theme-default",
+      "missing": []
+    },
+    {
+      "theme": "theme-defense-green",
+      "missing": []
+    },
+    {
+      "theme": "theme-factory-blue",
+      "missing": []
+    },
+    {
+      "theme": "theme-industrial-blue",
+      "missing": []
+    },
+    {
+      "theme": "theme-pap-olive",
+      "missing": []
+    },
+    {
+      "theme": "theme-rocket-moss",
+      "missing": []
+    },
+    {
+      "theme": "theme-tech-blue",
+      "missing": []
+    }
+  ],
+  "referencedTokens": [
+    "--zx-semantic-border-subtle",
+    "--zx-semantic-fill-hover",
+    "--zx-semantic-status-danger-on-surface",
+    "--zx-semantic-surface-field-fill",
+    "--zx-semantic-surface-field-inner",
+    "--zx-semantic-surface-field-on-text-secondary",
+    "--zx-semantic-surface-header-edge",
+    "--zx-semantic-surface-header-fill",
+    "--zx-semantic-surface-header-on-text-secondary",
+    "--zx-semantic-surface-overlay-depth",
+    "--zx-semantic-surface-overlay-edge",
+    "--zx-semantic-surface-overlay-fill",
+    "--zx-semantic-surface-overlay-on-text",
+    "--zx-semantic-surface-selected-fill",
+    "--zx-semantic-surface-selected-on-text",
+    "--zx-semantic-text-primary",
+    "--zx-semantic-text-secondary"
+  ]
+}

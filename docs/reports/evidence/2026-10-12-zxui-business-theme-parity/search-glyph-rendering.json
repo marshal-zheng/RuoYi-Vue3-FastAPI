@@ -1,0 +1,64 @@
+{
+  "before": {
+    "viewBox": "0 0 1024 1024",
+    "renderedSize": 18,
+    "approximateRingThickness": 1.125,
+    "positionFractional": false
+  },
+  "after": [
+    {
+      "dpr": 1,
+      "field": {
+        "x": 1139,
+        "y": 174,
+        "width": 260,
+        "height": 30
+      },
+      "button": {
+        "x": 1364,
+        "y": 175,
+        "width": 34,
+        "height": 28
+      },
+      "icon": {
+        "x": 1372,
+        "y": 180,
+        "width": 18,
+        "height": 18
+      },
+      "verticalOffset": 0,
+      "viewBox": "0 0 18 18",
+      "strokeWidth": "1.5px",
+      "fill": "none",
+      "shapeRendering": "geometricprecision"
+    },
+    {
+      "dpr": 2,
+      "field": {
+        "x": 1139,
+        "y": 174,
+        "width": 260,
+        "height": 30
+      },
+      "button": {
+        "x": 1364,
+        "y": 175,
+        "width": 34,
+        "height": 28
+      },
+      "icon": {
+        "x": 1372,
+        "y": 180,
+        "width": 18,
+        "height": 18
+      },
+      "verticalOffset": 0,
+      "viewBox": "0 0 18 18",
+      "strokeWidth": "1.5px",
+      "fill": "none",
+      "shapeRendering": "geometricprecision"
+    }
+  ],
+  "searchStatus": 200,
+  "pageErrors": []
+}

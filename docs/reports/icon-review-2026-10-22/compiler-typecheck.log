@@ -1,3 +1,4 @@
 
 > @zxio/theme-compiler@1.0.0 typecheck /Users/hqz/Downloads/element-plus/packages/theme-compiler
 > tsc -p tsconfig.json
+

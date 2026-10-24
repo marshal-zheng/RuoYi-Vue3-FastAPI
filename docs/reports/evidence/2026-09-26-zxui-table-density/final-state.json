@@ -1,0 +1,10 @@
+{
+  "page": "/system/user",
+  "sidebarVisible": 200,
+  "theme": "army-pine",
+  "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+  "viewport": [
+    1728,
+    936
+  ]
+}

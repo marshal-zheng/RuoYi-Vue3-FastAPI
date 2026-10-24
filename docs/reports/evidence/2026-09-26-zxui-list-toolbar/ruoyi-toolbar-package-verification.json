@@ -1,0 +1,9 @@
+{
+  "candidate": "file:./vendor/zxio-zxui-3.0.0-next.0-toolbar.20260926.1.tgz",
+  "rootEqualsLeaf": true,
+  "globalInstall": true,
+  "stylePath": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/zxui/style/list-toolbar.css",
+  "styleBytes": 14490,
+  "hasLayout": true,
+  "usesDensity": true
+}

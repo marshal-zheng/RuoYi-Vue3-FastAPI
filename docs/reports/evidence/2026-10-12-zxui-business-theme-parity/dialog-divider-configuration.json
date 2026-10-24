@@ -1,0 +1,361 @@
+{
+  "cases": [
+    {
+      "label": "unconfigured-omitted",
+      "enabled": false,
+      "header": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "footer": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "切换分隔线保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "css-does-not-enable",
+      "enabled": false,
+      "header": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "footer": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "provider-on-hook-inherits",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "ref-false-overrides-provider-on",
+      "enabled": false,
+      "header": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "footer": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "ref-undefined-restores-inheritance",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "ref-true-overrides-provider-off",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "hook-update-options-false",
+      "enabled": false,
+      "header": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "footer": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "hook-update-options-undefined-inherits",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.1)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "css-section-overrides",
+      "enabled": true,
+      "header": {
+        "width": "3px",
+        "style": "solid",
+        "color": "color(srgb 0.12 0.14 0.18 / 0.36)"
+      },
+      "footer": {
+        "width": "0px",
+        "style": "none",
+        "color": "color(srgb 0.12 0.14 0.18)"
+      },
+      "themeEdge": "1px solid color(srgb 0.12 0.14 0.18 / 0.1)",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "note": "开关变化后仍保留内容",
+      "customFooter": false,
+      "portalScoped": true
+    },
+    {
+      "label": "css-common",
+      "enabled": true,
+      "header": {
+        "width": "2px",
+        "style": "dashed",
+        "color": "color(srgb 0.25 0.55 0.98)"
+      },
+      "footer": {
+        "width": "2px",
+        "style": "dashed",
+        "color": "color(srgb 0.25 0.55 0.98)"
+      },
+      "theme": "default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "footer-absent",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid"
+      },
+      "footer": null,
+      "theme": "default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "custom-footer",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid"
+      },
+      "customFooter": true,
+      "theme": "default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "nested-provider-inherits-divider",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid"
+      },
+      "theme": "default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "nested-provider-reactive-off",
+      "enabled": false,
+      "header": {
+        "width": "0px",
+        "style": "none"
+      },
+      "footer": {
+        "width": "0px",
+        "style": "none"
+      },
+      "theme": "default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "nested-provider-reactive-on",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid"
+      },
+      "theme": "default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "default-dark-themed-divider",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.93 0.95 0.98 / 0.22)"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.93 0.95 0.98 / 0.22)"
+      },
+      "theme": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "rocket-moss-dark-themed-divider",
+      "enabled": true,
+      "header": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.18 0.3 0.22 / 0.28)"
+      },
+      "footer": {
+        "width": "1px",
+        "style": "solid",
+        "color": "color(srgb 0.18 0.3 0.22 / 0.28)"
+      },
+      "theme": "rocket-moss",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    },
+    {
+      "label": "rocket-moss-dark-disabled",
+      "enabled": false,
+      "header": {
+        "width": "0px",
+        "style": "none"
+      },
+      "footer": {
+        "width": "0px",
+        "style": "none"
+      },
+      "theme": "rocket-moss",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "closeCenterDelta": 0,
+      "portalScoped": true,
+      "recordedFrom": "observed runtime tool output; condensed fields"
+    }
+  ],
+  "businessDefault": {
+    "enabled": false,
+    "headerBorder": "0px",
+    "footerBorder": "0px",
+    "fullscreenButtons": 0,
+    "closeCenterDelta": 0,
+    "theme": "default"
+  },
+  "documentation": {
+    "path": "/Users/hqz/Downloads/element-plus/docs/examples/dialog/divider.vue",
+    "parseErrors": [],
+    "compiled": true
+  },
+  "pageErrors": [],
+  "priorSessionDiagnostics": [
+    "Error: 用户token不合法"
+  ]
+}

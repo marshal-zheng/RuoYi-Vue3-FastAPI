@@ -1,0 +1,92 @@
+[
+  {
+    "navbar": [
+      {
+        "class": "navbar-navigation flex items-center",
+        "left": 4.0390625,
+        "right": 432,
+        "width": 427.9609375
+      },
+      {
+        "class": "navbar-actions flex items-center mr-4 gap-3",
+        "left": 432,
+        "right": 751,
+        "width": 319
+      },
+      {
+        "class": "zx-theme-preset-switch el-tooltip__trigger el-tooltip__trigger",
+        "left": 432,
+        "right": 539,
+        "width": 107
+      },
+      {
+        "class": "avatar-wrapper flex items-center gap-2 px-3 py-1.5 rounded-md transition-all duration-300 font-medium el-tooltip__trigger el-tooltip__trigger",
+        "left": 607,
+        "right": 751,
+        "width": 144
+      }
+    ],
+    "scrollWidth": 768,
+    "width": 768
+  },
+  {
+    "navbar": [
+      {
+        "class": "navbar-navigation flex items-center",
+        "left": 1,
+        "right": 246.015625,
+        "width": 245.015625
+      },
+      {
+        "class": "navbar-actions flex items-center mr-4 gap-3",
+        "left": 246.015625,
+        "right": 381,
+        "width": 134.984375
+      },
+      {
+        "class": "zx-theme-preset-switch el-tooltip__trigger el-tooltip__trigger",
+        "left": 246.015625,
+        "right": 278.015625,
+        "width": 32
+      },
+      {
+        "class": "avatar-wrapper flex items-center gap-2 px-3 py-1.5 rounded-md transition-all duration-300 font-medium el-tooltip__trigger el-tooltip__trigger",
+        "left": 326.015625,
+        "right": 381,
+        "width": 54.984375
+      }
+    ],
+    "scrollWidth": 390,
+    "width": 390
+  },
+  {
+    "navbar": [
+      {
+        "class": "navbar-navigation flex items-center",
+        "left": 1,
+        "right": 177,
+        "width": 176
+      },
+      {
+        "class": "navbar-actions flex items-center mr-4 gap-3",
+        "left": 177,
+        "right": 311,
+        "width": 134
+      },
+      {
+        "class": "zx-theme-preset-switch el-tooltip__trigger el-tooltip__trigger",
+        "left": 177,
+        "right": 209,
+        "width": 32
+      },
+      {
+        "class": "avatar-wrapper flex items-center gap-2 px-3 py-1.5 rounded-md transition-all duration-300 font-medium el-tooltip__trigger el-tooltip__trigger",
+        "left": 257,
+        "right": 311,
+        "width": 54
+      }
+    ],
+    "scrollWidth": 320,
+    "width": 320
+  }
+]
