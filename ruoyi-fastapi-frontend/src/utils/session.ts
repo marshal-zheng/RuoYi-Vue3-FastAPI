@@ -75,13 +75,48 @@ const waitForRefresh = (refresh: Promise<string>, config: SessionConfig): Promis
   });
 };
 
+/** Fetch returns failed streaming bodies before JSON decoding; preserve the usual error contract. */
+const decodeStreamError = async (error: unknown): Promise<void> => {
+  if (!axios.isAxiosError(error) || !error.response?.data?.getReader) return;
+  const reader = (error.response.data as ReadableStream<Uint8Array>).getReader();
+  const decoder = new TextDecoder();
+  let text = '';
+  let bytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytes += value.byteLength;
+      if (bytes > 1024 * 1024) return;
+      text += decoder.decode(value, { stream: true });
+    }
+    text += decoder.decode();
+    if (text.trim()) error.response.data = JSON.parse(text);
+  } catch {
+    // Keep the original HTTP status when an error body is absent or malformed.
+  } finally {
+    await reader.cancel().catch(() => undefined);
+    reader.releaseLock();
+  }
+};
+
 /** One browser-session flight; Axios still owns serialization, parsing and cancellation. */
 export const createSessionTransport = (onToken: (token: string) => void) => {
   const refreshClient = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_API,
     timeout: 10000,
   });
-  const transport = axios.getAdapter(axios.defaults.adapter);
+  const defaultTransport = axios.getAdapter(axios.defaults.adapter);
+  const transport: AxiosAdapter = async (config) => {
+    if (config.responseType !== 'stream') return defaultTransport(config);
+    try {
+      // XHR buffers the full response. Fetch keeps the stream and its cancellation signal alive.
+      return await axios.getAdapter('fetch')(config);
+    } catch (error) {
+      await decodeStreamError(error);
+      throw error;
+    }
+  };
   let pending: Promise<string> | undefined;
   let pendingVersion: number | undefined;
 

@@ -75,6 +75,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.unstubAllGlobals();
   axios.defaults.adapter = originalAdapter;
   clearSecurityTokens();
   endQuerySession();
@@ -242,5 +243,93 @@ describe('browser session renewal', () => {
   it('prefers the current CSRF cookie after rotation by another tab', () => {
     document.cookie = 'csrf_token=other-tab-csrf; path=/';
     expect(getCsrfToken()).toBe('other-tab-csrf');
+  });
+
+  it('uses the fetch adapter for streams and preserves authentication, JSON and cancellation after headers', async () => {
+    const caller = new AbortController();
+    let sent!: Request;
+    const fetch = vi.fn<typeof globalThis.fetch>(async (input) => {
+      sent = input as Request;
+      const stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+          sent.signal.addEventListener('abort', () =>
+            controller.error(new DOMException('Cancelled', 'AbortError'))
+          );
+        },
+      });
+      return new Response(stream, {
+        headers: { 'content-type': 'text/event-stream' },
+      });
+    });
+    vi.stubGlobal('fetch', fetch);
+    const result = await client().post<ReadableStream<Uint8Array>>({
+      url: 'https://api.test/remark',
+      data: { instruction: '润色备注' },
+      responseType: 'stream',
+      signal: caller.signal,
+    });
+    expect(fetch).toHaveBeenCalledOnce();
+    expect(business).toHaveLength(0);
+    expect(sent.headers.get('Authorization')).toBe(`Bearer ${getToken()}`);
+    expect(sent.headers.get('X-CSRF-Token')).toBe('old-csrf');
+    expect(await sent.text()).toBe('{"instruction":"润色备注"}');
+    expect(sent.signal.aborted).toBe(false);
+    const reader = result.getReader();
+    const read = expect(reader.read()).rejects.toMatchObject({ name: 'AbortError' });
+    caller.abort();
+    expect(sent.signal.aborted).toBe(true);
+    await read;
+    reader.releaseLock();
+  });
+
+  it('refreshes one explicit pre-stream 401 and replays the same body with rotated credentials', async () => {
+    const sent: Request[] = [];
+    const fetch = vi.fn<typeof globalThis.fetch>(async (input) => {
+      sent.push(input as Request);
+      if (sent.length === 1) {
+        return new Response(JSON.stringify({ status: 401, detail: '会话已过期' }), {
+          status: 401,
+          headers: { 'content-type': 'application/problem+json' },
+        });
+      }
+      return new Response('data: {"type":"result"}\n\n', {
+        headers: { 'content-type': 'text/event-stream' },
+      });
+    });
+    vi.stubGlobal('fetch', fetch);
+    const result = await client().post<ReadableStream<Uint8Array>>({
+      url: 'https://api.test/remark',
+      data: { instruction: '润色备注' },
+      responseType: 'stream',
+    });
+    expect(refreshes).toBe(1);
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(await sent[0].text()).toBe(await sent[1].text());
+    expect(sent[0].headers.get('X-CSRF-Token')).toBe('old-csrf');
+    expect(sent[1].headers.get('X-CSRF-Token')).toBe('new-csrf');
+    expect(sent[1].headers.get('Authorization')).toBe(`Bearer ${getToken()}`);
+    await result.cancel();
+  });
+
+  it('decodes streaming ProblemDetails without refreshing or retrying non-auth failures', async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>(
+      async () =>
+        new Response(JSON.stringify({ status: 503, detail: 'AI 服务尚未配置' }), {
+          status: 503,
+          headers: { 'content-type': 'application/problem+json' },
+        })
+    );
+    vi.stubGlobal('fetch', fetch);
+    await expect(
+      client().post({
+        url: 'https://api.test/remark',
+        responseType: 'stream',
+      })
+    ).rejects.toMatchObject({
+      status: 503,
+      data: { detail: 'AI 服务尚未配置' },
+    });
+    expect(fetch).toHaveBeenCalledOnce();
+    expect(refreshes).toBe(0);
   });
 });
