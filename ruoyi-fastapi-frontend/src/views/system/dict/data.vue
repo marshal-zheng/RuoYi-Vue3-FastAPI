@@ -209,7 +209,21 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item data-form-full label="备注" prop="remark">
-          <RemarkEditor v-if="open" ref="remarkRef" :key="remarkSession" v-model="form.remark" />
+          <RemarkEditor
+            v-if="open"
+            ref="remarkRef"
+            :key="remarkSession"
+            v-model="form.remark"
+            scene="dictData"
+            :ai-context="
+              () => ({
+                dictType: form.dictType,
+                dictLabel: form.dictLabel,
+                dictValue: form.dictValue,
+                status: form.status === '0' ? '正常' : '停用',
+              })
+            "
+          />
         </el-form-item> </FormGrid
     ></el-form>
     <template #footer>

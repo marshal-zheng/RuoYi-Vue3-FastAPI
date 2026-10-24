@@ -131,6 +131,19 @@
             ref="remarkRef"
             :key="remarkSession"
             v-model="state.data.remark"
+            scene="user"
+            :ai-context="
+              () => ({
+                deptName: selectedDepartment?.label,
+                postNames: postOptions
+                  .filter((item) => state.data.postIds?.includes(item.postId))
+                  .map((item) => item.postName),
+                roleNames: roleOptions
+                  .filter((item) => state.data.roleIds?.includes(item.roleId))
+                  .map((item) => item.roleName),
+                status: state.data.status === '0' ? '正常' : '停用',
+              })
+            "
           />
         </el-form-item>
       </FormGrid>

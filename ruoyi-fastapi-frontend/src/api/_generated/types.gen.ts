@@ -3827,6 +3827,9 @@ export type HardBreakNodeInput = {
         type: 'link';
       } & LinkMark)
     | ({
+        type: 'textStyle';
+      } & TextStyleMark)
+    | ({
         type: 'bold';
       } & BoldMark)
     | ({
@@ -3854,6 +3857,9 @@ export type HardBreakNodeOutput = {
     | ({
         type: 'link';
       } & LinkMark)
+    | ({
+        type: 'textStyle';
+      } & TextStyleMark)
     | ({
         type: 'bold';
       } & BoldMark)
@@ -5972,6 +5978,43 @@ export type PyInfo = {
 };
 
 /**
+ * RemarkAIRequest
+ */
+export type RemarkAiRequest = {
+  candidate?: RemarkDocumentInput | null;
+  /**
+   * Context
+   */
+  context?: {
+    [key: string]: string | Array<string>;
+  };
+  document: RemarkDocumentInput | null;
+  /**
+   * Instruction
+   */
+  instruction: string;
+  /**
+   * Scene
+   */
+  scene: 'user' | 'role' | 'post' | 'dictType' | 'dictData' | 'config' | 'genTable';
+  selection?: RemarkDocumentInput | null;
+  /**
+   * Target
+   */
+  target: 'document' | 'selection';
+};
+
+/**
+ * RemarkAIStatus
+ */
+export type RemarkAiStatus = {
+  /**
+   * Available
+   */
+  available: boolean;
+};
+
+/**
  * RemarkDocument
  */
 export type RemarkDocumentInput = {
@@ -6935,6 +6978,9 @@ export type TextNodeInput = {
         type: 'link';
       } & LinkMark)
     | ({
+        type: 'textStyle';
+      } & TextStyleMark)
+    | ({
         type: 'bold';
       } & BoldMark)
     | ({
@@ -6963,6 +7009,9 @@ export type TextNodeOutput = {
         type: 'link';
       } & LinkMark)
     | ({
+        type: 'textStyle';
+      } & TextStyleMark)
+    | ({
         type: 'bold';
       } & BoldMark)
     | ({
@@ -6977,6 +7026,35 @@ export type TextNodeOutput = {
    * Type
    */
   type: 'text';
+};
+
+/**
+ * TextStyleAttrs
+ */
+export type TextStyleAttrs = {
+  /**
+   * Color
+   */
+  color: 'red' | 'orange' | 'green' | 'blue' | 'purple' | 'gray';
+  /**
+   * Fontfamily
+   */
+  fontFamily: null;
+  /**
+   * Fontsize
+   */
+  fontSize: null;
+};
+
+/**
+ * TextStyleMark
+ */
+export type TextStyleMark = {
+  attrs: TextStyleAttrs;
+  /**
+   * Type
+   */
+  type: 'textStyle';
 };
 
 /**
@@ -16690,6 +16768,47 @@ export type QueryProtocolDetailSystemProtocolProtocolIdGetResponses = {
    */
   200: unknown;
 };
+
+export type GenerateRemarkAiSystemRemarkAiGeneratePostData = {
+  body: RemarkAiRequest;
+  path?: never;
+  query?: never;
+  url: '/system/remark/ai/generate';
+};
+
+export type GenerateRemarkAiSystemRemarkAiGeneratePostErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type GenerateRemarkAiSystemRemarkAiGeneratePostError =
+  GenerateRemarkAiSystemRemarkAiGeneratePostErrors[keyof GenerateRemarkAiSystemRemarkAiGeneratePostErrors];
+
+export type GenerateRemarkAiSystemRemarkAiGeneratePostResponses = {
+  /**
+   * SSE delta / result / error events
+   */
+  200: unknown;
+};
+
+export type GetRemarkAiStatusSystemRemarkAiStatusGetData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/system/remark/ai/status';
+};
+
+export type GetRemarkAiStatusSystemRemarkAiStatusGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: RemarkAiStatus;
+};
+
+export type GetRemarkAiStatusSystemRemarkAiStatusGetResponse =
+  GetRemarkAiStatusSystemRemarkAiStatusGetResponses[keyof GetRemarkAiStatusSystemRemarkAiStatusGetResponses];
 
 export type AddSystemRoleSystemRolePostData = {
   body: RoleCreateModel;

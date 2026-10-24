@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Literal
 
 from dotenv import load_dotenv
-from pydantic import AliasChoices, Field, computed_field
+from pydantic import AliasChoices, Field, SecretStr, computed_field
 from pydantic_settings import BaseSettings
 
 
@@ -26,6 +26,15 @@ class AppSettings(BaseSettings):
     app_access_log: bool = False
     app_ip_location_query: bool = True
     app_same_time_login: bool = True
+
+
+class RemarkAISettings(BaseSettings):
+    """Server-only DeepSeek configuration; never expose the credential in API responses."""
+
+    deepseek_api_key: SecretStr = Field(default=SecretStr(''), repr=False)
+    deepseek_base_url: str = 'https://api.deepseek.com/v1'
+    deepseek_model: str = 'deepseek-chat'
+    remark_ai_timeout_seconds: int = Field(default=90, ge=10, le=300)
 
 
 class DevManagedDataHotReconcileSettings(BaseSettings):
@@ -505,6 +514,9 @@ class GetConfig:
         # 实例化应用配置模型
         return AppSettings()
 
+    def get_remark_ai_config(self):
+        return RemarkAISettings()
+
     @lru_cache
     def get_jwt_config(self):
         """
@@ -672,6 +684,8 @@ class GetConfig:
 get_config = GetConfig()
 # 应用配置
 AppConfig = get_config.get_app_config()
+# AI credentials are read only by the server-side remark service.
+RemarkAIConfig = get_config.get_remark_ai_config()
 # Jwt配置
 JwtConfig = get_config.get_jwt_config()
 # 敏感数据加密配置

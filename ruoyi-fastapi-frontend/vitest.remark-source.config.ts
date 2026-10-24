@@ -1,5 +1,6 @@
 import { createRequire } from 'node:module';
 import path from 'node:path';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import { mergeConfig } from 'vitest/config';
 import base from './vitest.config';
 
@@ -17,6 +18,8 @@ const { zxuiSourcePlugin } = requireSource(
 
 const config = mergeConfig(base, {
   plugins: [
+    // Source-mode editor chrome includes Vue TSX, as in the dev server config.
+    vueJsx(),
     zxuiSourcePlugin({
       workspaceRoot,
       featurePackages: ['@zxio/text-editor', '@zxio/schema-form'],
@@ -37,5 +40,6 @@ const config = mergeConfig(base, {
 config.test!.include = [
   'tests/unit/components/RemarkPackageRoundtrip.test.ts',
   'tests/unit/components/RemarkFormilyIntegration.test.ts',
+  'tests/unit/components/RemarkAIIntegration.test.ts',
 ];
 export default config;

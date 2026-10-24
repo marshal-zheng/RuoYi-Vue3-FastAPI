@@ -94,7 +94,14 @@ export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
           type: 'object',
           title: '备注',
           'x-component': 'RemarkEditor',
-          'x-component-props': { placeholder: '请输入内容' },
+          'x-component-props': {
+            scene: 'post',
+            aiContext: () => ({
+              postName: ctx.form.values.postName,
+              postCode: ctx.form.values.postCode,
+              status: ctx.form.values.status === '0' ? '正常' : '停用',
+            }),
+          },
         },
       },
     };

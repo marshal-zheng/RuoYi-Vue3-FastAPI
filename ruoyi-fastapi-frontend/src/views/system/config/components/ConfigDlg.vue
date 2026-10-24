@@ -34,6 +34,14 @@
             ref="remarkRef"
             :key="remarkSession"
             v-model="state.data.remark"
+            scene="config"
+            :ai-context="
+              () => ({
+                configName: state.data.configName,
+                configKey: state.data.configKey,
+                configType: state.data.configType === 'Y' ? '系统内置' : '自定义',
+              })
+            "
           />
         </el-form-item>
       </FormGrid>

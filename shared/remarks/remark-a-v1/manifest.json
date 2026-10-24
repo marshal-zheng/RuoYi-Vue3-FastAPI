@@ -584,6 +584,90 @@
     {
       "file": "invalid/mark-type-array.json",
       "zxui": "reject"
+    },
+    {
+      "file": "valid/text-color.json",
+      "literal": "重要说明",
+      "display": "重要说明",
+      "zxui": "accept"
+    },
+    {
+      "file": "valid/text-color-mark-order.json",
+      "zxui": "canonicalize",
+      "literal": "x",
+      "display": "x",
+      "normalized": {
+        "version": 2,
+        "body": {
+          "format": "json",
+          "content": {
+            "type": "doc",
+            "content": [
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "textAlign": null,
+                  "blockId": "blk_a1"
+                },
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "x",
+                    "marks": [
+                      {
+                        "type": "link",
+                        "attrs": {
+                          "href": "https://example.com/",
+                          "target": "_blank",
+                          "rel": "noopener noreferrer nofollow",
+                          "class": null,
+                          "title": null
+                        }
+                      },
+                      {
+                        "type": "textStyle",
+                        "attrs": {
+                          "fontFamily": null,
+                          "fontSize": null,
+                          "color": "blue"
+                        }
+                      },
+                      {
+                        "type": "italic"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "annotations": [],
+        "assets": [],
+        "meta": {
+          "schemaVersion": "stable-block-identity/v2"
+        }
+      }
+    },
+    {
+      "file": "invalid/text-color-hex.json",
+      "zxui": "reject"
+    },
+    {
+      "file": "invalid/text-color-unlisted.json",
+      "zxui": "reject"
+    },
+    {
+      "file": "invalid/text-style-font-size.json",
+      "zxui": "reject"
+    },
+    {
+      "file": "invalid/text-style-empty.json",
+      "zxui": "reject"
+    },
+    {
+      "file": "invalid/text-style-missing-attribute.json",
+      "zxui": "reject"
     }
   ]
 }

@@ -90,6 +90,14 @@
           ref="remarkRef"
           :key="remarkSession"
           v-model="drawer.state.data.remark"
+          scene="role"
+          :ai-context="
+            () => ({
+              roleName: drawer.state.data.roleName,
+              roleKey: drawer.state.data.roleKey,
+              status: drawer.state.data.status === '0' ? '正常' : '停用',
+            })
+          "
         />
       </el-form-item>
     </el-form>

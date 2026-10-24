@@ -7070,13 +7070,17 @@
                     "mapping": {
                       "bold": "#/components/schemas/BoldMark",
                       "italic": "#/components/schemas/ItalicMark",
-                      "link": "#/components/schemas/LinkMark"
+                      "link": "#/components/schemas/LinkMark",
+                      "textStyle": "#/components/schemas/TextStyleMark"
                     },
                     "propertyName": "type"
                   },
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TextStyleMark"
                     },
                     {
                       "$ref": "#/components/schemas/BoldMark"
@@ -7121,13 +7125,17 @@
                     "mapping": {
                       "bold": "#/components/schemas/BoldMark",
                       "italic": "#/components/schemas/ItalicMark",
-                      "link": "#/components/schemas/LinkMark"
+                      "link": "#/components/schemas/LinkMark",
+                      "textStyle": "#/components/schemas/TextStyleMark"
                     },
                     "propertyName": "type"
                   },
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TextStyleMark"
                     },
                     {
                       "$ref": "#/components/schemas/BoldMark"
@@ -11028,6 +11036,110 @@
         "title": "PyInfo",
         "type": "object"
       },
+      "RemarkAIRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "candidate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "context": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "maxLength": 300,
+                  "type": "string"
+                },
+                {
+                  "items": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "maxItems": 50,
+                  "type": "array"
+                }
+              ]
+            },
+            "maxProperties": 8,
+            "title": "Context",
+            "type": "object"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "instruction": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Instruction",
+            "type": "string"
+          },
+          "scene": {
+            "enum": [
+              "user",
+              "role",
+              "post",
+              "dictType",
+              "dictData",
+              "config",
+              "genTable"
+            ],
+            "title": "Scene",
+            "type": "string"
+          },
+          "selection": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target": {
+            "enum": [
+              "document",
+              "selection"
+            ],
+            "title": "Target",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scene",
+          "instruction",
+          "target",
+          "document"
+        ],
+        "title": "RemarkAIRequest",
+        "type": "object"
+      },
+      "RemarkAIStatus": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "title": "RemarkAIStatus",
+        "type": "object"
+      },
       "RemarkDocument-Input": {
         "additionalProperties": false,
         "properties": {
@@ -12841,13 +12953,17 @@
                     "mapping": {
                       "bold": "#/components/schemas/BoldMark",
                       "italic": "#/components/schemas/ItalicMark",
-                      "link": "#/components/schemas/LinkMark"
+                      "link": "#/components/schemas/LinkMark",
+                      "textStyle": "#/components/schemas/TextStyleMark"
                     },
                     "propertyName": "type"
                   },
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TextStyleMark"
                     },
                     {
                       "$ref": "#/components/schemas/BoldMark"
@@ -12893,13 +13009,17 @@
                     "mapping": {
                       "bold": "#/components/schemas/BoldMark",
                       "italic": "#/components/schemas/ItalicMark",
-                      "link": "#/components/schemas/LinkMark"
+                      "link": "#/components/schemas/LinkMark",
+                      "textStyle": "#/components/schemas/TextStyleMark"
                     },
                     "propertyName": "type"
                   },
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/TextStyleMark"
                     },
                     {
                       "$ref": "#/components/schemas/BoldMark"
@@ -12932,6 +13052,57 @@
           "text"
         ],
         "title": "TextNode",
+        "type": "object"
+      },
+      "TextStyleAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "color": {
+            "enum": [
+              "red",
+              "orange",
+              "green",
+              "blue",
+              "purple",
+              "gray"
+            ],
+            "title": "Color",
+            "type": "string"
+          },
+          "fontFamily": {
+            "title": "Fontfamily",
+            "type": "null"
+          },
+          "fontSize": {
+            "title": "Fontsize",
+            "type": "null"
+          }
+        },
+        "required": [
+          "fontFamily",
+          "fontSize",
+          "color"
+        ],
+        "title": "TextStyleAttrs",
+        "type": "object"
+      },
+      "TextStyleMark": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/TextStyleAttrs"
+          },
+          "type": {
+            "const": "textStyle",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "TextStyleMark",
         "type": "object"
       },
       "Token": {
@@ -28135,6 +28306,77 @@
         "tags": [
           "协议管理",
           "协议管理"
+        ]
+      }
+    },
+    "/system/remark/ai/generate": {
+      "post": {
+        "operationId": "generate_remark_ai_system_remark_ai_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemarkAIRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/event-stream": {}
+            },
+            "description": "SSE delta / result / error events"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Generate Remark Ai",
+        "tags": [
+          "系统管理-AI备注"
+        ]
+      }
+    },
+    "/system/remark/ai/status": {
+      "get": {
+        "operationId": "get_remark_ai_status_system_remark_ai_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemarkAIStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Remark Ai Status",
+        "tags": [
+          "系统管理-AI备注"
         ]
       }
     },

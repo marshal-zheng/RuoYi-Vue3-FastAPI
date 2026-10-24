@@ -1,7 +1,9 @@
 """Frozen remark-a-v1 codec. No ORM, application services, HTML parsing or I/O.
 
-Historical migrations must continue to import this version. Changes of accepted
-semantics require a new codec/revision and an explicit conversion.
+Historical migrations must continue to import this version. An additive
+admission may extend it only when every previously accepted document stays
+accepted unchanged (2026-10-22: named text colors). Any other change of accepted
+semantics requires a new codec/revision and an explicit conversion.
 """
 
 import hashlib
@@ -23,7 +25,10 @@ LIMITS = {
 }
 BLOCK_ID = re.compile(r'^[a-z][a-z0-9]*_[a-z0-9]+$')
 CONTROL = re.compile(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\ud800-\udfff]')
-MARK_ORDER = {'link': 0, 'bold': 1, 'italic': 2}
+# Same rank as the ZXUI schema, so canonical mark order matches the editor's.
+MARK_ORDER = {'link': 0, 'textStyle': 1, 'bold': 2, 'italic': 3}
+# ZXUI BASIC_RICH_TEXT_TEXT_COLORS; colors are stored by name, never as CSS.
+TEXT_COLORS = ('red', 'orange', 'green', 'blue', 'purple', 'gray')
 
 
 class RemarkError(ValueError):
@@ -110,7 +115,12 @@ def _marks(value, path):
         if kind in seen:
             _fail('duplicate-mark', path)
         seen.add(kind)
-        _keys(mark, ['type', 'attrs'] if kind == 'link' else ['type'], path=path)
+        _keys(mark, ['type', 'attrs'] if kind in {'link', 'textStyle'} else ['type'], path=path)
+        if kind == 'textStyle':
+            attrs = mark['attrs']
+            _keys(attrs, ['fontFamily', 'fontSize', 'color'], path=path)
+            if attrs['fontFamily'] is not None or attrs['fontSize'] is not None or attrs['color'] not in TEXT_COLORS:
+                _fail('text-style', path)
         if kind == 'link':
             attrs = mark['attrs']
             _keys(attrs, ['href', 'target', 'rel', 'class', 'title'], path=path)

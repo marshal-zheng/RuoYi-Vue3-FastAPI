@@ -12,6 +12,7 @@ from modules.system.api.menu_controller import menuController
 from modules.system.api.notice_controller import noticeController
 from modules.system.api.online_controller import onlineController
 from modules.system.api.post_controller import postController
+from modules.system.api.remark_ai_controller import remark_ai_router
 from modules.system.api.resilience_controller import resilienceController
 from modules.system.api.role_controller import roleController
 from modules.system.api.server_controller import serverController
@@ -30,6 +31,7 @@ __all__ = [
     'noticeController',
     'onlineController',
     'postController',
+    'remark_ai_router',
     'resilienceController',
     'roleController',
     'serverController',

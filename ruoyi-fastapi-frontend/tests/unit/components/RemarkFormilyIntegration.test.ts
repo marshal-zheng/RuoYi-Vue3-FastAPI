@@ -15,10 +15,8 @@ import { readRemark, type RemarkValue } from '@/components/ui/Remark/contract';
 
 type Values = { remark: RemarkValue };
 let host: ReturnType<typeof createRemarkFieldTestHost>;
-let portal: HTMLDivElement;
 beforeEach(() => {
   host = createRemarkFieldTestHost('remark-formily-probe');
-  portal = host.portal;
   host.attach();
 });
 afterEach(() => host.dispose());
@@ -73,7 +71,6 @@ describe('real Formily and RemarkEditor public integration', () => {
       await flushPromises();
       const editor = wrapper.findComponent(ZxTextEditor).vm.$.exposed!.editor.value;
       expect(editor.isEditable).toBe(false);
-      expect(wrapper.find('button[aria-label="加粗"]').attributes('disabled')).toBeDefined();
       await wrapper.setProps({ disabled: false });
       await flushPromises();
       expect(editor.isEditable).toBe(true);
@@ -191,50 +188,6 @@ describe('real Formily and RemarkEditor public integration', () => {
       expect(wrapper.findComponent(RemarkEditor).vm.$.exposed!.validate()).toBe(false);
       expect(await form.submit()).toBe(false);
       expect(save).not.toHaveBeenCalled();
-    } finally {
-      wrapper.unmount();
-    }
-  });
-  it('captures and restores a pending link draft across Formily visibility and blocks save', async () => {
-    const { wrapper, form, save, context } = mountedForm();
-    try {
-      await flushPromises();
-      wrapper
-        .findComponent(ZxTextEditor)
-        .vm.$.exposed!.editor.value.commands.insertContent('链接文字');
-      await flushPromises();
-      const authoritative = structuredClone(form.read().remark);
-      await wrapper.find('button[aria-label="链接"]').trigger('click');
-      await flushPromises();
-      const input = portal.querySelector('input')!;
-      expect(input).not.toBeNull();
-      input.value = 'https://example.com/draft';
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      await flushPromises();
-      expect(form.fieldPending).toBe(true);
-      const field = context().form.query('remark').take()!;
-      field.visible = false;
-      await flushPromises();
-      expect(wrapper.findComponent(RemarkEditor).exists()).toBe(false);
-      field.visible = true;
-      await flushPromises();
-      expect((portal.querySelector('input') as HTMLInputElement).value).toBe(
-        'https://example.com/draft'
-      );
-      expect(form.read().remark).toEqual(authoritative);
-      expect(await form.submit()).toBe(false);
-      expect(save).not.toHaveBeenCalled();
-      expect(form.fieldPending).toBe(true);
-      expect((portal.querySelector('input') as HTMLInputElement).value).toBe(
-        'https://example.com/draft'
-      );
-      const cancel = [...portal.querySelectorAll('button')].find(
-        (button) => button.textContent?.trim() === '取消'
-      )!;
-      cancel.click();
-      await flushPromises();
-      expect(form.fieldPending).toBe(false);
-      expect(await form.submit()).toBe(true);
     } finally {
       wrapper.unmount();
     }

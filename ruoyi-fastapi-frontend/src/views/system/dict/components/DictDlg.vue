@@ -31,6 +31,14 @@
             ref="remarkRef"
             :key="remarkSession"
             v-model="state.data.remark"
+            scene="dictType"
+            :ai-context="
+              () => ({
+                dictName: state.data.dictName,
+                dictType: state.data.dictType,
+                status: state.data.status === '0' ? '正常' : '停用',
+              })
+            "
           />
         </el-form-item>
       </FormGrid>

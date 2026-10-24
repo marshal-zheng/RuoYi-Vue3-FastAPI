@@ -4956,7 +4956,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/keybindings@npm:2.0.0, @zxio/keybindings@npm:^2.0.0":
+"@zxio/keybindings@npm:^2.0.0":
   version: 2.0.0
   resolution: "@zxio/keybindings@npm:2.0.0"
   dependencies:
@@ -4967,7 +4967,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/mcp-core@npm:1.0.0, @zxio/mcp-core@npm:^1.0.0":
+"@zxio/mcp-core@npm:^1.0.0":
   version: 1.0.0
   resolution: "@zxio/mcp-core@npm:1.0.0"
   checksum: 10c0/75f68885330b5bd2aa8e64e00ec4a4c6d0bc8ec73b491cd4bd36640739a8d1f08726ea58d9ea1475036bdcb65c5ddb77536c4865f9edd646205e2b085078f9bb
@@ -5013,9 +5013,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-remark-a.20261022.9.tgz::locator=vfadmin%40workspace%3A.":
-  version: 1.0.0-remark-a.20261022.9
-  resolution: "@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-remark-a.20261022.9.tgz#./vendor/zxio-text-editor-1.0.0-remark-a.20261022.9.tgz::hash=593ba3&locator=vfadmin%40workspace%3A."
+"@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-remark-ai.20261023.2.tgz::locator=vfadmin%40workspace%3A.":
+  version: 1.0.0-remark-ai.20261023.2
+  resolution: "@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-remark-ai.20261023.2.tgz#./vendor/zxio-text-editor-1.0.0-remark-ai.20261023.2.tgz::hash=52e3a0&locator=vfadmin%40workspace%3A."
   dependencies:
     "@floating-ui/dom": "npm:^1.7.6"
     "@floating-ui/vue": "npm:^1.1.11"
@@ -5049,9 +5049,9 @@ __metadata:
     "@tiptap/suggestion": "npm:^3.31.4"
     "@tiptap/vue-3": "npm:^3.31.4"
     "@tiptap/y-tiptap": "npm:^3.0.9"
-    "@zxio/keybindings": "npm:2.0.0"
-    "@zxio/mcp-core": "npm:1.0.0"
-    "@zxio/tokens": "npm:2.0.0"
+    "@zxio/keybindings": "npm:^2.0.0"
+    "@zxio/mcp-core": "npm:^1.0.0"
+    "@zxio/tokens": "npm:^2.0.0"
     ai-sdk: "npm:ai@^7.0.37"
     jsonc-parser: "npm:3.3.1"
     lowlight: "npm:^3.3.0"
@@ -5069,9 +5069,9 @@ __metadata:
     zx-prosemirror-model-legacy-v0: "npm:prosemirror-model@1.25.10"
     zx-prosemirror-transform-legacy-v0: "npm:prosemirror-transform@1.12.0"
   peerDependencies:
-    "@zxio/zxui": 3.0.0-next.0-remark-raw.20261022.1
+    "@zxio/zxui": ^3.0.0-next.0
     vue: ^3.5.0
-  checksum: 10c0/b7d04493995abcabbc84ccf6fa80a4fab6002c5abc9075be02d9c3e5650a335ea3401dba1de136c0ced4d5cb590d928c2cc3b61647b68e3dc969527ef1f79cbc
+  checksum: 10c0/0debf385973ca7a213b13a3f7b9c0edf70094bbbf1c7e6d202bb2e6ce7452a7bbdfc079aa186981b5f7974499c9948d9e98780b7f414d2516db9d8a99b969dd4
   languageName: node
   linkType: hard
 
@@ -15089,7 +15089,7 @@ __metadata:
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
     "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-remark-a.20261022.1.tgz"
-    "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-remark-a.20261022.9.tgz"
+    "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-remark-ai.20261023.2.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz"

@@ -21,16 +21,17 @@ from modules.system.api.audit_controller import auditController
 from modules.system.api.cache_controller import cache_router
 from modules.system.api.common_controller import commonController
 from modules.system.api.config_controller import configController
+from modules.system.api.dashboard_controller import dashboard_controller
 from modules.system.api.dept_controller import deptController
 from modules.system.api.dev_menu_sync_controller import devMenuSyncController
 from modules.system.api.dict_controller import dictController
-from modules.system.api.dashboard_controller import dashboard_controller
 from modules.system.api.event_controller import eventController
 from modules.system.api.log_controller import logController
 from modules.system.api.menu_controller import menuController
 from modules.system.api.notice_controller import noticeController
 from modules.system.api.online_controller import onlineController
 from modules.system.api.post_controller import postController
+from modules.system.api.remark_ai_controller import remark_ai_router
 from modules.system.api.resilience_controller import resilienceController
 from modules.system.api.role_controller import roleController
 from modules.system.api.server_controller import serverController
@@ -116,6 +117,7 @@ def _build_system_routers() -> tuple[RouterRegistration, ...]:
         RouterRegistration(router=menuController, tags=('系统管理-菜单管理',), capability_module_key='platform'),
         RouterRegistration(router=deptController, tags=('系统管理-部门管理',), capability_module_key='platform'),
         RouterRegistration(router=postController, tags=('系统管理-岗位管理',), capability_module_key='platform'),
+        RouterRegistration(router=remark_ai_router, tags=('系统管理-AI备注',), capability_module_key='platform'),
         RouterRegistration(router=dictController, tags=('系统管理-字典管理',), capability_module_key='platform'),
         RouterRegistration(router=configController, tags=('系统管理-参数管理',), capability_module_key='platform'),
         RouterRegistration(router=noticeController, tags=('系统管理-通知公告管理',), capability_module_key='platform'),

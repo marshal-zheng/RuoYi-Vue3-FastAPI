@@ -36,6 +36,18 @@ class LinkMark(_Exact):
     attrs: LinkAttrs
 
 
+class TextStyleAttrs(_Exact):
+    fontFamily: None
+    fontSize: None
+    # Mirrors remark_document_v1.TEXT_COLORS, which admits the document first.
+    color: Literal['red', 'orange', 'green', 'blue', 'purple', 'gray']
+
+
+class TextStyleMark(_Exact):
+    type: Literal['textStyle']
+    attrs: TextStyleAttrs
+
+
 class BoldMark(_Exact):
     type: Literal['bold']
 
@@ -44,7 +56,7 @@ class ItalicMark(_Exact):
     type: Literal['italic']
 
 
-Mark = Annotated[LinkMark | BoldMark | ItalicMark, Field(discriminator='type')]
+Mark = Annotated[LinkMark | TextStyleMark | BoldMark | ItalicMark, Field(discriminator='type')]
 
 
 class TextNode(_Exact):

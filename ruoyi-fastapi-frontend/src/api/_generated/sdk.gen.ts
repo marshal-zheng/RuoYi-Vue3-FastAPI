@@ -332,6 +332,9 @@ import type {
   GenCodeLocalToolGenGenCodeTableNameGetData,
   GenCodeLocalToolGenGenCodeTableNameGetErrors,
   GenCodeLocalToolGenGenCodeTableNameGetResponses,
+  GenerateRemarkAiSystemRemarkAiGeneratePostData,
+  GenerateRemarkAiSystemRemarkAiGeneratePostErrors,
+  GenerateRemarkAiSystemRemarkAiGeneratePostResponses,
   GetCaptchaImageCaptchaImageGetData,
   GetCaptchaImageCaptchaImageGetResponses,
   GetDeviceCategoryDetailDeviceCategoryCategoryIdGetData,
@@ -388,6 +391,8 @@ import type {
   GetProtocolListSystemProtocolListGetData,
   GetProtocolListSystemProtocolListGetErrors,
   GetProtocolListSystemProtocolListGetResponses,
+  GetRemarkAiStatusSystemRemarkAiStatusGetData,
+  GetRemarkAiStatusSystemRemarkAiStatusGetResponses,
   GetResilienceCircuitBreakersResilienceCircuitBreakersGetData,
   GetResilienceCircuitBreakersResilienceCircuitBreakersGetResponses,
   GetSagaInstancesSagaInstancesGetData,
@@ -4628,6 +4633,42 @@ export const queryProtocolDetailSystemProtocolProtocolIdGet = <
   >({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/system/protocol/{protocol_id}',
+    ...options,
+  });
+
+/**
+ * Generate Remark Ai
+ */
+export const generateRemarkAiSystemRemarkAiGeneratePost = <ThrowOnError extends boolean = false>(
+  options: Options<GenerateRemarkAiSystemRemarkAiGeneratePostData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    GenerateRemarkAiSystemRemarkAiGeneratePostResponses,
+    GenerateRemarkAiSystemRemarkAiGeneratePostErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/system/remark/ai/generate',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Get Remark Ai Status
+ */
+export const getRemarkAiStatusSystemRemarkAiStatusGet = <ThrowOnError extends boolean = false>(
+  options?: Options<GetRemarkAiStatusSystemRemarkAiStatusGetData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetRemarkAiStatusSystemRemarkAiStatusGetResponses,
+    unknown,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/system/remark/ai/status',
     ...options,
   });
 

@@ -14,7 +14,19 @@
         ><zx-input v-model="info.functionAuthor" placeholder="请输入作者"
       /></el-form-item>
       <el-form-item data-form-full label="备注" prop="remark"
-        ><RemarkEditor ref="remarkRef" v-model="info.remark" @edit-state="remarkEditState = $event"
+        ><RemarkEditor
+          ref="remarkRef"
+          :key="info.tableId ?? info.tableName"
+          v-model="info.remark"
+          scene="genTable"
+          :ai-context="
+            () => ({
+              tableName: info.tableName,
+              tableComment: info.tableComment,
+              className: info.className,
+            })
+          "
+          @edit-state="remarkEditState = $event"
       /></el-form-item>
     </FormGrid>
   </el-form>
