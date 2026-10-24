@@ -1,25 +1,17 @@
 <template>
-  <zx-floating-panel
-    :showCollapseBtn="false"
-    :position="position"
-    :size="size"
-    :collapsed-size="collapsedSize"
-    :default-collapsed="defaultCollapsed"
-    class="alarm-panel-floating floating-panel"
-  >
-    <template #header>
+  <section class="simulation-widget-content">
+    <header class="simulation-widget-toolbar">
       <div class="panel-header">
         <div class="panel-title">
-          <span class="title-text">告警</span>
           <el-badge v-if="alarmBadge" :value="alarmBadge" :max="99" type="danger" />
         </div>
         <div class="panel-actions">
           <!-- 可按需添加操作按钮 -->
         </div>
       </div>
-    </template>
+    </header>
 
-    <div class="alarm-panel-content panel-body h-full" style="height: 350px">
+    <div class="alarm-panel-content panel-body h-full">
       <AlarmPanel
         :alarms="alarms"
         @alarm-click="$emit('alarm-click', $event)"
@@ -27,7 +19,7 @@
         @stats-change="handleStatsChange"
       />
     </div>
-  </zx-floating-panel>
+  </section>
 </template>
 
 <script setup>
@@ -38,22 +30,6 @@ defineProps({
   alarms: {
     type: Array,
     default: () => [],
-  },
-  position: {
-    type: Object,
-    default: () => ({ top: '550px', right: '28px' }),
-  },
-  size: {
-    type: Object,
-    default: () => ({ width: '320px', maxHeight: '420px' }),
-  },
-  collapsedSize: {
-    type: Object,
-    default: () => ({ width: '46px', height: '46px' }),
-  },
-  defaultCollapsed: {
-    type: Boolean,
-    default: false,
   },
 });
 

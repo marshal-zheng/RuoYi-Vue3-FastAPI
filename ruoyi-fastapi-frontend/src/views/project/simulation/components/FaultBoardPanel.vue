@@ -1,18 +1,8 @@
 <template>
-  <zx-floating-panel
-    v-if="visible"
-    class="fault-floating simbus-floating-panel"
-    :position="position"
-    :size="size"
-    :showCollapseBtn="false"
-    :collapsed-size="collapsedSize"
-    :default-collapsed="defaultCollapsed"
-    @close="$emit('close')"
-  >
-    <template #header>
+  <section class="simulation-widget-content">
+    <header class="simulation-widget-toolbar">
       <div class="header">
         <div>
-          <div class="title">故障板</div>
           <div class="sub">活跃 {{ activeCount }} / 共 {{ faults.length }}</div>
         </div>
         <div class="actions">
@@ -29,7 +19,7 @@
           </el-button>
         </div>
       </div>
-    </template>
+    </header>
 
     <!-- 仿真未运行提示（边界情况：仿真在中途停止） -->
     <div v-if="!isRunning" class="not-running-hint">
@@ -106,7 +96,7 @@
         </div>
       </div>
     </section>
-  </zx-floating-panel>
+  </section>
 </template>
 
 <script setup>
@@ -115,34 +105,22 @@ import { Close, Refresh, Delete, Link, Warning } from '@element-plus/icons-vue';
 import { FAULT_TYPE_CONFIG } from '../composables/useFaultInjection';
 
 const props = defineProps({
-  visible: { type: Boolean, default: false },
   faults: { type: Array, default: () => [] },
   loading: { type: Boolean, default: false },
   selectedEdge: { type: Object, default: null }, // 选中的链路
   hoveredEdge: { type: Object, default: null }, // 悬停的链路（备用选中）
   isRunning: { type: Boolean, default: false }, // 仿真是否运行中
-  position: {
-    type: Object,
-    default: () => ({ top: '12px', right: '92px' }),
-  },
-  size: {
-    type: Object,
-    default: () => ({ width: '420px', maxHeight: '620px' }),
-  },
-  collapsedSize: {
-    type: Object,
-    default: () => ({ width: '46px', height: '46px' }),
-  },
-  defaultCollapsed: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 defineEmits(['apply-template', 'clear', 'clear-all', 'refresh', 'close']);
 
 const templates = [
-  { name: 'disconnect', label: '断链', tip: '立即断开链路', payload: { type: 'disconnect' } },
+  {
+    name: 'disconnect',
+    label: '断链',
+    tip: '立即断开链路',
+    payload: { type: 'disconnect' },
+  },
   {
     name: 'loss10',
     label: '丢包10%',

@@ -1,151 +1,143 @@
 <template>
-  <transition name="fade-slide">
-    <zx-floating-panel
-      v-if="visible"
-      :showCollapseBtn="false"
-      :position="position"
-      :size="size"
-      :collapsed-size="collapsedSize"
-      :default-collapsed="defaultCollapsed"
-      class="bandwidth-chart-panel simbus-floating-panel"
-    >
-      <template #header>
-        <div class="flex items-center gap-2 flex-1">
-          <span class="font-semibold text-sm">带宽监控</span>
-          <el-tag v-if="isRunning" type="success" size="small" effect="dark" class="live-tag">
-            <span class="live-dot"></span>
-            实时
-          </el-tag>
-          <el-tag v-else-if="isWaiting" type="info" size="small" effect="plain"> 待机 </el-tag>
+  <section class="simulation-widget-content">
+    <header class="simulation-widget-toolbar">
+      <div class="flex items-center gap-2 flex-1">
+        <el-tag v-if="isRunning" type="success" size="small" effect="dark" class="live-tag">
+          <span class="live-dot"></span>
+          实时
+        </el-tag>
+        <el-tag v-else-if="isWaiting" type="info" size="small" effect="plain"> 待机 </el-tag>
 
-          <div class="flex items-center gap-2 ml-auto">
-            <el-segmented v-model="viewMode" :options="viewOptions" size="small" />
-            <el-select
-              v-if="viewMode === 'port'"
-              v-model="selectedPort"
-              placeholder="选择端口"
-              size="small"
-              style="width: 120px"
-              clearable
-              popper-class="sim-popper-dark"
-            >
-              <el-option v-for="port in portList" :key="port" :label="port" :value="port" />
-            </el-select>
-          </div>
-        </div>
-      </template>
-
-      <div class="bandwidth-chart-panel monitor-panel" :style="chartStyle">
-        <!-- 实时图表区域 -->
-        <div
-          class="chart-wrapper"
-          @mousemove="handleChartMouseMove"
-          @mouseleave="handleChartMouseLeave"
-        >
-          <!-- 示波器风格背景 -->
-          <div class="oscilloscope-bg">
-            <div class="grid-lines"></div>
-            <div v-if="hasData" class="scanline" :style="{ left: scanlinePosition }"></div>
-          </div>
-
-          <!-- Canvas 图表 -->
-          <canvas ref="canvasRef" class="chart-canvas"></canvas>
-
-          <!-- 当前值显示 -->
-          <div class="current-value-display">
-            <div class="label">实时带宽</div>
-            <div class="value" :class="bandwidthLevelClass">
-              {{ displayBandwidth.value }}
-              <span class="unit">{{ displayBandwidth.unit }}</span>
-            </div>
-          </div>
-
-          <!-- 状态指示 -->
-          <div class="status-indicator">
-            <span class="status-dot" :class="statusClass"></span>
-            <span class="status-text">{{ statusText }}</span>
-          </div>
-
-          <!-- Y轴刻度 -->
-          <div class="y-axis-labels">
-            <span>{{ yAxisLabels.max }}</span>
-            <span>{{ yAxisLabels.mid }}</span>
-            <span>0</span>
-          </div>
-
-          <!-- 垂直指示线 -->
-          <div
-            v-if="chartTooltip.visible"
-            class="chart-crosshair"
-            :style="{ left: chartTooltip.lineX + 'px' }"
-          ></div>
-
-          <!-- 数据点高亮 -->
-          <div
-            v-if="chartTooltip.visible"
-            class="chart-highlight-dot"
-            :style="{ left: chartTooltip.dotX + 'px', top: chartTooltip.dotY + 'px' }"
-          ></div>
-        </div>
-
-        <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
-        <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
-          <div
-            v-if="chartTooltip.visible"
-            class="chart-tooltip-fixed bandwidth"
-            :style="{
-              ...chartStyle,
-              left: chartTooltip.tooltipX + 'px',
-              top: chartTooltip.tooltipY + 'px',
-            }"
+        <div class="flex items-center gap-2 ml-auto">
+          <el-segmented v-model="viewMode" :options="viewOptions" size="small" />
+          <el-select
+            v-if="viewMode === 'port'"
+            v-model="selectedPort"
+            placeholder="选择端口"
+            size="small"
+            style="width: 120px"
+            clearable
+            popper-class="sim-popper-dark"
           >
-            <div class="tooltip-header">
-              <span class="tooltip-time">{{ chartTooltip.time }}</span>
-              <span class="tooltip-index">#{{ chartTooltip.index + 1 }}</span>
-            </div>
-            <div class="tooltip-main-value">
-              <span class="main-value">
-                {{ chartTooltip.value }}
-                <span class="unit">{{ chartTooltip.unit }}</span>
-              </span>
-            </div>
-          </div>
-        </Teleport>
+            <el-option v-for="port in portList" :key="port" :label="port" :value="port" />
+          </el-select>
+        </div>
+      </div>
+    </header>
 
-        <!-- 统计卡片 -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-icon avg"></div>
-            <div class="stat-content">
-              <span class="stat-label">平均</span>
-              <span class="stat-value">{{ stats.avg }}</span>
-            </div>
+    <div class="bandwidth-chart-panel monitor-panel" :style="chartStyle">
+      <!-- 实时图表区域 -->
+      <div
+        class="chart-wrapper"
+        @mousemove="handleChartMouseMove"
+        @mouseleave="handleChartMouseLeave"
+      >
+        <!-- 示波器风格背景 -->
+        <div class="oscilloscope-bg">
+          <div class="grid-lines"></div>
+          <div v-if="hasData" class="scanline" :style="{ left: scanlinePosition }"></div>
+        </div>
+
+        <!-- Canvas 图表 -->
+        <canvas ref="canvasRef" class="chart-canvas"></canvas>
+
+        <!-- 当前值显示 -->
+        <div class="current-value-display">
+          <div class="label">实时带宽</div>
+          <div class="value" :class="bandwidthLevelClass">
+            {{ displayBandwidth.value }}
+            <span class="unit">{{ displayBandwidth.unit }}</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon peak"></div>
-            <div class="stat-content">
-              <span class="stat-label">峰值</span>
-              <span class="stat-value highlight">{{ stats.peak }}</span>
-            </div>
+        </div>
+
+        <!-- 状态指示 -->
+        <div class="status-indicator">
+          <span class="status-dot" :class="statusClass"></span>
+          <span class="status-text">{{ statusText }}</span>
+        </div>
+
+        <!-- Y轴刻度 -->
+        <div class="y-axis-labels">
+          <span>{{ yAxisLabels.max }}</span>
+          <span>{{ yAxisLabels.mid }}</span>
+          <span>0</span>
+        </div>
+
+        <!-- 垂直指示线 -->
+        <div
+          v-if="chartTooltip.visible"
+          class="chart-crosshair"
+          :style="{ left: chartTooltip.lineX + 'px' }"
+        ></div>
+
+        <!-- 数据点高亮 -->
+        <div
+          v-if="chartTooltip.visible"
+          class="chart-highlight-dot"
+          :style="{
+            left: chartTooltip.dotX + 'px',
+            top: chartTooltip.dotY + 'px',
+          }"
+        ></div>
+      </div>
+
+      <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
+      <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
+        <div
+          v-if="chartTooltip.visible"
+          class="chart-tooltip-fixed bandwidth"
+          :style="{
+            ...chartStyle,
+            left: chartTooltip.tooltipX + 'px',
+            top: chartTooltip.tooltipY + 'px',
+          }"
+        >
+          <div class="tooltip-header">
+            <span class="tooltip-time">{{ chartTooltip.time }}</span>
+            <span class="tooltip-index">#{{ chartTooltip.index + 1 }}</span>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon min"></div>
-            <div class="stat-content">
-              <span class="stat-label">最小</span>
-              <span class="stat-value">{{ stats.min }}</span>
-            </div>
+          <div class="tooltip-main-value">
+            <span class="main-value">
+              {{ chartTooltip.value }}
+              <span class="unit">{{ chartTooltip.unit }}</span>
+            </span>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon count"></div>
-            <div class="stat-content">
-              <span class="stat-label">报文</span>
-              <span class="stat-value">{{ stats.msgCount }}</span>
-            </div>
+        </div>
+      </Teleport>
+
+      <!-- 统计卡片 -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon avg"></div>
+          <div class="stat-content">
+            <span class="stat-label">平均</span>
+            <span class="stat-value">{{ stats.avg }}</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon peak"></div>
+          <div class="stat-content">
+            <span class="stat-label">峰值</span>
+            <span class="stat-value highlight">{{ stats.peak }}</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon min"></div>
+          <div class="stat-content">
+            <span class="stat-label">最小</span>
+            <span class="stat-value">{{ stats.min }}</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon count"></div>
+          <div class="stat-content">
+            <span class="stat-label">报文</span>
+            <span class="stat-value">{{ stats.msgCount }}</span>
           </div>
         </div>
       </div>
-    </zx-floating-panel>
-  </transition>
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -173,26 +165,6 @@ const props = defineProps({
   bandwidthData: {
     type: Array,
     default: () => [],
-  },
-  visible: {
-    type: Boolean,
-    default: false,
-  },
-  position: {
-    type: Object,
-    default: () => ({ top: '100px', right: '30px' }),
-  },
-  size: {
-    type: Object,
-    default: () => ({ width: '500px', maxHeight: '420px' }),
-  },
-  collapsedSize: {
-    type: Object,
-    default: () => ({ width: '48px', height: '48px' }),
-  },
-  defaultCollapsed: {
-    type: Boolean,
-    default: false,
   },
   running: {
     type: Boolean,
@@ -285,7 +257,7 @@ const isRunning = computed(() => {
 });
 
 // 是否待机
-const isWaiting = computed(() => props.visible && props.bandwidthData.length === 0);
+const isWaiting = computed(() => true && props.bandwidthData.length === 0);
 
 // 状态文字
 const statusText = computed(() => {
@@ -683,29 +655,8 @@ async function initCanvas() {
   }
 }
 
-// 监听可见性变化
-watch(
-  () => props.visible,
-  (visible) => {
-    if (visible) {
-      nextTick(() => {
-        initCanvas();
-        if (isRunning.value) {
-          startAnimation();
-        } else {
-          stopAnimation();
-          drawChart();
-        }
-      });
-    } else {
-      stopAnimation();
-    }
-  },
-  { immediate: true }
-);
-
 watch(isRunning, (running) => {
-  if (running && props.visible) {
+  if (running) {
     startAnimation();
   } else {
     stopAnimation();
@@ -725,12 +676,8 @@ watch([viewMode, selectedPort], () => {
 });
 
 onMounted(() => {
-  if (props.visible) {
-    initCanvas();
-    if (isRunning.value) {
-      startAnimation();
-    }
-  }
+  initCanvas();
+  if (isRunning.value) startAnimation();
 });
 
 onUnmounted(() => {

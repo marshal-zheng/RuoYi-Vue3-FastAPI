@@ -1,237 +1,229 @@
 <template>
-  <transition name="fade-slide">
-    <zx-floating-panel
-      v-if="visible"
-      :showCollapseBtn="false"
-      :position="position"
-      :size="size"
-      :collapsed-size="collapsedSize"
-      :default-collapsed="defaultCollapsed"
-      class="timing-latency-panel simbus-floating-panel"
-    >
-      <template #header>
-        <div class="flex items-center gap-2 flex-1">
-          <span class="font-semibold text-sm">时序/延迟分析</span>
-          <el-tag v-if="isRunning" type="success" size="small" effect="dark" class="live-tag">
-            <span class="live-dot"></span>
-            实时
-          </el-tag>
-          <el-tag v-else-if="!hasData" type="info" size="small" effect="plain">待机</el-tag>
+  <section class="simulation-widget-content">
+    <header class="simulation-widget-toolbar">
+      <div class="flex items-center gap-2 flex-1">
+        <el-tag v-if="isRunning" type="success" size="small" effect="dark" class="live-tag">
+          <span class="live-dot"></span>
+          实时
+        </el-tag>
+        <el-tag v-else-if="!hasData" type="info" size="small" effect="plain">待机</el-tag>
 
-          <div class="flex items-center gap-2 ml-auto">
-            <el-segmented v-model="viewMode" :options="viewOptions" size="small" />
-          </div>
+        <div class="flex items-center gap-2 ml-auto">
+          <el-segmented v-model="viewMode" :options="viewOptions" size="small" />
         </div>
-      </template>
+      </div>
+    </header>
 
-      <div class="timing-panel-content" :style="chartStyle">
-        <!-- 时序视图模式 -->
-        <div v-if="viewMode === 'timing'" class="timing-view">
-          <!-- 时序图表区域 -->
+    <div class="timing-panel-content" :style="chartStyle">
+      <!-- 时序视图模式 -->
+      <div v-if="viewMode === 'timing'" class="timing-view">
+        <!-- 时序图表区域 -->
+        <div
+          class="timing-chart-wrapper"
+          @mousemove="handleTimingMouseMove"
+          @mouseleave="handleTimingMouseLeave"
+        >
+          <div class="oscilloscope-bg">
+            <div class="grid-lines"></div>
+          </div>
+          <canvas ref="timingCanvasRef" class="timing-canvas"></canvas>
+
+          <!-- Y轴刻度 (延迟) -->
+          <div class="y-axis-labels">
+            <span>{{ latencyAxisLabels.max }}</span>
+            <span>{{ latencyAxisLabels.mid }}</span>
+            <span>{{ latencyAxisLabels.min }}</span>
+          </div>
+
+          <!-- 图例 -->
+          <div class="chart-legend">
+            <span class="legend-item"> <span class="legend-line latency"></span>时延 </span>
+          </div>
+
+          <!-- 垂直指示线 -->
           <div
-            class="timing-chart-wrapper"
-            @mousemove="handleTimingMouseMove"
-            @mouseleave="handleTimingMouseLeave"
-          >
-            <div class="oscilloscope-bg">
-              <div class="grid-lines"></div>
-            </div>
-            <canvas ref="timingCanvasRef" class="timing-canvas"></canvas>
+            v-if="timingTooltip.visible"
+            class="chart-crosshair"
+            :style="{ left: timingTooltip.lineX + 'px' }"
+          ></div>
 
-            <!-- Y轴刻度 (延迟) -->
-            <div class="y-axis-labels">
-              <span>{{ latencyAxisLabels.max }}</span>
-              <span>{{ latencyAxisLabels.mid }}</span>
-              <span>{{ latencyAxisLabels.min }}</span>
-            </div>
-
-            <!-- 图例 -->
-            <div class="chart-legend">
-              <span class="legend-item"> <span class="legend-line latency"></span>时延 </span>
-            </div>
-
-            <!-- 垂直指示线 -->
-            <div
-              v-if="timingTooltip.visible"
-              class="chart-crosshair"
-              :style="{ left: timingTooltip.lineX + 'px' }"
-            ></div>
-
-            <!-- 数据点高亮 -->
-            <div
-              v-if="timingTooltip.visible"
-              class="chart-highlight-dot"
-              :style="{ left: timingTooltip.dotX + 'px', top: timingTooltip.dotY + 'px' }"
-            ></div>
-          </div>
-
-          <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
-          <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
-            <div
-              v-if="timingTooltip.visible"
-              class="chart-tooltip-fixed timing"
-              :style="{
-                ...chartStyle,
-                left: timingTooltip.tooltipX + 'px',
-                top: timingTooltip.tooltipY + 'px',
-              }"
-            >
-              <div class="tooltip-header">
-                <span class="tooltip-index">#{{ timingTooltip.index + 1 }}</span>
-                <span class="tooltip-protocol">{{ timingTooltip.protocol }}</span>
-              </div>
-              <div class="tooltip-body">
-                <div class="tooltip-row main latency">
-                  <span class="tooltip-dot latency"></span>
-                  <span class="tooltip-label">时延</span>
-                  <span class="tooltip-value align-right">{{ timingTooltip.latency }}</span>
-                </div>
-                <div class="tooltip-row">
-                  <span class="tooltip-dot send"></span>
-                  <span class="tooltip-label">发送</span>
-                  <span class="tooltip-value">{{ timingTooltip.sender }}</span>
-                </div>
-                <div class="tooltip-row">
-                  <span class="tooltip-dot receive"></span>
-                  <span class="tooltip-label">接收</span>
-                  <span class="tooltip-value">{{ timingTooltip.receiver }}</span>
-                </div>
-              </div>
-            </div>
-          </Teleport>
-
-          <!-- 时延统计卡片 -->
-          <div class="latency-stats-grid">
-            <div class="stat-card">
-              <div class="stat-icon avg"></div>
-              <div class="stat-content">
-                <span class="stat-label">平均时延</span>
-                <span class="stat-value">{{ latencyStats.avg }}</span>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon max"></div>
-              <div class="stat-content">
-                <span class="stat-label">最大时延</span>
-                <span class="stat-value highlight-warning">{{ latencyStats.max }}</span>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon min"></div>
-              <div class="stat-content">
-                <span class="stat-label">最小时延</span>
-                <span class="stat-value highlight-success">{{ latencyStats.min }}</span>
-              </div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon jitter"></div>
-              <div class="stat-content">
-                <span class="stat-label">抖动</span>
-                <span class="stat-value">{{ latencyStats.jitter }}</span>
-              </div>
-            </div>
-          </div>
+          <!-- 数据点高亮 -->
+          <div
+            v-if="timingTooltip.visible"
+            class="chart-highlight-dot"
+            :style="{
+              left: timingTooltip.dotX + 'px',
+              top: timingTooltip.dotY + 'px',
+            }"
+          ></div>
         </div>
 
-        <!-- 带宽分组视图模式 -->
-        <div v-else-if="viewMode === 'bandwidth'" class="bandwidth-grouped-view">
-          <!-- 分组选择器 -->
-          <div class="group-selector">
-            <el-radio-group v-model="groupBy" size="small">
-              <el-radio-button value="protocol">按协议</el-radio-button>
-              <el-radio-button value="port">按端口</el-radio-button>
-            </el-radio-group>
-          </div>
-
-          <!-- 分组带宽图表 -->
+        <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
+        <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
           <div
-            class="grouped-chart-wrapper"
-            @mousemove="handleBandwidthMouseMove"
-            @mouseleave="handleBandwidthMouseLeave"
+            v-if="timingTooltip.visible"
+            class="chart-tooltip-fixed timing"
+            :style="{
+              ...chartStyle,
+              left: timingTooltip.tooltipX + 'px',
+              top: timingTooltip.tooltipY + 'px',
+            }"
           >
-            <div class="oscilloscope-bg">
-              <div class="grid-lines"></div>
+            <div class="tooltip-header">
+              <span class="tooltip-index">#{{ timingTooltip.index + 1 }}</span>
+              <span class="tooltip-protocol">{{ timingTooltip.protocol }}</span>
             </div>
-            <canvas ref="bandwidthCanvasRef" class="bandwidth-canvas"></canvas>
-
-            <!-- Y轴刻度 -->
-            <div class="y-axis-labels">
-              <span>{{ bandwidthAxisLabels.max }}</span>
-              <span>{{ bandwidthAxisLabels.mid }}</span>
-              <span>0</span>
+            <div class="tooltip-body">
+              <div class="tooltip-row main latency">
+                <span class="tooltip-dot latency"></span>
+                <span class="tooltip-label">时延</span>
+                <span class="tooltip-value align-right">{{ timingTooltip.latency }}</span>
+              </div>
+              <div class="tooltip-row">
+                <span class="tooltip-dot send"></span>
+                <span class="tooltip-label">发送</span>
+                <span class="tooltip-value">{{ timingTooltip.sender }}</span>
+              </div>
+              <div class="tooltip-row">
+                <span class="tooltip-dot receive"></span>
+                <span class="tooltip-label">接收</span>
+                <span class="tooltip-value">{{ timingTooltip.receiver }}</span>
+              </div>
             </div>
-
-            <!-- 动态图例 -->
-            <div class="chart-legend grouped-legend">
-              <span
-                v-for="(group, index) in groupedBandwidthLegend"
-                :key="group.key"
-                class="legend-item"
-              >
-                <span class="legend-line" :style="{ background: getGroupColor(index) }"></span>
-                {{ group.label }}
-              </span>
-            </div>
-
-            <!-- 垂直指示线 -->
-            <div
-              v-if="bandwidthTooltip.visible"
-              class="chart-crosshair bandwidth"
-              :style="{ left: bandwidthTooltip.lineX + 'px' }"
-            ></div>
           </div>
+        </Teleport>
 
-          <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
-          <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
-            <div
-              v-if="bandwidthTooltip.visible && bandwidthTooltip.groups.length > 0"
-              class="chart-tooltip-fixed bandwidth"
-              :style="{
-                ...chartStyle,
-                left: bandwidthTooltip.tooltipX + 'px',
-                top: bandwidthTooltip.tooltipY + 'px',
-              }"
-            >
-              <div class="tooltip-header">
-                <span class="tooltip-time">{{ bandwidthTooltip.time }}</span>
-              </div>
-              <div class="tooltip-body">
-                <div
-                  v-for="(item, idx) in bandwidthTooltip.groups"
-                  :key="item.key"
-                  class="tooltip-row"
-                >
-                  <span class="tooltip-dot" :style="{ background: getGroupColor(idx) }"></span>
-                  <span class="tooltip-label">{{ item.label }}</span>
-                  <span class="tooltip-value">{{ item.value }}</span>
-                </div>
-              </div>
+        <!-- 时延统计卡片 -->
+        <div class="latency-stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon avg"></div>
+            <div class="stat-content">
+              <span class="stat-label">平均时延</span>
+              <span class="stat-value">{{ latencyStats.avg }}</span>
             </div>
-          </Teleport>
-
-          <!-- 分组统计表格 -->
-          <div class="grouped-stats-table">
-            <div class="stats-header">
-              <span>{{ groupBy === 'protocol' ? '协议' : '端口' }}</span>
-              <span>当前</span>
-              <span>平均</span>
-              <span>峰值</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon max"></div>
+            <div class="stat-content">
+              <span class="stat-label">最大时延</span>
+              <span class="stat-value highlight-warning">{{ latencyStats.max }}</span>
             </div>
-            <div v-for="(group, index) in groupedBandwidthStats" :key="group.key" class="stats-row">
-              <span class="group-name">
-                <span class="color-dot" :style="{ background: getGroupColor(index) }"></span>
-                {{ group.label }}
-              </span>
-              <span class="stat-current">{{ group.current }}</span>
-              <span class="stat-avg">{{ group.avg }}</span>
-              <span class="stat-peak">{{ group.peak }}</span>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon min"></div>
+            <div class="stat-content">
+              <span class="stat-label">最小时延</span>
+              <span class="stat-value highlight-success">{{ latencyStats.min }}</span>
             </div>
-            <div v-if="groupedBandwidthStats.length === 0" class="stats-empty">暂无数据</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon jitter"></div>
+            <div class="stat-content">
+              <span class="stat-label">抖动</span>
+              <span class="stat-value">{{ latencyStats.jitter }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </zx-floating-panel>
-  </transition>
+
+      <!-- 带宽分组视图模式 -->
+      <div v-else-if="viewMode === 'bandwidth'" class="bandwidth-grouped-view">
+        <!-- 分组选择器 -->
+        <div class="group-selector">
+          <el-radio-group v-model="groupBy" size="small">
+            <el-radio-button value="protocol">按协议</el-radio-button>
+            <el-radio-button value="port">按端口</el-radio-button>
+          </el-radio-group>
+        </div>
+
+        <!-- 分组带宽图表 -->
+        <div
+          class="grouped-chart-wrapper"
+          @mousemove="handleBandwidthMouseMove"
+          @mouseleave="handleBandwidthMouseLeave"
+        >
+          <div class="oscilloscope-bg">
+            <div class="grid-lines"></div>
+          </div>
+          <canvas ref="bandwidthCanvasRef" class="bandwidth-canvas"></canvas>
+
+          <!-- Y轴刻度 -->
+          <div class="y-axis-labels">
+            <span>{{ bandwidthAxisLabels.max }}</span>
+            <span>{{ bandwidthAxisLabels.mid }}</span>
+            <span>0</span>
+          </div>
+
+          <!-- 动态图例 -->
+          <div class="chart-legend grouped-legend">
+            <span
+              v-for="(group, index) in groupedBandwidthLegend"
+              :key="group.key"
+              class="legend-item"
+            >
+              <span class="legend-line" :style="{ background: getGroupColor(index) }"></span>
+              {{ group.label }}
+            </span>
+          </div>
+
+          <!-- 垂直指示线 -->
+          <div
+            v-if="bandwidthTooltip.visible"
+            class="chart-crosshair bandwidth"
+            :style="{ left: bandwidthTooltip.lineX + 'px' }"
+          ></div>
+        </div>
+
+        <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
+        <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
+          <div
+            v-if="bandwidthTooltip.visible && bandwidthTooltip.groups.length > 0"
+            class="chart-tooltip-fixed bandwidth"
+            :style="{
+              ...chartStyle,
+              left: bandwidthTooltip.tooltipX + 'px',
+              top: bandwidthTooltip.tooltipY + 'px',
+            }"
+          >
+            <div class="tooltip-header">
+              <span class="tooltip-time">{{ bandwidthTooltip.time }}</span>
+            </div>
+            <div class="tooltip-body">
+              <div
+                v-for="(item, idx) in bandwidthTooltip.groups"
+                :key="item.key"
+                class="tooltip-row"
+              >
+                <span class="tooltip-dot" :style="{ background: getGroupColor(idx) }"></span>
+                <span class="tooltip-label">{{ item.label }}</span>
+                <span class="tooltip-value">{{ item.value }}</span>
+              </div>
+            </div>
+          </div>
+        </Teleport>
+
+        <!-- 分组统计表格 -->
+        <div class="grouped-stats-table">
+          <div class="stats-header">
+            <span>{{ groupBy === 'protocol' ? '协议' : '端口' }}</span>
+            <span>当前</span>
+            <span>平均</span>
+            <span>峰值</span>
+          </div>
+          <div v-for="(group, index) in groupedBandwidthStats" :key="group.key" class="stats-row">
+            <span class="group-name">
+              <span class="color-dot" :style="{ background: getGroupColor(index) }"></span>
+              {{ group.label }}
+            </span>
+            <span class="stat-current">{{ group.current }}</span>
+            <span class="stat-avg">{{ group.avg }}</span>
+            <span class="stat-peak">{{ group.peak }}</span>
+          </div>
+          <div v-if="groupedBandwidthStats.length === 0" class="stats-empty">暂无数据</div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -263,26 +255,6 @@ const props = defineProps({
   bandwidthData: {
     type: Array,
     default: () => [],
-  },
-  visible: {
-    type: Boolean,
-    default: false,
-  },
-  position: {
-    type: Object,
-    default: () => ({ bottom: '96px', left: '28px' }),
-  },
-  size: {
-    type: Object,
-    default: () => ({ width: '560px', maxHeight: '480px' }),
-  },
-  collapsedSize: {
-    type: Object,
-    default: () => ({ width: '46px', height: '46px' }),
-  },
-  defaultCollapsed: {
-    type: Boolean,
-    default: false,
   },
 });
 
@@ -848,7 +820,13 @@ function drawBandwidthChart() {
   const chartHeight = height - padding.top - padding.bottom;
 
   // 保存布局
-  bandwidthChartLayout.value = { padding, width, height, chartWidth, chartHeight };
+  bandwidthChartLayout.value = {
+    padding,
+    width,
+    height,
+    chartWidth,
+    chartHeight,
+  };
 
   ctx.clearRect(0, 0, width, height);
 
@@ -1106,22 +1084,6 @@ async function initCanvas() {
   }
 }
 
-// 监听可见性变化
-watch(
-  () => props.visible,
-  (visible) => {
-    if (visible) {
-      nextTick(() => {
-        initCanvas();
-        startAnimation();
-      });
-    } else {
-      stopAnimation();
-    }
-  },
-  { immediate: true }
-);
-
 // 监听视图模式变化
 watch(viewMode, () => {
   nextTick(() => {
@@ -1142,7 +1104,7 @@ watch(groupBy, () => {
 watch(
   () => props.messages,
   () => {
-    if (viewMode.value === 'timing' && props.visible) {
+    if (viewMode.value === 'timing') {
       updateTimingData();
       if (!animationFrameId) {
         startAnimation();
@@ -1156,7 +1118,7 @@ watch(
 watch(
   () => props.bandwidthData,
   () => {
-    if (viewMode.value === 'bandwidth' && props.visible) {
+    if (viewMode.value === 'bandwidth') {
       drawBandwidthChart();
       if (!animationFrameId) {
         startAnimation();
@@ -1167,10 +1129,8 @@ watch(
 );
 
 onMounted(() => {
-  if (props.visible) {
-    initCanvas();
-    startAnimation();
-  }
+  initCanvas();
+  startAnimation();
 });
 
 onUnmounted(() => {

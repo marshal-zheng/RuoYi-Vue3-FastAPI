@@ -1,0 +1,12 @@
+.simulation-widget-content {
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+.simulation-widget-toolbar {
+  flex: none;
+  padding: 0 0 8px;
+}

@@ -108,46 +108,37 @@
           />
         </section>
 
-        <!-- 带宽面板（封装组件，内部含浮动容器） -->
-        <BandwidthChartPanel
-          ref="bandwidthChartRef"
-          v-if="dockState.bandwidth"
-          :visible="dockState.bandwidth"
-          :bandwidth-data="bandwidthData"
-          :running="isRunning"
-          :speed="simulationState.speed"
-          :reset-on-stop="true"
-          :position="{ top: '14px', left: '14px' }"
-          :size="{ width: '520px', maxHeight: '430px' }"
-          :collapsed-size="{ width: '46px', height: '46px' }"
-          :default-collapsed="false"
-        />
-
-        <!-- 告警面板（封装组件，内部含浮动容器） -->
-        <AlarmPanelFloating
-          v-if="dockState.alarm"
-          :alarms="alarmData"
-          :position="{ top: '14px', right: '14px' }"
-          :size="{ width: '520px', maxHeight: '420px' }"
-          :collapsed-size="{ width: '46px', height: '46px' }"
-          :default-collapsed="false"
-          @alarm-click="handleAlarmClick"
-        />
-
-        <!-- 时序/延迟分析面板 -->
-        <TimingLatencyPanel
-          v-if="dockState.timing"
-          :visible="dockState.timing"
-          :messages="filteredMessages"
-          :bandwidth-data="bandwidthData"
-          :position="{
-            top: 'min(420px, max(14px, calc(100vh - 620px)))',
-            left: '14px',
-          }"
-          :size="{ width: '520px', maxHeight: '430px' }"
-          :collapsed-size="{ width: '46px', height: '46px' }"
-          :default-collapsed="false"
-        />
+        <aside
+          v-show="activeDockKeys.length"
+          class="simulation-dashboard-pane"
+          aria-label="仿真监控面板"
+        >
+          <SimulationDashboard
+            :key="projectId"
+            ref="simulationDashboardRef"
+            :project-id="projectId"
+            :dock-state="dockState"
+            :bandwidth-data="bandwidthData"
+            :alarms="alarmData"
+            :messages="filteredMessages"
+            :running="isRunning"
+            :speed="simulationState.speed"
+            :readonly="isReadonlySession"
+            :faults="faults"
+            :faults-loading="faultsLoading"
+            :selected-edge="selectedEdge"
+            :hovered-edge="hoveredEdge"
+            :injection-strategy="injectionStrategy"
+            @visibility-change="Object.assign(dockState, $event)"
+            @alarm-click="handleAlarmClick"
+            @apply-template="handleFaultTemplate"
+            @clear="handleFaultClear"
+            @clear-all="handleClearAllFaults"
+            @refresh="refreshFaults"
+            @close-fault="exitFaultMode"
+            @apply-injection="handleInjectionStrategyApply"
+          />
+        </aside>
       </main>
 
       <!-- 底部：协议分析器 -->
@@ -165,32 +156,6 @@
         />
       </footer>
     </div>
-
-    <!-- 故障板浮层 -->
-    <FaultBoardFloating
-      v-if="dockState.fault"
-      :visible="dockState.fault"
-      :faults="faults"
-      :loading="faultsLoading"
-      :selected-edge="selectedEdge"
-      :hovered-edge="hoveredEdge"
-      :is-running="isRunning"
-      :position="{ top: '58px', right: '92px' }"
-      @apply-template="handleFaultTemplate"
-      @clear="handleFaultClear"
-      @clear-all="handleClearAllFaults"
-      @refresh="refreshFaults"
-      @close="exitFaultMode"
-    />
-
-    <!-- 数据注入策略面板 -->
-    <DataInjectionPanel
-      ref="injectionPanelRef"
-      :visible="dockState.injection"
-      :position="{ bottom: '280px', left: '14px' }"
-      :default-collapsed="false"
-      @apply="handleInjectionStrategyApply"
-    />
 
     <!-- 右侧通顶侧边栏 - 航空暗黑系 -->
     <aside class="sim-side-dock-aside">
@@ -235,19 +200,15 @@ import { ElMessage } from 'element-plus';
 import { Warning } from '@element-plus/icons-vue';
 
 // 组件导入
+import SimulationDashboard from './dashboard/SimulationDashboard.vue';
 import XflowDAG from '@/components/business/Dag/index.vue';
 import SimulationHeader from './components/SimulationHeader.vue';
-import BandwidthChartPanel from './components/BandwidthChartPanel.vue';
-import AlarmPanelFloating from './components/AlarmPanelFloating.vue';
 import SimulationSideDock from './components/SimulationSideDock.vue';
 import ProtocolAnalyzer from './components/ProtocolAnalyzer.vue';
 import EdgeTooltip from './components/EdgeTooltip.vue';
-import FaultBoardFloating from './components/FaultBoardFloating.vue';
 import EventTriggerPanel from './components/EventTriggerPanel.vue';
 import SimulationReportDialog from './components/SimulationReportDialog.vue';
 import HealthCheckDialog from './components/HealthCheckDialog.vue';
-import TimingLatencyPanel from './components/TimingLatencyPanel.vue';
-import DataInjectionPanel from './components/DataInjectionPanel.vue';
 import { NodeEditDrawer } from '../components';
 
 // Composables 导入
@@ -261,6 +222,7 @@ import { useSimulationReport } from './composables/useSimulationReport';
 import { useEventTrigger } from './composables/useEventTrigger';
 import { useHealthCheck } from './composables/useHealthCheck';
 import useAppStore from '@/store/modules/app';
+import { isDemoOfflineMode, resolveRuntimeConfig } from '@/mocks/runtime/mode';
 
 // 样式导入 - 注意：simulation-theme.css 已内部导入 variables.css
 import './styles/simulation-theme.css';
@@ -530,8 +492,7 @@ const nodeEditDrawerRef = ref(null);
 const protocolAnalyzerRef = ref(null);
 const reportDialogRef = ref(null);
 const healthCheckDialogRef = ref(null);
-const bandwidthChartRef = ref(null);
-const injectionPanelRef = ref(null);
+const simulationDashboardRef = ref(null);
 
 // 获取图实例
 function getGraphInstance() {
@@ -813,7 +774,7 @@ async function handleStart() {
   if (!passed) return;
 
   // 构建数据注入策略参数
-  const strategyConfig = injectionPanelRef.value?.getConfig?.() || injectionStrategy.value;
+  const strategyConfig = simulationDashboardRef.value?.getConfig?.() || injectionStrategy.value;
   const startOptions = {
     injection_strategy: strategyConfig.strategy,
     injection_params: strategyConfig.params,
@@ -879,7 +840,7 @@ const handleStep = throttle(
     stepLock = true;
     step()
       .then(() => {
-        bandwidthChartRef.value?.stepScanline();
+        simulationDashboardRef.value?.stepScanline();
       })
       .catch((err) => {
         const message = err?.message || '单步执行失败';
@@ -1152,7 +1113,9 @@ onMounted(async () => {
   appStore.closeSideBar({ withoutAnimation: true });
   await Promise.all([loadProjectInfo(), loadDeviceList()]);
   restoreSavedTopology();
-  await loadReadonlySimulationSnapshot();
+  if (isDemoOfflineMode(resolveRuntimeConfig().mode)) {
+    await loadReadonlySimulationSnapshot();
+  }
 });
 
 onUnmounted(() => {
@@ -1372,5 +1335,29 @@ watch(isRunning, (running) => {
     transparent 70%
   );
   pointer-events: none;
+}
+</style>
+
+<style scoped>
+.simulation-dashboard-pane {
+  flex: 0 0 52%;
+  min-width: 0;
+  overflow: auto;
+  padding-left: 12px;
+}
+@media (max-width: 1000px) {
+  .simulation-shell main {
+    flex-direction: column;
+    overflow: auto;
+  }
+  .simulation-shell .sim-canvas {
+    flex: none;
+    min-height: 350px;
+  }
+  .simulation-dashboard-pane {
+    flex: none;
+    overflow: visible;
+    padding: 12px 0 0;
+  }
 }
 </style>

@@ -1,26 +1,15 @@
 <template>
-  <zx-floating-panel
-    ref="panelRef"
-    v-if="visible"
-    :showCollapseBtn="false"
-    class="injection-floating simbus-floating-panel"
-    title="数据注入策略"
-    :position="position"
-    :size="{ width: '340px', maxHeight: '520px' }"
-    :collapsed-size="{ width: '48px', height: '48px' }"
-    :default-collapsed="defaultCollapsed"
-  >
-    <template #header>
+  <section class="simulation-widget-content">
+    <header class="simulation-widget-toolbar">
       <div class="header">
         <div class="flex items-center gap-2">
           <el-icon class="text-zx-accent-on-surface"><Setting /></el-icon>
           <div>
-            <div class="title">数据注入策略</div>
             <div class="sub">配置仿真数据填充方式</div>
           </div>
         </div>
       </div>
-    </template>
+    </header>
 
     <div class="injection-panel-content">
       <!-- 全局策略选择 -->
@@ -158,35 +147,22 @@
         </div>
       </div>
     </div>
-  </zx-floating-panel>
+  </section>
 </template>
 
 <script setup>
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Setting, Check } from '@element-plus/icons-vue';
 
-defineProps({
-  visible: {
-    type: Boolean,
-    default: true,
-  },
-  position: {
-    type: Object,
-    default: () => ({ top: '80px', left: '30px' }),
-  },
-  defaultCollapsed: {
-    type: Boolean,
-    default: true,
-  },
+const props = defineProps({
+  initialConfig: { type: Object, default: () => ({}) },
 });
 
-const emit = defineEmits(['apply']);
-
-const panelRef = ref();
+const emit = defineEmits(['apply', 'config-change']);
 
 // 全局策略
-const globalStrategy = ref('random');
+const globalStrategy = ref(props.initialConfig.strategy || 'random');
 
 // 策略参数
 const params = reactive({
@@ -205,6 +181,17 @@ const params = reactive({
   frequency: 1,
   phase: 0,
 });
+
+Object.assign(params, props.initialConfig.params || {});
+watch(
+  [globalStrategy, params],
+  () =>
+    emit('config-change', {
+      strategy: globalStrategy.value,
+      params: { ...params },
+    }),
+  { deep: true }
+);
 
 // 策略列表
 const strategies = [
