@@ -59,7 +59,16 @@ describe('project/version/topology mock handlers', () => {
     expect(location).toBe(new URL(`/api/project/${created.projectId}`, response.url).href);
     if (!location) throw new Error('A persisted creation must return Location');
     const resource = await fetch(location).then((res) => res.json());
-    expect(resource).toEqual(created);
+    const { versionId, ...project } = created;
+    expect(resource).toEqual(project);
+    expect(versionId).toBeGreaterThan(0);
+    expect(
+      await fetch(`/api/project/version/${versionId}`).then((res) => res.json())
+    ).toMatchObject({
+      projectId: created.projectId,
+      versionId,
+      versionNumber: 'v1.0.0',
+    });
     const deleted = await fetch(location, { method: 'DELETE' });
     expect(deleted.status).toBe(204);
     expect(await deleted.text()).toBe('');
@@ -267,10 +276,10 @@ describe('project/version/topology mock handlers', () => {
       }),
     });
 
-    expect(lockedUpdateResponse.status).toBe(400);
-    expect(lockedDeleteResponse.status).toBe(400);
-    expect(lockedTopologyResponse.status).toBe(400);
-    expect(mismatchedTopologyResponse.status).toBe(400);
+    expect(lockedUpdateResponse.status).toBe(409);
+    expect(lockedDeleteResponse.status).toBe(409);
+    expect(lockedTopologyResponse.status).toBe(409);
+    expect(mismatchedTopologyResponse.status).toBe(404);
     await expect(lockedTopologyResponse.json()).resolves.toMatchObject({
       detail: '固化版本不允许保存拓扑',
     });
