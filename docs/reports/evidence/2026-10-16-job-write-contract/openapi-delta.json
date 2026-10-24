@@ -1,0 +1,48 @@
+{
+  "changes": [
+    {
+      "path": "/components/schemas/EditJobModel",
+      "change": "removed"
+    },
+    {
+      "path": "/components/schemas/JobCreateModel",
+      "change": "added"
+    },
+    {
+      "path": "/components/schemas/JobRunModel",
+      "change": "added"
+    },
+    {
+      "path": "/components/schemas/JobStatusUpdateModel",
+      "change": "added"
+    },
+    {
+      "path": "/components/schemas/JobUpdateModel",
+      "change": "added"
+    },
+    {
+      "path": "/paths//monitor/job/post/requestBody/content/application/json/schema/$ref",
+      "change": "changed",
+      "before": "#/components/schemas/JobModel",
+      "after": "#/components/schemas/JobCreateModel"
+    },
+    {
+      "path": "/paths//monitor/job/put/requestBody/content/application/json/schema/$ref",
+      "change": "changed",
+      "before": "#/components/schemas/EditJobModel",
+      "after": "#/components/schemas/JobUpdateModel"
+    },
+    {
+      "path": "/paths//monitor/job/changeStatus/put/requestBody/content/application/json/schema/$ref",
+      "change": "changed",
+      "before": "#/components/schemas/EditJobModel",
+      "after": "#/components/schemas/JobStatusUpdateModel"
+    },
+    {
+      "path": "/paths//monitor/job/run/put/requestBody/content/application/json/schema/$ref",
+      "change": "changed",
+      "before": "#/components/schemas/JobModel",
+      "after": "#/components/schemas/JobRunModel"
+    }
+  ]
+}

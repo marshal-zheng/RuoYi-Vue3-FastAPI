@@ -1,0 +1,3 @@
+/* Compatibility import only. Host owns body/Teleport scope inheritance;
+   Element Plus, ZXUI and the public VXE bridge own their component styles.
+   The legacy sim-*-dark class names no longer force a color mode. */

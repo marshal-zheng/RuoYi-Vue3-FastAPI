@@ -1,0 +1,15 @@
+{
+  "database": {
+    "activeUsers": 0,
+    "userRoles": 0,
+    "activeRole": 0,
+    "roleDepts": 0,
+    "roleMenus": 0,
+    "menu": 0,
+    "activeProtocols": 0
+  },
+  "ownedSessionKeysRemoved": 3,
+  "remainingOwnedSessions": 0,
+  "ownedAvatarRemoved": true,
+  "avatarStillExists": false
+}

@@ -1,0 +1,191 @@
+[
+  {
+    "path": "/system",
+    "name": "System",
+    "component": "Layout",
+    "title": "系统管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/user",
+    "name": "User",
+    "component": "system/user/index",
+    "title": "用户管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/role",
+    "name": "Role",
+    "component": "system/role/index",
+    "title": "角色管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/menu",
+    "name": "Menu",
+    "component": "system/menu/index",
+    "title": "菜单管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/dept",
+    "name": "Dept",
+    "component": "system/dept/index",
+    "title": "部门管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/post",
+    "name": "Post",
+    "component": "system/post/index",
+    "title": "岗位管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/dict",
+    "name": "Dict",
+    "component": "system/dict/index",
+    "title": "字典管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/config",
+    "name": "Config",
+    "component": "system/config/index",
+    "title": "参数设置",
+    "hidden": false
+  },
+  {
+    "path": "/system/notice",
+    "name": "Notice",
+    "component": "system/notice/index",
+    "title": "通知公告",
+    "hidden": false
+  },
+  {
+    "path": "/system/log",
+    "name": "Log",
+    "component": "ParentView",
+    "title": "日志管理",
+    "hidden": false
+  },
+  {
+    "path": "/system/log/operlog",
+    "name": "Operlog",
+    "component": "monitor/operlog/index",
+    "title": "操作日志",
+    "hidden": false
+  },
+  {
+    "path": "/system/log/logininfor",
+    "name": "Logininfor",
+    "component": "monitor/logininfor/index",
+    "title": "登录日志",
+    "hidden": false
+  },
+  {
+    "path": "/system/log/audit",
+    "name": "Audit",
+    "component": "monitor/audit/index",
+    "title": "审计日志",
+    "hidden": false
+  },
+  {
+    "path": "/monitor",
+    "name": "Monitor",
+    "component": "Layout",
+    "title": "系统监控",
+    "hidden": false
+  },
+  {
+    "path": "/monitor/online",
+    "name": "Online",
+    "component": "monitor/online/index",
+    "title": "在线用户",
+    "hidden": false
+  },
+  {
+    "path": "/monitor/job",
+    "name": "Job",
+    "component": "monitor/job/index",
+    "title": "定时任务",
+    "hidden": false
+  },
+  {
+    "path": "/monitor/druid",
+    "name": "Druid",
+    "component": "monitor/druid/index",
+    "title": "数据监控",
+    "hidden": false
+  },
+  {
+    "path": "/monitor/server",
+    "name": "Server",
+    "component": "monitor/server/index",
+    "title": "服务监控",
+    "hidden": false
+  },
+  {
+    "path": "/monitor/cache",
+    "name": "Cache",
+    "component": "monitor/cache/index",
+    "title": "缓存监控",
+    "hidden": false
+  },
+  {
+    "path": "/monitor/cacheList",
+    "name": "Cachelist",
+    "component": "monitor/cache/list",
+    "title": "缓存列表",
+    "hidden": false
+  },
+  {
+    "path": "/tool",
+    "name": "Tool",
+    "component": "Layout",
+    "title": "系统工具",
+    "hidden": false
+  },
+  {
+    "path": "/tool/build",
+    "name": "Build",
+    "component": "tool/build/index",
+    "title": "表单构建",
+    "hidden": false
+  },
+  {
+    "path": "/tool/gen",
+    "name": "Gen",
+    "component": "tool/gen/index",
+    "title": "代码生成",
+    "hidden": false
+  },
+  {
+    "path": "/tool/swagger",
+    "name": "Swagger",
+    "component": "tool/swagger/index",
+    "title": "系统接口",
+    "hidden": false
+  },
+  {
+    "path": "/project",
+    "name": "Project",
+    "component": "Layout",
+    "title": "工程管理",
+    "hidden": false
+  },
+  {
+    "path": "/project/project",
+    "name": "Project",
+    "component": "project/index",
+    "title": "工程列表",
+    "hidden": false
+  },
+  {
+    "path": "/project/operlog",
+    "name": "Projectoperlog",
+    "component": "monitor/operlog/index",
+    "title": "操作日志",
+    "hidden": false
+  }
+]

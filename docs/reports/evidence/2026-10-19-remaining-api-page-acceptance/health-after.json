@@ -1,0 +1,99 @@
+[
+  {
+    "path": "/health",
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "app": "RuoYi-FastAPI",
+      "version": "1.6.2",
+      "providers": {
+        "redis": {
+          "initialized": true,
+          "healthy": true,
+          "detail": "ready"
+        },
+        "scheduler": {
+          "initialized": true,
+          "healthy": true,
+          "detail": "ready"
+        },
+        "queryCache": {
+          "initialized": true,
+          "healthy": true,
+          "detail": "enabled"
+        }
+      }
+    }
+  },
+  {
+    "path": "/ready",
+    "status": 200,
+    "body": {
+      "status": "ready",
+      "containerReady": true
+    }
+  },
+  {
+    "path": "/health/db",
+    "status": 200,
+    "body": {
+      "status": "healthy",
+      "message": "连接池状态正常",
+      "poolSize": 50,
+      "checkedOut": 0,
+      "overflow": -48,
+      "totalCapacity": 60,
+      "usageRate": 0.0,
+      "available": 60
+    }
+  },
+  {
+    "path": "/health/deep",
+    "status": 200,
+    "body": {
+      "status": "healthy",
+      "timeoutSeconds": 2.0,
+      "dependencies": {
+        "database": {
+          "status": "healthy",
+          "detail": "ok",
+          "latencyMs": 1.93
+        },
+        "redis": {
+          "status": "healthy",
+          "detail": "ok",
+          "latencyMs": 0.468
+        }
+      }
+    }
+  },
+  {
+    "path": "/health/events",
+    "status": 200,
+    "body": {
+      "status": "healthy",
+      "running": true,
+      "backlog": 0,
+      "lagSeconds": 0.0,
+      "lastDispatchAt": null,
+      "lastError": null,
+      "handlers": {
+        "system.user.deleted": [
+          "project_read_side_projection"
+        ]
+      }
+    }
+  },
+  {
+    "path": "/health/query-stats",
+    "status": 200,
+    "body": {
+      "totalQueries": 43,
+      "slowQueries": 0,
+      "slowQueryRate": "0.00%",
+      "avgTimeMs": "2.19",
+      "maxTimeMs": "14.80",
+      "nPlusOneDetected": 0
+    }
+  }
+]

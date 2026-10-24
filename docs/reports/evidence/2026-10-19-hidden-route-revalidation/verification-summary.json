@@ -1,0 +1,49 @@
+{
+  "dynamicBusinessRoutes": 8,
+  "routeVariants": 9,
+  "allMatrixCellsPass": true,
+  "tests": {
+    "files": 7,
+    "passed": 68,
+    "failed": 0
+  },
+  "typecheck": "pass",
+  "scopedLint": "pass",
+  "sourceLinkedBuild": "pass",
+  "browserRequests": 637,
+  "browser5xx": 0,
+  "unhandledPageErrors": 0,
+  "cleanup": {
+    "database": {
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoles": 0,
+      "roleMenus": 0,
+      "roleDepts": 0,
+      "menus": 0,
+      "categories": 0,
+      "unexpectedSavedDevices": 0
+    },
+    "sessionKeysRemoved": 2,
+    "remainingOwnedSessions": 0
+  },
+  "sourceFilesModified": 6,
+  "existingTestFilesModified": 3,
+  "newTestFiles": [
+    "tests/unit/components/DictDataRouteFilter.test.ts"
+  ],
+  "baselineFiles": 14,
+  "unchangedBaselineFiles": 5,
+  "heads": {
+    "ruoyi": {
+      "before": "4ed36ba3eb0500d6202ea8740e5533d212f6f5a9",
+      "after": "4ed36ba3eb0500d6202ea8740e5533d212f6f5a9"
+    },
+    "zxui": {
+      "before": "09257a69055f2e397c75f1665935a71ec18e0732",
+      "after": "09257a69055f2e397c75f1665935a71ec18e0732"
+    }
+  },
+  "commitOrPushExecuted": false,
+  "simulationRuntime": "excluded by AGENTS.md"
+}

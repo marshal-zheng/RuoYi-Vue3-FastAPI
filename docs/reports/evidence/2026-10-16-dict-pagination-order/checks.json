@@ -1,0 +1,55 @@
+{
+  "realRed": {
+    "command": "PROBE_PHASE=red node /tmp/ruoyi-dict-pagination/actual-probe.cjs",
+    "exitCode": 1,
+    "expectedFailure": true,
+    "rows": 84,
+    "uniqueRows": 52,
+    "missingRows": 32,
+    "distinctRepeatedCodes": 13
+  },
+  "realGreen": {
+    "command": "PROBE_PHASE=green node /tmp/ruoyi-dict-pagination/actual-probe.cjs",
+    "exitCode": 0,
+    "scenarios": 10,
+    "mainTraversalPages": 278,
+    "duplicates": 0,
+    "missing": 0,
+    "excelOrderMatches": true
+  },
+  "existingTests": {
+    "command": "./venv/bin/pytest tests/unit/services/test_dict_service.py -q -o addopts=''",
+    "exitCode": 0,
+    "passed": 9
+  },
+  "effectiveSql": {
+    "result": "Only dict_code final ordering added; update_time DESC, dict_sort ordering and filtering/offset/limit unchanged"
+  },
+  "independentReview": {
+    "result": "No blocking findings; effective SQL checked under four filtering combinations; no live API verification by reviewer"
+  },
+  "ruff": {
+    "command": "./venv/bin/ruff check modules/system/infrastructure/dict_repository.py",
+    "exitCode": 1,
+    "baselineCount": 40,
+    "afterCount": 40,
+    "newDiagnostics": []
+  },
+  "conventions": {
+    "command": "bash .cursor/skills/backend-conventions/scripts/validate.sh --changed",
+    "exitCode": 0,
+    "note": "Guardrails passed; script PATH did not contain Ruff, separate explicit venv Ruff baseline comparison performed; mypy/pytest not included by script"
+  },
+  "diffCheck": {
+    "command": "git diff --check",
+    "exitCode": 0
+  },
+  "runtime": {
+    "domainFixturesCreated": 0,
+    "dictionaryDataUnchanged": true,
+    "probeSessionsLoggedOut": true,
+    "temporaryExcelRemoved": true,
+    "onlyTaskStartedBackendStopped": true
+  },
+  "scope": "One production line changed in DictDataRepository.paginate_with_filters. No frontend/ZXUI/shared paginator/schema/index change. No new mock tests for this low-impact order clause."
+}

@@ -1,0 +1,60 @@
+{
+  "changedPaths": [
+    {
+      "path": "/system/role",
+      "methods": [
+        "post",
+        "put"
+      ]
+    },
+    {
+      "path": "/system/role/changeStatus",
+      "methods": [
+        "put"
+      ]
+    },
+    {
+      "path": "/system/role/dataScope",
+      "methods": [
+        "put"
+      ]
+    },
+    {
+      "path": "/system/user",
+      "methods": [
+        "post",
+        "put"
+      ]
+    },
+    {
+      "path": "/system/user/changeStatus",
+      "methods": [
+        "put"
+      ]
+    },
+    {
+      "path": "/system/user/profile",
+      "methods": [
+        "put"
+      ]
+    }
+  ],
+  "schemas": {
+    "added": [
+      "RoleCreateModel",
+      "RoleDataScopeUpdateModel",
+      "RoleStatusUpdateModel",
+      "RoleUpdateModel",
+      "UserCreateModel",
+      "UserProfileUpdateModel",
+      "UserStatusUpdateModel",
+      "UserUpdateModel"
+    ],
+    "removed": [
+      "AddRoleModel",
+      "AddUserModel"
+    ],
+    "changed": []
+  },
+  "otherDrift": {}
+}

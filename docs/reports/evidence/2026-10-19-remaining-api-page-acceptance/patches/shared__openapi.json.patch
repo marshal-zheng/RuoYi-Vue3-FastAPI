@@ -1,0 +1,174 @@
+--- baseline/shared/openapi.json
++++ current/shared/openapi.json
+@@ -6910,10 +6910,10 @@
+             "anyOf": [
+               {
+                 "enum": [
++                  "0",
++                  "1",
+                   0,
+-                  1,
+-                  "0",
+-                  "1"
++                  1
+                 ]
+               },
+               {
+@@ -7281,6 +7281,126 @@
+           }
+         },
+         "title": "PostPageQueryModel",
++        "type": "object"
++      },
++      "ProjectCreatedModel": {
++        "description": "新建工程及同时创建的初始版本，供拓扑设计入口使用。",
++        "properties": {
++          "createBy": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "创建人",
++            "title": "Createby"
++          },
++          "createTime": {
++            "anyOf": [
++              {
++                "format": "date-time",
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "创建时间",
++            "title": "Createtime"
++          },
++          "delFlag": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "default": "0",
++            "description": "删除标志（0代表存在 2代表删除）",
++            "title": "Delflag"
++          },
++          "projectCode": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "工程编码",
++            "title": "Projectcode"
++          },
++          "projectDesc": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "工程描述",
++            "title": "Projectdesc"
++          },
++          "projectId": {
++            "description": "工程编号",
++            "title": "Projectid",
++            "type": "integer"
++          },
++          "projectName": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "工程名称",
++            "title": "Projectname"
++          },
++          "updateBy": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "更新者",
++            "title": "Updateby"
++          },
++          "updateTime": {
++            "anyOf": [
++              {
++                "format": "date-time",
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "更新时间",
++            "title": "Updatetime"
++          },
++          "versionId": {
++            "description": "初始版本编号",
++            "title": "Versionid",
++            "type": "integer"
++          }
++        },
++        "required": [
++          "projectId",
++          "versionId"
++        ],
++        "title": "ProjectCreatedModel",
+         "type": "object"
+       },
+       "ProjectImportDataModel": {
+@@ -15418,10 +15538,10 @@
+               "anyOf": [
+                 {
+                   "enum": [
++                    "0",
++                    "1",
+                     0,
+-                    1,
+-                    "0",
+-                    "1"
++                    1
+                   ]
+                 },
+                 {
+@@ -15707,10 +15827,12 @@
+           "required": true
+         },
+         "responses": {
+-          "200": {
+-            "content": {
+-              "application/json": {
+-                "schema": {}
++          "201": {
++            "content": {
++              "application/json": {
++                "schema": {
++                  "$ref": "#/components/schemas/ProjectCreatedModel"
++                }
+               }
+             },
+             "description": "Successful Response"

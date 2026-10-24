@@ -1,0 +1,1974 @@
+--- baseline/ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
++++ current/ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
+@@ -285,17 +285,3 @@
+ 
+     roles: List[Union[SelectedRoleModel, None]] = Field(default=[], description='角色信息')
+     user: UserInfoModel = Field(description='用户信息')
+-
+-
+-@as_query
+-class CrudUserRoleModel(CamelModelBase):
+-    """
+-    新增、删除用户关联角色及角色关联用户模型
+-    """
+-
+-    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+-
+-    user_id: Optional[int] = Field(default=None, description='用户ID')
+-    user_ids: Optional[str] = Field(default=None, description='用户ID信息')
+-    role_id: Optional[int] = Field(default=None, description='角色ID')
+-    role_ids: Optional[str] = Field(default=None, description='角色ID信息')
+--- baseline/ruoyi-fastapi-backend/module_admin/entity/vo/user_write_vo.py
++++ current/ruoyi-fastapi-backend/module_admin/entity/vo/user_write_vo.py
+@@ -6,6 +6,7 @@
+ from pydantic_validation_decorator import FieldValidationError
+ 
+ from module_admin.entity.vo.base import CamelModelBase
++from module_admin.entity.vo.user_role_write_vo import AuthorizationIds
+ from module_admin.entity.vo.user_vo import EditUserModel
+ 
+ 
+@@ -37,7 +38,7 @@
+     id_card: str | None = Field(default=None, max_length=18, description='身份证号')
+     status: Literal['0', '1'] | None = Field(default=None, description='帐号状态')
+     remark: str | None = Field(default=None, description='备注')
+-    role_ids: list[int] | None = Field(default=None, description='角色ID; 未提供保留, 空数组或null清空')
++    role_ids: AuthorizationIds | None = Field(default=None, description='角色ID; 未提供保留, 空数组或null清空')
+     post_ids: list[int] | None = Field(default=None, description='岗位ID; 未提供保留, 空数组或null清空')
+ 
+ 
+--- baseline/ruoyi-fastapi-backend/modules/system/api/dependencies.py
++++ current/ruoyi-fastapi-backend/modules/system/api/dependencies.py
+@@ -31,6 +31,7 @@
+     AddRoleCommand,
+     AddRoleUserCommand,
+     AssignRoleDataScopeCommand,
++    BatchCancelRoleUserCommand,
+     CancelRoleUserCommand,
+     ChangeRoleStatusCommand,
+     DeleteRoleCommand,
+@@ -84,6 +85,7 @@
+     AddRoleCommandHandler,
+     AddRoleUserCommandHandler,
+     AssignRoleDataScopeCommandHandler,
++    BatchCancelRoleUserCommandHandler,
+     CancelRoleUserCommandHandler,
+     ChangeRoleStatusCommandHandler,
+     DeleteRoleCommandHandler,
+@@ -186,11 +188,12 @@
+     GetUserListQuery,
+     GetUserProfileQuery,
+ )
++from modules.system.application.services.user_role_service import UserRoleService
+ 
+ if TYPE_CHECKING:
++    from modules.system.application.services import DictDataService, DictTypeService
+     from modules.system.application.services.config_service import ConfigService
+     from modules.system.application.services.dept_service import DeptService
+-    from modules.system.application.services import DictDataService, DictTypeService
+     from modules.system.application.services.menu_service import MenuService
+     from modules.system.application.services.notice_service import NoticeService
+     from modules.system.application.services.post_service import PostService
+@@ -211,6 +214,7 @@
+ ) -> Mediator:
+     """Build request-scoped mediator with explicit system handlers."""
+     registry = HandlerRegistry()
++    user_role_service = UserRoleService(user_service, role_service)
+     registry.register_command(
+         AddConfigCommand,
+         AddConfigCommandHandler(config_service),
+@@ -325,12 +329,13 @@
+     )
+     registry.register_command(
+         AddRoleUserCommand,
+-        AddRoleUserCommandHandler(user_service, role_service),
++        AddRoleUserCommandHandler(user_role_service),
+     )
+     registry.register_command(
+         CancelRoleUserCommand,
+-        CancelRoleUserCommandHandler(user_service),
+-    )
++        CancelRoleUserCommandHandler(user_role_service),
++    )
++    registry.register_command(BatchCancelRoleUserCommand, BatchCancelRoleUserCommandHandler(user_role_service))
+     registry.register_command(
+         AddUserCommand,
+         AddUserCommandHandler(user_service, dept_service, role_service),
+@@ -353,7 +358,7 @@
+     )
+     registry.register_command(
+         AssignUserRolesCommand,
+-        AssignUserRolesCommandHandler(user_service, role_service),
++        AssignUserRolesCommandHandler(user_role_service),
+     )
+     registry.register_query(
+         GetConfigListQuery,
+--- baseline/ruoyi-fastapi-backend/modules/system/api/role_controller.py
++++ current/ruoyi-fastapi-backend/modules/system/api/role_controller.py
+@@ -10,7 +10,8 @@
+ from module_admin.aspect.data_scope import GetDataScope
+ from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
+ from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel, RoleModel, RolePageQueryModel
+-from module_admin.entity.vo.user_vo import CrudUserRoleModel, CurrentUserModel, UserRolePageQueryModel
++from module_admin.entity.vo.user_vo import CurrentUserModel, UserRolePageQueryModel
++from module_admin.entity.vo.user_role_write_vo import RoleUsersGrantModel, RoleUserRevokeModel, RoleUsersRevokeModel
+ from module_admin.entity.vo.role_write_vo import (
+     RoleCreateModel,
+     RoleDataScopeUpdateModel,
+@@ -23,6 +24,7 @@
+ from modules.system.application.commands import (
+     AddRoleCommand,
+     AddRoleUserCommand,
++    BatchCancelRoleUserCommand,
+     AssignRoleDataScopeCommand,
+     CancelRoleUserCommand,
+     ChangeRoleStatusCommand,
+@@ -377,21 +379,23 @@
+     return ok_page_result(role_user_unallocated_page_query_result)
+ 
+ 
+-@roleController.put('/authUser/selectAll', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
++@roleController.put('/authUser/selectAll', status_code=204, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+ @Log(title='角色管理', business_type=BusinessType.GRANT)
+ async def add_system_role_user(
+     request: Request,
+-    add_role_user: CrudUserRoleModel = Depends(CrudUserRoleModel.as_query),
+-    query_db: AsyncSession = Depends(get_db),
+-    current_user: CurrentUserModel = Depends(get_current_user),
+-    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
++    add_role_user: RoleUsersGrantModel,
++    query_db: AsyncSession = Depends(get_db),
++    current_user: CurrentUserModel = Depends(get_current_user),
++    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
++    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+     mediator: Mediator = Depends(provide_system_mediator),
+ ):
+     grant_command = AddRoleUserCommand(
+         role_user=add_role_user,
+         query_db=query_db,
+-        enforce_data_scope=not current_user.user.admin,
+-        data_scope_sql=data_scope_sql,
++        enforce_scope_checks=not current_user.user.admin,
++        user_data_scope_sql=user_data_scope_sql,
++        role_data_scope_sql=role_data_scope_sql,
+         operator=current_user.user.user_name,
+         trace_id=request.headers.get('x-trace-id'),
+         request_id=request.headers.get('x-request-id'),
+@@ -403,18 +407,23 @@
+     return ResponseUtil.no_content()
+ 
+ 
+-@roleController.put('/authUser/cancel', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
++@roleController.put('/authUser/cancel', status_code=204, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+ @Log(title='角色管理', business_type=BusinessType.GRANT)
+ async def cancel_system_role_user(
+     request: Request,
+-    cancel_user_role: CrudUserRoleModel,
+-    query_db: AsyncSession = Depends(get_db),
+-    current_user: CurrentUserModel = Depends(get_current_user),
++    cancel_user_role: RoleUserRevokeModel,
++    query_db: AsyncSession = Depends(get_db),
++    current_user: CurrentUserModel = Depends(get_current_user),
++    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
++    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+     mediator: Mediator = Depends(provide_system_mediator),
+ ):
+     cancel_command = CancelRoleUserCommand(
+         role_user=cancel_user_role,
+         query_db=query_db,
++        enforce_scope_checks=not current_user.user.admin,
++        user_data_scope_sql=user_data_scope_sql,
++        role_data_scope_sql=role_data_scope_sql,
+         operator=current_user.user.user_name,
+         trace_id=request.headers.get('x-trace-id'),
+         request_id=request.headers.get('x-request-id'),
+@@ -426,18 +435,23 @@
+     return ResponseUtil.no_content()
+ 
+ 
+-@roleController.put('/authUser/cancelAll', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
++@roleController.put('/authUser/cancelAll', status_code=204, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+ @Log(title='角色管理', business_type=BusinessType.GRANT)
+ async def batch_cancel_system_role_user(
+     request: Request,
+-    batch_cancel_user_role: CrudUserRoleModel = Depends(CrudUserRoleModel.as_query),
+-    query_db: AsyncSession = Depends(get_db),
+-    current_user: CurrentUserModel = Depends(get_current_user),
+-    mediator: Mediator = Depends(provide_system_mediator),
+-):
+-    cancel_command = CancelRoleUserCommand(
++    batch_cancel_user_role: RoleUsersRevokeModel,
++    query_db: AsyncSession = Depends(get_db),
++    current_user: CurrentUserModel = Depends(get_current_user),
++    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
++    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
++    mediator: Mediator = Depends(provide_system_mediator),
++):
++    cancel_command = BatchCancelRoleUserCommand(
+         role_user=batch_cancel_user_role,
+         query_db=query_db,
++        enforce_scope_checks=not current_user.user.admin,
++        user_data_scope_sql=user_data_scope_sql,
++        role_data_scope_sql=role_data_scope_sql,
+         operator=current_user.user.user_name,
+         trace_id=request.headers.get('x-trace-id'),
+         request_id=request.headers.get('x-request-id'),
+--- baseline/ruoyi-fastapi-backend/modules/system/api/user_controller.py
++++ current/ruoyi-fastapi-backend/modules/system/api/user_controller.py
+@@ -15,9 +15,9 @@
+ from module_admin.annotation.log_annotation import Log
+ from module_admin.aspect.data_scope import GetDataScope
+ from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
++from module_admin.entity.vo.user_role_write_vo import UserRolesAssignModel
+ from module_admin.entity.vo.user_vo import (
+     AddUserModel,
+-    CrudUserRoleModel,
+     CurrentUserModel,
+     DeleteUserModel,
+     EditUserModel,
+@@ -597,14 +597,13 @@
+ 
+ @userController.put(
+     '/authRole',
+-    response_model=UserRoleResponseModel,
++    status_code=204,
+     dependencies=[Depends(CheckUserInterfaceAuth('system:user:edit'))],
+ )
+ @Log(title='用户管理', business_type=BusinessType.GRANT)
+ async def update_system_role_user(
+     request: Request,
+-    user_id: int = Query(alias='userId'),
+-    role_ids: str = Query(alias='roleIds'),
++    user_role: UserRolesAssignModel,
+     query_db: AsyncSession = Depends(get_db),
+     current_user: CurrentUserModel = Depends(get_current_user),
+     user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+@@ -613,7 +612,7 @@
+ ):
+     assign_command = AssignUserRolesCommand(
+         query_db=query_db,
+-        user_role=CrudUserRoleModel(userId=user_id, roleIds=role_ids),
++        user_role=user_role,
+         enforce_scope_checks=not current_user.user.admin,
+         user_data_scope_sql=user_data_scope_sql,
+         role_data_scope_sql=role_data_scope_sql,
+--- baseline/ruoyi-fastapi-backend/modules/system/application/commands/__init__.py
++++ current/ruoyi-fastapi-backend/modules/system/application/commands/__init__.py
+@@ -39,6 +39,7 @@
+     AddRoleCommand,
+     AddRoleUserCommand,
+     AssignRoleDataScopeCommand,
++    BatchCancelRoleUserCommand,
+     CancelRoleUserCommand,
+     ChangeRoleStatusCommand,
+     DeleteRoleCommand,
+@@ -66,6 +67,7 @@
+     'AddUserCommand',
+     'AssignRoleDataScopeCommand',
+     'AssignUserRolesCommand',
++    'BatchCancelRoleUserCommand',
+     'CancelRoleUserCommand',
+     'ChangeRoleStatusCommand',
+     'DeleteConfigCommand',
+--- baseline/ruoyi-fastapi-backend/modules/system/application/commands/role_commands.py
++++ current/ruoyi-fastapi-backend/modules/system/application/commands/role_commands.py
+@@ -7,7 +7,11 @@
+ from pydantic import BaseModel, ConfigDict, Field
+ 
+ from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel  # noqa: TC001
+-from module_admin.entity.vo.user_vo import CrudUserRoleModel  # noqa: TC001
++from module_admin.entity.vo.user_role_write_vo import (  # noqa: TC001
++    RoleUserRevokeModel,
++    RoleUsersGrantModel,
++    RoleUsersRevokeModel,
++)
+ 
+ 
+ class _RoleCommandContext(BaseModel):
+@@ -58,13 +62,19 @@
+     role: AddRoleModel = Field(description='Role payload for status update')
+ 
+ 
+-class AddRoleUserCommand(_RoleDataScopeContext):
+-    """Assign users to role."""
+-
+-    role_user: CrudUserRoleModel = Field(description='Role-user payload to assign')
++class _RoleUserScopeContext(_RoleCommandContext):
++    enforce_scope_checks: bool = Field(description='Whether the actor is subject to user/role data scopes')
++    user_data_scope_sql: Any = Field(description='User data-scope SQL')
++    role_data_scope_sql: Any = Field(description='Role/Dept data-scope SQL')
+ 
+ 
+-class CancelRoleUserCommand(_RoleCommandContext):
+-    """Remove role assignment from users."""
++class AddRoleUserCommand(_RoleUserScopeContext):
++    role_user: RoleUsersGrantModel = Field(description='Users to grant this role')
+ 
+-    role_user: CrudUserRoleModel = Field(description='Role-user payload to cancel')
++
++class CancelRoleUserCommand(_RoleUserScopeContext):
++    role_user: RoleUserRevokeModel = Field(description='Single role-user association to revoke')
++
++
++class BatchCancelRoleUserCommand(_RoleUserScopeContext):
++    role_user: RoleUsersRevokeModel = Field(description='Role-user associations to revoke together')
+--- baseline/ruoyi-fastapi-backend/modules/system/application/commands/user_commands.py
++++ current/ruoyi-fastapi-backend/modules/system/application/commands/user_commands.py
+@@ -6,9 +6,9 @@
+ 
+ from pydantic import BaseModel, ConfigDict, Field
+ 
++from module_admin.entity.vo.user_role_write_vo import UserRolesAssignModel  # noqa: TC001
+ from module_admin.entity.vo.user_vo import (  # noqa: TC001
+     AddUserModel,
+-    CrudUserRoleModel,
+     CurrentUserModel,
+     DeleteUserModel,
+     EditUserModel,
+@@ -80,7 +80,7 @@
+ class AssignUserRolesCommand(_UserDbCommandContext):
+     """Assign roles to a user."""
+ 
+-    user_role: CrudUserRoleModel = Field(description='User-role assignment payload')
++    user_role: UserRolesAssignModel = Field(description='User-role assignment payload')
+     enforce_scope_checks: bool = Field(default=False, description='Whether to enforce user/role scope checks')
+     user_data_scope_sql: Any = Field(default='True', description='User data-scope SQL')
+     role_data_scope_sql: Any = Field(default='True', description='Role data-scope SQL')
+--- baseline/ruoyi-fastapi-backend/modules/system/application/handlers/command/__init__.py
++++ current/ruoyi-fastapi-backend/modules/system/application/handlers/command/__init__.py
+@@ -39,6 +39,7 @@
+     AddRoleCommandHandler,
+     AddRoleUserCommandHandler,
+     AssignRoleDataScopeCommandHandler,
++    BatchCancelRoleUserCommandHandler,
+     CancelRoleUserCommandHandler,
+     ChangeRoleStatusCommandHandler,
+     DeleteRoleCommandHandler,
+@@ -66,6 +67,7 @@
+     'AddUserCommandHandler',
+     'AssignRoleDataScopeCommandHandler',
+     'AssignUserRolesCommandHandler',
++    'BatchCancelRoleUserCommandHandler',
+     'CancelRoleUserCommandHandler',
+     'ChangeRoleStatusCommandHandler',
+     'DeleteConfigCommandHandler',
+--- baseline/ruoyi-fastapi-backend/modules/system/application/handlers/command/role_command_handlers.py
++++ current/ruoyi-fastapi-backend/modules/system/application/handlers/command/role_command_handlers.py
+@@ -9,18 +9,19 @@
+     AddRoleCommand,
+     AddRoleUserCommand,
+     AssignRoleDataScopeCommand,
++    BatchCancelRoleUserCommand,
+     CancelRoleUserCommand,
+     ChangeRoleStatusCommand,
+     DeleteRoleCommand,
+     EditRoleCommand,
+ )
+ from modules.system.application.contracts import CommandResult, ICommandHandler
++from modules.system.application.event_factory import build_system_event
+ from modules.system.application.handlers.command.result_data import command_result_data
+-from modules.system.application.event_factory import build_system_event
+ 
+ if TYPE_CHECKING:
+     from modules.system.application.services.role_service import RoleService
+-    from modules.system.application.services.user_service import UserService
++    from modules.system.application.services.user_role_service import UserRoleService
+ 
+ 
+ def _build_metadata(request) -> dict[str, str | None]:
+@@ -188,61 +189,58 @@
+ 
+ 
+ class AddRoleUserCommandHandler(ICommandHandler[AddRoleUserCommand, dict[str, str]]):
+-    """Handle assign users to role command."""
+-
+-    def __init__(self, user_service: UserService, role_service: RoleService):
+-        self._user_service = user_service
+-        self._role_service = role_service
++    def __init__(self, user_role_service: UserRoleService):
++        self._user_role_service = user_role_service
+ 
+     async def handle(self, request: AddRoleUserCommand) -> CommandResult[dict[str, str]]:
+-        if request.enforce_data_scope and request.role_user.role_id is not None:
+-            await self._role_service.check_role_data_scope_services(
+-                str(request.role_user.role_id),
+-                request.data_scope_sql,
+-            )
+-        grant_result = await self._user_service.add_user_role_services(request.query_db, request.role_user)
+-        event = build_system_event(
+-            event_type='system.role.user_granted',
+-            aggregate_type='role',
+-            aggregate_id=str(request.role_user.role_id or 'unknown'),
+-            payload={
+-                'roleId': request.role_user.role_id,
+-                'userIds': request.role_user.user_ids,
+-            },
+-            metadata=_build_metadata(request),
+-        )
+-        return CommandResult(
+-            success=grant_result.is_success,
+-            status='granted' if grant_result.is_success else 'failed',
+-            data=command_result_data(grant_result),
+-            events=(event,),
+-            metadata=_build_metadata(request),
+-        )
++        result = await self._user_role_service.grant_role_users(
++            request.query_db, request.role_user, **_authorization_scope(request)
++        )
++        return _authorization_result(request, result, 'granted')
+ 
+ 
+ class CancelRoleUserCommandHandler(ICommandHandler[CancelRoleUserCommand, dict[str, str]]):
+-    """Handle remove users from role command."""
+-
+-    def __init__(self, user_service: UserService):
+-        self._user_service = user_service
++    def __init__(self, user_role_service: UserRoleService):
++        self._user_role_service = user_role_service
+ 
+     async def handle(self, request: CancelRoleUserCommand) -> CommandResult[dict[str, str]]:
+-        cancel_result = await self._user_service.delete_user_role_services(request.query_db, request.role_user)
+-        event = build_system_event(
+-            event_type='system.role.user_revoked',
+-            aggregate_type='role',
+-            aggregate_id=str(request.role_user.role_id or 'unknown'),
+-            payload={
+-                'roleId': request.role_user.role_id,
+-                'userIds': request.role_user.user_ids,
+-                'userId': request.role_user.user_id,
+-            },
+-            metadata=_build_metadata(request),
+-        )
+-        return CommandResult(
+-            success=cancel_result.is_success,
+-            status='deleted' if cancel_result.is_success else 'failed',
+-            data=command_result_data(cancel_result),
+-            events=(event,),
+-            metadata=_build_metadata(request),
+-        )
++        result = await self._user_role_service.revoke_role_user(
++            request.query_db, request.role_user, **_authorization_scope(request)
++        )
++        return _authorization_result(request, result, 'deleted')
++
++
++class BatchCancelRoleUserCommandHandler(ICommandHandler[BatchCancelRoleUserCommand, dict[str, str]]):
++    def __init__(self, user_role_service: UserRoleService):
++        self._user_role_service = user_role_service
++
++    async def handle(self, request: BatchCancelRoleUserCommand) -> CommandResult[dict[str, str]]:
++        result = await self._user_role_service.revoke_role_users(
++            request.query_db, request.role_user, **_authorization_scope(request)
++        )
++        return _authorization_result(request, result, 'deleted')
++
++
++def _authorization_scope(request):
++    return {
++        'enforce_scope_checks': request.enforce_scope_checks,
++        'user_data_scope_sql': request.user_data_scope_sql,
++        'role_data_scope_sql': request.role_data_scope_sql,
++    }
++
++
++def _authorization_result(request, result, status):
++    event = build_system_event(
++        event_type='system.role.user_granted' if status == 'granted' else 'system.role.user_revoked',
++        aggregate_type='role',
++        aggregate_id=str(request.role_user.role_id),
++        payload=request.role_user.model_dump(by_alias=True),
++        metadata=_build_metadata(request),
++    )
++    return CommandResult(
++        success=result.is_success,
++        status=status if result.is_success else 'failed',
++        data=command_result_data(result),
++        events=(event,),
++        metadata=_build_metadata(request),
++    )
+--- baseline/ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py
++++ current/ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py
+@@ -16,8 +16,9 @@
+     ResetUserPasswordCommand,
+ )
+ from modules.system.application.contracts import CommandResult, ICommandHandler
++from modules.system.application.event_factory import build_system_event
+ from modules.system.application.handlers.command.result_data import command_result_data
+-from modules.system.application.event_factory import build_system_event
++from modules.system.application.services.user_role_service import UserRoleService
+ 
+ if TYPE_CHECKING:
+     from modules.system.application.services.dept_service import DeptService
+@@ -50,9 +51,11 @@
+         request.user.validate_fields()
+         if request.enforce_scope_checks:
+             await self._dept_service.check_dept_data_scope_services(request.user.dept_id, request.dept_data_scope_sql)
+-            role_ids = _serialize_role_ids(request.user.role_ids)
+-            if role_ids:
+-                await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
++        if request.user.role_ids:
++            await UserRoleService(self._user_service, self._role_service).check_user_roles(
++                request.query_db, None, request.user.role_ids,
++                enforce_scope_checks=request.enforce_scope_checks, role_data_scope_sql=request.role_data_scope_sql,
++            )
+         create_result = await self._user_service.add_user_services(request.query_db, request.user)
+         event = build_system_event(
+             event_type='system.user.created',
+@@ -99,15 +102,19 @@
+                 request.user.user_id,
+                 request.user_data_scope_sql,
+             )
+-            if edit_type not in {'status', 'avatar', 'pwd'}:
+-                if 'dept_id' in request.user.model_fields_set and request.user.dept_id is not None:
+-                    await self._dept_service.check_dept_data_scope_services(
+-                        request.user.dept_id,
+-                        request.dept_data_scope_sql,
+-                    )
+-                role_ids = _serialize_role_ids(request.user.role_ids)
+-                if role_ids:
+-                    await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
++            if (
++                edit_type not in {'status', 'avatar', 'pwd'}
++                and 'dept_id' in request.user.model_fields_set
++                and request.user.dept_id is not None
++            ):
++                await self._dept_service.check_dept_data_scope_services(
++                    request.user.dept_id, request.dept_data_scope_sql
++                )
++        if edit_type not in {'profile', 'status', 'avatar', 'pwd', 'login'} and 'role_ids' in request.user.model_fields_set:
++            await UserRoleService(self._user_service, self._role_service).check_user_roles(
++                request.query_db, request.user.user_id, request.user.role_ids,
++                enforce_scope_checks=request.enforce_scope_checks, role_data_scope_sql=request.role_data_scope_sql,
++            )
+         update_result = await self._user_service.edit_user_services(request.query_db, request.user)
+         event = build_system_event(
+             event_type='system.user.updated',
+@@ -228,22 +235,16 @@
+ class AssignUserRolesCommandHandler(ICommandHandler[AssignUserRolesCommand, dict[str, str]]):
+     """Handle assign roles to user command."""
+ 
+-    def __init__(self, user_service: UserService, role_service: RoleService):
+-        self._user_service = user_service
+-        self._role_service = role_service
++    def __init__(self, user_role_service: UserRoleService):
++        self._user_role_service = user_role_service
+ 
+     async def handle(self, request: AssignUserRolesCommand) -> CommandResult[dict[str, str]]:
+-        if request.enforce_scope_checks and request.user_role.user_id is not None:
+-            await self._user_service.check_user_data_scope_services(
+-                request.query_db,
+-                request.user_role.user_id,
+-                request.user_data_scope_sql,
+-            )
+-            role_ids = request.user_role.role_ids or ''
+-            if role_ids:
+-                await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+-
+-        assign_result = await self._user_service.add_user_role_services(request.query_db, request.user_role)
++        assign_result = await self._user_role_service.assign_user_roles(
++            request.query_db, request.user_role,
++            enforce_scope_checks=request.enforce_scope_checks,
++            user_data_scope_sql=request.user_data_scope_sql,
++            role_data_scope_sql=request.role_data_scope_sql,
++        )
+         event = build_system_event(
+             event_type='system.user.roles_assigned',
+             aggregate_type='user',
+@@ -261,9 +262,3 @@
+             events=(event,),
+             metadata=_build_metadata(request),
+         )
+-
+-
+-def _serialize_role_ids(role_ids) -> str:
+-    if not role_ids:
+-        return ''
+-    return ','.join(str(item) for item in role_ids)
+--- baseline/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
++++ current/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
+@@ -18,7 +18,6 @@
+ from utils.transaction_manager import transactional
+ from module_admin.entity.vo.user_vo import (
+     AddUserModel,
+-    CrudUserRoleModel,
+     CurrentUserModel,
+     DeleteUserModel,
+     EditUserModel,
+@@ -29,14 +28,13 @@
+     UserModel,
+     UserPageQueryModel,
+     UserProfileModel,
+-    UserRoleModel,
+     UserRoleQueryModel,
+     UserRoleResponseModel,
+ )
+ from modules.system.infrastructure.user_post_repository import UserPostRepository
+ from modules.system.infrastructure.user_repository import UserRepository
+ from modules.system.infrastructure.user_role_repository import UserRoleRepository
+-from modules.system.application.services.role_service import RoleService
++from modules.system.infrastructure.role_repository import RoleRepository
+ from utils.common_util import CamelCaseUtil
+ from utils.excel_util import ExcelUtil
+ from utils.page_util import PageResponseModel
+@@ -723,7 +721,8 @@
+             role=CamelCaseUtil.transform_result(query_user.get('user_role_info')),
+         )
+         query_role_list = [
+-            SelectedRoleModel(**row) for row in await RoleService.get_role_select_option_services(query_db)
++            SelectedRoleModel(**CamelCaseUtil.transform_result(row))
++            for row in await RoleRepository(query_db).find_all_active()
+         ]
+         for model_a in query_role_list:
+             for model_b in user.role:
+@@ -731,67 +730,3 @@
+                     model_a.flag = True
+         result = UserRoleResponseModel(roles=query_role_list, user=user)
+         return result
+-    @transactional()
+-    async def add_user_role_services(self, query_db: AsyncSession, page_object: CrudUserRoleModel):
+-        """
+-        新增用户关联角色信息service
+-        :param query_db: orm对象
+-        :param page_object: 新增用户关联角色对象
+-        :return: 新增用户关联角色校验结果
+-        """
+-        user_role_repo = self._user_role_repo(query_db)
+-        if page_object.user_id and page_object.role_ids:
+-            role_id_list = page_object.role_ids.split(',')
+-            await user_role_repo.delete_by_user_id(page_object.user_id)
+-            for role_id in role_id_list:
+-                db_user_role = UserRoleDO(user_id=page_object.user_id, role_id=int(role_id))
+-                await user_role_repo.add(db_user_role)
+-            return CrudResponseModel(is_success=True, message='分配成功')
+-        elif page_object.user_id and not page_object.role_ids:
+-            await user_role_repo.delete_by_user_id(page_object.user_id)
+-            return CrudResponseModel(is_success=True, message='分配成功')
+-        elif page_object.user_ids and page_object.role_id:
+-            user_id_list = page_object.user_ids.split(',')
+-            for user_id in user_id_list:
+-                user_role = await self.detail_user_role_services(
+-                    query_db, UserRoleModel(userId=user_id, roleId=page_object.role_id)
+-                )
+-                if user_role:
+-                    continue
+-                else:
+-                    db_user_role = UserRoleDO(user_id=int(user_id), role_id=page_object.role_id)
+-                    await user_role_repo.add(db_user_role)
+-            return CrudResponseModel(is_success=True, message='新增成功')
+-        else:
+-            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='不满足新增条件')
+-    @transactional()
+-    async def delete_user_role_services(self, query_db: AsyncSession, page_object: CrudUserRoleModel):
+-        """
+-        删除用户关联角色信息service
+-        :param query_db: orm对象
+-        :param page_object: 删除用户关联角色对象
+-        :return: 删除用户关联角色校验结果
+-        """
+-        if not ((page_object.user_id and page_object.role_id) or (page_object.user_ids and page_object.role_id)):
+-            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='传入用户角色关联信息为空')
+-        user_role_repo = self._user_role_repo(query_db)
+-        if page_object.user_id and page_object.role_id:
+-            await user_role_repo.delete_by_user_and_role(page_object.user_id, page_object.role_id)
+-            return CrudResponseModel(is_success=True, message='删除成功')
+-        elif page_object.user_ids and page_object.role_id:
+-            user_id_list = page_object.user_ids.split(',')
+-            for user_id in user_id_list:
+-                await user_role_repo.delete_by_user_and_role(int(user_id), page_object.role_id)
+-            return CrudResponseModel(is_success=True, message='删除成功')
+-        else:
+-            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='不满足删除条件')
+-    async def detail_user_role_services(self, query_db: AsyncSession, page_object: UserRoleModel):
+-        """
+-        获取用户关联角色详细信息service
+-        :param query_db: orm对象
+-        :param page_object: 用户关联角色对象
+-        :return: 用户关联角色详细信息
+-        """
+-        user_role_repo = self._user_role_repo(query_db)
+-        user_role = await user_role_repo.find_by_user_and_role(page_object.user_id, page_object.role_id)
+-        return user_role
+--- baseline/ruoyi-fastapi-backend/modules/system/tests/test_role_write_commands.py
++++ current/ruoyi-fastapi-backend/modules/system/tests/test_role_write_commands.py
+@@ -6,12 +6,13 @@
+ import pytest
+ 
+ from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel
+-from module_admin.entity.vo.user_vo import CrudUserRoleModel
++from module_admin.entity.vo.user_role_write_vo import RoleUserRevokeModel, RoleUsersGrantModel, RoleUsersRevokeModel
+ from modules.system.api.dependencies import provide_system_mediator
+ from modules.system.application.commands import (
+     AddRoleCommand,
+     AddRoleUserCommand,
+     AssignRoleDataScopeCommand,
++    BatchCancelRoleUserCommand,
+     CancelRoleUserCommand,
+     ChangeRoleStatusCommand,
+     DeleteRoleCommand,
+@@ -21,6 +22,7 @@
+     AddRoleCommandHandler,
+     AddRoleUserCommandHandler,
+     AssignRoleDataScopeCommandHandler,
++    BatchCancelRoleUserCommandHandler,
+     CancelRoleUserCommandHandler,
+     ChangeRoleStatusCommandHandler,
+     DeleteRoleCommandHandler,
+@@ -73,13 +75,15 @@
+         self.add_called_with = None
+         self.delete_called_with = None
+ 
+-    async def add_user_role_services(self, query_db, payload):
++    async def grant_role_users(self, query_db, payload, **scope):
+         self.add_called_with = (query_db, payload)
+         return _CrudResponse(is_success=True, message='分配成功')
+ 
+-    async def delete_user_role_services(self, query_db, payload):
++    async def revoke_role_user(self, query_db, payload, **scope):
+         self.delete_called_with = (query_db, payload)
+         return _CrudResponse(is_success=True, message='删除成功')
++
++    revoke_role_users = revoke_role_user
+ 
+ 
+ @pytest.mark.asyncio
+@@ -178,27 +182,33 @@
+ 
+ @pytest.mark.asyncio
+ async def test_role_user_command_handlers_success() -> None:
+-    role_service = _RoleServiceStub()
+     user_service = _UserServiceStub()
+-    add_handler = AddRoleUserCommandHandler(user_service, role_service)
++    add_handler = AddRoleUserCommandHandler(user_service)
+     cancel_handler = CancelRoleUserCommandHandler(user_service)
+     query_db = object()
+ 
+     grant_result = await add_handler.handle(
+         AddRoleUserCommand(
+-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+-            query_db=query_db,
++            role_user=RoleUsersGrantModel(userIds=[42, 43], roleId=2),
++            query_db=query_db,
++            enforce_scope_checks=True, user_data_scope_sql='True', role_data_scope_sql='True',
+             operator='admin',
+         )
+     )
+     cancel_result = await cancel_handler.handle(
+         CancelRoleUserCommand(
+-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+-            query_db=query_db,
+-            operator='admin',
+-        )
+-    )
+-
++            role_user=RoleUserRevokeModel(userId=42, roleId=2),
++            query_db=query_db,
++            enforce_scope_checks=True, user_data_scope_sql='True', role_data_scope_sql='True',
++            operator='admin',
++        )
++    )
++
++    batch_result = await BatchCancelRoleUserCommandHandler(user_service).handle(BatchCancelRoleUserCommand(
++        query_db=query_db, role_user=RoleUsersRevokeModel(roleId=2, userIds=[42, 43]),
++        enforce_scope_checks=True, user_data_scope_sql='True', role_data_scope_sql='True',
++    ))
++    assert batch_result.status == 'deleted'
+     assert grant_result.status == 'granted'
+     assert cancel_result.status == 'deleted'
+     assert user_service.add_called_with is not None
+@@ -206,22 +216,25 @@
+ 
+ 
+ @pytest.mark.asyncio
+-async def test_system_mediator_dispatches_role_user_commands() -> None:
++async def test_system_mediator_dispatches_role_user_commands(monkeypatch) -> None:
+     role_service = _RoleServiceStub()
+     user_service = _UserServiceStub()
++    monkeypatch.setattr('modules.system.api.dependencies.UserRoleService', lambda *_: user_service)
+     mediator = provide_system_mediator(role_service=role_service, user_service=user_service)
+     query_db = object()
+ 
+     grant_result = await mediator.send(
+         AddRoleUserCommand(
+-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+-            query_db=query_db,
++            role_user=RoleUsersGrantModel(userIds=[42, 43], roleId=2),
++            query_db=query_db,
++            enforce_scope_checks=True, user_data_scope_sql='True', role_data_scope_sql='True',
+         )
+     )
+     cancel_result = await mediator.send(
+         CancelRoleUserCommand(
+-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+-            query_db=query_db,
++            role_user=RoleUserRevokeModel(userId=42, roleId=2),
++            query_db=query_db,
++            enforce_scope_checks=True, user_data_scope_sql='True', role_data_scope_sql='True',
+         )
+     )
+ 
+--- baseline/ruoyi-fastapi-backend/modules/system/tests/test_user_write_commands.py
++++ current/ruoyi-fastapi-backend/modules/system/tests/test_user_write_commands.py
+@@ -2,12 +2,13 @@
+ 
+ from dataclasses import dataclass
+ from datetime import datetime
++from unittest.mock import AsyncMock
+ 
+ import pytest
+ 
++from module_admin.entity.vo.user_role_write_vo import UserRolesAssignModel
+ from module_admin.entity.vo.user_vo import (
+     AddUserModel,
+-    CrudUserRoleModel,
+     CurrentUserModel,
+     DeleteUserModel,
+     EditUserModel,
+@@ -87,7 +88,7 @@
+         )
+         return _CrudResponse(is_success=True, message='导入成功')
+ 
+-    async def add_user_role_services(self, query_db, payload):
++    async def assign_user_roles(self, query_db, payload, **scope):
+         self.assign_called_with = (query_db, payload)
+         return _CrudResponse(is_success=True, message='分配成功')
+ 
+@@ -132,6 +133,11 @@
+     )
+ 
+ 
++@pytest.fixture(autouse=True)
++def authorization_preflight(monkeypatch):
++    monkeypatch.setattr('modules.system.application.services.user_role_service.UserRoleService.check_user_roles', AsyncMock())
++
++
+ @pytest.mark.asyncio
+ async def test_user_command_handlers_success() -> None:
+     user_service = _UserServiceStub()
+@@ -147,7 +153,7 @@
+     delete_handler = DeleteUserCommandHandler(user_service)
+     reset_handler = ResetUserPasswordCommandHandler(user_service)
+     import_handler = ImportUsersCommandHandler(user_service)
+-    assign_handler = AssignUserRolesCommandHandler(user_service, role_service)
++    assign_handler = AssignUserRolesCommandHandler(user_service)
+ 
+     add_result = await add_handler.handle(
+         AddUserCommand(
+@@ -214,7 +220,7 @@
+     assign_result = await assign_handler.handle(
+         AssignUserRolesCommand(
+             query_db=query_db,
+-            user_role=CrudUserRoleModel(userId=2, roleIds='1,2'),
++            user_role=UserRolesAssignModel(userId=2, roleIds=[1, 2]),
+             operator='admin',
+         )
+     )
+--- baseline/ruoyi-fastapi-backend/ports/services.py
++++ current/ruoyi-fastapi-backend/ports/services.py
+@@ -1215,15 +1215,6 @@
+ 
+     async def get_user_role_allocated_list_services(self, query_db: Any, page_object: Any) -> Any:
+         """Contract for `UserService.get_user_role_allocated_list_services`."""
+-
+-    async def add_user_role_services(self, query_db: Any, page_object: Any) -> Any:
+-        """Contract for `UserService.add_user_role_services`."""
+-
+-    async def delete_user_role_services(self, query_db: Any, page_object: Any) -> Any:
+-        """Contract for `UserService.delete_user_role_services`."""
+-
+-    async def detail_user_role_services(self, query_db: Any, page_object: Any) -> Any:
+-        """Contract for `UserService.detail_user_role_services`."""
+ 
+ 
+ __all__ = [
+--- baseline/ruoyi-fastapi-frontend/src/api/_generated/index.ts
++++ current/ruoyi-fastapi-frontend/src/api/_generated/index.ts
+@@ -311,6 +311,7 @@
+   AddSystemRoleUserSystemRoleAuthUserSelectAllPutData,
+   AddSystemRoleUserSystemRoleAuthUserSelectAllPutError,
+   AddSystemRoleUserSystemRoleAuthUserSelectAllPutErrors,
++  AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponse,
+   AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses,
+   AddSystemUserSystemUserPostData,
+   AddSystemUserSystemUserPostError,
+@@ -319,6 +320,7 @@
+   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData,
+   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutError,
+   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutErrors,
++  BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponse,
+   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses,
+   BatchDeviceIdsModel,
+   BatchGenCodeToolGenBatchGenCodeGetData,
+@@ -347,6 +349,7 @@
+   CancelSystemRoleUserSystemRoleAuthUserCancelPutData,
+   CancelSystemRoleUserSystemRoleAuthUserCancelPutError,
+   CancelSystemRoleUserSystemRoleAuthUserCancelPutErrors,
++  CancelSystemRoleUserSystemRoleAuthUserCancelPutResponse,
+   CancelSystemRoleUserSystemRoleAuthUserCancelPutResponses,
+   ChangeSystemJobStatusMonitorJobChangeStatusPutData,
+   ChangeSystemJobStatusMonitorJobChangeStatusPutError,
+@@ -441,7 +444,6 @@
+   CreateTableToolGenCreateTablePostError,
+   CreateTableToolGenCreateTablePostErrors,
+   CreateTableToolGenCreateTablePostResponses,
+-  CrudUserRoleModel,
+   CurrentUserModel,
+   DatabaseHealthCheckHealthDbGetData,
+   DatabaseHealthCheckHealthDbGetResponses,
+@@ -1201,6 +1203,9 @@
+   RolePageQueryModel,
+   RoleStatusUpdateModel,
+   RoleUpdateModel,
++  RoleUserRevokeModel,
++  RoleUsersGrantModel,
++  RoleUsersRevokeModel,
+   RotateSigningKeysAuthKeysRotatePostData,
+   RotateSigningKeysAuthKeysRotatePostError,
+   RotateSigningKeysAuthKeysRotatePostErrors,
+@@ -1284,6 +1289,7 @@
+   UserProfileUpdateModel,
+   UserRegister,
+   UserRoleResponseModel,
++  UserRolesAssignModel,
+   UserStatusUpdateModel,
+   UserUpdateModel,
+   ValidateTopologySimulationTopologyValidatePostData,
+--- baseline/ruoyi-fastapi-frontend/src/api/_generated/sdk.gen.ts
++++ current/ruoyi-fastapi-frontend/src/api/_generated/sdk.gen.ts
+@@ -4656,9 +4656,9 @@
+ export const batchCancelSystemRoleUserSystemRoleAuthUserCancelAllPut = <
+   ThrowOnError extends boolean = false,
+ >(
+-  options?: Options<BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData, ThrowOnError>
+-) =>
+-  (options?.client ?? client).put<
++  options: Options<BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData, ThrowOnError>
++) =>
++  (options.client ?? client).put<
+     BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses,
+     BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutErrors,
+     ThrowOnError
+@@ -4666,6 +4666,10 @@
+     security: [{ scheme: 'bearer', type: 'http' }],
+     url: '/system/role/authUser/cancelAll',
+     ...options,
++    headers: {
++      'Content-Type': 'application/json',
++      ...options.headers,
++    },
+   });
+ 
+ /**
+@@ -4674,9 +4678,9 @@
+ export const addSystemRoleUserSystemRoleAuthUserSelectAllPut = <
+   ThrowOnError extends boolean = false,
+ >(
+-  options?: Options<AddSystemRoleUserSystemRoleAuthUserSelectAllPutData, ThrowOnError>
+-) =>
+-  (options?.client ?? client).put<
++  options: Options<AddSystemRoleUserSystemRoleAuthUserSelectAllPutData, ThrowOnError>
++) =>
++  (options.client ?? client).put<
+     AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses,
+     AddSystemRoleUserSystemRoleAuthUserSelectAllPutErrors,
+     ThrowOnError
+@@ -4684,6 +4688,10 @@
+     security: [{ scheme: 'bearer', type: 'http' }],
+     url: '/system/role/authUser/selectAll',
+     ...options,
++    headers: {
++      'Content-Type': 'application/json',
++      ...options.headers,
++    },
+   });
+ 
+ /**
+@@ -4906,6 +4914,10 @@
+     security: [{ scheme: 'bearer', type: 'http' }],
+     url: '/system/user/authRole',
+     ...options,
++    headers: {
++      'Content-Type': 'application/json',
++      ...options.headers,
++    },
+   });
+ 
+ /**
+--- baseline/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
++++ current/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
+@@ -646,38 +646,6 @@
+    * 版本ID
+    */
+   versionId: number;
+-};
+-
+-/**
+- * CrudUserRoleModel
+- *
+- * 新增、删除用户关联角色及角色关联用户模型
+- */
+-export type CrudUserRoleModel = {
+-  /**
+-   * Roleid
+-   *
+-   * 角色ID
+-   */
+-  roleId?: number | null;
+-  /**
+-   * Roleids
+-   *
+-   * 角色ID信息
+-   */
+-  roleIds?: string | null;
+-  /**
+-   * Userid
+-   *
+-   * 用户ID
+-   */
+-  userId?: number | null;
+-  /**
+-   * Userids
+-   *
+-   * 用户ID信息
+-   */
+-  userIds?: string | null;
+ };
+ 
+ /**
+@@ -4794,6 +4762,60 @@
+ };
+ 
+ /**
++ * RoleUserRevokeModel
++ */
++export type RoleUserRevokeModel = {
++  /**
++   * Roleid
++   *
++   * 角色ID
++   */
++  roleId: number;
++  /**
++   * Userid
++   *
++   * 取消授权的用户ID
++   */
++  userId: number;
++};
++
++/**
++ * RoleUsersGrantModel
++ */
++export type RoleUsersGrantModel = {
++  /**
++   * Roleid
++   *
++   * 角色ID
++   */
++  roleId: number;
++  /**
++   * Userids
++   *
++   * 增量授权用户ID集合, 不影响其他角色关联
++   */
++  userIds: Array<number>;
++};
++
++/**
++ * RoleUsersRevokeModel
++ */
++export type RoleUsersRevokeModel = {
++  /**
++   * Roleid
++   *
++   * 角色ID
++   */
++  roleId: number;
++  /**
++   * Userids
++   *
++   * 取消授权用户ID集合, 只删除指定关联
++   */
++  userIds: Array<number>;
++};
++
++/**
+  * SelectedRoleModel
+  *
+  * 是否选择角色模型
+@@ -5589,6 +5611,24 @@
+    * 用户信息
+    */
+   user: UserInfoModel;
++};
++
++/**
++ * UserRolesAssignModel
++ */
++export type UserRolesAssignModel = {
++  /**
++   * Roleids
++   *
++   * 完整角色ID集合, 空数组清空; 缺失或null无效
++   */
++  roleIds: Array<number>;
++  /**
++   * Userid
++   *
++   * 用户ID
++   */
++  userId: number;
+ };
+ 
+ /**
+@@ -12578,7 +12618,7 @@
+   GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetResponses[keyof GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetResponses];
+ 
+ export type CancelSystemRoleUserSystemRoleAuthUserCancelPutData = {
+-  body: CrudUserRoleModel;
++  body: RoleUserRevokeModel;
+   path?: never;
+   query?: never;
+   url: '/system/role/authUser/cancel';
+@@ -12598,38 +12638,16 @@
+   /**
+    * Successful Response
+    */
+-  200: unknown;
+-};
++  204: void;
++};
++
++export type CancelSystemRoleUserSystemRoleAuthUserCancelPutResponse =
++  CancelSystemRoleUserSystemRoleAuthUserCancelPutResponses[keyof CancelSystemRoleUserSystemRoleAuthUserCancelPutResponses];
+ 
+ export type BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData = {
+-  body?: never;
+-  path?: never;
+-  query?: {
+-    /**
+-     * Userid
+-     *
+-     * 用户ID
+-     */
+-    userId?: number | null;
+-    /**
+-     * Userids
+-     *
+-     * 用户ID信息
+-     */
+-    userIds?: string | null;
+-    /**
+-     * Roleid
+-     *
+-     * 角色ID
+-     */
+-    roleId?: number | null;
+-    /**
+-     * Roleids
+-     *
+-     * 角色ID信息
+-     */
+-    roleIds?: string | null;
+-  };
++  body: RoleUsersRevokeModel;
++  path?: never;
++  query?: never;
+   url: '/system/role/authUser/cancelAll';
+ };
+ 
+@@ -12647,38 +12665,16 @@
+   /**
+    * Successful Response
+    */
+-  200: unknown;
+-};
++  204: void;
++};
++
++export type BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponse =
++  BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses[keyof BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses];
+ 
+ export type AddSystemRoleUserSystemRoleAuthUserSelectAllPutData = {
+-  body?: never;
+-  path?: never;
+-  query?: {
+-    /**
+-     * Userid
+-     *
+-     * 用户ID
+-     */
+-    userId?: number | null;
+-    /**
+-     * Userids
+-     *
+-     * 用户ID信息
+-     */
+-    userIds?: string | null;
+-    /**
+-     * Roleid
+-     *
+-     * 角色ID
+-     */
+-    roleId?: number | null;
+-    /**
+-     * Roleids
+-     *
+-     * 角色ID信息
+-     */
+-    roleIds?: string | null;
+-  };
++  body: RoleUsersGrantModel;
++  path?: never;
++  query?: never;
+   url: '/system/role/authUser/selectAll';
+ };
+ 
+@@ -12696,8 +12692,11 @@
+   /**
+    * Successful Response
+    */
+-  200: unknown;
+-};
++  204: void;
++};
++
++export type AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponse =
++  AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses[keyof AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses];
+ 
+ export type GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData = {
+   body?: never;
+@@ -13256,18 +13255,9 @@
+   QueryDetailSystemUserSystemUserGetResponses[keyof QueryDetailSystemUserSystemUserGetResponses];
+ 
+ export type UpdateSystemRoleUserSystemUserAuthRolePutData = {
+-  body?: never;
+-  path?: never;
+-  query: {
+-    /**
+-     * Userid
+-     */
+-    userId: number;
+-    /**
+-     * Roleids
+-     */
+-    roleIds: string;
+-  };
++  body: UserRolesAssignModel;
++  path?: never;
++  query?: never;
+   url: '/system/user/authRole';
+ };
+ 
+@@ -13285,7 +13275,7 @@
+   /**
+    * Successful Response
+    */
+-  200: UserRoleResponseModel;
++  204: void;
+ };
+ 
+ export type UpdateSystemRoleUserSystemUserAuthRolePutResponse =
+--- baseline/ruoyi-fastapi-frontend/src/api/menu-contract.test.ts
++++ current/ruoyi-fastapi-frontend/src/api/menu-contract.test.ts
+@@ -101,20 +101,20 @@
+     {
+       method: 'put',
+       path: '/system/user/authRole',
+-      query: { userId: '7', roleIds: '2' },
+-      run: () => updateAuthRole({ userId: 7, roleIds: '2' }),
++      query: { userId: 7, roleIds: [2] },
++      run: () => updateAuthRole({ userId: 7, roleIds: [2] }),
+     },
+     {
+       method: 'put',
+       path: '/system/role/authUser/cancelAll',
+-      query: { roleId: '2', userIds: '7' },
+-      run: () => authUserCancelAll({ roleId: 2, userIds: '7' }),
++      query: { roleId: 2, userIds: [7] },
++      run: () => authUserCancelAll({ roleId: 2, userIds: [7] }),
+     },
+     {
+       method: 'put',
+       path: '/system/role/authUser/selectAll',
+-      query: { roleId: '2', userIds: '7' },
+-      run: () => authUserSelectAll({ roleId: 2, userIds: '7' }),
++      query: { roleId: 2, userIds: [7] },
++      run: () => authUserSelectAll({ roleId: 2, userIds: [7] }),
+     },
+     {
+       method: 'post',
+@@ -129,7 +129,7 @@
+       run: () => createTable({ sql: 'SELECT 1' }),
+     },
+   ])(
+-    'keeps $method $path parameters in the backend Query contract',
++    'serializes $method $path according to its write contract',
+     async ({ method, path, query, run }) => {
+       let body = '';
+       let search = new URLSearchParams();
+@@ -150,8 +150,13 @@
+ 
+       await run();
+ 
+-      for (const [key, value] of Object.entries(query)) expect(search.get(key)).toBe(value);
+-      expect(body).toBe('');
++      if (method === 'put') {
++        expect(JSON.parse(body)).toEqual(query);
++        expect([...search]).toEqual([]);
++      } else {
++        for (const [key, value] of Object.entries(query)) expect(search.get(key)).toBe(value);
++        expect(body).toBe('');
++      }
+     }
+   );
+ 
+--- baseline/ruoyi-fastapi-frontend/src/api/system/role.ts
++++ current/ruoyi-fastapi-frontend/src/api/system/role.ts
+@@ -6,7 +6,9 @@
+   RoleUpdateModel,
+   RoleStatusUpdateModel,
+   RoleDataScopeUpdateModel,
+-  CrudUserRoleModel,
++  RoleUserRevokeModel,
++  RoleUsersRevokeModel,
++  RoleUsersGrantModel,
+   GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData,
+   GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData,
+   RoleModel,
+@@ -119,31 +121,31 @@
+ }
+ 
+ // 取消用户授权角色
+-export function authUserCancel(data: CrudUserRoleModel) {
++export function authUserCancel(data: RoleUserRevokeModel) {
+   return request<null>({
+     url: '/system/role/authUser/cancel',
+     method: 'put',
+-    data: data,
++    data,
+     feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
+   });
+ }
+ 
+ // 批量取消用户授权角色
+-export function authUserCancelAll(data: CrudUserRoleModel) {
++export function authUserCancelAll(data: RoleUsersRevokeModel) {
+   return request<null>({
+     url: '/system/role/authUser/cancelAll',
+     method: 'put',
+-    params: data,
++    data,
+     feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
+   });
+ }
+ 
+ // 授权用户选择
+-export function authUserSelectAll(data: CrudUserRoleModel) {
++export function authUserSelectAll(data: RoleUsersGrantModel) {
+   return request<null>({
+     url: '/system/role/authUser/selectAll',
+     method: 'put',
+-    params: data,
++    data,
+     feedback: { mode: 'auto', key: 'system.role.auth-user.assign' },
+   });
+ }
+--- baseline/ruoyi-fastapi-frontend/src/api/system/user.ts
++++ current/ruoyi-fastapi-frontend/src/api/system/user.ts
+@@ -2,7 +2,7 @@
+ import type { BatchResult, HttpCollection, HttpOffsetPage } from '@/types/http-contract';
+ import type {
+   UserCreateModel,
+-  CrudUserRoleModel,
++  UserRolesAssignModel,
+   UserUpdateModel,
+   UserProfileUpdateModel,
+   UserStatusUpdateModel,
+@@ -195,11 +195,11 @@
+ }
+ 
+ // 保存授权角色
+-export function updateAuthRole(data: CrudUserRoleModel) {
++export function updateAuthRole(data: UserRolesAssignModel) {
+   return request<null>({
+     url: '/system/user/authRole',
+     method: 'put',
+-    params: data,
++    data,
+     feedback: { mode: 'auto', key: 'system.user.assign-role' },
+   });
+ }
+--- baseline/ruoyi-fastapi-frontend/src/views/system/role/authUser.vue
++++ current/ruoyi-fastapi-frontend/src/views/system/role/authUser.vue
+@@ -19,7 +19,7 @@
+               type="primary"
+               icon="Plus"
+               @click="openSelectUser"
+-              v-hasPermi="['system:role:add']"
++              v-hasPermi="['system:role:edit']"
+               >添加用户</ZxButton
+             >
+             <ZxButton
+@@ -27,7 +27,7 @@
+               icon="CircleClose"
+               :disabled="multiple"
+               @click="cancelAuthUserAll"
+-              v-hasPermi="['system:role:remove']"
++              v-hasPermi="['system:role:edit']"
+               :loading="cancelAuthUserAllPending"
+               >批量取消授权</ZxButton
+             >
+@@ -89,7 +89,7 @@
+                   link
+                   type="primary"
+                   @click="cancelAuthUser(scope.row)"
+-                  v-hasPermi="['system:role:remove']"
++                  v-hasPermi="['system:role:edit']"
+                   :loading="cancelAuthUserPending"
+                   >取消授权</ZxButton
+                 >
+@@ -110,7 +110,7 @@
+ 
+ <script setup name="AuthUser">
+ import { useOperation } from '@/utils/operation';
+-import selectUser from './selectUser';
++import selectUser from './selectUser.vue';
+ import { allocatedUserList, authUserCancel, authUserCancelAll } from '@/api/system/role';
+ import { parseTime } from '@/utils/ruoyi';
+ 
+@@ -158,7 +158,7 @@
+   await proxy.$modal
+     .confirm('确认要取消该用户"' + row.userName + '"角色吗？')
+     .then(function () {
+-      return authUserCancel({ userId: row.userId, roleId: route.params.roleId });
++      return authUserCancel({ userId: row.userId, roleId: Number(route.params.roleId) });
+     })
+     .then(() => {
+       gridListRef.value?.refresh();
+@@ -167,8 +167,8 @@
+ });
+ 
+ const { run: cancelAuthUserAll, pending: cancelAuthUserAllPending } = useOperation(async () => {
+-  const roleId = route.params.roleId;
+-  const uIds = userIds.value.join(',');
++  const roleId = Number(route.params.roleId);
++  const uIds = [...userIds.value];
+   await proxy.$modal
+     .confirm('是否取消选中用户授权数据项?')
+     .then(function () {
+--- baseline/ruoyi-fastapi-frontend/src/views/system/role/selectUser.vue
++++ current/ruoyi-fastapi-frontend/src/views/system/role/selectUser.vue
+@@ -137,9 +137,9 @@
+ const emit = defineEmits(['ok']);
+ /** 选择授权用户操作 */
+ const { run: handleSelectUser, pending: handleSelectUserPending } = useOperation(async () => {
+-  const roleId = queryParams.roleId;
+-  const uIds = userIds.value.join(',');
+-  if (uIds == '') {
++  const roleId = Number(queryParams.roleId);
++  const uIds = [...userIds.value];
++  if (uIds.length === 0) {
+     ElMessage.error('请选择要分配的用户');
+     return;
+   }
+--- baseline/ruoyi-fastapi-frontend/src/views/system/user/authRole.vue
++++ current/ruoyi-fastapi-frontend/src/views/system/user/authRole.vue
+@@ -88,7 +88,7 @@
+ /** 提交按钮 */
+ const { run: submitForm } = useOperation(async () => {
+   const userId = form.value.userId;
+-  const rIds = roleIds.value.join(',');
++  const rIds = [...roleIds.value];
+   await updateAuthRole({ userId: userId, roleIds: rIds }).then(() => {
+     close();
+   });
+--- baseline/ruoyi-fastapi-frontend/tests/unit/api/role.test.ts
++++ current/ruoyi-fastapi-frontend/tests/unit/api/role.test.ts
+@@ -102,11 +102,11 @@
+       status: 501,
+       problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+     });
+-    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: '2,3' })).rejects.toMatchObject({
++    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: [2, 3] })).rejects.toMatchObject({
+       status: 501,
+       problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+     });
+-    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: '2,3' })).rejects.toMatchObject({
++    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: [2, 3] })).rejects.toMatchObject({
+       status: 501,
+       problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+     });
+--- baseline/shared/openapi.json
++++ current/shared/openapi.json
+@@ -1032,61 +1032,6 @@
+           "versionId"
+         ],
+         "title": "CreateSimulationSessionModel",
+-        "type": "object"
+-      },
+-      "CrudUserRoleModel": {
+-        "description": "新增、删除用户关联角色及角色关联用户模型",
+-        "properties": {
+-          "roleId": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "角色ID",
+-            "title": "Roleid"
+-          },
+-          "roleIds": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "角色ID信息",
+-            "title": "Roleids"
+-          },
+-          "userId": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户ID",
+-            "title": "Userid"
+-          },
+-          "userIds": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户ID信息",
+-            "title": "Userids"
+-          }
+-        },
+-        "title": "CrudUserRoleModel",
+         "type": "object"
+       },
+       "CurrentUserModel": {
+@@ -8718,6 +8663,89 @@
+         "title": "RoleUpdateModel",
+         "type": "object"
+       },
++      "RoleUserRevokeModel": {
++        "additionalProperties": false,
++        "properties": {
++          "roleId": {
++            "description": "角色ID",
++            "exclusiveMinimum": 0.0,
++            "maximum": 2147483647.0,
++            "title": "Roleid",
++            "type": "integer"
++          },
++          "userId": {
++            "description": "取消授权的用户ID",
++            "exclusiveMinimum": 0.0,
++            "maximum": 2147483647.0,
++            "title": "Userid",
++            "type": "integer"
++          }
++        },
++        "required": [
++          "roleId",
++          "userId"
++        ],
++        "title": "RoleUserRevokeModel",
++        "type": "object"
++      },
++      "RoleUsersGrantModel": {
++        "additionalProperties": false,
++        "properties": {
++          "roleId": {
++            "description": "角色ID",
++            "exclusiveMinimum": 0.0,
++            "maximum": 2147483647.0,
++            "title": "Roleid",
++            "type": "integer"
++          },
++          "userIds": {
++            "description": "增量授权用户ID集合, 不影响其他角色关联",
++            "items": {
++              "exclusiveMinimum": 0.0,
++              "maximum": 2147483647.0,
++              "type": "integer"
++            },
++            "minItems": 1,
++            "title": "Userids",
++            "type": "array"
++          }
++        },
++        "required": [
++          "roleId",
++          "userIds"
++        ],
++        "title": "RoleUsersGrantModel",
++        "type": "object"
++      },
++      "RoleUsersRevokeModel": {
++        "additionalProperties": false,
++        "properties": {
++          "roleId": {
++            "description": "角色ID",
++            "exclusiveMinimum": 0.0,
++            "maximum": 2147483647.0,
++            "title": "Roleid",
++            "type": "integer"
++          },
++          "userIds": {
++            "description": "取消授权用户ID集合, 只删除指定关联",
++            "items": {
++              "exclusiveMinimum": 0.0,
++              "maximum": 2147483647.0,
++              "type": "integer"
++            },
++            "minItems": 1,
++            "title": "Userids",
++            "type": "array"
++          }
++        },
++        "required": [
++          "roleId",
++          "userIds"
++        ],
++        "title": "RoleUsersRevokeModel",
++        "type": "object"
++      },
+       "SelectedRoleModel": {
+         "description": "是否选择角色模型",
+         "properties": {
+@@ -9310,6 +9338,8 @@
+             "anyOf": [
+               {
+                 "items": {
++                  "exclusiveMinimum": 0.0,
++                  "maximum": 2147483647.0,
+                   "type": "integer"
+                 },
+                 "type": "array"
+@@ -10277,6 +10307,34 @@
+         "title": "UserRoleResponseModel",
+         "type": "object"
+       },
++      "UserRolesAssignModel": {
++        "additionalProperties": false,
++        "properties": {
++          "roleIds": {
++            "description": "完整角色ID集合, 空数组清空; 缺失或null无效",
++            "items": {
++              "exclusiveMinimum": 0.0,
++              "maximum": 2147483647.0,
++              "type": "integer"
++            },
++            "title": "Roleids",
++            "type": "array"
++          },
++          "userId": {
++            "description": "用户ID",
++            "exclusiveMinimum": 0.0,
++            "maximum": 2147483647.0,
++            "title": "Userid",
++            "type": "integer"
++          }
++        },
++        "required": [
++          "userId",
++          "roleIds"
++        ],
++        "title": "UserRolesAssignModel",
++        "type": "object"
++      },
+       "UserStatusUpdateModel": {
+         "additionalProperties": false,
+         "properties": {
+@@ -10394,6 +10452,8 @@
+             "anyOf": [
+               {
+                 "items": {
++                  "exclusiveMinimum": 0.0,
++                  "maximum": 2147483647.0,
+                   "type": "integer"
+                 },
+                 "type": "array"
+@@ -24188,19 +24248,14 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/CrudUserRoleModel"
++                "$ref": "#/components/schemas/RoleUserRevokeModel"
+               }
+             }
+           },
+           "required": true
+         },
+         "responses": {
+-          "200": {
+-            "content": {
+-              "application/json": {
+-                "schema": {}
+-              }
+-            },
++          "204": {
+             "description": "Successful Response"
+           },
+           "422": {
+@@ -24228,87 +24283,18 @@
+     "/system/role/authUser/cancelAll": {
+       "put": {
+         "operationId": "batch_cancel_system_role_user_system_role_authUser_cancelAll_put",
+-        "parameters": [
+-          {
+-            "description": "用户ID",
+-            "in": "query",
+-            "name": "userId",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "integer"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "用户ID",
+-              "title": "Userid"
+-            }
+-          },
+-          {
+-            "description": "用户ID信息",
+-            "in": "query",
+-            "name": "userIds",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "string"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "用户ID信息",
+-              "title": "Userids"
+-            }
+-          },
+-          {
+-            "description": "角色ID",
+-            "in": "query",
+-            "name": "roleId",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "integer"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "角色ID",
+-              "title": "Roleid"
+-            }
+-          },
+-          {
+-            "description": "角色ID信息",
+-            "in": "query",
+-            "name": "roleIds",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "string"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "角色ID信息",
+-              "title": "Roleids"
+-            }
+-          }
+-        ],
++        "requestBody": {
++          "content": {
++            "application/json": {
++              "schema": {
++                "$ref": "#/components/schemas/RoleUsersRevokeModel"
++              }
++            }
++          },
++          "required": true
++        },
+         "responses": {
+-          "200": {
+-            "content": {
+-              "application/json": {
+-                "schema": {}
+-              }
+-            },
++          "204": {
+             "description": "Successful Response"
+           },
+           "422": {
+@@ -24336,87 +24322,18 @@
+     "/system/role/authUser/selectAll": {
+       "put": {
+         "operationId": "add_system_role_user_system_role_authUser_selectAll_put",
+-        "parameters": [
+-          {
+-            "description": "用户ID",
+-            "in": "query",
+-            "name": "userId",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "integer"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "用户ID",
+-              "title": "Userid"
+-            }
+-          },
+-          {
+-            "description": "用户ID信息",
+-            "in": "query",
+-            "name": "userIds",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "string"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "用户ID信息",
+-              "title": "Userids"
+-            }
+-          },
+-          {
+-            "description": "角色ID",
+-            "in": "query",
+-            "name": "roleId",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "integer"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "角色ID",
+-              "title": "Roleid"
+-            }
+-          },
+-          {
+-            "description": "角色ID信息",
+-            "in": "query",
+-            "name": "roleIds",
+-            "required": false,
+-            "schema": {
+-              "anyOf": [
+-                {
+-                  "type": "string"
+-                },
+-                {
+-                  "type": "null"
+-                }
+-              ],
+-              "description": "角色ID信息",
+-              "title": "Roleids"
+-            }
+-          }
+-        ],
++        "requestBody": {
++          "content": {
++            "application/json": {
++              "schema": {
++                "$ref": "#/components/schemas/RoleUsersGrantModel"
++              }
++            }
++          },
++          "required": true
++        },
+         "responses": {
+-          "200": {
+-            "content": {
+-              "application/json": {
+-                "schema": {}
+-              }
+-            },
++          "204": {
+             "description": "Successful Response"
+           },
+           "422": {
+@@ -25718,35 +25635,18 @@
+     "/system/user/authRole": {
+       "put": {
+         "operationId": "update_system_role_user_system_user_authRole_put",
+-        "parameters": [
+-          {
+-            "in": "query",
+-            "name": "userId",
+-            "required": true,
+-            "schema": {
+-              "title": "Userid",
+-              "type": "integer"
+-            }
+-          },
+-          {
+-            "in": "query",
+-            "name": "roleIds",
+-            "required": true,
+-            "schema": {
+-              "title": "Roleids",
+-              "type": "string"
+-            }
+-          }
+-        ],
++        "requestBody": {
++          "content": {
++            "application/json": {
++              "schema": {
++                "$ref": "#/components/schemas/UserRolesAssignModel"
++              }
++            }
++          },
++          "required": true
++        },
+         "responses": {
+-          "200": {
+-            "content": {
+-              "application/json": {
+-                "schema": {
+-                  "$ref": "#/components/schemas/UserRoleResponseModel"
+-                }
+-              }
+-            },
++          "204": {
+             "description": "Successful Response"
+           },
+           "422": {

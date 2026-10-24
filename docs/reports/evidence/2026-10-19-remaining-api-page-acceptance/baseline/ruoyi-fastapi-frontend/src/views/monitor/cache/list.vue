@@ -1,0 +1,270 @@
+<template>
+  <div class="app-container cache-browser" data-zx-fill="anchor">
+    <el-row :gutter="10" class="cache-panels" data-zx-fill>
+      <el-col :span="8">
+        <el-card class="cache-card">
+          <template #header>
+            <Collection style="width: 1em; height: 1em; vertical-align: middle" />
+            <span style="vertical-align: middle">缓存列表</span>
+            <el-button
+              style="float: right; padding: 3px 0"
+              link
+              type="primary"
+              icon="Refresh"
+              @click="refreshCacheNames()"
+            ></el-button>
+          </template>
+          <el-table
+            v-loading="loading"
+            :data="cacheNames"
+            height="100%"
+            highlight-current-row
+            @row-click="getCacheKeys"
+            style="width: 100%"
+          >
+            <el-table-column label="序号" width="60" type="index"></el-table-column>
+
+            <el-table-column
+              label="缓存名称"
+              align="center"
+              prop="cacheName"
+              :show-overflow-tooltip="true"
+              :formatter="nameFormatter"
+            ></el-table-column>
+
+            <el-table-column
+              label="备注"
+              align="center"
+              prop="remark"
+              :show-overflow-tooltip="true"
+            />
+            <el-table-column
+              label="操作"
+              width="60"
+              align="center"
+              class-name="small-padding fixed-width"
+            >
+              <template #default="scope">
+                <el-button
+                  link
+                  type="primary"
+                  icon="Delete"
+                  @click="handleClearCacheName(scope.row)"
+                  :loading="handleClearCacheNamePending"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+
+      <el-col :span="8">
+        <el-card class="cache-card">
+          <template #header>
+            <Key style="width: 1em; height: 1em; vertical-align: middle" />
+            <span style="vertical-align: middle">键名列表</span>
+            <el-button
+              style="float: right; padding: 3px 0"
+              link
+              type="primary"
+              icon="Refresh"
+              @click="refreshCacheKeys()"
+            ></el-button>
+          </template>
+          <el-table
+            v-loading="subLoading"
+            :data="cacheKeys"
+            height="100%"
+            highlight-current-row
+            @row-click="handleCacheValue"
+            style="width: 100%"
+          >
+            <el-table-column label="序号" width="60" type="index"></el-table-column>
+            <el-table-column
+              label="缓存键名"
+              align="center"
+              :show-overflow-tooltip="true"
+              :formatter="keyFormatter"
+            >
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              width="60"
+              align="center"
+              class-name="small-padding fixed-width"
+            >
+              <template #default="scope">
+                <el-button
+                  link
+                  type="primary"
+                  icon="Delete"
+                  @click="handleClearCacheKey(scope.row)"
+                  :loading="handleClearCacheKeyPending"
+                ></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+
+      <el-col :span="8">
+        <el-card :bordered="false" class="cache-card">
+          <template #header>
+            <Document style="width: 1em; height: 1em; vertical-align: middle" />
+            <span style="vertical-align: middle">缓存内容</span>
+            <el-button
+              style="float: right; padding: 3px 0"
+              link
+              type="primary"
+              icon="Refresh"
+              @click="handleClearCacheAll()"
+              :loading="handleClearCacheAllPending"
+              >清理全部</el-button
+            >
+          </template>
+          <el-form :model="cacheForm">
+            <el-row :gutter="32">
+              <el-col :offset="1" :span="22">
+                <el-form-item label="缓存名称:" prop="cacheName">
+                  <zx-input v-model="cacheForm.cacheName" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :offset="1" :span="22">
+                <el-form-item label="缓存键名:" prop="cacheKey">
+                  <zx-input v-model="cacheForm.cacheKey" readonly />
+                </el-form-item>
+              </el-col>
+              <el-col :offset="1" :span="22">
+                <el-form-item label="缓存内容:" prop="cacheValue">
+                  <zx-input v-model="cacheForm.cacheValue" type="textarea" :rows="8" readonly />
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script setup name="CacheList">
+import { useOperation } from '@/utils/operation';
+import {
+  listCacheName,
+  listCacheKey,
+  getCacheValue,
+  clearCacheName,
+  clearCacheKey,
+  clearCacheAll,
+} from '@/api/monitor/cache';
+
+const cacheNames = ref([]);
+const cacheKeys = ref([]);
+const cacheForm = ref({});
+const loading = ref(true);
+const subLoading = ref(false);
+const nowCacheName = ref('');
+
+/** 查询缓存名称列表 */
+function getCacheNames() {
+  loading.value = true;
+  listCacheName().then((response) => {
+    cacheNames.value = response.items;
+    loading.value = false;
+  });
+}
+
+/** 刷新缓存名称列表 */
+function refreshCacheNames() {
+  getCacheNames();
+}
+
+/** 清理指定名称缓存 */
+const { run: handleClearCacheName, pending: handleClearCacheNamePending } = useOperation(
+  async (row) => {
+    await clearCacheName(row.cacheName).then(() => {
+      getCacheKeys();
+    });
+  }
+);
+
+/** 查询缓存键名列表 */
+function getCacheKeys(row) {
+  const cacheName = row !== undefined ? row.cacheName : nowCacheName.value;
+  if (cacheName === '') {
+    return;
+  }
+  subLoading.value = true;
+  listCacheKey(cacheName).then((response) => {
+    cacheKeys.value = response.items;
+    subLoading.value = false;
+    nowCacheName.value = cacheName;
+  });
+}
+
+/** 刷新缓存键名列表 */
+function refreshCacheKeys() {
+  getCacheKeys();
+}
+
+/** 清理指定键名缓存 */
+const { run: handleClearCacheKey, pending: handleClearCacheKeyPending } = useOperation(
+  async (cacheKey) => {
+    await clearCacheKey(cacheKey).then(() => {
+      getCacheKeys();
+    });
+  }
+);
+
+/** 列表前缀去除 */
+function nameFormatter(row) {
+  return row.cacheName.replace(':', '');
+}
+
+/** 键名前缀去除 */
+function keyFormatter(cacheKey) {
+  return cacheKey.replace(nowCacheName.value, '');
+}
+
+/** 查询缓存内容详细 */
+function handleCacheValue(cacheKey) {
+  getCacheValue(nowCacheName.value, cacheKey).then((response) => {
+    cacheForm.value = response;
+  });
+}
+
+/** 清理全部缓存 */
+const { run: handleClearCacheAll, pending: handleClearCacheAllPending } = useOperation(async () => {
+  await clearCacheAll().then(() => {});
+});
+
+getCacheNames();
+</script>
+
+<style scoped>
+.cache-panels {
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.cache-panels > :deep(.el-col) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.cache-card {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+}
+.cache-card :deep(.el-card__header) {
+  flex: 0 0 auto;
+}
+.cache-card :deep(.el-card__body) {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+}
+</style>

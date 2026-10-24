@@ -1,0 +1,7 @@
+{
+  "proxyOriginWasRewritten": true,
+  "ticketStatus": 200,
+  "afterLogoutSocket": {
+    "opened": true
+  }
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "check": "report links",
+    "pass": true,
+    "missing": []
+  },
+  {
+    "check": "35 pending rows have evidence",
+    "pass": true
+  },
+  {
+    "check": "new API scope counts",
+    "pass": true
+  },
+  {
+    "check": "active owned state cleared",
+    "pass": true
+  },
+  {
+    "check": "page errors",
+    "pass": true
+  },
+  {
+    "check": "frontend quality commands clean",
+    "pass": true
+  },
+  {
+    "check": "backend main regression",
+    "pass": true
+  },
+  {
+    "check": "frontend regressions",
+    "pass": true
+  },
+  {
+    "check": "Redis port regressions",
+    "pass": true
+  },
+  {
+    "check": "no added existing Python rule counts",
+    "pass": true
+  },
+  {
+    "check": "no serialized JWT/auth header in evidence",
+    "pass": true,
+    "files": []
+  },
+  {
+    "check": "only documented source changes",
+    "pass": true
+  },
+  {
+    "check": "temporary Redis removed",
+    "pass": true
+  }
+]

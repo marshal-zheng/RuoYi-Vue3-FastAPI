@@ -1,0 +1,75 @@
+@import "tailwindcss" source(none);
+@import "@zxio/theme-tailwind/v4.css";
+@import "./simulation-palette.css";
+@import "./theme.module.css";
+
+/* Only application templates contribute utilities; scripts and tests are not views. */
+@source "../../**/*.{vue,js,ts,jsx,tsx}";
+@source "../../../index.html";
+@source not "../../**/*.{test,spec}.{vue,js,ts,jsx,tsx}";
+@source not "../../**/__tests__/**";
+
+/* Shared recipes consume the public ZXUI contract at the element scope. */
+@layer components {
+  /* 按钮组件 */
+  .btn,
+  .btn-base,
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-warning,
+  .btn-danger {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-zx-accent text-zx-accent-on-fill hover:bg-zx-accent-tint-3 hover:text-zx-accent-on-fill-hover focus:ring-zx-action-focus-ring;
+  }
+
+  .btn-secondary {
+    @apply bg-zx-surface-field-fill text-zx-surface-field-on-text hover:bg-zx-fill-hover focus:ring-zx-action-focus-ring;
+  }
+
+  .btn-success {
+    @apply bg-zx-success text-zx-status-success-on-fill hover:bg-zx-status-success-tint-3 hover:text-zx-status-success-on-fill-hover focus:ring-zx-action-focus-ring;
+  }
+
+  .btn-warning {
+    @apply bg-zx-warning text-zx-status-warning-on-fill hover:bg-zx-status-warning-tint-3 hover:text-zx-status-warning-on-fill-hover focus:ring-zx-action-focus-ring;
+  }
+
+  .btn-danger {
+    @apply bg-zx-danger text-zx-status-danger-on-fill hover:bg-zx-status-danger-tint-3 hover:text-zx-status-danger-on-fill-hover focus:ring-zx-action-focus-ring;
+  }
+
+  /* 卡片组件 */
+  .card {
+    @apply bg-zx-surface-card-fill text-zx-surface-card-on-text rounded-zx-surface shadow-zx-surface-card-depth border border-zx-border-default;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-zx-border-subtle;
+  }
+
+  .card-body {
+    @apply px-6 py-4;
+  }
+
+  .card-footer {
+    @apply px-6 py-4 border-t border-zx-border-subtle;
+  }
+
+  /* 表单组件 */
+  .form-input {
+    @apply block w-full px-3 py-2 border border-zx-border-control rounded-zx-control bg-zx-surface-field-fill text-zx-surface-field-on-text focus:outline-none focus:ring-zx-action-focus-ring focus:border-zx-action-focus-ring;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-zx-text-primary mb-1;
+  }
+
+  .form-error {
+    @apply text-sm text-zx-status-danger-on-surface mt-1;
+  }
+
+}

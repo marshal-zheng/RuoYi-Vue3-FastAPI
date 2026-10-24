@@ -1,0 +1,82 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 1 item
+
+tests/unit/controllers/test_user_role_write_contract.py F                [100%]
+
+=================================== FAILURES ===================================
+__ test_command_pipeline_uses_partial_edit_validation_as_well_as_the_handler ___
+
+    def test_command_pipeline_uses_partial_edit_validation_as_well_as_the_handler():
+        from modules.system.application.behaviors.command_behaviors import CommandValidationBehavior
+    
+        command = EditUserCommand(query_db=object(), user=EditUserModel(userId=42, nickName='After'))
+>       CommandValidationBehavior._validate_request(command)
+
+CommandValidationBehavior = <class 'modules.system.application.behaviors.command_behaviors.CommandValidationBehavior'>
+command    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<object object at 0x11c68cc70>, user=EditUserM...le=[]), enforce_scope_checks=False, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+
+tests/unit/controllers/test_user_role_write_contract.py:253: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+modules/system/application/behaviors/command_behaviors.py:57: in _validate_request
+    validator()
+        field_name = 'user'
+        payload    = EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=Non...te_time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[])
+        payload_items = [('operator', None), ('trace_id', None), ('request_id', None), ('query_db', <object object at 0x11c68cc70>), ('user', ...e=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[])), ('enforce_scope_checks', False), ...]
+        request    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<object object at 0x11c68cc70>, user=EditUserM...le=[]), enforce_scope_checks=False, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+        validator  = <bound method UserModel.validate_fields of EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', ...e_time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[])>
+module_admin/entity/vo/user_vo.py:93: in validate_fields
+    self.get_user_name()
+        self       = EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=Non...te_time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[])
+venv/lib/python3.13/site-packages/pydantic_validation_decorator/xss.py:75: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+        args       = (EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=No..._time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[]),)
+        field_value = None
+        func       = <function UserModel.get_user_name at 0x11af17f60>
+        kwargs     = {}
+        self       = <pydantic_validation_decorator.xss.Xss object at 0x11aebc980>
+        validate_model = EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=Non...te_time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=No..._time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[]),)
+kwargs = {}
+validate_model = EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=Non...te_time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[])
+field_value = None
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        validate_model = args[0]
+        if isinstance(validate_model, BaseModel) and hasattr(validate_model, self.field_name):
+            field_value = getattr(validate_model, self.field_name)
+            if (
+                field_value is None
+                or field_value == ''
+                or field_value == []
+                or field_value == ()
+                or field_value == {}
+            ):
+>               raise FieldValidationError(
+                    model_name=validate_model.__class__.__name__,
+                    field_name=self.field_name,
+                    field_value=field_value,
+                    validator=self.__class__.__name__,
+                    message=self.message if self.message else f'{self.field_name} cannot be empty.',
+                )
+E               pydantic_validation_decorator.exceptions.FieldValidationError
+
+args       = (EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=No..._time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[]),)
+field_value = None
+func       = <function UserModel.get_user_name at 0x11af17ec0>
+kwargs     = {}
+self       = <pydantic_validation_decorator.not_blank.NotBlank object at 0x11af17390>
+validate_model = EditUserModel(user_id=42, dept_id=None, user_name=None, nick_name='After', user_type=None, email=None, phonenumber=Non...te_time=None, update_by=None, update_time=None, remark=None, admin=False, role_ids=[], post_ids=[], type=None, role=[])
+
+venv/lib/python3.13/site-packages/pydantic_validation_decorator/not_blank.py:67: FieldValidationError
+=========================== short test summary info ============================
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_command_pipeline_uses_partial_edit_validation_as_well_as_the_handler
+============================== 1 failed in 0.46s ===============================

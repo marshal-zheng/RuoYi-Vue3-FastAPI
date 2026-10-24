@@ -1,0 +1,113 @@
+{
+  "ok": true,
+  "mode": "source",
+  "evidence": "Production TS modules + Axios XHR + local FastAPI/MySQL. Loopback proxy injects 503 before reads or after a real committed write. UI delivery stubbed; no browser use.",
+  "results": [
+    {
+      "name": "real-login-and-business-default-retry-off",
+      "ok": true,
+      "authenticated": true,
+      "globalRetryConfigured": false,
+      "existingConfigs": 7
+    },
+    {
+      "name": "real-business-read-failure-is-not-automatically-retried",
+      "ok": true,
+      "attempts": 1,
+      "status": 503,
+      "problemCauseAndConfigPreserved": true
+    },
+    {
+      "name": "real-read-recovers-without-intermediate-business-feedback",
+      "ok": true,
+      "attempts": 2,
+      "errorFeedback": 0,
+      "realFastApiListAndPager": true
+    },
+    {
+      "name": "real-business-error-hook-enhances-only-the-final-failure",
+      "ok": true,
+      "attempts": 3,
+      "errorFeedback": 1,
+      "originalAxiosAndEnhancedProblemRetained": true
+    },
+    {
+      "name": "committed-real-write-response-failure-is-not-replayed-by-business",
+      "ok": true,
+      "forwardedAndCommittedWrites": 1,
+      "automaticReplays": 0,
+      "errorFeedback": 1,
+      "pendingReleased": true,
+      "readbackVerified": true
+    },
+    {
+      "name": "enabled-library-retry-still-does-not-replay-a-committed-write",
+      "ok": true,
+      "configuredRetryCount": 2,
+      "forwardedAndCommittedWrites": 1,
+      "automaticReplays": 0,
+      "readbackVerified": true
+    },
+    {
+      "name": "real-409-conflict-retains-cause-context-and-business-detail",
+      "ok": true,
+      "attempts": 1,
+      "status": 409,
+      "originalCauseAndEnhancedProblem": true,
+      "existingValueUnchanged": true
+    },
+    {
+      "name": "backoff-cancel-releases-real-business-operation-immediately",
+      "ok": true,
+      "backoffMs": 1000,
+      "cancelElapsedMs": 0.34,
+      "attempts": 1,
+      "cancelReasonLastAxiosErrorAndConfig": true,
+      "errorFeedback": 0,
+      "pendingReleased": true
+    },
+    {
+      "name": "real-response-transform-and-resolver-exceptions-preserve-identity",
+      "ok": true,
+      "realFastApiResponses": 2,
+      "transportAttemptsPerSemanticFailure": 1,
+      "exceptionIdentity": true
+    },
+    {
+      "name": "real-axios-response-transform-is-outside-retry",
+      "ok": true,
+      "realFastApiResponse": true,
+      "attempts": 1,
+      "axiosTransformExceptionIdentity": true
+    },
+    {
+      "name": "real-401-auth-hook-runs-once-and-keeps-its-exception",
+      "ok": true,
+      "real401Attempts": 2,
+      "finalAuthHookCalls": 1,
+      "authExceptionIdentity": true
+    },
+    {
+      "name": "real-business-401-prompts-once-after-final-attempt",
+      "ok": true,
+      "real401Attempts": 2,
+      "reloginPrompts": 1,
+      "validSessionRestored": true
+    },
+    {
+      "name": "real-download-unwrap-and-failure-behavior-retained",
+      "ok": true,
+      "excelBytes": 5274,
+      "real404": true,
+      "noFailureFileSaved": true,
+      "loadingReleased": true
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "temporaryConfigsDeleted": 2,
+      "originalConfigsUnchanged": 7,
+      "total": 7
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "verifiedBaselineFiles": 3461,
+  "taskChangedFiles": 18,
+  "files": [
+    {
+      "path": "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py",
+      "beforeSha256": "f6c85e053c16010e80ff252fda11370b0cab74a522dda0d3c9ef369c047c1d00",
+      "afterSha256": "98ae01fba407e78543a30b37a83dce2b7cc4d2d5b8da3cc7e9090605674f36ca"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py",
+      "beforeSha256": "7a7ba1491fb5f373eda3050e9d5037331a3112db4c52979f3a6edb7569ef95d2",
+      "afterSha256": "a462b3bc110eb0d05cc73fe8b964f3c5bcea12668de6ec88ab3e7ee72c99bc0f"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/identity/api/login_controller.py",
+      "beforeSha256": "ae36addf22044e9ec4fdb4ceab22d09db4a3144cd5a783abe30c64be27485bbf",
+      "afterSha256": "e0d6d7e66c867cca1f40e0fa5310e289dfcaf9afd21db068b49c3f20cae61f15"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/api/role_controller.py",
+      "beforeSha256": "fdae90b98bcd1f61ce66ae6e0cf6f03fe3a51d1406d93a1ce18383a61196bcf8",
+      "afterSha256": "f318c81ef12f55e8ce3db21efc2651964a67c739fdc64f2b2c3f093876f9b3ae"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/api/user_controller.py",
+      "beforeSha256": "a37eeced0385b88e99a0c66b2691ccae8e78fa7c50c052fa35d6360f553987ee",
+      "afterSha256": "0457946175e7e00f39efb1475c5f0d0c5411650695495a96e0a0f45f1c2e387d"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py",
+      "beforeSha256": "2571c248e033de2c7aa7e5bd170630c06910bbf591fdc2b92bb6cef6e9556234",
+      "afterSha256": "df56e16274beb5b5a0b36734221a276b0bc9917fda50947d810a3ddee93e54c5"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/application/services/role_service.py",
+      "beforeSha256": "99c6e6f66eb7eaa39a7318b4d966c954fc15388ea4c53dd63891bfd2e4e1dbb4",
+      "afterSha256": "2036a53ea748719b57ed3d05701ec83f861beda2b23d3c41aa2cc1b17c4f6a5f"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/application/services/user_service.py",
+      "beforeSha256": "0aaeb8749b11aab76b083f45e90a017e7d6e6d2fec3fb68e216567559fb82b2e",
+      "afterSha256": "13d3b35cd3bc65c09529ef7db4979c190c228f8611916e2dfa6141134aefeafe"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/api/_generated/index.ts",
+      "beforeSha256": "661e72b3bfeebeaec9f2e98a5bc64cd4bd4c929bc8858f78a1413bc5ee5b9816",
+      "afterSha256": "4c14665e829b1b2c12d66e632006f550c42dac50ce13aace6b25349fcfab296f"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+      "beforeSha256": "89e30cfa1a801c395822a4905acfa0eccb8fe79b19faa8d47bb090b2bd561694",
+      "afterSha256": "43303792882225246e132a9fb0e314652d47065e2fbb16321837e8f0cb389eaa"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/api/system/role.ts",
+      "beforeSha256": "c60da536cb61b8426b1633aa60e1bf1051b8a08a830cd1661932b8e4e132813a",
+      "afterSha256": "b877cd4ddd9a360e2bfe7e45c149ceadfae2671a0a605d18e998d69588f7dde9"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/api/system/user.ts",
+      "beforeSha256": "f27ef1647f04951a29b7f94ad6de7b94f10fc8ed40d04a3588f6a2695592efb2",
+      "afterSha256": "c78b646ca1c63235f58f46f3013a891026a9e058106683623a900a2b844f2c06"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/system/role/components/RoleDataScopeDrawer.vue",
+      "beforeSha256": "fc0a29c4e182873d044db19750a301751d34373723cad533d9d1050d6110fa66",
+      "afterSha256": "bba9d54ca2a0a7e48fbf01c70aa9b0580381d6e4e95cec269a73957a003642e4"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue",
+      "beforeSha256": "f938b33859b5fc93b285d827404c972e83f9b79d11be73a96c83c924c92a9bea",
+      "afterSha256": "6a10d4707cb8d846d31cb7096ed77d09201696eeedc134a3d9677e25565a5cea"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue",
+      "beforeSha256": "7a36b859729c03cf989c9201516cbcd5eccf298e95d4c3df8e8f74c224980c26",
+      "afterSha256": "84d31584d1ea4bd50c53d31656ae0b1af3888db7fd757335569b551409d80176"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts",
+      "beforeSha256": "543c5d60c3e436dee67930510d942b912649be26d9b0218dfa56b52aadada9c4",
+      "afterSha256": "5531c2235e3a2606685f6d27d0074c2f4875cb6820dcf89f29b13990f0044fff"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts",
+      "beforeSha256": "c92d59ce47a510724cff06d4bada717a1681fab8f7580b5ac5b357408472673b",
+      "afterSha256": "e8beba15be3318c6a2c8983554c8015ab3dd8e8503aa223f919cdd93e5def232"
+    },
+    {
+      "path": "shared/openapi.json",
+      "beforeSha256": "5af1b3a60e4e58048e83b925501d55566e32b1f3edeff70bc570e51143f60d41",
+      "afterSha256": "2b0d9722e46979e822b6b2cf47ee53384dc4918565684fa36ddc3faddaee7bc0"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/module_admin/entity/vo/user_write_vo.py",
+      "beforeSha256": null,
+      "afterSha256": "82851faca050cb1a95be069de95e238051beaed1e5f0411d50beeafe34da2f9c"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py",
+      "beforeSha256": null,
+      "afterSha256": "59f0c5591d59151ce2a2e76904e5e32afff8e7ee3569c5ba55e314a692557db1"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py",
+      "beforeSha256": null,
+      "afterSha256": "d1a3c7597e7d50fc1099ade58d2314f624895437737ea638c78ff77f05ef54ce"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/tests/unit/services/test_role_write_relations.py",
+      "beforeSha256": null,
+      "afterSha256": "aef2fafbaaf49cf6a9f03bcb90349a1d249ff314e084f41a2091f3d8ad451a4b"
+    }
+  ],
+  "unrelatedConventionFailureFile": {
+    "path": "ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue",
+    "baselineUnchanged": true
+  },
+  "newImplementationAndTestFiles": 4
+}

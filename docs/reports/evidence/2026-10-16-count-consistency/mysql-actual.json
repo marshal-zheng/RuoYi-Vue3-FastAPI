@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "name": "reader-count-before-writer-commit-does-not-poison-later-pages",
+      "ok": true,
+      "isolation": "REPEATABLE-READ",
+      "beforeCommit": {
+        "total": 0,
+        "items": 0
+      },
+      "afterCommit": {
+        "total": 1,
+        "items": 1
+      }
+    },
+    {
+      "name": "existing-reader-retains-consistent-snapshot-and-new-transaction-sees-commit",
+      "ok": true,
+      "oldSnapshot": {
+        "total": 1,
+        "items": 1
+      },
+      "newTransaction": {
+        "total": 2,
+        "items": 2
+      }
+    },
+    {
+      "name": "savepoint-release-is-not-root-commit-and-outer-rollback-does-not-share-local-count",
+      "ok": true,
+      "localTotal": 3,
+      "otherSessionTotal": 2,
+      "afterRollbackTotal": 2
+    },
+    {
+      "name": "count-query-observation-on-current-local-data",
+      "ok": true,
+      "localRows": 9,
+      "samples": 19,
+      "countSqlMsMedian": 0.493,
+      "countSqlMsMax": 2.358,
+      "largeDatasetBenchmark": false
+    },
+    {
+      "name": "mysql-fixtures-cleaned",
+      "ok": true,
+      "deleted": 2,
+      "remaining": 0
+    }
+  ]
+}

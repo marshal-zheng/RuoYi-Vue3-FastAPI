@@ -1,0 +1,19 @@
+--- baseline/ruoyi-fastapi-backend/tests/integration/test_success_contract_responses.py
++++ current/ruoyi-fastapi-backend/tests/integration/test_success_contract_responses.py
+@@ -44,7 +44,7 @@
+             'projectDesc': project.project_desc,
+             'updateBy': operator,
+         }
+-        return SimpleNamespace(message='新增成功', result={'projectId': project_id})
++        return SimpleNamespace(message='新增成功', result={'projectId': project_id, 'versionId': 201})
+ 
+     async def edit_project(self, project, operator: str | None = None):
+         self._projects[project.project_id] = {
+@@ -346,6 +346,7 @@
+     assert response.headers['Location'] == 'http://testserver/project/101'
+     assert response.json() == {
+         'projectId': 101,
++        'versionId': 201,
+         'projectName': '演示工程',
+         'projectDesc': 'demo project',
+         'updateBy': 'admin',

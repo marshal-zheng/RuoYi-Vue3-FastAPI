@@ -1,0 +1,11 @@
+--- baseline/ruoyi-fastapi-frontend/src/views/project/components/ProjectFormDialog.vue
++++ current/ruoyi-fastapi-frontend/src/views/project/components/ProjectFormDialog.vue
+@@ -72,7 +72,7 @@
+       const res = await addProject(data);
+       // http 客户端已解包 payload.data，res 直接是项目数据
+       const newId = res?.projectId || res?.id || null;
+-      emit('success', { mode: 'create', projectId: newId, data: res });
++      emit('success', { mode: 'create', projectId: newId, versionId: res.versionId, data: res });
+       return res;
+     },
+   });

@@ -1,0 +1,22 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 115 items
+
+tests/unit/controllers/test_user_role_write_contract.py ................ [ 13%]
+..............                                                           [ 26%]
+tests/unit/services/test_role_write_relations.py ................        [ 40%]
+tests/unit/services/test_detail_resource_contract.py ................... [ 56%]
+.............                                                            [ 67%]
+tests/unit/services/test_user_service.py .............                   [ 79%]
+tests/unit/services/test_role_service.py ..........                      [ 87%]
+modules/system/tests/test_user_write_commands.py ..                      [ 89%]
+modules/system/tests/test_role_write_commands.py ....                    [ 93%]
+modules/system/tests/test_command_pipeline_behaviors.py ....             [ 96%]
+tests/unit/controllers/test_user_controller.py ..                        [ 98%]
+tests/unit/controllers/test_role_controller.py ..                        [100%]
+
+============================= 115 passed in 2.88s ==============================

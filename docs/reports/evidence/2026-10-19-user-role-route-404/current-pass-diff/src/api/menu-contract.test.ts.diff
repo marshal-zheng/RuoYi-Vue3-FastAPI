@@ -1,0 +1,10 @@
+--- src/api/menu-contract.test.ts (start)
++++ src/api/menu-contract.test.ts (end)
+@@ -23,6 +23,7 @@
+   const { createMemoryHistory, createRouter } = await import('vue-router');
+   return {
+     default: createRouter({ history: createMemoryHistory(), routes: [] }),
++    Layout: {},
+     constantRoutes: [],
+     dynamicRoutes: [],
+   };

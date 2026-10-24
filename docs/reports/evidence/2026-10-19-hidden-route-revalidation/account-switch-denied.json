@@ -1,0 +1,26 @@
+{
+  "first": {
+    "path": "/system/role-auth/user/97",
+    "currentName": null,
+    "resolved": null,
+    "notFound": true,
+    "permissions": [
+      "",
+      "system:user:list",
+      "system:user:query"
+    ],
+    "registered": []
+  },
+  "refresh": {
+    "path": "/system/role-auth/user/97",
+    "currentName": null,
+    "resolved": null,
+    "notFound": true,
+    "permissions": [
+      "",
+      "system:user:list",
+      "system:user:query"
+    ],
+    "registered": []
+  }
+}

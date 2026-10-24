@@ -1,0 +1,158 @@
+[
+  {
+    "time": "2026-10-19T05:19:01.677Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.097Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.117Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.159Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.164Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.262Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.317Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.336Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.339Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.337Z",
+    "method": "GET",
+    "path": "/api/system/menu/treeselect",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.369Z",
+    "method": "GET",
+    "path": "/api/system/menu/roleMenuTreeselect/1",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.394Z",
+    "method": "GET",
+    "path": "/api/system/dept/treeselect",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.420Z",
+    "method": "GET",
+    "path": "/api/system/dept/list/exclude/103",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.440Z",
+    "method": "GET",
+    "path": "/api/dev/menu/status",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.483Z",
+    "method": "DELETE",
+    "path": "/api/system/menu/",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:19:30.519Z",
+    "method": "DELETE",
+    "path": "/api/system/config",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:19:30.551Z",
+    "method": "POST",
+    "path": "/api/project/export",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:19:30.719Z",
+    "method": "POST",
+    "path": "/api/dev/menu/sync",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:54.532Z",
+    "method": "DELETE",
+    "path": "/api/monitor/cache/clearCacheName/zxqa_cache_mvet0wd2",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:19:54.554Z",
+    "method": "DELETE",
+    "path": "/api/monitor/cache/clearCacheKey/zxqa_exact_mvet0wd2:item",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:20:29.118Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.118Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.139Z",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.145Z",
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:20:29.147Z",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.187Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  }
+]

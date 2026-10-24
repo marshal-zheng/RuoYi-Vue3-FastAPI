@@ -1,0 +1,17 @@
+--- baseline/ruoyi-fastapi-backend/modules/system/application/handlers/query/post_query_handlers.py
++++ current/ruoyi-fastapi-backend/modules/system/application/handlers/query/post_query_handlers.py
+@@ -17,13 +17,7 @@
+ 
+ 
+ def _to_post_item(raw: Any) -> PostItemReadModel:
+-    if hasattr(raw, 'model_dump'):
+-        payload = raw.model_dump(by_alias=False)
+-    elif isinstance(raw, dict):
+-        payload = raw
+-    else:
+-        payload = {}
+-    return PostItemReadModel.model_validate(payload)
++    return PostItemReadModel.model_validate(raw)
+ 
+ 
+ class GetPostListQueryHandler(IQueryHandler[GetPostListQuery, PostPageReadModel]):

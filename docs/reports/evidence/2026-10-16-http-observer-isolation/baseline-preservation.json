@@ -1,0 +1,34 @@
+{
+  "business": {
+    "baselineFiles": 3406,
+    "unrelatedBaselineFilesPreserved": true,
+    "changedBaselineFiles": [
+      "ruoyi-fastapi-frontend/src/utils/http.test.ts",
+      "ruoyi-fastapi-frontend/src/utils/feedback/channel.ts",
+      "ruoyi-fastapi-frontend/src/utils/request.ts",
+      "ruoyi-fastapi-frontend/package.json",
+      "ruoyi-fastapi-frontend/src/utils/http.ts",
+      "ruoyi-fastapi-frontend/src/utils/feedback/presenter.test.ts",
+      "ruoyi-fastapi-frontend/yarn.lock",
+      "ruoyi-fastapi-frontend/src/utils/feedback/presenter.ts",
+      "ruoyi-fastapi-frontend/src/utils/request.download.test.ts"
+    ]
+  },
+  "zxui": {
+    "baselineFiles": 7942,
+    "unrelatedBaselineFilesPreserved": true,
+    "changedBaselineFiles": [
+      "packages/http/src/types.ts",
+      "docs/zh-CN/guide/http-client.md",
+      "packages/http/src/notifier.ts",
+      "packages/http/src/logger.ts",
+      "docs/zh-CN/component/http-client.md",
+      "docs/en-US/guide/http-client.md",
+      "docs/examples/http-client/notifier.vue",
+      "docs/en-US/component/http-client.md",
+      "packages/http/src/client.ts",
+      "packages/http/README.md"
+    ]
+  },
+  "knownConventionsFailureFileUnchanged": "ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue"
+}

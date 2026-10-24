@@ -1,0 +1,130 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+····xxxxxx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/components/UserFormDialog.test.ts > UserFormDialog > opens in loading state and ignores A when B is selected and returned first
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/components/UserFormDialog.test.ts:148:40
+    146|     const first = api.open(11); await nextTick();
+    147|     const dialog = wrapper.findComponent(dialogStub);
+    148|     expect(dialog.props('modelValue')).toBe(true);
+       |                                        ^
+    149|     expect(dialog.props('loading')).toBe(true); expect(dialog.props('o…
+    150|     const second = api.open(12); await nextTick();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  tests/unit/components/UserFormDialog.test.ts > UserFormDialog > does not let an old failure clear a newer loading state or display an error
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/components/UserFormDialog.test.ts:165:40
+    163|     a.reject(new Error('old failure')); await old; await nextTick();
+    164|     const dialog = wrapper.findComponent(dialogStub);
+    165|     expect(dialog.props('modelValue')).toBe(true); expect(dialog.props…
+       |                                        ^
+    166|     expect(dialog.props('okDisabled')).toBe(true);
+    167|     expect(feedback.error).not.toHaveBeenCalled(); expect(feedback.pro…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  tests/unit/components/UserFormDialog.test.ts > UserFormDialog > invalidates a closed opening and keeps its late response from releasing a reopened read
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected: 
+true
+
++ Received: 
+undefined
+
+ ❯ tests/unit/components/UserFormDialog.test.ts:179:66
+    177|     const dialog = wrapper.findComponent(dialogStub);
+    178|     dialog.vm.$emit('update:modelValue', false); await nextTick();
+    179|     expect(vi.mocked(getUser).mock.calls[0][1]?.signal?.aborted).toBe(…
+       |                                                                  ^
+    180|     expect(dialog.props('modelValue')).toBe(false);
+    181|     const next = api.open(11); await nextTick();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  tests/unit/components/UserFormDialog.test.ts > UserFormDialog > keeps a newer create opening when an older edit read finishes
+AssertionError: expected 11 to be undefined
+
+- Expected: 
+undefined
+
++ Received: 
+11
+
+ ❯ tests/unit/components/UserFormDialog.test.ts:195:26
+    193|     const old = api.open(11); await api.open(); edit.resolve(detail(11…
+    194|     const model = wrapper.findComponent(dialogStub).props('formModel');
+    195|     expect(model.userId).toBeUndefined(); expect(model.userName).toBe(…
+       |                          ^
+    196|   });
+    197| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  tests/unit/components/UserFormDialog.test.ts > UserFormDialog > keeps a failed current read disabled and retries the same user explicitly
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/components/UserFormDialog.test.ts:205:40
+    203|     expect(result).toEqual({ error });
+    204|     const dialog = wrapper.findComponent(dialogStub);
+    205|     expect(dialog.props('modelValue')).toBe(true); expect(dialog.props…
+       |                                        ^
+    206|     expect(dialog.props('okDisabled')).toBe(true); expect(feedback.err…
+    207|     const retry = wrapper.findAll('button').find(button => button.text…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  tests/unit/components/UserFormDialog.test.ts > UserFormDialog > aborts on disposal and ignores a non-cooperating late response
+AssertionError: expected undefined to be true // Object.is equality
+
+- Expected: 
+true
+
++ Received: 
+undefined
+
+ ❯ tests/unit/components/UserFormDialog.test.ts:217:66
+    215|     const wrapper = mountDialog(); const task = (wrapper.vm as unknown…
+    216|     await nextTick(); wrapper.unmount();
+    217|     expect(vi.mocked(getUser).mock.calls[0][1]?.signal?.aborted).toBe(…
+       |                                                                  ^
+    218|     response.resolve(detail(11)); await task;
+    219|     expect(feedback.error).not.toHaveBeenCalled(); expect(feedback.pro…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 4 passed (10)
+   Start at  07:06:42
+   Duration  1.04s (transform 246ms, setup 212ms, collect 466ms, tests 66ms, environment 134ms, prepare 24ms)
+

@@ -1,0 +1,514 @@
+{
+  "events": [
+    {
+      "time": "2026-10-19T03:19:43.541Z",
+      "method": "GET",
+      "path": "/src/api/system/devMenuSync.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:43.565Z",
+      "method": "GET",
+      "path": "/src/api/login.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:43.565Z",
+      "method": "GET",
+      "path": "/src/api/menu.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:43.565Z",
+      "method": "GET",
+      "path": "/src/api/system/dict/data.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:43.565Z",
+      "method": "GET",
+      "path": "/src/api/system/dict/type.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:43.576Z",
+      "method": "GET",
+      "path": "/src/api/detail.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:45.882Z",
+      "method": "GET",
+      "path": "/api/captchaImage",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.278Z",
+      "method": "POST",
+      "path": "/api/login",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.308Z",
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.357Z",
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.363Z",
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.372Z",
+      "method": "GET",
+      "path": "/src/api/system/user.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.372Z",
+      "method": "GET",
+      "path": "/src/api/system/role.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.372Z",
+      "method": "GET",
+      "path": "/src/api/system/dept.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.467Z",
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.582Z",
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.591Z",
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:19:53.608Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:13.981Z",
+      "method": "GET",
+      "path": "/src/api/project/project.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:13.981Z",
+      "method": "GET",
+      "path": "/src/api/project/version.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:14.087Z",
+      "method": "GET",
+      "path": "/api/project/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:14.531Z",
+      "method": "POST",
+      "path": "/api/project",
+      "status": 201
+    },
+    {
+      "time": "2026-10-19T03:20:14.538Z",
+      "method": "GET",
+      "path": "/src/api/device/device.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:14.539Z",
+      "method": "GET",
+      "path": "/src/api/project/topology.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:14.574Z",
+      "method": "GET",
+      "path": "/src/api/protocol/protocol.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:14.762Z",
+      "method": "GET",
+      "path": "/api/device/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:14.948Z",
+      "method": "GET",
+      "path": "/api/project/topology/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:26.602Z",
+      "method": "POST",
+      "path": "/api/project/topology/save",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:26.668Z",
+      "method": "GET",
+      "path": "/api/project/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:26.697Z",
+      "method": "GET",
+      "path": "/api/project/topology/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:26.723Z",
+      "method": "GET",
+      "path": "/api/project/version/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:39.490Z",
+      "method": "POST",
+      "path": "/api/project/version/clone",
+      "status": 201
+    },
+    {
+      "time": "2026-10-19T03:20:39.563Z",
+      "method": "GET",
+      "path": "/api/project/version/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:39.564Z",
+      "method": "GET",
+      "path": "/api/project/topology/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:47.947Z",
+      "method": "PUT",
+      "path": "/api/project/version/lock",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:47.986Z",
+      "method": "GET",
+      "path": "/api/project/version/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:57.504Z",
+      "method": "PUT",
+      "path": "/api/project/version/lock",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:20:57.553Z",
+      "method": "GET",
+      "path": "/api/project/version/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:16.338Z",
+      "method": "GET",
+      "path": "/api/project/version/export-xml/15",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:22.525Z",
+      "method": "GET",
+      "path": "/api/project/version/export-excel/15",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:31.288Z",
+      "method": "GET",
+      "path": "/api/project/topology/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:31.963Z",
+      "method": "POST",
+      "path": "/api/project/version/export",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:37.791Z",
+      "method": "GET",
+      "path": "/api/device/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:37.985Z",
+      "method": "GET",
+      "path": "/api/project/topology/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:44.849Z",
+      "method": "GET",
+      "path": "/api/project/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:45.087Z",
+      "method": "GET",
+      "path": "/api/project/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:45.622Z",
+      "method": "GET",
+      "path": "/api/project/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:51.316Z",
+      "method": "PUT",
+      "path": "/api/project",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:22:51.384Z",
+      "method": "GET",
+      "path": "/api/project/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:10.153Z",
+      "method": "GET",
+      "path": "/api/project/export/14",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:15.272Z",
+      "method": "POST",
+      "path": "/api/project/import/batch",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:15.318Z",
+      "method": "GET",
+      "path": "/api/project/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:19.905Z",
+      "method": "GET",
+      "path": "/api/project/15",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:20.032Z",
+      "method": "GET",
+      "path": "/api/project/15",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:20.068Z",
+      "method": "GET",
+      "path": "/api/project/version/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:20.089Z",
+      "method": "GET",
+      "path": "/api/project/version/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:27.468Z",
+      "method": "GET",
+      "path": "/api/project/version/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:27.549Z",
+      "method": "GET",
+      "path": "/api/device/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:27.733Z",
+      "method": "GET",
+      "path": "/api/project/topology/15",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:36.021Z",
+      "method": "GET",
+      "path": "/src/api/monitor/job.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:36.214Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_group",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:36.219Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_status",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:36.219Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_executor",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:23:36.223Z",
+      "method": "GET",
+      "path": "/api/monitor/job/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:06.401Z",
+      "method": "POST",
+      "path": "/api/monitor/job",
+      "status": 422
+    },
+    {
+      "time": "2026-10-19T03:24:16.959Z",
+      "method": "POST",
+      "path": "/api/monitor/job",
+      "status": 201
+    },
+    {
+      "time": "2026-10-19T03:24:17.007Z",
+      "method": "GET",
+      "path": "/api/monitor/job/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:24.470Z",
+      "method": "GET",
+      "path": "/api/monitor/job/8",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:24.511Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_executor",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:24.515Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_group",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:24.517Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_status",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:24.790Z",
+      "method": "PUT",
+      "path": "/api/monitor/job",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:24.826Z",
+      "method": "GET",
+      "path": "/api/monitor/job/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:43.581Z",
+      "method": "PUT",
+      "path": "/api/monitor/job/changeStatus",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:50.377Z",
+      "method": "PUT",
+      "path": "/api/monitor/job/changeStatus",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:50.918Z",
+      "method": "PUT",
+      "path": "/api/monitor/job/run",
+      "status": 202
+    },
+    {
+      "time": "2026-10-19T03:24:56.079Z",
+      "method": "GET",
+      "path": "/src/api/monitor/jobLog.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:56.230Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_group",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:56.230Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_executor",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:56.233Z",
+      "method": "GET",
+      "path": "/api/monitor/job/8",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:56.236Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_common_status",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:24:56.268Z",
+      "method": "GET",
+      "path": "/api/monitor/jobLog/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:25:07.798Z",
+      "method": "GET",
+      "path": "/api/monitor/jobLog/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:25:07.878Z",
+      "method": "POST",
+      "path": "/api/monitor/jobLog/export",
+      "status": 200
+    }
+  ],
+  "pageErrors": [
+    {
+      "time": "2026-10-19T03:24:06.406Z",
+      "message": "Cron表达式不正确"
+    }
+  ]
+}

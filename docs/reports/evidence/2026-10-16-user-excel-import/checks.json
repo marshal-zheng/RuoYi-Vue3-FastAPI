@@ -1,0 +1,131 @@
+{
+  "scope": {
+    "productionFiles": [
+      "ruoyi-fastapi-frontend/src/api/system/user.ts",
+      "ruoyi-fastapi-frontend/src/views/system/user/components/UserImportDialog.vue"
+    ],
+    "testFiles": [
+      "ruoyi-fastapi-frontend/tests/unit/components/UserImportDialog.test.ts",
+      "ruoyi-fastapi-frontend/src/utils/io-toolkit/upload.contract.test.ts"
+    ],
+    "zxuiChanges": false,
+    "backendChanges": false
+  },
+  "regressions": {
+    "componentLifecycleAdded": 7,
+    "existingUploadContractAdded": 1,
+    "red": {
+      "lifecycle": 7,
+      "uploadTimeout": {
+        "expected": 0,
+        "observed": 60000
+      }
+    },
+    "focused": {
+      "files": 5,
+      "passed": 42,
+      "exitCode": 0,
+      "command": "yarn vitest run tests/unit/components/UserImportDialog.test.ts src/utils/io-toolkit/upload.contract.test.ts src/utils/http.test.ts src/utils/request.download.test.ts tests/unit/components/UserFormDialog.test.ts --reporter=dot"
+    },
+    "evidence": [
+      "regression-red.txt",
+      "upload-timeout-red.txt",
+      "focused-tests.txt"
+    ]
+  },
+  "quality": {
+    "lint": {
+      "command": "yarn lint:check",
+      "exitCode": 0
+    },
+    "types": {
+      "command": "yarn type-check",
+      "exitCode": 0
+    },
+    "sourceBuild": {
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod",
+      "exitCode": 0,
+      "seconds": 22.54,
+      "existingChunkSizeWarning": true
+    },
+    "conventions": {
+      "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+      "exitCode": 1,
+      "existingFailure": "ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue console usage",
+      "targetedFileUnchangedCheck": "VersionList.vue and every unrelated baseline file retain their original SHA256"
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  },
+  "review": {
+    "independentReadOnlyReview": "passed; no blocking findings; existing native Upload file fields and Dialog lifecycle checked",
+    "componentTestsIndependentlyRun": 7,
+    "timeoutIncrementalReview": "passed; explicit 0 preserves native XHR wait while signal cancellation remains active"
+  },
+  "realVerification": {
+    "command": "node /tmp/ruoyi-user-import/actual-probe.cjs",
+    "exitCode": 0,
+    "checks": 8,
+    "sourceHttpAndUseDialog": true,
+    "productionComponentSetupCompiled": true,
+    "realLocalFastAPIAndMySQL": true,
+    "uiAdaptersObserved": true,
+    "computerUse": false,
+    "browserVisualVerification": false,
+    "lateSuccessFailureAndProgressRaces": "component deferred-response regressions; actual XHR cancellation separately verified",
+    "cancellationDoesNotRollbackServerCommit": true
+  },
+  "planStageCheckpoint": {
+    "STATUS": "PLAN_DRAFTED",
+    "FILES_WRITTEN": [
+      "docs/plans/2026-10-16-user-excel-import.md"
+    ],
+    "EVIDENCE": [
+      "READ: both AGENTS.md, Upload/Dialog/HTTP sources, user controller/service and adjacent APIs",
+      "SEARCH: actual upload consumers, existing FormData helper, lifecycle tests and backend import contract",
+      "COMMAND: plan structure verification passed before production edits"
+    ],
+    "PLAN_CHANGES": [
+      "Preserve native upload waiting with explicit timeout:0 after real adapter configuration showed the FormData default is 60000ms"
+    ],
+    "WORK_ITEM_SYNC_SUGGESTION": "none",
+    "NEXT_ACTION": "completed implementation, real verification, independent review and task-owned runtime cleanup",
+    "BLOCK_REASON": "none",
+    "UNBLOCK_ACTION": "none"
+  },
+  "completion": {
+    "workspacePreservation": {
+      "business": {
+        "baselineFiles": 3392,
+        "changedExistingFiles": [
+          "ruoyi-fastapi-frontend/src/api/system/user.ts",
+          "ruoyi-fastapi-frontend/src/utils/io-toolkit/upload.contract.test.ts",
+          "ruoyi-fastapi-frontend/src/views/system/user/components/UserImportDialog.vue"
+        ],
+        "newFiles": [
+          "docs/plans/2026-10-16-user-excel-import.md",
+          "docs/reports/2026-10-16-user-excel-import.md",
+          "docs/reports/evidence/2026-10-16-user-excel-import/actual.json",
+          "docs/reports/evidence/2026-10-16-user-excel-import/checks.json",
+          "docs/reports/evidence/2026-10-16-user-excel-import/focused-tests.txt",
+          "docs/reports/evidence/2026-10-16-user-excel-import/regression-red.txt",
+          "docs/reports/evidence/2026-10-16-user-excel-import/upload-timeout-red.txt",
+          "ruoyi-fastapi-frontend/tests/unit/components/UserImportDialog.test.ts"
+        ],
+        "unrelatedExistingFilesChanged": 0
+      },
+      "zxui": {
+        "baselineFiles": 7942,
+        "changedExistingFiles": [],
+        "newFiles": [],
+        "unrelatedExistingFilesChanged": 0
+      }
+    },
+    "temporaryExcelFilesRemaining": 0,
+    "probeLoginLoggedOut": true,
+    "taskStartedBackendStopped": true,
+    "gitDiffCheckPassed": true
+  }
+}

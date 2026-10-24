@@ -1,0 +1,217 @@
+[
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/system/post/components/post-form.test.ts",
+    "before": "8da12163d9c9f3637230a4e88e8ffd095777d660c25a3b4efd230f21efd3d60c",
+    "after": "eab3366a690a5d68ba8591a3689f3d3e8531541dca099b92bb1d99deb610b02f"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/system/post/components/post-form.ts",
+    "before": "e16bbaf069d1de09e1ed54153be8d25adcda7d2b929c5dc01993687159282e4a",
+    "after": "424bea0c241af5fc938e43954f6d8cdf6e52f086408582f7838b0cff621429cc"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/system/post/components/PostDlg.vue",
+    "before": "175f7b97a51375eb5058113398e8754667e1ad06d4a6a1f8265590e865b3c868",
+    "after": "7ca5c37bdb71d107cd9031bf65498116d552241aaf9288aa84071657a32efa5e"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/monitor/druid/index.vue",
+    "before": "7fbe72f21c86b2285eb924432506cafc2756d8cab9187426a0ea14d5b8f984ad",
+    "after": "04d77ba0dc8fa428c76382e19c46c3c8b8021d0d7c6b2463a5fb3b7346f30434"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/tool/swagger/index.vue",
+    "before": "fdcdb58e1e0f4d880e6d569cbf870d993580abbb10258bbb8fd8e89d0e975564",
+    "after": "371860791c138b28c7e2391f1f8855535f00305bd3cf85a9d0dc77da6e95d1b6"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/tool/gen/importTable.vue",
+    "before": "f49bbbea75195b4bd21ab73e4cd2a9385825edfcfbb9003bfbd5e63fbd058c9a",
+    "after": "b41d2317e8f3d0b5b7370007d6583245bb7b22936d83e1131e9d0376ba77602b"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/project/components/ProjectFormDialog.vue",
+    "before": "90ed53abe8a307a445d10abb3b78579e1c9dce251cb77b2f38419d1b7d3b8f41",
+    "after": "f3953820fa2c07d4dce03690359022c961fe616dee53620f849477a7e3be5fac"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/project/components/VersionExportDialog.vue",
+    "before": "f762ff72ecbede03ccfb0cde417afcc34f10bd55a073a7a6cee384f605b9bb84",
+    "after": "05eb8848e6e870b75461f6830601e3eb2cf813bfa57b04ad2b905ac8105acb1d"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/project/components/VersionCloneDialog.vue",
+    "before": "1405bac97b22b6562f28b16c7e6b18a7d3f48db898bd4ae95923744715c58c61",
+    "after": "15532d6657c7ae4a90f32e5f1cbb2a157028fd06104aa98840917b7756a412dc"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/project/project.ts",
+    "before": "0ec9e3ff6d656c7a354aac02839f0216f478849393a36b551fd7361f6452c819",
+    "after": "531ad5b19342173d50e409fa37da79549966333d1744ac9800c97b6fb95ee963"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/project/version.ts",
+    "before": "6e54320c7af4f1baf2f69dcaec719f6f6a8a9fd5ae6ae5d0a722d0c495165ad7",
+    "after": "20f667f8bc6a48be34bf1c4e3d4292f7d95c44a458b2f978188ff4b61e02d9e1"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/system/post.ts",
+    "before": "0627e9a2f1f337be6fd3e950d9cdf3f1f8e18fa25c80e81d0ec2df4d4e7be69c",
+    "after": "af0d4a33f308873617ff27a8362e8b6f9077c0872d22034da3e3ec8d6543178f"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+    "before": "533ed0ad5e3bfeee3c5d32f1725270b2adc70a971c3aee669be32b071758dbcc",
+    "after": "3c8b48e251c8bc27c54ff2298e3acf9c018847a900b14ab0acb1162fa93dcbb8"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/_generated/index.ts",
+    "before": "1d8e7e755f7bd3c331cfd06ab534f86fb103855f9e1a976aa0c95d38307be40f",
+    "after": "dfae3e344239438625c67465e6c2ef6c46db3fb2232fdc1f9b0832fd21b1a561"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/utils/editor-read.ts",
+    "before": "04e13d7529fb5629032c8db304363379e3933d2dc10546334bb0dee58ce830e0",
+    "after": "eaf55ffb4af7559052717f3336f0f69fc2d7fb2f6810eff3c7b8f9e5fb68f370"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/tests/test_post_read_queries.py",
+    "before": "1f9055ffee313f27be474edc6d8a1d082a202afe69fe17ffc3d62f3a84a4883d",
+    "after": "c854df0c8258f881d2990cb1fdbd3b4cfc4e950bf15a889a92896eb3dd4ff7cf"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/application/services/server_service.py",
+    "before": "3b590904ea61baddbddf460573c9c3a8610714d8198427fae824f43194ccfd6c",
+    "after": "2d44a5cdd1001ac68a654ba48fccb51076b8c131cd219c5d408bb85b5750e78d"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py",
+    "before": "c3f6e605ae70ac2fd9f2d811629bb3f6d965a1190e63ed54fd3920dca89bb776",
+    "after": "6e3463bc341209fc3e96e87c080c9f486180f15d2524cc3cfcc9662c644e7702"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/application/handlers/query/post_query_handlers.py",
+    "before": "610329d43860d67be9b3d17c0b927480dc24d40d5925d6c0f28fc500f0cc3f5d",
+    "after": "403be2e36507ef4d56526a0da13424112708d19e9a1321a42d590cb333a214e0"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/scheduler/application/job_log_service.py",
+    "before": "4ac70f224ccfaa67ea8d48850e01b26270a6c0a9a389452b136efa30ba24a49d",
+    "after": "ec727c5e78b146c2df22752e9036d10bc7121f1bf88ea12417939fe0cf77a752"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/project/api/project_controller.py",
+    "before": "eadf8f1394cfc7a2cf0a6fa66e5ef9e06d4e8e7c1ece7f5a1fb707560b7ca823",
+    "after": "a0b3cac75a1db71f81c323c2a14602b6e00af11e218ed360e3f62bb3fac9514a"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/project/infrastructure/project_version_repository.py",
+    "before": "6159aa0e027166dcf4d1e6aaf30eec47fc04fa09b9db8a1376c8c85204d2fc37",
+    "after": "325dcf66886492803948c89eb9780824025dc4393799a0fde98a92cd1fbcbf56"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/project/infrastructure/project_repository.py",
+    "before": "d6ceb0795b72b8e69ff0afea7ba2abe80b0a639b2fd6e348063aa992163fa374",
+    "after": "54fc1b2711fd035f8dce5ea81dd3a49913418f2e6dfc07a1d5cfafc7053a070a"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/project/application/services/project_topology_service.py",
+    "before": "ea30a5c4957f581389c49ad587e4a9ca6c6f3fc8a69225a8a6bf91f71240aed9",
+    "after": "d4d578f497731d413b647f87786078eda315fb5d67100d98e62d154354de2f68"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/project/application/services/project_service.py",
+    "before": "9b20da308d1cd6517344d015e88d85ddb9c410b25a882161b024de5d8ff6cf79",
+    "after": "3573c9858ec7e65f85acdf7c8a5f4883bd086df4bf8568423340dad2a5826872"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/project/application/services/project_version_service.py",
+    "before": "c6407c37921330f819622cea6de2fcf4fd01a7d5a977bd9114b99e07e8bad1be",
+    "after": "8023c7624995fde1072f53a5c82e98e0e849d4b2d0afbe32b44036da779981ab"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/module_admin/entity/vo/project_vo.py",
+    "before": "e5fec1114c0f3950375ebf3b4d2333e66d36ae2716ed5278677921364e6c5b52",
+    "after": "f63ac71b90213a94c5dd02c155939a7a4ff1021facc9053442cf31f192f14ffd"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts",
+    "before": "644e32dfba6f53c4cb386b7be036814a37e03d31639c4b0a2d8420a15d462e0a",
+    "after": "9d7149e249ec993bb7249fd35161d6bfa816a3a8933c65498c68139514e9d668"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/RemainingEditorReadLifecycle.test.ts",
+    "before": "75f8da147dfa505a41ad1c36b6edfd7c3c6ed16a902037feda9ce8dee17e9870",
+    "after": "803be896a2c695ec8a282fff1ca9e6b602be53ab72119232fe99461c1782bc7b"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts",
+    "before": "a750a3f8820e0760192d2c6b95a6b826759b0ce8db10bbfee45dfbd2abf6bdf7",
+    "after": "fd84bfabf38d4cfc225a8d5cc04385905628b302d8c3e98fbfccf9e4fd1c0b97"
+  },
+  {
+    "path": "shared/openapi.json",
+    "before": "534dfad1b5f60b67099b70307660803a3f086da38b159a15c4886100fc7a2a05",
+    "after": "6640763aabd35437c1e8352bd5e044036fb9cdf7ea9f0cb23fca143689f8bbbb"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/integration/test_success_contract_responses.py",
+    "before": "8d44fe224a2ba59a4a984420f1f098bafed51f04f7b7c5aa8e998bee93e91bff",
+    "after": "ee26ad0e80085271ba9813265c3dd5e990d69ce4adc7e56ed58cd861d1b632d4"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/mocks/handlers/project.ts",
+    "before": "a0301b2cfc957c3b14813a2a08daf4231eafd9e9614a59d90c2fee1bbb758590",
+    "after": "0c9484f3dbcd0fad3da1bf5fb9fa3af6d01d9ec168dfeff0354def6648bb5411"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+    "before": "aa599c11999bf942050864917281ac117dc781b1185629583928238823335e93",
+    "after": "178a7d0c9a5330a87234b0228998ad18b5d8ad2e314d4f9697f6e5af61914e0e"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/config/get_scheduler.py",
+    "before": "4232185518fd39af8c1e4f761f496a4c93cb7cd0c1facca2b074bfde3f7e683a",
+    "after": "ed2855126bbb4696cc3b27e89da007658594baa6c954b4f4fc13dbda73d54262"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts",
+    "before": "c360921f36469b299f48527a7407514cd7c4a91624e660769e32f4bf72828a5b",
+    "after": "0fbd5bf8c4b40884bafa63a9872f69778f9de5d25eebc5e44e28e4545d00b9e4"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/server.py",
+    "before": "66a3d9550fc6831f48cbcbf87e1ac3e3195117ba8b2c1949578ed5f01c8343b4",
+    "after": "7536f904b887f3621db997d0a65e9d2c3251c94dc558c0cd45ead5ce8171d521"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/package.json",
+    "before": "f2bb87740a83ae9e87c8edbc3467d551040a7d6a0af34049b04115e406cdf54f",
+    "after": "576c25caf08c132f11defdff0fc8cb858459c830cac754515888e27b96e85128"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/yarn.lock",
+    "before": "0f268aaacbf1ee6983644f1364d1d4aa78bd51d192bf89c45f6944cb32d5cbfb",
+    "after": "d7f1b53fb037f5e656db1ae735560e3b7ca7bb885cd6e4a37ec60fedf3762c02"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/container/providers.py",
+    "before": "86ca1c381b80d21062b0c964a821f4f7989abaa902c2fe6de7af57f0f57abda8",
+    "after": "21555f8c8fd5acf607688af184e63429429d9e825a817eecb44c874fc3c31d79"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/mocks/store/datasource.ts",
+    "before": "08365ce5b9a0f447e03c5b9d759754003634f533dc9e7d8fe31159d0479c0957",
+    "after": "feaedcbb8cead69a2ab36638bae9d126cf55a3f4da48f758c92807a72931bf03"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/mocks/handlers/user.ts",
+    "before": "bc6f93d5b6ceb2c8815c47bda2b25b64d550b033f095476162d12d4125bf1e11",
+    "after": "41ba0142faa42015e5882e39dc2700a83c19c6315c0a418b5d37ad7aed222d49"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/mocks/utils/request.ts",
+    "before": "45543b80610719321b17e2300e801ebd0e77007e0e1a0c87c36860956d12f2f3",
+    "after": "6d53afbd7a186ade83d969fda8a0b7675f66d2237c7eb7586afb771ba102479a"
+  }
+]

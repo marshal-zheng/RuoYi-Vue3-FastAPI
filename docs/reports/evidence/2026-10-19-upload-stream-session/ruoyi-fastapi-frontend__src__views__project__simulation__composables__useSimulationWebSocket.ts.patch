@@ -1,0 +1,100 @@
+--- before/ruoyi-fastapi-frontend/src/views/project/simulation/composables/useSimulationWebSocket.ts
++++ after/ruoyi-fastapi-frontend/src/views/project/simulation/composables/useSimulationWebSocket.ts
+@@ -3,9 +3,10 @@
+  * 封装WebSocket连接、消息处理、自动重连
+  * 提供响应式数据流（优化版）
+  */
+-import { ref, shallowRef, onUnmounted, type Ref, type ShallowRef } from 'vue';
++import { ref, shallowRef, watch, onUnmounted, type Ref, type ShallowRef } from 'vue';
+ import { ElMessage } from 'element-plus';
+ import request from '@/utils/request';
++import { queryScope, scopeRequestOptions } from '@/queries/context';
+ import { decodeWebSocketMessage, type WebSocketMessage } from './websocket-contract';
+ import type {
+   SimulationStatusData,
+@@ -75,7 +76,7 @@
+ }
+ 
+ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
+-  const ws = ref<WebSocket | null>(null);
++  const ws = shallowRef<WebSocket | null>(null);
+   const connected = ref<boolean>(false);
+   const lastError = ref<string | null>(null);
+   const reconnectAttempts = ref<number>(0);
+@@ -113,15 +114,20 @@
+       return;
+     }
+ 
++    const scope = queryScope.value;
++    if (!scope) return;
+     let wsTicket = '';
+     const attempt = connectionGeneration;
+     ticketPending = true;
+     try {
+-      const ticketResp = await request<{ wsTicket?: string; ws_ticket?: string }>({
+-        url: '/auth/ws-ticket',
+-        method: 'post',
+-        data: { session_id: sessionId },
+-      });
++      const ticketResp = await request<{ wsTicket?: string; ws_ticket?: string }>(
++        {
++          url: '/auth/ws-ticket',
++          method: 'post',
++          data: { session_id: sessionId },
++        },
++        scopeRequestOptions(scope)
++      );
+       wsTicket = ticketResp.wsTicket || ticketResp.ws_ticket || '';
+     } catch (err) {
+       if (attempt !== connectionGeneration) return;
+@@ -162,9 +168,11 @@
+     const wsUrl = buildWsUrl(wsTicket);
+ 
+     try {
+-      ws.value = new WebSocket(wsUrl);
+-
+-      ws.value.onopen = () => {
++      const socket = new WebSocket(wsUrl);
++      ws.value = socket;
++
++      socket.onopen = () => {
++        if (attempt !== connectionGeneration || ws.value !== socket) return;
+         lastError.value = null;
+         connected.value = true;
+         reconnectAttempts.value = 0;
+@@ -173,7 +181,8 @@
+         startHeartbeat();
+       };
+ 
+-      ws.value.onmessage = (event: MessageEvent) => {
++      socket.onmessage = (event: MessageEvent) => {
++        if (attempt !== connectionGeneration || ws.value !== socket) return;
+         try {
+           const raw: unknown = JSON.parse(event.data);
+           const message = decodeWebSocketMessage(raw);
+@@ -187,12 +196,14 @@
+         }
+       };
+ 
+-      ws.value.onerror = () => {
++      socket.onerror = () => {
++        if (attempt !== connectionGeneration || ws.value !== socket) return;
+         lastError.value = '实时连接发生错误';
+         connected.value = false;
+       };
+ 
+-      ws.value.onclose = () => {
++      socket.onclose = () => {
++        if (attempt !== connectionGeneration || ws.value !== socket) return;
+         connected.value = false;
+         stopHeartbeat();
+ 
+@@ -362,6 +373,8 @@
+     faultEventsData.value = [];
+     notifiedAlarmIds.clear();
+   };
++
++  watch(queryScope, () => disconnect(), { flush: 'sync' });
+ 
+   // 组件卸载时断开连接
+   onUnmounted(() => {

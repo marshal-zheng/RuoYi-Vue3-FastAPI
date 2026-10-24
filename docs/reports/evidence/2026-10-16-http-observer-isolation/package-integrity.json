@@ -1,0 +1,9 @@
+{
+  "archive": "zxio-http-1.0.0-observers.20261016.tgz",
+  "sha256": "5653a87f1c3d5e4c0d52b7b25cd283d484ac61f9d7131ccd447559e30e05cd5a",
+  "packedFiles": 53,
+  "installedPayloadMatchesArchive": true,
+  "builtPayloadMatchesArchive": true,
+  "manifestSemanticallyEqual": true,
+  "readmeMatchesSource": true
+}

@@ -1,0 +1,12 @@
+{
+  "status": 500,
+  "body": {
+    "type": "about:blank",
+    "title": "解析导入文件失败: Excel file format cannot be determined, you must specify an engine manually.",
+    "status": 500,
+    "detail": "解析导入文件失败: Excel file format cannot be determined, you must specify an engine manually.",
+    "instance": "/dev-api/system/protocol/importPreview",
+    "errorCode": 50000,
+    "requestId": "6f099e2ab5f940cc8c72447f0d4f4130"
+  }
+}

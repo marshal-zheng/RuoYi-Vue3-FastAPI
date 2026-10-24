@@ -1,0 +1,23 @@
+<template>
+  <div class="inner-link" data-zx-fill="anchor">
+    <iframe :id="iframeId" style="width: 100%; height: 100%" :src="src" frameborder="no"></iframe>
+  </div>
+</template>
+
+<script setup>
+defineProps({
+  src: {
+    type: String,
+    default: '/',
+  },
+  iframeId: {
+    type: String,
+  },
+});
+</script>
+
+<style scoped>
+.inner-link iframe {
+  display: block;
+}
+</style>

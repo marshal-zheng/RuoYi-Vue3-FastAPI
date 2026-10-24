@@ -1,0 +1,12 @@
+{
+  "status": 403,
+  "body": {
+    "type": "http://localhost/problems/forbidden",
+    "title": "该用户无此接口权限",
+    "status": 403,
+    "detail": "该用户无此接口权限",
+    "instance": "/dev-api/system/user/authRole",
+    "errorCode": 20004,
+    "requestId": "4b262b4248a043beb07cd9477e8c5557"
+  }
+}

@@ -1,0 +1,25 @@
+
+==> ESLint
+  [OK] Lint passed on changed files
+
+==> Type Check
+  [WARN] Type check skipped
+
+==> Color Token Policy
+  [OK] No new hex color violations
+
+==> HTTP Layer Policy
+  [OK] No runtime axios violations
+
+==> Vue Component Policy
+  [OK] No Options API regressions
+
+==> Console Usage Policy
+  [FAIL] console.log/warn/error added in business code
+  Files:
+    - ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue
+
+==> Unit Tests
+  [WARN] Tests skipped (use --with-tests to enable)
+
+[FAIL] 1 check(s) failed

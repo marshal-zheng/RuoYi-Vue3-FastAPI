@@ -1,0 +1,17 @@
+{
+  "business": {
+    "initialFilesChecked": 3386,
+    "changedInitialFiles": [
+      "ruoyi-fastapi-frontend/src/views/tool/gen/index.vue",
+      "ruoyi-fastapi-frontend/src/utils/request.ts",
+      "ruoyi-fastapi-frontend/src/utils/request.download.test.ts",
+      "ruoyi-fastapi-frontend/src/plugins/download.js"
+    ],
+    "unexpectedChanges": []
+  },
+  "zxui": {
+    "initialFilesChecked": 7942,
+    "changedInitialFiles": [],
+    "unexpectedChanges": []
+  }
+}

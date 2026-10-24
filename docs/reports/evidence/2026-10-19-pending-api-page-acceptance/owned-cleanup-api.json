@@ -1,0 +1,14 @@
+[
+  {
+    "method": "DELETE",
+    "path": "/project/17",
+    "status": 204,
+    "body": null
+  },
+  {
+    "method": "DELETE",
+    "path": "/system/user/133",
+    "status": 204,
+    "body": null
+  }
+]

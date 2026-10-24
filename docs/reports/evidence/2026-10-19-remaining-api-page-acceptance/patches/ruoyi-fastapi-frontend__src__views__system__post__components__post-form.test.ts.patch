@@ -1,0 +1,40 @@
+--- baseline/ruoyi-fastapi-frontend/src/views/system/post/components/post-form.test.ts
++++ current/ruoyi-fastapi-frontend/src/views/system/post/components/post-form.test.ts
+@@ -1,5 +1,5 @@
+ import { describe, expect, it } from 'vitest';
+-import { initialPost, toPostDto } from './post-form';
++import { initialPost, postFieldIssues, toPostDto } from './post-form';
+ 
+ const valid = {
+   postName: '业务岗位',
+@@ -10,6 +10,30 @@
+ };
+ 
+ describe('post write boundary', () => {
++  it('routes structured server fields and leaves unstructured conflicts at form level', () => {
++    expect(postFieldIssues(new Error('岗位名称已存在'))).toEqual([]);
++    expect(
++      postFieldIssues({
++        problem: {
++          type: 'validation-error',
++          title: '字段不合法',
++          status: 422,
++          detail: '字段不合法',
++          instance: '/system/post',
++          errors: [
++            { field: 'post_name', message: '名称不能为空' },
++            { field: 'postCode', message: '编码不能为空' },
++            { field: 'unknown', message: '其他问题' },
++          ],
++        },
++      })
++    ).toEqual([
++      { field: 'postName', message: '名称不能为空' },
++      { field: 'postCode', message: '编码不能为空' },
++      { field: 'unknown', message: '其他问题' },
++    ]);
++  });
++
+   it('keeps zero sort and empty remark, while identity and audit fields cannot leak from inputs', () => {
+     expect(initialPost({ postSort: 0, status: '1', remark: '' })).toMatchObject({
+       postSort: 0,

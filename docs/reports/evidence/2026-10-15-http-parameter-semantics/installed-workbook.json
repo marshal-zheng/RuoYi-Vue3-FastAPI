@@ -1,0 +1,8 @@
+{
+  "mode": "installed",
+  "format": "xlsx",
+  "sheets": 1,
+  "rowsIncludingHeader": 2,
+  "columns": 13,
+  "expectedLoginRowPresent": true
+}

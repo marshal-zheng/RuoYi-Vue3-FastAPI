@@ -1,0 +1,92 @@
+[
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/FileUpload/index.vue",
+    "unchanged": true,
+    "expected": "3cf17835de0f11781a2528c3b25f5831f942fe187b32d61a24807d04ede7b8d8",
+    "actual": "3cf17835de0f11781a2528c3b25f5831f942fe187b32d61a24807d04ede7b8d8"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/ImageUpload/index.vue",
+    "unchanged": true,
+    "expected": "109077cff38b38a05d788a2f393e25c6d8d43745e8cf454975f4c5b9f83667cc",
+    "actual": "109077cff38b38a05d788a2f393e25c6d8d43745e8cf454975f4c5b9f83667cc"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/Editor/index.vue",
+    "unchanged": true,
+    "expected": "e563ae72054ff339de867477419ce3d1b35b72af38549c24892a3e93cef6b5c3",
+    "actual": "e563ae72054ff339de867477419ce3d1b35b72af38549c24892a3e93cef6b5c3"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.ts",
+    "unchanged": true,
+    "expected": "df9725acb6683a3b7155d635ace21d65e3ff5ed926d4878a4292749bd2e6d796",
+    "actual": "df9725acb6683a3b7155d635ace21d65e3ff5ed926d4878a4292749bd2e6d796"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.test.ts",
+    "unchanged": true,
+    "expected": "cc48037c88ead35ea7b1981605613a58be13e7c1978fcce1e179866fd8ae373d",
+    "actual": "cc48037c88ead35ea7b1981605613a58be13e7c1978fcce1e179866fd8ae373d"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/api/security_controller.py",
+    "unchanged": true,
+    "expected": "18274308839c37f0a8e2bf6f40389ecc1145385e6cfc8667be5e97048cb419a5",
+    "actual": "18274308839c37f0a8e2bf6f40389ecc1145385e6cfc8667be5e97048cb419a5"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py",
+    "unchanged": true,
+    "expected": "bb5207290c03b770ddf63c7433c176f084fc53d3ad3e6319f4649ea7676d4c84",
+    "actual": "bb5207290c03b770ddf63c7433c176f084fc53d3ad3e6319f4649ea7676d4c84"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_security_token_service.py",
+    "unchanged": true,
+    "expected": "d20f5e637a43f308beb3fddc1fed063b5f05e22872bea0a54e65a92c5cfab616",
+    "actual": "d20f5e637a43f308beb3fddc1fed063b5f05e22872bea0a54e65a92c5cfab616"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/vite.config.ts",
+    "unchanged": true,
+    "expected": "9a73b1edcc86f0b19abdee4fcb74687d6b31bfe3200a42d088e0eef567180a39",
+    "actual": "9a73b1edcc86f0b19abdee4fcb74687d6b31bfe3200a42d088e0eef567180a39"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/application/services/login_service.py",
+    "unchanged": true,
+    "expected": "9b8fd2a5f7b83072f85cac5f36157203fb0728edf7df171b207e24882f1c1da3",
+    "actual": "9b8fd2a5f7b83072f85cac5f36157203fb0728edf7df171b207e24882f1c1da3"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/project/simulation/composables/useSimulationWebSocket.ts",
+    "unchanged": true,
+    "expected": "5f7ee503d99efb8ecc6559dc3ade93e0334d27d6a14129e6d5f6df2d2303adad",
+    "actual": "5f7ee503d99efb8ecc6559dc3ade93e0334d27d6a14129e6d5f6df2d2303adad"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/composables/useAuthenticatedUpload.ts",
+    "unchanged": true,
+    "expected": "2f4ebd938c02ceb37738a3eb98762522b9c8014cdab66acf7b121a76ba3bb13b",
+    "actual": "2f4ebd938c02ceb37738a3eb98762522b9c8014cdab66acf7b121a76ba3bb13b"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/composables/useUploadModel.ts",
+    "unchanged": true,
+    "expected": "08d4df987bb4aa93ade631605a5810de0b69ce6911a1da4a4c3aa35c726b22cc",
+    "actual": "08d4df987bb4aa93ade631605a5810de0b69ce6911a1da4a4c3aa35c726b22cc"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts",
+    "unchanged": false,
+    "expected": "c360921f36469b299f48527a7407514cd7c4a91624e660769e32f4bf72828a5b",
+    "actual": "0fbd5bf8c4b40884bafa63a9872f69778f9de5d25eebc5e44e28e4545d00b9e4"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/WebSocketSession.test.ts",
+    "unchanged": true,
+    "expected": "337bc1d9cb1fc73f6dffec287a4138a3b07a1548614b011ddf81de28c4408c55",
+    "actual": "337bc1d9cb1fc73f6dffec287a4138a3b07a1548614b011ddf81de28c4408c55"
+  }
+]

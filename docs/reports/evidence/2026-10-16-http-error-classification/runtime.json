@@ -1,0 +1,7 @@
+{
+  "ownedBackendPid": 81937,
+  "ownedBackendStopped": true,
+  "port8088Listening": false,
+  "existingMySQLAndRedisPreserved": true,
+  "computerUse": false
+}

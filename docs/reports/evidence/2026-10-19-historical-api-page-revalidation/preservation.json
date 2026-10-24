@@ -1,0 +1,23 @@
+{
+  "baselineFiles": 1955,
+  "missingBaselineFiles": [],
+  "currentPassModifiedExistingFiles": [
+    "ruoyi/ruoyi-fastapi-backend/module_admin/service/protocol_service.py",
+    "ruoyi/ruoyi-fastapi-frontend/src/views/system/role/components/RoleDataScopeDrawer.vue",
+    "ruoyi/ruoyi-fastapi-frontend/src/views/system/user/profile/index.vue",
+    "zxui/packages/components/dialog/src/use-dialog-portal.ts",
+    "zxui/packages/components/dialog/__tests__/overlay-navigation.test.ts"
+  ],
+  "otherObservedChanges": [
+    "ruoyi/ruoyi-fastapi-frontend/src/views/monitor/server/dashboard.vue",
+    "ruoyi/ruoyi-fastapi-frontend/src/components/business/Dashboard/PersistentDashboard.vue",
+    "ruoyi/ruoyi-fastapi-frontend/package.json",
+    "zxui/packages/dashboard/__tests__/persistence.test.ts",
+    "zxui/packages/dashboard/src/persistence/types.ts",
+    "zxui/packages/dashboard/src/persistence/controller.ts"
+  ],
+  "headsUnchanged": {
+    "ruoyi": false,
+    "zxui": false
+  }
+}

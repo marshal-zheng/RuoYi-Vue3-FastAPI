@@ -1,0 +1,73 @@
+{
+  "inspection": "Static import-aware TypeScript call inventory plus backend endpoint declarations and consumer lookup; no role/SQL mutations",
+  "recognizedCallSites": 210,
+  "callsWithParams": 43,
+  "nonGetCallsWithParams": [
+    {
+      "file": "api/device/category.ts",
+      "line": 62,
+      "method": "post",
+      "url": "'/device/category/export'",
+      "params": "query"
+    },
+    {
+      "file": "api/device/device.ts",
+      "line": 66,
+      "method": "post",
+      "url": "'/device/export'",
+      "params": "query"
+    },
+    {
+      "file": "api/simulation/simulation.ts",
+      "line": 232,
+      "method": "delete",
+      "url": "`/simulation/faults/${faultId}`",
+      "params": "{ sessionId }"
+    },
+    {
+      "file": "api/system/role.ts",
+      "line": 118,
+      "method": "put",
+      "url": "'/system/role/authUser/cancelAll'",
+      "params": "data"
+    },
+    {
+      "file": "api/system/role.ts",
+      "line": 128,
+      "method": "put",
+      "url": "'/system/role/authUser/selectAll'",
+      "params": "data"
+    },
+    {
+      "file": "api/system/user.ts",
+      "line": 162,
+      "method": "put",
+      "url": "'/system/user/authRole'",
+      "params": "data"
+    },
+    {
+      "file": "api/tool/gen.ts",
+      "line": 54,
+      "method": "post",
+      "url": "'/tool/gen/importTable'",
+      "params": "data"
+    },
+    {
+      "file": "api/tool/gen.ts",
+      "line": 64,
+      "method": "post",
+      "url": "'/tool/gen/createTable'",
+      "params": "data"
+    }
+  ],
+  "compatibilityFindings": {
+    "activeQueryOnlyWriteEndpoints": 5,
+    "simulationQueryOnlyDelete": "source inspection only; no simulation UI modification or runtime validation",
+    "unusedDeviceExportHelpersWithoutBackendRoute": 2,
+    "productionJoinParamsToUrlCalls": 0,
+    "productionJoinTimeCalls": 0,
+    "stringParamsPathDependenciesFound": 0,
+    "operationLogImplicitBodyCopyDependency": true
+  },
+  "migration": "Library defaults legacy; business opts into axios mode globally"
+}

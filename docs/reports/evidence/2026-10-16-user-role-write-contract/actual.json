@@ -1,0 +1,246 @@
+{
+  "ok": true,
+  "mode": "source",
+  "checks": 23,
+  "unhandledRejections": 0,
+  "evidence": "Production HTTP/API modules and four SFC setup/submit paths, source ZXUI, real Axios XHR/FastAPI/MySQL. No native form or visual browser rendering; no computer use.",
+  "results": [
+    {
+      "name": "user-partial-edit-preserves-omitted-relations",
+      "ok": true,
+      "normalEdit": true,
+      "rolesPreserved": true,
+      "postsPreserved": true
+    },
+    {
+      "name": "user-relations-replace-empty-null-and-independent-presence",
+      "ok": true,
+      "replace": true,
+      "emptyClears": true,
+      "nullClears": true,
+      "independentPresence": true
+    },
+    {
+      "name": "role-normal-edit-preserves-menus-and-data-scope",
+      "ok": true,
+      "partialEdit": true,
+      "omittedMenusPreserved": true,
+      "dataScopeUnchanged": true
+    },
+    {
+      "name": "role-menu-replace-empty-null",
+      "ok": true,
+      "replace": true,
+      "emptyClears": true,
+      "nullClears": true,
+      "departmentsUntouched": true
+    },
+    {
+      "name": "data-scope-omitted-replace-empty-null",
+      "ok": true,
+      "omittedPreserves": true,
+      "replace": true,
+      "emptyClears": true,
+      "nullClears": true,
+      "scopeChangeWithoutDepartmentsPreserves": true
+    },
+    {
+      "name": "user-and-role-status-touch-only-status",
+      "ok": true,
+      "statusSaved": true,
+      "disabledRoleReadableAndReenableable": true,
+      "otherFieldsAndPersistedRelationsUnchanged": true
+    },
+    {
+      "name": "profile-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "userId",
+        "userName",
+        "deptId",
+        "status",
+        "delFlag",
+        "password",
+        "avatar",
+        "roleIds",
+        "postIds",
+        "type",
+        "createBy"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "user-create-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "userId",
+        "delFlag",
+        "loginIp",
+        "avatar",
+        "type",
+        "createBy"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "user-edit-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "password",
+        "avatar",
+        "delFlag",
+        "loginIp",
+        "createBy",
+        "type",
+        "admin"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "user-status-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "nickName",
+        "deptId",
+        "roleIds",
+        "postIds",
+        "password",
+        "type",
+        "createBy"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "role-create-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "roleId",
+        "dataScope",
+        "deptIds",
+        "delFlag",
+        "type",
+        "createBy"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "role-edit-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "dataScope",
+        "deptIds",
+        "delFlag",
+        "createBy",
+        "type",
+        "admin"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "role-status-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "roleName",
+        "menuIds",
+        "dataScope",
+        "deptIds",
+        "type",
+        "createBy"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "role-scope-rejects-out-of-operation-fields",
+      "ok": true,
+      "status": 422,
+      "rejectedFields": [
+        "roleName",
+        "roleKey",
+        "menuIds",
+        "status",
+        "type",
+        "createBy"
+      ],
+      "problemDetails": true,
+      "feedbackOnceEach": true
+    },
+    {
+      "name": "missing-null-and-invalid-required-fields-return-422",
+      "ok": true,
+      "invalidRequests": 11,
+      "noDatabaseFailure": true
+    },
+    {
+      "name": "existing-domain-validation-remains-422-not-500",
+      "ok": true,
+      "invalidRequests": 5,
+      "problemDetails": true,
+      "noAuditWrapperSystemError": true
+    },
+    {
+      "name": "user-form-saves-only-editor-fields-through-real-api",
+      "ok": true,
+      "productionComponent": true,
+      "realPut": true,
+      "displayMetadataExcluded": true
+    },
+    {
+      "name": "role-form-and-scope-drawer-use-exact-inputs",
+      "ok": true,
+      "productionComponents": 2,
+      "realPuts": true,
+      "noDisplayFields": true
+    },
+    {
+      "name": "profile-saves-only-own-fields-without-replaying-login-relations",
+      "ok": true,
+      "productionProfileForm": true,
+      "authenticatedIdentity": true,
+      "concurrentRoleAndPostAssignmentsPreserved": true,
+      "loginBookkeepingIntact": true
+    },
+    {
+      "name": "ordinary-user-profile-rejects-identity-and-privileged-fields",
+      "ok": true,
+      "rejectedFields": 7,
+      "ownRecordUnchanged": true,
+      "otherUserUnchanged": true
+    },
+    {
+      "name": "scoped-user-partial-edit-preserves-target-user-permission",
+      "ok": true,
+      "selfOnlyRole": true,
+      "omittedDepartmentDoesNotRequireUnrelatedDepartmentPermission": true,
+      "otherUserStillForbidden": true,
+      "existingDataScopeErrorCode": 30010,
+      "existingDataScopeHttpStatus": 401
+    },
+    {
+      "name": "normal-user-and-role-creation-persisted-as-intended",
+      "ok": true,
+      "twoUsersAndRolesCreated": true,
+      "forbiddenCreatesProducedNoRows": true,
+      "originalPasswordStillAuthenticates": true
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "temporaryRecordsRemoved": true,
+      "originalBusinessListsAndTotalsExact": true
+    }
+  ]
+}

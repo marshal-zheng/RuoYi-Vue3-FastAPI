@@ -1,0 +1,316 @@
+--- before/ruoyi-fastapi-backend/module_admin/annotation/log_annotation.py
++++ after/ruoyi-fastapi-backend/module_admin/annotation/log_annotation.py
+@@ -46,6 +46,27 @@
+     except Exception as exc:
+         logger.warning(f'Log decorator 解析服务失败 provider={provider_name}: {exc}')
+         return None
++
++
++async def _record_log(request: Request, query_db: AsyncSession, provider_name: str, payload, *, failed=False):
++    """Failure evidence must survive rollback of the failed request."""
++    method_name = {
++        'login_log_service': 'add_login_log_services',
++        'operation_log_service': 'add_operation_log_services',
++    }[provider_name]
++    if not failed:
++        service = _resolve_request_service(request, provider_name, query_db)
++        if service is not None:
++            await getattr(service, method_name)(payload)
++        return
++    try:
++        container = get_app_container(request)
++        async with container.create_task_session() as session, session.begin():
++            service = container.resolve_service(provider_name, session)
++            await getattr(service, method_name)(payload)
++    except Exception as exc:
++        # Never replace the original business/authentication error with a log failure.
++        logger.error('Failed to persist failure log provider={}: {}', provider_name, type(exc).__name__)
+ 
+ 
+ class Log:
+@@ -246,21 +267,15 @@
+                     )
+ 
+                     if query_db:
+-                        login_log_service = _resolve_request_service(request, 'login_log_service', query_db)
+-                        if login_log_service:
+-                            await login_log_service.add_login_log_services(LogininforModel(**login_log))
+-                        else:
+-                            logger.warning('Log decorator 无法解析 login_log_service，跳过登录日志入库')
++                        await _record_log(
++                            request, query_db, 'login_log_service', LogininforModel(**login_log),
++                            failed=captured_exception is not None,
++                        )
+                     else:
+                         logger.warning('Log decorator 未获取到 AsyncSession，跳过登录日志入库')
+             else:
+                 if not query_db:
+                     logger.warning('Log decorator 未获取到 AsyncSession，跳过操作日志入库')
+-                    return result
+-
+-                operation_log_service = _resolve_request_service(request, 'operation_log_service', query_db)
+-                if not operation_log_service:
+-                    logger.warning('Log decorator 无法解析 operation_log_service，跳过操作日志入库')
+                     return result
+ 
+                 current_user = await LoginService.get_current_user(request, token, query_db)
+@@ -295,7 +310,10 @@
+                     operTime=oper_time,
+                     costTime=int(cost_time),
+                 )
+-                await operation_log_service.add_operation_log_services(operation_log)
++                await _record_log(
++                    request, query_db, 'operation_log_service', operation_log,
++                    failed=captured_exception is not None,
++                )
+ 
+             if captured_exception is not None:
+                 raise captured_exception
+--- before/ruoyi-fastapi-backend/module_generator/repository/gen_repository.py
++++ after/ruoyi-fastapi-backend/module_generator/repository/gen_repository.py
+@@ -239,8 +239,11 @@
+             """
+         
+         query = text(query_sql).bindparams(table_names=tuple(table_names))
+-        result = await self.db.execute(query)
+-        return result.fetchall()
++        # Schema discovery must see DDL committed on the independent connection,
++        # rather than an earlier information_schema snapshot in the request.
++        async with self.db.bind.connect() as connection:
++            result = await connection.execute(query)
++            return result.fetchall()
+     
+     async def execute_sql_statements(self, sql_statements: List[Expression]) -> None:
+         """
+@@ -248,9 +251,12 @@
+         
+         :param sql_statements: SQL 语句 AST 列表
+         """
+-        for sql_statement in sql_statements:
+-            sql = sql_statement.sql(dialect=DataBaseConfig.sqlglot_parse_dialect)
+-            await self.db.execute(text(sql))
++        # MySQL DDL commits implicitly. Keep it off the request connection so
++        # authentication/metadata transactions and their savepoints stay valid.
++        async with self.db.bind.begin() as connection:
++            for sql_statement in sql_statements:
++                sql = sql_statement.sql(dialect=DataBaseConfig.sqlglot_parse_dialect)
++                await connection.execute(text(sql))
+     
+     async def add(self, gen_table_data: Dict[str, Any]) -> GenTableDO:
+         """
+@@ -365,8 +371,9 @@
+             """
+         
+         query = text(query_sql).bindparams(table_name=table_name)
+-        result = await self.db.execute(query)
+-        return result.fetchall()
++        async with self.db.bind.connect() as connection:
++            result = await connection.execute(query)
++            return result.fetchall()
+     
+     async def add(self, column_data: Dict[str, Any]) -> GenTableColumnDO:
+         """
+--- before/ruoyi-fastapi-backend/module_generator/service/gen_service.py
++++ after/ruoyi-fastapi-backend/module_generator/service/gen_service.py
+@@ -12,12 +12,13 @@
+ 
+ from sqlalchemy.ext.asyncio import AsyncSession
+ from sqlglot import parse as sqlglot_parse
+-from sqlglot.expressions import Add, Alter, Create, Delete, Drop, Expression, Insert, Table, TruncateTable, Update
++from sqlglot.errors import ParseError
++from sqlglot.expressions import Create, Expression, Schema, Table
+ 
+ from config.constant import GenConstant
+ from config.env import DataBaseConfig, GenConfig
+ from config.error_codes import ErrorCode
+-from exceptions.exception import ResourceNotFoundException, ServiceException
++from exceptions.exception import ResourceConflictException, ResourceNotFoundException, ServiceException, ValidationException
+ from module_admin.entity.vo.common_vo import CrudResponseModel
+ from module_admin.entity.vo.user_vo import CurrentUserModel
+ from module_generator.entity.vo.gen_vo import (
+@@ -194,12 +195,19 @@
+         :param current_user: 当前用户信息对象
+         :return: 创建表结构结果
+         """
+-        sql_statements = sqlglot_parse(sql, dialect=DataBaseConfig.sqlglot_parse_dialect)
++        try:
++            sql_statements = sqlglot_parse(sql, dialect=DataBaseConfig.sqlglot_parse_dialect)
++        except ParseError as exc:
++            raise ValidationException(user_message='建表语句不合法', field='sql') from exc
+ 
+         if not self._is_valid_create_table(sql_statements):
+-            raise ServiceException(message='建表语句不合法')
++            raise ValidationException(user_message='仅支持完整的 CREATE TABLE 建表语句', field='sql')
+ 
+         table_names = self._get_table_names(sql_statements)
++        if len(set(table_names)) != len(table_names):
++            raise ValidationException(user_message='建表语句包含重复表名', field='sql')
++        if await self.get_gen_db_table_list_by_name_services(table_names):
++            raise ResourceConflictException(user_message='待创建的表已存在，请使用导入功能')
+ 
+         # 执行建表语句
+         await self.table_repo.execute_sql_statements(sql_statements)
+@@ -239,17 +247,18 @@
+         :param sql_statements: sql语句的ast列表
+         :return: 校验结果
+         """
+-        validate_create = [isinstance(sql_statement, Create) for sql_statement in sql_statements]
+-        validate_forbidden_keywords = [
+-            isinstance(
+-                sql_statement,
+-                (Add, Alter, Delete, Drop, Insert, TruncateTable, Update),
+-            )
+-            for sql_statement in sql_statements
+-        ]
+-        if not any(validate_create) or any(validate_forbidden_keywords):
+-            return False
+-        return True
++        return bool(sql_statements) and all(
++            isinstance(statement, Create)
++            and statement.kind == 'TABLE'
++            and isinstance(statement.this, Schema)
++            and isinstance(statement.this.this, Table)
++            and not statement.this.this.db
++            and not statement.this.this.catalog
++            and bool(statement.this.expressions)
++            and statement.expression is None
++            and not statement.args.get('replace')
++            for statement in sql_statements
++        )
+ 
+     @staticmethod
+     def _get_table_names(sql_statements: List[Expression]) -> List[str]:
+--- before/ruoyi-fastapi-backend/modules/system/application/services/cache_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/cache_service.py
+@@ -3,12 +3,19 @@
+ from config.get_redis import RedisUtil
+ from module_admin.entity.vo.cache_vo import CacheInfoModel, CacheMonitorModel
+ from module_admin.entity.vo.common_vo import CrudResponseModel
++from ports import IRedisClient
+ 
+ 
+ class CacheService:
+     """
+     缓存监控模块服务层
+     """
++
++    @staticmethod
++    async def _namespace_keys(redis_client: IRedisClient, cache_name: str):
++        # Redis MATCH uses glob syntax; names are literal namespace prefixes.
++        prefix = ''.join(f'\\{char}' if char in '\\*?[]' else char for char in cache_name)
++        return [key async for key in redis_client.scan_iter(match=f'{prefix}:*')]
+ 
+     async def get_cache_monitor_statistical_info_services(self, request: Request):
+         """
+@@ -54,7 +61,7 @@
+         :param cache_name: 缓存名称
+         :return: 缓存键名列表信息
+         """
+-        cache_keys = await request.app.state.redis.keys(f'{cache_name}*')
++        cache_keys = await self._namespace_keys(request.app.state.redis, cache_name)
+         cache_key_list = [key.split(':', 1)[1] for key in cache_keys if key.startswith(f'{cache_name}:')]
+ 
+         return cache_key_list
+@@ -80,7 +87,7 @@
+         :param cache_name: 缓存名称
+         :return: 操作缓存响应信息
+         """
+-        cache_keys = await request.app.state.redis.keys(f'{cache_name}*')
++        cache_keys = await self._namespace_keys(request.app.state.redis, cache_name)
+         if cache_keys:
+             await request.app.state.redis.delete(*cache_keys)
+ 
+@@ -94,9 +101,7 @@
+         :param cache_key: 缓存键名
+         :return: 操作缓存响应信息
+         """
+-        cache_keys = await request.app.state.redis.keys(f'*{cache_key}')
+-        if cache_keys:
+-            await request.app.state.redis.delete(*cache_keys)
++        await request.app.state.redis.delete(cache_key)
+ 
+         return CrudResponseModel(is_success=True, message=f'{cache_key}清除成功')
+ 
+--- before/ruoyi-fastapi-backend/modules/system/infrastructure/dict_repository.py
++++ after/ruoyi-fastapi-backend/modules/system/infrastructure/dict_repository.py
+@@ -10,7 +10,6 @@
+ from module_admin.entity.do.enums import StatusEnum
+ from module_admin.repository.base_repository import BaseRepository
+ from utils.page_util import PageUtil
+-from utils.time_format_util import list_format_datetime
+ 
+ 
+ class DictTypeRepository(BaseRepository[DictTypeDO]):
+@@ -47,11 +46,11 @@
+         result = await self.db.execute(stmt)
+         return result.scalars().first()
+     
+-    async def find_all(self) -> List[dict]:
++    async def find_all(self) -> List[DictTypeDO]:
+         """获取所有字典类型"""
+         stmt = select(DictTypeDO)
+         result = await self.db.execute(stmt)
+-        return list_format_datetime(result.scalars().all())
++        return list(result.scalars().all())
+     
+     async def paginate_with_filters(
+         self,
+--- before/ruoyi-fastapi-backend/ports/external.py
++++ after/ruoyi-fastapi-backend/ports/external.py
+@@ -2,7 +2,7 @@
+ 
+ from __future__ import annotations
+ 
+-from collections.abc import Awaitable, Callable, Iterable
++from collections.abc import AsyncIterator, Awaitable, Callable, Iterable
+ from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
+ 
+ if TYPE_CHECKING:
+@@ -36,6 +36,9 @@
+ 
+     async def keys(self, pattern: str = '*') -> Iterable[str]:
+         """Return keys matching pattern."""
++
++    def scan_iter(self, *, match: str = '*') -> AsyncIterator[str]:
++        """Iterate matching keys without a blocking whole-keyspace lookup."""
+ 
+     async def info(self, section: str | None = None) -> dict[str, Any]:
+         """Return redis server information."""
+--- before/ruoyi-fastapi-backend/tests/fakes/external_fakes.py
++++ after/ruoyi-fastapi-backend/tests/fakes/external_fakes.py
+@@ -73,6 +73,10 @@
+         self._purge_all_expired()
+         all_keys = set(self._values.keys()) | set(self._lists.keys())
+         return sorted(key for key in all_keys if fnmatch.fnmatch(key, pattern))
++
++    async def scan_iter(self, *, match: str = '*'):
++        for key in await self.keys(match):
++            yield key
+ 
+     async def info(self, section: str | None = None) -> dict[str, Any]:
+         self._purge_all_expired()
+--- before/ruoyi-fastapi-frontend/src/api/monitor/cache.ts
++++ after/ruoyi-fastapi-frontend/src/api/monitor/cache.ts
+@@ -50,9 +50,9 @@
+ }
+ 
+ // 清理指定键名缓存
+-export function clearCacheKey(cacheKey: string) {
++export function clearCacheKey(cacheName: string, cacheKey: string) {
+   return request({
+-    url: '/monitor/cache/clearCacheKey/' + cacheKey,
++    url: '/monitor/cache/clearCacheKey/' + encodeURIComponent(`${cacheName}:${cacheKey}`),
+     method: 'delete',
+     feedback: { mode: 'auto', key: 'monitor.cache.clear' },
+   });
+--- before/ruoyi-fastapi-frontend/src/views/monitor/cache/list.vue
++++ after/ruoyi-fastapi-frontend/src/views/monitor/cache/list.vue
+@@ -210,7 +210,7 @@
+ /** 清理指定键名缓存 */
+ const { run: handleClearCacheKey, pending: handleClearCacheKeyPending } = useOperation(
+   async (cacheKey) => {
+-    await clearCacheKey(cacheKey).then(() => {
++    await clearCacheKey(nowCacheName.value, cacheKey).then(() => {
+       getCacheKeys();
+     });
+   }

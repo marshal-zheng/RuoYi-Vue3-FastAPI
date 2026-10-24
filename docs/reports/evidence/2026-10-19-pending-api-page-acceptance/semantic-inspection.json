@@ -1,0 +1,10 @@
+{
+  "menuNodes": 94,
+  "checkedRoleKeysValid": true,
+  "departmentNodes": 10,
+  "excludedDepartmentAbsent": true,
+  "devStatusEnabled": true,
+  "syncDryRunNoWrites": true,
+  "dashboardEditAndReset": true,
+  "jsonImportVersionMatches": true
+}

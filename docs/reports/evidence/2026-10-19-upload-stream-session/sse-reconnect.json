@@ -1,0 +1,57 @@
+{
+  "mode": "controlled QA access-key eviction followed by plugin disable/enable diagnostic API",
+  "events": [
+    {
+      "time": "2026-10-19T02:01:31.604Z",
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 401
+    },
+    {
+      "time": "2026-10-19T02:01:31.612Z",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T02:01:31.638Z",
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T02:01:31.656Z",
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    }
+  ],
+  "priorClosed": 1,
+  "logout": {
+    "url": "http://localhost/login?redirect=%2Fsystem%2Fuser",
+    "closedRequests": [
+      {
+        "time": "2026-10-19T02:03:19.073Z",
+        "kind": "failed",
+        "error": "net::ERR_ABORTED"
+      }
+    ],
+    "events": [
+      {
+        "time": "2026-10-19T02:03:19.078Z",
+        "method": "POST",
+        "path": "/api/auth/logout",
+        "status": 204
+      },
+      {
+        "time": "2026-10-19T02:03:19.500Z",
+        "method": "GET",
+        "path": "/api/captchaImage",
+        "status": 200
+      }
+    ],
+    "observedAt": "2026-10-19T02:03:27.356Z",
+    "observationSeconds": 44.576,
+    "newStreamRequests": 0
+  }
+}

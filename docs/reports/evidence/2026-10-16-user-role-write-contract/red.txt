@@ -1,0 +1,898 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+created: 14/14 workers
+14 workers [28 items]
+
+FFFFFFFFFFFFFFFFFFF.FFFF..F.                                             [100%]
+=================================== FAILURES ===================================
+_ test_each_operation_rejects_inappropriate_fields[router0-/system/user/profile-PUT-valid0-forbidden0] _
+[gw0] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x129792030>
+path = '/system/user/profile', method = 'PUT', valid = {'nickName': 'After'}
+forbidden = ['userId', 'userName', 'deptId', 'status', 'delFlag', 'password', ...]
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'userId'
+forbidden  = ['userId', 'userName', 'deptId', 'status', 'delFlag', 'password', ...]
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.user_vo.UserInfoModel'>
+path       = '/system/user/profile'
+router     = <fastapi.routing.APIRouter object at 0x129792030>
+valid      = {'nickName': 'After'}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_each_operation_rejects_inappropriate_fields[router1-/system/user-POST-valid1-forbidden1] _
+[gw0] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x129792030>
+path = '/system/user', method = 'POST'
+valid = {'password': 'admin123', 'userName': 'alice'}
+forbidden = ['userId', 'delFlag', 'loginIp', 'avatar', 'type', 'createBy']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'userId'
+forbidden  = ['userId', 'delFlag', 'loginIp', 'avatar', 'type', 'createBy']
+method     = 'POST'
+model      = <class 'module_admin.entity.vo.user_vo.AddUserModel'>
+path       = '/system/user'
+router     = <fastapi.routing.APIRouter object at 0x129792030>
+valid      = {'password': 'admin123', 'userName': 'alice'}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_each_operation_rejects_inappropriate_fields[router4-/system/role-POST-valid4-forbidden4] _
+[gw1] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x10fbe24e0>
+path = '/system/role', method = 'POST'
+valid = {'roleKey': 'ops', 'roleName': 'Ops', 'roleSort': 1}
+forbidden = ['roleId', 'dataScope', 'deptIds', 'delFlag', 'type', 'createBy']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'roleId'
+forbidden  = ['roleId', 'dataScope', 'deptIds', 'delFlag', 'type', 'createBy']
+method     = 'POST'
+model      = <class 'module_admin.entity.vo.role_vo.AddRoleModel'>
+path       = '/system/role'
+router     = <fastapi.routing.APIRouter object at 0x10fbe24e0>
+valid      = {'roleKey': 'ops', 'roleName': 'Ops', 'roleSort': 1}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_each_operation_rejects_inappropriate_fields[router5-/system/role-PUT-valid5-forbidden5] _
+[gw1] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x10fbe24e0>
+path = '/system/role', method = 'PUT', valid = {'roleId': 42, 'roleName': 'Ops'}
+forbidden = ['dataScope', 'deptIds', 'delFlag', 'createBy', 'type', 'admin']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'dataScope'
+forbidden  = ['dataScope', 'deptIds', 'delFlag', 'createBy', 'type', 'admin']
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.role_vo.AddRoleModel'>
+path       = '/system/role'
+router     = <fastapi.routing.APIRouter object at 0x10fbe24e0>
+valid      = {'roleId': 42, 'roleName': 'Ops'}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_each_operation_rejects_inappropriate_fields[router2-/system/user-PUT-valid2-forbidden2] _
+[gw2] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x11a392030>
+path = '/system/user', method = 'PUT'
+valid = {'userId': 42, 'userName': 'alice'}
+forbidden = ['password', 'avatar', 'delFlag', 'loginIp', 'createBy', 'type', ...]
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'password'
+forbidden  = ['password', 'avatar', 'delFlag', 'loginIp', 'createBy', 'type', ...]
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+path       = '/system/user'
+router     = <fastapi.routing.APIRouter object at 0x11a392030>
+valid      = {'userId': 42, 'userName': 'alice'}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_each_operation_rejects_inappropriate_fields[router6-/system/role/changeStatus-PUT-valid6-forbidden6] _
+[gw4] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x11a5de4e0>
+path = '/system/role/changeStatus', method = 'PUT'
+valid = {'roleId': 42, 'status': '1'}
+forbidden = ['roleName', 'menuIds', 'dataScope', 'deptIds', 'type', 'createBy']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'roleName'
+forbidden  = ['roleName', 'menuIds', 'dataScope', 'deptIds', 'type', 'createBy']
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.role_vo.AddRoleModel'>
+path       = '/system/role/changeStatus'
+router     = <fastapi.routing.APIRouter object at 0x11a5de4e0>
+valid      = {'roleId': 42, 'status': '1'}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_each_operation_rejects_inappropriate_fields[router3-/system/user/changeStatus-PUT-valid3-forbidden3] _
+[gw2] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x11a392030>
+path = '/system/user/changeStatus', method = 'PUT'
+valid = {'status': '1', 'userId': 42}
+forbidden = ['nickName', 'deptId', 'roleIds', 'postIds', 'password', 'type', ...]
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'nickName'
+forbidden  = ['nickName', 'deptId', 'roleIds', 'postIds', 'password', 'type', ...]
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+path       = '/system/user/changeStatus'
+router     = <fastapi.routing.APIRouter object at 0x11a392030>
+valid      = {'status': '1', 'userId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_each_operation_rejects_inappropriate_fields[router7-/system/role/dataScope-PUT-valid7-forbidden7] _
+[gw4] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x11a5de4e0>
+path = '/system/role/dataScope', method = 'PUT'
+valid = {'dataScope': '2', 'roleId': 42}
+forbidden = ['roleName', 'roleKey', 'menuIds', 'status', 'type', 'createBy']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
+    def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
+        model = request_model(router, path, method)
+        model.model_validate(valid)
+        for field in forbidden:
+>           with pytest.raises(ValidationError) as caught:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+caught     = <ExceptionInfo for raises contextmanager>
+field      = 'roleName'
+forbidden  = ['roleName', 'roleKey', 'menuIds', 'status', 'type', 'createBy']
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.role_vo.AddRoleModel'>
+path       = '/system/role/dataScope'
+router     = <fastapi.routing.APIRouter object at 0x11a5de4e0>
+valid      = {'dataScope': '2', 'roleId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:47: Failed
+_ test_identity_and_required_action_fields_cannot_be_missing_or_null[router4-/system/role/dataScope-valid4-required4] _
+[gw5] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x119cde4e0>
+path = '/system/role/dataScope', valid = {'dataScope': '2', 'roleId': 42}
+required = ['roleId', 'dataScope']
+
+    @pytest.mark.parametrize(('router', 'path', 'valid', 'required'), [
+        (userController, '/system/user', {'userId': 42}, ['userId']),
+        (userController, '/system/user/changeStatus', {'userId': 42, 'status': '1'}, ['userId', 'status']),
+        (roleController, '/system/role', {'roleId': 42}, ['roleId']),
+        (roleController, '/system/role/changeStatus', {'roleId': 42, 'status': '1'}, ['roleId', 'status']),
+        (roleController, '/system/role/dataScope', {'roleId': 42, 'dataScope': '2'}, ['roleId', 'dataScope']),
+    ])
+    def test_identity_and_required_action_fields_cannot_be_missing_or_null(router, path, valid, required):
+        model = request_model(router, path)
+        for field in required:
+            for payload in [{key: value for key, value in valid.items() if key != field}, {**valid, field: None}]:
+>               with pytest.raises(ValidationError):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'roleId'
+model      = <class 'module_admin.entity.vo.role_vo.AddRoleModel'>
+path       = '/system/role/dataScope'
+payload    = {'dataScope': '2'}
+required   = ['roleId', 'dataScope']
+router     = <fastapi.routing.APIRouter object at 0x119cde4e0>
+valid      = {'dataScope': '2', 'roleId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:63: Failed
+_ test_identity_and_required_action_fields_cannot_be_missing_or_null[router2-/system/role-valid2-required2] _
+[gw6] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x1270e24e0>
+path = '/system/role', valid = {'roleId': 42}, required = ['roleId']
+
+    @pytest.mark.parametrize(('router', 'path', 'valid', 'required'), [
+        (userController, '/system/user', {'userId': 42}, ['userId']),
+        (userController, '/system/user/changeStatus', {'userId': 42, 'status': '1'}, ['userId', 'status']),
+        (roleController, '/system/role', {'roleId': 42}, ['roleId']),
+        (roleController, '/system/role/changeStatus', {'roleId': 42, 'status': '1'}, ['roleId', 'status']),
+        (roleController, '/system/role/dataScope', {'roleId': 42, 'dataScope': '2'}, ['roleId', 'dataScope']),
+    ])
+    def test_identity_and_required_action_fields_cannot_be_missing_or_null(router, path, valid, required):
+        model = request_model(router, path)
+        for field in required:
+            for payload in [{key: value for key, value in valid.items() if key != field}, {**valid, field: None}]:
+>               with pytest.raises(ValidationError):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'roleId'
+model      = <class 'module_admin.entity.vo.role_vo.AddRoleModel'>
+path       = '/system/role'
+payload    = {}
+required   = ['roleId']
+router     = <fastapi.routing.APIRouter object at 0x1270e24e0>
+valid      = {'roleId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:63: Failed
+_ test_identity_and_required_action_fields_cannot_be_missing_or_null[router0-/system/user-valid0-required0] _
+[gw3] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x11ec92030>
+path = '/system/user', valid = {'userId': 42}, required = ['userId']
+
+    @pytest.mark.parametrize(('router', 'path', 'valid', 'required'), [
+        (userController, '/system/user', {'userId': 42}, ['userId']),
+        (userController, '/system/user/changeStatus', {'userId': 42, 'status': '1'}, ['userId', 'status']),
+        (roleController, '/system/role', {'roleId': 42}, ['roleId']),
+        (roleController, '/system/role/changeStatus', {'roleId': 42, 'status': '1'}, ['roleId', 'status']),
+        (roleController, '/system/role/dataScope', {'roleId': 42, 'dataScope': '2'}, ['roleId', 'dataScope']),
+    ])
+    def test_identity_and_required_action_fields_cannot_be_missing_or_null(router, path, valid, required):
+        model = request_model(router, path)
+        for field in required:
+            for payload in [{key: value for key, value in valid.items() if key != field}, {**valid, field: None}]:
+>               with pytest.raises(ValidationError):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'userId'
+model      = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+path       = '/system/user'
+payload    = {}
+required   = ['userId']
+router     = <fastapi.routing.APIRouter object at 0x11ec92030>
+valid      = {'userId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:63: Failed
+_ test_identity_and_required_action_fields_cannot_be_missing_or_null[router3-/system/role/changeStatus-valid3-required3] _
+[gw6] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x1270e24e0>
+path = '/system/role/changeStatus', valid = {'roleId': 42, 'status': '1'}
+required = ['roleId', 'status']
+
+    @pytest.mark.parametrize(('router', 'path', 'valid', 'required'), [
+        (userController, '/system/user', {'userId': 42}, ['userId']),
+        (userController, '/system/user/changeStatus', {'userId': 42, 'status': '1'}, ['userId', 'status']),
+        (roleController, '/system/role', {'roleId': 42}, ['roleId']),
+        (roleController, '/system/role/changeStatus', {'roleId': 42, 'status': '1'}, ['roleId', 'status']),
+        (roleController, '/system/role/dataScope', {'roleId': 42, 'dataScope': '2'}, ['roleId', 'dataScope']),
+    ])
+    def test_identity_and_required_action_fields_cannot_be_missing_or_null(router, path, valid, required):
+        model = request_model(router, path)
+        for field in required:
+            for payload in [{key: value for key, value in valid.items() if key != field}, {**valid, field: None}]:
+>               with pytest.raises(ValidationError):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'roleId'
+model      = <class 'module_admin.entity.vo.role_vo.AddRoleModel'>
+path       = '/system/role/changeStatus'
+payload    = {'status': '1'}
+required   = ['roleId', 'status']
+router     = <fastapi.routing.APIRouter object at 0x1270e24e0>
+valid      = {'roleId': 42, 'status': '1'}
+
+tests/unit/controllers/test_user_role_write_contract.py:63: Failed
+_ test_identity_and_required_action_fields_cannot_be_missing_or_null[router1-/system/user/changeStatus-valid1-required1] _
+[gw3] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+router = <fastapi.routing.APIRouter object at 0x11ec92030>
+path = '/system/user/changeStatus', valid = {'status': '1', 'userId': 42}
+required = ['userId', 'status']
+
+    @pytest.mark.parametrize(('router', 'path', 'valid', 'required'), [
+        (userController, '/system/user', {'userId': 42}, ['userId']),
+        (userController, '/system/user/changeStatus', {'userId': 42, 'status': '1'}, ['userId', 'status']),
+        (roleController, '/system/role', {'roleId': 42}, ['roleId']),
+        (roleController, '/system/role/changeStatus', {'roleId': 42, 'status': '1'}, ['roleId', 'status']),
+        (roleController, '/system/role/dataScope', {'roleId': 42, 'dataScope': '2'}, ['roleId', 'dataScope']),
+    ])
+    def test_identity_and_required_action_fields_cannot_be_missing_or_null(router, path, valid, required):
+        model = request_model(router, path)
+        for field in required:
+            for payload in [{key: value for key, value in valid.items() if key != field}, {**valid, field: None}]:
+>               with pytest.raises(ValidationError):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'userId'
+model      = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+path       = '/system/user/changeStatus'
+payload    = {'status': '1'}
+required   = ['userId', 'status']
+router     = <fastapi.routing.APIRouter object at 0x11ec92030>
+valid      = {'status': '1', 'userId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:63: Failed
+_ test_profile_maps_only_requested_fields_and_never_replays_login_associations _
+[gw5] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10eb25a70>
+
+    @pytest.mark.asyncio
+    async def test_profile_maps_only_requested_fields_and_never_replays_login_associations(monkeypatch):
+        model = request_model(userController, '/system/user/profile')
+        mediator = SimpleNamespace(send=AsyncMock(return_value=SimpleNamespace(data={'message': '更新成功'})))
+        monkeypatch.setattr(user_controller, '_load_user_profile', AsyncMock(return_value={}))
+        current = CurrentUserModel(permissions=[], roles=[], user=UserInfoModel(
+            userId=42, userName='alice', roleIds='21', postIds='31', role=[]
+        ))
+        await inspect.unwrap(user_controller.change_system_user_profile_info)(
+            Request({'type': 'http', 'headers': []}), model.model_validate({'nickName': 'After'}),
+            object(), current, mediator,
+        )
+        command = mediator.send.await_args.args[0]
+        fields = command.user.model_fields_set
+        assert command.user.user_id == current.user.user_id
+        assert command.user.nick_name == 'After'
+>       assert command.user.type == 'profile'
+E       AssertionError: assert None == 'profile'
+E        +  where None = EditUserModel(user_id=42, dept_id=None, user_name='alice', nick_name='After', user_type=None, email=None, phonenumber=...time(2026, 10, 16, 10, 28, 56, 978065), remark=None, admin=False, role_ids=['21'], post_ids=['31'], type=None, role=[]).type
+E        +    where EditUserModel(user_id=42, dept_id=None, user_name='alice', nick_name='After', user_type=None, email=None, phonenumber=...time(2026, 10, 16, 10, 28, 56, 978065), remark=None, admin=False, role_ids=['21'], post_ids=['31'], type=None, role=[]) = EditUserCommand(operator='alice', trace_id=None, request_id=None, query_db=<object object at 0x1090771b0>, user=EditUs...le=[]), enforce_scope_checks=False, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True').user
+
+command    = EditUserCommand(operator='alice', trace_id=None, request_id=None, query_db=<object object at 0x1090771b0>, user=EditUs...le=[]), enforce_scope_checks=False, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+current    = CurrentUserModel(permissions=[], roles=[], user=UserInfoModel(user_id=42, dept_id=None, user_name='alice', nick_name=N...me=None, update_by=None, update_time=None, remark=None, admin=False, post_ids='31', role_ids='21', dept=None, role=[]))
+fields     = {'admin', 'nick_name', 'post_ids', 'role', 'role_ids', 'update_by', ...}
+mediator   = namespace(send=<AsyncMock id='4731212464'>)
+model      = <class 'module_admin.entity.vo.user_vo.UserInfoModel'>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10eb25a70>
+
+tests/unit/controllers/test_user_role_write_contract.py:83: AssertionError
+----------------------------- Captured stderr call -----------------------------
+{"text": "2026-10-16 10:28:56.978 | INFO     | modules.system.api.user_controller:change_system_user_profile_info:457 - 更新成功\n", "record": {"elapsed": {"repr": "0:00:01.280258", "seconds": 1.280258}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "user_controller.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/modules/system/api/user_controller.py"}, "function": "change_system_user_profile_info", "level": {"icon": "ℹ️", "name": "INFO", "no": 20}, "line": 457, "message": "更新成功", "module": "user_controller", "name": "modules.system.api.user_controller", "process": {"id": 43953, "name": "MainProcess"}, "thread": {"id": 8337219328, "name": "MainThread"}, "time": {"repr": "2026-10-16 10:28:56.978216+01:00", "timestamp": 1792142936.978216}}}
+___________ test_role_relationship_presence_is_preserved[scope-null] ___________
+[gw10] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x126209fd0>
+provided = 'null', operation = 'scope'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('provided', ['omitted', 'empty', 'null', 'replace'])
+    @pytest.mark.parametrize('operation', ['edit', 'scope'])
+    async def test_role_relationship_presence_is_preserved(db_session, provided, operation):
+        role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2', status='0')
+        db_session.add(role)
+        db_session.add_all([RoleMenuDO(role_id=42, menu_id=20), RoleDeptDO(role_id=42, dept_id=30)])
+        await db_session.flush()
+        service = RoleService(RoleRepository(db_session), RoleMenuRepository(db_session),
+                              RoleDeptRepository(db_session), AsyncMock(), db_session)
+        service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
+        service._invalidate_role_cache = AsyncMock()
+        service.check_role_name_unique_services = AsyncMock(return_value=True)
+        service.check_role_key_unique_services = AsyncMock(return_value=True)
+        field = 'menuIds' if operation == 'edit' else 'deptIds'
+        old = 20 if operation == 'edit' else 30
+        values = {'omitted': {}, 'empty': {field: []}, 'null': {field: None}, 'replace': {field: [old + 1]}}
+        payload = {'roleId': 42, **values[provided]}
+        if operation == 'edit':
+            payload['roleName'] = 'After'
+            await service.edit_role_services(AddRoleModel(**payload))
+        else:
+            payload['dataScope'] = '2'
+>           await service.role_datascope_services(AddRoleModel(**payload))
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^
+E           pydantic_core._pydantic_core.ValidationError: 1 validation error for AddRoleModel
+E           deptIds
+E             Input should be a valid list [type=list_type, input_value=None, input_type=NoneType]
+E               For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x126209fd0>
+field      = 'deptIds'
+old        = 30
+operation  = 'scope'
+payload    = {'dataScope': '2', 'deptIds': None, 'roleId': 42}
+provided   = 'null'
+role       = <module_admin.entity.do.role_do.RoleDO object at 0x12620acf0>
+service    = <modules.system.application.services.role_service.RoleService object at 0x12641c590>
+values     = {'empty': {'deptIds': []}, 'null': {'deptIds': None}, 'omitted': {}, 'replace': {'deptIds': [31]}}
+
+tests/unit/services/test_role_write_relations.py:43: ValidationError
+_ test_user_service_restricts_fields_and_profile_does_not_touch_relations[status] _
+[gw13] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x133909fd0>
+operation = 'status'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['profile', 'status', 'edit'])
+    async def test_user_service_restricts_fields_and_profile_does_not_touch_relations(db_session, operation):
+        user = UserDO(user_id=42, user_name='alice', nick_name='Before', dept_id=7, status='0',
+                      del_flag='0', password='original-hash', login_ip='original')
+        db_session.add(user)
+        db_session.add_all([UserRoleDO(user_id=42, role_id=20), UserPostDO(user_id=42, post_id=30)])
+        await db_session.flush()
+        payload = {'userId': 42, 'userName': 'alice', 'nickName': 'After', 'password': 'smuggled',
+                   'delFlag': '2', 'loginIp': 'smuggled', 'roleIds': [], 'postIds': []}
+        if operation == 'profile':
+            payload.update(type='profile', deptId=999, status='1')
+        elif operation == 'status':
+            payload.update(type='status', status='1')
+        await UserService().edit_user_services(db_session, EditUserModel(**payload))
+>       assert user.password == 'original-hash'
+E       AssertionError: assert 'smuggled' == 'original-hash'
+E         
+E         - original-hash
+E         + smuggled
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x133909fd0>
+operation  = 'status'
+payload    = {'delFlag': '2', 'loginIp': 'smuggled', 'nickName': 'After', 'password': 'smuggled', ...}
+user       = <module_admin.entity.do.user_do.UserDO object at 0x13390acf0>
+
+tests/unit/services/test_role_write_relations.py:99: AssertionError
+___________ test_role_relationship_presence_is_preserved[edit-null] ____________
+[gw8] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b409fd0>
+provided = 'null', operation = 'edit'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('provided', ['omitted', 'empty', 'null', 'replace'])
+    @pytest.mark.parametrize('operation', ['edit', 'scope'])
+    async def test_role_relationship_presence_is_preserved(db_session, provided, operation):
+        role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2', status='0')
+        db_session.add(role)
+        db_session.add_all([RoleMenuDO(role_id=42, menu_id=20), RoleDeptDO(role_id=42, dept_id=30)])
+        await db_session.flush()
+        service = RoleService(RoleRepository(db_session), RoleMenuRepository(db_session),
+                              RoleDeptRepository(db_session), AsyncMock(), db_session)
+        service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
+        service._invalidate_role_cache = AsyncMock()
+        service.check_role_name_unique_services = AsyncMock(return_value=True)
+        service.check_role_key_unique_services = AsyncMock(return_value=True)
+        field = 'menuIds' if operation == 'edit' else 'deptIds'
+        old = 20 if operation == 'edit' else 30
+        values = {'omitted': {}, 'empty': {field: []}, 'null': {field: None}, 'replace': {field: [old + 1]}}
+        payload = {'roleId': 42, **values[provided]}
+        if operation == 'edit':
+            payload['roleName'] = 'After'
+>           await service.edit_role_services(AddRoleModel(**payload))
+                                             ^^^^^^^^^^^^^^^^^^^^^^^
+E           pydantic_core._pydantic_core.ValidationError: 1 validation error for AddRoleModel
+E           menuIds
+E             Input should be a valid list [type=list_type, input_value=None, input_type=NoneType]
+E               For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b409fd0>
+field      = 'menuIds'
+old        = 20
+operation  = 'edit'
+payload    = {'menuIds': None, 'roleId': 42, 'roleName': 'After'}
+provided   = 'null'
+role       = <module_admin.entity.do.role_do.RoleDO object at 0x11b40acf0>
+service    = <modules.system.application.services.role_service.RoleService object at 0x11b618590>
+values     = {'empty': {'menuIds': []}, 'null': {'menuIds': None}, 'omitted': {}, 'replace': {'menuIds': [21]}}
+
+tests/unit/services/test_role_write_relations.py:40: ValidationError
+_ test_user_service_restricts_fields_and_profile_does_not_touch_relations[edit] _
+[gw13] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1339fc2d0>
+operation = 'edit'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['profile', 'status', 'edit'])
+    async def test_user_service_restricts_fields_and_profile_does_not_touch_relations(db_session, operation):
+        user = UserDO(user_id=42, user_name='alice', nick_name='Before', dept_id=7, status='0',
+                      del_flag='0', password='original-hash', login_ip='original')
+        db_session.add(user)
+        db_session.add_all([UserRoleDO(user_id=42, role_id=20), UserPostDO(user_id=42, post_id=30)])
+        await db_session.flush()
+        payload = {'userId': 42, 'userName': 'alice', 'nickName': 'After', 'password': 'smuggled',
+                   'delFlag': '2', 'loginIp': 'smuggled', 'roleIds': [], 'postIds': []}
+        if operation == 'profile':
+            payload.update(type='profile', deptId=999, status='1')
+        elif operation == 'status':
+            payload.update(type='status', status='1')
+        await UserService().edit_user_services(db_session, EditUserModel(**payload))
+>       assert user.password == 'original-hash'
+E       AssertionError: assert 'smuggled' == 'original-hash'
+E         
+E         - original-hash
+E         + smuggled
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1339fc2d0>
+operation  = 'edit'
+payload    = {'delFlag': '2', 'loginIp': 'smuggled', 'nickName': 'After', 'password': 'smuggled', ...}
+user       = <module_admin.entity.do.user_do.UserDO object at 0x1339fe850>
+
+tests/unit/services/test_role_write_relations.py:99: AssertionError
+____________ test_role_service_updates_only_operation_fields[edit] _____________
+[gw11] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b909fd0>
+operation = 'edit'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['edit', 'scope', 'status'])
+    async def test_role_service_updates_only_operation_fields(db_session, operation):
+        role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2',
+                      status='0', del_flag='0', create_by='original')
+        db_session.add(role)
+        await db_session.flush()
+        service = RoleService(RoleRepository(db_session), RoleMenuRepository(db_session),
+                              RoleDeptRepository(db_session), AsyncMock(), db_session)
+        service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
+        service._invalidate_role_cache = AsyncMock()
+        service.check_role_name_unique_services = AsyncMock(return_value=True)
+        service.check_role_key_unique_services = AsyncMock(return_value=True)
+        data = {'roleId': 42, 'delFlag': '2', 'createBy': 'smuggled'}
+        if operation == 'edit':
+            data.update(roleName='After', dataScope='1', menuIds=[])
+            await service.edit_role_services(AddRoleModel(**data))
+            assert role.role_name == 'After'
+>           assert role.data_scope == '2'
+E           AssertionError: assert '1' == '2'
+E             
+E             - 2
+E             + 1
+
+data       = {'createBy': 'smuggled', 'dataScope': '1', 'delFlag': '2', 'menuIds': [], ...}
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b909fd0>
+operation  = 'edit'
+role       = <module_admin.entity.do.role_do.RoleDO object at 0x11b90af90>
+service    = <modules.system.application.services.role_service.RoleService object at 0x11bb246e0>
+
+tests/unit/services/test_role_write_relations.py:69: AssertionError
+___________ test_role_service_updates_only_operation_fields[status] ____________
+[gw12] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123109fd0>
+operation = 'status'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['edit', 'scope', 'status'])
+    async def test_role_service_updates_only_operation_fields(db_session, operation):
+        role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2',
+                      status='0', del_flag='0', create_by='original')
+        db_session.add(role)
+        await db_session.flush()
+        service = RoleService(RoleRepository(db_session), RoleMenuRepository(db_session),
+                              RoleDeptRepository(db_session), AsyncMock(), db_session)
+        service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
+        service._invalidate_role_cache = AsyncMock()
+        service.check_role_name_unique_services = AsyncMock(return_value=True)
+        service.check_role_key_unique_services = AsyncMock(return_value=True)
+        data = {'roleId': 42, 'delFlag': '2', 'createBy': 'smuggled'}
+        if operation == 'edit':
+            data.update(roleName='After', dataScope='1', menuIds=[])
+            await service.edit_role_services(AddRoleModel(**data))
+            assert role.role_name == 'After'
+            assert role.data_scope == '2'
+        elif operation == 'scope':
+            data.update(roleName='Smuggled', dataScope='1', deptIds=[])
+            await service.role_datascope_services(AddRoleModel(**data))
+            assert role.role_name == 'Before'
+            assert role.data_scope == '1'
+        else:
+            data.update(roleName='Smuggled', status='1', type='status')
+            await service.edit_role_services(AddRoleModel(**data))
+>           assert role.role_name == 'Before'
+E           AssertionError: assert 'Smuggled' == 'Before'
+E             
+E             - Before
+E             + Smuggled
+
+data       = {'createBy': 'smuggled', 'delFlag': '2', 'roleId': 42, 'roleName': 'Smuggled', ...}
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123109fd0>
+operation  = 'status'
+role       = <module_admin.entity.do.role_do.RoleDO object at 0x12310af90>
+service    = <modules.system.application.services.role_service.RoleService object at 0x12331c6e0>
+
+tests/unit/services/test_role_write_relations.py:78: AssertionError
+_________ test_role_relationship_presence_is_preserved[scope-omitted] __________
+[gw9] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123009fd0>
+provided = 'omitted', operation = 'scope'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('provided', ['omitted', 'empty', 'null', 'replace'])
+    @pytest.mark.parametrize('operation', ['edit', 'scope'])
+    async def test_role_relationship_presence_is_preserved(db_session, provided, operation):
+        role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2', status='0')
+        db_session.add(role)
+        db_session.add_all([RoleMenuDO(role_id=42, menu_id=20), RoleDeptDO(role_id=42, dept_id=30)])
+        await db_session.flush()
+        service = RoleService(RoleRepository(db_session), RoleMenuRepository(db_session),
+                              RoleDeptRepository(db_session), AsyncMock(), db_session)
+        service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
+        service._invalidate_role_cache = AsyncMock()
+        service.check_role_name_unique_services = AsyncMock(return_value=True)
+        service.check_role_key_unique_services = AsyncMock(return_value=True)
+        field = 'menuIds' if operation == 'edit' else 'deptIds'
+        old = 20 if operation == 'edit' else 30
+        values = {'omitted': {}, 'empty': {field: []}, 'null': {field: None}, 'replace': {field: [old + 1]}}
+        payload = {'roleId': 42, **values[provided]}
+        if operation == 'edit':
+            payload['roleName'] = 'After'
+            await service.edit_role_services(AddRoleModel(**payload))
+        else:
+            payload['dataScope'] = '2'
+            await service.role_datascope_services(AddRoleModel(**payload))
+        menus = [row.menu_id for row in await service.role_menu_repo.find_by_role_id(42)]
+        depts = [row.dept_id for row in await service.role_dept_repo.find_by_role_id(42)]
+        expected = [old] if provided == 'omitted' else [old + 1] if provided == 'replace' else []
+>       assert (menus if operation == 'edit' else depts) == expected
+E       assert [] == [30]
+E         
+E         Right contains one more item: 30
+E         Use -v to get more diff
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123009fd0>
+depts      = []
+expected   = [30]
+field      = 'deptIds'
+menus      = [20]
+old        = 30
+operation  = 'scope'
+payload    = {'dataScope': '2', 'roleId': 42}
+provided   = 'omitted'
+role       = <module_admin.entity.do.role_do.RoleDO object at 0x12300acf0>
+service    = <modules.system.application.services.role_service.RoleService object at 0x12321c590>
+values     = {'empty': {'deptIds': []}, 'null': {'deptIds': None}, 'omitted': {}, 'replace': {'deptIds': [31]}}
+
+tests/unit/services/test_role_write_relations.py:47: AssertionError
+__________ test_role_relationship_presence_is_preserved[edit-omitted] __________
+[gw7] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117209fd0>
+provided = 'omitted', operation = 'edit'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('provided', ['omitted', 'empty', 'null', 'replace'])
+    @pytest.mark.parametrize('operation', ['edit', 'scope'])
+    async def test_role_relationship_presence_is_preserved(db_session, provided, operation):
+        role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2', status='0')
+        db_session.add(role)
+        db_session.add_all([RoleMenuDO(role_id=42, menu_id=20), RoleDeptDO(role_id=42, dept_id=30)])
+        await db_session.flush()
+        service = RoleService(RoleRepository(db_session), RoleMenuRepository(db_session),
+                              RoleDeptRepository(db_session), AsyncMock(), db_session)
+        service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
+        service._invalidate_role_cache = AsyncMock()
+        service.check_role_name_unique_services = AsyncMock(return_value=True)
+        service.check_role_key_unique_services = AsyncMock(return_value=True)
+        field = 'menuIds' if operation == 'edit' else 'deptIds'
+        old = 20 if operation == 'edit' else 30
+        values = {'omitted': {}, 'empty': {field: []}, 'null': {field: None}, 'replace': {field: [old + 1]}}
+        payload = {'roleId': 42, **values[provided]}
+        if operation == 'edit':
+            payload['roleName'] = 'After'
+>           await service.edit_role_services(AddRoleModel(**payload))
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117209fd0>
+field      = 'menuIds'
+old        = 20
+operation  = 'edit'
+payload    = {'roleId': 42, 'roleName': 'After'}
+provided   = 'omitted'
+role       = <module_admin.entity.do.role_do.RoleDO object at 0x11720acf0>
+service    = <modules.system.application.services.role_service.RoleService object at 0x11741c590>
+values     = {'empty': {'menuIds': []}, 'null': {'menuIds': None}, 'omitted': {}, 'replace': {'menuIds': [21]}}
+
+tests/unit/services/test_role_write_relations.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+utils/transaction_manager.py:325: in wrapper
+    return await _execute()
+           ^^^^^^^^^^^^^^^^
+        _execute   = <function transactional.<locals>.decorator.<locals>.wrapper.<locals>._execute at 0x115c27060>
+        arg        = AddRoleModel(role_id=42, role_name='After', role_key=None, role_sort=None, data_scope=None, menu_check_strictly=None, ...one, create_time=None, update_by=None, update_time=None, remark=None, admin=False, dept_ids=[], menu_ids=[], type=None)
+        args       = (<modules.system.application.services.role_service.RoleService object at 0x11741c590>, AddRoleModel(role_id=42, role_n...ne, create_time=None, update_by=None, update_time=None, remark=None, admin=False, dept_ids=[], menu_ids=[], type=None))
+        attr       = 'query_db'
+        candidate  = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117209fd0>
+        db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117209fd0>
+        func       = <function RoleService.edit_role_services at 0x115795a80>
+        isolation_level = None
+        kwargs     = {}
+        max_retries = 3
+        owner      = <modules.system.application.services.role_service.RoleService object at 0x11741c590>
+        retry_on_deadlock = False
+        timeout    = None
+utils/transaction_manager.py:316: in _execute
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        args       = (<modules.system.application.services.role_service.RoleService object at 0x11741c590>, AddRoleModel(role_id=42, role_n...ne, create_time=None, update_by=None, update_time=None, remark=None, admin=False, dept_ids=[], menu_ids=[], type=None))
+        db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117209fd0>
+        func       = <function RoleService.edit_role_services at 0x115795a80>
+        isolation_level = None
+        kwargs     = {}
+        timeout    = None
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.role_service.RoleService object at 0x11741c590>
+page_object = AddRoleModel(role_id=42, role_name='After', role_key=None, role_sort=None, data_scope=None, menu_check_strictly=None, ...one, create_time=None, update_by=None, update_time=None, remark=None, admin=False, dept_ids=[], menu_ids=[], type=None)
+
+    @transactional()
+    async def edit_role_services(self, page_object: AddRoleModel):
+        """
+        编辑角色信息service
+    
+        :param page_object: 编辑角色对象
+        :return: 编辑角色校验结果
+        """
+        edit_role = page_object.model_dump(exclude_unset=True, exclude={'admin'})
+        if page_object.type != 'status':
+>           del edit_role['menu_ids']
+                ^^^^^^^^^^^^^^^^^^^^^
+E           KeyError: 'menu_ids'
+
+edit_role  = {'role_id': 42, 'role_name': 'After'}
+page_object = AddRoleModel(role_id=42, role_name='After', role_key=None, role_sort=None, data_scope=None, menu_check_strictly=None, ...one, create_time=None, update_by=None, update_time=None, remark=None, admin=False, dept_ids=[], menu_ids=[], type=None)
+self       = <modules.system.application.services.role_service.RoleService object at 0x11741c590>
+
+modules/system/application/services/role_service.py:242: KeyError
+----------------------------- Captured stderr call -----------------------------
+{"text": "2026-10-16 10:28:57.093 | ERROR    | utils.transaction_manager:transaction:97 - Transaction 4682981328: Nested transaction rolled back (duration: 0.000s) - 'menu_ids'\n", "record": {"elapsed": {"repr": "0:00:01.311298", "seconds": 1.311298}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "transaction_manager.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/utils/transaction_manager.py"}, "function": "transaction", "level": {"icon": "❌", "name": "ERROR", "no": 40}, "line": 97, "message": "Transaction 4682981328: Nested transaction rolled back (duration: 0.000s) - 'menu_ids'", "module": "transaction_manager", "name": "utils.transaction_manager", "process": {"id": 43955, "name": "MainProcess"}, "thread": {"id": 8337219328, "name": "MainThread"}, "time": {"repr": "2026-10-16 10:28:57.093800+01:00", "timestamp": 1792142937.0938}}}
+____________ test_role_service_updates_only_operation_fields[scope] ____________
+[gw11] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b9fc2d0>
+operation = 'scope'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['edit', 'scope', 'status'])
+    async def test_role_service_updates_only_operation_fields(db_session, operation):
+        role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2',
+                      status='0', del_flag='0', create_by='original')
+        db_session.add(role)
+        await db_session.flush()
+        service = RoleService(RoleRepository(db_session), RoleMenuRepository(db_session),
+                              RoleDeptRepository(db_session), AsyncMock(), db_session)
+        service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
+        service._invalidate_role_cache = AsyncMock()
+        service.check_role_name_unique_services = AsyncMock(return_value=True)
+        service.check_role_key_unique_services = AsyncMock(return_value=True)
+        data = {'roleId': 42, 'delFlag': '2', 'createBy': 'smuggled'}
+        if operation == 'edit':
+            data.update(roleName='After', dataScope='1', menuIds=[])
+            await service.edit_role_services(AddRoleModel(**data))
+            assert role.role_name == 'After'
+            assert role.data_scope == '2'
+        elif operation == 'scope':
+            data.update(roleName='Smuggled', dataScope='1', deptIds=[])
+            await service.role_datascope_services(AddRoleModel(**data))
+>           assert role.role_name == 'Before'
+E           AssertionError: assert 'Smuggled' == 'Before'
+E             
+E             - Before
+E             + Smuggled
+
+data       = {'createBy': 'smuggled', 'dataScope': '1', 'delFlag': '2', 'deptIds': [], ...}
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b9fc2d0>
+operation  = 'scope'
+role       = <module_admin.entity.do.role_do.RoleDO object at 0x11b9fead0>
+service    = <modules.system.application.services.role_service.RoleService object at 0x11b9fefd0>
+
+tests/unit/services/test_role_write_relations.py:73: AssertionError
+_ test_user_service_restricts_fields_and_profile_does_not_touch_relations[profile] _
+[gw12] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1231fc2d0>
+operation = 'profile'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['profile', 'status', 'edit'])
+    async def test_user_service_restricts_fields_and_profile_does_not_touch_relations(db_session, operation):
+        user = UserDO(user_id=42, user_name='alice', nick_name='Before', dept_id=7, status='0',
+                      del_flag='0', password='original-hash', login_ip='original')
+        db_session.add(user)
+        db_session.add_all([UserRoleDO(user_id=42, role_id=20), UserPostDO(user_id=42, post_id=30)])
+        await db_session.flush()
+        payload = {'userId': 42, 'userName': 'alice', 'nickName': 'After', 'password': 'smuggled',
+                   'delFlag': '2', 'loginIp': 'smuggled', 'roleIds': [], 'postIds': []}
+        if operation == 'profile':
+            payload.update(type='profile', deptId=999, status='1')
+        elif operation == 'status':
+            payload.update(type='status', status='1')
+        await UserService().edit_user_services(db_session, EditUserModel(**payload))
+>       assert user.password == 'original-hash'
+E       AssertionError: assert 'smuggled' == 'original-hash'
+E         
+E         - original-hash
+E         + smuggled
+
+db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1231fc2d0>
+operation  = 'profile'
+payload    = {'delFlag': '2', 'deptId': 999, 'loginIp': 'smuggled', 'nickName': 'After', ...}
+user       = <module_admin.entity.do.user_do.UserDO object at 0x12310a900>
+
+tests/unit/services/test_role_write_relations.py:99: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router0-/system/user/profile-PUT-valid0-forbidden0]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router1-/system/user-POST-valid1-forbidden1]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router4-/system/role-POST-valid4-forbidden4]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router5-/system/role-PUT-valid5-forbidden5]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router2-/system/user-PUT-valid2-forbidden2]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router6-/system/role/changeStatus-PUT-valid6-forbidden6]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router3-/system/user/changeStatus-PUT-valid3-forbidden3]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_each_operation_rejects_inappropriate_fields[router7-/system/role/dataScope-PUT-valid7-forbidden7]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_identity_and_required_action_fields_cannot_be_missing_or_null[router4-/system/role/dataScope-valid4-required4]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_identity_and_required_action_fields_cannot_be_missing_or_null[router2-/system/role-valid2-required2]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_identity_and_required_action_fields_cannot_be_missing_or_null[router0-/system/user-valid0-required0]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_identity_and_required_action_fields_cannot_be_missing_or_null[router3-/system/role/changeStatus-valid3-required3]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_identity_and_required_action_fields_cannot_be_missing_or_null[router1-/system/user/changeStatus-valid1-required1]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_profile_maps_only_requested_fields_and_never_replays_login_associations
+FAILED tests/unit/services/test_role_write_relations.py::test_role_relationship_presence_is_preserved[scope-null]
+FAILED tests/unit/services/test_role_write_relations.py::test_user_service_restricts_fields_and_profile_does_not_touch_relations[status]
+FAILED tests/unit/services/test_role_write_relations.py::test_role_relationship_presence_is_preserved[edit-null]
+FAILED tests/unit/services/test_role_write_relations.py::test_user_service_restricts_fields_and_profile_does_not_touch_relations[edit]
+FAILED tests/unit/services/test_role_write_relations.py::test_role_service_updates_only_operation_fields[edit]
+FAILED tests/unit/services/test_role_write_relations.py::test_role_service_updates_only_operation_fields[status]
+FAILED tests/unit/services/test_role_write_relations.py::test_role_relationship_presence_is_preserved[scope-omitted]
+FAILED tests/unit/services/test_role_write_relations.py::test_role_relationship_presence_is_preserved[edit-omitted]
+FAILED tests/unit/services/test_role_write_relations.py::test_role_service_updates_only_operation_fields[scope]
+FAILED tests/unit/services/test_role_write_relations.py::test_user_service_restricts_fields_and_profile_does_not_touch_relations[profile]
+========================= 24 failed, 4 passed in 4.31s =========================

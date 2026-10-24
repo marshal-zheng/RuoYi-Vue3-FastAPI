@@ -1,0 +1,3229 @@
+--- a/ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts
++++ b/ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts
+@@ -416,3 +416,33 @@
+   );
+   expect(expired.config.silentError).toBe(true);
+ });
++
++for (const item of cases.filter((item) => item.name === 'role' || item.name === 'scope')) {
++  it(`${item.name} sends operation fields without response-only metadata`, async () => {
++    const e = editor(item.component);
++    await e.exposed.open(item.arg(11));
++    Object.assign(e.model(), {
++      createBy: 'response-only',
++      delFlag: '2',
++      type: 'status',
++      admin: true,
++    });
++    await e.modal().props('confirm')(e.model());
++    const payload = api.write.mock.calls[0][0];
++    expect(payload.roleId).toBe(11);
++    for (const field of ['createBy', 'delFlag', 'type', 'admin'])
++      expect(payload).not.toHaveProperty(field);
++    if (item.name === 'scope') {
++      expect(Object.keys(payload).sort()).toEqual([
++        'dataScope',
++        'deptCheckStrictly',
++        'deptIds',
++        'roleId',
++      ]);
++      expect(payload.deptIds).toEqual([11]);
++    } else {
++      expect(payload.roleName).toBe('Role 11');
++      expect(payload.menuIds).toEqual([11]);
++    }
++  });
++}
+--- a/ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py
++++ b/ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py
+@@ -151,8 +151,8 @@
+     新增角色模型
+     """
+ 
+-    dept_ids: List = Field(default=[], description='部门ID信息')
+-    menu_ids: List = Field(default=[], description='菜单ID信息')
++    dept_ids: List[int] | None = Field(default=None, description='部门ID信息')
++    menu_ids: List[int] | None = Field(default=None, description='菜单ID信息')
+     type: Optional[str] = Field(default=None, description='操作类型')
+ 
+ 
+--- a/ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
++++ b/ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
+@@ -196,6 +196,12 @@
+ 
+     role: Optional[List] = Field(default=[], description='角色信息')
+ 
++    def validate_fields(self):
++        # Partial edits must validate the same supplied fields in HTTP and CQRS paths.
++        for field in ('user_name', 'nick_name', 'email', 'phonenumber', 'id_card'):
++            if field in self.model_fields_set:
++                getattr(self, f'get_{field}')()
++
+ 
+ class ResetPasswordModel(CamelModelBase):
+     """
+--- a/ruoyi-fastapi-backend/modules/identity/api/login_controller.py
++++ b/ruoyi-fastapi-backend/modules/identity/api/login_controller.py
+@@ -183,7 +183,7 @@
+     )
+     csrf_token, csrf_ttl = await security_service.issue_csrf_token(user_id)
+ 
+-    await user_service.edit_user_services(query_db, EditUserModel(userId=result[0].user_id, loginDate=datetime.now(), type='status'))
++    await user_service.edit_user_services(query_db, EditUserModel(userId=result[0].user_id, loginDate=datetime.now(), type='login'))
+     logger.info('登录成功')
+ 
+     request_from_swagger = request.headers.get('referer').endswith('docs') if request.headers.get('referer') else False
+--- a/ruoyi-fastapi-backend/modules/system/api/role_controller.py
++++ b/ruoyi-fastapi-backend/modules/system/api/role_controller.py
+@@ -11,6 +11,12 @@
+ from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
+ from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel, RoleModel, RolePageQueryModel
+ from module_admin.entity.vo.user_vo import CrudUserRoleModel, CurrentUserModel, UserRolePageQueryModel
++from module_admin.entity.vo.role_write_vo import (
++    RoleCreateModel,
++    RoleDataScopeUpdateModel,
++    RoleStatusUpdateModel,
++    RoleUpdateModel,
++)
+ from modules.identity.ports import get_current_user
+ from modules.system.application.services.role_service import RoleService
+ from modules.system.api.dependencies import provide_system_mediator
+@@ -108,11 +114,12 @@
+ @Log(title='角色管理', business_type=BusinessType.INSERT)
+ async def add_system_role(
+     request: Request,
+-    add_role: AddRoleModel,
+-    query_db: AsyncSession = Depends(get_db),
+-    current_user: CurrentUserModel = Depends(get_current_user),
+-    mediator: Mediator = Depends(provide_system_mediator),
+-):
++    add_role: RoleCreateModel,
++    query_db: AsyncSession = Depends(get_db),
++    current_user: CurrentUserModel = Depends(get_current_user),
++    mediator: Mediator = Depends(provide_system_mediator),
++):
++    add_role = AddRoleModel(**add_role.model_dump(exclude_unset=True))
+     add_role.create_by = current_user.user.user_name
+     add_role.create_time = datetime.now()
+     add_role.update_by = current_user.user.user_name
+@@ -139,12 +146,13 @@
+ @Log(title='角色管理', business_type=BusinessType.UPDATE)
+ async def edit_system_role(
+     request: Request,
+-    edit_role: AddRoleModel,
+-    query_db: AsyncSession = Depends(get_db),
+-    current_user: CurrentUserModel = Depends(get_current_user),
+-    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+-    mediator: Mediator = Depends(provide_system_mediator),
+-):
++    edit_role: RoleUpdateModel,
++    query_db: AsyncSession = Depends(get_db),
++    current_user: CurrentUserModel = Depends(get_current_user),
++    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
++    mediator: Mediator = Depends(provide_system_mediator),
++):
++    edit_role = AddRoleModel(**edit_role.model_dump(exclude_unset=True))
+     edit_role.update_by = current_user.user.user_name
+     edit_role.update_time = datetime.now()
+     edit_command = EditRoleCommand(
+@@ -174,17 +182,14 @@
+ @Log(title='角色管理', business_type=BusinessType.GRANT)
+ async def edit_system_role_datascope(
+     request: Request,
+-    role_data_scope: AddRoleModel,
++    role_data_scope: RoleDataScopeUpdateModel,
+     query_db: AsyncSession = Depends(get_db),
+     current_user: CurrentUserModel = Depends(get_current_user),
+     data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+     mediator: Mediator = Depends(provide_system_mediator),
+ ):
+     edit_role = AddRoleModel(
+-        roleId=role_data_scope.role_id,
+-        dataScope=role_data_scope.data_scope,
+-        deptIds=role_data_scope.dept_ids,
+-        deptCheckStrictly=role_data_scope.dept_check_strictly,
++        **role_data_scope.model_dump(exclude_unset=True),
+         updateBy=current_user.user.user_name,
+         updateTime=datetime.now(),
+     )
+@@ -288,7 +293,7 @@
+ @Log(title='角色管理', business_type=BusinessType.UPDATE)
+ async def reset_system_role_status(
+     request: Request,
+-    change_role: AddRoleModel,
++    change_role: RoleStatusUpdateModel,
+     query_db: AsyncSession = Depends(get_db),
+     current_user: CurrentUserModel = Depends(get_current_user),
+     data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+--- a/ruoyi-fastapi-backend/modules/system/api/user_controller.py
++++ b/ruoyi-fastapi-backend/modules/system/api/user_controller.py
+@@ -24,10 +24,15 @@
+     ResetPasswordModel,
+     ResetUserModel,
+     UserDetailModel,
+-    UserInfoModel,
+     UserPageQueryModel,
+     UserProfileModel,
+     UserRoleResponseModel,
++)
++from module_admin.entity.vo.user_write_vo import (
++    UserCreateModel,
++    UserProfileUpdateModel,
++    UserStatusUpdateModel,
++    UserUpdateModel,
+ )
+ from modules.identity.ports import get_current_user
+ from modules.system.application.services.user_service import UserService
+@@ -142,13 +147,14 @@
+ @Log(title='用户管理', business_type=BusinessType.INSERT)
+ async def add_system_user(
+     request: Request,
+-    add_user: AddUserModel,
++    add_user: UserCreateModel,
+     query_db: AsyncSession = Depends(get_db),
+     current_user: CurrentUserModel = Depends(get_current_user),
+     dept_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+     role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+     mediator: Mediator = Depends(provide_system_mediator),
+ ):
++    add_user = AddUserModel(**add_user.model_dump(exclude_unset=True))
+     add_user.password = PwdUtil.get_password_hash(add_user.password)
+     add_user.create_by = current_user.user.user_name
+     add_user.create_time = datetime.now()
+@@ -186,7 +192,7 @@
+ @Log(title='用户管理', business_type=BusinessType.UPDATE)
+ async def edit_system_user(
+     request: Request,
+-    edit_user: EditUserModel,
++    edit_user: UserUpdateModel,
+     query_db: AsyncSession = Depends(get_db),
+     current_user: CurrentUserModel = Depends(get_current_user),
+     user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+@@ -194,6 +200,7 @@
+     role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+     mediator: Mediator = Depends(provide_system_mediator),
+ ):
++    edit_user = EditUserModel(**edit_user.model_dump(exclude_unset=True))
+     edit_user.update_by = current_user.user.user_name
+     edit_user.update_time = datetime.now()
+     edit_command = EditUserCommand(
+@@ -295,7 +302,7 @@
+ @Log(title='用户管理', business_type=BusinessType.UPDATE)
+ async def change_system_user_status(
+     request: Request,
+-    change_user: EditUserModel,
++    change_user: UserStatusUpdateModel,
+     query_db: AsyncSession = Depends(get_db),
+     current_user: CurrentUserModel = Depends(get_current_user),
+     data_scope_sql: str = Depends(GetDataScope('UserDO')),
+@@ -430,20 +437,18 @@
+ @Log(title='个人信息', business_type=BusinessType.UPDATE)
+ async def change_system_user_profile_info(
+     request: Request,
+-    user_info: UserInfoModel,
++    user_info: UserProfileUpdateModel,
+     query_db: AsyncSession = Depends(get_db),
+     current_user: CurrentUserModel = Depends(get_current_user),
+     mediator: Mediator = Depends(provide_system_mediator),
+ ):
+     edit_user = EditUserModel(
+-        **user_info.model_dump(exclude_unset=True, by_alias=True, exclude={'role_ids', 'post_ids'}),
++        **user_info.model_dump(exclude_unset=True),
+         userId=current_user.user.user_id,
+         userName=current_user.user.user_name,
+         updateBy=current_user.user.user_name,
+         updateTime=datetime.now(),
+-        roleIds=current_user.user.role_ids.split(',') if current_user.user.role_ids else [],
+-        postIds=current_user.user.post_ids.split(',') if current_user.user.post_ids else [],
+-        role=current_user.user.role,
++        type='profile',
+     )
+     edit_command = EditUserCommand(
+         query_db=query_db,
+--- a/ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py
++++ b/ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py
+@@ -90,7 +90,9 @@
+         edit_type = request.user.type or ''
+         if edit_type not in {'status', 'avatar', 'pwd'}:
+             request.user.validate_fields()
+-        await self._user_service.check_user_allowed_services(request.user)
++        # Profile identity is supplied by the authenticated controller, including admin self-service.
++        if edit_type != 'profile':
++            await self._user_service.check_user_allowed_services(request.user)
+         if request.enforce_scope_checks:
+             await self._user_service.check_user_data_scope_services(
+                 request.query_db,
+@@ -98,10 +100,11 @@
+                 request.user_data_scope_sql,
+             )
+             if edit_type not in {'status', 'avatar', 'pwd'}:
+-                await self._dept_service.check_dept_data_scope_services(
+-                    request.user.dept_id,
+-                    request.dept_data_scope_sql,
+-                )
++                if 'dept_id' in request.user.model_fields_set and request.user.dept_id is not None:
++                    await self._dept_service.check_dept_data_scope_services(
++                        request.user.dept_id,
++                        request.dept_data_scope_sql,
++                    )
+                 role_ids = _serialize_role_ids(request.user.role_ids)
+                 if role_ids:
+                     await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+--- a/ruoyi-fastapi-backend/modules/system/application/services/role_service.py
++++ b/ruoyi-fastapi-backend/modules/system/application/services/role_service.py
+@@ -237,11 +237,12 @@
+         :param page_object: 编辑角色对象
+         :return: 编辑角色校验结果
+         """
+-        edit_role = page_object.model_dump(exclude_unset=True, exclude={'admin'})
+-        if page_object.type != 'status':
+-            del edit_role['menu_ids']
+-        if page_object.type == 'status':
+-            del edit_role['type']
++        writable = {'status'} if page_object.type == 'status' else {
++            'role_name', 'role_key', 'role_sort', 'status', 'menu_check_strictly', 'remark'
++        }
++        edit_role = page_object.model_dump(
++            exclude_unset=True, include=writable | {'role_id', 'update_by', 'update_time'}
++        )
+         await self.role_detail_services(edit_role.get('role_id'))
+ 
+         if page_object.type != 'status':
+@@ -264,7 +265,7 @@
+                 if hasattr(db_role, key):
+                     setattr(db_role, key, value)
+             await self.role_repo.update(db_role)
+-        if page_object.type != 'status':
++        if page_object.type != 'status' and 'menu_ids' in page_object.model_fields_set:
+             await self.role_menu_repo.delete_by_role_id(page_object.role_id)
+             if page_object.menu_ids:
+                 for menu in page_object.menu_ids:
+@@ -281,7 +282,10 @@
+         :param page_object: 角色数据权限对象
+         :return: 分配角色数据权限结果
+         """
+-        edit_role = page_object.model_dump(exclude_unset=True, exclude={'admin', 'dept_ids'})
++        edit_role = page_object.model_dump(
++            exclude_unset=True,
++            include={'role_id', 'data_scope', 'dept_check_strictly', 'update_by', 'update_time'},
++        )
+         await self.role_detail_services(page_object.role_id)
+ 
+         db_role = await self.role_repo.find_by_id(page_object.role_id)
+@@ -290,11 +294,12 @@
+                 if hasattr(db_role, key):
+                     setattr(db_role, key, value)
+             await self.role_repo.update(db_role)
+-        await self.role_dept_repo.delete_by_role_id(page_object.role_id)
+-        if page_object.dept_ids and page_object.data_scope == '2':
+-            for dept in page_object.dept_ids:
+-                db_role_dept = RoleDeptDO(role_id=page_object.role_id, dept_id=dept)
+-                await self.role_dept_repo.add(db_role_dept)
++        if 'dept_ids' in page_object.model_fields_set:
++            await self.role_dept_repo.delete_by_role_id(page_object.role_id)
++            if page_object.dept_ids and db_role.data_scope == '2':
++                for dept in page_object.dept_ids:
++                    db_role_dept = RoleDeptDO(role_id=page_object.role_id, dept_id=dept)
++                    await self.role_dept_repo.add(db_role_dept)
+         await self._invalidate_role_cache()
+         return CrudResponseModel(is_success=True, message='分配成功')
+ 
+@@ -344,7 +349,8 @@
+                 return RoleModel(**cached)
+             await cache.delete(cache_key)
+ 
+-        role = await self.role_repo.find_active_by_id(role_id)
++        # Management details must remain available after disabling a role.
++        role = await self.role_repo.find_by_id(role_id)
+         if role:
+             result = RoleModel(**CamelCaseUtil.transform_result(role))
+         else:
+--- a/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
++++ b/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
+@@ -320,9 +320,20 @@
+         :return: 编辑用户校验结果
+         关联字段未提供时保留, 提供空数组或 None 时清空。
+         """
+-        is_general_edit = page_object.type not in {'status', 'avatar', 'pwd'}
++        is_general_edit = page_object.type not in {'status', 'avatar', 'pwd', 'login'}
++        edit_fields = {
++            'dept_id', 'user_name', 'nick_name', 'email', 'phonenumber', 'id_card', 'sex', 'status', 'remark'
++        }
++        operation_fields = {
++            'profile': {'nick_name', 'email', 'phonenumber', 'sex'},
++            'status': {'status'},
++            'avatar': {'avatar'},
++            'pwd': {'password'},
++            'login': {'login_date', 'login_ip'},
++        }
++        writable = operation_fields.get(page_object.type, edit_fields) | {'update_by', 'update_time'}
+         edit_user = page_object.model_dump(
+-            exclude_unset=True, exclude={'admin', 'role', 'role_ids', 'post_ids', 'type'}
++            exclude_unset=True, include=writable
+         )
+         user_repo = self._user_repo(query_db)
+         db_user = await user_repo.get_by_id(page_object.user_id)
+@@ -353,13 +364,13 @@
+             if hasattr(db_user, key):
+                 setattr(db_user, key, value)
+         await user_repo.update(db_user)
+-        if is_general_edit and 'role_ids' in page_object.model_fields_set:
++        if page_object.type != 'profile' and is_general_edit and 'role_ids' in page_object.model_fields_set:
+             user_role_repo = self._user_role_repo(query_db)
+             await user_role_repo.delete_by_user_id(page_object.user_id)
+             for role in page_object.role_ids or []:
+                 db_user_role = UserRoleDO(user_id=page_object.user_id, role_id=role)
+                 await user_role_repo.add(db_user_role)
+-        if is_general_edit and 'post_ids' in page_object.model_fields_set:
++        if page_object.type != 'profile' and is_general_edit and 'post_ids' in page_object.model_fields_set:
+             user_post_repo = self._user_post_repo(query_db)
+             await user_post_repo.delete_by_user_id(page_object.user_id)
+             for post in page_object.post_ids or []:
+--- a/ruoyi-fastapi-frontend/src/api/_generated/index.ts
++++ b/ruoyi-fastapi-frontend/src/api/_generated/index.ts
+@@ -268,7 +268,6 @@
+   AddProtocolSystemProtocolPostError,
+   AddProtocolSystemProtocolPostErrors,
+   AddProtocolSystemProtocolPostResponses,
+-  AddRoleModel,
+   AddSystemConfigSystemConfigPostData,
+   AddSystemConfigSystemConfigPostError,
+   AddSystemConfigSystemConfigPostErrors,
+@@ -317,7 +316,6 @@
+   AddSystemUserSystemUserPostError,
+   AddSystemUserSystemUserPostErrors,
+   AddSystemUserSystemUserPostResponses,
+-  AddUserModel,
+   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData,
+   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutError,
+   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutErrors,
+@@ -1192,8 +1190,12 @@
+   RevokeSigningKeysAuthKeysRevokePostError,
+   RevokeSigningKeysAuthKeysRevokePostErrors,
+   RevokeSigningKeysAuthKeysRevokePostResponses,
++  RoleCreateModel,
++  RoleDataScopeUpdateModel,
+   RoleModel,
+   RolePageQueryModel,
++  RoleStatusUpdateModel,
++  RoleUpdateModel,
+   RotateSigningKeysAuthKeysRotatePostData,
+   RotateSigningKeysAuthKeysRotatePostError,
+   RotateSigningKeysAuthKeysRotatePostErrors,
+@@ -1269,12 +1271,16 @@
+   UpsertFaultSimulationFaultsPostError,
+   UpsertFaultSimulationFaultsPostErrors,
+   UpsertFaultSimulationFaultsPostResponses,
++  UserCreateModel,
+   UserDetailModel,
+   UserInfoModel,
+   UserPageQueryModel,
+   UserProfileModel,
++  UserProfileUpdateModel,
+   UserRegister,
+   UserRoleResponseModel,
++  UserStatusUpdateModel,
++  UserUpdateModel,
+   ValidateTopologySimulationTopologyValidatePostData,
+   ValidateTopologySimulationTopologyValidatePostError,
+   ValidateTopologySimulationTopologyValidatePostErrors,
+--- a/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
++++ b/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
+@@ -2,274 +2,6 @@
+ 
+ export type ClientOptions = {
+   baseUrl: `${string}://${string}` | (string & {});
+-};
+-
+-/**
+- * AddRoleModel
+- *
+- * 新增角色模型
+- */
+-export type AddRoleModel = {
+-  /**
+-   * Admin
+-   *
+-   * 是否为admin
+-   */
+-  admin?: boolean | null;
+-  /**
+-   * Createby
+-   *
+-   * 创建者
+-   */
+-  createBy?: string | null;
+-  /**
+-   * Createtime
+-   *
+-   * 创建时间
+-   */
+-  createTime?: string | null;
+-  /**
+-   * Datascope
+-   *
+-   * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）
+-   */
+-  dataScope?: string | null;
+-  /**
+-   * Delflag
+-   *
+-   * 删除标志（0代表存在 2代表删除）
+-   */
+-  delFlag?: '0' | '2' | null;
+-  /**
+-   * Deptcheckstrictly
+-   *
+-   * 部门树选择项是否关联显示
+-   */
+-  deptCheckStrictly?: number | boolean | null;
+-  /**
+-   * Deptids
+-   *
+-   * 部门ID信息
+-   */
+-  deptIds?: Array<unknown>;
+-  /**
+-   * Menucheckstrictly
+-   *
+-   * 菜单树选择项是否关联显示
+-   */
+-  menuCheckStrictly?: number | boolean | null;
+-  /**
+-   * Menuids
+-   *
+-   * 菜单ID信息
+-   */
+-  menuIds?: Array<unknown>;
+-  /**
+-   * Remark
+-   *
+-   * 备注
+-   */
+-  remark?: string | null;
+-  /**
+-   * Roleid
+-   *
+-   * 角色ID
+-   */
+-  roleId?: number | null;
+-  /**
+-   * Rolekey
+-   *
+-   * 角色权限字符串
+-   */
+-  roleKey?: string | null;
+-  /**
+-   * Rolename
+-   *
+-   * 角色名称
+-   */
+-  roleName?: string | null;
+-  /**
+-   * Rolesort
+-   *
+-   * 显示顺序
+-   */
+-  roleSort?: number | null;
+-  /**
+-   * Status
+-   *
+-   * 角色状态（0正常 1停用）
+-   */
+-  status?: '0' | '1' | null;
+-  /**
+-   * Type
+-   *
+-   * 操作类型
+-   */
+-  type?: string | null;
+-  /**
+-   * Updateby
+-   *
+-   * 更新者
+-   */
+-  updateBy?: string | null;
+-  /**
+-   * Updatetime
+-   *
+-   * 更新时间
+-   */
+-  updateTime?: string | null;
+-};
+-
+-/**
+- * AddUserModel
+- *
+- * 新增用户模型
+- */
+-export type AddUserModel = {
+-  /**
+-   * Admin
+-   *
+-   * 是否为admin
+-   */
+-  admin?: boolean | null;
+-  /**
+-   * Avatar
+-   *
+-   * 头像地址
+-   */
+-  avatar?: string | null;
+-  /**
+-   * Createby
+-   *
+-   * 创建者
+-   */
+-  createBy?: string | null;
+-  /**
+-   * Createtime
+-   *
+-   * 创建时间
+-   */
+-  createTime?: string | null;
+-  /**
+-   * Delflag
+-   *
+-   * 删除标志（0代表存在 2代表删除）
+-   */
+-  delFlag?: '0' | '2' | null;
+-  /**
+-   * Deptid
+-   *
+-   * 部门ID
+-   */
+-  deptId?: number | null;
+-  /**
+-   * Email
+-   *
+-   * 用户邮箱
+-   */
+-  email?: string | null;
+-  /**
+-   * Idcard
+-   *
+-   * 身份证号
+-   */
+-  idCard?: string | null;
+-  /**
+-   * Logindate
+-   *
+-   * 最后登录时间
+-   */
+-  loginDate?: string | null;
+-  /**
+-   * Loginip
+-   *
+-   * 最后登录IP
+-   */
+-  loginIp?: string | null;
+-  /**
+-   * Nickname
+-   *
+-   * 用户昵称
+-   */
+-  nickName?: string | null;
+-  /**
+-   * Password
+-   *
+-   * 密码
+-   */
+-  password?: string | null;
+-  /**
+-   * Phonenumber
+-   *
+-   * 手机号码
+-   */
+-  phonenumber?: string | null;
+-  /**
+-   * Postids
+-   *
+-   * 岗位ID信息
+-   */
+-  postIds?: Array<unknown> | null;
+-  /**
+-   * Remark
+-   *
+-   * 备注
+-   */
+-  remark?: string | null;
+-  /**
+-   * Roleids
+-   *
+-   * 角色ID信息
+-   */
+-  roleIds?: Array<unknown> | null;
+-  /**
+-   * Sex
+-   *
+-   * 用户性别（0男 1女 2未知）
+-   */
+-  sex?: '0' | '1' | '2' | null;
+-  /**
+-   * Status
+-   *
+-   * 帐号状态（0正常 1停用）
+-   */
+-  status?: '0' | '1' | null;
+-  /**
+-   * Type
+-   *
+-   * 操作类型
+-   */
+-  type?: string | null;
+-  /**
+-   * Updateby
+-   *
+-   * 更新者
+-   */
+-  updateBy?: string | null;
+-  /**
+-   * Updatetime
+-   *
+-   * 更新时间
+-   */
+-  updateTime?: string | null;
+-  /**
+-   * Userid
+-   *
+-   * 用户ID
+-   */
+-  userId?: number | null;
+-  /**
+-   * Username
+-   *
+-   * 用户账号
+-   */
+-  userName?: string | null;
+-  /**
+-   * Usertype
+-   *
+-   * 用户类型（00系统用户）
+-   */
+-  userType?: string | null;
+ };
+ 
+ /**
+@@ -4520,6 +4252,84 @@
+ };
+ 
+ /**
++ * RoleCreateModel
++ */
++export type RoleCreateModel = {
++  /**
++   * Menucheckstrictly
++   *
++   * 菜单树选择项是否关联显示
++   */
++  menuCheckStrictly?: boolean | null;
++  /**
++   * Menuids
++   *
++   * 菜单ID; 未提供保留, 空数组或null清空
++   */
++  menuIds?: Array<number> | null;
++  /**
++   * Remark
++   *
++   * 备注
++   */
++  remark?: string | null;
++  /**
++   * Rolekey
++   *
++   * 角色权限字符串
++   */
++  roleKey: string;
++  /**
++   * Rolename
++   *
++   * 角色名称
++   */
++  roleName: string;
++  /**
++   * Rolesort
++   *
++   * 显示顺序
++   */
++  roleSort: number;
++  /**
++   * Status
++   *
++   * 角色状态
++   */
++  status?: '0' | '1';
++};
++
++/**
++ * RoleDataScopeUpdateModel
++ */
++export type RoleDataScopeUpdateModel = {
++  /**
++   * Datascope
++   *
++   * 数据范围
++   */
++  dataScope: '1' | '2' | '3' | '4' | '5';
++  /**
++   * Deptcheckstrictly
++   *
++   * 部门树选择项是否关联显示
++   */
++  deptCheckStrictly?: boolean | null;
++  /**
++   * Deptids
++   *
++   * 部门ID; 未提供保留, 空数组或null清空
++   */
++  deptIds?: Array<number> | null;
++  /**
++   * Roleid
++   *
++   * 角色ID
++   */
++  roleId: number;
++};
++
++/**
+  * RoleModel
+  *
+  * 角色表对应pydantic模型
+@@ -4740,6 +4550,78 @@
+ };
+ 
+ /**
++ * RoleStatusUpdateModel
++ */
++export type RoleStatusUpdateModel = {
++  /**
++   * Roleid
++   *
++   * 角色ID
++   */
++  roleId: number;
++  /**
++   * Status
++   *
++   * 角色状态
++   */
++  status: '0' | '1';
++};
++
++/**
++ * RoleUpdateModel
++ */
++export type RoleUpdateModel = {
++  /**
++   * Menucheckstrictly
++   *
++   * 菜单树选择项是否关联显示
++   */
++  menuCheckStrictly?: boolean | null;
++  /**
++   * Menuids
++   *
++   * 菜单ID; 未提供保留, 空数组或null清空
++   */
++  menuIds?: Array<number> | null;
++  /**
++   * Remark
++   *
++   * 备注
++   */
++  remark?: string | null;
++  /**
++   * Roleid
++   *
++   * 角色ID
++   */
++  roleId: number;
++  /**
++   * Rolekey
++   *
++   * 角色权限字符串
++   */
++  roleKey?: string;
++  /**
++   * Rolename
++   *
++   * 角色名称
++   */
++  roleName?: string;
++  /**
++   * Rolesort
++   *
++   * 显示顺序
++   */
++  roleSort?: number;
++  /**
++   * Status
++   *
++   * 角色状态
++   */
++  status?: '0' | '1';
++};
++
++/**
+  * SelectedRoleModel
+  *
+  * 是否选择角色模型
+@@ -5002,6 +4884,84 @@
+ };
+ 
+ /**
++ * UserCreateModel
++ */
++export type UserCreateModel = {
++  /**
++   * Deptid
++   *
++   * 部门ID
++   */
++  deptId?: number | null;
++  /**
++   * Email
++   *
++   * 邮箱
++   */
++  email?: string | null;
++  /**
++   * Idcard
++   *
++   * 身份证号
++   */
++  idCard?: string | null;
++  /**
++   * Nickname
++   *
++   * 用户昵称
++   */
++  nickName: string;
++  /**
++   * Password
++   *
++   * 初始密码
++   */
++  password: string;
++  /**
++   * Phonenumber
++   *
++   * 手机号码
++   */
++  phonenumber?: string | null;
++  /**
++   * Postids
++   *
++   * 岗位ID; 未提供保留, 空数组或null清空
++   */
++  postIds?: Array<number> | null;
++  /**
++   * Remark
++   *
++   * 备注
++   */
++  remark?: string | null;
++  /**
++   * Roleids
++   *
++   * 角色ID; 未提供保留, 空数组或null清空
++   */
++  roleIds?: Array<number> | null;
++  /**
++   * Sex
++   *
++   * 用户性别
++   */
++  sex?: '0' | '1' | '2' | null;
++  /**
++   * Status
++   *
++   * 帐号状态
++   */
++  status?: '0' | '1' | null;
++  /**
++   * Username
++   *
++   * 用户账号
++   */
++  userName: string;
++};
++
++/**
+  * UserDetailModel
+  *
+  * 获取用户详情信息响应模型
+@@ -5374,6 +5334,38 @@
+ };
+ 
+ /**
++ * UserProfileUpdateModel
++ *
++ * The authenticated user can edit these profile fields only.
++ */
++export type UserProfileUpdateModel = {
++  /**
++   * Email
++   *
++   * 邮箱
++   */
++  email?: string | null;
++  /**
++   * Nickname
++   *
++   * 用户昵称
++   */
++  nickName?: string;
++  /**
++   * Phonenumber
++   *
++   * 手机号码
++   */
++  phonenumber?: string | null;
++  /**
++   * Sex
++   *
++   * 用户性别
++   */
++  sex?: '0' | '1' | '2' | null;
++};
++
++/**
+  * UserRegister
+  */
+ export type UserRegister = {
+@@ -5425,6 +5417,102 @@
+    * 用户信息
+    */
+   user: UserInfoModel;
++};
++
++/**
++ * UserStatusUpdateModel
++ */
++export type UserStatusUpdateModel = {
++  /**
++   * Status
++   *
++   * 帐号状态
++   */
++  status: '0' | '1';
++  /**
++   * Userid
++   *
++   * 用户ID
++   */
++  userId: number;
++};
++
++/**
++ * UserUpdateModel
++ */
++export type UserUpdateModel = {
++  /**
++   * Deptid
++   *
++   * 部门ID
++   */
++  deptId?: number | null;
++  /**
++   * Email
++   *
++   * 邮箱
++   */
++  email?: string | null;
++  /**
++   * Idcard
++   *
++   * 身份证号
++   */
++  idCard?: string | null;
++  /**
++   * Nickname
++   *
++   * 用户昵称
++   */
++  nickName?: string;
++  /**
++   * Phonenumber
++   *
++   * 手机号码
++   */
++  phonenumber?: string | null;
++  /**
++   * Postids
++   *
++   * 岗位ID; 未提供保留, 空数组或null清空
++   */
++  postIds?: Array<number> | null;
++  /**
++   * Remark
++   *
++   * 备注
++   */
++  remark?: string | null;
++  /**
++   * Roleids
++   *
++   * 角色ID; 未提供保留, 空数组或null清空
++   */
++  roleIds?: Array<number> | null;
++  /**
++   * Sex
++   *
++   * 用户性别
++   */
++  sex?: '0' | '1' | '2' | null;
++  /**
++   * Status
++   *
++   * 帐号状态
++   */
++  status?: '0' | '1' | null;
++  /**
++   * Userid
++   *
++   * 用户ID
++   */
++  userId: number;
++  /**
++   * Username
++   *
++   * 用户账号
++   */
++  userName?: string;
+ };
+ 
+ /**
+@@ -12098,7 +12186,7 @@
+ };
+ 
+ export type AddSystemRoleSystemRolePostData = {
+-  body: AddRoleModel;
++  body: RoleCreateModel;
+   path?: never;
+   query?: never;
+   url: '/system/role';
+@@ -12122,7 +12210,7 @@
+ };
+ 
+ export type EditSystemRoleSystemRolePutData = {
+-  body: AddRoleModel;
++  body: RoleUpdateModel;
+   path?: never;
+   query?: never;
+   url: '/system/role';
+@@ -12612,7 +12700,7 @@
+   GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetResponses[keyof GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetResponses];
+ 
+ export type ResetSystemRoleStatusSystemRoleChangeStatusPutData = {
+-  body: AddRoleModel;
++  body: RoleStatusUpdateModel;
+   path?: never;
+   query?: never;
+   url: '/system/role/changeStatus';
+@@ -12636,7 +12724,7 @@
+ };
+ 
+ export type EditSystemRoleDatascopeSystemRoleDataScopePutData = {
+-  body: AddRoleModel;
++  body: RoleDataScopeUpdateModel;
+   path?: never;
+   query?: never;
+   url: '/system/role/dataScope';
+@@ -12916,7 +13004,7 @@
+   QueryDetailSystemRoleSystemRoleRoleIdGetResponses[keyof QueryDetailSystemRoleSystemRoleRoleIdGetResponses];
+ 
+ export type AddSystemUserSystemUserPostData = {
+-  body: AddUserModel;
++  body: UserCreateModel;
+   path?: never;
+   query?: never;
+   url: '/system/user';
+@@ -12940,7 +13028,7 @@
+ };
+ 
+ export type EditSystemUserSystemUserPutData = {
+-  body: EditUserModel;
++  body: UserUpdateModel;
+   path?: never;
+   query?: never;
+   url: '/system/user';
+@@ -13064,7 +13152,7 @@
+   GetSystemAllocatedRoleListSystemUserAuthRoleUserIdGetResponses[keyof GetSystemAllocatedRoleListSystemUserAuthRoleUserIdGetResponses];
+ 
+ export type ChangeSystemUserStatusSystemUserChangeStatusPutData = {
+-  body: EditUserModel;
++  body: UserStatusUpdateModel;
+   path?: never;
+   query?: never;
+   url: '/system/user/changeStatus';
+@@ -13364,7 +13452,7 @@
+   QueryDetailSystemUserProfileSystemUserProfileGetResponses[keyof QueryDetailSystemUserProfileSystemUserProfileGetResponses];
+ 
+ export type ChangeSystemUserProfileInfoSystemUserProfilePutData = {
+-  body: UserInfoModel;
++  body: UserProfileUpdateModel;
+   path?: never;
+   query?: never;
+   url: '/system/user/profile';
+--- a/ruoyi-fastapi-frontend/src/api/system/role.ts
++++ b/ruoyi-fastapi-frontend/src/api/system/role.ts
+@@ -2,7 +2,10 @@
+ export type RoleRecord = Omit<RoleModel, 'roleId'> & { roleId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type {
+-  AddRoleModel,
++  RoleCreateModel,
++  RoleUpdateModel,
++  RoleStatusUpdateModel,
++  RoleDataScopeUpdateModel,
+   CrudUserRoleModel,
+   GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData,
+   GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData,
+@@ -38,7 +41,7 @@
+ }
+ 
+ // 新增角色
+-export function addRole(data: AddRoleModel) {
++export function addRole(data: RoleCreateModel) {
+   return request<RoleRecord>({
+     url: '/system/role',
+     method: 'post',
+@@ -48,7 +51,7 @@
+ }
+ 
+ // 修改角色
+-export function updateRole(data: RoleModel) {
++export function updateRole(data: RoleUpdateModel) {
+   return request<RoleRecord>({
+     url: '/system/role',
+     method: 'put',
+@@ -58,7 +61,7 @@
+ }
+ 
+ // 角色数据权限
+-export function dataScope(data: AddRoleModel) {
++export function dataScope(data: RoleDataScopeUpdateModel) {
+   return request<RoleRecord>({
+     url: '/system/role/dataScope',
+     method: 'put',
+@@ -68,7 +71,10 @@
+ }
+ 
+ // 角色状态修改
+-export function changeRoleStatus(roleId: number | string, status: string) {
++export function changeRoleStatus(
++  roleId: RoleStatusUpdateModel['roleId'],
++  status: RoleStatusUpdateModel['status']
++) {
+   const data = {
+     roleId,
+     status,
+--- a/ruoyi-fastapi-frontend/src/api/system/user.ts
++++ b/ruoyi-fastapi-frontend/src/api/system/user.ts
+@@ -1,9 +1,11 @@
+ import { requestDetail } from '@/api/detail';
+ import type { BatchResult, HttpCollection, HttpOffsetPage } from '@/types/http-contract';
+ import type {
+-  AddUserModel,
++  UserCreateModel,
+   CrudUserRoleModel,
+-  EditUserModel,
++  UserUpdateModel,
++  UserProfileUpdateModel,
++  UserStatusUpdateModel,
+   UserDetailModel,
+   UserInfoModel,
+   UserPageQueryModel,
+@@ -75,7 +77,7 @@
+ }
+ 
+ // 新增用户
+-export function addUser(data: AddUserModel) {
++export function addUser(data: UserCreateModel) {
+   const payload = sanitizePasswordField(data, ['password']);
+   return request<UserInfoModel>({
+     url: '/system/user',
+@@ -86,12 +88,11 @@
+ }
+ 
+ // 修改用户
+-export function updateUser(data: EditUserModel) {
+-  const payload = sanitizePasswordField(data, ['password']);
++export function updateUser(data: UserUpdateModel) {
+   return request<UserInfoModel>({
+     url: '/system/user',
+     method: 'put',
+-    data: payload,
++    data,
+     feedback: { mode: 'auto', key: 'system.user.update' },
+   });
+ }
+@@ -123,7 +124,10 @@
+ }
+ 
+ // 用户状态修改
+-export function changeUserStatus(userId: number | string, status: string) {
++export function changeUserStatus(
++  userId: UserStatusUpdateModel['userId'],
++  status: UserStatusUpdateModel['status']
++) {
+   const data = {
+     userId,
+     status,
+@@ -145,7 +149,7 @@
+ }
+ 
+ // 修改用户个人信息
+-export function updateUserProfile(data: UserInfoModel) {
++export function updateUserProfile(data: UserProfileUpdateModel) {
+   return request<UserProfileModel>({
+     url: '/system/user/profile',
+     method: 'put',
+--- a/ruoyi-fastapi-frontend/src/views/system/role/components/RoleDataScopeDrawer.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/role/components/RoleDataScopeDrawer.vue
+@@ -95,7 +95,9 @@
+   async onConfirm() {
+     if (drawerLoading.value || loadError.value) return false;
+     const submitData = {
+-      ...drawer.state.data,
++      roleId: drawer.state.data.roleId,
++      dataScope: drawer.state.data.dataScope,
++      deptCheckStrictly: drawer.state.data.deptCheckStrictly,
+       deptIds: getDeptAllCheckedKeys(),
+     };
+     await dataScope(submitData);
+--- a/ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue
+@@ -135,11 +135,16 @@
+   async onConfirm() {
+     if (drawerLoading.value || loadError.value) return false;
+     const submitData = {
+-      ...drawer.state.data,
++      roleName: drawer.state.data.roleName,
++      roleKey: drawer.state.data.roleKey,
++      roleSort: drawer.state.data.roleSort,
++      status: drawer.state.data.status,
++      menuCheckStrictly: drawer.state.data.menuCheckStrictly,
++      remark: drawer.state.data.remark,
+       menuIds: getMenuAllCheckedKeys(),
+     };
+-    if (submitData.roleId) {
+-      await updateRole(submitData);
++    if (drawer.state.data.roleId) {
++      await updateRole({ ...submitData, roleId: drawer.state.data.roleId });
+     } else {
+       await addRole(submitData);
+     }
+--- a/ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue
+@@ -192,12 +192,22 @@
+     }),
+     onConfirm: async (data) => {
+       if (detailLoading.value || loadError.value) return false;
++      const payload = {
++        deptId: data.deptId,
++        userName: data.userName,
++        nickName: data.nickName,
++        phonenumber: data.phonenumber,
++        email: data.email,
++        sex: data.sex,
++        status: data.status,
++        remark: data.remark,
++        postIds: data.postIds,
++        roleIds: data.roleIds,
++      };
+       if (data.userId) {
+-        const payload = { ...data };
+-        delete payload.password;
+-        await updateUser(payload);
++        await updateUser({ ...payload, userId: data.userId });
+       } else {
+-        await addUser(data);
++        await addUser({ ...payload, password: data.password });
+       }
+       emit('success');
+     },
+--- a/ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts
++++ b/ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts
+@@ -291,3 +291,23 @@
+     expect(wrapper.emitted('success')).toBeUndefined();
+   });
+ });
++
++it('submits only editable user fields when the draft contains response metadata', async () => {
++  vi.mocked(getUser).mockResolvedValue(detail(42));
++  const wrapper = mountDialog();
++  await (wrapper.vm as unknown as DialogApi).open(42);
++  const dialog = wrapper.findComponent(dialogStub);
++  const model = dialog.props('formModel');
++  Object.assign(model, {
++    password: 'must-not-write',
++    loginIp: 'response-only',
++    createBy: 'response-only',
++    type: 'status',
++    admin: true,
++  });
++  await dialog.props('confirm')(model);
++  const payload = vi.mocked(updateUser).mock.calls[0][0];
++  expect(payload).toMatchObject({ userId: 42, nickName: 'User 42', roleIds: [42], postIds: [42] });
++  for (const field of ['password', 'loginIp', 'createBy', 'type', 'admin'])
++    expect(payload).not.toHaveProperty(field);
++});
+--- a/shared/openapi.json
++++ b/shared/openapi.json
+@@ -1,552 +1,6 @@
+ {
+   "components": {
+     "schemas": {
+-      "AddRoleModel": {
+-        "description": "新增角色模型",
+-        "properties": {
+-          "admin": {
+-            "anyOf": [
+-              {
+-                "type": "boolean"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "default": false,
+-            "description": "是否为admin",
+-            "title": "Admin"
+-          },
+-          "createBy": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "创建者",
+-            "title": "Createby"
+-          },
+-          "createTime": {
+-            "anyOf": [
+-              {
+-                "format": "date-time",
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "创建时间",
+-            "title": "Createtime"
+-          },
+-          "dataScope": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）",
+-            "title": "Datascope"
+-          },
+-          "delFlag": {
+-            "anyOf": [
+-              {
+-                "enum": [
+-                  "0",
+-                  "2"
+-                ],
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "删除标志（0代表存在 2代表删除）",
+-            "title": "Delflag"
+-          },
+-          "deptCheckStrictly": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "boolean"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "部门树选择项是否关联显示",
+-            "title": "Deptcheckstrictly"
+-          },
+-          "deptIds": {
+-            "default": [],
+-            "description": "部门ID信息",
+-            "items": {},
+-            "title": "Deptids",
+-            "type": "array"
+-          },
+-          "menuCheckStrictly": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "boolean"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "菜单树选择项是否关联显示",
+-            "title": "Menucheckstrictly"
+-          },
+-          "menuIds": {
+-            "default": [],
+-            "description": "菜单ID信息",
+-            "items": {},
+-            "title": "Menuids",
+-            "type": "array"
+-          },
+-          "remark": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "备注",
+-            "title": "Remark"
+-          },
+-          "roleId": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "角色ID",
+-            "title": "Roleid"
+-          },
+-          "roleKey": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "角色权限字符串",
+-            "title": "Rolekey"
+-          },
+-          "roleName": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "角色名称",
+-            "title": "Rolename"
+-          },
+-          "roleSort": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "显示顺序",
+-            "title": "Rolesort"
+-          },
+-          "status": {
+-            "anyOf": [
+-              {
+-                "enum": [
+-                  "0",
+-                  "1"
+-                ],
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "角色状态（0正常 1停用）",
+-            "title": "Status"
+-          },
+-          "type": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "操作类型",
+-            "title": "Type"
+-          },
+-          "updateBy": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "更新者",
+-            "title": "Updateby"
+-          },
+-          "updateTime": {
+-            "anyOf": [
+-              {
+-                "format": "date-time",
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "更新时间",
+-            "title": "Updatetime"
+-          }
+-        },
+-        "title": "AddRoleModel",
+-        "type": "object"
+-      },
+-      "AddUserModel": {
+-        "description": "新增用户模型",
+-        "properties": {
+-          "admin": {
+-            "anyOf": [
+-              {
+-                "type": "boolean"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "default": false,
+-            "description": "是否为admin",
+-            "title": "Admin"
+-          },
+-          "avatar": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "头像地址",
+-            "title": "Avatar"
+-          },
+-          "createBy": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "创建者",
+-            "title": "Createby"
+-          },
+-          "createTime": {
+-            "anyOf": [
+-              {
+-                "format": "date-time",
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "创建时间",
+-            "title": "Createtime"
+-          },
+-          "delFlag": {
+-            "anyOf": [
+-              {
+-                "enum": [
+-                  "0",
+-                  "2"
+-                ],
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "删除标志（0代表存在 2代表删除）",
+-            "title": "Delflag"
+-          },
+-          "deptId": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "部门ID",
+-            "title": "Deptid"
+-          },
+-          "email": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户邮箱",
+-            "title": "Email"
+-          },
+-          "idCard": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "身份证号",
+-            "title": "Idcard"
+-          },
+-          "loginDate": {
+-            "anyOf": [
+-              {
+-                "format": "date-time",
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "最后登录时间",
+-            "title": "Logindate"
+-          },
+-          "loginIp": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "最后登录IP",
+-            "title": "Loginip"
+-          },
+-          "nickName": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户昵称",
+-            "title": "Nickname"
+-          },
+-          "password": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "密码",
+-            "title": "Password"
+-          },
+-          "phonenumber": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "手机号码",
+-            "title": "Phonenumber"
+-          },
+-          "postIds": {
+-            "anyOf": [
+-              {
+-                "items": {},
+-                "type": "array"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "default": [],
+-            "description": "岗位ID信息",
+-            "title": "Postids"
+-          },
+-          "remark": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "备注",
+-            "title": "Remark"
+-          },
+-          "roleIds": {
+-            "anyOf": [
+-              {
+-                "items": {},
+-                "type": "array"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "default": [],
+-            "description": "角色ID信息",
+-            "title": "Roleids"
+-          },
+-          "sex": {
+-            "anyOf": [
+-              {
+-                "enum": [
+-                  "0",
+-                  "1",
+-                  "2"
+-                ],
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户性别（0男 1女 2未知）",
+-            "title": "Sex"
+-          },
+-          "status": {
+-            "anyOf": [
+-              {
+-                "enum": [
+-                  "0",
+-                  "1"
+-                ],
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "帐号状态（0正常 1停用）",
+-            "title": "Status"
+-          },
+-          "type": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "操作类型",
+-            "title": "Type"
+-          },
+-          "updateBy": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "更新者",
+-            "title": "Updateby"
+-          },
+-          "updateTime": {
+-            "anyOf": [
+-              {
+-                "format": "date-time",
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "更新时间",
+-            "title": "Updatetime"
+-          },
+-          "userId": {
+-            "anyOf": [
+-              {
+-                "type": "integer"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户ID",
+-            "title": "Userid"
+-          },
+-          "userName": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户账号",
+-            "title": "Username"
+-          },
+-          "userType": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+-            "description": "用户类型（00系统用户）",
+-            "title": "Usertype"
+-          }
+-        },
+-        "title": "AddUserModel",
+-        "type": "object"
+-      },
+       "BatchDeviceIdsModel": {
+         "description": "批量设备ID模型",
+         "properties": {
+@@ -8378,6 +7832,141 @@
+         "title": "ResetPasswordModel",
+         "type": "object"
+       },
++      "RoleCreateModel": {
++        "additionalProperties": false,
++        "properties": {
++          "menuCheckStrictly": {
++            "anyOf": [
++              {
++                "type": "boolean"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "菜单树选择项是否关联显示",
++            "title": "Menucheckstrictly"
++          },
++          "menuIds": {
++            "anyOf": [
++              {
++                "items": {
++                  "type": "integer"
++                },
++                "type": "array"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "菜单ID; 未提供保留, 空数组或null清空",
++            "title": "Menuids"
++          },
++          "remark": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "备注",
++            "title": "Remark"
++          },
++          "roleKey": {
++            "description": "角色权限字符串",
++            "maxLength": 100,
++            "minLength": 1,
++            "title": "Rolekey",
++            "type": "string"
++          },
++          "roleName": {
++            "description": "角色名称",
++            "maxLength": 30,
++            "minLength": 1,
++            "title": "Rolename",
++            "type": "string"
++          },
++          "roleSort": {
++            "description": "显示顺序",
++            "title": "Rolesort",
++            "type": "integer"
++          },
++          "status": {
++            "description": "角色状态",
++            "enum": [
++              "0",
++              "1"
++            ],
++            "title": "Status",
++            "type": "string"
++          }
++        },
++        "required": [
++          "roleName",
++          "roleKey",
++          "roleSort"
++        ],
++        "title": "RoleCreateModel",
++        "type": "object"
++      },
++      "RoleDataScopeUpdateModel": {
++        "additionalProperties": false,
++        "properties": {
++          "dataScope": {
++            "description": "数据范围",
++            "enum": [
++              "1",
++              "2",
++              "3",
++              "4",
++              "5"
++            ],
++            "title": "Datascope",
++            "type": "string"
++          },
++          "deptCheckStrictly": {
++            "anyOf": [
++              {
++                "type": "boolean"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "部门树选择项是否关联显示",
++            "title": "Deptcheckstrictly"
++          },
++          "deptIds": {
++            "anyOf": [
++              {
++                "items": {
++                  "type": "integer"
++                },
++                "type": "array"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "部门ID; 未提供保留, 空数组或null清空",
++            "title": "Deptids"
++          },
++          "roleId": {
++            "description": "角色ID",
++            "exclusiveMinimum": 0.0,
++            "title": "Roleid",
++            "type": "integer"
++          }
++        },
++        "required": [
++          "roleId",
++          "dataScope"
++        ],
++        "title": "RoleDataScopeUpdateModel",
++        "type": "object"
++      },
+       "RoleModel": {
+         "description": "角色表对应pydantic模型",
+         "properties": {
+@@ -8820,6 +8409,113 @@
+           }
+         },
+         "title": "RolePageQueryModel",
++        "type": "object"
++      },
++      "RoleStatusUpdateModel": {
++        "additionalProperties": false,
++        "properties": {
++          "roleId": {
++            "description": "角色ID",
++            "exclusiveMinimum": 0.0,
++            "title": "Roleid",
++            "type": "integer"
++          },
++          "status": {
++            "description": "角色状态",
++            "enum": [
++              "0",
++              "1"
++            ],
++            "title": "Status",
++            "type": "string"
++          }
++        },
++        "required": [
++          "roleId",
++          "status"
++        ],
++        "title": "RoleStatusUpdateModel",
++        "type": "object"
++      },
++      "RoleUpdateModel": {
++        "additionalProperties": false,
++        "properties": {
++          "menuCheckStrictly": {
++            "anyOf": [
++              {
++                "type": "boolean"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "菜单树选择项是否关联显示",
++            "title": "Menucheckstrictly"
++          },
++          "menuIds": {
++            "anyOf": [
++              {
++                "items": {
++                  "type": "integer"
++                },
++                "type": "array"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "菜单ID; 未提供保留, 空数组或null清空",
++            "title": "Menuids"
++          },
++          "remark": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "备注",
++            "title": "Remark"
++          },
++          "roleId": {
++            "description": "角色ID",
++            "exclusiveMinimum": 0.0,
++            "title": "Roleid",
++            "type": "integer"
++          },
++          "roleKey": {
++            "description": "角色权限字符串",
++            "maxLength": 100,
++            "title": "Rolekey",
++            "type": "string"
++          },
++          "roleName": {
++            "description": "角色名称",
++            "maxLength": 30,
++            "title": "Rolename",
++            "type": "string"
++          },
++          "roleSort": {
++            "description": "显示顺序",
++            "title": "Rolesort",
++            "type": "integer"
++          },
++          "status": {
++            "description": "角色状态",
++            "enum": [
++              "0",
++              "1"
++            ],
++            "title": "Status",
++            "type": "string"
++          }
++        },
++        "required": [
++          "roleId"
++        ],
++        "title": "RoleUpdateModel",
+         "type": "object"
+       },
+       "SelectedRoleModel": {
+@@ -9315,6 +9011,165 @@
+         "title": "Token",
+         "type": "object"
+       },
++      "UserCreateModel": {
++        "additionalProperties": false,
++        "properties": {
++          "deptId": {
++            "anyOf": [
++              {
++                "type": "integer"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "部门ID",
++            "title": "Deptid"
++          },
++          "email": {
++            "anyOf": [
++              {
++                "maxLength": 50,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "邮箱",
++            "title": "Email"
++          },
++          "idCard": {
++            "anyOf": [
++              {
++                "maxLength": 18,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "身份证号",
++            "title": "Idcard"
++          },
++          "nickName": {
++            "description": "用户昵称",
++            "maxLength": 30,
++            "minLength": 1,
++            "title": "Nickname",
++            "type": "string"
++          },
++          "password": {
++            "description": "初始密码",
++            "minLength": 1,
++            "pattern": "^[^<>\"'|\\\\]+$",
++            "title": "Password",
++            "type": "string"
++          },
++          "phonenumber": {
++            "anyOf": [
++              {
++                "maxLength": 11,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "手机号码",
++            "title": "Phonenumber"
++          },
++          "postIds": {
++            "anyOf": [
++              {
++                "items": {
++                  "type": "integer"
++                },
++                "type": "array"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "岗位ID; 未提供保留, 空数组或null清空",
++            "title": "Postids"
++          },
++          "remark": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "备注",
++            "title": "Remark"
++          },
++          "roleIds": {
++            "anyOf": [
++              {
++                "items": {
++                  "type": "integer"
++                },
++                "type": "array"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "角色ID; 未提供保留, 空数组或null清空",
++            "title": "Roleids"
++          },
++          "sex": {
++            "anyOf": [
++              {
++                "enum": [
++                  "0",
++                  "1",
++                  "2"
++                ],
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "用户性别",
++            "title": "Sex"
++          },
++          "status": {
++            "anyOf": [
++              {
++                "enum": [
++                  "0",
++                  "1"
++                ],
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "帐号状态",
++            "title": "Status"
++          },
++          "userName": {
++            "description": "用户账号",
++            "maxLength": 30,
++            "minLength": 1,
++            "title": "Username",
++            "type": "string"
++          }
++        },
++        "required": [
++          "nickName",
++          "userName",
++          "password"
++        ],
++        "title": "UserCreateModel",
++        "type": "object"
++      },
+       "UserDetailModel": {
+         "description": "获取用户详情信息响应模型",
+         "properties": {
+@@ -10083,6 +9938,63 @@
+           "roleGroup"
+         ],
+         "title": "UserProfileModel",
++        "type": "object"
++      },
++      "UserProfileUpdateModel": {
++        "additionalProperties": false,
++        "description": "The authenticated user can edit these profile fields only.",
++        "properties": {
++          "email": {
++            "anyOf": [
++              {
++                "maxLength": 50,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "邮箱",
++            "title": "Email"
++          },
++          "nickName": {
++            "description": "用户昵称",
++            "maxLength": 30,
++            "title": "Nickname",
++            "type": "string"
++          },
++          "phonenumber": {
++            "anyOf": [
++              {
++                "maxLength": 11,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "手机号码",
++            "title": "Phonenumber"
++          },
++          "sex": {
++            "anyOf": [
++              {
++                "enum": [
++                  "0",
++                  "1",
++                  "2"
++                ],
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "用户性别",
++            "title": "Sex"
++          }
++        },
++        "title": "UserProfileUpdateModel",
+         "type": "object"
+       },
+       "UserRegister": {
+@@ -10163,6 +10075,186 @@
+           "user"
+         ],
+         "title": "UserRoleResponseModel",
++        "type": "object"
++      },
++      "UserStatusUpdateModel": {
++        "additionalProperties": false,
++        "properties": {
++          "status": {
++            "description": "帐号状态",
++            "enum": [
++              "0",
++              "1"
++            ],
++            "title": "Status",
++            "type": "string"
++          },
++          "userId": {
++            "description": "用户ID",
++            "exclusiveMinimum": 0.0,
++            "title": "Userid",
++            "type": "integer"
++          }
++        },
++        "required": [
++          "userId",
++          "status"
++        ],
++        "title": "UserStatusUpdateModel",
++        "type": "object"
++      },
++      "UserUpdateModel": {
++        "additionalProperties": false,
++        "properties": {
++          "deptId": {
++            "anyOf": [
++              {
++                "type": "integer"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "部门ID",
++            "title": "Deptid"
++          },
++          "email": {
++            "anyOf": [
++              {
++                "maxLength": 50,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "邮箱",
++            "title": "Email"
++          },
++          "idCard": {
++            "anyOf": [
++              {
++                "maxLength": 18,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "身份证号",
++            "title": "Idcard"
++          },
++          "nickName": {
++            "description": "用户昵称",
++            "maxLength": 30,
++            "title": "Nickname",
++            "type": "string"
++          },
++          "phonenumber": {
++            "anyOf": [
++              {
++                "maxLength": 11,
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "手机号码",
++            "title": "Phonenumber"
++          },
++          "postIds": {
++            "anyOf": [
++              {
++                "items": {
++                  "type": "integer"
++                },
++                "type": "array"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "岗位ID; 未提供保留, 空数组或null清空",
++            "title": "Postids"
++          },
++          "remark": {
++            "anyOf": [
++              {
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "备注",
++            "title": "Remark"
++          },
++          "roleIds": {
++            "anyOf": [
++              {
++                "items": {
++                  "type": "integer"
++                },
++                "type": "array"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "角色ID; 未提供保留, 空数组或null清空",
++            "title": "Roleids"
++          },
++          "sex": {
++            "anyOf": [
++              {
++                "enum": [
++                  "0",
++                  "1",
++                  "2"
++                ],
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "用户性别",
++            "title": "Sex"
++          },
++          "status": {
++            "anyOf": [
++              {
++                "enum": [
++                  "0",
++                  "1"
++                ],
++                "type": "string"
++              },
++              {
++                "type": "null"
++              }
++            ],
++            "description": "帐号状态",
++            "title": "Status"
++          },
++          "userId": {
++            "description": "用户ID",
++            "exclusiveMinimum": 0.0,
++            "title": "Userid",
++            "type": "integer"
++          },
++          "userName": {
++            "description": "用户账号",
++            "maxLength": 30,
++            "title": "Username",
++            "type": "string"
++          }
++        },
++        "required": [
++          "userId"
++        ],
++        "title": "UserUpdateModel",
+         "type": "object"
+       },
+       "ValidationError": {
+@@ -23335,7 +23427,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/AddRoleModel"
++                "$ref": "#/components/schemas/RoleCreateModel"
+               }
+             }
+           },
+@@ -23377,7 +23469,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/AddRoleModel"
++                "$ref": "#/components/schemas/RoleUpdateModel"
+               }
+             }
+           },
+@@ -24631,7 +24723,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/AddRoleModel"
++                "$ref": "#/components/schemas/RoleStatusUpdateModel"
+               }
+             }
+           },
+@@ -24675,7 +24767,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/AddRoleModel"
++                "$ref": "#/components/schemas/RoleDataScopeUpdateModel"
+               }
+             }
+           },
+@@ -25285,7 +25377,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/AddUserModel"
++                "$ref": "#/components/schemas/UserCreateModel"
+               }
+             }
+           },
+@@ -25327,7 +25419,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/EditUserModel"
++                "$ref": "#/components/schemas/UserUpdateModel"
+               }
+             }
+           },
+@@ -25533,7 +25625,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/EditUserModel"
++                "$ref": "#/components/schemas/UserStatusUpdateModel"
+               }
+             }
+           },
+@@ -26241,7 +26333,7 @@
+           "content": {
+             "application/json": {
+               "schema": {
+-                "$ref": "#/components/schemas/UserInfoModel"
++                "$ref": "#/components/schemas/UserProfileUpdateModel"
+               }
+             }
+           },
+--- /dev/null
++++ b/ruoyi-fastapi-backend/module_admin/entity/vo/user_write_vo.py
+@@ -0,0 +1,58 @@
++"""Public user write inputs; persistence and response fields stay in user_vo."""
++
++from typing import Literal
++
++from pydantic import ConfigDict, Field, model_validator
++from pydantic_validation_decorator import FieldValidationError
++
++from module_admin.entity.vo.base import CamelModelBase
++from module_admin.entity.vo.user_vo import EditUserModel
++
++
++class UserProfileUpdateModel(CamelModelBase):
++    """The authenticated user can edit these profile fields only."""
++
++    model_config = ConfigDict(extra='forbid')
++
++    # An omitted field stays unset; explicitly supplied null is invalid for non-null columns.
++    nick_name: str = Field(default=None, max_length=30, description='用户昵称')
++    email: str | None = Field(default=None, max_length=50, description='邮箱')
++    phonenumber: str | None = Field(default=None, max_length=11, description='手机号码')
++    sex: Literal['0', '1', '2'] | None = Field(default=None, description='用户性别')
++
++    @model_validator(mode='after')
++    def validate_input_fields(self):
++        # Reuse existing domain rules before the controller's audit/error wrapper runs.
++        user = EditUserModel(**self.model_dump(exclude_unset=True))
++        try:
++            user.validate_fields()
++        except FieldValidationError as error:
++            raise ValueError(error.message) from error
++        return self
++
++
++class _UserEditorFields(UserProfileUpdateModel):
++    dept_id: int | None = Field(default=None, description='部门ID')
++    user_name: str = Field(default=None, max_length=30, description='用户账号')
++    id_card: str | None = Field(default=None, max_length=18, description='身份证号')
++    status: Literal['0', '1'] | None = Field(default=None, description='帐号状态')
++    remark: str | None = Field(default=None, description='备注')
++    role_ids: list[int] | None = Field(default=None, description='角色ID; 未提供保留, 空数组或null清空')
++    post_ids: list[int] | None = Field(default=None, description='岗位ID; 未提供保留, 空数组或null清空')
++
++
++class UserCreateModel(_UserEditorFields):
++    nick_name: str = Field(min_length=1, max_length=30, description='用户昵称')
++    user_name: str = Field(min_length=1, max_length=30, description='用户账号')
++    password: str = Field(min_length=1, pattern=r"""^[^<>"'|\\]+$""", description='初始密码')
++
++
++class UserUpdateModel(_UserEditorFields):
++    user_id: int = Field(gt=0, description='用户ID')
++
++
++class UserStatusUpdateModel(CamelModelBase):
++    model_config = ConfigDict(extra='forbid')
++
++    user_id: int = Field(gt=0, description='用户ID')
++    status: Literal['0', '1'] = Field(description='帐号状态')
+--- /dev/null
++++ b/ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py
+@@ -0,0 +1,59 @@
++"""Public role write inputs, separated by business operation."""
++
++from typing import Literal
++
++from pydantic import ConfigDict, Field, model_validator
++from pydantic_validation_decorator import FieldValidationError
++
++from module_admin.entity.vo.base import CamelModelBase
++from module_admin.entity.vo.role_vo import RoleModel
++
++
++class _RoleEditorFields(CamelModelBase):
++    model_config = ConfigDict(extra='forbid')
++
++    # Missing fields are excluded from the update; supplied null cannot reach non-null columns.
++    role_name: str = Field(default=None, max_length=30, description='角色名称')
++    role_key: str = Field(default=None, max_length=100, description='角色权限字符串')
++    role_sort: int = Field(default=None, description='显示顺序')
++    status: Literal['0', '1'] = Field(default=None, description='角色状态')
++    menu_check_strictly: bool | None = Field(default=None, description='菜单树选择项是否关联显示')
++    remark: str | None = Field(default=None, description='备注')
++    menu_ids: list[int] | None = Field(default=None, description='菜单ID; 未提供保留, 空数组或null清空')
++
++    @model_validator(mode='after')
++    def validate_input_fields(self):
++        role = RoleModel(**self.model_dump(exclude_unset=True))
++        try:
++            for field in ('role_name', 'role_key', 'role_sort'):
++                if field in self.model_fields_set:
++                    getattr(role, f'get_{field}')()
++        except FieldValidationError as error:
++            raise ValueError(error.message) from error
++        return self
++
++
++class RoleCreateModel(_RoleEditorFields):
++    role_name: str = Field(min_length=1, max_length=30, description='角色名称')
++    role_key: str = Field(min_length=1, max_length=100, description='角色权限字符串')
++    role_sort: int = Field(description='显示顺序')
++
++
++class RoleUpdateModel(_RoleEditorFields):
++    role_id: int = Field(gt=0, description='角色ID')
++
++
++class RoleStatusUpdateModel(CamelModelBase):
++    model_config = ConfigDict(extra='forbid')
++
++    role_id: int = Field(gt=0, description='角色ID')
++    status: Literal['0', '1'] = Field(description='角色状态')
++
++
++class RoleDataScopeUpdateModel(CamelModelBase):
++    model_config = ConfigDict(extra='forbid')
++
++    role_id: int = Field(gt=0, description='角色ID')
++    data_scope: Literal['1', '2', '3', '4', '5'] = Field(description='数据范围')
++    dept_check_strictly: bool | None = Field(default=None, description='部门树选择项是否关联显示')
++    dept_ids: list[int] | None = Field(default=None, description='部门ID; 未提供保留, 空数组或null清空')
+--- /dev/null
++++ b/ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py
+@@ -0,0 +1,252 @@
++"""Operation-specific request boundaries, using the actual registered route models."""
++
++import inspect
++from types import SimpleNamespace
++from unittest.mock import AsyncMock
++
++import pytest
++from pydantic import ValidationError
++from starlette.requests import Request
++
++from exceptions.exception import PermissionException
++from module_admin.entity.vo.common_vo import CrudResponseModel
++from module_admin.entity.vo.user_vo import CurrentUserModel, EditUserModel, UserInfoModel
++from modules.system.api import user_controller
++from modules.system.api.role_controller import roleController
++from modules.system.api.user_controller import userController
++from modules.system.application.behaviors.command_behaviors import CommandValidationBehavior
++from modules.system.application.commands import EditUserCommand
++from modules.system.application.handlers.command.user_command_handlers import EditUserCommandHandler
++
++
++def request_model(router, path, method='PUT'):
++    route = next(route for route in router.routes if route.path == path and method in route.methods)
++    return route.body_field.type_
++
++
++CASES = [
++    (
++        userController,
++        '/system/user/profile',
++        'PUT',
++        {'nickName': 'After'},
++        [
++            'userId',
++            'userName',
++            'deptId',
++            'status',
++            'delFlag',
++            'password',
++            'avatar',
++            'roleIds',
++            'postIds',
++            'type',
++            'createBy',
++        ],
++    ),
++    (
++        userController,
++        '/system/user',
++        'POST',
++        {'userName': 'alice', 'nickName': 'Alice', 'password': 'admin123'},
++        ['userId', 'delFlag', 'loginIp', 'avatar', 'type', 'createBy'],
++    ),
++    (
++        userController,
++        '/system/user',
++        'PUT',
++        {'userId': 42, 'userName': 'alice'},
++        ['password', 'avatar', 'delFlag', 'loginIp', 'createBy', 'type', 'admin'],
++    ),
++    (
++        userController,
++        '/system/user/changeStatus',
++        'PUT',
++        {'userId': 42, 'status': '1'},
++        ['nickName', 'deptId', 'roleIds', 'postIds', 'password', 'type', 'createBy'],
++    ),
++    (
++        roleController,
++        '/system/role',
++        'POST',
++        {'roleName': 'Ops', 'roleKey': 'ops', 'roleSort': 1},
++        ['roleId', 'dataScope', 'deptIds', 'delFlag', 'type', 'createBy'],
++    ),
++    (
++        roleController,
++        '/system/role',
++        'PUT',
++        {'roleId': 42, 'roleName': 'Ops'},
++        ['dataScope', 'deptIds', 'delFlag', 'createBy', 'type', 'admin'],
++    ),
++    (
++        roleController,
++        '/system/role/changeStatus',
++        'PUT',
++        {'roleId': 42, 'status': '1'},
++        ['roleName', 'menuIds', 'dataScope', 'deptIds', 'type', 'createBy'],
++    ),
++    (
++        roleController,
++        '/system/role/dataScope',
++        'PUT',
++        {'roleId': 42, 'dataScope': '2'},
++        ['roleName', 'roleKey', 'menuIds', 'status', 'type', 'createBy'],
++    ),
++]
++
++
++@pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'forbidden'), CASES)
++def test_each_operation_rejects_inappropriate_fields(router, path, method, valid, forbidden):
++    model = request_model(router, path, method)
++    model.model_validate(valid)
++    for field in forbidden:
++        with pytest.raises(ValidationError) as caught:
++            model.model_validate({**valid, field: None})
++        assert any(error['type'] == 'extra_forbidden' for error in caught.value.errors()), field
++
++
++@pytest.mark.parametrize(
++    ('router', 'path', 'valid', 'required'),
++    [
++        (userController, '/system/user', {'userId': 42}, ['userId']),
++        (userController, '/system/user/changeStatus', {'userId': 42, 'status': '1'}, ['userId', 'status']),
++        (roleController, '/system/role', {'roleId': 42}, ['roleId']),
++        (roleController, '/system/role/changeStatus', {'roleId': 42, 'status': '1'}, ['roleId', 'status']),
++        (roleController, '/system/role/dataScope', {'roleId': 42, 'dataScope': '2'}, ['roleId', 'dataScope']),
++    ],
++)
++def test_identity_and_required_action_fields_cannot_be_missing_or_null(router, path, valid, required):
++    model = request_model(router, path)
++    for field in required:
++        for payload in [{key: value for key, value in valid.items() if key != field}, {**valid, field: None}]:
++            with pytest.raises(ValidationError):
++                model.model_validate(payload)
++
++
++@pytest.mark.asyncio
++async def test_profile_maps_only_requested_fields_and_never_replays_login_associations(monkeypatch):
++    model = request_model(userController, '/system/user/profile')
++    mediator = SimpleNamespace(send=AsyncMock(return_value=SimpleNamespace(data={'message': '更新成功'})))
++    monkeypatch.setattr(user_controller, '_load_user_profile', AsyncMock(return_value={}))
++    current = CurrentUserModel(
++        permissions=[], roles=[], user=UserInfoModel(userId=42, userName='alice', roleIds='21', postIds='31', role=[])
++    )
++    await inspect.unwrap(user_controller.change_system_user_profile_info)(
++        Request({'type': 'http', 'headers': []}),
++        model.model_validate({'nickName': 'After'}),
++        object(),
++        current,
++        mediator,
++    )
++    command = mediator.send.await_args.args[0]
++    fields = command.user.model_fields_set
++    assert command.user.user_id == current.user.user_id
++    assert command.user.nick_name == 'After'
++    assert command.user.type == 'profile'
++    assert fields.isdisjoint({'role_ids', 'post_ids', 'role', 'password', 'dept_id', 'status', 'del_flag'})
++    assert command.user.update_by == current.user.user_name
++
++
++@pytest.mark.asyncio
++async def test_ordinary_user_partial_edit_validates_only_supplied_fields():
++    service = SimpleNamespace(
++        check_user_allowed_services=AsyncMock(),
++        edit_user_services=AsyncMock(return_value=CrudResponseModel(is_success=True, message='更新成功')),
++    )
++    handler = EditUserCommandHandler(service, AsyncMock(), AsyncMock())
++    await handler.handle(EditUserCommand(query_db=object(), user=EditUserModel(userId=42, nickName='After')))
++    service.edit_user_services.assert_awaited_once()
++
++
++@pytest.mark.asyncio
++async def test_profile_command_allows_admin_self_service_without_association_or_admin_edits():
++    service = SimpleNamespace(
++        check_user_allowed_services=AsyncMock(side_effect=AssertionError('admin profile rejected')),
++        edit_user_services=AsyncMock(return_value=CrudResponseModel(is_success=True, message='更新成功')),
++    )
++    handler = EditUserCommandHandler(service, AsyncMock(), AsyncMock())
++    await handler.handle(
++        EditUserCommand(
++            query_db=object(), user=EditUserModel(userId=1, userName='admin', nickName='After', type='profile')
++        )
++    )
++    service.check_user_allowed_services.assert_not_awaited()
++    service.edit_user_services.assert_awaited_once()
++
++
++@pytest.mark.parametrize(
++    ('router', 'path', 'method', 'valid', 'fields'),
++    [
++        (userController, '/system/user', 'POST', {'userName': 'alice', 'password': 'admin123'}, ['nickName']),
++        (userController, '/system/user/profile', 'PUT', {}, ['nickName']),
++        (userController, '/system/user', 'PUT', {'userId': 42}, ['userName', 'nickName']),
++        (roleController, '/system/role', 'PUT', {'roleId': 42}, ['roleName', 'roleKey', 'roleSort', 'status']),
++    ],
++)
++def test_non_null_persistence_fields_reject_explicit_null(router, path, method, valid, fields):
++    model = request_model(router, path, method)
++    for field in fields:
++        with pytest.raises(ValidationError):
++            model.model_validate({**valid, field: None})
++        prop = model.model_json_schema(by_alias=True)['properties'][field]
++        assert not any(option.get('type') == 'null' for option in prop.get('anyOf', []))
++
++
++def test_user_creation_requires_a_nickname():
++    model = request_model(userController, '/system/user', 'POST')
++    with pytest.raises(ValidationError):
++        model.model_validate({'userName': 'alice', 'password': 'admin123'})
++
++
++@pytest.mark.parametrize(
++    ('router', 'path', 'method', 'payload'),
++    [
++        (
++            userController,
++            '/system/user',
++            'POST',
++            {'userName': 'alice', 'nickName': 'Alice', 'password': 'admin123', 'email': 'invalid'},
++        ),
++        (userController, '/system/user', 'PUT', {'userId': 42, 'email': 'invalid'}),
++        (userController, '/system/user/profile', 'PUT', {'email': 'invalid'}),
++        (roleController, '/system/role', 'POST', {'roleName': '', 'roleKey': 'ops', 'roleSort': 1}),
++        (roleController, '/system/role', 'PUT', {'roleId': 42, 'roleName': ''}),
++    ],
++)
++def test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper(router, path, method, payload):
++    with pytest.raises(ValidationError):
++        request_model(router, path, method).model_validate(payload)
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize('dept', ['omitted', 'null', 'outside'])
++async def test_partial_user_edits_check_only_the_supplied_target_department(dept):
++    service = SimpleNamespace(
++        check_user_allowed_services=AsyncMock(),
++        check_user_data_scope_services=AsyncMock(),
++        edit_user_services=AsyncMock(return_value=CrudResponseModel(is_success=True, message='更新成功')),
++    )
++    dept_service = SimpleNamespace(
++        check_dept_data_scope_services=AsyncMock(side_effect=PermissionException(user_message='无部门权限'))
++    )
++    handler = EditUserCommandHandler(service, dept_service, AsyncMock())
++    payload = {'userId': 42, 'nickName': 'After'}
++    if dept != 'omitted':
++        payload['deptId'] = None if dept == 'null' else 999
++    command = EditUserCommand(query_db=object(), user=EditUserModel(**payload), enforce_scope_checks=True)
++    if dept == 'outside':
++        with pytest.raises(PermissionException):
++            await handler.handle(command)
++        dept_service.check_dept_data_scope_services.assert_awaited_once()
++        service.edit_user_services.assert_not_awaited()
++    else:
++        await handler.handle(command)
++        dept_service.check_dept_data_scope_services.assert_not_awaited()
++        service.edit_user_services.assert_awaited_once()
++    service.check_user_data_scope_services.assert_awaited_once()
++
++
++def test_command_pipeline_uses_partial_edit_validation_as_well_as_the_handler():
++    command = EditUserCommand(query_db=object(), user=EditUserModel(userId=42, nickName='After'))
++    CommandValidationBehavior._validate_request(command)
+--- /dev/null
++++ b/ruoyi-fastapi-backend/tests/unit/services/test_role_write_relations.py
+@@ -0,0 +1,175 @@
++"""Persistence regressions for operation fields and omitted/empty associations."""
++
++from datetime import datetime
++from unittest.mock import AsyncMock, MagicMock, patch
++
++import pytest
++
++from module_admin.entity.do.role_do import RoleDeptDO, RoleDO, RoleMenuDO
++from module_admin.entity.do.user_do import UserDO, UserPostDO, UserRoleDO
++from module_admin.entity.vo.role_vo import AddRoleModel, RoleModel
++from module_admin.entity.vo.user_vo import EditUserModel
++from modules.system.application.services.role_service import RoleService
++from modules.system.application.services.user_service import UserService
++from modules.system.infrastructure.role_dept_repository import RoleDeptRepository
++from modules.system.infrastructure.role_menu_repository import RoleMenuRepository
++from modules.system.infrastructure.role_repository import RoleRepository
++from modules.system.infrastructure.user_post_repository import UserPostRepository
++from modules.system.infrastructure.user_role_repository import UserRoleRepository
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize('provided', ['omitted', 'empty', 'null', 'replace'])
++@pytest.mark.parametrize('operation', ['edit', 'scope'])
++async def test_role_relationship_presence_is_preserved(db_session, provided, operation):
++    role = RoleDO(role_id=42, role_name='Before', role_key='before', role_sort=1, data_scope='2', status='0')
++    db_session.add(role)
++    db_session.add_all([RoleMenuDO(role_id=42, menu_id=20), RoleDeptDO(role_id=42, dept_id=30)])
++    await db_session.flush()
++    service = RoleService(
++        RoleRepository(db_session),
++        RoleMenuRepository(db_session),
++        RoleDeptRepository(db_session),
++        AsyncMock(),
++        db_session,
++    )
++    service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
++    service._invalidate_role_cache = AsyncMock()
++    service.check_role_name_unique_services = AsyncMock(return_value=True)
++    service.check_role_key_unique_services = AsyncMock(return_value=True)
++    field = 'menuIds' if operation == 'edit' else 'deptIds'
++    old = 20 if operation == 'edit' else 30
++    values = {'omitted': {}, 'empty': {field: []}, 'null': {field: None}, 'replace': {field: [old + 1]}}
++    payload = {'roleId': 42, **values[provided]}
++    if operation == 'edit':
++        payload['roleName'] = 'After'
++        await service.edit_role_services(AddRoleModel(**payload))
++    else:
++        payload['dataScope'] = '2'
++        await service.role_datascope_services(AddRoleModel(**payload))
++    menus = [row.menu_id for row in await service.role_menu_repo.find_by_role_id(42)]
++    depts = [row.dept_id for row in await service.role_dept_repo.find_by_role_id(42)]
++    expected = [old] if provided == 'omitted' else [old + 1] if provided == 'replace' else []
++    assert (menus if operation == 'edit' else depts) == expected
++    assert (depts if operation == 'edit' else menus) == ([30] if operation == 'edit' else [20])
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize('operation', ['edit', 'scope', 'status'])
++async def test_role_service_updates_only_operation_fields(db_session, operation):
++    role = RoleDO(
++        role_id=42,
++        role_name='Before',
++        role_key='before',
++        role_sort=1,
++        data_scope='2',
++        status='0',
++        del_flag='0',
++        create_by='original',
++    )
++    db_session.add(role)
++    await db_session.flush()
++    service = RoleService(
++        RoleRepository(db_session),
++        RoleMenuRepository(db_session),
++        RoleDeptRepository(db_session),
++        AsyncMock(),
++        db_session,
++    )
++    service.role_detail_services = AsyncMock(return_value=RoleModel(roleId=42))
++    service._invalidate_role_cache = AsyncMock()
++    service.check_role_name_unique_services = AsyncMock(return_value=True)
++    service.check_role_key_unique_services = AsyncMock(return_value=True)
++    data = {'roleId': 42, 'delFlag': '2', 'createBy': 'smuggled'}
++    if operation == 'edit':
++        data.update(roleName='After', dataScope='1', menuIds=[])
++        await service.edit_role_services(AddRoleModel(**data))
++        assert role.role_name == 'After'
++        assert role.data_scope == '2'
++    elif operation == 'scope':
++        data.update(roleName='Smuggled', dataScope='1', deptIds=[])
++        await service.role_datascope_services(AddRoleModel(**data))
++        assert role.role_name == 'Before'
++        assert role.data_scope == '1'
++    else:
++        data.update(roleName='Smuggled', status='1', type='status')
++        await service.edit_role_services(AddRoleModel(**data))
++        assert role.role_name == 'Before'
++        assert role.status == '1'
++    assert role.del_flag == '0'
++    assert role.create_by == 'original'
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize('operation', ['profile', 'status', 'edit'])
++async def test_user_service_restricts_fields_and_profile_does_not_touch_relations(db_session, operation):
++    user = UserDO(
++        user_id=42,
++        user_name='alice',
++        nick_name='Before',
++        dept_id=7,
++        status='0',
++        del_flag='0',
++        password='original-hash',
++        login_ip='original',
++    )
++    db_session.add(user)
++    db_session.add_all([UserRoleDO(user_id=42, role_id=20), UserPostDO(user_id=42, post_id=30)])
++    await db_session.flush()
++    payload = {
++        'userId': 42,
++        'userName': 'alice',
++        'nickName': 'After',
++        'password': 'smuggled',
++        'delFlag': '2',
++        'loginIp': 'smuggled',
++        'roleIds': [],
++        'postIds': [],
++    }
++    if operation == 'profile':
++        payload.update(type='profile', deptId=999, status='1')
++    elif operation == 'status':
++        payload.update(type='status', status='1')
++    await UserService().edit_user_services(db_session, EditUserModel(**payload))
++    assert user.password == 'original-hash'
++    assert user.del_flag == '0'
++    assert user.login_ip == 'original'
++    assert user.nick_name == ('Before' if operation == 'status' else 'After')
++    if operation == 'profile':
++        assert user.dept_id == 7
++        assert user.status == '0'
++    if operation != 'edit':
++        assert [row.role_id for row in await UserRoleRepository(db_session).find_by_user_id(42)] == [20]
++        assert [row.post_id for row in await UserPostRepository(db_session).find_by_user_id(42)] == [30]
++
++
++@pytest.mark.asyncio
++async def test_login_bookkeeping_updates_login_fields_without_using_status_operation(db_session):
++    user = UserDO(user_id=42, user_name='login_user', nick_name='Before', status='0')
++    db_session.add(user)
++    await db_session.flush()
++    login_date = datetime(2026, 1, 1)
++    await UserService().edit_user_services(
++        db_session, EditUserModel(userId=42, loginDate=login_date, status='1', nickName='Smuggled', type='login')
++    )
++    assert user.login_date == login_date
++    assert user.status == '0'
++    assert user.nick_name == 'Before'
++
++
++@pytest.mark.asyncio
++async def test_management_detail_can_read_a_disabled_role(db_session):
++    role = RoleDO(role_id=42, role_name='Disabled', role_key='disabled', role_sort=1, status='1')
++    db_session.add(role)
++    await db_session.flush()
++    service = RoleService(RoleRepository(db_session), AsyncMock(), AsyncMock(), AsyncMock(), db_session)
++    cache = MagicMock()
++    cache.get = AsyncMock(return_value=None)
++    cache.set = AsyncMock()
++    cache.build_key.return_value = 'owned-role-42'
++    cache.get.return_value = None
++
++    with patch('modules.system.application.services.role_service.get_query_cache', return_value=cache):
++        result = await service.role_detail_services(42)
++    assert result.role_id == 42
++    assert result.status == '1'

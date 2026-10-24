@@ -1,0 +1,1 @@
+"""protocol bounded context package."""

@@ -1,0 +1,140 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 21 items / 16 deselected / 5 selected
+
+tests/unit/controllers/test_user_role_write_contract.py FFFFF            [100%]
+
+=================================== FAILURES ===================================
+_ test_non_null_persistence_fields_reject_explicit_null[router0-/system/user-POST-valid0-fields0] _
+
+router = <fastapi.routing.APIRouter object at 0x12257c500>
+path = '/system/user', method = 'POST'
+valid = {'password': 'admin123', 'userName': 'alice'}, fields = ['nickName']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'fields'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'password': 'admin123'}, ['nickName']),
+        (userController, '/system/user/profile', 'PUT', {}, ['nickName']),
+        (userController, '/system/user', 'PUT', {'userId': 42}, ['userName', 'nickName']),
+        (roleController, '/system/role', 'PUT', {'roleId': 42}, ['roleName', 'roleKey', 'roleSort', 'status']),
+    ])
+    def test_non_null_persistence_fields_reject_explicit_null(router, path, method, valid, fields):
+        model = request_model(router, path, method)
+        for field in fields:
+>           with pytest.raises(ValidationError):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'nickName'
+fields     = ['nickName']
+method     = 'POST'
+model      = <class 'module_admin.entity.vo.user_write_vo.UserCreateModel'>
+path       = '/system/user'
+router     = <fastapi.routing.APIRouter object at 0x12257c500>
+valid      = {'password': 'admin123', 'userName': 'alice'}
+
+tests/unit/controllers/test_user_role_write_contract.py:185: Failed
+_ test_non_null_persistence_fields_reject_explicit_null[router1-/system/user/profile-PUT-valid1-fields1] _
+
+router = <fastapi.routing.APIRouter object at 0x12257c500>
+path = '/system/user/profile', method = 'PUT', valid = {}, fields = ['nickName']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'fields'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'password': 'admin123'}, ['nickName']),
+        (userController, '/system/user/profile', 'PUT', {}, ['nickName']),
+        (userController, '/system/user', 'PUT', {'userId': 42}, ['userName', 'nickName']),
+        (roleController, '/system/role', 'PUT', {'roleId': 42}, ['roleName', 'roleKey', 'roleSort', 'status']),
+    ])
+    def test_non_null_persistence_fields_reject_explicit_null(router, path, method, valid, fields):
+        model = request_model(router, path, method)
+        for field in fields:
+>           with pytest.raises(ValidationError):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'nickName'
+fields     = ['nickName']
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.user_write_vo.UserProfileUpdateModel'>
+path       = '/system/user/profile'
+router     = <fastapi.routing.APIRouter object at 0x12257c500>
+valid      = {}
+
+tests/unit/controllers/test_user_role_write_contract.py:185: Failed
+_ test_non_null_persistence_fields_reject_explicit_null[router2-/system/user-PUT-valid2-fields2] _
+
+router = <fastapi.routing.APIRouter object at 0x12257c500>
+path = '/system/user', method = 'PUT', valid = {'userId': 42}
+fields = ['userName', 'nickName']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'fields'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'password': 'admin123'}, ['nickName']),
+        (userController, '/system/user/profile', 'PUT', {}, ['nickName']),
+        (userController, '/system/user', 'PUT', {'userId': 42}, ['userName', 'nickName']),
+        (roleController, '/system/role', 'PUT', {'roleId': 42}, ['roleName', 'roleKey', 'roleSort', 'status']),
+    ])
+    def test_non_null_persistence_fields_reject_explicit_null(router, path, method, valid, fields):
+        model = request_model(router, path, method)
+        for field in fields:
+>           with pytest.raises(ValidationError):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'userName'
+fields     = ['userName', 'nickName']
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.user_write_vo.UserUpdateModel'>
+path       = '/system/user'
+router     = <fastapi.routing.APIRouter object at 0x12257c500>
+valid      = {'userId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:185: Failed
+_ test_non_null_persistence_fields_reject_explicit_null[router3-/system/role-PUT-valid3-fields3] _
+
+router = <fastapi.routing.APIRouter object at 0x1222a49b0>
+path = '/system/role', method = 'PUT', valid = {'roleId': 42}
+fields = ['roleName', 'roleKey', 'roleSort', 'status']
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'valid', 'fields'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'password': 'admin123'}, ['nickName']),
+        (userController, '/system/user/profile', 'PUT', {}, ['nickName']),
+        (userController, '/system/user', 'PUT', {'userId': 42}, ['userName', 'nickName']),
+        (roleController, '/system/role', 'PUT', {'roleId': 42}, ['roleName', 'roleKey', 'roleSort', 'status']),
+    ])
+    def test_non_null_persistence_fields_reject_explicit_null(router, path, method, valid, fields):
+        model = request_model(router, path, method)
+        for field in fields:
+>           with pytest.raises(ValidationError):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+field      = 'roleName'
+fields     = ['roleName', 'roleKey', 'roleSort', 'status']
+method     = 'PUT'
+model      = <class 'module_admin.entity.vo.role_write_vo.RoleUpdateModel'>
+path       = '/system/role'
+router     = <fastapi.routing.APIRouter object at 0x1222a49b0>
+valid      = {'roleId': 42}
+
+tests/unit/controllers/test_user_role_write_contract.py:185: Failed
+____________________ test_user_creation_requires_a_nickname ____________________
+
+    def test_user_creation_requires_a_nickname():
+        model = request_model(userController, '/system/user', 'POST')
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+model      = <class 'module_admin.entity.vo.user_write_vo.UserCreateModel'>
+
+tests/unit/controllers/test_user_role_write_contract.py:193: Failed
+=========================== short test summary info ============================
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_non_null_persistence_fields_reject_explicit_null[router0-/system/user-POST-valid0-fields0]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_non_null_persistence_fields_reject_explicit_null[router1-/system/user/profile-PUT-valid1-fields1]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_non_null_persistence_fields_reject_explicit_null[router2-/system/user-PUT-valid2-fields2]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_non_null_persistence_fields_reject_explicit_null[router3-/system/role-PUT-valid3-fields3]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_user_creation_requires_a_nickname
+======================= 5 failed, 16 deselected in 0.42s =======================

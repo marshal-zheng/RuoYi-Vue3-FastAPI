@@ -1,0 +1,109 @@
+--- baseline/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
++++ current/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
+@@ -3812,7 +3812,7 @@
+    *
+    * 操作状态（0正常 1异常）
+    */
+-  status?: 0 | 1 | '0' | '1' | null;
++  status?: '0' | '1' | 0 | 1 | null;
+   /**
+    * Title
+    *
+@@ -4003,6 +4003,74 @@
+    * 更新时间
+    */
+   updateTime?: string | null;
++};
++
++/**
++ * ProjectCreatedModel
++ *
++ * 新建工程及同时创建的初始版本，供拓扑设计入口使用。
++ */
++export type ProjectCreatedModel = {
++  /**
++   * Createby
++   *
++   * 创建人
++   */
++  createBy?: string | null;
++  /**
++   * Createtime
++   *
++   * 创建时间
++   */
++  createTime?: string | null;
++  /**
++   * Delflag
++   *
++   * 删除标志（0代表存在 2代表删除）
++   */
++  delFlag?: string | null;
++  /**
++   * Projectcode
++   *
++   * 工程编码
++   */
++  projectCode?: string | null;
++  /**
++   * Projectdesc
++   *
++   * 工程描述
++   */
++  projectDesc?: string | null;
++  /**
++   * Projectid
++   *
++   * 工程编号
++   */
++  projectId: number;
++  /**
++   * Projectname
++   *
++   * 工程名称
++   */
++  projectName?: string | null;
++  /**
++   * Updateby
++   *
++   * 更新者
++   */
++  updateBy?: string | null;
++  /**
++   * Updatetime
++   *
++   * 更新时间
++   */
++  updateTime?: string | null;
++  /**
++   * Versionid
++   *
++   * 初始版本编号
++   */
++  versionId: number;
+ };
+ 
+ /**
+@@ -8185,7 +8253,7 @@
+      *
+      * 操作状态（0正常 1异常）
+      */
+-    status?: 0 | 1 | '0' | '1' | null;
++    status?: '0' | '1' | 0 | 1 | null;
+     /**
+      * Errormsg
+      *
+@@ -8331,8 +8399,11 @@
+   /**
+    * Successful Response
+    */
+-  200: unknown;
+-};
++  201: ProjectCreatedModel;
++};
++
++export type AddSystemProjectProjectPostResponse =
++  AddSystemProjectProjectPostResponses[keyof AddSystemProjectProjectPostResponses];
+ 
+ export type EditSystemProjectProjectPutData = {
+   body: ProjectModel;

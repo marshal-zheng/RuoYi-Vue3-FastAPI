@@ -1,0 +1,375 @@
+{
+  "items": [
+    {
+      "name": "System",
+      "path": "/system",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "query": null,
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统管理",
+        "icon": "system",
+        "noCache": false,
+        "link": null
+      },
+      "children": [
+        {
+          "name": "User",
+          "path": "user",
+          "hidden": false,
+          "component": "system/user/index",
+          "query": null,
+          "meta": {
+            "title": "用户管理",
+            "icon": "user",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Role",
+          "path": "role",
+          "hidden": false,
+          "component": "system/role/index",
+          "query": null,
+          "meta": {
+            "title": "角色管理",
+            "icon": "peoples",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Menu",
+          "path": "menu",
+          "hidden": false,
+          "component": "system/menu/index",
+          "query": null,
+          "meta": {
+            "title": "菜单管理",
+            "icon": "tree-table",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Dept",
+          "path": "dept",
+          "hidden": false,
+          "component": "system/dept/index",
+          "query": null,
+          "meta": {
+            "title": "部门管理",
+            "icon": "tree",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Post",
+          "path": "post",
+          "hidden": false,
+          "component": "system/post/index",
+          "query": null,
+          "meta": {
+            "title": "岗位管理",
+            "icon": "post",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Dict",
+          "path": "dict",
+          "hidden": false,
+          "component": "system/dict/index",
+          "query": null,
+          "meta": {
+            "title": "字典管理",
+            "icon": "dict",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Config",
+          "path": "config",
+          "hidden": false,
+          "component": "system/config/index",
+          "query": null,
+          "meta": {
+            "title": "参数设置",
+            "icon": "edit",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Notice",
+          "path": "notice",
+          "hidden": false,
+          "component": "system/notice/index",
+          "query": null,
+          "meta": {
+            "title": "通知公告",
+            "icon": "message",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Log",
+          "path": "log",
+          "hidden": false,
+          "redirect": "noRedirect",
+          "component": "ParentView",
+          "query": null,
+          "alwaysShow": true,
+          "meta": {
+            "title": "日志管理",
+            "icon": "log",
+            "noCache": false,
+            "link": null
+          },
+          "children": [
+            {
+              "name": "Operlog",
+              "path": "operlog",
+              "hidden": false,
+              "component": "monitor/operlog/index",
+              "query": null,
+              "meta": {
+                "title": "操作日志",
+                "icon": "form",
+                "noCache": false,
+                "link": null
+              }
+            },
+            {
+              "name": "Logininfor",
+              "path": "logininfor",
+              "hidden": false,
+              "component": "monitor/logininfor/index",
+              "query": null,
+              "meta": {
+                "title": "登录日志",
+                "icon": "logininfor",
+                "noCache": false,
+                "link": null
+              }
+            },
+            {
+              "name": "Audit",
+              "path": "audit",
+              "hidden": false,
+              "component": "monitor/audit/index",
+              "query": null,
+              "meta": {
+                "title": "审计日志",
+                "icon": "log",
+                "noCache": false,
+                "link": null
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Monitor",
+      "path": "/monitor",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "query": null,
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统监控",
+        "icon": "monitor",
+        "noCache": false,
+        "link": null
+      },
+      "children": [
+        {
+          "name": "Online",
+          "path": "online",
+          "hidden": false,
+          "component": "monitor/online/index",
+          "query": null,
+          "meta": {
+            "title": "在线用户",
+            "icon": "online",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Job",
+          "path": "job",
+          "hidden": false,
+          "component": "monitor/job/index",
+          "query": null,
+          "meta": {
+            "title": "定时任务",
+            "icon": "job",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Druid",
+          "path": "druid",
+          "hidden": false,
+          "component": "monitor/druid/index",
+          "query": null,
+          "meta": {
+            "title": "数据监控",
+            "icon": "druid",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Server",
+          "path": "server",
+          "hidden": false,
+          "component": "monitor/server/index",
+          "query": null,
+          "meta": {
+            "title": "服务监控",
+            "icon": "server",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Cache",
+          "path": "cache",
+          "hidden": false,
+          "component": "monitor/cache/index",
+          "query": null,
+          "meta": {
+            "title": "缓存监控",
+            "icon": "redis",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Cachelist",
+          "path": "cacheList",
+          "hidden": false,
+          "component": "monitor/cache/list",
+          "query": null,
+          "meta": {
+            "title": "缓存列表",
+            "icon": "redis-list",
+            "noCache": false,
+            "link": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tool",
+      "path": "/tool",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "query": null,
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统工具",
+        "icon": "tool",
+        "noCache": false,
+        "link": null
+      },
+      "children": [
+        {
+          "name": "Build",
+          "path": "build",
+          "hidden": false,
+          "component": "tool/build/index",
+          "query": null,
+          "meta": {
+            "title": "表单构建",
+            "icon": "build",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Gen",
+          "path": "gen",
+          "hidden": false,
+          "component": "tool/gen/index",
+          "query": null,
+          "meta": {
+            "title": "代码生成",
+            "icon": "code",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Swagger",
+          "path": "swagger",
+          "hidden": false,
+          "component": "tool/swagger/index",
+          "query": null,
+          "meta": {
+            "title": "系统接口",
+            "icon": "swagger",
+            "noCache": false,
+            "link": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Project",
+      "path": "/project",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "query": null,
+      "alwaysShow": true,
+      "meta": {
+        "title": "工程管理",
+        "icon": "build",
+        "noCache": false,
+        "link": null
+      },
+      "children": [
+        {
+          "name": "Project",
+          "path": "project",
+          "hidden": false,
+          "component": "project/index",
+          "query": null,
+          "meta": {
+            "title": "工程列表",
+            "icon": "list",
+            "noCache": false,
+            "link": null
+          }
+        },
+        {
+          "name": "Projectoperlog",
+          "path": "operlog",
+          "hidden": false,
+          "component": "monitor/operlog/index",
+          "query": null,
+          "meta": {
+            "title": "操作日志",
+            "icon": "form",
+            "noCache": false,
+            "link": null
+          }
+        }
+      ]
+    }
+  ]
+}

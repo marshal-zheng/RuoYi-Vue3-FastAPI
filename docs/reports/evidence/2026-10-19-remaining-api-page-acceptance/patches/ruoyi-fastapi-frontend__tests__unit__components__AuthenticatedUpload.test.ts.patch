@@ -1,0 +1,19 @@
+--- baseline/ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts
++++ current/ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts
+@@ -2,6 +2,7 @@
+ import { defineComponent, h, nextTick, ref, type Component, type App } from 'vue';
+ import { mount, flushPromises } from '@vue/test-utils';
+ import ElementPlus, { ElUpload } from 'element-plus';
++import modal from '@/plugins/modal';
+ import { endQuerySession, setQuerySession } from '@/queries/context';
+ import FileUpload from '@/components/ui/FileUpload/index.vue';
+ import ImageUpload from '@/components/ui/ImageUpload/index.vue';
+@@ -19,7 +20,7 @@
+         ElementPlus,
+         {
+           install(app: App) {
+-            app.config.globalProperties.$modal = { loading, closeLoading };
++            app.config.globalProperties.$modal = { ...modal, loading, closeLoading };
+           },
+         },
+       ],

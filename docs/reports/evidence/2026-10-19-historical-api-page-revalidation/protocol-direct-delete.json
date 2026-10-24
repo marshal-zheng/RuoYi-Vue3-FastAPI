@@ -1,0 +1,18 @@
+{
+  "result": {
+    "status": 204,
+    "body": null
+  },
+  "detail": {
+    "status": 404,
+    "body": {
+      "type": "about:blank",
+      "title": "协议不存在",
+      "status": 404,
+      "detail": "协议不存在",
+      "instance": "/dev-api/system/protocol/17",
+      "errorCode": 45001,
+      "requestId": "c3e5748cc6754dd290c107c5a4b74f8f"
+    }
+  }
+}

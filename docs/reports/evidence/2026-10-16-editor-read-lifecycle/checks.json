@@ -1,0 +1,65 @@
+{
+  "scope": [
+    "config",
+    "dict-type",
+    "dept",
+    "role-edit",
+    "role-data-scope"
+  ],
+  "businessTests": {
+    "command": "yarn test:run tests/unit/components/EditorReadLifecycle.test.ts tests/unit/components/RoleFormDrawer.test.ts tests/unit/components/UserFormDialog.test.ts tests/unit/components/ListQueryContract.test.ts tests/unit/components/MenuCollection.test.ts src/utils/http.test.ts src/utils/feedback/presenter.test.ts src/utils/request.download.test.ts src/api/menu-contract.test.ts",
+    "exitCode": 0,
+    "files": 9,
+    "passed": 108
+  },
+  "lint": {
+    "command": "yarn lint:check",
+    "exitCode": 0
+  },
+  "types": {
+    "command": "yarn type-check",
+    "exitCode": 0
+  },
+  "sourceBuild": {
+    "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod",
+    "exitCode": 0
+  },
+  "uiStandards": {
+    "command": "yarn ui:standards",
+    "exitCode": 0,
+    "violations": 0,
+    "passedTests": 14
+  },
+  "zxuiHooks": {
+    "command": "pnpm exec vitest run packages/components/hooks/use-dialog/__tests__/use-dialog.test.ts packages/components/hooks/use-drawer/__tests__/use-drawer.test.ts --maxWorkers=1 --minWorkers=1",
+    "exitCode": 0,
+    "passed": 20
+  },
+  "conventions": {
+    "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+    "exitCode": 1,
+    "unchangedBaselineFailure": "ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue console usage"
+  },
+  "actual": {
+    "command": "node /tmp/ruoyi-editor-reads/actual-probe.cjs",
+    "exitCode": 0,
+    "passedChecks": 27,
+    "unhandledRejections": 0,
+    "nativeUiVisualVerified": false
+  },
+  "review": {
+    "agent": "/root/editor_lifecycle_audit",
+    "mode": "read-only",
+    "finalFindings": [],
+    "fixedFindings": [
+      "Current silent read must preserve relogin feedback",
+      "Auth routing must preserve original transport meta.status"
+    ]
+  },
+  "backendProcess": {
+    "pid": 95037,
+    "startedByThisTask": true,
+    "stopped": true
+  },
+  "noCommitOrPublication": true
+}

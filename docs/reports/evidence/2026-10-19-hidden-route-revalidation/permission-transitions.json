@@ -1,0 +1,443 @@
+[
+  {
+    "name": "AuthRole",
+    "path": "/system/user-auth/role/143",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/system/user-auth/role/143",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/system/user-auth/role/143",
+      "currentName": "AuthRole",
+      "resolved": "AuthRole",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "AuthUser",
+    "path": "/system/role-auth/user/97",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/system/role-auth/user/97",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/system/role-auth/user/97",
+      "currentName": "AuthUser",
+      "resolved": "AuthUser",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "Data",
+    "path": "/system/dict-data/index/1",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/system/dict-data/index/1",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/system/dict-data/index/1",
+      "currentName": "Data",
+      "resolved": "Data",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "JobLog",
+    "path": "/monitor/job-log/index/0",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/monitor/job-log/index/0",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/monitor/job-log/index/0",
+      "currentName": "JobLog",
+      "resolved": "JobLog",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "GenEdit",
+    "path": "/tool/gen-edit/index/1?page=1",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/tool/gen-edit/index/1?page=1",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/tool/gen-edit/index/1?page=1",
+      "currentName": "GenEdit",
+      "resolved": "GenEdit",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "ProjectDetail",
+    "path": "/project/project-detail/index/1",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/project/project-detail/index/1",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/project/project-detail/index/1",
+      "currentName": "ProjectDetail",
+      "resolved": "ProjectDetail",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "DeviceDetail",
+    "path": "/device/detail/index/1",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/device/detail/index/1",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/device/detail/index/1",
+      "currentName": "DeviceDetail",
+      "resolved": "DeviceDetail",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "DeviceDetail",
+    "path": "/device/detail/index",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/device/detail/index",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/device/detail/index",
+      "currentName": "DeviceDetail",
+      "resolved": "DeviceDetail",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  },
+  {
+    "name": "ProjectTopo",
+    "path": "/project/topo/index/1?versionId=1",
+    "revokeStatus": 204,
+    "grantStatus": 204,
+    "revoked": {
+      "path": "/system/user",
+      "currentName": "User",
+      "resolved": "User",
+      "notFound": false,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "denied": {
+      "path": "/project/topo/index/1?versionId=1",
+      "currentName": null,
+      "resolved": null,
+      "notFound": true,
+      "permissions": [
+        "",
+        "system:user:list",
+        "system:user:query"
+      ],
+      "registered": []
+    },
+    "granted": {
+      "path": "/project/topo/index/1?versionId=1",
+      "currentName": "ProjectTopo",
+      "resolved": "ProjectTopo",
+      "notFound": false,
+      "permissions": [
+        "*:*:*"
+      ],
+      "registered": [
+        "AuthRole",
+        "AuthUser",
+        "Data",
+        "JobLog",
+        "GenEdit",
+        "ProjectDetail",
+        "DeviceDetail",
+        "ProjectTopo"
+      ]
+    }
+  }
+]

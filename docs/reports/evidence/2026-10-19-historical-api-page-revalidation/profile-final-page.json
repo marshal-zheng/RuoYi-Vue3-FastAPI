@@ -1,0 +1,81 @@
+{
+  "profile": {
+    "status": 200,
+    "body": {
+      "data": {
+        "userId": 134,
+        "deptId": 103,
+        "userName": "zxqa_h_mveu4gpz",
+        "nickName": "验收操作员_mveu4gpz",
+        "userType": "00",
+        "email": "op_mveu4gpz@example.com",
+        "phonenumber": "13800991340",
+        "idCard": "",
+        "sex": "0",
+        "avatar": "/profile/avatar/2026/10/19/avatar_20261019065708A840.png",
+        "status": "0",
+        "delFlag": "0",
+        "loginIp": "",
+        "loginDate": "2026-10-19T07:16:46",
+        "createBy": "admin",
+        "createTime": "2026-10-19T06:49:46",
+        "updateBy": "zxqa_h_mveu4gpz",
+        "updateTime": "2026-10-19T07:16:46",
+        "remark": null,
+        "roleIds": "1",
+        "postIds": "",
+        "dept": {
+          "deptId": 103,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "研发部门",
+          "orderNum": 1,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        "role": [
+          {
+            "roleId": 1,
+            "roleName": "超级管理员",
+            "roleKey": "admin",
+            "roleSort": 1,
+            "dataScope": "1",
+            "menuCheckStrictly": true,
+            "deptCheckStrictly": true,
+            "status": "0",
+            "delFlag": "0",
+            "createBy": "admin",
+            "createTime": "2026-09-20T06:41:45",
+            "updateBy": "",
+            "updateTime": "2026-09-20T06:41:45",
+            "remark": "超级管理员",
+            "admin": true
+          }
+        ]
+      },
+      "postGroup": "",
+      "roleGroup": "超级管理员"
+    }
+  },
+  "images": [
+    {
+      "src": "/src/assets/logo/logo.png",
+      "loaded": true
+    },
+    {
+      "src": "/api/profile/avatar/2026/10/19/avatar_20261019065708A840.png",
+      "loaded": true
+    }
+  ],
+  "overflow": {
+    "client": 1100,
+    "scroll": 1100
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "urls": [
+    "http://127.0.0.1/src/router/index.js?t=1792392525819",
+    "http://127.0.0.1/src/router/index.js?t=1792392633347"
+  ],
+  "instances": [
+    {
+      "isMounted": true,
+      "routeCount": 8,
+      "currentPath": "/system/user-auth/role/141"
+    },
+    {
+      "isMounted": false,
+      "routeCount": 8,
+      "currentPath": "/"
+    }
+  ],
+  "same": false
+}

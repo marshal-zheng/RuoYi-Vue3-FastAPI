@@ -1,0 +1,32 @@
+{
+  "mainBefore": {
+    "path": "/device/detail/index",
+    "name": "DeviceDetail",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "independentContextLoggedSameUser": true,
+  "refreshStatus": 401,
+  "problem": {
+    "title": "登录状态已失效，请重新登录",
+    "errorCode": 20001
+  },
+  "expected": true,
+  "reason": "app_same_time_login=false; later login replaces the prior session",
+  "storage": {
+    "access": false,
+    "session": false,
+    "activeMatches": false
+  }
+}

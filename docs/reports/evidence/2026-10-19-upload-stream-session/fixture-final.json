@@ -1,0 +1,27 @@
+{
+  "invalidBlocked": true,
+  "fileUploaded": true,
+  "imageUploaded": true,
+  "fileRemoved": true,
+  "imageRemoved": true,
+  "preview": {
+    "fits": true,
+    "imageLoaded": true
+  },
+  "smallViewport": {
+    "width": 1100,
+    "height": 800
+  },
+  "injectedFailure503": true,
+  "retryStatus": 200,
+  "removedModels": [
+    "",
+    ""
+  ],
+  "unmountProbe": "diagnostic unmount while intercepted request pending; fullscreen upload mask prevents normal button click",
+  "canceledRequests": [
+    {
+      "error": "net::ERR_ABORTED"
+    }
+  ]
+}

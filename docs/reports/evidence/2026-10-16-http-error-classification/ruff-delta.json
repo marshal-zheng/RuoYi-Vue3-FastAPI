@@ -1,0 +1,13 @@
+{
+  "baseline": 118,
+  "current": 116,
+  "added": [],
+  "removed": [
+    {
+      "file": "ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py",
+      "rule": "UP045",
+      "message": "Use `X | None` for type annotations",
+      "count": 2
+    }
+  ]
+}

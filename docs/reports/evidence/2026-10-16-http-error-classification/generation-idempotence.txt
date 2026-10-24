@@ -1,0 +1,48 @@
+[0;32m========================================[0m
+[0;32m  OpenAPI 类型生成工具[0m
+[0;32m========================================[0m
+
+[1;33m[1/3] 读取仓库 OpenAPI artifact...[0m
+      文件: /Users/hqz/dev/RuoYi-Vue3-FastAPI/shared/openapi.json
+[0;32m      ✓ OpenAPI artifact 已就绪[0m
+
+[1;33m[2/3] 生成 TypeScript 类型...[0m
+      输出目录: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/api/_generated
+[90m@hey-api/openapi-ts v0.97.0[39m
+
+[90m[Job 1] [39m⏳ [36mGenerating from 1 input:[39m
+[90m[Job 1] [39m[36m  [1] [39m/Users/hqz/dev/RuoYi-Vue3-FastAPI/shared/openapi.json
+[90m[Job 1] [39m[32m✅ Done![39m Your output is in [96m/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/api/_generated[39m [90m(4 files in 283ms)[39m
+Applied 3 reviewed SDK templates for @hey-api/openapi-ts 0.97.0
+[0;32m      ✓ TypeScript 类型生成成功[0m
+
+[1;33m[3/3] 格式化生成的代码...[0m
+src/api/_generated/client.gen.ts 21ms
+src/api/_generated/client/client.gen.ts 28ms (unchanged)
+src/api/_generated/client/index.ts 2ms (unchanged)
+src/api/_generated/client/types.gen.ts 9ms (unchanged)
+src/api/_generated/client/utils.gen.ts 20ms
+src/api/_generated/core/auth.gen.ts 2ms
+src/api/_generated/core/bodySerializer.gen.ts 4ms (unchanged)
+src/api/_generated/core/params.gen.ts 5ms (unchanged)
+src/api/_generated/core/pathSerializer.gen.ts 9ms
+src/api/_generated/core/queryKeySerializer.gen.ts 4ms (unchanged)
+src/api/_generated/core/serverSentEvents.gen.ts 8ms (unchanged)
+src/api/_generated/core/types.gen.ts 2ms (unchanged)
+src/api/_generated/core/utils.gen.ts 4ms
+src/api/_generated/index.ts 9ms
+src/api/_generated/sdk.gen.ts 82ms
+src/api/_generated/types.gen.ts 98ms
+[0;32m      ✓ 代码格式化完成[0m
+
+[0;32m========================================[0m
+[0;32m  类型生成完成！[0m
+[0;32m========================================[0m
+
+生成的文件位于: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/api/_generated
+OpenAPI 来源: artifact (/Users/hqz/dev/RuoYi-Vue3-FastAPI/shared/openapi.json)
+
+使用方法:
+  import type { UserResponse } from '@/api/_generated';
+  import { UserService } from '@/api/_generated';
+

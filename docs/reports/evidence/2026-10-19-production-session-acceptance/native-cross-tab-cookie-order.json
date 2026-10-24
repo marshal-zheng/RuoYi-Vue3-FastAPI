@@ -1,0 +1,58 @@
+{
+  "queued": {
+    "held": [
+      {
+        "clientId": "9B59D6F1A4573A88E293A7D53ADAD038",
+        "mode": "exclusive",
+        "name": "ruoyi-session-refresh"
+      }
+    ],
+    "pending": [
+      {
+        "clientId": "563242C5A03CBC91F27B670BBD688D08",
+        "mode": "exclusive",
+        "name": "ruoyi-session-refresh"
+      }
+    ]
+  },
+  "beforeReleasePath": "/login",
+  "loginSentBeforeRelease": false,
+  "after": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "cookieMatchesAccess": true,
+  "newAccountRenewRequests": [
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 401,
+      "type": "xhr"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200,
+      "type": "xhr"
+    }
+  ]
+}

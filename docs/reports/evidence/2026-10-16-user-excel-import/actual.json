@@ -1,0 +1,91 @@
+{
+  "ok": true,
+  "mode": "source @zxio/http + source useDialog + compiled production UserImportDialog setup/actions + real local FastAPI/MySQL; UI/file-selection adapters observed without computer use",
+  "resultCount": 8,
+  "results": [
+    {
+      "name": "real-template-download-remains-compatible",
+      "ok": true,
+      "realTemplate": true,
+      "columns": 7,
+      "filledTemplateUsedForAllImports": true
+    },
+    {
+      "name": "real-successful-import-and-readback-with-one-active-operation",
+      "ok": true,
+      "userName": "impmvak344za",
+      "createdAndReadBack": true,
+      "summary": {
+        "total": 1,
+        "succeeded": 1,
+        "failed": 0
+      },
+      "oneRequestForRepeatedTrigger": true,
+      "pendingReleased": true,
+      "formDataPreserved": true,
+      "resultPresentedOnce": true,
+      "resolvedTimeout": 0
+    },
+    {
+      "name": "real-existing-user-import-preserves-updateSupport-semantics",
+      "ok": true,
+      "withoutUpdateSupport": {
+        "failed": 1,
+        "existingUserUnchanged": true
+      },
+      "withUpdateSupport": {
+        "succeeded": 1,
+        "action": "updated",
+        "readbackUpdated": true
+      }
+    },
+    {
+      "name": "real-422-keeps-original-error-and-retries-same-file",
+      "ok": true,
+      "realFailureStatus": 422,
+      "originalAxiosCauseAndConfigPreserved": true,
+      "oneFeedback": true,
+      "fileRetained": true,
+      "noWriteOnValidationFailure": true,
+      "retrySucceededAndReadBack": true,
+      "pendingReleased": true
+    },
+    {
+      "name": "real-in-flight-cancel-reopen-and-response-lifecycle",
+      "ok": true,
+      "realUpstreamStatuses": [
+        200,
+        200
+      ],
+      "multipartBoundaryAndAuthorization": true,
+      "realXhrCancelled": true,
+      "cancelReasonPreserved": true,
+      "noCancellationFeedback": true,
+      "newOperationNotClearedByOldCompletion": true,
+      "onlyNewResultPresented": true,
+      "serverHadCommittedBeforeClientCancellation": true
+    },
+    {
+      "name": "close-before-dispatch-and-real-click-failure-boundary",
+      "ok": true,
+      "closedBeforeDispatch": true,
+      "noRequestSent": true,
+      "clickConsumesAlreadyReported422": true,
+      "pendingReleased": true
+    },
+    {
+      "name": "real-unmount-aborts-with-no-late-feedback",
+      "ok": true,
+      "realUpstreamStatus": 200,
+      "abortedOnUnmount": true,
+      "noLateResultOrFailureFeedback": true
+    },
+    {
+      "name": "cleanup-preserves-existing-business-users",
+      "ok": true,
+      "temporaryUsersDeleted": 5,
+      "remainingFixtureUsers": 0,
+      "existingUserRowsUnchanged": 1
+    }
+  ]
+}

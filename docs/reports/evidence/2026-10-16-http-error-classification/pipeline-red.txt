@@ -1,0 +1,109 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 16 items
+
+tests/unit/services/test_user_service.py ...F............                [100%]
+
+=================================== FAILURES ===================================
+______ test_wrong_old_password_is_field_validation_without_writing[True] _______
+
+through_pipeline = True
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('through_pipeline', [False, True])
+    async def test_wrong_old_password_is_field_validation_without_writing(through_pipeline):
+        password_hash = PwdUtil.get_password_hash('Current123!')
+        user = SimpleNamespace(password=password_hash)
+        repository = SimpleNamespace(
+            get_user_with_relations=AsyncMock(return_value={'user_basic_info': user}),
+            get_by_id=AsyncMock(),
+            update=AsyncMock(),
+        )
+        service = UserService(user_repo_factory=lambda _: repository)
+        payload = ResetUserModel(userId=42, oldPassword='Incorrect123!', password='Changed123!')
+    
+        with pytest.raises(ValidationException) as failure:
+            if through_pipeline:
+                command = ResetUserPasswordCommand(query_db=None, reset_user=payload)
+                handler = ResetUserPasswordCommandHandler(service)
+>               await CommandValidationBehavior().handle(command, lambda: handler.handle(command))
+
+command    = ResetUserPasswordCommand(operator=None, trace_id=None, request_id=None, query_db=None, reset_user=ResetUserModel(user_...ate_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None))
+failure    = <ExceptionInfo for raises contextmanager>
+handler    = <modules.system.application.handlers.command.user_command_handlers.ResetUserPasswordCommandHandler object at 0x10e08cc20>
+password_hash = '$2b$12$GUNB2IqiiNdgyv0NCOqaA.xJbL3EGWsmtw8yx0x.NbM6dXLWSMfke'
+payload    = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+repository = namespace(get_user_with_relations=<AsyncMock id='4526678304'>, get_by_id=<AsyncMock id='4530423520'>, update=<AsyncMock id='4530424192'>)
+service    = <modules.system.application.services.user_service.UserService object at 0x10e0662c0>
+through_pipeline = True
+user       = namespace(password='$2b$12$GUNB2IqiiNdgyv0NCOqaA.xJbL3EGWsmtw8yx0x.NbM6dXLWSMfke')
+
+tests/unit/services/test_user_service.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+modules/system/application/behaviors/command_behaviors.py:31: in handle
+    self._validate_request(request)
+        next_handler = <function test_wrong_old_password_is_field_validation_without_writing.<locals>.<lambda> at 0x10e0172e0>
+        request    = ResetUserPasswordCommand(operator=None, trace_id=None, request_id=None, query_db=None, reset_user=ResetUserModel(user_...ate_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None))
+        self       = <modules.system.application.behaviors.command_behaviors.CommandValidationBehavior object at 0x10e08cd70>
+modules/system/application/behaviors/command_behaviors.py:57: in _validate_request
+    validator()
+        field_name = 'reset_user'
+        payload    = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+        payload_items = [('operator', None), ('trace_id', None), ('request_id', None), ('query_db', None), ('reset_user', ResetUserModel(user_...te_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None))]
+        request    = ResetUserPasswordCommand(operator=None, trace_id=None, request_id=None, query_db=None, reset_user=ResetUserModel(user_...ate_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None))
+        validator  = <bound method UserModel.validate_fields of ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, us...ate_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)>
+module_admin/entity/vo/user_vo.py:93: in validate_fields
+    self.get_user_name()
+        self       = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+venv/lib/python3.13/site-packages/pydantic_validation_decorator/xss.py:75: in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+        args       = (ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None...te_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None),)
+        field_value = None
+        func       = <function UserModel.get_user_name at 0x10d717e20>
+        kwargs     = {}
+        self       = <pydantic_validation_decorator.xss.Xss object at 0x10d5bc980>
+        validate_model = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None...te_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None),)
+kwargs = {}
+validate_model = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+field_value = None
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        validate_model = args[0]
+        if isinstance(validate_model, BaseModel) and hasattr(validate_model, self.field_name):
+            field_value = getattr(validate_model, self.field_name)
+            if (
+                field_value is None
+                or field_value == ''
+                or field_value == []
+                or field_value == ()
+                or field_value == {}
+            ):
+>               raise FieldValidationError(
+                    model_name=validate_model.__class__.__name__,
+                    field_name=self.field_name,
+                    field_value=field_value,
+                    validator=self.__class__.__name__,
+                    message=self.message if self.message else f'{self.field_name} cannot be empty.',
+                )
+E               pydantic_validation_decorator.exceptions.FieldValidationError
+
+args       = (ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None...te_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None),)
+field_value = None
+func       = <function UserModel.get_user_name at 0x10d717d80>
+kwargs     = {}
+self       = <pydantic_validation_decorator.not_blank.NotBlank object at 0x10d717250>
+validate_model = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+
+venv/lib/python3.13/site-packages/pydantic_validation_decorator/not_blank.py:67: FieldValidationError
+=========================== short test summary info ============================
+FAILED tests/unit/services/test_user_service.py::test_wrong_old_password_is_field_validation_without_writing[True]
+========================= 1 failed, 15 passed in 0.76s =========================

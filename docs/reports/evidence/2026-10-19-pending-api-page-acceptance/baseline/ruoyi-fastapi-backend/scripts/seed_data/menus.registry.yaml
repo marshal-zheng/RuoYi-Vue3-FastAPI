@@ -1,0 +1,4 @@
+# Deprecated after module-manifest cutover. Keep empty to avoid dual-write.
+version: "1"
+menus: []
+role_grants: []

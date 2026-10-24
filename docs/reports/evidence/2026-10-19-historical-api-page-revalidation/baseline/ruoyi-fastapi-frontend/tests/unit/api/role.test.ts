@@ -1,0 +1,128 @@
+import { describe, expect, it } from 'vitest';
+
+import * as roleApi from '@/api/system/role';
+import { createStatusHandler } from '@/mocks/handlers/error-common';
+import { expectRequestTimeout } from '../../helpers/error-assertions';
+import { setupMainlineMockHandlers } from '../../mocks/mainline';
+import { mockServer } from '../../mocks/server';
+
+describe('Role API contract', () => {
+  setupMainlineMockHandlers();
+
+  it('loads role list and detail through the HTTP contract', async () => {
+    const result = await roleApi.listRole({
+      page: 1,
+      pageSize: 20,
+      roleKey: 'admin',
+    });
+
+    expect(result).toMatchObject({
+      total: 1,
+      page: 1,
+      pageSize: 20,
+      items: [
+        expect.objectContaining({
+          roleName: '超级管理员',
+          roleKey: 'admin',
+        }),
+      ],
+    });
+    expect(result.pager).toMatchObject({
+      mode: 'offset',
+      page: 1,
+      size: 20,
+      total: 1,
+    });
+
+    await expect(roleApi.getRole(1)).resolves.toMatchObject({
+      roleId: 1,
+      roleKey: 'admin',
+    });
+    await expect(roleApi.getRole('1')).resolves.toMatchObject({
+      roleId: 1,
+      roleName: '超级管理员',
+    });
+  });
+
+  it('handles role mutations through real request serialization', async () => {
+    await expect(
+      roleApi.addRole({
+        roleName: '测试角色',
+        roleKey: 'test',
+        roleSort: 1,
+        status: '0',
+        menuIds: [1, 2, 3],
+      })
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+
+    await expect(
+      roleApi.updateRole({
+        roleId: 1,
+        roleName: '更新角色',
+        roleKey: 'updated',
+      })
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+
+    await expect(
+      roleApi.dataScope({
+        roleId: 1,
+        dataScope: '2',
+        deptIds: [1, 2, 3],
+      })
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+
+    await expect(roleApi.changeRoleStatus(1, '1')).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+
+    await expect(roleApi.delRole('1,2,3')).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+  });
+
+  it('covers role authorization and dept tree endpoints via MSW', async () => {
+    await expect(roleApi.allocatedUserList({ roleId: 1 })).resolves.toMatchObject({
+      items: [expect.objectContaining({ userName: 'admin' })],
+    });
+    await expect(roleApi.unallocatedUserList({ roleId: 1 })).resolves.toMatchObject({
+      items: [expect.objectContaining({ userName: 'guest' })],
+    });
+    await expect(roleApi.authUserCancel({ roleId: 1, userId: 2 })).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: [2, 3] })).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: [2, 3] })).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+    await expect(roleApi.deptTreeSelect(1)).resolves.toMatchObject({
+      roleId: 1,
+      checkedKeys: [100],
+    });
+  });
+
+  it('surfaces role API failures from the request error mapping', async () => {
+    mockServer.use(createStatusHandler('get', '/system/role/list', 503));
+    await expect(roleApi.listRole({})).rejects.toMatchObject({ status: 503 });
+
+    mockServer.use(createStatusHandler('get', '/system/role/list', 429));
+    await expect(roleApi.listRole({})).rejects.toMatchObject({ status: 429 });
+
+    await expectRequestTimeout('get', '/system/role/list');
+  });
+});

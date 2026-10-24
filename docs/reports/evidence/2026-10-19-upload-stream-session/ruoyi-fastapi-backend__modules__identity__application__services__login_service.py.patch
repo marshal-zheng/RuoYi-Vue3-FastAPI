@@ -1,0 +1,10 @@
+--- before/ruoyi-fastapi-backend/modules/identity/application/services/login_service.py
++++ after/ruoyi-fastapi-backend/modules/identity/application/services/login_service.py
+@@ -390,6 +390,7 @@
+                 role=CamelCaseUtil.transform_result(query_user.get('user_role_info')),
+             ),
+         )
++        context.state.auth_session_id = str(payload.get('session_id') or '')
+         return current_user
+ 
+     async def get_current_user_routers(self, user_id: int):

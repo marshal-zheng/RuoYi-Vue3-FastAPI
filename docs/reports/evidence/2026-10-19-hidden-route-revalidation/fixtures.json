@@ -1,0 +1,23 @@
+{
+  "nonce": "mvex2c1g",
+  "role": {
+    "id": 97,
+    "name": "hidden_mvex2c1g"
+  },
+  "actor": {
+    "id": 143,
+    "name": "hid_mvex2c1g"
+  },
+  "menu": {
+    "id": 1080,
+    "name": "设备路由验收"
+  },
+  "category": {
+    "id": 1,
+    "name": "RouteQA_mvex2c1g"
+  },
+  "readonly": {
+    "id": 144,
+    "name": "hidro_mvex2c1g"
+  }
+}

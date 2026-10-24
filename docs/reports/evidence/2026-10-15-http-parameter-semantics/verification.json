@@ -1,0 +1,126 @@
+{
+  "redBeforeFix": {
+    "library": {
+      "expectedFailed": 8,
+      "otherPassed": 40
+    },
+    "business": {
+      "expectedFailed": 6,
+      "otherPassed": 21
+    },
+    "operationLog": {
+      "expectedFailed": 2
+    },
+    "reviewBoundary": {
+      "expectedFailed": 2,
+      "otherPassed": 1,
+      "skipped": 46
+    }
+  },
+  "checks": [
+    {
+      "command": "pnpm exec vitest run packages/http/__tests__",
+      "cwd": "ZXUI",
+      "exitCode": 0,
+      "files": 8,
+      "testsPassed": 88
+    },
+    {
+      "command": "pnpm exec eslint packages/http/src/client.ts packages/http/src/types.ts packages/http/src/utils.ts packages/http/__tests__/client.test.ts packages/http/__tests__/utils.test.ts",
+      "cwd": "ZXUI",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm exec tsc --noEmit --strict --target ES2022 --module ESNext --moduleResolution Bundler --skipLibCheck packages/http/__tests__/client.test.ts packages/http/__tests__/utils.test.ts",
+      "cwd": "ZXUI",
+      "exitCode": 0
+    },
+    {
+      "command": "pnpm -C packages/http build",
+      "cwd": "ZXUI",
+      "exitCode": 0
+    },
+    {
+      "command": "yarn vitest run src/api src/utils src/store/modules/user.login.test.ts",
+      "cwd": "frontend",
+      "mode": "installed",
+      "exitCode": 0,
+      "files": 18,
+      "testsPassed": 90
+    },
+    {
+      "command": "yarn vitest run --config /tmp/ruoyi-http-source.pVzUd4/vitest-source.config.mts src/api src/utils src/store/modules/user.login.test.ts",
+      "cwd": "frontend",
+      "mode": "source",
+      "alias": "exact @zxio/http -> packages/http/src/index.ts; merge production repository Vitest config; dedupe axios",
+      "exitCode": 0,
+      "files": 18,
+      "testsPassed": 90
+    },
+    {
+      "command": "yarn type-check",
+      "cwd": "frontend",
+      "exitCode": 0
+    },
+    {
+      "command": "yarn lint:check",
+      "cwd": "frontend",
+      "exitCode": 0
+    },
+    {
+      "command": "bash .agents/skills/frontend-conventions/scripts/validate.sh --changed",
+      "cwd": "business root",
+      "exitCode": 0
+    },
+    {
+      "command": "./venv/bin/python -m pytest -o addopts='' tests/unit/test_log_annotation.py tests/unit/middlewares/test_token_source_guard_middleware.py tests/unit/middlewares/test_idempotency_middleware.py -q",
+      "cwd": "backend",
+      "exitCode": 0,
+      "testsPassed": 18,
+      "warnings": "One existing Pydantic regex deprecation"
+    },
+    {
+      "command": "./venv/bin/ruff check tests/unit/test_log_annotation.py",
+      "cwd": "backend",
+      "exitCode": 0
+    },
+    {
+      "command": "./venv/bin/ruff format --check module_admin/annotation/log_annotation.py tests/unit/test_log_annotation.py",
+      "cwd": "backend",
+      "exitCode": 0
+    },
+    {
+      "command": "PATH=<backend venv>/bin:$PATH bash .agents/skills/backend-conventions/scripts/validate.sh --changed",
+      "cwd": "business root",
+      "exitCode": 1,
+      "limitation": "35 existing log_annotation.py Ruff findings; rule counts identical before/after; format and guardrails pass"
+    },
+    {
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod --outDir /tmp/ruoyi-http-parameters/build-source",
+      "cwd": "frontend",
+      "exitCode": 0,
+      "mode": "source",
+      "buildSeconds": 19.16,
+      "warnings": "Existing Vite CJS/Browserslist/chunk-size warnings"
+    },
+    {
+      "command": "VITE_ZXUI_LOCAL=false yarn build:prod --outDir /tmp/ruoyi-http-parameters/build-installed",
+      "cwd": "frontend",
+      "exitCode": 0,
+      "mode": "installed",
+      "buildSeconds": 19.69,
+      "warnings": "Existing Vite CJS/Browserslist/chunk-size warnings"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": "both repositories",
+      "exitCode": 0
+    }
+  ],
+  "runtimeCleanup": {
+    "ownBackendStopped": true,
+    "port8088HasNoListener": true,
+    "databaseAndRedisLeftRunning": true
+  },
+  "scope": "No npm publish, commits, browser automation, role authorization mutations or SQL table creation"
+}

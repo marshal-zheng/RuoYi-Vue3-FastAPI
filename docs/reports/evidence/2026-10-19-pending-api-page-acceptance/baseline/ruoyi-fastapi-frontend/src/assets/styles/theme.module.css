@@ -1,0 +1,516 @@
+/* Compiled inside tailwind.css, after its single Tailwind import. */
+
+/* Application layout and legacy aliases. Values resolve at each Host scope. */
+@layer theme {
+  :root,
+  [data-zx-theme][data-zx-variant] {
+    /* Layout and component variables */
+    --sidebar-width: 200px;
+    --base-sidebar-width: 200px;
+    --navbar-height: 50px;
+    --footer-height: 60px;
+    
+    /* Component-specific variables that extend Element Plus */
+    --navbar-bg: var(--el-bg-color);
+    --navbar-text: var(--el-text-color-primary);
+    --navbar-hover: var(--zx-semantic-fill-hover);
+    --sidebar-bg: var(--el-bg-color);
+    --sidebar-text: var(--el-text-color-regular);
+    --sidebar-active-bg: var(--el-color-primary-light-9);
+    --sidebar-active-text: var(--el-color-primary);
+    --blockquote-bg: var(--el-bg-color-page);
+    --blockquote-border: var(--el-border-color);
+    --blockquote-text: var(--el-text-color-regular);
+    --cron-border: var(--el-border-color);
+    --splitpanes-bg: var(--el-bg-color);
+    --splitpanes-border: var(--el-border-color);
+    --splitpanes-splitter-bg: var(--el-border-color-light);
+    --splitpanes-splitter-hover-bg: var(--el-border-color);
+    --splitpanes-default-bg: var(--zx-semantic-surface-panel-fill);
+    
+    /* TagsView variables */
+    --tags-bg: var(--el-bg-color);
+    --tags-item-bg: var(--el-bg-color);
+    --tags-item-text: var(--el-text-color-regular);
+    --tags-item-border: var(--el-border-color-light);
+    --tags-item-hover: var(--el-fill-color-light);
+    --tags-close-hover: var(--zx-semantic-fill-hover);
+
+    /* Logo variables - Logo 相关样式 */
+    --logo-height: 50px;
+    --logo-title-font-size: 13px;
+    --logo-title-font-weight: 600;
+
+    /* Navigation geometry; colours come from the ZXUI surface roles. */
+    --top-header-height: 50px;
+    --left-menu-min-width: 64px;
+    --left-menu-active-bar-width: 4px;
+    --left-menu-item-radius: 10px;
+
+    --app-footer-height: 0px;
+    --app-content-padding: 20px;
+    --app-content-bg-color: var(--zx-semantic-surface-page);
+    --transition-time-02: 0.2s;
+    --app-table-header-bg: var(--zx-semantic-surface-header-fill);
+    --app-table-header-color: var(--zx-semantic-surface-header-on-text);
+    
+    /* content card */
+    --app-card-radius: var(--zx-semantic-radius-surface);
+    --app-card-shadow: var(--zx-semantic-surface-card-depth);
+    --app-card-border: 1px solid var(--el-border-color-light);
+  }
+
+  /* Dark mode comes from the ZXUI variant on the theme scope, which also sets
+     `color-scheme`; Tailwind's gray palette is not re-mapped per mode. */
+
+ }
+
+/* 3) 语义组件类 - Tailwind v4 CSS-first 方案 */
+@layer components {
+  /* 主题卡片组件 */
+  .theme-card {
+    @apply bg-zx-surface-card-fill text-zx-surface-card-on-text border border-zx-border-default rounded-zx-surface shadow-zx-surface-card-depth transition;
+  }
+  
+  /* 主题按钮组件 */
+  .theme-button {
+    @apply rounded-zx-control font-medium transition border;
+  }
+  
+  /* Element Plus 按钮变体 */
+  .el-button-primary {
+    @apply bg-zx-accent text-zx-accent-on-fill border-transparent hover:bg-zx-accent-tint-3 hover:text-zx-accent-on-fill-hover;
+  }
+  
+  .el-button-success {
+    @apply bg-zx-success text-zx-status-success-on-fill border-transparent hover:bg-zx-status-success-tint-3 hover:text-zx-status-success-on-fill-hover;
+  }
+  
+  .el-button-warning {
+    @apply bg-zx-warning text-zx-status-warning-on-fill border-transparent hover:bg-zx-status-warning-tint-3 hover:text-zx-status-warning-on-fill-hover;
+  }
+  
+  .el-button-danger {
+    @apply bg-zx-danger text-zx-status-danger-on-fill border-transparent hover:bg-zx-status-danger-tint-3 hover:text-zx-status-danger-on-fill-hover;
+  }
+  
+  .el-button-info {
+    @apply bg-zx-info text-zx-status-info-on-fill border-transparent hover:bg-zx-status-info-tint-3 hover:text-zx-status-info-on-fill-hover;
+  }
+  
+  /* 主题输入框组件 */
+  .theme-input {
+    @apply px-3 py-2 border border-zx-border-control rounded-zx-control bg-zx-surface-field-fill text-zx-surface-field-on-text transition;
+  }
+
+  /* Triangle utilities - CSS border-based shapes */
+  .triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid currentColor;
+  }
+
+  .triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid currentColor;
+  }
+
+  .triangle-left {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid currentColor;
+  }
+
+  .triangle-right {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid currentColor;
+  }
+
+  /* Triangle size variants */
+  .triangle-sm {
+    border-width: 5px;
+  }
+
+  .triangle-md {
+    border-width: 10px;
+  }
+
+  .triangle-lg {
+    border-width: 15px;
+  }
+
+  .triangle-xl {
+    border-width: 20px;
+  }
+
+  /* Triangle color variants using theme colors */
+  .triangle-primary {
+    color: var(--zx-semantic-accent-on-surface);
+  }
+
+  .triangle-success {
+    color: var(--zx-semantic-status-success-on-surface);
+  }
+
+  .triangle-warning {
+    color: var(--zx-semantic-status-warning-on-surface);
+  }
+
+  .triangle-danger {
+    color: var(--zx-semantic-status-danger-on-surface);
+  }
+
+  .triangle-info {
+    color: var(--zx-semantic-status-info-on-surface);
+  }
+
+  /* Shared button base/variants are defined once in tailwind.css. */
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-current transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent text-current hover:bg-zx-fill-hover;
+  }
+
+  /* Button size variants */
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  .btn-full {
+    @apply w-full;
+  }
+
+  /* Animated color buttons with border effects */
+  .color-btn {
+    @apply relative inline-block px-9 py-3.5 bg-zx-accent text-zx-accent-on-fill text-sm rounded-lg border-none outline-none transition-all duration-[600ms] overflow-hidden;
+  }
+
+  .color-btn:hover {
+    @apply bg-zx-accent-tint-3 text-zx-accent-on-fill-hover;
+  }
+
+  .color-btn::before,
+  .color-btn::after {
+    content: '';
+    @apply absolute h-0.5 w-0 transition-all duration-[400ms];
+  }
+
+  .color-btn::before {
+    @apply top-0 right-0;
+  }
+
+  .color-btn::after {
+    @apply bottom-0 left-0;
+  }
+
+  .color-btn:hover::before,
+  .color-btn:hover::after {
+    @apply w-full transition-all duration-[600ms];
+  }
+
+  /* Custom scrollbar styles - Tailwind doesn't provide scrollbar utilities */
+  .custom-scrollbar::-webkit-scrollbar-track-piece {
+    background: var(--zx-semantic-fill-scrollbar-track);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--zx-semantic-fill-scrollbar-thumb);
+    border-radius: 20px;
+  }
+}
+
+@layer utilities {
+  /* Custom utility classes that work with Tailwind */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+  }
+  
+  /* Vue transition utilities */
+  /* Fade transition (Vue 3 class names) */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.28s;
+  }
+  .fade-enter-from,
+  .fade-leave-active {
+    opacity: 0;
+  }
+
+  /* Fade-transform (align with RuoYi smooth route transition) */
+  .fade-transform--move,
+  .fade-transform-enter-active {
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  /* Smoothly fade previous view while keeping layout stable */
+  .fade-transform-leave-active {
+    position: absolute;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .fade-transform-leave-from {
+    opacity: 1;
+    transform: none;
+  }
+  .fade-transform-enter-from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  .fade-transform-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  
+  /* Breadcrumb transition */
+  .breadcrumb-enter-active,
+  .breadcrumb-leave-active {
+    transition: all .5s;
+  }
+  .breadcrumb-enter-from,
+  .breadcrumb-leave-active {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  
+  .breadcrumb-move {
+    transition: all 0.5s;
+  }
+  
+  .breadcrumb-leave-active {
+    position: absolute;
+  }
+  
+  /* Slide transitions */
+  .slide-up-enter-active,
+  .slide-up-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-up-enter {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  
+  .slide-up-leave-to {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  
+  .slide-down-enter-active,
+  .slide-down-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-down-enter {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  
+  .slide-down-leave-to {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  
+  .slide-left-enter-active,
+  .slide-left-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-left-enter {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  
+  .slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  
+  .slide-right-enter-active,
+  .slide-right-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-right-enter {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  
+  .slide-right-leave-to {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  
+  /* Scale transitions */
+  .scale-enter-active,
+  .scale-leave-active {
+    transition: all 200ms;
+  }
+  
+  .scale-enter {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  
+  .scale-leave-to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  
+  /* Bounce transition */
+  .bounce-enter-active {
+    animation: bounce-in 0.5s;
+  }
+  
+  .bounce-leave-active {
+    animation: bounce-in 0.5s reverse;
+  }
+  
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* Flip transition */
+  .flip-enter-active,
+  .flip-leave-active {
+    transition: all 300ms;
+  }
+  
+  .flip-enter {
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
+  
+  .flip-leave-to {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+  
+  /* Zoom transition */
+  .zoom-enter-active,
+  .zoom-leave-active {
+    transition: all 200ms;
+  }
+  
+  .zoom-enter {
+    opacity: 0;
+    transform: scale(0);
+  }
+  
+  .zoom-leave-to {
+    opacity: 0;
+    transform: scale(0);
+  }
+  
+  /* List transitions */
+  .list-enter-active,
+  .list-leave-active {
+    transition: all 300ms;
+  }
+  
+  .list-enter {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  
+  .list-leave-to {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  
+  .list-move {
+    transition: transform 300ms;
+  }
+  
+  /* Stagger list animations */
+  .stagger-item {
+    transition: all 300ms;
+  }
+  
+  .stagger-item:nth-child(1) { transition-delay: 0ms; }
+  .stagger-item:nth-child(2) { transition-delay: 50ms; }
+  .stagger-item:nth-child(3) { transition-delay: 100ms; }
+  .stagger-item:nth-child(4) { transition-delay: 150ms; }
+  .stagger-item:nth-child(5) { transition-delay: 200ms; }
+  .stagger-item:nth-child(6) { transition-delay: 250ms; }
+  .stagger-item:nth-child(7) { transition-delay: 300ms; }
+  .stagger-item:nth-child(8) { transition-delay: 350ms; }
+  .stagger-item:nth-child(9) { transition-delay: 400ms; }
+  .stagger-item:nth-child(10) { transition-delay: 450ms; }
+  
+  /* Page transitions */
+  .page-enter-active,
+  .page-leave-active {
+    transition: all 300ms;
+  }
+  
+  .page-enter {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+  
+  .page-leave-to {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+  
+  /* Modal transitions */
+  .modal-enter-active,
+  .modal-leave-active {
+    transition: all 200ms;
+  }
+  
+  .modal-enter {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  
+  .modal-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  
+  /* Drawer transitions */
+  .drawer-enter-active,
+  .drawer-leave-active {
+    transition: transform 300ms;
+  }
+  
+  .drawer-enter {
+    transform: translateX(100%);
+  }
+  
+  .drawer-leave-to {
+    transform: translateX(100%);
+  }
+}

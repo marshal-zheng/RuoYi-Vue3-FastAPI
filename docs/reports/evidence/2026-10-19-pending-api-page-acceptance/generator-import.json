@@ -1,0 +1,88 @@
+{
+  "status": 200,
+  "read": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "updateTime": "2026-10-19T06:30:25",
+          "tplCategory": "crud",
+          "tplWebType": "",
+          "createBy": "zxqa_p_mvet0wd2",
+          "genType": "0",
+          "genPath": "/",
+          "remark": null,
+          "className": "ZxqaMvet0wd2B",
+          "businessName": "b",
+          "functionAuthor": "insistence",
+          "updateBy": "zxqa_p_mvet0wd2",
+          "tableId": 7,
+          "packageName": "module_admin.system",
+          "moduleName": "system",
+          "functionName": "验收导入 mvet0wd2",
+          "options": null,
+          "subTableName": null,
+          "tableComment": "验收导入表 mvet0wd2",
+          "tableName": "zxqa_mvet0wd2_b",
+          "subTableFkName": null,
+          "createTime": "2026-10-19T06:30:25",
+          "columns": [
+            {
+              "isInsert": "1",
+              "createBy": "zxqa_p_mvet0wd2",
+              "columnComment": "",
+              "pythonType": "int",
+              "isEdit": null,
+              "createTime": "2026-10-19T06:30:25",
+              "tableId": 7,
+              "pythonField": "itemId",
+              "isList": null,
+              "updateBy": "zxqa_p_mvet0wd2",
+              "isPk": "1",
+              "isQuery": null,
+              "updateTime": "2026-10-19T06:30:25",
+              "isIncrement": "0",
+              "queryType": "EQ",
+              "columnType": "bigint",
+              "isRequired": "0",
+              "htmlType": "input",
+              "columnId": 38,
+              "isUnique": null,
+              "dictType": "",
+              "columnName": "item_id",
+              "sort": 1
+            },
+            {
+              "isInsert": "1",
+              "createBy": "zxqa_p_mvet0wd2",
+              "columnComment": "",
+              "pythonType": "str",
+              "isEdit": "1",
+              "createTime": "2026-10-19T06:30:25",
+              "tableId": 7,
+              "pythonField": "itemName",
+              "isList": "1",
+              "updateBy": "zxqa_p_mvet0wd2",
+              "isPk": "0",
+              "isQuery": "1",
+              "updateTime": "2026-10-19T06:30:25",
+              "isIncrement": "0",
+              "queryType": "LIKE",
+              "columnType": "varchar(80)",
+              "isRequired": "0",
+              "htmlType": "input",
+              "columnId": 39,
+              "isUnique": null,
+              "dictType": "",
+              "columnName": "item_name",
+              "sort": 2
+            }
+          ]
+        }
+      ],
+      "total": 1,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

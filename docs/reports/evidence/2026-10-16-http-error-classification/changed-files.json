@@ -1,0 +1,9 @@
+[
+  "ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py",
+  "ruoyi-fastapi-backend/modules/system/application/services/user_service.py",
+  "ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py",
+  "ruoyi-fastapi-backend/tests/unit/services/test_user_service.py",
+  "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+  "ruoyi-fastapi-frontend/src/utils/http.test.ts",
+  "shared/openapi.json"
+]

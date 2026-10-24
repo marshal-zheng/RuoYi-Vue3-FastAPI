@@ -1,0 +1,119 @@
+{
+  "mode": "source",
+  "boundary": "Actual compiled UserFormDialog setup, business useFormDialog and ZXUI source useDialog, business API and @zxio/http source via JSDOM XHR to real FastAPI/MySQL. No rendered browser, native form validation, or file interaction. FormGrid visual export stubbed; feedback observed.",
+  "results": [
+    {
+      "name": "form-edit-with-real-defaults",
+      "accountState": "0",
+      "ok": true,
+      "httpStatus": 200,
+      "createOnlyPasswordOmitted": true,
+      "roleDisplayOmitted": true,
+      "relationsPreserved": true,
+      "loadingReleased": true,
+      "successOnce": true
+    },
+    {
+      "name": "omitted-relations-and-null-scalar",
+      "accountState": "0",
+      "ok": true,
+      "httpStatus": 200,
+      "rolesPreserved": true,
+      "postsPreserved": true,
+      "emailCleared": true,
+      "unprovidedRemarkPreserved": true
+    },
+    {
+      "name": "roles-only-clear-and-replace",
+      "accountState": "0",
+      "ok": true,
+      "httpStatus": 200,
+      "postsPreserved": true
+    },
+    {
+      "name": "posts-only-replace-and-clear",
+      "accountState": "0",
+      "ok": true,
+      "httpStatus": 200,
+      "rolesPreserved": true,
+      "differentExistingPostAvailable": true
+    },
+    {
+      "name": "explicit-null-relations-clear",
+      "accountState": "0",
+      "ok": true,
+      "httpStatus": 200
+    },
+    {
+      "name": "form-reassign-and-reopen",
+      "accountState": "0",
+      "ok": true,
+      "httpStatus": 200,
+      "rolesPersisted": true,
+      "postsPersisted": true,
+      "statusPreserved": true,
+      "loadingReleased": true
+    },
+    {
+      "name": "form-edit-with-real-defaults",
+      "accountState": "1",
+      "ok": true,
+      "httpStatus": 200,
+      "createOnlyPasswordOmitted": true,
+      "roleDisplayOmitted": true,
+      "relationsPreserved": true,
+      "loadingReleased": true,
+      "successOnce": true
+    },
+    {
+      "name": "omitted-relations-and-null-scalar",
+      "accountState": "1",
+      "ok": true,
+      "httpStatus": 200,
+      "rolesPreserved": true,
+      "postsPreserved": true,
+      "emailCleared": true,
+      "unprovidedRemarkPreserved": true
+    },
+    {
+      "name": "roles-only-clear-and-replace",
+      "accountState": "1",
+      "ok": true,
+      "httpStatus": 200,
+      "postsPreserved": true
+    },
+    {
+      "name": "posts-only-replace-and-clear",
+      "accountState": "1",
+      "ok": true,
+      "httpStatus": 200,
+      "rolesPreserved": true,
+      "differentExistingPostAvailable": true
+    },
+    {
+      "name": "explicit-null-relations-clear",
+      "accountState": "1",
+      "ok": true,
+      "httpStatus": 200
+    },
+    {
+      "name": "form-reassign-and-reopen",
+      "accountState": "1",
+      "ok": true,
+      "httpStatus": 200,
+      "rolesPersisted": true,
+      "postsPersisted": true,
+      "statusPreserved": true,
+      "loadingReleased": true
+    },
+    {
+      "name": "editing-preserves-password-and-login-policy",
+      "accountState": "both",
+      "ok": true,
+      "normalLogin": 200,
+      "disabledLogin": 401
+    }
+  ],
+  "cleanupVerified": true,
+  "cleanup": "Only two marked temporary users soft-deleted through business API; normal audit/soft-delete records retained. Probe sessions logged out; existing roles/departments/posts unchanged."
+}

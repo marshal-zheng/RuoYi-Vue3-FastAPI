@@ -1,0 +1,10 @@
+{
+  "operationsChanged": [
+    "/system/dept post",
+    "/system/dept put"
+  ],
+  "schemasChanged": [
+    "DeptCreateModel",
+    "DeptUpdateModel"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "newRegressionRed": {
+    "command": "yarn vitest run tests/list-export-query-parity.test.ts --reporter=verbose",
+    "result": "6 expected failures on original source"
+  },
+  "focusedRegression": {
+    "command": "yarn vitest run tests/list-export-query-parity.test.ts tests/user-query-export.test.ts src/utils/http.test.ts src/utils/operation.test.ts --reporter=verbose",
+    "exitCode": 0,
+    "files": 4,
+    "passed": 35
+  },
+  "independentReview": {
+    "result": "No blocking issues; independently ran 6 new tests successfully"
+  },
+  "realBackendExcel": {
+    "command": "node /tmp/ruoyi-list-export-parity/actual-probe.cjs",
+    "exitCode": 0,
+    "scenarios": 21,
+    "boundary": "Actual source handlers/GridList/HTTP to local FastAPI/MySQL; UI surfaces recorded, no browser/computer use"
+  },
+  "eslint": {
+    "command": "yarn lint:check",
+    "exitCode": 0
+  },
+  "types": {
+    "command": "yarn type-check",
+    "exitCode": 0
+  },
+  "sourceBuild": {
+    "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod --outDir /tmp/ruoyi-list-export-parity/build-source",
+    "exitCode": 0,
+    "durationSeconds": 24.31,
+    "warnings": "Existing CSS/chunk/dynamic-import and outdated Browserslist data notices"
+  },
+  "diffCheck": {
+    "command": "git diff --check",
+    "exitCode": 0
+  },
+  "changedConventions": {
+    "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+    "exitCode": 1,
+    "reason": "Existing console usage in src/views/project/components/VersionList.vue; hash unchanged from task baseline"
+  },
+  "prettier": {
+    "command": "prettier --check on the five modified Vue files and new test",
+    "result": "New test formatted; all five Vue files already failed before and still fail, as checked using the same current project configuration. Unrelated formatting was preserved."
+  },
+  "knownOutOfScope": [
+    "Dictionary data repository orders by dict_sort only: cross-type pageSize=1 showed duplicates/missing records; clear-type Excel equality verified in one page of size 1000. No backend ordering change.",
+    "Existing nonpaged backend exports cap results at 10000 rows; current data below cap.",
+    "Project module currently has zero operation logs; actual positive operation-log filtering and sorting verified against an existing other module."
+  ]
+}

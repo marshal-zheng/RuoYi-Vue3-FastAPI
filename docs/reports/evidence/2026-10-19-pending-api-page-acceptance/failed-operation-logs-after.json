@@ -1,0 +1,32 @@
+{
+  "failureStatus": 422,
+  "read": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "title": "工程管理-导出",
+          "businessType": 5,
+          "requestMethod": "POST",
+          "operName": "zxqa_p_mvet0wd2",
+          "operUrl": "/dev-api/project/export",
+          "operLocation": "未知",
+          "jsonResult": "{\"type\": \"http://localhost/problems/VALIDATION_ERROR\", \"title\": \"请在路径中提供project_id\", \"status\": 422, \"detail\": \"请在路径中提供project_id\", \"instance\": \"/dev-api/project/export\", \"errorCode\": 10001, \"requestId\": \"b233f3572999439193a034541e727f25\"}",
+          "errorMsg": "请在路径中提供project_id",
+          "costTime": 0,
+          "method": "modules.project.api.project_controller.export_project_placeholder()",
+          "operId": 1739,
+          "operatorType": 1,
+          "deptName": "研发部门",
+          "operIp": "",
+          "operParam": "{}",
+          "status": 1,
+          "operTime": "2026-10-19T06:35:25"
+        }
+      ],
+      "total": 1,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

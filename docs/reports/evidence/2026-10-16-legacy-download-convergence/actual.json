@@ -1,0 +1,99 @@
+{
+  "boundary": "Actual code-generation operation and click functions with business useOperation, legacy ZIP entry, shared download pipeline, source @zxio/http and Axios via JSDOM XHR to real local FastAPI/MySQL; ZIP integrity and real Excel parsed. A local gateway holds real upstream responses for deterministic concurrent/cancel checks. UI feedback/loading/save recorded; no computer use or visual browser acceptance.",
+  "results": [
+    {
+      "name": "actual-code-generation-page-saves-valid-zip",
+      "ok": true,
+      "tableName": "sys_config",
+      "pendingReleased": true,
+      "bytes": 9430,
+      "entries": 8,
+      "crcValid": true,
+      "nonemptyFiles": true
+    },
+    {
+      "name": "actual-422-through-legacy-zip-keeps-original-error",
+      "ok": true,
+      "status": 422,
+      "rawBlobPreserved": true,
+      "originalAxiosErrorPreserved": true,
+      "requestContextPreserved": true,
+      "feedbackCount": 1,
+      "loadingReleased": true
+    },
+    {
+      "name": "actual-generator-page-releases-pending-after-failure-and-retries",
+      "ok": true,
+      "pendingReleasedAfterFailure": true,
+      "retrySaved": true,
+      "bytes": 9430,
+      "entries": 8,
+      "crcValid": true,
+      "nonemptyFiles": true
+    },
+    {
+      "name": "actual-in-flight-generator-cancellation-is-quiet-and-rejected",
+      "ok": true,
+      "realUpstreamStatus": 200,
+      "realXhrCancelled": true,
+      "cancelReasonPreserved": true,
+      "pendingReleased": true,
+      "noFailureFeedback": true
+    },
+    {
+      "name": "actual-ZIP-and-Excel-share-loading-until-last-download",
+      "ok": true,
+      "sharedLoading": true,
+      "zipFinishedWithoutClosingExcelMask": true,
+      "closedOnceAfterBoth": true,
+      "archive": {
+        "bytes": 9430,
+        "entries": 8,
+        "crcValid": true,
+        "nonemptyFiles": true
+      },
+      "spreadsheet": {
+        "rows": 1,
+        "columns": 13
+      }
+    },
+    {
+      "name": "actual-cancelled-ZIP-keeps-other-Excel-loading-active",
+      "ok": true,
+      "cancelledZipSavedNothing": true,
+      "otherDownloadKeptMask": true,
+      "closedOnceAfterExcel": true
+    },
+    {
+      "name": "actual-ZIP-save-failure-rejects-original-and-releases-pending",
+      "ok": true,
+      "originalSaveErrorPreserved": true,
+      "pendingReleased": true,
+      "loadingReleased": true,
+      "feedbackCount": 1
+    },
+    {
+      "name": "pre-cancelled-ZIP-rejects-quietly-and-releases-loading",
+      "ok": true,
+      "noFailureFeedback": true,
+      "loadingReleased": true
+    },
+    {
+      "name": "actual-generator-click-failure-does-not-reach-Vue-error-handler",
+      "ok": true,
+      "actualPageClickBoundary": true,
+      "pendingReleased": true,
+      "noVueUnhandledError": true
+    }
+  ],
+  "existingGeneratorMetadataUnchanged": true,
+  "fixture": {
+    "table": "sys_config",
+    "id": 3,
+    "existingDatabaseTableImported": true,
+    "onlyGeneratorMetadataCreated": true,
+    "cleanupVerified": true
+  },
+  "sessionLoggedOut": true,
+  "temporaryBinaryRemoved": true
+}

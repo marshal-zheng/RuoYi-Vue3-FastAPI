@@ -1,0 +1,17 @@
+{
+  "ownedProcessesStopped": [
+    {
+      "pid": 22734,
+      "command": "/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python /tmp/ruoyi-job-write-contract/serve-probe.py",
+      "signal": "SIGTERM"
+    },
+    {
+      "pid": 17403,
+      "command": "redis-server 127.0.0.1:6379",
+      "signal": "SIGTERM"
+    }
+  ],
+  "otherContainersUntouched": true,
+  "colimaAndMysqlLeftRunning": true,
+  "reason": "Starting Colima also resumed existing restart-policy containers; leave Docker services available rather than stop unrelated applications."
+}

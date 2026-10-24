@@ -1,0 +1,24 @@
+{
+  "name": "zxqa_u_mvelcp2o",
+  "userId": 125,
+  "result": {
+    "results": [
+      {
+        "itemId": "zxqa_u_mvelcp2o",
+        "success": true,
+        "rowNumber": 1,
+        "userName": "zxqa_u_mvelcp2o",
+        "action": "created"
+      }
+    ],
+    "summary": {
+      "total": 1,
+      "succeeded": 1,
+      "failed": 0
+    }
+  },
+  "status": 200,
+  "temporaryRoleIds": [
+    1
+  ]
+}

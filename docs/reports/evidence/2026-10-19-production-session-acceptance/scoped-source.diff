@@ -1,0 +1,317 @@
+--- before/src/utils/auth.ts
++++ after/src/utils/auth.ts
+@@ -63,9 +63,11 @@
+ 
+ let securityTokenVersion = 0;
+ let securitySessionVersion = 0;
++let securitySessionController = new AbortController();
+ 
+ export const getSecurityTokenVersion = (): number => securityTokenVersion;
+ export const getSecuritySessionVersion = (): number => securitySessionVersion;
++export const getSecuritySessionSignal = (): AbortSignal => securitySessionController.signal;
+ 
+ let memoryToken = readSessionValue(ACCESS_TOKEN_SESSION_KEY);
+ let memoryCsrfToken = readSessionValue(CSRF_TOKEN_SESSION_KEY) || readCookieValue(CSRF_COOKIE_NAME);
+@@ -82,12 +84,7 @@
+ }
+ 
+ export function removeToken(): void {
+-  securityTokenVersion++;
+-  securitySessionVersion++;
+-  memoryToken = '';
+-  memoryCsrfToken = '';
+-  writeSessionValue(ACCESS_TOKEN_SESSION_KEY, '');
+-  writeSessionValue(CSRF_TOKEN_SESSION_KEY, '');
++  clearSecurityTokens();
+ }
+ 
+ export function getCsrfToken(): string | undefined {
+@@ -108,6 +105,8 @@
+ export function clearSecurityTokens(): void {
+   securityTokenVersion++;
+   securitySessionVersion++;
++  securitySessionController.abort();
++  securitySessionController = new AbortController();
+   memoryToken = '';
+   memoryCsrfToken = '';
+   writeSessionValue(ACCESS_TOKEN_SESSION_KEY, '');
+--- before/src/utils/session.ts
++++ after/src/utils/session.ts
+@@ -10,6 +10,7 @@
+   getCsrfToken,
+   getSecurityTokenVersion,
+   getSecuritySessionVersion,
++  getSecuritySessionSignal,
+   getToken,
+   setCsrfToken,
+   setToken,
+@@ -22,6 +23,30 @@
+ 
+ type SessionConfig = InternalAxiosRequestConfig & {
+   requestOptions?: RequestOptions;
++};
++
++let cookieOperations: Promise<unknown> = Promise.resolve();
++
++/** Login, logout and renewal all replace the same origin-wide authentication cookies. */
++export const withSessionCookieLock = async <T>(
++  operation: () => Promise<T>,
++  signal?: AbortSignal
++): Promise<T> => {
++  const run = () => {
++    if (signal?.aborted) throw new CanceledError('Session changed');
++    return operation();
++  };
++  if (typeof navigator !== 'undefined' && navigator.locks) {
++    return await navigator.locks
++      .request('ruoyi-session-refresh', { signal }, run)
++      .catch((error) => {
++        if (signal?.aborted) throw new CanceledError('Session changed');
++        throw error;
++      });
++  }
++  const result = cookieOperations.then(run, run);
++  cookieOperations = result.catch(() => undefined);
++  return result;
+ };
+ 
+ const expiresSoon = (token: string): boolean => {
+@@ -63,10 +88,12 @@
+   const refresh = (): Promise<string> => {
+     const version = getSecurityTokenVersion();
+     if (pending && pendingVersion === version) return pending;
++    const signal = getSecuritySessionSignal();
+     const renew = async () => {
+       if (getSecurityTokenVersion() !== version) throw new CanceledError('Session changed');
+       const response = await refreshClient.post<SessionResponse>('/auth/refresh', undefined, {
+         headers: { 'X-CSRF-Token': getCsrfToken() || '' },
++        signal,
+       });
+       if (getSecurityTokenVersion() !== version) throw new CanceledError('Session changed');
+       if (!response.data.token) throw new Error('Session refresh response is missing token');
+@@ -75,11 +102,7 @@
+       onToken(response.data.token);
+       return response.data.token;
+     };
+-    // Cookies are shared between tabs; serialize rotation across same-origin tabs too.
+-    const task =
+-      typeof navigator !== 'undefined' && navigator.locks
+-        ? navigator.locks.request('ruoyi-session-refresh', renew)
+-        : renew();
++    const task = withSessionCookieLock(renew, signal);
+     pendingVersion = version;
+     const flight = Promise.resolve(task)
+       .then((value) => value)
+--- before/src/api/login.ts
++++ after/src/api/login.ts
+@@ -5,6 +5,7 @@
+ import type { UserInfoModel, UserDetailModel, UserRegister } from '@/api/_generated/types.gen';
+ import request from '@/utils/request';
+ import { clampBcryptPassword } from '@/utils/password';
++import { withSessionCookieLock } from '@/utils/session';
+ 
+ // 登录方法
+ export function login(username: string, password: string, code: string, uuid: string) {
+@@ -14,18 +15,20 @@
+     code,
+     uuid,
+   });
+-  return request<LoginSession>({
+-    url: '/login',
+-    headers: {
+-      isToken: false,
+-      'Content-Type': 'application/x-www-form-urlencoded',
+-    },
+-    method: 'post',
+-    data,
+-    skipRelogin: true,
+-    silentSuccess: true,
+-    feedback: { mode: 'auto' },
+-  });
++  return withSessionCookieLock(() =>
++    request<LoginSession>({
++      url: '/login',
++      headers: {
++        isToken: false,
++        'Content-Type': 'application/x-www-form-urlencoded',
++      },
++      method: 'post',
++      data,
++      skipRelogin: true,
++      silentSuccess: true,
++      feedback: { mode: 'auto' },
++    })
++  );
+ }
+ 
+ // 注册方法
+@@ -51,7 +54,11 @@
+ // 获取用户详细信息
+ export function getInfo() {
+   return request<{
+-    user: UserInfoModel & { userId: number; userName: string; nickName: string };
++    user: UserInfoModel & {
++      userId: number;
++      userName: string;
++      nickName: string;
++    };
+     roles: string[];
+     permissions: string[];
+   }>({
+@@ -68,15 +75,17 @@
+ }
+ 
+ export function logout(options: LogoutRequestOptions = {}) {
+-  return request<null>({
+-    url: '/auth/logout',
+-    isToken: false,
+-    method: 'post',
+-    feedback: { mode: 'silent' },
+-    skipRelogin: true,
+-    silentError: true,
+-    ...options,
+-  });
++  return withSessionCookieLock(() =>
++    request<null>({
++      url: '/auth/logout',
++      isToken: false,
++      method: 'post',
++      feedback: { mode: 'silent' },
++      skipRelogin: true,
++      silentError: true,
++      ...options,
++    })
++  );
+ }
+ 
+ // 获取验证码
+--- before/src/store/modules/user.ts
++++ after/src/store/modules/user.ts
+@@ -13,6 +13,7 @@
+ import defAva from '@/assets/images/profile.jpg';
+ import request from '@/utils/request';
+ import { refreshHttpSession } from '@/utils/http';
++import { withSessionCookieLock } from '@/utils/session';
+ import { endQuerySession, setQuerySession } from '@/queries/context';
+ 
+ interface UserInfo {
+@@ -73,11 +74,13 @@
+               return;
+             }
+             try {
+-              const csrfResp = await request<{ csrfToken?: string }>({
+-                url: '/auth/csrf-token',
+-                method: 'post',
+-                silentSuccess: true,
+-              });
++              const csrfResp = await withSessionCookieLock(() =>
++                request<{ csrfToken?: string }>({
++                  url: '/auth/csrf-token',
++                  method: 'post',
++                  silentSuccess: true,
++                })
++              );
+               const csrfToken = csrfResp.csrfToken || '';
+               if (csrfToken) {
+                 setCsrfToken(csrfToken);
+--- before/src/utils/session.test.ts
++++ after/src/utils/session.test.ts
+@@ -226,6 +226,19 @@
+     expect(business).toHaveLength(0);
+   });
+ 
++  it('aborts the refresh network request when the security session ends', async () => {
++    refreshGate = deferred();
++    const result = transport.refresh().catch((error: unknown) => error);
++    await vi.waitFor(() => expect(refreshes).toBe(1));
++    const refreshConfig = send.mock.calls.find(([config]) => config.url === '/auth/refresh')![0];
++    clearSecurityTokens();
++    const aborted = refreshConfig.signal?.aborted;
++    refreshGate.resolve();
++    await result;
++    // Ignoring the response body cannot stop its Set-Cookie headers; cancel the transport too.
++    expect(aborted).toBe(true);
++  });
++
+   it('prefers the current CSRF cookie after rotation by another tab', () => {
+     document.cookie = 'csrf_token=other-tab-csrf; path=/';
+     expect(getCsrfToken()).toBe('other-tab-csrf');
+--- before/src/utils/session-cookie-lock.test.ts
++++ after/src/utils/session-cookie-lock.test.ts
+@@ -0,0 +1,76 @@
++import { afterEach, describe, expect, it, vi } from 'vitest';
++import { http, HttpResponse } from 'msw';
++import { login, logout } from '@/api/login';
++import { createApiPath } from '@/mocks/constants';
++import { clearSecurityTokens } from '@/utils/auth';
++import { createSessionTransport } from './session';
++import { setupMainlineMockHandlers } from '../../tests/mocks/mainline';
++import { mockServer } from '../../tests/mocks/server';
++
++const deferred = () => {
++  let resolve!: () => void;
++  const promise = new Promise<void>((done) => {
++    resolve = done;
++  });
++  return { promise, resolve };
++};
++
++describe('authentication cookie writes', () => {
++  setupMainlineMockHandlers();
++
++  afterEach(() => {
++    clearSecurityTokens();
++    vi.unstubAllGlobals();
++  });
++
++  it.each(['login', 'logout'] as const)(
++    'serializes %s behind another tab refresh',
++    async (operation) => {
++      const entered = deferred();
++      const release = deferred();
++      const events: string[] = [];
++      let queue = Promise.resolve();
++      const lock = vi.fn(
++        (_name: string, optionsOrRun: unknown, callback?: () => Promise<unknown>) => {
++          const run = (callback ?? optionsOrRun) as () => Promise<unknown>;
++          const result = queue.then(run);
++          queue = result.then(
++            () => undefined,
++            () => undefined
++          );
++          return result;
++        }
++      );
++      vi.stubGlobal('navigator', { locks: { request: lock } });
++      mockServer.use(
++        http.post(createApiPath('/auth/refresh'), async () => {
++          events.push('refresh');
++          entered.resolve();
++          await release.promise;
++          return HttpResponse.json({
++            token: 'renewed-token',
++            csrfToken: 'renewed-csrf',
++          });
++        }),
++        http.post(createApiPath(operation === 'login' ? '/login' : '/auth/logout'), () => {
++          events.push(operation);
++          return operation === 'login'
++            ? HttpResponse.json({ token: 'new-login-token' })
++            : new HttpResponse(null, { status: 204 });
++        })
++      );
++      const refresh = createSessionTransport(vi.fn()).refresh();
++      await entered.promise;
++      const mutation = operation === 'login' ? login('qa', 'qa-password', '', '') : logout();
++      try {
++        await vi.waitFor(() => expect(lock).toHaveBeenCalledTimes(2));
++        expect(events).toEqual(['refresh']);
++        expect(lock.mock.calls[0][0]).toBe(lock.mock.calls[1][0]);
++      } finally {
++        release.resolve();
++        await Promise.all([refresh, mutation]);
++      }
++      expect(events).toEqual(['refresh', operation]);
++    }
++  );
++});

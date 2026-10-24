@@ -1,0 +1,173 @@
+from pydantic import Field, ConfigDict
+from module_admin.entity.vo.base import CamelModelBase
+from pydantic.alias_generators import to_camel
+from typing import Optional, List, Dict, Any
+from datetime import datetime
+
+
+class DeviceQueryModel(CamelModelBase):
+    """
+    设备查询模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True
+    )
+    device_name: Optional[str] = Field(None, description="设备名称")
+    device_type: Optional[str] = Field(None, description="设备类型")
+    device_category_id: Optional[int] = Field(None, description="设备分类ID")
+    bus_type: Optional[str] = Field(None, description="总线类型")
+    begin_time: Optional[str] = Field(None, description="开始时间")
+    end_time: Optional[str] = Field(None, description="结束时间")
+    page: int = Field(1, description="页码")
+    page_size: int = Field(10, description="每页数量")
+
+
+class DeviceInterfaceModel(CamelModelBase):
+    """
+    设备接口模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    interface_id: Optional[int] = Field(None, description="接口ID")
+    device_id: Optional[int] = Field(None, description="设备ID")
+    interface_name: str = Field(..., description="接口名称")
+    interface_type: str = Field(..., description="接口类型（RS422/RS485/CAN/LAN/1553B）")
+    position: str = Field('right', description="端口位置（left/right/top/bottom）")
+    description: Optional[str] = Field(None, description="接口描述")
+    params: Optional[Dict[str, Any]] = Field(None, description="接口参数配置")
+    message_config: Optional[Dict[str, Any]] = Field(None, description="报文配置")
+    create_time: Optional[datetime] = Field(None, description="创建时间")
+    update_time: Optional[datetime] = Field(None, description="更新时间")
+
+
+class DeviceModel(CamelModelBase):
+    """
+    设备模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    device_id: Optional[int] = Field(None, description="设备ID")
+    device_name: str = Field(..., description="设备名称")
+    device_category_id: Optional[int] = Field(None, description="设备分类ID")
+    category_name: Optional[str] = Field(None, description="分类名称")
+    device_type: Optional[str] = Field(None, description="设备类型")
+    manufacturer: Optional[str] = Field(None, description="制造商")
+    model: Optional[str] = Field(None, description="型号")
+    version: Optional[str] = Field(None, description="版本")
+    bus_type: Optional[str] = Field(None, description="总线类型")
+    remark: Optional[str] = Field(None, description="备注")
+    create_by: Optional[str] = Field(None, description="创建者")
+    create_time: Optional[datetime] = Field(None, description="创建时间")
+    update_by: Optional[str] = Field(None, description="更新者")
+    update_time: Optional[datetime] = Field(None, description="更新时间")
+    interfaces: List[DeviceInterfaceModel] = Field(default_factory=list, description="设备接口列表")
+
+
+class DeviceListModel(CamelModelBase):
+    """
+    设备列表模型（不包含接口详情）
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    device_id: int = Field(..., description="设备ID")
+    device_name: str = Field(..., description="设备名称")
+    category_name: Optional[str] = Field(None, description="分类名称")
+    bus_interfaces: Optional[str] = Field(None, description="总线接口（格式化显示）")
+    create_by: Optional[str] = Field(None, description="创建者")
+    update_time: Optional[datetime] = Field(None, description="更新时间")
+    interfaces: List[DeviceInterfaceModel] = Field(default_factory=list, description="设备接口列表")
+
+
+class CloneDeviceModel(CamelModelBase):
+    """
+    克隆设备模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True
+    )
+
+    source_device_id: int = Field(..., description="源设备ID")
+    device_name: str = Field(..., description="新设备名称")
+    create_by: Optional[str] = Field(None, description="创建者")
+    create_time: Optional[datetime] = Field(None, description="创建时间")
+
+
+class ExportDeviceInterfaceModel(CamelModelBase):
+    """
+    导出设备接口模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    interface_name: str = Field(..., description="接口名称")
+    interface_type: Optional[str] = Field(None, description="接口类型")
+    position: Optional[str] = Field(None, description="端口位置")
+    description: Optional[str] = Field(None, description="接口描述")
+    params: Optional[Dict[str, Any]] = Field(None, description="接口参数配置")
+    message_config: Optional[Dict[str, Any]] = Field(None, description="报文配置")
+
+
+class ExportDeviceModel(CamelModelBase):
+    """
+    导出设备模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    device_id: Optional[int] = Field(None, description="设备ID")
+    device_name: str = Field(..., description="设备名称")
+    category_name: Optional[str] = Field(None, description="分类名称")
+    device_type: Optional[str] = Field(None, description="设备类型")
+    manufacturer: Optional[str] = Field(None, description="制造商")
+    model: Optional[str] = Field(None, description="型号")
+    version: Optional[str] = Field(None, description="版本")
+    bus_type: Optional[str] = Field(None, description="总线类型")
+    remark: Optional[str] = Field(None, description="备注")
+    interfaces: List[ExportDeviceInterfaceModel] = Field(default_factory=list, description="接口列表")
+
+
+class DeviceExportDataModel(CamelModelBase):
+    """
+    设备导出数据模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    export_version: str = Field('1.0.0', description="导出版本")
+    export_time: datetime = Field(default_factory=datetime.now, description="导出时间")
+    device: ExportDeviceModel
+
+
+class BatchDeviceIdsModel(CamelModelBase):
+    """
+    批量设备ID模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True
+    )
+
+    device_ids: List[int] = Field(..., description="设备ID列表")

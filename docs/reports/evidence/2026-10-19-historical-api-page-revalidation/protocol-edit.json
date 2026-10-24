@@ -1,0 +1,98 @@
+{
+  "status": 200,
+  "body": {
+    "protocolName": "QA协议_mveu4gpz",
+    "protocolType": "RS422",
+    "description": "Edited mveu4gpz",
+    "delFlag": "0",
+    "updateTime": "2026-10-19T07:13:48",
+    "updateBy": "zxqa_h_mveu4gpz",
+    "status": "0",
+    "protocolId": 15,
+    "protocolConfig": {
+      "notes": "",
+      "speed": "",
+      "fields": [
+        {
+          "id": "17923904113020.6356288134360445",
+          "unit": "℃",
+          "scale": "0.1",
+          "remark": "mveu4gpz",
+          "XRowKey": "row_95",
+          "children": [],
+          "dataType": "UINT16",
+          "parentId": null,
+          "XRowChild": [],
+          "byteCount": 2,
+          "fieldCode": "qa_temperature",
+          "fieldName": "验收温度",
+          "valueRange": "0..100",
+          "byteSequence": "0-1"
+        }
+      ],
+      "method": "",
+      "sender": "",
+      "baudRate": "9600",
+      "receiver": "",
+      "frequency": "",
+      "speedLabel": "",
+      "errorHandle": "",
+      "frameLength": "2",
+      "methodLabel": "",
+      "sendDuration": "",
+      "frequencyLabel": "",
+      "errorHandleLabel": ""
+    },
+    "createTime": "2026-10-19T07:13:38",
+    "createBy": "zxqa_h_mveu4gpz"
+  },
+  "read": {
+    "status": 200,
+    "body": {
+      "protocolName": "QA协议_mveu4gpz",
+      "protocolType": "RS422",
+      "description": "Edited mveu4gpz",
+      "delFlag": "0",
+      "updateTime": "2026-10-19T07:13:48",
+      "updateBy": "zxqa_h_mveu4gpz",
+      "status": "0",
+      "protocolId": 15,
+      "protocolConfig": {
+        "notes": "",
+        "speed": "",
+        "fields": [
+          {
+            "id": "17923904113020.6356288134360445",
+            "unit": "℃",
+            "scale": "0.1",
+            "remark": "mveu4gpz",
+            "XRowKey": "row_95",
+            "children": [],
+            "dataType": "UINT16",
+            "parentId": null,
+            "XRowChild": [],
+            "byteCount": 2,
+            "fieldCode": "qa_temperature",
+            "fieldName": "验收温度",
+            "valueRange": "0..100",
+            "byteSequence": "0-1"
+          }
+        ],
+        "method": "",
+        "sender": "",
+        "baudRate": "9600",
+        "receiver": "",
+        "frequency": "",
+        "speedLabel": "",
+        "errorHandle": "",
+        "frameLength": "2",
+        "methodLabel": "",
+        "sendDuration": "",
+        "frequencyLabel": "",
+        "errorHandleLabel": ""
+      },
+      "createTime": "2026-10-19T07:13:38",
+      "createBy": "zxqa_h_mveu4gpz"
+    }
+  }
+}

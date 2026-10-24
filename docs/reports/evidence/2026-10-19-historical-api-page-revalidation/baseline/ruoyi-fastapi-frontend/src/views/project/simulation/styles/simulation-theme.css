@@ -1,0 +1,21 @@
+@import './variables.css';
+
+.simulation-shell {
+  color: var(--zx-semantic-surface-canvas-on-text);
+}
+
+.simulation-shell .pro-card {
+  background: var(--zx-semantic-surface-card-fill);
+  color: var(--zx-semantic-surface-card-on-text);
+  border: 1px solid var(--zx-semantic-border-default);
+  border-radius: var(--zx-semantic-radius-surface);
+  box-shadow: var(--zx-semantic-surface-card-depth);
+  overflow: hidden;
+}
+
+.simulation-shell .pro-card-header {
+  padding: 12px 16px;
+  background: var(--zx-semantic-surface-panel-fill);
+  color: var(--zx-semantic-surface-panel-on-text);
+  border-bottom: 1px solid var(--zx-semantic-border-subtle);
+}

@@ -1,0 +1,96 @@
+[
+  {
+    "id": "simulation-session-readonly",
+    "name": "仿真会话只读投影",
+    "stateType": "readonly",
+    "target": {
+      "method": "POST",
+      "openapiPath": "/simulation/sessions",
+      "mswPath": "/api/simulation/sessions",
+      "handlerTag": "simulation:session:create-readonly"
+    },
+    "pages": ["simulation-page"],
+    "owner": "simulation",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/simulation.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/simulation-page-state.spec.ts"
+    ],
+    "risk": "验证仿真会话保持只读投影，不写入新的运行态会话。",
+    "coreMatrix": false,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "schema-unavailable",
+      "reason": "基础仿真会话响应当前为 schema-unavailable，本 overlay 保持成功响应结构。"
+    },
+    "response": {
+      "projection": "readonly-view"
+    }
+  },
+  {
+    "id": "simulation-start-unsupported",
+    "name": "仿真启动 unsupported 501",
+    "stateType": "unsupported",
+    "target": {
+      "method": "POST",
+      "openapiPath": "/simulation/sessions/{session_id}/start",
+      "mswPath": "/api/simulation/sessions/:sessionId/start",
+      "handlerTag": "simulation:session-start-unsupported"
+    },
+    "pages": ["simulation-page"],
+    "owner": "simulation",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/simulation.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/simulation-page-state.spec.ts"
+    ],
+    "risk": "验证显式 unsupported overlay 与未覆盖 fallback 501 可以通过 header 区分。",
+    "coreMatrix": true,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "not-applicable",
+      "reason": "目标 contract entry 是 unsupported-501。"
+    },
+    "response": {
+      "status": 501,
+      "reason": "当前 demo-offline 只读模式不支持启动仿真",
+      "errorCode": "MOCK_API_NOT_IMPLEMENTED"
+    }
+  },
+  {
+    "id": "simulation-pause-unsupported",
+    "name": "仿真暂停 unsupported 501",
+    "stateType": "unsupported",
+    "target": {
+      "method": "POST",
+      "openapiPath": "/simulation/sessions/{session_id}/pause",
+      "mswPath": "/api/simulation/sessions/:sessionId/pause",
+      "handlerTag": "simulation:session-pause-unsupported"
+    },
+    "pages": ["simulation-page"],
+    "owner": "simulation",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/simulation.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/simulation-page-state.spec.ts"
+    ],
+    "risk": "验证页面控制按钮触发的 unsupported overlay 与未覆盖 fallback 501 可以通过 header 区分。",
+    "coreMatrix": true,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "not-applicable",
+      "reason": "目标 contract entry 是 unsupported-501。"
+    },
+    "response": {
+      "status": 501,
+      "reason": "当前 demo-offline 只读模式不支持暂停仿真",
+      "errorCode": "MOCK_API_NOT_IMPLEMENTED"
+    }
+  }
+]

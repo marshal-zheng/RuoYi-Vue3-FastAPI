@@ -1,0 +1,670 @@
+{
+  "errors": [
+    {
+      "time": 1792392300426,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392300491,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300491,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300495,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300495,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300861,
+      "type": "error",
+      "text": "ReferenceError: Cannot access 'Layout' before initialization\n    at http://127.0.0.1/src/router/index.js?t=1792392300708:32:16"
+    },
+    {
+      "time": 1792392300861,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    }
+  ],
+  "console": [
+    {
+      "time": 1792391767598,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792391767617,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792391767954,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792391890652,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792391890658,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792391891782,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392066576,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/components/Sidebar/index.vue"
+    },
+    {
+      "time": 1792392066576,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392081448,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/components/Sidebar/index.vue"
+    },
+    {
+      "time": 1792392081448,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392134714,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392134714,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392134714,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392134714,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392135559,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392135585,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392136491,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392152778,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392152779,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392152779,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392152779,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392153458,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392153466,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392153990,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392243219,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392243219,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392243219,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392243219,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392243382,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392245654,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392246178,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392253075,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392253075,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392253075,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392253075,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392253376,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392253386,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392253567,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392300861,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392300861,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392300861,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392300862,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392301007,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392301577,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392302089,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    }
+  ],
+  "network": [
+    {
+      "time": 1792391768035,
+      "method": "GET",
+      "path": "/api/captchaImage",
+      "status": 200
+    },
+    {
+      "time": 1792391768292,
+      "method": "POST",
+      "path": "/api/login",
+      "status": 200
+    },
+    {
+      "time": 1792391768313,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792391768355,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792391768359,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792391768457,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792391768498,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792391768504,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792391768513,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792391799092,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792391809694,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792391809849,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792391809850,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792391809855,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792391810126,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792391891863,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792391891872,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792391891929,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792391891929,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792391892008,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792391892154,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392080787,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792392080794,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792392080821,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792392081123,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392136621,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792392136647,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392136725,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792392136776,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392136853,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792392136878,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392152127,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792392152133,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792392152156,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792392152434,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392154086,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792392154093,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392154140,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792392154141,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392154199,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792392154483,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392242406,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792392242411,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792392242441,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792392243356,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392246531,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792392246531,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392246731,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392246731,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792392246788,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792392246897,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392253614,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792392253616,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392253853,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792392253853,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392253898,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792392253960,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392300480,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792392300485,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792392300491,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792392300988,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792392302158,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792392302165,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392302207,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792392302207,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792392302445,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792392302598,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    }
+  ]
+}

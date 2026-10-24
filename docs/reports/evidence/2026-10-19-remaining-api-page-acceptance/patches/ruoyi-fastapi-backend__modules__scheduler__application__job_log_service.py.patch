@@ -1,0 +1,24 @@
+--- baseline/ruoyi-fastapi-backend/modules/scheduler/application/job_log_service.py
++++ current/ruoyi-fastapi-backend/modules/scheduler/application/job_log_service.py
+@@ -1,7 +1,6 @@
+ from fastapi import Request
+ from sqlalchemy.ext.asyncio import AsyncSession
+ from typing import List
+-from module_admin.entity.do.enums import JobStatusEnum
+ from module_admin.entity.do.job_do import JobLogDO
+ from module_admin.entity.vo.common_vo import CrudResponseModel
+ from module_admin.entity.vo.job_vo import DeleteJobLogModel, JobLogModel, JobLogPageQueryModel
+@@ -132,10 +131,10 @@
+         job_executor_option_dict = {item.get('value'): item for item in job_executor_option}
+ 
+         for item in job_log_list:
+-            if item.get('status') == JobStatusEnum.NORMAL.value:
+-                item['status'] = '正常'
++            if item.get('status') == '0':
++                item['status'] = '成功'
+             else:
+-                item['status'] = '暂停'
++                item['status'] = '失败'
+             if str(item.get('jobGroup')) in job_group_option_dict.keys():
+                 item['jobGroup'] = job_group_option_dict.get(str(item.get('jobGroup'))).get('label')
+             if str(item.get('jobExecutor')) in job_executor_option_dict.keys():

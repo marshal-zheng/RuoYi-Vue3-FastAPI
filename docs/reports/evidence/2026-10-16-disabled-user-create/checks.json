@@ -1,0 +1,106 @@
+{
+  "scope": "Backend disabled-user create readback only. Management reads include disabled, non-deleted users; identity queries require active users. Password-login policy and permission/data-scope/soft-delete checks unchanged.",
+  "commands": [
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/services/test_user_service.py tests/unit/services/test_login_service_core.py",
+      "exitCode": 0,
+      "passed": 21,
+      "phase": "before changes"
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/repositories/test_user_repository.py",
+      "phase": "red",
+      "exitCode": 1,
+      "failed": 4,
+      "reason": "Disabled management read returned no user; active_only contract not yet implemented."
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/repositories/test_user_repository.py",
+      "phase": "green (before adding two token regressions)",
+      "exitCode": 0,
+      "passed": 4
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/repositories/test_user_repository.py tests/unit/services/test_user_service.py tests/unit/services/test_login_service_core.py tests/unit/services/test_security_token_service.py tests/unit/controllers/test_user_controller.py tests/unit/ports/test_repository_protocol_coverage.py modules/system/tests/test_user_read_queries.py modules/system/tests/test_user_write_commands.py",
+      "phase": "final",
+      "exitCode": 0,
+      "files": 8,
+      "passed": 42,
+      "warnings": [
+        "Existing deprecated Form regex argument"
+      ]
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/repositories/test_user_repository.py tests/unit/services/test_user_service.py tests/unit/services/test_login_service_core.py tests/unit/controllers/test_user_controller.py tests/unit/controllers/test_login_controller_refresh.py tests/unit/ports/test_repository_protocol_coverage.py modules/system/tests/test_user_read_queries.py modules/system/tests/test_user_write_commands.py",
+      "phase": "expanded earlier run",
+      "exitCode": 1,
+      "passed": 35,
+      "failed": 1,
+      "knownFailure": "Unchanged refresh test expects a data envelope absent from the existing flat-resource endpoint."
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/ruff check tests/unit/repositories/test_user_repository.py",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/ruff format --check tests/unit/repositories/test_user_repository.py ports/repositories.py",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m compileall -q modules/system/infrastructure/user_repository.py modules/identity/application/services/login_service.py ports/repositories.py tests/unit/repositories/test_user_repository.py",
+      "exitCode": 0
+    },
+    {
+      "cwd": ".",
+      "command": "PATH=<backend venv bin>:$PATH bash .agents/skills/backend-conventions/scripts/validate.sh --changed",
+      "exitCode": 1,
+      "knownFailures": [
+        "204 existing Ruff diagnostics across the changed workspace targets",
+        "Two existing source files require formatting"
+      ],
+      "guardrails": "passed"
+    },
+    {
+      "cwd": ".",
+      "command": "node /tmp/ruoyi-disabled-user/actual-probe.cjs source",
+      "exitCode": 0,
+      "passed": 8,
+      "note": "Ephemeral harness not retained because it includes local authentication setup. Sanitized results only."
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "independentReview": {
+    "result": "No remaining blockers",
+    "productionCallSitesChecked": 6,
+    "independentFinalNewTestsPassed": 6,
+    "note": "Reviewer identified and confirmed resolution of the new enabled-token fixture password omission. No production changes required."
+  },
+  "cleanup": {
+    "allMarkedTemporaryUsersSoftDeletedViaBusinessApi": true,
+    "visibleProbeUsersRemaining": 0,
+    "probeSessionsLoggedOut": true,
+    "normalAuditAndSoftDeleteHistoryRetained": true,
+    "taskBackendStopped": true,
+    "port8088Released": true,
+    "originalDockerAndRedisUnchanged": true
+  },
+  "notVerified": [
+    "Browser clicks and visual acceptance",
+    "General user-profile editing, blocked by existing KeyError role"
+  ],
+  "otherProductionChanges": false,
+  "committed": false,
+  "published": false
+}

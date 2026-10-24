@@ -1,0 +1,75 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+xxxxxxx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/components/UserImportDialog.test.ts > UserImportDialog lifecycle > releases loading after failure and retries the same selected Excel once
+AssertionError: expected "spy" to be called 1 times, but got 0 times
+ ❯ tests/unit/components/UserImportDialog.test.ts:72:29
+     70|     await wrapper.find('button').trigger('click');
+     71|     await flushPromises();
+     72|     expect(importUserExcel).toHaveBeenCalledTimes(1);
+       |                             ^
+     73|     expect(wrapper.find('button').attributes('data-loading')).toBe('tr…
+     74|     const error = new Error('Excel validation failed');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/unit/components/UserImportDialog.test.ts > UserImportDialog lifecycle > acquires loading before progress and sends only one import for repeated clicks
+AssertionError: expected "spy" to be called 1 times, but got 0 times
+ ❯ tests/unit/components/UserImportDialog.test.ts:93:29
+     91|     const button = wrapper.find('button');
+     92|     void button.trigger('click'); void button.trigger('click'); await …
+     93|     expect(importUserExcel).toHaveBeenCalledTimes(1);
+       |                             ^
+     94|     expect(wrapper.find('button').attributes('data-loading')).toBe('tr…
+     95|     expect(wrapper.findComponent(Upload).props('disabled')).toBe(true);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/unit/components/UserImportDialog.test.ts > UserImportDialog lifecycle > ignores late success and progress after close/reopen while a new import runs
+ FAIL  tests/unit/components/UserImportDialog.test.ts > UserImportDialog lifecycle > ignores late failure and progress after close/reopen while a new import runs
+AssertionError: expected "spy" to be called 1 times, but got 0 times
+ ❯ tests/unit/components/UserImportDialog.test.ts:105:29
+    103|     const wrapper = mountDialog(); const api = wrapper.vm as unknown a…
+    104|     api.open(); selectFile(wrapper); await wrapper.find('button').trig…
+    105|     expect(importUserExcel).toHaveBeenCalledTimes(1);
+       |                             ^
+    106|     const oldConfig = vi.mocked(importUserExcel).mock.calls[0][2]!;
+    107|     await api.close(); await nextTick();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/unit/components/UserImportDialog.test.ts > UserImportDialog lifecycle > aborts on dialog-close without reporting a late error
+ FAIL  tests/unit/components/UserImportDialog.test.ts > UserImportDialog lifecycle > aborts on unmount without reporting a late error
+TypeError: Cannot read properties of undefined (reading '2')
+ ❯ tests/unit/components/UserImportDialog.test.ts:130:59
+    128|     const wrapper = mountDialog(); (wrapper.vm as unknown as DialogApi…
+    129|     await wrapper.find('button').trigger('click'); await flushPromises…
+    130|     const config = vi.mocked(importUserExcel).mock.calls[0][2]!;
+       |                                                           ^
+    131|     if (path === 'dialog-close') wrapper.findComponent(Dialog).vm.$emi…
+    132|     else wrapper.unmount();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/unit/components/UserImportDialog.test.ts > UserImportDialog lifecycle > validates the selection before acquiring an import
+AssertionError: expected "spy" to be called 2 times, but got 0 times
+ ❯ tests/unit/components/UserImportDialog.test.ts:144:76
+    142|     selectFile(wrapper, 'not-excel.txt');
+    143|     await wrapper.find('button').trigger('click'); await flushPromises…
+    144|     expect(importUserExcel).not.toHaveBeenCalled(); expect(feedback.er…
+       |                                                                            ^
+    145|     expect(wrapper.find('button').attributes('data-loading')).toBe('fa…
+    146|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed (7)
+   Start at  06:49:51
+   Duration  963ms (transform 151ms, setup 227ms, collect 384ms, tests 42ms, environment 140ms, prepare 25ms)
+

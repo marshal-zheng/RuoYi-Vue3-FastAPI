@@ -1,0 +1,1 @@
+"""codegen bounded context package."""

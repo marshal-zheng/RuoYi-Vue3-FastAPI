@@ -1,0 +1,37 @@
+{
+  "status": 200,
+  "body": {
+    "results": [
+      {
+        "itemId": "zxqa_i1_mveu4gpz",
+        "success": true,
+        "rowNumber": 1,
+        "userName": "zxqa_i1_mveu4gpz",
+        "action": "created"
+      },
+      {
+        "itemId": "zxqa_i2_mveu4gpz",
+        "success": true,
+        "rowNumber": 2,
+        "userName": "zxqa_i2_mveu4gpz",
+        "action": "created"
+      },
+      {
+        "itemId": "zxqa_bad_mveu4gpz",
+        "success": false,
+        "rowNumber": 3,
+        "userName": "zxqa_bad_mveu4gpz",
+        "error": {
+          "errorCode": 20004,
+          "title": "导入失败",
+          "detail": "没有权限访问部门数据"
+        }
+      }
+    ],
+    "summary": {
+      "total": 3,
+      "succeeded": 2,
+      "failed": 1
+    }
+  }
+}

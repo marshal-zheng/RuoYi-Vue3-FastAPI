@@ -1,0 +1,27 @@
+{
+  "business": {
+    "baselineFiles": 3416,
+    "unrelatedBaselineFilesPreserved": true,
+    "changedBaselineFiles": [
+      "ruoyi-fastapi-backend/config/env.py",
+      "ruoyi-fastapi-backend/container/app_container.py",
+      "ruoyi-fastapi-backend/module_admin/repository/base_repository.py",
+      "ruoyi-fastapi-backend/module_generator/repository/gen_repository.py",
+      "ruoyi-fastapi-backend/server.py",
+      "ruoyi-fastapi-backend/tests/unit/module_generator/test_gen_table_paging.py",
+      "ruoyi-fastapi-backend/utils/count_cache.py",
+      "ruoyi-fastapi-backend/utils/page_util.py"
+    ]
+  },
+  "zxui": {
+    "baselineFiles": 7944,
+    "unrelatedBaselineFilesPreserved": true,
+    "changedBaselineFiles": []
+  },
+  "unchangedResponsibilityBoundaries": [
+    "ruoyi-fastapi-backend/modules/system/application/services/config_service.py",
+    "ruoyi-fastapi-backend/modules/system/infrastructure/config_repository.py",
+    "ruoyi-fastapi-backend/utils/transaction_manager.py",
+    "ruoyi-fastapi-backend/config/get_db.py"
+  ]
+}

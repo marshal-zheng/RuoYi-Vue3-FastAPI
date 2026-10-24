@@ -1,0 +1,79 @@
+{
+  "database": {
+    "bounds": {
+      "x": 220,
+      "y": 71,
+      "width": 860,
+      "height": 709,
+      "top": 71,
+      "right": 1080,
+      "bottom": 780,
+      "left": 220
+    },
+    "clientWidth": 1100,
+    "scrollWidth": 1100,
+    "viewport": {
+      "w": 1100,
+      "h": 800
+    }
+  },
+  "post": {
+    "bounds": {
+      "x": 0,
+      "y": 0,
+      "width": 1100,
+      "height": 800,
+      "top": 0,
+      "right": 1100,
+      "bottom": 800,
+      "left": 0
+    },
+    "scroll": 800,
+    "client": 800,
+    "viewport": {
+      "w": 1100,
+      "h": 800
+    },
+    "buttons": [
+      {
+        "text": "",
+        "bounds": {
+          "x": 821,
+          "y": 192.5,
+          "width": 32,
+          "height": 32,
+          "top": 192.5,
+          "right": 853,
+          "bottom": 224.5,
+          "left": 821
+        }
+      },
+      {
+        "text": "取消",
+        "bounds": {
+          "x": 677,
+          "y": 577.484375,
+          "width": 80,
+          "height": 32,
+          "top": 577.484375,
+          "right": 757,
+          "bottom": 609.484375,
+          "left": 677
+        }
+      },
+      {
+        "text": "确定",
+        "bounds": {
+          "x": 765,
+          "y": 577.484375,
+          "width": 80,
+          "height": 32,
+          "top": 577.484375,
+          "right": 845,
+          "bottom": 609.484375,
+          "left": 765
+        }
+      }
+    ]
+  }
+}

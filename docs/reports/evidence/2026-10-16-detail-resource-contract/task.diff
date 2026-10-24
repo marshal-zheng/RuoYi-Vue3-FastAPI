@@ -1,0 +1,1546 @@
+--- before/ruoyi-fastapi-backend/module_admin/controller/protocol_controller.py
++++ after/ruoyi-fastapi-backend/module_admin/controller/protocol_controller.py
+@@ -25,7 +25,7 @@
+ 
+ async def _load_protocol_detail(protocol_id: int, protocol_service: ProtocolService):
+     protocol_detail_result = await protocol_service.get_protocol_detail(protocol_id)
+-    return protocol_detail_result or {}
++    return protocol_detail_result
+ 
+ 
+ def _to_batch_contract(summary: dict) -> tuple[list[dict], dict[str, int]]:
+--- before/ruoyi-fastapi-backend/module_admin/service/protocol_service.py
++++ after/ruoyi-fastapi-backend/module_admin/service/protocol_service.py
+@@ -522,7 +522,11 @@
+             if isinstance(result, dict) and 'protocolConfig' in result:
+                 result['protocolConfig'] = self.__normalize_protocol_config_for_frontend(result.get('protocolConfig'))
+         else:
+-            result = CamelCaseUtil.transform_result({})
++            raise ResourceNotFoundException(
++                user_message='协议不存在',
++                error_code=ErrorCode.PROTOCOL_NOT_FOUND,
++                developer_message=f'protocol_id={protocol_id} not found',
++            )
+ 
+         return result
+ 
+--- before/ruoyi-fastapi-backend/module_generator/service/gen_service.py
++++ after/ruoyi-fastapi-backend/module_generator/service/gen_service.py
+@@ -16,7 +16,8 @@
+ 
+ from config.constant import GenConstant
+ from config.env import DataBaseConfig, GenConfig
+-from exceptions.exception import ServiceException
++from config.error_codes import ErrorCode
++from exceptions.exception import ResourceNotFoundException, ServiceException
+ from module_admin.entity.vo.common_vo import CrudResponseModel
+ from module_admin.entity.vo.user_vo import CurrentUserModel
+ from module_generator.entity.vo.gen_vo import (
+@@ -121,9 +122,7 @@
+         :param page_object: 编辑业务表对象
+         :return: 编辑业务表校验结果
+         """
+-        gen_table_info = await self.get_gen_table_by_id_services(page_object.table_id)
+-        if not gen_table_info.table_id:
+-            raise ServiceException(message='业务表不存在')
++        await self.get_gen_table_by_id_services(page_object.table_id)
+ 
+         edit_gen_table = page_object.model_dump(exclude_unset=True, by_alias=True)
+         edit_gen_table['options'] = json.dumps(edit_gen_table.get('params'))
+@@ -168,6 +167,12 @@
+         :return: 需要生成的业务表id对应的信息
+         """
+         gen_table = await self.table_repo.find_by_id(table_id)
++        if not gen_table:
++            raise ResourceNotFoundException(
++                user_message='代码生成表不存在',
++                error_code=ErrorCode.RESOURCE_NOT_FOUND,
++                developer_message=f'table_id={table_id} not found',
++            )
+         result = await self.set_table_from_options(GenTableModel(**CamelCaseUtil.transform_result(gen_table)))
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/project/api/project_controller.py
++++ after/ruoyi-fastapi-backend/modules/project/api/project_controller.py
+@@ -36,7 +36,7 @@
+ 
+ async def _load_project_detail(project_id: int, project_service: ProjectService):
+     detail_project_result = await project_service.get_project_detail(project_id)
+-    return detail_project_result or {}
++    return detail_project_result
+ 
+ 
+ @projectController.get(
+--- before/ruoyi-fastapi-backend/modules/project/api/project_version_controller.py
++++ after/ruoyi-fastapi-backend/modules/project/api/project_version_controller.py
+@@ -35,7 +35,7 @@
+ 
+ async def _load_project_version_detail(version_id: int, project_version_service: ProjectVersionService):
+     detail_version_result = await project_version_service.project_version_detail_services(version_id)
+-    return detail_version_result or {}
++    return detail_version_result
+ 
+ 
+ @projectVersionController.get(
+--- before/ruoyi-fastapi-backend/modules/project/application/services/project_service.py
++++ after/ruoyi-fastapi-backend/modules/project/application/services/project_service.py
+@@ -248,7 +248,11 @@
+         if project:
+             return CamelCaseUtil.transform_result(project)
+ 
+-        return CamelCaseUtil.transform_result({})
++        raise ResourceNotFoundException(
++            user_message='工程不存在',
++            error_code=ErrorCode.PROJECT_NOT_FOUND,
++            developer_message=f'project_id={project_id} not found',
++        )
+ 
+     async def export_project_services(self, project_id: int):
+         """
+--- before/ruoyi-fastapi-backend/modules/project/application/services/project_version_service.py
++++ after/ruoyi-fastapi-backend/modules/project/application/services/project_version_service.py
+@@ -162,7 +162,11 @@
+         if version:
+             result = CamelCaseUtil.transform_result(version)
+         else:
+-            result = CamelCaseUtil.transform_result({})
++            raise ResourceNotFoundException(
++                user_message='工程版本不存在',
++                error_code=ErrorCode.RESOURCE_NOT_FOUND,
++                developer_message=f'version_id={version_id} not found',
++            )
+ 
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/scheduler/api/job_controller.py
++++ after/ruoyi-fastapi-backend/modules/scheduler/api/job_controller.py
+@@ -32,7 +32,7 @@
+ 
+ async def _load_job_detail(job_id: int, job_service: JobService):
+     job_detail_result = await job_service.job_detail_services(job_id)
+-    return job_detail_result or {}
++    return job_detail_result
+ 
+ 
+ @jobController.get(
+--- before/ruoyi-fastapi-backend/modules/scheduler/application/job_service.py
++++ after/ruoyi-fastapi-backend/modules/scheduler/application/job_service.py
+@@ -253,7 +253,11 @@
+         if job:
+             result = JobModel(**CamelCaseUtil.transform_result(job))
+         else:
+-            result = JobModel(**dict())
++            raise ResourceNotFoundException(
++                user_message='定时任务不存在',
++                error_code=ErrorCode.RESOURCE_NOT_FOUND,
++                developer_message=f'job_id={job_id} not found',
++            )
+ 
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/system/api/menu_controller.py
++++ after/ruoyi-fastapi-backend/modules/system/api/menu_controller.py
+@@ -35,7 +35,7 @@
+         request_id=request.headers.get('x-request-id'),
+     )
+     menu_detail_result = await mediator.query(detail_query)
+-    return menu_detail_result or {}
++    return menu_detail_result
+ 
+ 
+ @menuController.get('/treeselect')
+--- before/ruoyi-fastapi-backend/modules/system/application/handlers/query/config_query_handlers.py
++++ after/ruoyi-fastapi-backend/modules/system/application/handlers/query/config_query_handlers.py
+@@ -68,8 +68,6 @@
+ 
+     async def handle(self, request: GetConfigDetailQuery) -> ConfigDetailReadModel:
+         detail_result = await self._config_service.config_detail_services(request.config_id)
+-        if detail_result is None:
+-            return ConfigDetailReadModel()
+         return ConfigDetailReadModel.model_validate(detail_result.model_dump(by_alias=False))
+ 
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/handlers/query/dept_query_handlers.py
++++ after/ruoyi-fastapi-backend/modules/system/application/handlers/query/dept_query_handlers.py
+@@ -90,8 +90,6 @@
+             await self._dept_service.check_dept_data_scope_services(request.dept_id, request.data_scope_sql)
+ 
+         detail_result = await self._dept_service.dept_detail_services(request.dept_id)
+-        if detail_result is None:
+-            return DeptDetailReadModel()
+ 
+         if hasattr(detail_result, 'model_dump'):
+             payload = detail_result.model_dump(by_alias=False)
+--- before/ruoyi-fastapi-backend/modules/system/application/handlers/query/dict_query_handlers.py
++++ after/ruoyi-fastapi-backend/modules/system/application/handlers/query/dict_query_handlers.py
+@@ -99,8 +99,6 @@
+ 
+     async def handle(self, request: GetDictTypeDetailQuery) -> DictTypeDetailReadModel:
+         detail_result = await self._dict_type_service.dict_type_detail_services(request.dict_id)
+-        if detail_result is None:
+-            return DictTypeDetailReadModel()
+ 
+         if hasattr(detail_result, 'model_dump'):
+             payload = detail_result.model_dump(by_alias=False)
+@@ -166,8 +164,6 @@
+ 
+     async def handle(self, request: GetDictDataDetailQuery) -> DictDataDetailReadModel:
+         detail_result = await self._dict_data_service.dict_data_detail_services(request.dict_code)
+-        if detail_result is None:
+-            return DictDataDetailReadModel()
+ 
+         if hasattr(detail_result, 'model_dump'):
+             payload = detail_result.model_dump(by_alias=False)
+--- before/ruoyi-fastapi-backend/modules/system/application/handlers/query/menu_query_handlers.py
++++ after/ruoyi-fastapi-backend/modules/system/application/handlers/query/menu_query_handlers.py
+@@ -87,6 +87,4 @@
+ 
+     async def handle(self, request: GetMenuDetailQuery) -> MenuItemReadModel:
+         detail_result = await self._menu_service.menu_detail_services(request.menu_id)
+-        if detail_result is None:
+-            return MenuItemReadModel()
+         return _to_menu_item(detail_result)
+--- before/ruoyi-fastapi-backend/modules/system/application/handlers/query/notice_query_handlers.py
++++ after/ruoyi-fastapi-backend/modules/system/application/handlers/query/notice_query_handlers.py
+@@ -63,8 +63,6 @@
+ 
+     async def handle(self, request: GetNoticeDetailQuery) -> NoticeDetailReadModel:
+         detail_result = await self._notice_service.notice_detail_services(request.notice_id)
+-        if detail_result is None:
+-            return NoticeDetailReadModel()
+ 
+         if hasattr(detail_result, 'model_dump'):
+             payload = detail_result.model_dump(by_alias=False)
+--- before/ruoyi-fastapi-backend/modules/system/application/handlers/query/post_query_handlers.py
++++ after/ruoyi-fastapi-backend/modules/system/application/handlers/query/post_query_handlers.py
+@@ -63,8 +63,6 @@
+ 
+     async def handle(self, request: GetPostDetailQuery) -> PostDetailReadModel:
+         detail_result = await self._post_service.post_detail_services(request.post_id)
+-        if detail_result is None:
+-            return PostDetailReadModel()
+ 
+         if hasattr(detail_result, 'model_dump'):
+             payload = detail_result.model_dump(by_alias=False)
+--- before/ruoyi-fastapi-backend/modules/system/application/handlers/query/role_query_handlers.py
++++ after/ruoyi-fastapi-backend/modules/system/application/handlers/query/role_query_handlers.py
+@@ -137,8 +137,6 @@
+             await self._role_service.check_role_data_scope_services(str(request.role_id), request.data_scope_sql)
+ 
+         detail_result = await self._role_service.role_detail_services(request.role_id)
+-        if detail_result is None:
+-            return RoleDetailReadModel()
+ 
+         return RoleDetailReadModel.model_validate(_extract_payload(detail_result))
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/services/config_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/config_service.py
+@@ -138,12 +138,6 @@
+         """
+         edit_config = page_object.model_dump(exclude_unset=True)
+         config_info = await self.config_detail_services(page_object.config_id)
+-        if not config_info.config_id:
+-            raise ResourceNotFoundException(
+-                user_message='参数配置不存在',
+-                error_code=ErrorCode.DICT_NOT_FOUND,
+-                developer_message=f'Config not found: config_id={page_object.config_id}',
+-            )
+ 
+         if not await self.check_config_key_unique_services(page_object):
+             raise ResourceConflictException(
+@@ -181,12 +175,6 @@
+         delete_config_key_list = []
+         for config_id in config_id_list:
+             config_info = await self.config_detail_services(int(config_id))
+-            if not config_info.config_id:
+-                raise ResourceNotFoundException(
+-                    user_message='参数配置不存在',
+-                    error_code=ErrorCode.CONFIG_NOT_FOUND,
+-                    developer_message=f'Config not found: config_id={config_id}',
+-                )
+             if config_info.config_type == CommonConstant.YES:
+                 raise BusinessException(
+                     user_message=f'内置参数【{config_info.config_key}】不能删除',
+@@ -212,7 +200,11 @@
+         if config:
+             result = ConfigModel(**CamelCaseUtil.transform_result(config))
+         else:
+-            result = ConfigModel(**dict())
++            raise ResourceNotFoundException(
++                user_message='参数配置不存在',
++                error_code=ErrorCode.CONFIG_NOT_FOUND,
++                developer_message=f'config_id={config_id} not found',
++            )
+ 
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/services/dept_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/dept_service.py
+@@ -272,13 +272,19 @@
+         cache_key = cache.build_key('dept:detail', {'dept_id': dept_id})
+         cached = await cache.get(cache_key)
+         if cached is not None:
+-            return DeptModel(**cached)
++            if isinstance(cached, dict) and cached.get('deptId', cached.get('dept_id')) == dept_id:
++                return DeptModel(**cached)
++            await cache.delete(cache_key)
+ 
+         dept = await self.dept_repo.find_active_by_id(dept_id)
+         if dept:
+             result = DeptModel(**CamelCaseUtil.transform_result(dept))
+         else:
+-            result = DeptModel(**dict())
++            raise ResourceNotFoundException(
++                user_message='部门不存在',
++                error_code=ErrorCode.DEPT_NOT_FOUND,
++                developer_message=f'dept_id={dept_id} not found',
++            )
+         await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py
+@@ -185,13 +185,7 @@
+             page_object.update_by = operator
+             page_object.update_time = datetime.now()
+         edit_data_type = page_object.model_dump(exclude_unset=True)
+-        dict_data_info = await self.dict_data_detail_services(page_object.dict_code)
+-        if not dict_data_info.dict_code:
+-            raise ResourceNotFoundException(
+-                user_message='字典数据不存在',
+-                error_code=ErrorCode.DICT_NOT_FOUND,
+-                developer_message=f'Dict data not found: dict_code={page_object.dict_code}',
+-            )
++        await self.dict_data_detail_services(page_object.dict_code)
+ 
+         if not await self.check_dict_data_unique_services(page_object):
+             raise ResourceConflictException(
+@@ -257,7 +251,11 @@
+         if dict_data:
+             result = DictDataModel(**CamelCaseUtil.transform_result(dict_data))
+         else:
+-            result = DictDataModel(**dict())
++            raise ResourceNotFoundException(
++                user_message='字典数据不存在',
++                error_code=ErrorCode.DICT_NOT_FOUND,
++                developer_message=f'dict_code={dict_code} not found',
++            )
+ 
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/services/dict_type_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/dict_type_service.py
+@@ -132,12 +132,6 @@
+             page_object.update_time = datetime.now()
+         edit_dict_type = page_object.model_dump(exclude_unset=True)
+         dict_type_info = await self.dict_type_detail_services(page_object.dict_id)
+-        if not dict_type_info.dict_id:
+-            raise ResourceNotFoundException(
+-                user_message='字典类型不存在',
+-                error_code=ErrorCode.DICT_NOT_FOUND,
+-                developer_message=f'Dict type not found: dict_id={page_object.dict_id}',
+-            )
+ 
+         if not await self.check_dict_type_unique_services(page_object):
+             raise ResourceConflictException(
+@@ -212,7 +206,11 @@
+         if dict_type:
+             result = DictTypeModel(**CamelCaseUtil.transform_result(dict_type))
+         else:
+-            result = DictTypeModel(**dict())
++            raise ResourceNotFoundException(
++                user_message='字典类型不存在',
++                error_code=ErrorCode.DICT_NOT_FOUND,
++                developer_message=f'dict_id={dict_id} not found',
++            )
+ 
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/services/menu_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/menu_service.py
+@@ -213,13 +213,7 @@
+         :return: 编辑菜单校验结果
+         """
+         edit_menu = page_object.model_dump(exclude_unset=True)
+-        menu_info = await self.menu_detail_services(page_object.menu_id)
+-        if not menu_info.menu_id:
+-            raise ResourceNotFoundException(
+-                user_message='菜单不存在',
+-                error_code=ErrorCode.MENU_NOT_FOUND,
+-                developer_message=f'Menu not found: menu_id={page_object.menu_id}',
+-            )
++        await self.menu_detail_services(page_object.menu_id)
+ 
+         if not await self.check_menu_name_unique_services(page_object):
+             raise ResourceConflictException(
+@@ -299,13 +293,19 @@
+         cache_key = cache.build_key('menu:detail', {'menu_id': menu_id})
+         cached = await cache.get(cache_key)
+         if cached is not None:
+-            return MenuModel(**cached)
++            if isinstance(cached, dict) and cached.get('menuId', cached.get('menu_id')) == menu_id:
++                return MenuModel(**cached)
++            await cache.delete(cache_key)
+ 
+         menu = await self.menu_repo.find_by_id(menu_id)
+         if menu:
+             result = MenuModel(**CamelCaseUtil.transform_result(menu))
+         else:
+-            result = MenuModel(**{})
++            raise ResourceNotFoundException(
++                user_message='菜单不存在',
++                error_code=ErrorCode.MENU_NOT_FOUND,
++                developer_message=f'menu_id={menu_id} not found',
++            )
+         await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/services/notice_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/notice_service.py
+@@ -96,9 +96,7 @@
+         :return: 编辑通知公告校验结果
+         """
+         edit_notice = page_object.model_dump(exclude_unset=True)
+-        notice_info = await self.notice_detail_services(page_object.notice_id)
+-        if not notice_info.notice_id:
+-            raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message='通知公告不存在')
++        await self.notice_detail_services(page_object.notice_id)
+ 
+         if not await self.check_notice_unique_services(page_object):
+             raise ResourceConflictException(
+@@ -145,6 +143,10 @@
+         if notice:
+             result = NoticeModel(**CamelCaseUtil.transform_result(notice))
+         else:
+-            result = NoticeModel(**{})
++            raise ResourceNotFoundException(
++                user_message='通知公告不存在',
++                error_code=ErrorCode.RESOURCE_NOT_FOUND,
++                developer_message=f'notice_id={notice_id} not found',
++            )
+ 
+         return result
+--- before/ruoyi-fastapi-backend/modules/system/application/services/post_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/post_service.py
+@@ -109,13 +109,7 @@
+         :return: 编辑岗位校验结果
+         """
+         edit_post = page_object.model_dump(exclude_unset=True)
+-        post_info = await self.post_detail_services(page_object.post_id)
+-        if not post_info.post_id:
+-            raise ResourceNotFoundException(
+-                user_message='岗位不存在',
+-                error_code=ErrorCode.ROLE_NOT_FOUND,
+-                developer_message=f'Post not found: post_id={page_object.post_id}',
+-            )
++        await self.post_detail_services(page_object.post_id)
+ 
+         if not await self.check_post_name_unique_services(page_object):
+             raise ResourceConflictException(
+@@ -177,7 +171,11 @@
+         if post:
+             result = PostModel(**CamelCaseUtil.transform_result(post))
+         else:
+-            result = PostModel(**{})
++            raise ResourceNotFoundException(
++                user_message='岗位不存在',
++                error_code=ErrorCode.RESOURCE_NOT_FOUND,
++                developer_message=f'post_id={post_id} not found',
++            )
+ 
+         return result
+ 
+--- before/ruoyi-fastapi-backend/modules/system/application/services/role_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/role_service.py
+@@ -242,13 +242,7 @@
+             del edit_role['menu_ids']
+         if page_object.type == 'status':
+             del edit_role['type']
+-        role_info = await self.role_detail_services(edit_role.get('role_id'))
+-        if not role_info.role_id:
+-            raise ResourceNotFoundException(
+-                user_message='角色不存在',
+-                error_code=ErrorCode.ROLE_NOT_FOUND,
+-                developer_message=f'Role not found: role_id={edit_role.get("role_id")}',
+-            )
++        await self.role_detail_services(edit_role.get('role_id'))
+ 
+         if page_object.type != 'status':
+             if not await self.check_role_name_unique_services(page_object):
+@@ -288,13 +282,7 @@
+         :return: 分配角色数据权限结果
+         """
+         edit_role = page_object.model_dump(exclude_unset=True, exclude={'admin', 'dept_ids'})
+-        role_info = await self.role_detail_services(page_object.role_id)
+-        if not role_info.role_id:
+-            raise ResourceNotFoundException(
+-                user_message='角色不存在',
+-                error_code=ErrorCode.ROLE_NOT_FOUND,
+-                developer_message=f'Role not found: role_id={page_object.role_id}',
+-            )
++        await self.role_detail_services(page_object.role_id)
+ 
+         db_role = await self.role_repo.find_by_id(page_object.role_id)
+         if db_role:
+@@ -352,13 +340,19 @@
+         cache_key = cache.build_key('role:detail', {'role_id': role_id})
+         cached = await cache.get(cache_key)
+         if cached is not None:
+-            return RoleModel(**cached)
++            if isinstance(cached, dict) and cached.get('roleId', cached.get('role_id')) == role_id:
++                return RoleModel(**cached)
++            await cache.delete(cache_key)
+ 
+         role = await self.role_repo.find_active_by_id(role_id)
+         if role:
+             result = RoleModel(**CamelCaseUtil.transform_result(role))
+         else:
+-            result = RoleModel(**{})
++            raise ResourceNotFoundException(
++                user_message='角色不存在',
++                error_code=ErrorCode.ROLE_NOT_FOUND,
++                developer_message=f'role_id={role_id} not found',
++            )
+         await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
+         return result
+ 
+--- before/ruoyi-fastapi-backend/tests/unit/services/test_config_service.py
++++ after/ruoyi-fastapi-backend/tests/unit/services/test_config_service.py
+@@ -137,9 +137,8 @@
+             mock_repo = MockRepo.return_value
+             mock_repo.find_by_id = AsyncMock(return_value=None)
+             
+-            result = await ConfigService(mock_repo, mock_db).config_detail_services(999)
+-            
+-            assert result.config_id is None
++            with pytest.raises(ResourceNotFoundException):
++                await ConfigService(mock_repo, mock_db).config_detail_services(999)
+ 
+ 
+ class TestConfigServiceCache:
+@@ -317,7 +316,10 @@
+     @pytest.mark.asyncio
+     async def test_edit_config_not_found(self, mock_redis, mock_db):
+         """Test editing non-existent config."""
+-        with patch.object(ConfigService, 'config_detail_services', new=AsyncMock(return_value=ConfigModel())):
++        with patch.object(
++            ConfigService, 'config_detail_services',
++            new=AsyncMock(side_effect=ResourceNotFoundException(user_message='参数配置不存在'))
++        ):
+             edit_config = ConfigModel(
+                 config_id=999,
+                 config_name='不存在',
+--- before/ruoyi-fastapi-backend/tests/unit/services/test_dept_service.py
++++ after/ruoyi-fastapi-backend/tests/unit/services/test_dept_service.py
+@@ -142,9 +142,8 @@
+             mock_repo = MockRepo.return_value
+             mock_repo.find_active_by_id = AsyncMock(return_value=None)
+             
+-            result = await DeptService(mock_repo, mock_db).dept_detail_services(999)
+-            
+-            assert result.dept_id is None
++            with pytest.raises(ResourceNotFoundException):
++                await DeptService(mock_repo, mock_db).dept_detail_services(999)
+ 
+ 
+ class TestDeptServiceDataScope:
+--- before/ruoyi-fastapi-backend/tests/unit/services/test_detail_resource_contract.py
++++ after/ruoyi-fastapi-backend/tests/unit/services/test_detail_resource_contract.py
+@@ -0,0 +1,124 @@
++"""Single-resource reads require an existing entity; collections keep their own semantics."""
++
++from importlib import import_module
++from inspect import signature
++from unittest.mock import AsyncMock, MagicMock
++
++import pytest
++
++from exceptions.exception import ResourceNotFoundException
++
++CASES = [
++    (
++        'modules.system.application.services.config_service',
++        'ConfigService',
++        'config_repo',
++        'config_detail_services',
++        'config_id',
++    ),
++    (
++        'modules.system.application.services.dict_type_service',
++        'DictTypeService',
++        'dict_type_repo',
++        'dict_type_detail_services',
++        'dict_id',
++    ),
++    (
++        'modules.system.application.services.dict_data_service',
++        'DictDataService',
++        'dict_data_repo',
++        'dict_data_detail_services',
++        'dict_code',
++    ),
++    ('modules.system.application.services.dept_service', 'DeptService', 'dept_repo', 'dept_detail_services', 'dept_id'),
++    ('modules.system.application.services.role_service', 'RoleService', 'role_repo', 'role_detail_services', 'role_id'),
++    ('modules.system.application.services.menu_service', 'MenuService', 'menu_repo', 'menu_detail_services', 'menu_id'),
++    ('modules.system.application.services.post_service', 'PostService', 'post_repo', 'post_detail_services', 'post_id'),
++    (
++        'modules.system.application.services.notice_service',
++        'NoticeService',
++        'notice_repo',
++        'notice_detail_services',
++        'notice_id',
++    ),
++    (
++        'modules.project.application.services.project_service',
++        'ProjectService',
++        'project_repo',
++        'project_detail_services',
++        'project_id',
++    ),
++    (
++        'modules.project.application.services.project_version_service',
++        'ProjectVersionService',
++        'version_repo',
++        'project_version_detail_services',
++        'version_id',
++    ),
++    (
++        'module_generator.service.gen_service',
++        'GenTableService',
++        'table_repo',
++        'get_gen_table_by_id_services',
++        'table_id',
++    ),
++    ('modules.scheduler.application.job_service', 'JobService', 'job_repo', 'job_detail_services', 'job_id'),
++    (
++        'module_admin.service.protocol_service',
++        'ProtocolService',
++        'protocol_repo',
++        'protocol_detail_services',
++        'protocol_id',
++    ),
++]
++
++
++def make_service(case, monkeypatch, *, row=None, cached=None):
++    module_name, class_name, repo_name, _, _ = case
++    module = import_module(module_name)
++    cls = getattr(module, class_name)
++    repo = MagicMock()
++    repo.find_by_id = AsyncMock(return_value=row)
++    repo.find_by_code = AsyncMock(return_value=row)
++    repo.find_active_by_id = AsyncMock(return_value=row)
++    service = cls(**{name: repo if name == repo_name else MagicMock() for name in signature(cls).parameters})
++    cache = MagicMock(key_prefix='query_cache')
++    cache.build_key.return_value = 'query_cache:detail:42'
++    cache.get = AsyncMock(return_value=cached)
++    cache.set = AsyncMock()
++    cache.delete = AsyncMock()
++    if hasattr(module, 'get_query_cache'):
++        monkeypatch.setattr(module, 'get_query_cache', lambda: cache)
++    return service, repo, cache
++
++
++@pytest.mark.parametrize('case', CASES, ids=lambda case: case[1])
++async def test_missing_detail_raises_existing_404(case, monkeypatch):
++    service, _, cache = make_service(case, monkeypatch)
++    with pytest.raises(ResourceNotFoundException) as failure:
++        await getattr(service, case[3])(42)
++    assert failure.value.http_status == 404
++    assert failure.value.error_code != 50000
++    cache.set.assert_not_awaited()
++
++
++@pytest.mark.parametrize('case', CASES, ids=lambda case: case[1])
++async def test_existing_detail_retains_its_identity(case, monkeypatch):
++    service, _, _ = make_service(case, monkeypatch, row={case[4]: 42})
++    result = await getattr(service, case[3])(42)
++    if hasattr(result, 'model_dump'):
++        result = result.model_dump(by_alias=False)
++    camel = case[4].split('_')[0] + ''.join(part.title() for part in case[4].split('_')[1:])
++    assert result.get(case[4], result.get(camel)) == 42
++
++
++@pytest.mark.parametrize('case', [CASES[3], CASES[4], CASES[5]], ids=lambda case: case[1])
++@pytest.mark.parametrize('cached_id', [None, 999])
++async def test_old_invalid_detail_cache_is_removed_and_missing_entity_still_404(case, cached_id, monkeypatch):
++    camel = case[4].split('_')[0] + ''.join(part.title() for part in case[4].split('_')[1:])
++    service, repo, cache = make_service(case, monkeypatch, cached={camel: cached_id})
++    with pytest.raises(ResourceNotFoundException):
++        await getattr(service, case[3])(42)
++    cache.delete.assert_awaited_once_with(cache.build_key.return_value)
++    assert repo.find_by_id.await_count + repo.find_active_by_id.await_count == 1
++    cache.set.assert_not_awaited()
+--- before/ruoyi-fastapi-backend/tests/unit/services/test_dict_service.py
++++ after/ruoyi-fastapi-backend/tests/unit/services/test_dict_service.py
+@@ -9,6 +9,7 @@
+ import pytest
+ 
+ from config.constant import CommonConstant
++from exceptions.exception import ResourceNotFoundException
+ from module_admin.entity.vo.dict_vo import DictDataModel, DictTypeModel
+ from modules.system.application.services import DictDataService, DictTypeService
+ 
+@@ -73,14 +74,12 @@
+         assert result == CommonConstant.UNIQUE
+ 
+     @pytest.mark.asyncio
+-    async def test_dict_type_detail_returns_empty_model_when_not_found(self):
++    async def test_dict_type_detail_raises_404_when_not_found(self):
+         service, dict_type_repo, _dict_data_repo, _dict_data_service = build_dict_type_service()
+         dict_type_repo.find_by_id.return_value = None
+ 
+-        result = await service.dict_type_detail_services(1)
+-
+-        assert isinstance(result, DictTypeModel)
+-        assert result.dict_id is None
++        with pytest.raises(ResourceNotFoundException):
++            await service.dict_type_detail_services(1)
+ 
+     @pytest.mark.asyncio
+     async def test_export_dict_type_list_maps_status(self, monkeypatch):
+--- before/ruoyi-fastapi-frontend/src/api/detail-contract.test.ts
++++ after/ruoyi-fastapi-frontend/src/api/detail-contract.test.ts
+@@ -0,0 +1,122 @@
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import { getConfig, listConfig } from './system/config';
++import { getType, optionselect } from './system/dict/type';
++import { getData, getDicts } from './system/dict/data';
++import { getDept } from './system/dept';
++import { getRole } from './system/role';
++import { getMenu, treeselect } from './system/menu';
++import { getPost } from './system/post';
++import { getNotice } from './system/notice';
++import { getProject as getSystemProject } from './system/project';
++import { getProject } from './project/project';
++import { getProjectVersion } from './project/version';
++import { getProtocol } from './protocol/protocol';
++import { getDevice } from './device/device';
++import { getDeviceCategory } from './device/category';
++import { getJob } from './monitor/job';
++import { getGenTable } from './tool/gen';
++import { getUser } from './system/user';
++
++const { transport, feedback } = vi.hoisted(() => ({
++  transport: vi.fn(),
++  feedback: vi.fn(() => Promise.resolve()),
++}));
++vi.mock('@/utils/request', () => ({ default: transport }));
++vi.mock('@/utils/feedback/message', () => ({ showMessage: feedback }));
++
++const cases = [
++  { name: 'config', read: getConfig, field: 'configId' },
++  { name: 'dict-type', read: getType, field: 'dictId' },
++  { name: 'dict-data', read: getData, field: 'dictCode' },
++  { name: 'dept', read: getDept, field: 'deptId' },
++  { name: 'role', read: getRole, field: 'roleId' },
++  { name: 'menu', read: getMenu, field: 'menuId' },
++  { name: 'post', read: getPost, field: 'postId' },
++  { name: 'notice', read: getNotice, field: 'noticeId' },
++  { name: 'system-project', read: getSystemProject, field: 'projectId' },
++  { name: 'project', read: getProject, field: 'projectId' },
++  { name: 'version', read: getProjectVersion, field: 'versionId' },
++  { name: 'protocol', read: getProtocol, field: 'protocolId' },
++  { name: 'device', read: getDevice, field: 'deviceId' },
++  { name: 'category', read: getDeviceCategory, field: 'deviceCategoryId' },
++  { name: 'job', read: getJob, field: 'jobId' },
++  {
++    name: 'generator',
++    read: getGenTable,
++    field: 'tableId',
++    wrap: (data: unknown) => ({ info: data, columns: [], tables: [] }),
++  },
++  {
++    name: 'user',
++    read: getUser,
++    field: 'userId',
++    wrap: (data: unknown) => ({ data, posts: [], roles: [] }),
++  },
++];
++
++beforeEach(() => vi.clearAllMocks());
++
++describe.each(cases)('$name detail identity', ({ read, field, wrap = (data: unknown) => data }) => {
++  it.each([null, {}, { [field]: null }, { [field]: 0 }, { [field]: 88 }, { [field]: '77' }])(
++    'rejects a missing or foreign identity %j before a caller can open an editor',
++    async (detail) => {
++      transport.mockResolvedValueOnce(wrap(detail));
++      await expect(read(77)).rejects.toMatchObject({ name: 'DetailIdentityError' });
++      expect(feedback).toHaveBeenCalledTimes(1);
++    }
++  );
++  it('retains a matching resource and accepts a numeric route ID', async () => {
++    const payload = wrap({ [field]: 77 });
++    transport.mockResolvedValueOnce(payload);
++    expect(await read('77')).toBe(payload);
++    expect(feedback).not.toHaveBeenCalled();
++  });
++  it('preserves the original HTTP failure without reporting it twice', async () => {
++    const failure = new Error('HTTP 404');
++    transport.mockRejectedValueOnce(failure);
++    await expect(read(77)).rejects.toBe(failure);
++    expect(feedback).not.toHaveBeenCalled();
++  });
++});
++
++it('leaves the current editor in charge of a silent identity failure', async () => {
++  const controller = new AbortController();
++  transport.mockResolvedValueOnce({ configId: 88 });
++  await expect(
++    getConfig(77, { signal: controller.signal, silentError: true })
++  ).rejects.toMatchObject({ name: 'DetailIdentityError' });
++  expect(feedback).not.toHaveBeenCalled();
++  expect(transport).toHaveBeenCalledWith(
++    expect.objectContaining({ signal: controller.signal, silentError: true })
++  );
++});
++
++it('preserves the user creation options endpoint with an absent user', async () => {
++  const options = { data: null, posts: [], roles: [], postIds: [], roleIds: [] };
++  transport.mockResolvedValueOnce(options);
++  expect(await getUser(undefined)).toBe(options);
++  expect(transport).toHaveBeenCalledWith(expect.objectContaining({ url: '/system/user/' }));
++  expect(feedback).not.toHaveBeenCalled();
++});
++
++it('preserves valid empty lists, options and dictionary collections', async () => {
++  const empty = { items: [], total: 0, page: 1, pageSize: 10 };
++  transport.mockResolvedValue(empty);
++  for (const read of [
++    () => listConfig(),
++    optionselect,
++    treeselect,
++    () => getDicts('empty-contract'),
++  ]) {
++    expect(await read()).toBe(empty);
++  }
++  expect(feedback).not.toHaveBeenCalled();
++});
++
++it('uses the existing HTTP failure feedback for an explicit detail read', async () => {
++  const failure = new Error('HTTP 404');
++  transport.mockRejectedValueOnce(failure);
++  await expect(getProtocol(77)).rejects.toBe(failure);
++  expect(transport).toHaveBeenCalledWith(expect.objectContaining({ feedback: { mode: 'auto' } }));
++  expect(feedback).not.toHaveBeenCalled();
++});
+--- before/ruoyi-fastapi-frontend/src/api/detail.ts
++++ after/ruoyi-fastapi-frontend/src/api/detail.ts
+@@ -0,0 +1,41 @@
++import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
++import { isRecord } from '@/types/http-contract';
++import { showMessage } from '@/utils/feedback/message';
++import { observeFeedback } from '@/utils/feedback/channel';
++
++/** A successful transport did not return the resource the caller requested. */
++export class DetailIdentityError extends Error {
++  constructor(
++    readonly expectedId: number | string,
++    readonly receivedId: unknown
++  ) {
++    super('详情数据与当前编辑目标不一致，请刷新后重试');
++    this.name = 'DetailIdentityError';
++  }
++}
++
++/** Only explicit single-resource reads use this contract; lists and creation options do not. */
++export async function requestDetail<T>(
++  config: ExtendedAxiosRequestConfig,
++  field: string,
++  id: number | string,
++  select: (payload: T) => unknown = (payload) => payload
++): Promise<T> {
++  const payload = await request<T>({ feedback: { mode: 'auto' }, ...config });
++  const detail = select(payload);
++  const receivedId = isRecord(detail) ? detail[field] : undefined;
++  const expectedId = typeof id === 'string' && /^\d+$/.test(id) ? Number(id) : id;
++  if (
++    typeof receivedId === 'number' &&
++    Number.isSafeInteger(receivedId) &&
++    receivedId > 0 &&
++    receivedId === expectedId
++  ) {
++    return payload;
++  }
++  const failure = new DetailIdentityError(id, receivedId);
++  if (!config.silentError) {
++    observeFeedback(() => showMessage({ type: 'error', message: failure.message }));
++  }
++  throw failure;
++}
+--- before/ruoyi-fastapi-frontend/src/api/device/category.ts
++++ after/ruoyi-fastapi-frontend/src/api/device/category.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type DeviceCategoryRecord = Omit<DeviceCategoryModel, 'deviceCategoryId'> & {
+   deviceCategoryId: number;
+ };
+@@ -22,10 +23,14 @@
+ 
+ // 查询设备分类详细
+ export function getDeviceCategory(categoryId: number | string) {
+-  return request<DeviceCategoryRecord>({
+-    url: '/device/category/' + categoryId,
+-    method: 'get',
+-  });
++  return requestDetail<DeviceCategoryRecord>(
++    {
++      url: '/device/category/' + categoryId,
++      method: 'get',
++    },
++    'deviceCategoryId',
++    categoryId
++  );
+ }
+ 
+ // 新增设备分类
+--- before/ruoyi-fastapi-frontend/src/api/device/device.ts
++++ after/ruoyi-fastapi-frontend/src/api/device/device.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type DeviceRecord = Omit<DeviceModel, 'deviceId'> & { deviceId: number };
+ export type DeviceQuery = Partial<Pick<DeviceModel, 'deviceName' | 'busType'>> & {
+   beginTime?: string;
+@@ -26,10 +27,14 @@
+ 
+ // 查询设备详细（包含接口配置）
+ export function getDevice(deviceId: number | string) {
+-  return request<DeviceRecord>({
+-    url: '/device/' + deviceId,
+-    method: 'get',
+-  });
++  return requestDetail<DeviceRecord>(
++    {
++      url: '/device/' + deviceId,
++      method: 'get',
++    },
++    'deviceId',
++    deviceId
++  );
+ }
+ 
+ // 新增设备（包含接口）
+--- before/ruoyi-fastapi-frontend/src/api/monitor/job.ts
++++ after/ruoyi-fastapi-frontend/src/api/monitor/job.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type JobRecord = Omit<JobModel, 'jobId'> & { jobId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type { EditJobModel, JobModel, JobPageQueryModel } from '@/api/_generated/types.gen';
+@@ -14,10 +15,14 @@
+ 
+ // 查询定时任务调度详细
+ export function getJob(jobId: number | string) {
+-  return request<JobRecord>({
+-    url: '/monitor/job/' + jobId,
+-    method: 'get',
+-  });
++  return requestDetail<JobRecord>(
++    {
++      url: '/monitor/job/' + jobId,
++      method: 'get',
++    },
++    'jobId',
++    jobId
++  );
+ }
+ 
+ // 新增定时任务调度
+--- before/ruoyi-fastapi-frontend/src/api/project/project.ts
++++ after/ruoyi-fastapi-frontend/src/api/project/project.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ import request from '@/utils/request';
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
+@@ -14,10 +15,16 @@
+ 
+ // 查询工程详细
+ export function getProject(projectId: number | string, options: AxiosRequestConfig = {}) {
+-  return request.get<ProjectRecord>('/project/' + projectId, {
+-    feedback: { mode: 'auto' },
+-    ...options,
+-  });
++  return requestDetail<ProjectRecord>(
++    {
++      ...options,
++      url: '/project/' + projectId,
++      method: 'get',
++      feedback: { mode: 'auto' },
++    },
++    'projectId',
++    projectId
++  );
+ }
+ 
+ // 新增工程
+--- before/ruoyi-fastapi-frontend/src/api/project/version.ts
++++ after/ruoyi-fastapi-frontend/src/api/project/version.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ import request from '@/utils/request';
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ export type ProjectVersionRecord = Omit<ProjectVersionModel, 'versionId'> & { versionId: number };
+@@ -22,10 +23,14 @@
+ 
+ // 查询项目版本详细
+ export function getProjectVersion(versionId: number | string) {
+-  return request<ProjectVersionRecord>({
+-    url: '/project/version/' + versionId,
+-    method: 'get',
+-  });
++  return requestDetail<ProjectVersionRecord>(
++    {
++      url: '/project/version/' + versionId,
++      method: 'get',
++    },
++    'versionId',
++    versionId
++  );
+ }
+ 
+ // 新增项目版本
+--- before/ruoyi-fastapi-frontend/src/api/protocol/protocol.ts
++++ after/ruoyi-fastapi-frontend/src/api/protocol/protocol.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type ProtocolRecord = Omit<ProtocolModel, 'protocolId'> & { protocolId: number };
+ import type { GetProtocolListSystemProtocolListGetData } from '@/api/_generated/types.gen';
+ export type ProtocolListQuery = NonNullable<GetProtocolListSystemProtocolListGetData['query']>;
+@@ -23,10 +24,14 @@
+ 
+ // 查询协议详细
+ export function getProtocol(protocolId: number | string) {
+-  return request<ProtocolRecord>({
+-    url: '/system/protocol/' + protocolId,
+-    method: 'get',
+-  });
++  return requestDetail<ProtocolRecord>(
++    {
++      url: '/system/protocol/' + protocolId,
++      method: 'get',
++    },
++    'protocolId',
++    protocolId
++  );
+ }
+ 
+ // 新增协议
+--- before/ruoyi-fastapi-frontend/src/api/system/config.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/config.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type ConfigRecord = Omit<ConfigModel, 'configId'> & { configId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type { ConfigModel, ConfigPageQueryModel } from '@/api/_generated/types.gen';
+@@ -17,11 +18,15 @@
+   configId: number | string,
+   config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+ ) {
+-  return request<ConfigRecord>({
+-    ...config,
+-    url: '/system/config/' + configId,
+-    method: 'get',
+-  });
++  return requestDetail<ConfigRecord>(
++    {
++      ...config,
++      url: '/system/config/' + configId,
++      method: 'get',
++    },
++    'configId',
++    configId
++  );
+ }
+ 
+ // 根据参数键名查询参数值
+--- before/ruoyi-fastapi-frontend/src/api/system/dept.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/dept.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type DeptRecord = Omit<DeptModel, 'deptId'> & { deptId: number };
+ import type { HttpCollection } from '@/types/http-contract';
+ import type { DeptModel, DeptQueryModel } from '@/api/_generated/types.gen';
+@@ -33,12 +34,16 @@
+   deptId: number | string,
+   config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+ ) {
+-  return request<DeptRecord>({
+-    ...config,
+-    url: '/system/dept/' + deptId,
+-    method: 'get',
+-    feedback: { mode: 'auto' },
+-  });
++  return requestDetail<DeptRecord>(
++    {
++      ...config,
++      url: '/system/dept/' + deptId,
++      method: 'get',
++      feedback: { mode: 'auto' },
++    },
++    'deptId',
++    deptId
++  );
+ }
+ 
+ // 新增部门
+--- before/ruoyi-fastapi-frontend/src/api/system/dict/data.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/dict/data.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type DataRecord = Omit<DictDataModel, 'dictCode'> & { dictCode: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type { DictDataModel, DictDataPageQueryModel } from '@/api/_generated/types.gen';
+@@ -24,10 +25,14 @@
+ 
+ // 查询字典数据详细
+ export function getData(dictCode: number | string) {
+-  return request<DataRecord>({
+-    url: '/system/dict/data/' + dictCode,
+-    method: 'get',
+-  });
++  return requestDetail<DataRecord>(
++    {
++      url: '/system/dict/data/' + dictCode,
++      method: 'get',
++    },
++    'dictCode',
++    dictCode
++  );
+ }
+ 
+ // Hook、选择器等消费者共用正在进行的请求，避免 HTTP 客户端取消同类型的前一个请求。
+--- before/ruoyi-fastapi-frontend/src/api/system/dict/type.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/dict/type.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type TypeRecord = Omit<DictTypeModel, 'dictId'> & { dictId: number };
+ import type { HttpCollection, HttpOffsetPage } from '@/types/http-contract';
+ import type { DictTypeModel, DictTypePageQueryModel } from '@/api/_generated/types.gen';
+@@ -17,11 +18,15 @@
+   dictId: number | string,
+   config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+ ) {
+-  return request<TypeRecord>({
+-    ...config,
+-    url: '/system/dict/type/' + dictId,
+-    method: 'get',
+-  });
++  return requestDetail<TypeRecord>(
++    {
++      ...config,
++      url: '/system/dict/type/' + dictId,
++      method: 'get',
++    },
++    'dictId',
++    dictId
++  );
+ }
+ 
+ // 新增字典类型
+--- before/ruoyi-fastapi-frontend/src/api/system/menu.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/menu.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type MenuRecord = MenuItem & MenuModel;
+ import type { GetSystemMenuListSystemMenuListGetData, MenuModel } from '@/api/_generated/types.gen';
+ import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+@@ -27,11 +28,15 @@
+ 
+ // 查询菜单详细
+ export function getMenu(menuId: number | string) {
+-  return request<MenuRecord>({
+-    url: '/system/menu/' + menuId,
+-    method: 'get',
+-    feedback: { mode: 'auto' },
+-  });
++  return requestDetail<MenuRecord>(
++    {
++      url: '/system/menu/' + menuId,
++      method: 'get',
++      feedback: { mode: 'auto' },
++    },
++    'menuId',
++    menuId
++  );
+ }
+ 
+ // 查询菜单下拉树结构
+--- before/ruoyi-fastapi-frontend/src/api/system/notice.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/notice.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ import type { NoticeModel } from '@/api/_generated/types.gen';
+ // JSON represents the backend bytes field as UTF-8 text, rather than multipart File.
+ export type NoticePayload = Omit<NoticeModel, 'noticeContent'> & { noticeContent?: string | null };
+@@ -19,11 +20,15 @@
+ 
+ // 查询公告详细
+ export function getNotice(noticeId: number | string) {
+-  return request<NoticeRecord>({
+-    url: '/system/notice/' + noticeId,
+-    method: 'get',
+-    feedback: { mode: 'auto' },
+-  });
++  return requestDetail<NoticeRecord>(
++    {
++      url: '/system/notice/' + noticeId,
++      method: 'get',
++      feedback: { mode: 'auto' },
++    },
++    'noticeId',
++    noticeId
++  );
+ }
+ 
+ // 新增公告
+--- before/ruoyi-fastapi-frontend/src/api/system/post.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/post.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type PostRecord = Omit<PostModel, 'postId'> & { postId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type { PostModel, PostPageQueryModel } from '@/api/_generated/types.gen';
+@@ -14,10 +15,14 @@
+ 
+ // 查询岗位详细
+ export function getPost(postId: number | string) {
+-  return request<PostRecord>({
+-    url: '/system/post/' + postId,
+-    method: 'get',
+-  });
++  return requestDetail<PostRecord>(
++    {
++      url: '/system/post/' + postId,
++      method: 'get',
++    },
++    'postId',
++    postId
++  );
+ }
+ 
+ // 新增岗位
+--- before/ruoyi-fastapi-frontend/src/api/system/project.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/project.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type {
+@@ -17,11 +18,15 @@
+ 
+ // 查询工程详细
+ export function getProject(projectId: number | string) {
+-  return request<ProjectRecord>({
+-    url: '/project/' + projectId,
+-    method: 'get',
+-    feedback: { mode: 'auto' },
+-  });
++  return requestDetail<ProjectRecord>(
++    {
++      url: '/project/' + projectId,
++      method: 'get',
++      feedback: { mode: 'auto' },
++    },
++    'projectId',
++    projectId
++  );
+ }
+ 
+ // 新增工程
+--- before/ruoyi-fastapi-frontend/src/api/system/role.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/role.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export type RoleRecord = Omit<RoleModel, 'roleId'> & { roleId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type {
+@@ -25,11 +26,15 @@
+   roleId: number | string,
+   config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+ ) {
+-  return request<RoleRecord>({
+-    ...config,
+-    url: '/system/role/' + roleId,
+-    method: 'get',
+-  });
++  return requestDetail<RoleRecord>(
++    {
++      ...config,
++      url: '/system/role/' + roleId,
++      method: 'get',
++    },
++    'roleId',
++    roleId
++  );
+ }
+ 
+ // 新增角色
+--- before/ruoyi-fastapi-frontend/src/api/system/user.ts
++++ after/ruoyi-fastapi-frontend/src/api/system/user.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ import type { BatchResult, HttpCollection, HttpOffsetPage } from '@/types/http-contract';
+ import type {
+   AddUserModel,
+@@ -38,11 +39,18 @@
+   userId: number | string | undefined,
+   config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+ ) {
+-  return request<UserDetailModel>({
++  const requestConfig = {
+     ...config,
+     url: '/system/user/' + parseStrEmpty(userId),
+     method: 'get',
+-  });
++  };
++  if (userId === undefined || userId === '') return request<UserDetailModel>(requestConfig);
++  return requestDetail<UserDetailModel>(
++    requestConfig,
++    'userId',
++    userId,
++    (payload) => payload?.data
++  );
+ }
+ 
+ // 导入结果、失败反馈与取消由当前导入操作负责，避免关闭后产生全局提示。
+--- before/ruoyi-fastapi-frontend/src/api/tool/gen.ts
++++ after/ruoyi-fastapi-frontend/src/api/tool/gen.ts
+@@ -1,3 +1,4 @@
++import { requestDetail } from '@/api/detail';
+ export interface GenTableDetail {
+   info: GenTableModel;
+   columns: GenTableColumnModel[];
+@@ -33,10 +34,15 @@
+ 
+ // 查询表详细信息
+ export function getGenTable(tableId: number | string) {
+-  return request<GenTableDetail>({
+-    url: '/tool/gen/' + tableId,
+-    method: 'get',
+-  });
++  return requestDetail<GenTableDetail>(
++    {
++      url: '/tool/gen/' + tableId,
++      method: 'get',
++    },
++    'tableId',
++    tableId,
++    (payload) => payload?.info
++  );
+ }
+ 
+ // 修改代码生成信息
+--- before/ruoyi-fastapi-frontend/src/components/business/Protocol/ProtocolFormDrawer.vue
++++ after/ruoyi-fastapi-frontend/src/components/business/Protocol/ProtocolFormDrawer.vue
+@@ -6,6 +6,7 @@
+     size="70%"
+     placement="right"
+     :loading="drawerLoading"
++    :ok-disabled="drawerLoading || !detailReady || drawer.state.disabled"
+     loadingType="skeleton"
+     class="protocol-drawer"
+   >
+@@ -111,6 +112,8 @@
+ const formRef = ref(null);
+ const templateRef = ref(null); // 协议模板组件引用（VXE-Table 校验）
+ const drawerLoading = ref(false);
++const detailReady = ref(false);
++const editTargetId = ref(null);
+ const importDialogRef = ref(null);
+ const senderEditable = computed(() => props.senderEditable !== false);
+ const receiverEditable = computed(() => props.receiverEditable !== false);
+@@ -134,6 +137,13 @@
+     protocolConfig: {},
+   }),
+   async onConfirm() {
++    if (
++      drawerLoading.value ||
++      !detailReady.value ||
++      drawer.state.data.protocolId !== editTargetId.value
++    ) {
++      return false;
++    }
+     // 校验协议模板（VXE-Table 表格校验）
+     if (templateRef.value?.validateBeforeSave) {
+       const templateValid = await templateRef.value.validateBeforeSave();
+@@ -231,13 +241,16 @@
+ };
+ 
+ const openDrawer = async (protocolData) => {
++  editTargetId.value = protocolData?.protocolId ?? null;
++  detailReady.value = editTargetId.value === null;
+   if (protocolData && protocolData.protocolId) {
+-    drawer.open();
++    drawer.open({ protocolId: editTargetId.value });
+     drawerLoading.value = true;
+     try {
+       // 调用详情接口获取完整数据（包含 protocolConfig）
+       // http 客户端已解包 payload.data，res 直接是协议数据
+-      const detail = (await getProtocol(protocolData.protocolId)) || {};
++      const detail = await getProtocol(protocolData.protocolId);
++      if (detail.protocolId !== editTargetId.value) return;
+       drawer.state.data = {
+         protocolId: detail.protocolId,
+         protocolName: detail.protocolName || '',
+@@ -246,6 +259,7 @@
+         remark: detail.remark || '',
+         protocolConfig: normalizeHeader(detail.protocolConfig || {}),
+       };
++      detailReady.value = true;
+     } finally {
+       drawerLoading.value = false;
+     }
+--- before/ruoyi-fastapi-frontend/src/views/protocol/index.vue
++++ after/ruoyi-fastapi-frontend/src/views/protocol/index.vue
+@@ -203,7 +203,9 @@
+ 
+ /** 编辑按钮操作 - 打开编辑 Drawer */
+ function handleDetailPage(row) {
+-  protocolDrawerRef.value?.open(row);
++  protocolDrawerRef.value?.open(row).catch(() => {
++    /* 详情读取已负责反馈。 */
++  });
+ }
+ 
+ /** 删除按钮操作 */
+--- before/ruoyi-fastapi-frontend/src/views/system/dict/data.vue
++++ after/ruoyi-fastapi-frontend/src/views/system/dict/data.vue
+@@ -344,12 +344,17 @@
+ /** 修改按钮操作 */
+ function handleUpdate(row) {
+   reset();
+-  const dictCode = row.dictCode || ids.value;
+-  getData(dictCode).then((response) => {
+-    form.value = response;
+-    open.value = true;
+-    title.value = '修改字典数据';
+-  });
++  const dictCode = row?.dictCode || ids.value[0];
++  if (!dictCode) return;
++  getData(dictCode)
++    .then((response) => {
++      form.value = response;
++      open.value = true;
++      title.value = '修改字典数据';
++    })
++    .catch(() => {
++      /* 详情读取已负责反馈，失败时不打开编辑表单。 */
++    });
+ }
+ /** 提交按钮 */
+ const { run: submitForm, pending: submitFormPending } = useOperation(async () => {
+--- before/ruoyi-fastapi-frontend/src/views/system/post/components/PostList.vue
++++ after/ruoyi-fastapi-frontend/src/views/system/post/components/PostList.vue
+@@ -187,7 +187,8 @@
+ async function handleUpdate(row?: PostRecord) {
+   const postId = row?.postId || ids.value[0];
+   if (!postId) return;
+-  const response = await getPost(postId);
++  const response = await getPost(postId).catch(() => null);
++  if (!response) return;
+   const data = response;
+   postDlgRef.value?.open({
+     postId: data.postId ?? undefined,
+--- before/ruoyi-fastapi-frontend/tests/unit/components/ProtocolDetailIdentity.test.ts
++++ after/ruoyi-fastapi-frontend/tests/unit/components/ProtocolDetailIdentity.test.ts
+@@ -0,0 +1,99 @@
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import { mount } from '@vue/test-utils';
++import ProtocolFormDrawer from '@/components/business/Protocol/ProtocolFormDrawer.vue';
++
++const { transport, feedback } = vi.hoisted(() => ({
++  transport: vi.fn(),
++  feedback: vi.fn(() => Promise.resolve()),
++}));
++vi.mock('@/utils/request', () => ({ default: transport }));
++vi.mock('@/utils/feedback/message', () => ({ showMessage: feedback }));
++vi.mock('@/components/business/Protocol/selector/ProtocolTypeSelector.vue', () => ({
++  default: { inheritAttrs: false, template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/EthernetProtocolTemplate.vue', () => ({
++  default: { inheritAttrs: false, template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/RS422ProtocolTemplate.vue', () => ({
++  default: { inheritAttrs: false, template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/CANProtocolTemplate.vue', () => ({
++  default: { inheritAttrs: false, template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/Protocol1553BTemplate.vue', () => ({
++  default: { inheritAttrs: false, template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/ImportFileDialog.vue', () => ({
++  default: { inheritAttrs: false, template: '<div />' },
++}));
++const shell = {
++  name: 'ZxDrawer',
++  inheritAttrs: false,
++  props: ['confirm', 'okDisabled', 'modelValue', 'loading', 'formModel'],
++  template: '<div><slot /></div>',
++};
++const stubs = Object.fromEntries(
++  ['ElForm', 'ElFormItem', 'ZxInput', 'ElButton', 'ElAlert', 'ElTag'].map((name) => [
++    name,
++    { inheritAttrs: false, template: '<div><slot /></div>' },
++  ])
++);
++function editor() {
++  const save = vi.fn(() => Promise.resolve());
++  const wrapper = mount(ProtocolFormDrawer, {
++    props: { save },
++    global: { stubs: { ...stubs, ZxDrawer: shell } },
++  });
++  const confirm = () => wrapper.findComponent(shell).props('confirm')({});
++  return { wrapper, save, confirm };
++}
++beforeEach(() => vi.clearAllMocks());
++
++describe('protocol edit identity', () => {
++  it.each([new Error('HTTP 404'), { protocolId: 88 }, {}])(
++    'does not allow an unsuccessful edit read to become a creation',
++    async (failure) => {
++      const { wrapper, save, confirm } = editor();
++      try {
++        if (failure instanceof Error) transport.mockRejectedValueOnce(failure);
++        else transport.mockResolvedValueOnce(failure);
++        await expect(wrapper.vm.open({ protocolId: 77 })).rejects.toBeDefined();
++        expect(await confirm()).toBe(false);
++        expect(save).not.toHaveBeenCalled();
++      } finally {
++        wrapper.unmount();
++      }
++    }
++  );
++  it('blocks saving when an edit draft loses its loaded identity', async () => {
++    const { wrapper, save, confirm } = editor();
++    try {
++      transport.mockResolvedValueOnce({ protocolId: 77 });
++      await wrapper.vm.open({ protocolId: 77 });
++      const data = wrapper.findComponent(shell).props('formModel') as { protocolId?: number };
++      data.protocolId = undefined;
++      expect(await confirm()).toBe(false);
++      expect(save).not.toHaveBeenCalled();
++    } finally {
++      wrapper.unmount();
++    }
++  });
++  it('allows a successful edit and a later deliberate creation', async () => {
++    const { wrapper, save, confirm } = editor();
++    try {
++      transport.mockResolvedValueOnce({
++        protocolId: 77,
++        protocolName: 'Protocol 77',
++        protocolType: 'can',
++      });
++      await wrapper.vm.open({ protocolId: 77 });
++      await confirm();
++      expect(save).toHaveBeenLastCalledWith(expect.objectContaining({ protocolId: 77 }));
++      await wrapper.vm.open();
++      await confirm();
++      expect(save).toHaveBeenLastCalledWith(expect.objectContaining({ protocolId: null }));
++    } finally {
++      wrapper.unmount();
++    }
++  });
++});

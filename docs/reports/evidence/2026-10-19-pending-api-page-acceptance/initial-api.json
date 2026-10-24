@@ -1,0 +1,2347 @@
+[
+  {
+    "method": "GET",
+    "path": "/system/menu/treeselect",
+    "ok": true,
+    "body": {
+      "items": [
+        {
+          "id": 1,
+          "label": "系统管理",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 100,
+              "label": "用户管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1000,
+                  "label": "用户查询",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1001,
+                  "label": "用户新增",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1002,
+                  "label": "用户修改",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1003,
+                  "label": "用户删除",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1004,
+                  "label": "用户导出",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1005,
+                  "label": "用户导入",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1006,
+                  "label": "重置密码",
+                  "parentId": 100,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 101,
+              "label": "角色管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1007,
+                  "label": "角色查询",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1008,
+                  "label": "角色新增",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1009,
+                  "label": "角色修改",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1010,
+                  "label": "角色删除",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1011,
+                  "label": "角色导出",
+                  "parentId": 101,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "label": "菜单管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1012,
+                  "label": "菜单查询",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1013,
+                  "label": "菜单新增",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1014,
+                  "label": "菜单修改",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1015,
+                  "label": "菜单删除",
+                  "parentId": 102,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 103,
+              "label": "部门管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1016,
+                  "label": "部门查询",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1017,
+                  "label": "部门新增",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1018,
+                  "label": "部门修改",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1019,
+                  "label": "部门删除",
+                  "parentId": 103,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 104,
+              "label": "岗位管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1020,
+                  "label": "岗位查询",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1021,
+                  "label": "岗位新增",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1022,
+                  "label": "岗位修改",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1023,
+                  "label": "岗位删除",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1024,
+                  "label": "岗位导出",
+                  "parentId": 104,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 105,
+              "label": "字典管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1025,
+                  "label": "字典查询",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1026,
+                  "label": "字典新增",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1027,
+                  "label": "字典修改",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1028,
+                  "label": "字典删除",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1029,
+                  "label": "字典导出",
+                  "parentId": 105,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 106,
+              "label": "参数设置",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1030,
+                  "label": "参数查询",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1031,
+                  "label": "参数新增",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1032,
+                  "label": "参数修改",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1033,
+                  "label": "参数删除",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1034,
+                  "label": "参数导出",
+                  "parentId": 106,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 107,
+              "label": "通知公告",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1035,
+                  "label": "公告查询",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1036,
+                  "label": "公告新增",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1037,
+                  "label": "公告修改",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1038,
+                  "label": "公告删除",
+                  "parentId": 107,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 108,
+              "label": "日志管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 500,
+                  "label": "操作日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1039,
+                      "label": "操作查询",
+                      "parentId": 500,
+                      "children": []
+                    },
+                    {
+                      "id": 1040,
+                      "label": "操作删除",
+                      "parentId": 500,
+                      "children": []
+                    },
+                    {
+                      "id": 1041,
+                      "label": "日志导出",
+                      "parentId": 500,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 501,
+                  "label": "登录日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1042,
+                      "label": "登录查询",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1043,
+                      "label": "登录删除",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1044,
+                      "label": "日志导出",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1045,
+                      "label": "账户解锁",
+                      "parentId": 501,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 502,
+                  "label": "审计日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1065,
+                      "label": "审计查询",
+                      "parentId": 502,
+                      "children": []
+                    },
+                    {
+                      "id": 1066,
+                      "label": "审计删除",
+                      "parentId": 502,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "label": "系统监控",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 109,
+              "label": "在线用户",
+              "parentId": 2,
+              "children": [
+                {
+                  "id": 1046,
+                  "label": "在线查询",
+                  "parentId": 109,
+                  "children": []
+                },
+                {
+                  "id": 1047,
+                  "label": "批量强退",
+                  "parentId": 109,
+                  "children": []
+                },
+                {
+                  "id": 1048,
+                  "label": "单条强退",
+                  "parentId": 109,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 110,
+              "label": "定时任务",
+              "parentId": 2,
+              "children": [
+                {
+                  "id": 1049,
+                  "label": "任务查询",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1050,
+                  "label": "任务新增",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1051,
+                  "label": "任务修改",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1052,
+                  "label": "任务删除",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1053,
+                  "label": "状态修改",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1054,
+                  "label": "任务导出",
+                  "parentId": 110,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 111,
+              "label": "数据监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 112,
+              "label": "服务监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 113,
+              "label": "缓存监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 114,
+              "label": "缓存列表",
+              "parentId": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "label": "系统工具",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 115,
+              "label": "表单构建",
+              "parentId": 3,
+              "children": []
+            },
+            {
+              "id": 116,
+              "label": "代码生成",
+              "parentId": 3,
+              "children": [
+                {
+                  "id": 1055,
+                  "label": "生成查询",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1056,
+                  "label": "生成修改",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1057,
+                  "label": "生成删除",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1058,
+                  "label": "导入代码",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1059,
+                  "label": "预览代码",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1060,
+                  "label": "生成代码",
+                  "parentId": 116,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 117,
+              "label": "系统接口",
+              "parentId": 3,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "label": "工程管理",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 118,
+              "label": "工程列表",
+              "parentId": 4,
+              "children": [
+                {
+                  "id": 1061,
+                  "label": "工程查询",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1062,
+                  "label": "工程新增",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1063,
+                  "label": "工程修改",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1064,
+                  "label": "工程删除",
+                  "parentId": 118,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 119,
+              "label": "操作日志",
+              "parentId": 4,
+              "children": []
+            }
+          ]
+        }
+      ],
+      "pager": {
+        "mode": "collection",
+        "total": 4,
+        "page": 1,
+        "size": 10
+      },
+      "list": [
+        {
+          "id": 1,
+          "label": "系统管理",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 100,
+              "label": "用户管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1000,
+                  "label": "用户查询",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1001,
+                  "label": "用户新增",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1002,
+                  "label": "用户修改",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1003,
+                  "label": "用户删除",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1004,
+                  "label": "用户导出",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1005,
+                  "label": "用户导入",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1006,
+                  "label": "重置密码",
+                  "parentId": 100,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 101,
+              "label": "角色管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1007,
+                  "label": "角色查询",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1008,
+                  "label": "角色新增",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1009,
+                  "label": "角色修改",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1010,
+                  "label": "角色删除",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1011,
+                  "label": "角色导出",
+                  "parentId": 101,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "label": "菜单管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1012,
+                  "label": "菜单查询",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1013,
+                  "label": "菜单新增",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1014,
+                  "label": "菜单修改",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1015,
+                  "label": "菜单删除",
+                  "parentId": 102,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 103,
+              "label": "部门管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1016,
+                  "label": "部门查询",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1017,
+                  "label": "部门新增",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1018,
+                  "label": "部门修改",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1019,
+                  "label": "部门删除",
+                  "parentId": 103,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 104,
+              "label": "岗位管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1020,
+                  "label": "岗位查询",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1021,
+                  "label": "岗位新增",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1022,
+                  "label": "岗位修改",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1023,
+                  "label": "岗位删除",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1024,
+                  "label": "岗位导出",
+                  "parentId": 104,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 105,
+              "label": "字典管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1025,
+                  "label": "字典查询",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1026,
+                  "label": "字典新增",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1027,
+                  "label": "字典修改",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1028,
+                  "label": "字典删除",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1029,
+                  "label": "字典导出",
+                  "parentId": 105,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 106,
+              "label": "参数设置",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1030,
+                  "label": "参数查询",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1031,
+                  "label": "参数新增",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1032,
+                  "label": "参数修改",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1033,
+                  "label": "参数删除",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1034,
+                  "label": "参数导出",
+                  "parentId": 106,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 107,
+              "label": "通知公告",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1035,
+                  "label": "公告查询",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1036,
+                  "label": "公告新增",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1037,
+                  "label": "公告修改",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1038,
+                  "label": "公告删除",
+                  "parentId": 107,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 108,
+              "label": "日志管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 500,
+                  "label": "操作日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1039,
+                      "label": "操作查询",
+                      "parentId": 500,
+                      "children": []
+                    },
+                    {
+                      "id": 1040,
+                      "label": "操作删除",
+                      "parentId": 500,
+                      "children": []
+                    },
+                    {
+                      "id": 1041,
+                      "label": "日志导出",
+                      "parentId": 500,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 501,
+                  "label": "登录日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1042,
+                      "label": "登录查询",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1043,
+                      "label": "登录删除",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1044,
+                      "label": "日志导出",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1045,
+                      "label": "账户解锁",
+                      "parentId": 501,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 502,
+                  "label": "审计日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1065,
+                      "label": "审计查询",
+                      "parentId": 502,
+                      "children": []
+                    },
+                    {
+                      "id": 1066,
+                      "label": "审计删除",
+                      "parentId": 502,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "label": "系统监控",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 109,
+              "label": "在线用户",
+              "parentId": 2,
+              "children": [
+                {
+                  "id": 1046,
+                  "label": "在线查询",
+                  "parentId": 109,
+                  "children": []
+                },
+                {
+                  "id": 1047,
+                  "label": "批量强退",
+                  "parentId": 109,
+                  "children": []
+                },
+                {
+                  "id": 1048,
+                  "label": "单条强退",
+                  "parentId": 109,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 110,
+              "label": "定时任务",
+              "parentId": 2,
+              "children": [
+                {
+                  "id": 1049,
+                  "label": "任务查询",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1050,
+                  "label": "任务新增",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1051,
+                  "label": "任务修改",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1052,
+                  "label": "任务删除",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1053,
+                  "label": "状态修改",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1054,
+                  "label": "任务导出",
+                  "parentId": 110,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 111,
+              "label": "数据监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 112,
+              "label": "服务监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 113,
+              "label": "缓存监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 114,
+              "label": "缓存列表",
+              "parentId": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "label": "系统工具",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 115,
+              "label": "表单构建",
+              "parentId": 3,
+              "children": []
+            },
+            {
+              "id": 116,
+              "label": "代码生成",
+              "parentId": 3,
+              "children": [
+                {
+                  "id": 1055,
+                  "label": "生成查询",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1056,
+                  "label": "生成修改",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1057,
+                  "label": "生成删除",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1058,
+                  "label": "导入代码",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1059,
+                  "label": "预览代码",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1060,
+                  "label": "生成代码",
+                  "parentId": 116,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 117,
+              "label": "系统接口",
+              "parentId": 3,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "label": "工程管理",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 118,
+              "label": "工程列表",
+              "parentId": 4,
+              "children": [
+                {
+                  "id": 1061,
+                  "label": "工程查询",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1062,
+                  "label": "工程新增",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1063,
+                  "label": "工程修改",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1064,
+                  "label": "工程删除",
+                  "parentId": 118,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 119,
+              "label": "操作日志",
+              "parentId": 4,
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/system/menu/roleMenuTreeselect/1",
+    "ok": true,
+    "body": {
+      "menus": [
+        {
+          "id": 1,
+          "label": "系统管理",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 100,
+              "label": "用户管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1000,
+                  "label": "用户查询",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1001,
+                  "label": "用户新增",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1002,
+                  "label": "用户修改",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1003,
+                  "label": "用户删除",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1004,
+                  "label": "用户导出",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1005,
+                  "label": "用户导入",
+                  "parentId": 100,
+                  "children": []
+                },
+                {
+                  "id": 1006,
+                  "label": "重置密码",
+                  "parentId": 100,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 101,
+              "label": "角色管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1007,
+                  "label": "角色查询",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1008,
+                  "label": "角色新增",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1009,
+                  "label": "角色修改",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1010,
+                  "label": "角色删除",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 1011,
+                  "label": "角色导出",
+                  "parentId": 101,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "label": "菜单管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1012,
+                  "label": "菜单查询",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1013,
+                  "label": "菜单新增",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1014,
+                  "label": "菜单修改",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 1015,
+                  "label": "菜单删除",
+                  "parentId": 102,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 103,
+              "label": "部门管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1016,
+                  "label": "部门查询",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1017,
+                  "label": "部门新增",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1018,
+                  "label": "部门修改",
+                  "parentId": 103,
+                  "children": []
+                },
+                {
+                  "id": 1019,
+                  "label": "部门删除",
+                  "parentId": 103,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 104,
+              "label": "岗位管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1020,
+                  "label": "岗位查询",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1021,
+                  "label": "岗位新增",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1022,
+                  "label": "岗位修改",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1023,
+                  "label": "岗位删除",
+                  "parentId": 104,
+                  "children": []
+                },
+                {
+                  "id": 1024,
+                  "label": "岗位导出",
+                  "parentId": 104,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 105,
+              "label": "字典管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1025,
+                  "label": "字典查询",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1026,
+                  "label": "字典新增",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1027,
+                  "label": "字典修改",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1028,
+                  "label": "字典删除",
+                  "parentId": 105,
+                  "children": []
+                },
+                {
+                  "id": 1029,
+                  "label": "字典导出",
+                  "parentId": 105,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 106,
+              "label": "参数设置",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1030,
+                  "label": "参数查询",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1031,
+                  "label": "参数新增",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1032,
+                  "label": "参数修改",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1033,
+                  "label": "参数删除",
+                  "parentId": 106,
+                  "children": []
+                },
+                {
+                  "id": 1034,
+                  "label": "参数导出",
+                  "parentId": 106,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 107,
+              "label": "通知公告",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 1035,
+                  "label": "公告查询",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1036,
+                  "label": "公告新增",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1037,
+                  "label": "公告修改",
+                  "parentId": 107,
+                  "children": []
+                },
+                {
+                  "id": 1038,
+                  "label": "公告删除",
+                  "parentId": 107,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 108,
+              "label": "日志管理",
+              "parentId": 1,
+              "children": [
+                {
+                  "id": 500,
+                  "label": "操作日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1039,
+                      "label": "操作查询",
+                      "parentId": 500,
+                      "children": []
+                    },
+                    {
+                      "id": 1040,
+                      "label": "操作删除",
+                      "parentId": 500,
+                      "children": []
+                    },
+                    {
+                      "id": 1041,
+                      "label": "日志导出",
+                      "parentId": 500,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 501,
+                  "label": "登录日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1042,
+                      "label": "登录查询",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1043,
+                      "label": "登录删除",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1044,
+                      "label": "日志导出",
+                      "parentId": 501,
+                      "children": []
+                    },
+                    {
+                      "id": 1045,
+                      "label": "账户解锁",
+                      "parentId": 501,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "id": 502,
+                  "label": "审计日志",
+                  "parentId": 108,
+                  "children": [
+                    {
+                      "id": 1065,
+                      "label": "审计查询",
+                      "parentId": 502,
+                      "children": []
+                    },
+                    {
+                      "id": 1066,
+                      "label": "审计删除",
+                      "parentId": 502,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "label": "系统监控",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 109,
+              "label": "在线用户",
+              "parentId": 2,
+              "children": [
+                {
+                  "id": 1046,
+                  "label": "在线查询",
+                  "parentId": 109,
+                  "children": []
+                },
+                {
+                  "id": 1047,
+                  "label": "批量强退",
+                  "parentId": 109,
+                  "children": []
+                },
+                {
+                  "id": 1048,
+                  "label": "单条强退",
+                  "parentId": 109,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 110,
+              "label": "定时任务",
+              "parentId": 2,
+              "children": [
+                {
+                  "id": 1049,
+                  "label": "任务查询",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1050,
+                  "label": "任务新增",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1051,
+                  "label": "任务修改",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1052,
+                  "label": "任务删除",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1053,
+                  "label": "状态修改",
+                  "parentId": 110,
+                  "children": []
+                },
+                {
+                  "id": 1054,
+                  "label": "任务导出",
+                  "parentId": 110,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 111,
+              "label": "数据监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 112,
+              "label": "服务监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 113,
+              "label": "缓存监控",
+              "parentId": 2,
+              "children": []
+            },
+            {
+              "id": 114,
+              "label": "缓存列表",
+              "parentId": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "label": "系统工具",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 115,
+              "label": "表单构建",
+              "parentId": 3,
+              "children": []
+            },
+            {
+              "id": 116,
+              "label": "代码生成",
+              "parentId": 3,
+              "children": [
+                {
+                  "id": 1055,
+                  "label": "生成查询",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1056,
+                  "label": "生成修改",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1057,
+                  "label": "生成删除",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1058,
+                  "label": "导入代码",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1059,
+                  "label": "预览代码",
+                  "parentId": 116,
+                  "children": []
+                },
+                {
+                  "id": 1060,
+                  "label": "生成代码",
+                  "parentId": 116,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 117,
+              "label": "系统接口",
+              "parentId": 3,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "label": "工程管理",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 118,
+              "label": "工程列表",
+              "parentId": 4,
+              "children": [
+                {
+                  "id": 1061,
+                  "label": "工程查询",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1062,
+                  "label": "工程新增",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1063,
+                  "label": "工程修改",
+                  "parentId": 118,
+                  "children": []
+                },
+                {
+                  "id": 1064,
+                  "label": "工程删除",
+                  "parentId": 118,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 119,
+              "label": "操作日志",
+              "parentId": 4,
+              "children": []
+            }
+          ]
+        }
+      ],
+      "checkedKeys": []
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/system/dept/treeselect",
+    "ok": true,
+    "body": {
+      "items": [
+        {
+          "id": 100,
+          "label": "集团总公司",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 101,
+              "label": "深圳分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 103,
+                  "label": "研发部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 104,
+                  "label": "市场部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 105,
+                  "label": "测试部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 106,
+                  "label": "财务部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 107,
+                  "label": "运维部门",
+                  "parentId": 101,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "label": "长沙分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 108,
+                  "label": "市场部门",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 109,
+                  "label": "财务部门",
+                  "parentId": 102,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "pager": {
+        "mode": "collection",
+        "total": 1,
+        "page": 1,
+        "size": 10
+      },
+      "list": [
+        {
+          "id": 100,
+          "label": "集团总公司",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 101,
+              "label": "深圳分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 103,
+                  "label": "研发部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 104,
+                  "label": "市场部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 105,
+                  "label": "测试部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 106,
+                  "label": "财务部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 107,
+                  "label": "运维部门",
+                  "parentId": 101,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "label": "长沙分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 108,
+                  "label": "市场部门",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 109,
+                  "label": "财务部门",
+                  "parentId": 102,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/system/dept/list/exclude/103",
+    "ok": true,
+    "body": {
+      "items": [
+        {
+          "deptId": 100,
+          "parentId": 0,
+          "ancestors": "0",
+          "deptName": "集团总公司",
+          "orderNum": 0,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 101,
+          "parentId": 100,
+          "ancestors": "0,100",
+          "deptName": "深圳分公司",
+          "orderNum": 1,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 108,
+          "parentId": 102,
+          "ancestors": "0,100,102",
+          "deptName": "市场部门",
+          "orderNum": 1,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 102,
+          "parentId": 100,
+          "ancestors": "0,100",
+          "deptName": "长沙分公司",
+          "orderNum": 2,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 104,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "市场部门",
+          "orderNum": 2,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 109,
+          "parentId": 102,
+          "ancestors": "0,100,102",
+          "deptName": "财务部门",
+          "orderNum": 2,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 105,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "测试部门",
+          "orderNum": 3,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 106,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "财务部门",
+          "orderNum": 4,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 107,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "运维部门",
+          "orderNum": 5,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        }
+      ],
+      "pager": {
+        "mode": "collection",
+        "total": 9,
+        "page": 1,
+        "size": 10
+      },
+      "list": [
+        {
+          "deptId": 100,
+          "parentId": 0,
+          "ancestors": "0",
+          "deptName": "集团总公司",
+          "orderNum": 0,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 101,
+          "parentId": 100,
+          "ancestors": "0,100",
+          "deptName": "深圳分公司",
+          "orderNum": 1,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 108,
+          "parentId": 102,
+          "ancestors": "0,100,102",
+          "deptName": "市场部门",
+          "orderNum": 1,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 102,
+          "parentId": 100,
+          "ancestors": "0,100",
+          "deptName": "长沙分公司",
+          "orderNum": 2,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 104,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "市场部门",
+          "orderNum": 2,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 109,
+          "parentId": 102,
+          "ancestors": "0,100,102",
+          "deptName": "财务部门",
+          "orderNum": 2,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 105,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "测试部门",
+          "orderNum": 3,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 106,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "财务部门",
+          "orderNum": 4,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        {
+          "deptId": 107,
+          "parentId": 101,
+          "ancestors": "0,100,101",
+          "deptName": "运维部门",
+          "orderNum": 5,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        }
+      ]
+    }
+  },
+  {
+    "method": "GET",
+    "path": "/dev/menu/status",
+    "ok": true,
+    "body": {
+      "enabled": true,
+      "modulesRoot": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/capabilities/modules",
+      "modulesRootExists": true,
+      "manifestCount": 1,
+      "watchIntervalMs": 200,
+      "debounceMs": 250,
+      "retryBackoffMs": 1000,
+      "retryMaxBackoffMs": 30000,
+      "lastSyncStatus": "idle",
+      "lastSeenSnapshotChecksum": "3ef6dca4f43f2e841b4fd7b91c3763cf0d21f8aa9c04d6093c956c21f635f4e8",
+      "lastAppliedSnapshotChecksum": null,
+      "lastAppliedCompiledChecksum": null,
+      "pendingSnapshotChecksum": null,
+      "retryCount": 0,
+      "nextRetryAt": null,
+      "lastSyncSuccess": null,
+      "lastSyncAt": null,
+      "lastTrigger": null,
+      "lastError": null,
+      "lastEventId": 0
+    }
+  },
+  {
+    "method": "delete",
+    "path": "/system/menu/",
+    "ok": false,
+    "status": 422,
+    "problem": {
+      "type": "http://localhost/problems/validation-error",
+      "title": "传入菜单id为空",
+      "status": 422,
+      "detail": "传入菜单id为空",
+      "instance": "/dev-api/system/menu/",
+      "errorCode": 10001,
+      "requestId": "30789c4155ee49c4817a13b95611cbd4",
+      "errors": [
+        {
+          "field": "menu_ids",
+          "message": "传入菜单id为空",
+          "code": "value_error"
+        }
+      ]
+    }
+  },
+  {
+    "method": "delete",
+    "path": "/system/config",
+    "ok": false,
+    "status": 422,
+    "problem": {
+      "type": "http://localhost/problems/validation-error",
+      "title": "传入参数配置id为空",
+      "status": 422,
+      "detail": "传入参数配置id为空",
+      "instance": "/dev-api/system/config",
+      "errorCode": 10001,
+      "requestId": "69e06def4ad542dcb1e224ebfa21b088",
+      "errors": [
+        {
+          "field": "config_ids",
+          "message": "传入参数配置id为空",
+          "code": "value_error"
+        }
+      ]
+    }
+  },
+  {
+    "method": "post",
+    "path": "/project/export",
+    "ok": false,
+    "status": 422,
+    "problem": {
+      "type": "http://localhost/problems/validation-error",
+      "title": "请在路径中提供project_id",
+      "status": 422,
+      "detail": "请在路径中提供project_id",
+      "instance": "/dev-api/project/export",
+      "errorCode": 10001,
+      "requestId": "479370a421fd4a51a124ca65523da405",
+      "errors": [
+        {
+          "field": "project_id",
+          "message": "请在路径中提供project_id",
+          "code": "value_error"
+        }
+      ]
+    }
+  },
+  {
+    "method": "post",
+    "path": "/dev/menu/sync",
+    "ok": true,
+    "body": {
+      "trigger": "acceptance-mvet0wd2",
+      "dryRun": true,
+      "success": true,
+      "compiledChecksum": "d102d8adfba3a169708373889bb3dd6dcd478e26f576d897f6441dae68f23811",
+      "affectedObjects": [],
+      "affectedObjectsCount": 0,
+      "residualObjects": [],
+      "appliedOperations": 0,
+      "skippedOperations": 0,
+      "metadataUpdatedObjects": 0,
+      "metadataDeactivatedObjects": 0,
+      "changedDomains": [],
+      "menuReloadRequired": false,
+      "postconditionStatus": "skipped",
+      "stateChanged": false,
+      "skippedReason": null,
+      "durationMs": 145,
+      "syncedAt": "2026-10-19T06:19:30.565158"
+    }
+  }
+]

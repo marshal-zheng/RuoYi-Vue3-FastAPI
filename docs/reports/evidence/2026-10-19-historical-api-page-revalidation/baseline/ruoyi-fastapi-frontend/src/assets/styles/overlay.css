@@ -1,0 +1,3 @@
+.splitpanes.default-theme .splitpanes__pane {
+  background-color: var(--zx-semantic-surface-panel-fill) !important;
+}

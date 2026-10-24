@@ -1,0 +1,13 @@
+{
+  "generators": [
+    "targeted components generator",
+    "examples",
+    "llms"
+  ],
+  "isolatedOutput": true,
+  "changedFiles": [
+    "llms-full.txt"
+  ],
+  "updatedHttpFullTextSections": 4,
+  "nonHttpAggregateEntriesUnchanged": true
+}

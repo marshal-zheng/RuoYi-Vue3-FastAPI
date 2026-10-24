@@ -1,0 +1,60 @@
+--- baseline/ruoyi-fastapi-frontend/src/views/system/post/components/PostDlg.vue
++++ current/ruoyi-fastapi-frontend/src/views/system/post/components/PostDlg.vue
+@@ -31,6 +31,7 @@
+ <script setup lang="ts">
+ import { computed, ref, shallowRef, watch } from 'vue';
+ import { ElMessageBox } from 'element-plus';
++import type { HttpError } from '@zxio/http';
+ import type { ZxDialogExpose } from '@zxio/zxui/dialog';
+ import { ZxSchemaForm, type Save, type SchemaFormInstance } from '@zxio/schema-form/form-create';
+ import '@zxio/schema-form/style.css';
+@@ -38,8 +39,16 @@
+ import { schemaFormDialog } from '@/components/ui/FormDialog';
+ import DictStatus from '@/components/business/DictStatus/index.vue';
+ import { getPost, addPost, updatePost } from '@/api/system/post';
++import { isProblemDetails, isRecord } from '@/types/http-contract';
++import { presentRequestError } from '@/utils/http';
+ import { useDict } from '@/utils/dict';
+-import { createPostRules, initialPost, toPostDto, type PostValues } from './post-form';
++import {
++  createPostRules,
++  initialPost,
++  postFieldIssues,
++  toPostDto,
++  type PostValues,
++} from './post-form';
+ 
+ const emit = defineEmits<{ (e: 'confirm'): void }>();
+ const visible = ref(false);
+@@ -109,8 +118,29 @@
+         }
+         const dto = toPostDto(values, id);
+         // The existing write API has no rollback; close/replacement stays locked until it settles.
+-        if (id === undefined) await addPost(dto);
+-        else await updatePost(dto);
++        try {
++          // The form owns failed-save feedback; successful writes keep the existing HTTP feedback.
++          if (id === undefined) await addPost(dto, { silentError: true });
++          else await updatePost(dto, { silentError: true });
++        } catch (error) {
++          if (signal.aborted || key !== generation || !visible.value)
++            return { ok: false, issues: [] };
++          if (
++            isRecord(error) &&
++            isProblemDetails(error.problem) &&
++            (error.problem.status === 401 ||
++              [20001, 20002].includes(Number(error.problem.errorCode)))
++          ) {
++            presentRequestError(error as unknown as HttpError, {
++              silentError: false,
++              feedback: { mode: 'auto' },
++            });
++            return { ok: false, issues: [] };
++          }
++          const issues = postFieldIssues(error);
++          if (issues.length) return { ok: false, issues };
++          throw error;
++        }
+         return { ok: true };
+       },
+     };

@@ -1,0 +1,175 @@
+[
+  {
+    "kind": "projectVersion",
+    "id": 15,
+    "status": 204,
+    "ui": true
+  },
+  {
+    "kind": "project",
+    "id": 13,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "project",
+    "id": 14,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "project",
+    "id": 15,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "dictData",
+    "id": 208,
+    "status": 204,
+    "ui": true
+  },
+  {
+    "kind": "dictType",
+    "id": 131,
+    "status": 204,
+    "ui": true,
+    "childGuard": 409
+  },
+  {
+    "kind": "post",
+    "id": 31,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "dept",
+    "id": 197,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "config",
+    "id": 81,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "menu",
+    "id": 1078,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "notice",
+    "id": 12,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "job",
+    "id": 8,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "dictData",
+    "id": 209,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "dictType",
+    "id": 132,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true
+  },
+  {
+    "kind": "jobLogs",
+    "ids": [
+      42,
+      38,
+      37
+    ],
+    "remaining": 0,
+    "identityVerified": true,
+    "api": true
+  },
+  {
+    "kind": "ownerLogout",
+    "status": 204,
+    "ui": true
+  },
+  {
+    "kind": "owner",
+    "id": 131,
+    "identityVerified": true,
+    "status": 204,
+    "activeRemaining": 0
+  },
+  {
+    "kind": "cleanupAdminLogout",
+    "status": 204
+  },
+  {
+    "kind": "ownedSessions",
+    "ownedKeysRemoved": 1,
+    "cleanupAdminCsrfRemoved": 1,
+    "remainingOwnerSessions": 0,
+    "ownerActiveKeyExists": false
+  },
+  {
+    "kind": "readonlyAdminLogout",
+    "status": 204
+  },
+  {
+    "kind": "finalReadonlyAdminLogout",
+    "status": 204
+  },
+  {
+    "kind": "finalSessionAudit",
+    "ownedKeysRemoved": 0,
+    "cleanupAdminCsrfRemoved": 1,
+    "remainingOwnerSessions": 0,
+    "ownerActiveKeyExists": false
+  },
+  {
+    "kind": "interruptedCascadeAdminSession",
+    "ownAdminSessionKeysRevoked": 4
+  },
+  {
+    "kind": "project",
+    "id": 16,
+    "status": 204,
+    "ui": true,
+    "identityVerified": true,
+    "childrenVerified": {
+      "project": 404,
+      "topology": 404,
+      "version": 404,
+      "versions": 0
+    }
+  },
+  {
+    "kind": "cascadeAdminLogout",
+    "status": 204
+  },
+  {
+    "kind": "cascadeSessionAudit",
+    "ownedKeysRemoved": 0,
+    "cleanupAdminCsrfRemoved": 1,
+    "remainingOwnerSessions": 0,
+    "ownerActiveKeyExists": false
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "outside": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "pageSize": 10
+    }
+  },
+  "inside": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "userId": 136,
+          "deptId": 103,
+          "userName": "zxqa_i1_mveu4gpz",
+          "nickName": "验收导入一",
+          "userType": "00",
+          "email": "i1_mveu4gpz@example.com",
+          "phonenumber": "13800991342",
+          "idCard": "",
+          "sex": "1",
+          "avatar": "",
+          "status": "0",
+          "delFlag": "0",
+          "loginIp": "",
+          "loginDate": "2026-10-19T07:11:15",
+          "createBy": "zxqa_h_mveu4gpz",
+          "createTime": "2026-10-19T06:56:09",
+          "updateBy": "zxqa_h_mveu4gpz",
+          "updateTime": "2026-10-19T07:11:15",
+          "remark": null,
+          "roleIds": null,
+          "postIds": null,
+          "dept": {
+            "deptName": "研发部门",
+            "deptId": 103,
+            "parentId": 101,
+            "leader": "年糕",
+            "status": "0",
+            "delFlag": "0",
+            "updateTime": "2026-09-20T06:41:45",
+            "updateBy": "",
+            "ancestors": "0,100,101",
+            "orderNum": 1,
+            "phone": "15888888888",
+            "email": "niangao@qq.com",
+            "createTime": "2026-09-20T06:41:45",
+            "createBy": "admin"
+          },
+          "role": []
+        }
+      ],
+      "total": 1,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

@@ -1,0 +1,32 @@
+--- zxui/packages/components/dialog/src/use-dialog-portal.ts (start)
++++ zxui/packages/components/dialog/src/use-dialog-portal.ts (end)
+@@ -1,10 +1,10 @@
+ import { computed, provide, ref, shallowRef, watch } from 'vue'
++import { useZIndex } from 'element-plus'
+ import {
+   themePortalBindingKey,
+   useRequiredThemePortalBinding,
+ } from '../../theme-provider'
+ import { useGlobalConfig } from '../../config-provider'
+-import { allocateZIndex } from '../../hooks/use-layer-governance'
+ 
+ import type { Ref } from 'vue'
+ import type { ZxDialogProps } from './props'
+@@ -16,6 +16,8 @@
+   attrs: Record<string, unknown>
+ ) {
+   const config = useGlobalConfig()
++  // Share Element Plus' counter with Drawer, Select and other overlay hosts.
++  const { nextZIndex } = useZIndex(computed(() => config.value?.zIndex ?? 2000))
+   const active = ref(visible.value)
+   const leaving = ref(false)
+   const result = useRequiredThemePortalBinding(
+@@ -37,7 +39,7 @@
+       leaving.value = !value && active.value
+       if (value) {
+         active.value = true
+-        allocatedZIndex.value = allocateZIndex(config.value?.zIndex)
++        allocatedZIndex.value = nextZIndex()
+       }
+     },
+     { immediate: true, flush: 'sync' }

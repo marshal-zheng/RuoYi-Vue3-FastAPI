@@ -1,0 +1,23 @@
+{
+  "status": 200,
+  "body": {
+    "header": {
+      "baudRate": "9600",
+      "frameLength": "2"
+    },
+    "fields": [
+      {
+        "fieldName": "验收温度",
+        "fieldCode": "qa_temperature",
+        "byteCount": 2,
+        "byteSequence": "0-1",
+        "valueRange": "0..100",
+        "unit": "℃",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "mveu4gpz"
+      }
+    ],
+    "protocolType": "RS422"
+  }
+}

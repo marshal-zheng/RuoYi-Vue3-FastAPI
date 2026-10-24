@@ -1,0 +1,47 @@
+--- before/ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py
++++ after/ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py
+@@ -698,19 +698,33 @@
+         )
+         return access, expires_in, payload
+ 
++    async def assert_user_session_live(self, *, session_id: str, user_id: str) -> None:
++        redis = self._require_redis()
++        raw = _to_text(await redis.get(f'sec:user_session:{session_id}')) if session_id else ''
++        metadata = json.loads(raw) if raw else {}
++        if not session_id or metadata.get('userId') != user_id:
++            raise AuthException(user_message='登录状态已失效，请重新登录', developer_message='WebSocket login session revoked or expired')
++        if not AppConfig.app_same_time_login:
++            active = _to_text(await redis.get(f'sec:active_session:{user_id}'))
++            if active != session_id:
++                raise AuthException(user_message='登录状态已失效，请重新登录', developer_message='WebSocket login session replaced')
++
+     async def issue_ws_ticket(
+         self,
+         *,
+         subject: str,
+         origin: str,
+         session_id: str,
++        auth_session_id: str,
+     ) -> tuple[str, int]:
++        await self.assert_user_session_live(session_id=auth_session_id, user_id=subject.removeprefix('user:'))
+         ttl = min(max(1, int(SecurityConfig.security_ws_ticket_ttl_seconds)), 30)
+         ticket = uuid.uuid4().hex
+         data = {
+             'subject': subject,
+             'origin': _normalize_origin(origin),
+             'sessionId': session_id,
++            'authSessionId': auth_session_id,
+             'createdAt': _utc_now().isoformat(),
+         }
+         inserted = await self._require_redis().set(
+@@ -770,6 +784,10 @@
+ 
+         if data.get('sessionId') != session_id:
+             raise AuthException(user_message='用户token不合法', developer_message='Ws session mismatch')
++        await self.assert_user_session_live(
++            session_id=str(data.get('authSessionId') or ''),
++            user_id=str(data.get('subject') or '').removeprefix('user:'),
++        )
+         return data
+ 
+     async def register_client_jwk(

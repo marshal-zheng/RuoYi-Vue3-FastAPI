@@ -1,0 +1,30 @@
+--- baseline/ruoyi-fastapi-frontend/src/mocks/handlers/project.ts
++++ current/ruoyi-fastapi-frontend/src/mocks/handlers/project.ts
+@@ -449,12 +449,22 @@
+             const project = await dataSource.project.create(
+               await readBody<Partial<MockProject>>(request)
+             );
+-            return HttpResponse.json(resultSuccess(projectResponse(project)), {
+-              status: 201,
+-              headers: {
+-                Location: createdResourceLocation(request, project.projectId),
+-              },
++            const version = await dataSource.version.create({
++              projectId: project.projectId,
++              versionNumber: 'v1.0.0',
++              versionName: '初始版本',
++              description: '项目初始版本',
++              status: '1',
+             });
++            return HttpResponse.json(
++              resultSuccess({ ...projectResponse(project), versionId: version.versionId }),
++              {
++                status: 201,
++                headers: {
++                  Location: createdResourceLocation(request, project.projectId),
++                },
++              }
++            );
+           } catch (error) {
+             return repositoryErrorResponse(error);
+           }

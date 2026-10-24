@@ -1,0 +1,32 @@
+{
+  "baselineEntries": 3578,
+  "changed": [
+    "ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py",
+    "ruoyi-fastapi-backend/module_admin/entity/vo/user_write_vo.py",
+    "ruoyi-fastapi-backend/modules/system/api/dependencies.py",
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py",
+    "ruoyi-fastapi-backend/modules/system/api/user_controller.py",
+    "ruoyi-fastapi-backend/modules/system/application/commands/__init__.py",
+    "ruoyi-fastapi-backend/modules/system/application/commands/role_commands.py",
+    "ruoyi-fastapi-backend/modules/system/application/commands/user_commands.py",
+    "ruoyi-fastapi-backend/modules/system/application/handlers/command/__init__.py",
+    "ruoyi-fastapi-backend/modules/system/application/handlers/command/role_command_handlers.py",
+    "ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py",
+    "ruoyi-fastapi-backend/modules/system/application/services/user_service.py",
+    "ruoyi-fastapi-backend/modules/system/tests/test_role_write_commands.py",
+    "ruoyi-fastapi-backend/modules/system/tests/test_user_write_commands.py",
+    "ruoyi-fastapi-backend/ports/services.py",
+    "ruoyi-fastapi-frontend/src/api/_generated/index.ts",
+    "ruoyi-fastapi-frontend/src/api/_generated/sdk.gen.ts",
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+    "ruoyi-fastapi-frontend/src/api/menu-contract.test.ts",
+    "ruoyi-fastapi-frontend/src/api/system/role.ts",
+    "ruoyi-fastapi-frontend/src/api/system/user.ts",
+    "ruoyi-fastapi-frontend/src/views/system/role/authUser.vue",
+    "ruoyi-fastapi-frontend/src/views/system/role/selectUser.vue",
+    "ruoyi-fastapi-frontend/src/views/system/user/authRole.vue",
+    "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts",
+    "shared/openapi.json"
+  ],
+  "removed": []
+}

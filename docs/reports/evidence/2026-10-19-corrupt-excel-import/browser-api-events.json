@@ -1,0 +1,176 @@
+[
+  {
+    "time": "2026-10-19T02:17:50.117Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:17:56.040Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.532Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.762Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.785Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.826Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.829Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.917Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.975Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.980Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:06.987Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:28.317Z",
+    "method": "POST",
+    "path": "/api/system/user/importTemplate",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:18:28.603Z",
+    "method": "POST",
+    "path": "/api/system/user/importData",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T02:18:57.835Z",
+    "method": "POST",
+    "path": "/api/system/user/importData",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T02:19:12.788Z",
+    "method": "POST",
+    "path": "/api/system/user/importData",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T02:19:39.524Z",
+    "method": "POST",
+    "path": "/api/system/user/importData",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T02:19:39.744Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:20:03.463Z",
+    "method": "POST",
+    "path": "/api/system/user/importData",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:20:03.544Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:20:24.094Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:20:24.446Z",
+    "method": "POST",
+    "path": "/api/system/user/importData",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T02:20:50.517Z",
+    "method": "POST",
+    "path": "/api/system/user/importData",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:20:50.564Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:21:12.893Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:22:16.339Z",
+    "method": "GET",
+    "path": "/api/system/user/129",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:22:16.382Z",
+    "method": "GET",
+    "path": "/api/system/user/130",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T02:22:16.449Z",
+    "method": "DELETE",
+    "path": "/api/system/user/129,130",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T02:22:59.298Z",
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T02:23:00.022Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  }
+]

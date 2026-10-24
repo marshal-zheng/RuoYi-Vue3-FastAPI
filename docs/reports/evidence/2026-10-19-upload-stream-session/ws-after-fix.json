@@ -1,0 +1,24 @@
+{
+  "ticketStatus": 200,
+  "deniedAfterLogout": {
+    "opened": false
+  },
+  "goodSocket": {
+    "opened": true,
+    "pong": true
+  },
+  "replaySocket": {
+    "opened": false
+  },
+  "mismatchSocket": {
+    "opened": false
+  },
+  "reconnectSocket": {
+    "opened": true,
+    "pong": true
+  },
+  "expiredSocket": {
+    "opened": false
+  },
+  "expiryAgeSeconds": 35.764
+}

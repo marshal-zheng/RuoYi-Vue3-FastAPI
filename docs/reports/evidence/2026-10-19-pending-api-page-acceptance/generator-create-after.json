@@ -1,0 +1,10 @@
+{
+  "invalidStatus": 422,
+  "validStatus": 200,
+  "valid": {
+    "tableNames": [
+      "zxqa_mvet0wd2_a"
+    ],
+    "createdCount": 1
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "scope": "User edit field contract only. No ZXUI/HTTP/authentication/schema/API-type or dependency changes.",
+  "associationSemantics": {
+    "role": "Display data, not a relation-write input",
+    "roleIds/postIds": {
+      "omitted": "preserve this relation group",
+      "nonEmptyArray": "replace this relation group",
+      "emptyArrayOrExplicitNull": "clear this relation group"
+    },
+    "specialTypes": "status/avatar/pwd do not update relations"
+  },
+  "commands": [
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/services/test_user_service.py",
+      "phase": "red",
+      "exitCode": 1,
+      "failed": 4,
+      "passed": 9,
+      "reason": "Missing role/role_ids/post_ids caused expected KeyError."
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/services/test_user_service.py",
+      "phase": "green",
+      "exitCode": 0,
+      "passed": 13
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn test:run tests/unit/components/UserFormDialog.test.ts",
+      "phase": "red",
+      "exitCode": 1,
+      "failed": 2,
+      "passed": 2,
+      "reason": "Real dialog defaults included password in both enabled and disabled edit payloads."
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m pytest -o addopts='' -q tests/unit/services/test_user_service.py tests/unit/repositories/test_user_repository.py tests/unit/services/test_login_service_core.py tests/unit/services/test_security_token_service.py tests/unit/controllers/test_user_controller.py tests/unit/ports/test_repository_protocol_coverage.py modules/system/tests/test_user_read_queries.py modules/system/tests/test_user_write_commands.py",
+      "phase": "final",
+      "exitCode": 0,
+      "files": 8,
+      "passed": 51,
+      "warnings": [
+        "Existing deprecated Form regex argument"
+      ]
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn test:run tests/unit/components/UserFormDialog.test.ts tests/user-query-export.test.ts src/components/ui/FormDialog/index.test.ts src/utils/operation.test.ts",
+      "exitCode": 0,
+      "files": 4,
+      "passed": 18
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn eslint src/views/system/user/components/UserFormDialog.vue tests/unit/components/UserFormDialog.test.ts --fix",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn lint:check",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn type-check",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod --outDir /tmp/ruoyi-user-edit/build-source",
+      "exitCode": 0,
+      "seconds": 27.01,
+      "note": "Existing build warnings, no publication."
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/ruff check tests/unit/services/test_user_service.py",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/ruff format --check tests/unit/services/test_user_service.py",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-backend",
+      "command": "./venv/bin/python -m compileall -q modules/system/application/services/user_service.py tests/unit/services/test_user_service.py",
+      "exitCode": 0
+    },
+    {
+      "cwd": ".",
+      "command": "PATH=<backend venv bin>:$PATH bash .agents/skills/backend-conventions/scripts/validate.sh --changed",
+      "exitCode": 1,
+      "knownFailure": "Existing Ruff/format issues; modified-file before/after comparison has no added diagnostics."
+    },
+    {
+      "cwd": ".",
+      "command": "bash .agents/skills/frontend-conventions/scripts/validate.sh --changed",
+      "exitCode": 1,
+      "knownFailure": "Existing VersionList.vue console usage."
+    },
+    {
+      "cwd": ".",
+      "command": "node /tmp/ruoyi-user-edit/actual-probe.cjs source",
+      "exitCode": 0,
+      "passed": 13,
+      "boundary": "Actual compiled SFC setup and business form wrapper + ZXUI source useDialog + actual API and HTTP source + JSDOM XHR to real FastAPI/MySQL. No native form validation/browser clicks/visual rendering. Ephemeral harness contains local auth setup and is not retained."
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "independentReview": {
+    "result": "No blockers",
+    "backendPassed": 15,
+    "frontendDialogPassed": 4,
+    "productionChangesReviewed": 2,
+    "note": "Read-only review; real backend verification belongs to the primary agent."
+  },
+  "cleanup": {
+    "markedTemporaryUsersCreated": 2,
+    "markedUsersSoftDeletedViaBusinessApi": true,
+    "visibleMarkerUsersRemaining": 0,
+    "probeSessionsLoggedOut": true,
+    "existingRolesPostsDepartmentsUnchanged": true,
+    "normalAuditAndSoftDeleteHistoryRetained": true,
+    "taskBackendStopped": true,
+    "port8088Released": true,
+    "existingDockerAndRedisUnchanged": true
+  },
+  "notVerified": [
+    "Browser clicks and visual acceptance",
+    "Native form validation rendering"
+  ],
+  "committed": false,
+  "published": false
+}

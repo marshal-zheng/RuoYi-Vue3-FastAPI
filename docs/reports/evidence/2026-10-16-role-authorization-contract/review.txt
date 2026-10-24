@@ -1,0 +1,1 @@
+独立子代理最终复核：101 项回归通过，无业务/权限/事务阻塞。再次复核四条 OpenAPI/生成 TypeScript 204 void 与四类写模型，旧 CrudUserRoleModel、旧增删/详情服务及其 ports 无残余。

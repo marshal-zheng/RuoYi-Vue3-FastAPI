@@ -1,0 +1,32 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+x·
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/io-toolkit/upload.contract.test.ts > multipart upload contract > routes user Excel import through HTTP while preserving the upload wait and cancellation contract
+AssertionError: expected 60000 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 60000
+
+ ❯ src/utils/io-toolkit/upload.contract.test.ts:39:36
+     37|       expect(transmitted?.signal).toBe(controller.signal);
+     38|       expect(transmitted?.onUploadProgress).toBe(progress);
+     39|       expect(transmitted?.timeout).toBe(0);
+       |                                    ^
+     40|     } finally {
+     41|       http.axiosInstance.interceptors.request.eject(interceptor);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  06:56:42
+   Duration  1.88s (transform 1.03s, setup 210ms, collect 1.34s, tests 8ms, environment 143ms, prepare 35ms)
+

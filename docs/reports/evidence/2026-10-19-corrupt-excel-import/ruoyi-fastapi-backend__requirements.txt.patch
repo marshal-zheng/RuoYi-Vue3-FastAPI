@@ -1,0 +1,10 @@
+--- before/ruoyi-fastapi-backend/requirements.txt
++++ after/ruoyi-fastapi-backend/requirements.txt
+@@ -6,6 +6,7 @@
+ loguru==0.7.3
+ openpyxl==3.1.5
+ pandas==2.2.3
++xlrd==2.0.2
+ passlib[bcrypt]==1.7.4
+ Pillow==11.1.0
+ psutil==7.0.0

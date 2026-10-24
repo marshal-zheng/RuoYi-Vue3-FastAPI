@@ -1,0 +1,23 @@
+{
+  "rawExportsRetained": false,
+  "results": [
+    {
+      "mode": "source",
+      "readableXlsx": true,
+      "sheets": 1,
+      "rows": 2,
+      "columns": 13,
+      "expectedUserPresent": true,
+      "bytes": 5327
+    },
+    {
+      "mode": "installed",
+      "readableXlsx": true,
+      "sheets": 1,
+      "rows": 2,
+      "columns": 13,
+      "expectedUserPresent": true,
+      "bytes": 5327
+    }
+  ]
+}

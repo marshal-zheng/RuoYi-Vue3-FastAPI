@@ -1,0 +1,59 @@
+{
+  "ok": true,
+  "files": [
+    {
+      "file": "ruoyi-fastapi-backend/config/get_scheduler.py",
+      "baselineDiagnostics": 9,
+      "currentDiagnostics": 7,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/ports/services.py",
+      "baselineDiagnostics": 0,
+      "currentDiagnostics": 0,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/ports/repositories.py",
+      "baselineDiagnostics": 0,
+      "currentDiagnostics": 0,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/module_task/__init__.py",
+      "baselineDiagnostics": 1,
+      "currentDiagnostics": 0,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/scheduler/api/job_controller.py",
+      "baselineDiagnostics": 2,
+      "currentDiagnostics": 2,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/scheduler/application/job_service.py",
+      "baselineDiagnostics": 24,
+      "currentDiagnostics": 8,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/scheduler/infrastructure/job_repository.py",
+      "baselineDiagnostics": 45,
+      "currentDiagnostics": 45,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/module_admin/entity/vo/job_vo.py",
+      "baselineDiagnostics": 42,
+      "currentDiagnostics": 41,
+      "added": []
+    },
+    {
+      "file": "ruoyi-fastapi-backend/tests/integration/test_success_contract_responses.py",
+      "baselineDiagnostics": 1,
+      "currentDiagnostics": 1,
+      "added": []
+    }
+  ]
+}

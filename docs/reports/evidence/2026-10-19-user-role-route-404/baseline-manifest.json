@@ -1,0 +1,12 @@
+{
+  "src/router/index.js": "70ccdff54b68de7d74336714dee7d42d865f35fa7b97bcf0732163211ad58893",
+  "src/permission.ts": "69f6feb41c88488320425e998e7d839cfafe4b0d1c9892e855b76181dc916514",
+  "src/store/modules/permission.ts": "49180b6111a459b54ef6c6a97ec228a92cdf8d7914420d9da81f8c11da5591d4",
+  "src/store/modules/user.ts": "b2ad6906750c8a0c195531e716e8aa724a5b25f56eca9f8193f30907e5facfe7",
+  "src/plugins/dev-menu-hot-sync.ts": "df9725acb6683a3b7155d635ace21d65e3ff5ed926d4878a4292749bd2e6d796",
+  "src/views/system/user/index.vue": "a82fd797047fdfb2baa11792d79e338e9afd77ec83607e9659c5a530b8ee5eb5",
+  "src/views/system/user/authRole.vue": "0666fecb9e471730e72ea06eb5a36f9ad24a81c17a8a486a86d42a53e40cb605",
+  "tests/unit/stores/permission.test.ts": "7f8a00e8d353169c821eec33b9e99166bcacd0a37c2374d436b97b5d7f6b62ee",
+  "src/plugins/dev-menu-hot-sync.test.ts": "cc48037c88ead35ea7b1981605613a58be13e7c1978fcce1e179866fd8ae373d",
+  "src/api/menu-contract.test.ts": "f1778a6599dae148de145e7a9001c7e2eecaa2c2e69be7b4c615ae89361d211f"
+}

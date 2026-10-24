@@ -1,0 +1,821 @@
+ D ".cursor/skills/init-ai-workspace/AI\345\274\200\345\217\221\350\247\204\350\214\203V1.pdf"
+ D .cursor/skills/init-ai-workspace/README.md
+ D ".cursor/skills/init-ai-workspace/README_\345\211\257\346\234\254.pdf"
+ D .cursor/skills/init-ai-workspace/SKILL.md
+ D .cursor/skills/init-ai-workspace/assets/commands/faq.md
+ D .cursor/skills/init-ai-workspace/assets/commands/learn.md
+ D .cursor/skills/init-ai-workspace/assets/commands/skill-stubs.md
+ D .cursor/skills/init-ai-workspace/assets/commands/task-alignment-review.md
+ D .cursor/skills/init-ai-workspace/assets/commands/update-codemaps.md
+ D .cursor/skills/init-ai-workspace/reference/agents-template.md
+ D .cursor/skills/init-ai-workspace/scripts/init.js
+ D .cursor/skills/init-ai-workspace/scripts/install-skills.js
+ M docs/codemaps/.diff-report.txt
+ M docs/codemaps/backend.md
+ M docs/codemaps/data.md
+ M ruoyi-fastapi-backend/alembic/env.py
+ M ruoyi-fastapi-backend/config/env.py
+ M ruoyi-fastapi-backend/config/get_scheduler.py
+ M ruoyi-fastapi-backend/container/app_container.py
+ M ruoyi-fastapi-backend/middlewares/trace_middleware/span.py
+ M ruoyi-fastapi-backend/module_admin/annotation/log_annotation.py
+ M ruoyi-fastapi-backend/module_admin/controller/protocol_controller.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/dept_vo.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/job_vo.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
+ M ruoyi-fastapi-backend/module_admin/repository/base_repository.py
+ M ruoyi-fastapi-backend/module_admin/service/protocol_service.py
+ M ruoyi-fastapi-backend/module_generator/repository/gen_repository.py
+ M ruoyi-fastapi-backend/module_generator/service/gen_service.py
+ M ruoyi-fastapi-backend/module_generator/templates/vue/v3/index-tree.vue.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/vue/v3/index.vue.jinja2
+ M ruoyi-fastapi-backend/module_task/__init__.py
+ M ruoyi-fastapi-backend/modules/identity/api/login_controller.py
+ M ruoyi-fastapi-backend/modules/identity/application/services/login_service.py
+ M ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py
+ M ruoyi-fastapi-backend/modules/project/api/project_controller.py
+ M ruoyi-fastapi-backend/modules/project/api/project_version_controller.py
+ M ruoyi-fastapi-backend/modules/project/application/services/project_service.py
+ M ruoyi-fastapi-backend/modules/project/application/services/project_version_service.py
+ M ruoyi-fastapi-backend/modules/registry.py
+ M ruoyi-fastapi-backend/modules/scheduler/api/job_controller.py
+ M ruoyi-fastapi-backend/modules/scheduler/application/job_service.py
+ M ruoyi-fastapi-backend/modules/scheduler/infrastructure/job_repository.py
+ M ruoyi-fastapi-backend/modules/system/api/dept_controller.py
+ M ruoyi-fastapi-backend/modules/system/api/menu_controller.py
+ M ruoyi-fastapi-backend/modules/system/api/user_controller.py
+ M ruoyi-fastapi-backend/modules/system/application/commands/dept_commands.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/command/dept_command_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/config_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/dept_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/dict_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/menu_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/notice_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/post_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/role_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/services/config_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/dept_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/dict_type_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/menu_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/notice_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/post_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/user_service.py
+ M ruoyi-fastapi-backend/modules/system/infrastructure/dept_repository.py
+ M ruoyi-fastapi-backend/modules/system/infrastructure/dict_repository.py
+ M ruoyi-fastapi-backend/modules/system/infrastructure/user_repository.py
+ M ruoyi-fastapi-backend/modules/system/tests/test_dept_write_commands.py
+ M ruoyi-fastapi-backend/modules/system/tests/test_user_write_commands.py
+ M ruoyi-fastapi-backend/ports/repositories.py
+ M ruoyi-fastapi-backend/ports/services.py
+ M ruoyi-fastapi-backend/scripts/internal/db_workflow/schema_apply_atlas.py
+ M ruoyi-fastapi-backend/server.py
+ M ruoyi-fastapi-backend/tests/conftest.py
+ M ruoyi-fastapi-backend/tests/integration/conftest.py
+ M ruoyi-fastapi-backend/tests/integration/test_dept_management.py
+ M ruoyi-fastapi-backend/tests/integration/test_error_handling_rfc7807.py
+ M ruoyi-fastapi-backend/tests/integration/test_menu_management.py
+ M ruoyi-fastapi-backend/tests/integration/test_project_integration.py
+ M ruoyi-fastapi-backend/tests/integration/test_success_contract_responses.py
+ M ruoyi-fastapi-backend/tests/integration/test_system_cqrs_cutover.py
+ M ruoyi-fastapi-backend/tests/integration/test_user_management.py
+ M ruoyi-fastapi-backend/tests/test_migrations.py
+ M ruoyi-fastapi-backend/tests/unit/controllers/test_login_controller_refresh.py
+ M ruoyi-fastapi-backend/tests/unit/controllers/test_simulation_controller.py
+ M ruoyi-fastapi-backend/tests/unit/module_generator/test_gen_table_paging.py
+ M ruoyi-fastapi-backend/tests/unit/security/test_sql_injection.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_config_service.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_dept_service.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_dict_service.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_user_service.py
+ D ruoyi-fastapi-backend/utils/count_cache.py
+ M ruoyi-fastapi-backend/utils/page_util.py
+ M ruoyi-fastapi-frontend/package.json
+ M ruoyi-fastapi-frontend/src/api/_generated/index.ts
+ M ruoyi-fastapi-frontend/src/api/_generated/sdk.gen.ts
+ M ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
+ M ruoyi-fastapi-frontend/src/api/login.ts
+ M ruoyi-fastapi-frontend/src/api/monitor/server.ts
+ M ruoyi-fastapi-frontend/src/components/business/Protocol/ProtocolFormDrawer.vue
+ M ruoyi-fastapi-frontend/src/components/ui/FormDialog/index.ts
+ M ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts
+ M ruoyi-fastapi-frontend/src/store/modules/user.login.test.ts
+ M ruoyi-fastapi-frontend/src/store/modules/user.ts
+ M ruoyi-fastapi-frontend/src/utils/auth.ts
+ M ruoyi-fastapi-frontend/src/utils/http.ts
+ M ruoyi-fastapi-frontend/src/views/monitor/server/index.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/NodeEditDrawer.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/ProtocolConfigDrawer.vue
+ D ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmPanelFloating.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/components/BandwidthChartPanel.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/components/DataInjectionPanel.vue
+ D ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultBoardFloating.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/components/TimingLatencyPanel.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/index.vue
+ M ruoyi-fastapi-frontend/vite/zxui-theme-packages.ts
+ M ruoyi-fastapi-frontend/yarn.lock
+ M shared/openapi.json
+?? .agents/skills/backend-conventions/SKILL.md
+?? .agents/skills/backend-conventions/references/architecture.md
+?? .agents/skills/backend-conventions/references/brownfield-map.md
+?? .agents/skills/backend-conventions/references/config-and-infra.md
+?? .agents/skills/backend-conventions/scripts/validate.sh
+?? .agents/skills/brainstorming/SKILL.md
+?? .agents/skills/dispatching-parallel-agents/SKILL.md
+?? .agents/skills/executing-task/SKILL.md
+?? .agents/skills/frontend-conventions/SKILL.md
+?? .agents/skills/frontend-conventions/assets/api-template.json
+?? .agents/skills/frontend-conventions/assets/view-template.json
+?? .agents/skills/frontend-conventions/references/api-and-store.md
+?? .agents/skills/frontend-conventions/references/component-patterns.md
+?? .agents/skills/frontend-conventions/references/lint-guard.md
+?? .agents/skills/frontend-conventions/references/tailwind-and-theme.md
+?? .agents/skills/frontend-conventions/scripts/new-view.sh
+?? .agents/skills/frontend-conventions/scripts/validate.sh
+?? .agents/skills/receiving-code-review/SKILL.md
+?? .agents/skills/requesting-code-review/SKILL.md
+?? .agents/skills/requesting-code-review/code-reviewer.md
+?? .agents/skills/skill-loader/SKILL.md
+?? .agents/skills/source-command-code-review/SKILL.md
+?? .agents/skills/source-command-faq/SKILL.md
+?? .agents/skills/source-command-learn/SKILL.md
+?? .agents/skills/source-command-task-alignment-review/SKILL.md
+?? .agents/skills/source-command-update-codemaps/SKILL.md
+?? .agents/skills/subagent-driven-development/SKILL.md
+?? .agents/skills/subagent-driven-development/code-quality-reviewer-prompt.md
+?? .agents/skills/subagent-driven-development/implementer-prompt.md
+?? .agents/skills/subagent-driven-development/spec-reviewer-prompt.md
+?? .agents/skills/test-driven-development/SKILL.md
+?? .agents/skills/test-driven-development/testing-anti-patterns.md
+?? .agents/skills/update-codemaps/SKILL.md
+?? .agents/skills/using-git-worktrees/SKILL.md
+?? .agents/skills/verification-before-completion/SKILL.md
+?? .agents/skills/writing-plans/SKILL.md
+?? .agents/skills/writing-skills/SKILL.md
+?? .agents/skills/writing-skills/examples/SKILL_MD_TESTING.md
+?? .agents/skills/writing-skills/reference/anthropic-best-practices.md
+?? .agents/skills/writing-skills/reference/graphviz-conventions.dot
+?? .agents/skills/writing-skills/reference/persuasion-principles.md
+?? .agents/skills/writing-skills/reference/testing-skills-with-subagents.md
+?? .agents/skills/writing-skills/scripts/render-graphs.js
+?? .agents/skills/writing-specs/SKILL.md
+?? .cursor/handoffs/2026-09-19-zxui-joint-handoff.md
+?? docs/plans/2026-09-23-zxui-theme-cascade-and-business-shell.md
+?? docs/plans/2026-09-26-zxui-business-theme-audit.md
+?? docs/plans/2026-09-26-zxui-list-toolbar.md
+?? docs/plans/2026-09-26-zxui-priority-fixes.md
+?? docs/plans/2026-09-26-zxui-table-density.md
+?? docs/plans/2026-09-26-zxui-vite-theme-deployment.md
+?? docs/plans/2026-09-27-third-party-density.md
+?? docs/plans/2026-09-27-zxui-remaining-theme-convergence.md
+?? docs/plans/2026-09-28-zxui-live-theme-followup.md
+?? docs/plans/2026-10-12-zxui-business-theme-parity.md
+?? docs/plans/2026-10-13-zxui-theme-consumption-recheck.md
+?? docs/plans/2026-10-15-http-independent-requests.md
+?? docs/plans/2026-10-15-http-parameter-semantics.md
+?? docs/plans/2026-10-16-business-operation-pending.md
+?? docs/plans/2026-10-16-count-consistency.md
+?? docs/plans/2026-10-16-dept-write-contract.md
+?? docs/plans/2026-10-16-http-error-classification.md
+?? docs/plans/2026-10-16-http-observer-isolation.md
+?? docs/plans/2026-10-16-http-preparation-errors.md
+?? docs/plans/2026-10-16-job-write-contract.md
+?? docs/plans/2026-10-16-list-export-query-parity.md
+?? docs/plans/2026-10-16-user-edit-read-lifecycle.md
+?? docs/plans/2026-10-16-user-excel-import.md
+?? docs/plans/2026-10-16-user-role-write-contract.md
+?? docs/plans/2026-10-18-session-renewal.md
+?? docs/reports/2026-09-23-zxui-theme-cascade-audit.md
+?? docs/reports/2026-09-26-enterprise-display-scaling-research.md
+?? docs/reports/2026-09-26-zxui-business-theme-audit.md
+?? docs/reports/2026-09-26-zxui-list-toolbar.md
+?? docs/reports/2026-09-26-zxui-priority-fixes.md
+?? docs/reports/2026-09-26-zxui-ruoyi-display-scaling-assessment.md
+?? docs/reports/2026-09-26-zxui-table-density.md
+?? docs/reports/2026-09-26-zxui-vite-theme-deployment.md
+?? docs/reports/2026-09-27-third-party-density.md
+?? docs/reports/2026-09-27-zxui-remaining-theme-convergence.md
+?? docs/reports/2026-09-28-zxui-button-disabled-foreground.md
+?? docs/reports/2026-09-28-zxui-density-commit.md
+?? docs/reports/2026-09-28-zxui-live-theme-followup.md
+?? docs/reports/2026-10-12-zxui-business-theme-parity.md
+?? docs/reports/2026-10-13-message-rich-content-refinement.md
+?? docs/reports/2026-10-13-message-visual-validation.md
+?? docs/reports/2026-10-13-notification-review.md
+?? docs/reports/2026-10-13-system-messagebox-review.md
+?? docs/reports/2026-10-13-zxui-message-review.md
+?? docs/reports/2026-10-14-page-agent-integration-assessment.md
+?? docs/reports/2026-10-15-http-independent-requests.md
+?? docs/reports/2026-10-15-http-parameter-semantics.md
+?? docs/reports/2026-10-16-business-operation-pending.md
+?? docs/reports/2026-10-16-count-consistency.md
+?? docs/reports/2026-10-16-dept-write-contract.md
+?? docs/reports/2026-10-16-detail-resource-contract.md
+?? docs/reports/2026-10-16-dict-pagination-order.md
+?? docs/reports/2026-10-16-disabled-user-create.md
+?? docs/reports/2026-10-16-editor-read-lifecycle.md
+?? docs/reports/2026-10-16-http-error-classification.md
+?? docs/reports/2026-10-16-http-observer-isolation.md
+?? docs/reports/2026-10-16-http-preparation-errors.md
+?? docs/reports/2026-10-16-http-retry-boundaries.md
+?? docs/reports/2026-10-16-job-write-contract.md
+?? docs/reports/2026-10-16-legacy-download-convergence.md
+?? docs/reports/2026-10-16-list-export-query-parity.md
+?? docs/reports/2026-10-16-remaining-editor-read-lifecycle.md
+?? docs/reports/2026-10-16-role-authorization-contract.md
+?? docs/reports/2026-10-16-sys-post-generator-config.md
+?? docs/reports/2026-10-16-user-edit-fields.md
+?? docs/reports/2026-10-16-user-edit-read-lifecycle.md
+?? docs/reports/2026-10-16-user-excel-import.md
+?? docs/reports/2026-10-16-user-query-export.md
+?? docs/reports/2026-10-16-user-role-write-contract.md
+?? docs/reports/2026-10-17-zxui-font-chunk.md
+?? docs/reports/2026-10-18-session-renewal.md
+?? docs/reports/assets/message-visual-2026-10-13/action-pending.png
+?? docs/reports/assets/message-visual-2026-10-13/air-gray-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/air-gray-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/air-gray-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/air-gray-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/air-gray-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/air-gray-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/air-gray-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/army-pine-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/army-pine-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/army-pine-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/army-pine-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/army-pine-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/army-pine-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/army-pine-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/default-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/default-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/default-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/default-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/default-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/default-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/default-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/defense-green-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/defense-green-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/defense-green-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/defense-green-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/defense-green-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/defense-green-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/defense-green-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/factory-blue-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/factory-blue-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/factory-blue-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/factory-blue-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/factory-blue-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/factory-blue-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/factory-blue-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/industrial-blue-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/industrial-blue-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/industrial-blue-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/industrial-blue-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/industrial-blue-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/industrial-blue-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/industrial-blue-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/keyboard-focus.png
+?? docs/reports/assets/message-visual-2026-10-13/measurements.json
+?? docs/reports/assets/message-visual-2026-10-13/message-dark-light.png
+?? docs/reports/assets/message-visual-2026-10-13/narrow-long.png
+?? docs/reports/assets/message-visual-2026-10-13/native-window.png
+?? docs/reports/assets/message-visual-2026-10-13/pap-olive-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/pap-olive-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/pap-olive-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/pap-olive-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/pap-olive-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/pap-olive-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/pap-olive-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-after.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-before.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-measurements.json
+?? docs/reports/assets/message-visual-2026-10-13/rich-narrow-long.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-touch.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-two-row-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/rich-two-row-preview.png
+?? docs/reports/assets/message-visual-2026-10-13/rocket-moss-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/rocket-moss-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/rocket-moss-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/rocket-moss-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/rocket-moss-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/rocket-moss-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/rocket-moss-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/summary.json
+?? docs/reports/assets/message-visual-2026-10-13/tech-blue-dark-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/tech-blue-dark-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/tech-blue-dark-default.png
+?? docs/reports/assets/message-visual-2026-10-13/tech-blue-light-comfortable.png
+?? docs/reports/assets/message-visual-2026-10-13/tech-blue-light-compact.png
+?? docs/reports/assets/message-visual-2026-10-13/tech-blue-light-default.png
+?? docs/reports/assets/message-visual-2026-10-13/tech-blue-matrix.png
+?? docs/reports/assets/message-visual-2026-10-13/touch-message.png
+?? docs/reports/assets/notification-visual-2026-10-13/air-gray-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/air-gray-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/air-gray-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/air-gray-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/air-gray-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/air-gray-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/air-gray-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/army-pine-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/army-pine-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/army-pine-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/army-pine-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/army-pine-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/army-pine-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/army-pine-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/before.png
+?? docs/reports/assets/notification-visual-2026-10-13/business-presenter.png
+?? docs/reports/assets/notification-visual-2026-10-13/content-contracts.png
+?? docs/reports/assets/notification-visual-2026-10-13/default-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/default-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/default-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/default-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/default-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/default-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/default-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/defense-green-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/defense-green-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/defense-green-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/defense-green-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/defense-green-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/defense-green-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/defense-green-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/factory-blue-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/factory-blue-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/factory-blue-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/factory-blue-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/factory-blue-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/factory-blue-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/factory-blue-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/final-dark.png
+?? docs/reports/assets/notification-visual-2026-10-13/final-light.png
+?? docs/reports/assets/notification-visual-2026-10-13/four-corners.png
+?? docs/reports/assets/notification-visual-2026-10-13/industrial-blue-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/industrial-blue-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/industrial-blue-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/industrial-blue-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/industrial-blue-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/industrial-blue-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/industrial-blue-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/interactions.json
+?? docs/reports/assets/notification-visual-2026-10-13/landscape-long-content.png
+?? docs/reports/assets/notification-visual-2026-10-13/measurements.json
+?? docs/reports/assets/notification-visual-2026-10-13/mobile-long-content-after.png
+?? docs/reports/assets/notification-visual-2026-10-13/mobile-long-content-scrolled.png
+?? docs/reports/assets/notification-visual-2026-10-13/mobile-long-content.png
+?? docs/reports/assets/notification-visual-2026-10-13/notification-dark-light.png
+?? docs/reports/assets/notification-visual-2026-10-13/pap-olive-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/pap-olive-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/pap-olive-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/pap-olive-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/pap-olive-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/pap-olive-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/pap-olive-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/reduced-motion-after.png
+?? docs/reports/assets/notification-visual-2026-10-13/reduced-motion.png
+?? docs/reports/assets/notification-visual-2026-10-13/rocket-moss-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/rocket-moss-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/rocket-moss-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/rocket-moss-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/rocket-moss-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/rocket-moss-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/rocket-moss-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/role-menu-loaded.png
+?? docs/reports/assets/notification-visual-2026-10-13/short-window-layering-after.png
+?? docs/reports/assets/notification-visual-2026-10-13/tech-blue-dark-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/tech-blue-dark-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/tech-blue-dark-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/tech-blue-light-comfortable.png
+?? docs/reports/assets/notification-visual-2026-10-13/tech-blue-light-compact.png
+?? docs/reports/assets/notification-visual-2026-10-13/tech-blue-light-default.png
+?? docs/reports/assets/notification-visual-2026-10-13/tech-blue-matrix.png
+?? docs/reports/assets/notification-visual-2026-10-13/template-slots.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/browser-receipts.json
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/dept-390.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/migrated-files.json
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/role-390.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/role-768.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/role-default-light.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/role-tech-blue-dark.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/ruoyi-toolbar-migration-verification.json
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/ruoyi-toolbar-package-verification.json
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/user-1024.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/user-final-wide.png
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/user-wide.png
+?? docs/reports/evidence/2026-09-26-zxui-priority-fixes/army-pine-dark-dialog.png
+?? docs/reports/evidence/2026-09-26-zxui-priority-fixes/browser-contrast.json
+?? docs/reports/evidence/2026-09-26-zxui-priority-fixes/industrial-blue-dark.png
+?? docs/reports/evidence/2026-09-26-zxui-table-density/business-receipts.json
+?? docs/reports/evidence/2026-09-26-zxui-table-density/delivery-verification.json
+?? docs/reports/evidence/2026-09-26-zxui-table-density/density-size-matrix.json
+?? docs/reports/evidence/2026-09-26-zxui-table-density/final-state.json
+?? docs/reports/evidence/2026-09-26-zxui-table-density/fixed-columns-after.png
+?? docs/reports/evidence/2026-09-26-zxui-table-density/fixed-columns-before.png
+?? docs/reports/evidence/2026-09-26-zxui-table-density/grid-fixed-scrolled.png
+?? docs/reports/evidence/2026-09-26-zxui-table-density/loginlog-default-dark-default.png
+?? docs/reports/evidence/2026-09-26-zxui-table-density/raw-fixed-scrolled.png
+?? docs/reports/evidence/2026-09-26-zxui-table-density/role-default-light-comfortable.png
+?? docs/reports/evidence/2026-09-26-zxui-table-density/role-selection.json
+?? docs/reports/evidence/2026-09-26-zxui-table-density/table-state-receipts.json
+?? docs/reports/evidence/2026-09-26-zxui-table-density/user-army-dark-default-final.png
+?? docs/reports/evidence/2026-09-26-zxui-vite-theme-deployment/army-pine-dark-dialog.png
+?? docs/reports/evidence/2026-09-26-zxui-vite-theme-deployment/browser-themes.json
+?? docs/reports/evidence/2026-09-26-zxui-vite-theme-deployment/ruoyi-zxui-vite-integrity.json
+?? docs/reports/evidence/2026-09-27-third-party-density/fixture-default.png
+?? docs/reports/evidence/2026-09-27-third-party-density/matrix.json
+?? docs/reports/evidence/2026-09-27-third-party-density/notice-comfortable.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/consumer-dark-vxe-menu.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/consumer-dark.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/consumer-light.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/consumer-matrix.json
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/designer-dark.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/designer-light.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/device-dark-surface.json
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/device-dark.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/device-light.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/device-theme.json
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/final-state.json
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/navbar-320.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/navbar-responsive.json
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/notice-dark.png
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/remaining-business-lint-final.json
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/verification.json
+?? docs/reports/evidence/2026-09-28-zxui-button-disabled/before-palette.json
+?? docs/reports/evidence/2026-09-28-zxui-button-disabled/contrast-check.json
+?? docs/reports/evidence/2026-09-28-zxui-button-disabled/served-assets.json
+?? docs/reports/evidence/2026-09-28-zxui-live-theme-followup/source-check.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-divider-configuration.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-divider-css-common.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-divider-css-overrides.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-divider-dark-enabled.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-divider-moss-disabled.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-divider-moss-enabled.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-divider-provider-enabled.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-header-alignment.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-ux-before.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-ux-defaults.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-ux-light-after.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-ux-mobile-after.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-ux-moss-after.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/dialog-ux-preview.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/industrial-blue-dark-collapsed.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/industrial-blue-dark-role-drawer.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/login-validation-filled.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/login-validation.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/search-glyph-after-1x.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/search-glyph-after-2x.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/search-glyph-before-1x.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/search-glyph-rendering.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/search-icon-adjusted.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/search-icon-geometry.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/search-provider-states.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/semantic-reference-audit.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/tech-blue-dark-role-search.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/tech-blue-dark-search-detail.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/theme-matrix.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/topology-svg-theme.json
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/user-dialog-header-adjusted.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/user-dialog-header-detail.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/user-dialog-header-mobile.png
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/user-dialog-no-divider.png
+?? docs/reports/evidence/2026-10-15-http-independent-requests/checks.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/example-compile.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/generated-http-examples.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/generated-http-types.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/generated-output-integrity.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/installed-actual.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/metadata.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/package-integrity.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/public-contract.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/source-actual.json
+?? docs/reports/evidence/2026-10-15-http-independent-requests/vitest-source.config.mts
+?? docs/reports/evidence/2026-10-15-http-independent-requests/xlsx-inspection.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/audit-ruff-comparison.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/installed-actual.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/installed-workbook.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/inventory.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/package-verification.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/review.md
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/source-actual.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/source-workbook.json
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/verification.json
+?? docs/reports/evidence/2026-10-16-business-operation-pending/actual-installed.json
+?? docs/reports/evidence/2026-10-16-business-operation-pending/actual-source.json
+?? docs/reports/evidence/2026-10-16-business-operation-pending/checks.json
+?? docs/reports/evidence/2026-10-16-business-operation-pending/lifecycle-seams.json
+?? docs/reports/evidence/2026-10-16-business-operation-pending/write-entry-inventory.json
+?? docs/reports/evidence/2026-10-16-count-consistency/actual.json
+?? docs/reports/evidence/2026-10-16-count-consistency/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-count-consistency/before-real.json
+?? docs/reports/evidence/2026-10-16-count-consistency/before-transaction.json
+?? docs/reports/evidence/2026-10-16-count-consistency/mysql-actual.json
+?? docs/reports/evidence/2026-10-16-count-consistency/ruff-delta.json
+?? docs/reports/evidence/2026-10-16-count-consistency/verification.json
+?? docs/reports/evidence/2026-10-16-dept-write-contract/actual.json
+?? docs/reports/evidence/2026-10-16-dept-write-contract/backend-focused.txt
+?? docs/reports/evidence/2026-10-16-dept-write-contract/business-workspace-audit.json
+?? docs/reports/evidence/2026-10-16-dept-write-contract/frontend-focused.txt
+?? docs/reports/evidence/2026-10-16-dept-write-contract/generated-check.json
+?? docs/reports/evidence/2026-10-16-dept-write-contract/openapi-delta.json
+?? docs/reports/evidence/2026-10-16-dept-write-contract/ruff-delta.json
+?? docs/reports/evidence/2026-10-16-dept-write-contract/verification.json
+?? docs/reports/evidence/2026-10-16-dept-write-contract/zxui-workspace-audit.json
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/actual-probe.cjs
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/actual.json
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/checks.json
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/final-preservation.json
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/preservation.json
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/ruff-delta.json
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/task.diff
+?? docs/reports/evidence/2026-10-16-dict-pagination-order/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-dict-pagination-order/checks.json
+?? docs/reports/evidence/2026-10-16-dict-pagination-order/green.json
+?? docs/reports/evidence/2026-10-16-dict-pagination-order/red.json
+?? docs/reports/evidence/2026-10-16-dict-pagination-order/sql-comparison.json
+?? docs/reports/evidence/2026-10-16-disabled-user-create/actual.json
+?? docs/reports/evidence/2026-10-16-disabled-user-create/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-disabled-user-create/checks.json
+?? docs/reports/evidence/2026-10-16-disabled-user-create/static-comparison.json
+?? docs/reports/evidence/2026-10-16-editor-read-lifecycle/actual-probe.cjs
+?? docs/reports/evidence/2026-10-16-editor-read-lifecycle/actual.json
+?? docs/reports/evidence/2026-10-16-editor-read-lifecycle/checks.json
+?? docs/reports/evidence/2026-10-16-editor-read-lifecycle/final-preservation.json
+?? docs/reports/evidence/2026-10-16-editor-read-lifecycle/preservation.json
+?? docs/reports/evidence/2026-10-16-editor-read-lifecycle/task.diff
+?? docs/reports/evidence/2026-10-16-http-error-classification/actual-probe.cjs
+?? docs/reports/evidence/2026-10-16-http-error-classification/actual.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/actual.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/backend-conventions.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/backend-focused.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/changed-files.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/evidence-manifest.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/frontend-conventions.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/frontend-focused.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/generate.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/generation-idempotence.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/generation-idempotence.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/lint.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/openapi-check.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/openapi-delta.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/openapi-export.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/password-input-red.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/pipeline-red.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/red.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/review.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/ruff-delta.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/runtime.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/task-manifest.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/task.diff
+?? docs/reports/evidence/2026-10-16-http-error-classification/test-format.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/test-ruff.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/typecheck.txt
+?? docs/reports/evidence/2026-10-16-http-error-classification/validation.json
+?? docs/reports/evidence/2026-10-16-http-error-classification/workspace-audit.json
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/actual-installed.json
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/actual-source.json
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/metadata.json
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/package-integrity.json
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/verification.json
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/workbooks.json
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/actual-installed.json
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/actual-source.json
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/checks.json
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/metadata.json
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/package-integrity.json
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/workbooks.json
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/actual-installed.json
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/actual-probe.cjs
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/actual-source.json
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/metadata.json
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/package-integrity.json
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/verification.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/actual.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/backend-focused.txt
+?? docs/reports/evidence/2026-10-16-job-write-contract/business-workspace-audit.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/frontend-focused.txt
+?? docs/reports/evidence/2026-10-16-job-write-contract/generated-check.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/openapi-delta.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/openapi-semantic-check.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/ruff-delta.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/runtime-cleanup.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/verification.json
+?? docs/reports/evidence/2026-10-16-job-write-contract/zxui-workspace-audit.json
+?? docs/reports/evidence/2026-10-16-legacy-download-convergence/actual.json
+?? docs/reports/evidence/2026-10-16-legacy-download-convergence/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-legacy-download-convergence/checks.json
+?? docs/reports/evidence/2026-10-16-list-export-query-parity/actual.json
+?? docs/reports/evidence/2026-10-16-list-export-query-parity/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-list-export-query-parity/checks.json
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/actual-probe.cjs
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/actual.json
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/actual.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/build-source.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/conventions.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/focused.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/lint.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/red-summary.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/review.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/task.diff
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/typecheck.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/ui-standards.txt
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/validation.json
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/workspace-audit.json
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/zxui-hooks.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/actual-probe.cjs
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/actual-server.py
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/actual.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/actual.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/backend-conventions.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/backend-focused.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/build-source.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/cold-read-green.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/cold-read-red.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/contract-red.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/editor-red.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/evidence-manifest.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/fixture-cleanup.py
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/frontend-conventions.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/frontend-focused.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/generated-check.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/inventory-capture.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/inventory-verify.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/inventory.py
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/lint.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/openapi-delta.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/review.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/ruff-delta.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/runtime-cleanup.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/service-red.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/task.diff
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/typecheck.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/ui-standards.txt
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/verification.json
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/workspace-audit.json
+?? docs/reports/evidence/2026-10-16-sys-post-generator-config/actual.json
+?? docs/reports/evidence/2026-10-16-user-edit-fields/actual.json
+?? docs/reports/evidence/2026-10-16-user-edit-fields/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-user-edit-fields/checks.json
+?? docs/reports/evidence/2026-10-16-user-edit-fields/static-comparison.json
+?? docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/actual.json
+?? docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/checks.json
+?? docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/focused-tests.txt
+?? docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/regression-red.txt
+?? docs/reports/evidence/2026-10-16-user-excel-import/actual.json
+?? docs/reports/evidence/2026-10-16-user-excel-import/checks.json
+?? docs/reports/evidence/2026-10-16-user-excel-import/focused-tests.txt
+?? docs/reports/evidence/2026-10-16-user-excel-import/regression-red.txt
+?? docs/reports/evidence/2026-10-16-user-excel-import/upload-timeout-red.txt
+?? docs/reports/evidence/2026-10-16-user-query-export/actual.json
+?? docs/reports/evidence/2026-10-16-user-query-export/baseline-preservation.json
+?? docs/reports/evidence/2026-10-16-user-query-export/checks.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/actual-probe.cjs
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/actual.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/actual.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/backend-conventions.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/backend-focused.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/build-source.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/cleanup-recovery.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/disabled-role-red.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/evidence-manifest.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/frontend-conventions.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/frontend-focused.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/frontend-red.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/generate-idempotence.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/generate-idempotence.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/generate.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/lint.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/new-format.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/new-ruff.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/null-red.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/openapi-check.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/openapi-delta.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/openapi-export.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/partial-original-red.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/pipeline-red.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/red.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/review-red.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/review.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/ruff-delta.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/runtime.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/task-manifest.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/task.diff
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/typecheck.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/ui-standards.txt
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/validation.json
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/workspace-audit.json
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline-manifest.json
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-backend/modules/identity/api/security_controller.py
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-backend/tests/unit/services/test_security_token_service.py
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-frontend/src/components/ui/Editor/index.vue
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-frontend/src/components/ui/FileUpload/index.vue
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-frontend/src/components/ui/ImageUpload/index.vue
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.test.ts
+?? docs/reports/evidence/2026-10-19-upload-stream-session/baseline/ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.ts
+?? docs/reports/zxui-theme-audit-2026-09-26/cron-industrial-dark.png
+?? docs/reports/zxui-theme-audit-2026-09-26/navigation-army-pine-dark.png
+?? docs/reports/zxui-theme-audit-2026-09-26/navigation-industrial-dark.png
+?? docs/reports/zxui-theme-audit-2026-09-26/navigation-industrial-light.png
+?? docs/reports/zxui-theme-audit-2026-09-26/navigation-matrix.json
+?? docs/reports/zxui-theme-audit-2026-09-26/register-army-pine-dark.png
+?? docs/specs/zxui-display-scaling/.ssd-run.json
+?? docs/specs/zxui-display-scaling/consumer-inventory.md
+?? docs/specs/zxui-display-scaling/design.md
+?? docs/specs/zxui-display-scaling/environment-matrix.md
+?? docs/specs/zxui-display-scaling/evidence-index.md
+?? docs/specs/zxui-display-scaling/evidence/task1-office-100.json
+?? docs/specs/zxui-display-scaling/evidence/task1-user-office-baseline.png
+?? docs/specs/zxui-display-scaling/evidence/task1-user-office-default.png
+?? docs/specs/zxui-display-scaling/evidence/task13-vxe-office-100.png
+?? docs/specs/zxui-display-scaling/evidence/task13-vxe-office-125.png
+?? docs/specs/zxui-display-scaling/requirements.md
+?? docs/specs/zxui-display-scaling/spec-review.md
+?? docs/specs/zxui-display-scaling/tasks.md
+?? ruoyi-fastapi-backend/alembic/versions/20261017_add_dashboard.py
+?? ruoyi-fastapi-backend/module_admin/entity/do/dashboard_do.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/dashboard_vo.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/dept_write_vo.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/job_write_vo.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/user_write_vo.py
+?? ruoyi-fastapi-backend/modules/system/api/dashboard_controller.py
+?? ruoyi-fastapi-backend/modules/system/application/services/dashboard_service.py
+?? ruoyi-fastapi-backend/modules/system/infrastructure/dashboard_repository.py
+?? ruoyi-fastapi-backend/modules/system/tests/test_dashboard_persistence.py
+?? ruoyi-fastapi-backend/tests/integration/security/test_user_session_renewal.py
+?? ruoyi-fastapi-backend/tests/unit/controllers/test_dept_write_contract.py
+?? ruoyi-fastapi-backend/tests/unit/controllers/test_job_write_contract.py
+?? ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py
+?? ruoyi-fastapi-backend/tests/unit/module_generator/test_editor_templates.py
+?? ruoyi-fastapi-backend/tests/unit/repositories/test_dept_repository.py
+?? ruoyi-fastapi-backend/tests/unit/repositories/test_user_repository.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_dept_write_boundaries.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_detail_resource_contract.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_job_writes.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_role_write_relations.py
+?? ruoyi-fastapi-backend/tests/unit/test_log_annotation.py
+?? ruoyi-fastapi-backend/tests/unit/utils/test_page_count_consistency.py
+?? ruoyi-fastapi-frontend/src/api/dashboard.ts
+?? ruoyi-fastapi-frontend/src/components/business/Dashboard/PersistentDashboard.vue
+?? ruoyi-fastapi-frontend/src/mocks/contracts/coverage/registry/dashboard.json
+?? ruoyi-fastapi-frontend/src/utils/session.test.ts
+?? ruoyi-fastapi-frontend/src/utils/session.ts
+?? ruoyi-fastapi-frontend/src/views/monitor/server/dashboard.vue
+?? ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmDashboardPanel.vue
+?? ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultBoardPanel.vue
+?? ruoyi-fastapi-frontend/src/views/project/simulation/dashboard/SimulationDashboard.vue
+?? ruoyi-fastapi-frontend/src/views/project/simulation/dashboard/panel-content.css
+?? ruoyi-fastapi-frontend/vendor/zxio-chart-2.0.0-dashboard-task11.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-convergence.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-task12-accepted.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0-final.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0-final2.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0-final4.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-widgets-0.1.0-dashboard-task12-accepted.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-independent.20261015.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-observers.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-parameters.20261015.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-preparation.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-query.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-retry.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-air-gray-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-army-pine-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-dashboard-task11.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-display.20260928.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-overlay-validation.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.1.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-query.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-query.final.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-source.20260927.1.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-default-2.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-defense-green-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-factory-blue-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-industrial-blue-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-pap-olive-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-rocket-moss-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-tech-blue-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-vue-query-1.0.0-phase-a.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-checks.final4.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-divider.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-font-chunk.final2.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-footprint.final2.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-layout.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-overlay-layout.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-query.final.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-remaining.20260927.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-table.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-toolbar.20260926.1.tgz

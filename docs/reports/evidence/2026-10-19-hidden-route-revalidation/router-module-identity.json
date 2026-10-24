@@ -1,0 +1,39 @@
+{
+  "copies": 3,
+  "allSameMountedRouter": true,
+  "routes": [
+    {
+      "name": "AuthRole",
+      "count": 1
+    },
+    {
+      "name": "AuthUser",
+      "count": 1
+    },
+    {
+      "name": "Data",
+      "count": 1
+    },
+    {
+      "name": "JobLog",
+      "count": 1
+    },
+    {
+      "name": "GenEdit",
+      "count": 1
+    },
+    {
+      "name": "ProjectDetail",
+      "count": 1
+    },
+    {
+      "name": "DeviceDetail",
+      "count": 1
+    },
+    {
+      "name": "ProjectTopo",
+      "count": 1
+    }
+  ],
+  "path": "/system/user"
+}

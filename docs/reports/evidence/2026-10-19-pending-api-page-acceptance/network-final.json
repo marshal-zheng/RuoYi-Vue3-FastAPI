@@ -1,0 +1,1130 @@
+[
+  {
+    "time": "2026-10-19T05:19:01.677Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.097Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.117Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.159Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.164Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.262Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.317Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.336Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:17.339Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.337Z",
+    "method": "GET",
+    "path": "/api/system/menu/treeselect",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.369Z",
+    "method": "GET",
+    "path": "/api/system/menu/roleMenuTreeselect/1",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.394Z",
+    "method": "GET",
+    "path": "/api/system/dept/treeselect",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.420Z",
+    "method": "GET",
+    "path": "/api/system/dept/list/exclude/103",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.440Z",
+    "method": "GET",
+    "path": "/api/dev/menu/status",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:30.483Z",
+    "method": "DELETE",
+    "path": "/api/system/menu/",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:19:30.519Z",
+    "method": "DELETE",
+    "path": "/api/system/config",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:19:30.551Z",
+    "method": "POST",
+    "path": "/api/project/export",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:19:30.719Z",
+    "method": "POST",
+    "path": "/api/dev/menu/sync",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:19:54.532Z",
+    "method": "DELETE",
+    "path": "/api/monitor/cache/clearCacheName/zxqa_cache_mvet0wd2",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:19:54.554Z",
+    "method": "DELETE",
+    "path": "/api/monitor/cache/clearCacheKey/zxqa_exact_mvet0wd2:item",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:20:29.118Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.118Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.139Z",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.145Z",
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:20:29.147Z",
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 401
+  },
+  {
+    "time": "2026-10-19T05:20:29.187Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:58.477Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:58.918Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:58.942Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:58.983Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:58.989Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:59.079Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:59.180Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:59.188Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:20:59.209Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.406Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.413Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.461Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.461Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.486Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.947Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.955Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:13.971Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:33.023Z",
+    "method": "GET",
+    "path": "/api/monitor/server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:33.023Z",
+    "method": "GET",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:21:50.155Z",
+    "method": "PUT",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:02.139Z",
+    "method": "GET",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:06.115Z",
+    "method": "GET",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:25.197Z",
+    "method": "PUT",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:25.262Z",
+    "method": "GET",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:25.342Z",
+    "method": "GET",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:25.371Z",
+    "method": "PUT",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 409
+  },
+  {
+    "time": "2026-10-19T05:22:25.477Z",
+    "method": "PUT",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:25.558Z",
+    "method": "GET",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:36.214Z",
+    "method": "DELETE",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:22:36.236Z",
+    "method": "GET",
+    "path": "/api/system/dashboard/account/monitor-server",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:40.456Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:22:47.747Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 500
+  },
+  {
+    "time": "2026-10-19T05:22:55.922Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 500
+  },
+  {
+    "time": "2026-10-19T05:25:00.511Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:00.912Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:00.937Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:00.978Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:00.983Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:01.072Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:01.177Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:01.195Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:01.198Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:11.442Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:22.220Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:25:22.307Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:22.349Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:25:27.502Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:06.567Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.038Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.064Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.108Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.113Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.204Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.322Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.343Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:07.346Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:14.740Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:22.448Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:22.498Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:22.499Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:28.509Z",
+    "method": "GET",
+    "path": "/api/system/menu/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:28.514Z",
+    "method": "GET",
+    "path": "/api/tool/gen/5",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:53.587Z",
+    "method": "GET",
+    "path": "/api/tool/gen/5",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:53.626Z",
+    "method": "PUT",
+    "path": "/api/tool/gen",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:28:53.678Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:29.804Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.316Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.340Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.380Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.383Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.472Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.592Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.601Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.620Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:30.620Z",
+    "method": "DELETE",
+    "path": "/api/tool/gen/5",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:29:44.606Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:50.765Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:50.816Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:50.816Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:50.853Z",
+    "method": "GET",
+    "path": "/api/tool/gen/6",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:51.147Z",
+    "method": "GET",
+    "path": "/api/system/menu/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:51.152Z",
+    "method": "GET",
+    "path": "/api/tool/gen/6",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:51.233Z",
+    "method": "GET",
+    "path": "/api/system/dict/type/optionselect",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:58.444Z",
+    "method": "PUT",
+    "path": "/api/tool/gen",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:58.491Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:29:58.509Z",
+    "method": "GET",
+    "path": "/api/tool/gen/6",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:08.512Z",
+    "method": "GET",
+    "path": "/api/tool/gen/synchDb/zxqa_mvet0wd2_a",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:08.549Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:08.563Z",
+    "method": "GET",
+    "path": "/api/tool/gen/6",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:08.615Z",
+    "method": "GET",
+    "path": "/api/tool/gen/genCode/zxqa_mvet0wd2_a",
+    "status": 403
+  },
+  {
+    "time": "2026-10-19T05:30:08.902Z",
+    "method": "GET",
+    "path": "/api/tool/gen/db/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:25.084Z",
+    "method": "GET",
+    "path": "/api/tool/gen/db/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:25.349Z",
+    "method": "POST",
+    "path": "/api/tool/gen/importTable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:25.398Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:25.398Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:33.915Z",
+    "method": "GET",
+    "path": "/api/tool/gen/batchGenCode",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:34.266Z",
+    "method": "GET",
+    "path": "/api/system/menu/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:34.271Z",
+    "method": "GET",
+    "path": "/api/tool/gen/6",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:34.394Z",
+    "method": "GET",
+    "path": "/api/system/dict/type/optionselect",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:45.228Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:45.259Z",
+    "method": "DELETE",
+    "path": "/api/monitor/cache/clearCacheName/zxqa_cache_mvet0wd2",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:30:45.286Z",
+    "method": "DELETE",
+    "path": "/api/monitor/cache/clearCacheKey/zxqa_exact_mvet0wd2:item",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:30:45.327Z",
+    "method": "POST",
+    "path": "/api/project/import",
+    "status": 201
+  },
+  {
+    "time": "2026-10-19T05:30:57.299Z",
+    "method": "POST",
+    "path": "/api/system/dept/export",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:57.335Z",
+    "method": "GET",
+    "path": "/api/project/version/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:30:57.791Z",
+    "method": "GET",
+    "path": "/api/monitor/cache/getNames",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:31:17.806Z",
+    "method": "GET",
+    "path": "/api/monitor/cache/getKeys/sys_config",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:31:17.964Z",
+    "method": "GET",
+    "path": "/api/monitor/cache/getValue/sys_config/zxqa_mvet0wd2",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:31:18.017Z",
+    "method": "GET",
+    "path": "/api/monitor/cache/getValue/sys_config/zxqa_mvet0wd2",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:31:18.022Z",
+    "method": "DELETE",
+    "path": "/api/monitor/cache/clearCacheKey/sys_config%3Azxqa_mvet0wd2",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:31:18.055Z",
+    "method": "GET",
+    "path": "/api/monitor/cache/getKeys/sys_config",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:31:34.337Z",
+    "method": "POST",
+    "path": "/api/system/user",
+    "status": 403
+  },
+  {
+    "time": "2026-10-19T05:31:34.524Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_common_status",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:31:34.524Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:32:06.985Z",
+    "method": "POST",
+    "path": "/api/system/user",
+    "status": 201
+  },
+  {
+    "time": "2026-10-19T05:32:08.134Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:32:41.545Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:34.680Z",
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.173Z",
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.198Z",
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.239Z",
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.240Z",
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.335Z",
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.445Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.454Z",
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.483Z",
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.486Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.673Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_common_status",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:35.689Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:42.399Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:34:52.077Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/unlock/zxqa_t_mvet0wd2",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:35:03.115Z",
+    "method": "DELETE",
+    "path": "/api/monitor/logininfor/472",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:35:03.155Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:03.156Z",
+    "method": "GET",
+    "path": "/api/monitor/logininfor/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:03.526Z",
+    "method": "GET",
+    "path": "/api/monitor/online/:owned-session",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:10.310Z",
+    "method": "DELETE",
+    "path": "/api/monitor/online/:owned-session",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:35:10.350Z",
+    "method": "GET",
+    "path": "/api/monitor/online/:owned-session",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:10.646Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_oper_type",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:10.648Z",
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_common_status",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:10.664Z",
+    "method": "GET",
+    "path": "/api/monitor/operlog/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:24.774Z",
+    "method": "GET",
+    "path": "/api/monitor/operlog/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:24.777Z",
+    "method": "POST",
+    "path": "/api/project/export",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:35:24.809Z",
+    "method": "GET",
+    "path": "/api/monitor/operlog/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:38.097Z",
+    "method": "DELETE",
+    "path": "/api/monitor/operlog/1738",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:35:38.145Z",
+    "method": "GET",
+    "path": "/api/monitor/operlog/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:38.146Z",
+    "method": "GET",
+    "path": "/api/monitor/operlog/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:38.454Z",
+    "method": "GET",
+    "path": "/api/common/tables",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:38.474Z",
+    "method": "GET",
+    "path": "/api/monitor/audit/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:44.653Z",
+    "method": "GET",
+    "path": "/api/monitor/audit/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:44.653Z",
+    "method": "GET",
+    "path": "/api/monitor/audit/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:35:52.805Z",
+    "method": "DELETE",
+    "path": "/api/monitor/audit/48736",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:35:52.848Z",
+    "method": "GET",
+    "path": "/api/monitor/audit/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:36:29.805Z",
+    "method": "DELETE",
+    "path": "/api/project/17",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:36:29.850Z",
+    "method": "DELETE",
+    "path": "/api/system/user/133",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:36:30.055Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:36:44.957Z",
+    "method": "GET",
+    "path": "/api/tool/gen/1",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:36:45.281Z",
+    "method": "DELETE",
+    "path": "/api/tool/gen/7,6",
+    "status": 204
+  },
+  {
+    "time": "2026-10-19T05:36:45.322Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:36:45.331Z",
+    "method": "GET",
+    "path": "/api/tool/gen/list",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:36:45.367Z",
+    "method": "GET",
+    "path": "/api/tool/gen/1",
+    "status": 200
+  },
+  {
+    "time": "2026-10-19T05:36:56.488Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 422
+  },
+  {
+    "time": "2026-10-19T05:37:29.522Z",
+    "method": "POST",
+    "path": "/api/tool/gen/createTable",
+    "status": 422
+  }
+]

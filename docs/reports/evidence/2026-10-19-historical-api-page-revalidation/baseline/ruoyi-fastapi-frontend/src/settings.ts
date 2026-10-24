@@ -1,0 +1,83 @@
+/// <reference types="vite/client" />
+
+// Version 1 applies the hidden Tags-Views default to legacy saved layouts once.
+export const LAYOUT_SETTINGS_VERSION = 1;
+
+interface SettingsConfig {
+  title: string;
+  showSettings: boolean;
+  topNav: boolean;
+  topNavBorder: boolean;
+  tagsView: boolean;
+  headerVisible: boolean;
+  breadcrumbVisible: boolean;
+  sidebarLogo: boolean;
+  showLogoImage: boolean;
+  dynamicTitle: boolean;
+  uniqueOpened: boolean;
+  errorLog: string | string[];
+}
+
+const settings: SettingsConfig = {
+  /**
+   * 网页标题
+   */
+  title: import.meta.env.VITE_APP_TITLE,
+  /**
+   * 是否系统布局配置
+   */
+  showSettings: true,
+
+  /**
+   * 是否显示顶部导航
+   */
+  topNav: false,
+
+  /**
+   * 是否显示顶部导航下划线
+   */
+  topNavBorder: false,
+
+  /**
+   * 是否显示 tagsView
+   */
+  tagsView: false,
+
+  /**
+   * 是否显示应用头部
+   */
+  headerVisible: true,
+
+  /** 是否显示面包屑 */
+  breadcrumbVisible: true,
+
+  /**
+   * 是否显示logo
+   */
+  sidebarLogo: true,
+
+  /**
+   * 是否显示logo图片（为false时只显示文字标题）
+   */
+  showLogoImage: false,
+
+  /**
+   * 是否显示动态标题
+   */
+  dynamicTitle: false,
+
+  /**
+   * 是否只保持一个子菜单的展开（设置为 false 可以同时展开多个菜单）
+   */
+  uniqueOpened: true,
+
+  /**
+   * @type {string | array} 'production' | ['production', 'development']
+   * @description Need show err logs component.
+   * The default is only used in the production env
+   * If you want to also use it in dev, you can pass ['production', 'development']
+   */
+  errorLog: 'production',
+};
+
+export default settings;

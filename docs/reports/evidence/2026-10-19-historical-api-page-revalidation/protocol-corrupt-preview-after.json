@@ -1,0 +1,19 @@
+{
+  "status": 422,
+  "body": {
+    "type": "http://localhost/problems/validation-error",
+    "title": "文件无法解析，请确认格式正确并重新保存后重试",
+    "status": 422,
+    "detail": "文件无法解析，请确认格式正确并重新保存后重试",
+    "instance": "/dev-api/system/protocol/importPreview",
+    "errorCode": 10005,
+    "requestId": "ec2cec4b28eb45dfaeb77288456a1612",
+    "errors": [
+      {
+        "field": "file",
+        "message": "文件无法解析，请确认格式正确并重新保存后重试",
+        "code": "value_error"
+      }
+    ]
+  }
+}

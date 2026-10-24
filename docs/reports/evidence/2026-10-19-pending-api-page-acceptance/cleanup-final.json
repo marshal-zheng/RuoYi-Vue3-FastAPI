@@ -1,0 +1,15 @@
+{
+  "counts": {
+    "ownedActiveUsers": 0,
+    "ownedGeneratorRegressionTables": 0,
+    "dashboardsForOwnedUsers": 1
+  },
+  "ownedSessionMetadataRemaining": 0,
+  "ownedActiveSessionKeysRemaining": 0,
+  "ownedCsrfKeysRemaining": 0,
+  "dashboardDeletionContract": {
+    "retainedDeletedEmptyDashboardMarkers": 1,
+    "ownedActiveDashboards": 0,
+    "ownedDashboardHistory": 0
+  }
+}

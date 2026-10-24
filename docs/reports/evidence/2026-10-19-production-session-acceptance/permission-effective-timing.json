@@ -1,0 +1,86 @@
+{
+  "before": {
+    "path": "/system/dict-data/index/1",
+    "name": "Data",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "afterEdit": {
+    "path": "/system/dict-data/index/1",
+    "name": "Data",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "queryStatus": 403,
+  "afterReload": {
+    "path": "/system/dict-data/index/1",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "grantWithoutRefresh": {
+    "path": "/system/dict-data/index/1",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "grantAfterRefresh": {
+    "path": "/system/dict-data/index/1",
+    "name": "Data",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  }
+}

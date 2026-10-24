@@ -1,0 +1,63 @@
+{
+  "mode": "source",
+  "boundary": "Actual UserFormDialog onConfirm/openDialog, actual business API and @zxio/http source through JSDOM XMLHttpRequest to real FastAPI/MySQL. UI open/loading/success/feedback observed; no browser interaction.",
+  "results": [
+    {
+      "name": "disabled-create-through-form-confirm",
+      "ok": true,
+      "status": 201,
+      "locationValid": true,
+      "responseHasDisabledResource": true,
+      "relatedPostsPreserved": true,
+      "successEmittedOnce": true
+    },
+    {
+      "name": "disabled-detail-opens-and-list-matches",
+      "ok": true,
+      "detailStatus": 200,
+      "listRows": 1,
+      "loadingReleased": true
+    },
+    {
+      "name": "disabled-password-login-denied",
+      "ok": true,
+      "status": 401,
+      "disabledReasonPreserved": true
+    },
+    {
+      "name": "enabled-account-can-login-and-read-session",
+      "ok": true,
+      "statusChange": 200,
+      "login": 200,
+      "getInfo": 200,
+      "getRouters": 200
+    },
+    {
+      "name": "management-read-still-requires-permission",
+      "ok": true,
+      "status": 403
+    },
+    {
+      "name": "disable-response-and-admin-detail-readable",
+      "ok": true,
+      "statusChange": 200,
+      "detail": 200
+    },
+    {
+      "name": "disabled-account-old-token-and-new-login-denied",
+      "ok": true,
+      "oldTokenGetInfo": 401,
+      "oldTokenGetRouters": 401,
+      "passwordLogin": 401
+    },
+    {
+      "name": "soft-deleted-user-not-readable",
+      "ok": true,
+      "delete": 204,
+      "detail": 404,
+      "visibleRows": 0
+    }
+  ],
+  "cleanupVerified": true,
+  "cleanup": "Only marked temporary user soft-deleted via business API; normal soft-delete/audit history retained. Probe login sessions logged out."
+}

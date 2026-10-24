@@ -1,0 +1,6 @@
+{
+  "fault": "single captcha request aborted",
+  "retryStatus": 200,
+  "pageErrors": [],
+  "loginSubmitted": false
+}

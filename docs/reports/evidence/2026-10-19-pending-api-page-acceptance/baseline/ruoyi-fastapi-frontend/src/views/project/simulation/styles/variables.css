@@ -1,0 +1,61 @@
+/* Legacy application aliases, evaluated at each Host/Portal scope.
+   Never write core --el-* or --zx-* values here. */
+:where([data-zx-theme][data-zx-variant]) {
+  --sim-bg-base: var(--zx-semantic-surface-canvas-fill);
+  --sim-bg-main: var(--zx-semantic-surface-canvas-fill);
+  --sim-bg-panel: var(--zx-semantic-surface-panel-fill);
+  --sim-bg-elevated: var(--zx-semantic-surface-blocking-fill);
+  --sim-bg-hover: var(--zx-semantic-fill-hover);
+  --sim-bg-active: var(--zx-semantic-surface-selected-fill);
+  --sim-text-primary: var(--zx-semantic-text-primary);
+  --sim-text-regular: var(--zx-semantic-text-primary);
+  --sim-text-secondary: var(--zx-semantic-text-secondary);
+  --sim-text-tertiary: var(--zx-semantic-text-secondary);
+  --sim-text-disabled: var(--zx-semantic-text-disabled);
+  --sim-text-inverse: var(--zx-semantic-accent-on-fill);
+  --sim-border-base: var(--zx-semantic-border-default);
+  --sim-border-light: var(--zx-semantic-border-subtle);
+  --sim-border-hover: var(--zx-semantic-border-strong);
+  --sim-border-focus: var(--zx-semantic-action-focus-ring);
+  --sim-border-accent: var(--zx-semantic-border-default);
+  --sim-accent: var(--zx-semantic-accent-on-surface);
+  --sim-accent-light: var(--zx-semantic-accent-on-surface);
+  --sim-accent-dim: var(--zx-semantic-accent-tint-7);
+  --sim-accent-bg: var(--zx-semantic-surface-selected-fill);
+  --sim-accent-secondary: var(--zx-semantic-accent-on-surface);
+  --sim-accent-secondary-bg: var(--zx-semantic-surface-selected-fill);
+  --sim-fill-base: var(--zx-semantic-surface-field-fill);
+  --sim-fill-light: var(--zx-semantic-surface-panel-fill);
+  --sim-fill-lighter: var(--zx-semantic-fill-hover);
+  --sim-fill-blank: var(--zx-semantic-surface-card-fill);
+  --sim-shadow-sm: var(--zx-semantic-surface-card-depth);
+  --sim-shadow-md: var(--zx-semantic-surface-card-depth);
+  --sim-shadow-lg: var(--zx-semantic-surface-blocking-depth);
+  --sim-shadow-xl: var(--zx-semantic-surface-blocking-depth);
+  --sim-shadow-glow: var(--zx-semantic-surface-card-depth);
+  --sim-shadow-glow-accent: var(--zx-semantic-surface-card-depth);
+  --sim-accent-glow: var(--zx-semantic-surface-card-depth);
+  --sim-radius-sm: var(--zx-semantic-radius-control);
+  --sim-radius-md: var(--zx-semantic-radius-surface);
+  --sim-radius-lg: var(--zx-semantic-radius-surface);
+  --sim-radius-xl: var(--zx-semantic-radius-surface);
+  --sim-success: var(--zx-semantic-status-success-on-surface);
+  --sim-success-bg: var(--zx-semantic-status-success-tint-9);
+  --sim-success-border: var(--zx-semantic-status-success);
+  --sim-warning: var(--zx-semantic-status-warning-on-surface);
+  --sim-warning-bg: var(--zx-semantic-status-warning-tint-9);
+  --sim-warning-border: var(--zx-semantic-status-warning);
+  --sim-danger: var(--zx-semantic-status-danger-on-surface);
+  --sim-danger-bg: var(--zx-semantic-status-danger-tint-9);
+  --sim-danger-border: var(--zx-semantic-status-danger);
+  --sim-info: var(--zx-semantic-status-info-on-surface);
+  --sim-info-bg: var(--zx-semantic-status-info-tint-9);
+  --sim-info-border: var(--zx-semantic-status-info);
+  /* Orange is the domain error level between warning and critical. */
+  --sim-orange: #f97316;
+  --sim-orange-bg: rgba(249, 115, 22, 0.15);
+  --sim-orange-border: rgba(249, 115, 22, 0.3);
+  --sim-transition-fast: var(--zx-semantic-motion-duration-fast) ease;
+  --sim-transition-normal: var(--zx-semantic-motion-duration) ease;
+  --sim-transition-slow: var(--zx-semantic-motion-duration) ease;
+}

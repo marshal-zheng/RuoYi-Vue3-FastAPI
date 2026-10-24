@@ -1,0 +1,16 @@
+{
+  "path": "/system/user-auth/role/141",
+  "versions": [
+    "http://127.0.0.1/src/router/index.js?t=1792392902738"
+  ],
+  "allSameRouter": true,
+  "hasAuthRole": true,
+  "storeKeys": [
+    "permission",
+    "user",
+    "settings",
+    "app",
+    "tags-view"
+  ],
+  "notFound": false
+}

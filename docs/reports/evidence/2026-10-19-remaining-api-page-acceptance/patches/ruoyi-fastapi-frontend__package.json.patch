@@ -1,0 +1,19 @@
+--- baseline/ruoyi-fastapi-frontend/package.json
++++ current/ruoyi-fastapi-frontend/package.json
+@@ -76,7 +76,7 @@
+     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-convergence.20261017.tgz",
+     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-task12-accepted.20261017.tgz",
+     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz",
+-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-pilot.20261019.tgz",
++    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz",
+     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz",
+     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz",
+     "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz",
+@@ -108,6 +108,7 @@
+     "nprogress": "0.2.0",
+     "pinia": "2.1.7",
+     "splitpanes": "3.1.5",
++    "swagger-ui-dist": "5.33.3",
+     "vue": "3.5.43",
+     "vue-cropper": "1.1.1",
+     "vue-echarts": "^7.0.3",

@@ -1,0 +1,27 @@
+[
+  {
+    "type": "readonly",
+    "id": 144,
+    "status": 204
+  },
+  {
+    "type": "actor",
+    "id": 143,
+    "status": 204
+  },
+  {
+    "type": "role",
+    "id": 97,
+    "status": 204
+  },
+  {
+    "type": "menu",
+    "id": 1080,
+    "status": 204
+  },
+  {
+    "type": "category",
+    "id": 1,
+    "status": 204
+  }
+]

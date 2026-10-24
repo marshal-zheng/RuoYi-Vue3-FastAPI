@@ -1,0 +1,46 @@
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > menu opening ownership > opens immediately and keeps the latest response when older success arrives last
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > notice opening ownership > opens immediately and keeps the latest response when older success arrives last
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > post opening ownership > opens immediately and keeps the latest response when older success arrives last
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > system project opening ownership > opens immediately and keeps the latest response when older success arrives last
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > menu opening ownership > ignores old failure and old finally while the new opening is pending
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > project opening ownership > ignores old failure and old finally while the new opening is pending
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > menu opening ownership > cancels a closed opening and isolates a reopen of the same ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > notice opening ownership > cancels a closed opening and isolates a reopen of the same ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > post opening ownership > cancels a closed opening and isolates a reopen of the same ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > system project opening ownership > cancels a closed opening and isolates a reopen of the same ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > menu opening ownership > blocks failed edits and retries the original ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > menu opening ownership > aborts at scope disposal without consuming late success
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > notice opening ownership > aborts at scope disposal without consuming late success
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > post opening ownership > aborts at scope disposal without consuming late success
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > system project opening ownership > aborts at scope disposal without consuming late success
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > menu opening ownership > restores current 401 recovery and keeps stale 401 silent
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > project opening ownership > restores current 401 recovery and keeps stale 401 silent
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > protocol opening ownership > restores current 401 recovery and keeps stale 401 silent
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > user opening ownership > restores current 401 recovery and keeps stale 401 silent
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > notice opening ownership > ignores old failure and old finally while the new opening is pending
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > post opening ownership > ignores old failure and old finally while the new opening is pending
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > system project opening ownership > ignores old failure and old finally while the new opening is pending
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > notice opening ownership > blocks failed edits and retries the original ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > post opening ownership > blocks failed edits and retries the original ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > system project opening ownership > blocks failed edits and retries the original ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > notice opening ownership > restores current 401 recovery and keeps stale 401 silent
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > post opening ownership > restores current 401 recovery and keeps stale 401 silent
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > system project opening ownership > restores current 401 recovery and keeps stale 401 silent
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > project opening ownership > opens immediately and keeps the latest response when older success arrives last
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > project opening ownership > cancels a closed opening and isolates a reopen of the same ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > protocol opening ownership > cancels a closed opening and isolates a reopen of the same ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > project opening ownership > retains an intentional create draft after the previous edit completes
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > project opening ownership > blocks failed edits and retries the original ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > project opening ownership > aborts at scope disposal without consuming late success
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > protocol opening ownership > aborts at scope disposal without consuming late success
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > protocol opening ownership > opens immediately and keeps the latest response when older success arrives last
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > protocol opening ownership > ignores old failure and old finally while the new opening is pending
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > protocol opening ownership > blocks failed edits and retries the original ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > dict data opening ownership > opens immediately and keeps the latest response when older success arrives last
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > dict data opening ownership > ignores old failure and old finally while the new opening is pending
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > dict data opening ownership > cancels a closed opening and isolates a reopen of the same ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > dict data opening ownership > retains an intentional create draft after the previous edit completes
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > dict data opening ownership > blocks failed edits and retries the original ID
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > dict data opening ownership > aborts at scope disposal without consuming late success
+ FAIL  tests/unit/components/RemainingEditorReadLifecycle.test.ts > dict data opening ownership > restores current 401 recovery and keeps stale 401 silent
+      Tests  45 failed | 12 passed (57)

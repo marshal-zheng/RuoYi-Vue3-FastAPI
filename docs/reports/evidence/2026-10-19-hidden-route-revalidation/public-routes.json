@@ -1,0 +1,42 @@
+[
+  {
+    "path": "/login",
+    "url": "http://127.0.0.1/login",
+    "refreshed": true,
+    "hmr": true,
+    "state": {
+      "path": "/login",
+      "notFound": false
+    }
+  },
+  {
+    "path": "/register",
+    "url": "http://127.0.0.1/register",
+    "refreshed": true,
+    "hmr": true,
+    "state": {
+      "path": "/register",
+      "notFound": false
+    }
+  },
+  {
+    "path": "/401",
+    "url": "http://127.0.0.1/401",
+    "refreshed": true,
+    "hmr": true,
+    "state": {
+      "path": "/401",
+      "notFound": false
+    }
+  },
+  {
+    "path": "/hidden-route-unknown-mvex2c1g",
+    "url": "http://127.0.0.1/hidden-route-unknown-mvex2c1g",
+    "refreshed": true,
+    "hmr": true,
+    "state": {
+      "path": "/hidden-route-unknown-mvex2c1g",
+      "notFound": true
+    }
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "path": "/system/user-auth/role/141",
+  "notFound": true,
+  "routeNames": [
+    "Profile",
+    "/redirect/:path(.*)",
+    "/redirect",
+    "/login",
+    "/register",
+    "/401",
+    "/user",
+    "/:pathMatch(.*)*"
+  ],
+  "piniaStores": [],
+  "moduleUrls": [
+    "http://127.0.0.1/src/main.ts?t=1792392525819",
+    "http://127.0.0.1/src/store/index.ts",
+    "http://127.0.0.1/src/router/index.js?t=1792392525819",
+    "http://127.0.0.1/src/permission.ts?t=1792392525819",
+    "http://127.0.0.1/src/router/index.js?t=1792392633347"
+  ],
+  "timeOrigin": 1792392632331.1
+}

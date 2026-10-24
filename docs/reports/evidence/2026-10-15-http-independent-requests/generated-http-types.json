@@ -1,0 +1,78 @@
+{
+  "slots": [
+    {
+      "name": "table",
+      "rawName": "table",
+      "description": "从示例推断",
+      "optional": true,
+      "common": false,
+      "source": "example",
+      "complete": false,
+      "camelName": "table",
+      "kebabName": "table"
+    },
+    {
+      "name": "default",
+      "rawName": "default",
+      "description": "从示例推断",
+      "optional": true,
+      "common": true,
+      "source": "example",
+      "complete": false,
+      "camelName": "default",
+      "kebabName": "default"
+    },
+    {
+      "name": "form",
+      "rawName": "form",
+      "description": "从示例推断",
+      "optional": true,
+      "common": false,
+      "source": "example",
+      "complete": false,
+      "camelName": "form",
+      "kebabName": "form"
+    }
+  ],
+  "constraints": [
+    {
+      "text": "`singleton: true` 时返回单例实例，多次调用 `createHttpClient` 返回同一实例；后续调用传入的配置会被忽略，需先调用 `resetHttpClientSingleton()`",
+      "kind": "onlyWhen",
+      "source": "doc-text",
+      "complete": true,
+      "refs": [
+        "singleton: true",
+        "createHttpClient",
+        "resetHttpClientSingleton()"
+      ]
+    },
+    {
+      "text": "`retry` 配置仅在请求失败时生效",
+      "kind": "onlyWhen",
+      "source": "doc-text",
+      "complete": true,
+      "refs": [
+        "retry"
+      ]
+    },
+    {
+      "text": "`notifier` 配置后，错误和成功消息才会通过通知器展示",
+      "kind": "onlyWhen",
+      "source": "doc-text",
+      "complete": true,
+      "refs": [
+        "notifier"
+      ]
+    },
+    {
+      "text": "`createConcurrencyPlugin` 需要作为 `plugins` 传入才能启用并发控制",
+      "kind": "requires",
+      "source": "doc-text",
+      "complete": true,
+      "refs": [
+        "createConcurrencyPlugin",
+        "plugins"
+      ]
+    }
+  ]
+}

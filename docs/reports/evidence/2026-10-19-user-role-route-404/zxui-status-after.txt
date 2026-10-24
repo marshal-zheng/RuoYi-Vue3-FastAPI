@@ -1,0 +1,184 @@
+ M .github/workflows/ai-production-hardening.yml
+ M .github/workflows/bundle-performance.yml
+ M .github/workflows/keybindings-quality-gate.yml
+ M README.md
+ M docs/.vitepress/plugins/dev-ai-proxy.ts
+ M docs/.vitepress/vitepress/components/navbar/vp-search.vue
+ M docs/.vitepress/vitepress/components/vp-navbar.vue
+ M docs/.vitepress/vitepress/styles/base.scss
+ M docs/.vitepress/vitepress/styles/navbar.scss
+ M docs/codemaps/.diff-report.txt
+ M docs/codemaps/build-release-governance.md
+ M docs/codemaps/developer-surfaces.md
+ M docs/codemaps/feature-packages.md
+ M docs/codemaps/overview.md
+ M docs/en-US/component/dashboard.md
+ M docs/en-US/component/text-editor.md
+ M docs/examples/ai-editor/authoring-ux/deepseek-transport.target-text.test.ts
+ M docs/examples/ai-editor/authoring-ux/deepseek-transport.ts
+ M docs/examples/ai-editor/authoring-ux/index.vue
+ M docs/examples/ai-editor/authoring-ux/workbench-host.ts
+ M docs/examples/ai-editor/authoring-ux/writing-capabilities.ts
+ M docs/examples/ai-editor/authoring-ux/writing-request-compiler.test.ts
+ M docs/examples/ai-editor/authoring-ux/writing-request-compiler.ts
+ M docs/package.json
+ M docs/plans/2026-10-14-dashboard-world-class-assessment.md
+ M docs/plans/2026-10-16-dashboard-handoff.md
+ M docs/reports/2026-10-19-schema-cross-scenario-delivery.md
+ M docs/scripts/__tests__/markdown-examples.test.ts
+ M docs/specs/AIEDITOR-inline-diff-preview/artifacts/visual-matrix/README.md
+ M docs/specs/AIEDITOR-session-transport/design.md
+ M docs/specs/THEME-theme-consumer-protocol/evidence/axis-matrix.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-browser-receipt.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-browser.png
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-resources.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-ssr-no-js-default.png
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-ssr-no-js-inactive.png
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-ssr-no-js-seeded.png
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-ssr-receipt.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/compatibility.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/hosted-packed.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/packed-receipt.json
+ M docs/zh-CN/component/ai-editor-authoring-ux.md
+ M docs/zh-CN/component/dashboard.md
+ M docs/zh-CN/component/dialog.md
+ M docs/zh-CN/component/drawer.md
+ M docs/zh-CN/component/icon-select.md
+ M docs/zh-CN/component/select.md
+ M docs/zh-CN/component/tags-input.md
+ M docs/zh-CN/component/text-editor.md
+ M docs/zh-CN/component/upload.md
+ M package.json
+ M packages/components/_shared/form-model.ts
+ M packages/components/dialog/__tests__/overlay-navigation.test.ts
+ M packages/components/dialog/src/use-dialog-confirm.ts
+ M packages/components/dialog/src/use-dialog-portal.ts
+ M packages/components/drawer/src/drawer.vue
+ M packages/components/hooks/use-dialog/index.ts
+ M packages/components/hooks/use-drawer/README.md
+ M packages/components/hooks/use-drawer/__tests__/use-drawer.test.ts
+ M packages/components/hooks/use-drawer/index.ts
+ M packages/components/icon-select/src/icon-select.vue
+ M packages/components/icon-select/src/props.ts
+ M packages/components/select/__tests__/select.test.tsx
+ M packages/components/select/src/select.vue
+ M packages/components/tags-input/src/props.ts
+ M packages/components/tags-input/src/tags-input.vue
+ M packages/components/upload/src/props.ts
+ M packages/components/upload/src/upload.vue
+ M packages/constants/form-modal.ts
+ M packages/dashboard-widgets/README.md
+ M packages/dashboard/README.md
+ M packages/dashboard/__tests__/dashboard-focus-ring.test.tsx
+ M packages/dashboard/__tests__/dashboard-grid.test.tsx
+ M packages/dashboard/__tests__/dashboard-renderer.test.tsx
+ M packages/dashboard/__tests__/dashboard-runtime-context.test.tsx
+ M packages/dashboard/__tests__/designer-panel-factory.test.ts
+ M packages/dashboard/__tests__/package-boundary.test.ts
+ M packages/dashboard/__tests__/vue-grid-layout-adapter.test.ts
+ M packages/dashboard/__tests__/widget-context.test.tsx
+ M packages/dashboard/__tests__/widget-resolver.test.tsx
+ M packages/dashboard/src/designer/components/dashboard-designer-issues.vue
+ M packages/dashboard/src/designer/components/dashboard-designer.vue
+ M packages/dashboard/src/designer/issues.ts
+ M packages/dashboard/src/designer/panel-factory.ts
+ M packages/dashboard/src/designer/types.ts
+ M packages/dashboard/src/locale/en.ts
+ M packages/dashboard/src/locale/zh-cn.ts
+ M packages/dashboard/src/runtime/components/dashboard-grid.vue
+ M packages/dashboard/src/runtime/components/dashboard-panel-chrome.vue
+ M packages/dashboard/src/runtime/components/dashboard-renderer.vue
+ M packages/dashboard/src/runtime/grid/responsive-grid-engine.ts
+ M packages/dashboard/src/runtime/grid/vue-grid-layout-adapter.ts
+ M packages/dashboard/src/runtime/index.ts
+ M packages/dashboard/src/runtime/types.ts
+ M packages/dashboard/src/schema/constants.ts
+ M packages/dashboard/src/schema/json.ts
+ M packages/dashboard/src/schema/types.ts
+ M packages/dashboard/src/validation/validate.ts
+ M packages/dashboard/src/widget/resolver.ts
+ M packages/dashboard/src/widget/types.ts
+ M packages/dashboard/style/dashboard.css
+ M packages/dashboard/style/dashboard.scss
+ M packages/schema-form/README.md
+ M packages/zxui/hooks/index.ts
+ M pnpm-lock.yaml
+ M scripts/check-ai-inline-diff-visual-matrix.mjs
+ M scripts/theme-consumer/admission/contract.ts
+ M scripts/theme-consumer/admission/declaration-policy.ts
+ M scripts/theme-consumer/structural-policy.test.ts
+ M scripts/theme-consumer/structural-policy.ts
+ M setup.sh
+?? .npmrc.auth
+?? .tmp/dashboard-commit-20261019/
+?? .tmp/dashboard-gates-20261017/
+?? .tmp/schema-dashboard-20261019/
+?? .tmp/schema-delivery-preservation-20261019/
+?? docs/examples/ai-editor/authoring-ux/token-calibration.ts
+?? docs/examples/dashboard/host-data.vue
+?? docs/examples/dashboard/viewing.vue
+?? docs/examples/dashboard/widgets.vue
+?? docs/examples/text-editor/density-scale.vue
+?? docs/helm-runs/
+?? docs/plans/2026-10-13-dashboard-examples.md
+?? docs/plans/2026-10-14-continue-writing-context-window.md
+?? docs/plans/2026-10-16-ai-writing-outcome-freshness-calibration.md
+?? docs/plans/2026-10-16-existing-checks-convergence.md
+?? docs/plans/2026-10-17-dashboard-convergence-verification.md
+?? docs/plans/2026-10-17-dashboard-gates-performance-convergence.md
+?? docs/plans/2026-10-17-dashboard-host-data-contract.md
+?? docs/plans/2026-10-17-dashboard-performance-accessibility-kiosk.md
+?? docs/plans/2026-10-17-dashboard-persistence-pilots.md
+?? docs/plans/2026-10-17-dashboard-responsive-grouping.md
+?? docs/plans/2026-10-17-dashboard-task10-verification.md
+?? docs/plans/2026-10-17-dashboard-task11-verification.md
+?? docs/plans/2026-10-17-dashboard-task12-verification.md
+?? docs/plans/2026-10-17-dashboard-task13-align-distribute-tidy.md
+?? docs/plans/2026-10-17-dashboard-task13-annotations-comments.md
+?? docs/plans/2026-10-17-dashboard-task13-library-panels-templates.md
+?? docs/plans/2026-10-17-dashboard-task13-nested-grids.md
+?? docs/plans/2026-10-17-dashboard-task13-version-diff.md
+?? docs/plans/2026-10-17-dashboard-task7-verification.md
+?? docs/plans/2026-10-17-dashboard-task8-verification.md
+?? docs/plans/2026-10-17-dashboard-task9-verification.md
+?? docs/plans/2026-10-17-dashboard-widget-pack.md
+?? docs/plans/2026-10-17-dashboard-widget-settings-palette.md
+?? docs/plans/2026-10-17-diagnostics-footprint.md
+?? docs/plans/2026-10-17-font-chunk-delivery.md
+?? docs/plans/2026-10-17-text-editor-display-token-adoption.md
+?? docs/plans/2026-10-18-form-contract-session-repair.md
+?? docs/plans/2026-10-19-dashboard-schema-card.md
+?? docs/plans/evidence/dashboard-convergence-2026-10-17/
+?? docs/plans/evidence/dashboard-task10-2026-10-17/
+?? docs/plans/evidence/dashboard-task11-2026-10-17/
+?? docs/plans/evidence/dashboard-task12-2026-10-17/
+?? docs/plans/evidence/dashboard-task7-2026-10-17/
+?? docs/plans/evidence/dashboard-task8-2026-10-17/
+?? docs/plans/evidence/dashboard-task9-2026-10-17/
+?? docs/plans/evidence/text-editor-chrome-geometry/
+?? docs/public/dashboard-widget-embed.html
+?? docs/reports/2026-10-18-form-contract-session-repair.md
+?? docs/reports/2026-10-19-dashboard-schema-card.md
+?? docs/reports/dashboard-schema-card-2026-10-19/
+?? docs/reports/evidence/2026-10-18-form-contract-session-repair/
+?? docs/reports/schema-cross-scenario-2026-10-19/zxio-schema-form-0.1.0.tgz
+?? docs/reviews/evidence/ai-writing-capabilities/
+?? docs/specs/AIEDITOR-inline-diff-preview/artifacts/visual-matrix/failure.json
+?? docs/specs/dashboard-core-grid-panel-runtime/task-7-responsive-grouping.md
+?? docs/specs/http-vue-query/
+?? packages/components/_shared/__tests__/form-field-contract.test.tsx
+?? packages/components/_shared/__tests__/form-session-contract.test.tsx
+?? packages/components/upload/__tests__/upload.lifecycle.test.tsx
+?? packages/dashboard/__tests__/dashboard-keyboard.test.ts
+?? packages/dashboard/__tests__/dashboard-perf.test.ts
+?? packages/dashboard/__tests__/host-data-contract.test.tsx
+?? packages/dashboard/src/runtime/components/dashboard-deferred-content.vue
+?? packages/dashboard/src/runtime/content-visibility.ts
+?? packages/dashboard/src/runtime/host-data.ts
+?? packages/dashboard/src/validation/host-data.ts
+?? patches/@zxio__vue-grid-layout@1.0.6.patch
+?? patches/@zxio__vue-grid-layout@1.0.6.source.patch
+?? patches/README.md
+?? scripts/check-text-editor-chrome-geometry.mts
+?? scripts/perf/docs-hydration-graph.test.ts
+?? scripts/setup-auth.test.ts

@@ -1,0 +1,173 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 15 items
+
+tests/unit/services/test_user_service.py FFF............                 [100%]
+
+=================================== FAILURES ===================================
+__________________ test_check_user_allowed_blocks_admin_user ___________________
+
+    @pytest.mark.asyncio
+    async def test_check_user_allowed_blocks_admin_user():
+        admin_user = UserModel(userId=1)
+        service = UserService()
+    
+        with pytest.raises(PermissionException) as failure:
+>           await service.check_user_allowed_services(admin_user)
+
+admin_user = UserModel(user_id=1, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None, id_ca..._ip=None, login_date=None, create_by=None, create_time=None, update_by=None, update_time=None, remark=None, admin=True)
+failure    = <ExceptionInfo for raises contextmanager>
+service    = <modules.system.application.services.user_service.UserService object at 0x120db0d70>
+
+tests/unit/services/test_user_service.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.user_service.UserService object at 0x120db0d70>
+check_user = UserModel(user_id=1, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None, id_ca..._ip=None, login_date=None, create_by=None, create_time=None, update_by=None, update_time=None, remark=None, admin=True)
+
+    async def check_user_allowed_services(self, check_user: UserModel):
+        """
+        校验用户是否允许操作service
+        :param check_user: 用户信息
+        :return: 校验结果
+        """
+        if check_user.admin:
+>           raise AuthException(
+                error_code=ErrorCode.ADMIN_USER_OPERATION_FORBIDDEN, user_message='不允许操作超级管理员用户'
+            )
+E           exceptions.exception.AuthException: 不允许操作超级管理员用户
+
+check_user = UserModel(user_id=1, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None, id_ca..._ip=None, login_date=None, create_by=None, create_time=None, update_by=None, update_time=None, remark=None, admin=True)
+self       = <modules.system.application.services.user_service.UserService object at 0x120db0d70>
+
+modules/system/application/services/user_service.py:188: AuthException
+_____________ test_user_data_scope_denial_is_authorization_failure _____________
+
+    @pytest.mark.asyncio
+    async def test_user_data_scope_denial_is_authorization_failure():
+        repository = SimpleNamespace(paginate_with_dept=AsyncMock(return_value=[]))
+        service = UserService(user_repo_factory=lambda _: repository)
+    
+        with pytest.raises(PermissionException) as failure:
+>           await service.check_user_data_scope_services(None, 42, 'self-only-scope')
+
+failure    = <ExceptionInfo for raises contextmanager>
+repository = namespace(paginate_with_dept=<AsyncMock id='4846196048'>)
+service    = <modules.system.application.services.user_service.UserService object at 0x120e1cb90>
+
+tests/unit/services/test_user_service.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.user_service.UserService object at 0x120e1cb90>
+query_db = None, user_id = 42, data_scope_sql = 'self-only-scope'
+
+    async def check_user_data_scope_services(self, query_db: AsyncSession, user_id: int, data_scope_sql: str):
+        """
+        校验用户数据权限service
+        :param query_db: orm对象
+        :param user_id: 用户id
+        :param data_scope_sql: 数据权限对应的查询sql语句
+        :return: 校验结果
+        """
+        user_repo = self._user_repo(query_db)
+        users = await user_repo.paginate_with_dept(
+            page=1, page_size=10000, user_id=user_id, data_scope_sql=data_scope_sql
+        )
+        items = users.items if hasattr(users, 'items') else users
+        if items:
+            return CrudResponseModel(is_success=True, message='校验通过')
+        else:
+>           raise AuthException(error_code=ErrorCode.DATA_SCOPE_PERMISSION_DENIED, user_message='没有权限访问用户数据')
+E           exceptions.exception.AuthException: 没有权限访问用户数据
+
+data_scope_sql = 'self-only-scope'
+items      = []
+query_db   = None
+self       = <modules.system.application.services.user_service.UserService object at 0x120e1cb90>
+user_id    = 42
+user_repo  = namespace(paginate_with_dept=<AsyncMock id='4846196048'>)
+users      = []
+
+modules/system/application/services/user_service.py:209: AuthException
+_________ test_wrong_old_password_is_field_validation_without_writing __________
+
+    @pytest.mark.asyncio
+    async def test_wrong_old_password_is_field_validation_without_writing():
+        password_hash = PwdUtil.get_password_hash('Current123!')
+        user = SimpleNamespace(password=password_hash)
+        repository = SimpleNamespace(
+            get_user_with_relations=AsyncMock(return_value={'user_basic_info': user}),
+            get_by_id=AsyncMock(),
+            update=AsyncMock(),
+        )
+        service = UserService(user_repo_factory=lambda _: repository)
+    
+        with pytest.raises(ValidationException) as failure:
+>           await service.reset_user_services(
+                None, ResetUserModel(userId=42, oldPassword='Incorrect123!', password='Changed123!')
+            )
+
+failure    = <ExceptionInfo for raises contextmanager>
+password_hash = '$2b$12$WWH/Qch/jVCYbGVlItYzNuyMHH8IxQ/fgBHnyiUQBdV9gcvVnJwf.'
+repository = namespace(get_user_with_relations=<AsyncMock id='4846198736'>, get_by_id=<AsyncMock id='4846200080'>, update=<AsyncMock id='4846199072'>)
+service    = <modules.system.application.services.user_service.UserService object at 0x120e1c7d0>
+user       = namespace(password='$2b$12$WWH/Qch/jVCYbGVlItYzNuyMHH8IxQ/fgBHnyiUQBdV9gcvVnJwf.')
+
+tests/unit/services/test_user_service.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+utils/transaction_manager.py:308: in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        arg        = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+        args       = (<modules.system.application.services.user_service.UserService object at 0x120e1c7d0>, None, ResetUserModel(user_id=42...ate_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None))
+        attr       = 'db'
+        candidate  = None
+        db         = None
+        func       = <function UserService.reset_user_services at 0x1208a1d00>
+        isolation_level = None
+        kwargs     = {}
+        max_retries = 3
+        owner      = <modules.system.application.services.user_service.UserService object at 0x120e1c7d0>
+        retry_on_deadlock = False
+        timeout    = None
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.user_service.UserService object at 0x120e1c7d0>
+query_db = None
+page_object = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+
+    @transactional()
+    async def reset_user_services(self, query_db: AsyncSession, page_object: ResetUserModel):
+        """
+        重置用户密码service
+        :param query_db: orm对象
+        :param page_object: 重置用户对象
+        :return: 重置用户校验结果
+        """
+        reset_user = page_object.model_dump(exclude_unset=True, exclude={'admin'})
+        user_repo = self._user_repo(query_db)
+        if page_object.old_password:
+            user = (await user_repo.get_user_with_relations(user_id=page_object.user_id)).get('user_basic_info')
+            if not PwdUtil.verify_password(page_object.old_password, user.password):
+>               raise AuthException(error_code=ErrorCode.INVALID_PASSWORD, user_message='修改密码失败，旧密码错误')
+E               exceptions.exception.AuthException: 修改密码失败，旧密码错误
+
+page_object = ResetUserModel(user_id=42, dept_id=None, user_name=None, nick_name=None, user_type=None, email=None, phonenumber=None,...date_by=None, update_time=None, remark=None, admin=False, old_password='Incorrect123!', sms_code=None, session_id=None)
+query_db   = None
+reset_user = {'old_password': 'Incorrect123!', 'password': 'Changed123!', 'user_id': 42}
+self       = <modules.system.application.services.user_service.UserService object at 0x120e1c7d0>
+user       = namespace(password='$2b$12$WWH/Qch/jVCYbGVlItYzNuyMHH8IxQ/fgBHnyiUQBdV9gcvVnJwf.')
+user_repo  = namespace(get_user_with_relations=<AsyncMock id='4846198736'>, get_by_id=<AsyncMock id='4846200080'>, update=<AsyncMock id='4846199072'>)
+
+modules/system/application/services/user_service.py:489: AuthException
+----------------------------- Captured stderr call -----------------------------
+{"text": "2026-10-16 11:17:25.689 | WARNING  | utils.transaction_manager:wrapper:307 - @transactional: No AsyncSession found in reset_user_services, executing without transaction\n", "record": {"elapsed": {"repr": "0:00:00.512138", "seconds": 0.512138}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "transaction_manager.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/utils/transaction_manager.py"}, "function": "wrapper", "level": {"icon": "⚠️", "name": "WARNING", "no": 30}, "line": 307, "message": "@transactional: No AsyncSession found in reset_user_services, executing without transaction", "module": "transaction_manager", "name": "utils.transaction_manager", "process": {"id": 72918, "name": "MainProcess"}, "thread": {"id": 8337219328, "name": "MainThread"}, "time": {"repr": "2026-10-16 11:17:25.689158+01:00", "timestamp": 1792145845.689158}}}
+=========================== short test summary info ============================
+FAILED tests/unit/services/test_user_service.py::test_check_user_allowed_blocks_admin_user
+FAILED tests/unit/services/test_user_service.py::test_user_data_scope_denial_is_authorization_failure
+FAILED tests/unit/services/test_user_service.py::test_wrong_old_password_is_field_validation_without_writing
+========================= 3 failed, 12 passed in 0.60s =========================

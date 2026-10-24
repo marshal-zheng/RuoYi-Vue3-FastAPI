@@ -1,0 +1,102 @@
+{
+  "checks": [
+    {
+      "name": "backend-focused",
+      "command": "./venv/bin/python -m pytest tests/unit/controllers/test_user_role_write_contract.py tests/unit/services/test_role_write_relations.py tests/unit/services/test_detail_resource_contract.py tests/unit/services/test_user_service.py tests/unit/services/test_role_service.py modules/system/tests/test_user_write_commands.py modules/system/tests/test_role_write_commands.py modules/system/tests/test_command_pipeline_behaviors.py tests/unit/controllers/test_user_controller.py tests/unit/controllers/test_role_controller.py -q --no-cov -n0",
+      "cwd": "ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "testsPassed": 115,
+      "evidence": "backend-focused.txt"
+    },
+    {
+      "name": "frontend-focused",
+      "command": "yarn vitest run tests/unit/components/UserFormDialog.test.ts tests/unit/components/EditorReadLifecycle.test.ts tests/unit/components/RoleFormDrawer.test.ts tests/unit/components/RemainingEditorReadLifecycle.test.ts src/utils/http.test.ts tests/unit/api/role.test.ts src/api/detail-contract.test.ts --reporter=dot",
+      "cwd": "ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "testsPassed": 277,
+      "filesPassed": 7,
+      "evidence": "frontend-focused.txt"
+    },
+    {
+      "name": "lint",
+      "command": "yarn lint:check",
+      "cwd": "ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "evidence": "lint.txt"
+    },
+    {
+      "name": "typecheck",
+      "command": "yarn type-check",
+      "cwd": "ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "evidence": "typecheck.txt"
+    },
+    {
+      "name": "source-build",
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod",
+      "cwd": "ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "evidence": "build-source.txt"
+    },
+    {
+      "name": "ui-standards",
+      "command": "yarn ui:standards",
+      "cwd": "ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "testsPassed": 14,
+      "evidence": "ui-standards.txt"
+    },
+    {
+      "name": "openapi-check",
+      "command": "./venv/bin/python scripts/export_openapi.py --check --output ../shared/openapi.json",
+      "cwd": "ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "evidence": "openapi-check.txt"
+    },
+    {
+      "name": "generate-idempotence",
+      "command": "bash scripts/generate-api-types.sh --artifact",
+      "cwd": ".",
+      "exitCode": 0,
+      "filesCompared": 5,
+      "evidence": "generate-idempotence.json"
+    },
+    {
+      "name": "new-backend-files-ruff",
+      "command": "./venv/bin/ruff check module_admin/entity/vo/user_write_vo.py module_admin/entity/vo/role_write_vo.py tests/unit/controllers/test_user_role_write_contract.py tests/unit/services/test_role_write_relations.py",
+      "cwd": "ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "evidence": "new-ruff.txt"
+    },
+    {
+      "name": "new-backend-files-format",
+      "command": "./venv/bin/ruff format --check module_admin/entity/vo/user_write_vo.py module_admin/entity/vo/role_write_vo.py tests/unit/controllers/test_user_role_write_contract.py tests/unit/services/test_role_write_relations.py",
+      "cwd": "ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "evidence": "new-format.txt"
+    },
+    {
+      "name": "backend-conventions",
+      "command": "bash .cursor/skills/backend-conventions/scripts/validate.sh --changed",
+      "cwd": ".",
+      "exitCode": 0,
+      "limitation": "Guardrails passed; Ruff not on the script PATH, separate Ruff checks and baseline delta recorded. Script skips mypy/pytest by default.",
+      "evidence": "backend-conventions.txt"
+    },
+    {
+      "name": "frontend-conventions",
+      "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+      "cwd": ".",
+      "exitCode": 1,
+      "baselineOnly": "Unchanged src/views/project/components/VersionList.vue console usage; its content hash equals start-of-task baseline.",
+      "evidence": "frontend-conventions.txt"
+    }
+  ],
+  "ruffDelta": {
+    "baseline": 183,
+    "current": 183,
+    "added": [],
+    "removed": []
+  },
+  "scope": "Focused verification; no full backend or frontend test suite claim."
+}

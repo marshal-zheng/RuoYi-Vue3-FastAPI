@@ -1,0 +1,11 @@
+{
+  "pathsUnchanged": true,
+  "changedSchemas": [
+    "ResetPasswordModel"
+  ],
+  "newRequiredFields": [
+    "oldPassword",
+    "newPassword"
+  ],
+  "oldRequiredFields": []
+}

@@ -1,0 +1,30 @@
+{
+  "business": {
+    "existingFilesCompared": 3413,
+    "changedExistingFiles": [
+      "ruoyi-fastapi-frontend/package.json",
+      "ruoyi-fastapi-frontend/yarn.lock"
+    ],
+    "unexpectedExistingChanges": [],
+    "missingExistingFiles": [],
+    "stagingUnchanged": true
+  },
+  "zxui": {
+    "existingFilesCompared": 7934,
+    "changedExistingFiles": [
+      "packages/http/__tests__/observer.test.ts",
+      "docs/en-US/component/http-client.md",
+      "docs/en-US/guide/http-client.md",
+      "docs/zh-CN/component/http-client.md",
+      "docs/zh-CN/guide/http-client.md",
+      "packages/http/README.md",
+      "packages/http/__tests__/retry.test.ts",
+      "packages/http/src/client.ts",
+      "packages/http/src/errors.ts",
+      "packages/http/src/retry.ts"
+    ],
+    "unexpectedExistingChanges": [],
+    "missingExistingFiles": [],
+    "stagingUnchanged": true
+  }
+}

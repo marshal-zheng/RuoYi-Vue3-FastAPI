@@ -1,0 +1,32 @@
+--- baseline/ruoyi-fastapi-backend/modules/project/api/project_controller.py
++++ current/ruoyi-fastapi-backend/modules/project/api/project_controller.py
+@@ -15,6 +15,7 @@
+ from module_admin.entity.vo.project_vo import (
+     BatchProjectIdsModel,
+     DeleteProjectModel,
++    ProjectCreatedModel,
+     ProjectImportDataModel,
+     ProjectModel,
+     ProjectPageQueryModel,
+@@ -58,7 +59,10 @@
+     return ResponseUtil.ok_resource(project_query_result)
+ 
+ 
+-@projectController.post('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))])
++@projectController.post(
++    '', status_code=201, response_model=ProjectCreatedModel,
++    dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))],
++)
+ @Log(title='工程管理-工程', business_type=BusinessType.INSERT)
+ async def add_system_project(
+     request: Request,
+@@ -76,7 +80,8 @@
+     logger.info(add_project_result.message)
+ 
+     project_id = require_int_value(add_project_result.result, 'projectId', 'project_id', contract_name='project.create')
+-    resource = await _load_project_detail(project_id, project_service)
++    version_id = require_int_value(add_project_result.result, 'versionId', 'version_id', contract_name='project.create')
++    resource = {**(await _load_project_detail(project_id, project_service)), 'versionId': version_id}
+     location = ResponseUtil.build_absolute_location(request, f'/project/{project_id}')
+     return ResponseUtil.created_resource(resource, location=location)
+ 

@@ -1,0 +1,41 @@
+{
+  "business": {
+    "baselineFileCount": 3422,
+    "implementationAndTestChanges": [
+      "ruoyi-fastapi-frontend/src/api/system/config.ts",
+      "ruoyi-fastapi-frontend/src/api/system/dept.ts",
+      "ruoyi-fastapi-frontend/src/api/system/dict/type.ts",
+      "ruoyi-fastapi-frontend/src/api/system/menu.ts",
+      "ruoyi-fastapi-frontend/src/api/system/role.ts",
+      "ruoyi-fastapi-frontend/src/utils/editor-read.ts",
+      "ruoyi-fastapi-frontend/src/utils/http.test.ts",
+      "ruoyi-fastapi-frontend/src/utils/http.ts",
+      "ruoyi-fastapi-frontend/src/views/system/config/components/ConfigDlg.vue",
+      "ruoyi-fastapi-frontend/src/views/system/config/components/ConfigList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/dept/components/DeptDlg.vue",
+      "ruoyi-fastapi-frontend/src/views/system/dept/components/DeptList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/dict/components/DictDlg.vue",
+      "ruoyi-fastapi-frontend/src/views/system/dict/components/DictList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/role/components/RoleDataScopeDrawer.vue",
+      "ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue",
+      "ruoyi-fastapi-frontend/src/views/system/role/index.vue",
+      "ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/components/RoleFormDrawer.test.ts"
+    ],
+    "unrelatedFileChanges": [],
+    "headUnchanged": true,
+    "stagingUnchanged": true,
+    "reportAndEvidenceAdded": 6
+  },
+  "zxui": {
+    "baselineFileCount": 7935,
+    "implementationAndTestChanges": [],
+    "unrelatedFileChanges": [],
+    "headUnchanged": true,
+    "stagingUnchanged": true,
+    "reportAndEvidenceAdded": 0
+  },
+  "backend8088ListenerAfterCleanup": false,
+  "actualInventoryExactEquality": true,
+  "taskDiffWhitespaceCheck": true
+}

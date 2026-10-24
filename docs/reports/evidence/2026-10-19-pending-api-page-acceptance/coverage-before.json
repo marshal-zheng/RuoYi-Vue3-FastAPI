@@ -1,0 +1,1837 @@
+{
+  "catalogOperations": 169,
+  "interpretation": "Receipts and case records are not equivalent to exhaustive per-field coverage; historical references are module-level only. Explicitly unexecuted alternatives are retained.",
+  "summary": {
+    "current_live_receipt": 93,
+    "historical_module_evidence_not_per_operation_reexecution": 41,
+    "not_live_exercised_alternate_or_unreachable_path": 19,
+    "outside_scope_shared_destructive_operation": 10,
+    "outside_scope_existing_schema_or_filesystem_write": 6
+  },
+  "operations": [
+    {
+      "path": "/system/user/deptTree",
+      "method": "GET",
+      "operationId": "get_system_dept_tree_system_user_deptTree_get",
+      "summary": "Get System Dept Tree",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/user/list",
+      "method": "GET",
+      "operationId": "get_system_user_list_system_user_list_get",
+      "summary": "Get System User List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/user",
+      "method": "PUT",
+      "operationId": "edit_system_user_system_user_put",
+      "summary": "Edit System User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user",
+      "method": "POST",
+      "operationId": "add_system_user_system_user_post",
+      "summary": "Add System User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/{user_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_user_system_user__user_ids__delete",
+      "summary": "Delete System User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/resetPwd",
+      "method": "PUT",
+      "operationId": "reset_system_user_pwd_system_user_resetPwd_put",
+      "summary": "Reset System User Pwd",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/changeStatus",
+      "method": "PUT",
+      "operationId": "change_system_user_status_system_user_changeStatus_put",
+      "summary": "Change System User Status",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/profile",
+      "method": "GET",
+      "operationId": "query_detail_system_user_profile_system_user_profile_get",
+      "summary": "Query Detail System User Profile",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/profile",
+      "method": "PUT",
+      "operationId": "change_system_user_profile_info_system_user_profile_put",
+      "summary": "Change System User Profile Info",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/",
+      "method": "GET",
+      "operationId": "query_detail_system_user_system_user__get",
+      "summary": "Query Detail System User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/{user_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_user_system_user__user_id__get",
+      "summary": "Query Detail System User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/profile/avatar",
+      "method": "POST",
+      "operationId": "change_system_user_profile_avatar_system_user_profile_avatar_post",
+      "summary": "Change System User Profile Avatar",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/profile/updatePwd",
+      "method": "PUT",
+      "operationId": "reset_system_user_password_system_user_profile_updatePwd_put",
+      "summary": "Reset System User Password",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/importData",
+      "method": "POST",
+      "operationId": "batch_import_system_user_system_user_importData_post",
+      "summary": "Batch Import System User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/importTemplate",
+      "method": "POST",
+      "operationId": "export_system_user_template_system_user_importTemplate_post",
+      "summary": "Export System User Template",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/export",
+      "method": "POST",
+      "operationId": "export_system_user_list_system_user_export_post",
+      "summary": "Export System User List",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/authRole/{user_id}",
+      "method": "GET",
+      "operationId": "get_system_allocated_role_list_system_user_authRole__user_id__get",
+      "summary": "Get System Allocated Role List",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/user/authRole",
+      "method": "PUT",
+      "operationId": "update_system_role_user_system_user_authRole_put",
+      "summary": "Update System Role User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/deptTree/{role_id}",
+      "method": "GET",
+      "operationId": "get_system_role_dept_tree_system_role_deptTree__role_id__get",
+      "summary": "Get System Role Dept Tree",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/list",
+      "method": "GET",
+      "operationId": "get_system_role_list_system_role_list_get",
+      "summary": "Get System Role List",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role",
+      "method": "PUT",
+      "operationId": "edit_system_role_system_role_put",
+      "summary": "Edit System Role",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role",
+      "method": "POST",
+      "operationId": "add_system_role_system_role_post",
+      "summary": "Add System Role",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/dataScope",
+      "method": "PUT",
+      "operationId": "edit_system_role_datascope_system_role_dataScope_put",
+      "summary": "Edit System Role Datascope",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/{role_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_role_system_role__role_ids__delete",
+      "summary": "Delete System Role",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/{role_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_role_system_role__role_id__get",
+      "summary": "Query Detail System Role",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/export",
+      "method": "POST",
+      "operationId": "export_system_role_list_system_role_export_post",
+      "summary": "Export System Role List",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/changeStatus",
+      "method": "PUT",
+      "operationId": "reset_system_role_status_system_role_changeStatus_put",
+      "summary": "Reset System Role Status",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/authUser/allocatedList",
+      "method": "GET",
+      "operationId": "get_system_allocated_user_list_system_role_authUser_allocatedList_get",
+      "summary": "Get System Allocated User List",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/authUser/unallocatedList",
+      "method": "GET",
+      "operationId": "get_system_unallocated_user_list_system_role_authUser_unallocatedList_get",
+      "summary": "Get System Unallocated User List",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/authUser/selectAll",
+      "method": "PUT",
+      "operationId": "add_system_role_user_system_role_authUser_selectAll_put",
+      "summary": "Add System Role User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/authUser/cancel",
+      "method": "PUT",
+      "operationId": "cancel_system_role_user_system_role_authUser_cancel_put",
+      "summary": "Cancel System Role User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/role/authUser/cancelAll",
+      "method": "PUT",
+      "operationId": "batch_cancel_system_role_user_system_role_authUser_cancelAll_put",
+      "summary": "Batch Cancel System Role User",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "docs/reports/2026-10-18-role-authorization-final-audit.md"
+    },
+    {
+      "path": "/system/dashboard/{scope}/{key}",
+      "method": "GET",
+      "operationId": "load_dashboard_system_dashboard__scope___key__get",
+      "summary": "Load Dashboard",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dashboard/{scope}/{key}",
+      "method": "PUT",
+      "operationId": "save_dashboard_system_dashboard__scope___key__put",
+      "summary": "Save Dashboard",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/dashboard/{scope}/{key}",
+      "method": "DELETE",
+      "operationId": "remove_dashboard_system_dashboard__scope___key__delete",
+      "summary": "Remove Dashboard",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/menu/treeselect",
+      "method": "GET",
+      "operationId": "get_system_menu_tree_system_menu_treeselect_get",
+      "summary": "Get System Menu Tree",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/menu/roleMenuTreeselect/{role_id}",
+      "method": "GET",
+      "operationId": "get_system_role_menu_tree_system_menu_roleMenuTreeselect__role_id__get",
+      "summary": "Get System Role Menu Tree",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/menu/list",
+      "method": "GET",
+      "operationId": "get_system_menu_list_system_menu_list_get",
+      "summary": "Get System Menu List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/menu",
+      "method": "PUT",
+      "operationId": "edit_system_menu_system_menu_put",
+      "summary": "Edit System Menu",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/menu",
+      "method": "POST",
+      "operationId": "add_system_menu_system_menu_post",
+      "summary": "Add System Menu",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/menu/{menu_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_menu_system_menu__menu_ids__delete",
+      "summary": "Delete System Menu",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "cleanup.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/menu/",
+      "method": "DELETE",
+      "operationId": "delete_system_menu_empty_system_menu__delete",
+      "summary": "Delete System Menu Empty",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/menu/{menu_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_menu_system_menu__menu_id__get",
+      "summary": "Query Detail System Menu",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dept/list/exclude/{dept_id}",
+      "method": "GET",
+      "operationId": "get_system_dept_tree_for_edit_option_system_dept_list_exclude__dept_id__get",
+      "summary": "Get System Dept Tree For Edit Option",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/dept/list",
+      "method": "GET",
+      "operationId": "get_system_dept_list_system_dept_list_get",
+      "summary": "Get System Dept List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dept/treeselect",
+      "method": "GET",
+      "operationId": "get_system_dept_tree_select_system_dept_treeselect_get",
+      "summary": "Get System Dept Tree Select",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/dept",
+      "method": "PUT",
+      "operationId": "edit_system_dept_system_dept_put",
+      "summary": "Edit System Dept",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/dept",
+      "method": "POST",
+      "operationId": "add_system_dept_system_dept_post",
+      "summary": "Add System Dept",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/dept/{dept_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_dept_system_dept__dept_ids__delete",
+      "summary": "Delete System Dept",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "cleanup.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dept/{dept_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_dept_system_dept__dept_id__get",
+      "summary": "Query Detail System Dept",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        403
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dept/export",
+      "method": "POST",
+      "operationId": "export_system_dept_list_system_dept_export_post",
+      "summary": "Export System Dept List",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/post/list",
+      "method": "GET",
+      "operationId": "get_system_post_list_system_post_list_get",
+      "summary": "Get System Post List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/post",
+      "method": "PUT",
+      "operationId": "edit_system_post_system_post_put",
+      "summary": "Edit System Post",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/post",
+      "method": "POST",
+      "operationId": "add_system_post_system_post_post",
+      "summary": "Add System Post",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/post/{post_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_post_system_post__post_ids__delete",
+      "summary": "Delete System Post",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "cleanup.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/post/{post_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_post_system_post__post_id__get",
+      "summary": "Query Detail System Post",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/post/export",
+      "method": "POST",
+      "operationId": "export_system_post_list_system_post_export_post",
+      "summary": "Export System Post List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/type/list",
+      "method": "GET",
+      "operationId": "get_system_dict_type_list_system_dict_type_list_get",
+      "summary": "Get System Dict Type List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/type",
+      "method": "PUT",
+      "operationId": "edit_system_dict_type_system_dict_type_put",
+      "summary": "Edit System Dict Type",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/dict/type",
+      "method": "POST",
+      "operationId": "add_system_dict_type_system_dict_type_post",
+      "summary": "Add System Dict Type",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/type/refreshCache",
+      "method": "DELETE",
+      "operationId": "refresh_system_dict_system_dict_type_refreshCache_delete",
+      "summary": "Refresh System Dict",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/system/dict/type/{dict_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_dict_type_system_dict_type__dict_ids__delete",
+      "summary": "Delete System Dict Type",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204,
+        409
+      ],
+      "evidence": [
+        "cleanup.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/type/optionselect",
+      "method": "GET",
+      "operationId": "query_system_dict_type_options_system_dict_type_optionselect_get",
+      "summary": "Query System Dict Type Options",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/type/{dict_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_dict_type_system_dict_type__dict_id__get",
+      "summary": "Query Detail System Dict Type",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/type/export",
+      "method": "POST",
+      "operationId": "export_system_dict_type_list_system_dict_type_export_post",
+      "summary": "Export System Dict Type List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/data/type/{dict_type}",
+      "method": "GET",
+      "operationId": "query_system_dict_type_data_system_dict_data_type__dict_type__get",
+      "summary": "Query System Dict Type Data",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/data/list",
+      "method": "GET",
+      "operationId": "get_system_dict_data_list_system_dict_data_list_get",
+      "summary": "Get System Dict Data List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/data",
+      "method": "PUT",
+      "operationId": "edit_system_dict_data_system_dict_data_put",
+      "summary": "Edit System Dict Data",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/dict/data",
+      "method": "POST",
+      "operationId": "add_system_dict_data_system_dict_data_post",
+      "summary": "Add System Dict Data",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/data/{dict_codes}",
+      "method": "DELETE",
+      "operationId": "delete_system_dict_data_system_dict_data__dict_codes__delete",
+      "summary": "Delete System Dict Data",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "cleanup.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/data/{dict_code}",
+      "method": "GET",
+      "operationId": "query_detail_system_dict_data_system_dict_data__dict_code__get",
+      "summary": "Query Detail System Dict Data",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/dict/data/export",
+      "method": "POST",
+      "operationId": "export_system_dict_data_list_system_dict_data_export_post",
+      "summary": "Export System Dict Data List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/config/list",
+      "method": "GET",
+      "operationId": "get_system_config_list_system_config_list_get",
+      "summary": "Get System Config List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/config",
+      "method": "PUT",
+      "operationId": "edit_system_config_system_config_put",
+      "summary": "Edit System Config",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/config",
+      "method": "POST",
+      "operationId": "add_system_config_system_config_post",
+      "summary": "Add System Config",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/config",
+      "method": "DELETE",
+      "operationId": "delete_system_config_empty_system_config_delete",
+      "summary": "Delete System Config Empty",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/system/config/refreshCache",
+      "method": "DELETE",
+      "operationId": "refresh_system_config_system_config_refreshCache_delete",
+      "summary": "Refresh System Config",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/system/config/{config_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_config_system_config__config_ids__delete",
+      "summary": "Delete System Config",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "cleanup.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/config/{config_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_config_system_config__config_id__get",
+      "summary": "Query Detail System Config",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/config/configKey/{config_key}",
+      "method": "GET",
+      "operationId": "query_system_config_system_config_configKey__config_key__get",
+      "summary": "Query System Config",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json",
+        "config-owned.xlsx"
+      ]
+    },
+    {
+      "path": "/system/config/export",
+      "method": "POST",
+      "operationId": "export_system_config_list_system_config_export_post",
+      "summary": "Export System Config List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json",
+        "config-owned.xlsx"
+      ]
+    },
+    {
+      "path": "/system/notice/list",
+      "method": "GET",
+      "operationId": "get_system_notice_list_system_notice_list_get",
+      "summary": "Get System Notice List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/notice",
+      "method": "PUT",
+      "operationId": "edit_system_notice_system_notice_put",
+      "summary": "Edit System Notice",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/notice",
+      "method": "POST",
+      "operationId": "add_system_notice_system_notice_post",
+      "summary": "Add System Notice",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "cases.json"
+      ]
+    },
+    {
+      "path": "/system/notice/{notice_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_notice_system_notice__notice_ids__delete",
+      "summary": "Delete System Notice",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "cleanup.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/system/notice/{notice_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_post_system_notice__notice_id__get",
+      "summary": "Query Detail System Post",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/operlog/list",
+      "method": "GET",
+      "operationId": "get_system_operation_log_list_monitor_operlog_list_get",
+      "summary": "Get System Operation Log List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/operlog/clean",
+      "method": "DELETE",
+      "operationId": "clear_system_operation_log_monitor_operlog_clean_delete",
+      "summary": "Clear System Operation Log",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/operlog/{oper_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_operation_log_monitor_operlog__oper_ids__delete",
+      "summary": "Delete System Operation Log",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/monitor/operlog/export",
+      "method": "POST",
+      "operationId": "export_system_operation_log_list_monitor_operlog_export_post",
+      "summary": "Export System Operation Log List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/logininfor/list",
+      "method": "GET",
+      "operationId": "get_system_login_log_list_monitor_logininfor_list_get",
+      "summary": "Get System Login Log List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/logininfor/clean",
+      "method": "DELETE",
+      "operationId": "clear_system_login_log_monitor_logininfor_clean_delete",
+      "summary": "Clear System Login Log",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/logininfor/{info_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_login_log_monitor_logininfor__info_ids__delete",
+      "summary": "Delete System Login Log",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/monitor/logininfor/unlock/{user_name}",
+      "method": "GET",
+      "operationId": "unlock_system_user_monitor_logininfor_unlock__user_name__get",
+      "summary": "Unlock System User",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/monitor/logininfor/export",
+      "method": "POST",
+      "operationId": "export_system_login_log_list_monitor_logininfor_export_post",
+      "summary": "Export System Login Log List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/online/list",
+      "method": "GET",
+      "operationId": "get_monitor_online_list_monitor_online_list_get",
+      "summary": "Get Monitor Online List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/online/{token_ids}",
+      "method": "DELETE",
+      "operationId": "delete_monitor_online_monitor_online__token_ids__delete",
+      "summary": "Delete Monitor Online",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/server",
+      "method": "GET",
+      "operationId": "get_monitor_server_info_monitor_server_get",
+      "summary": "Get Monitor Server Info",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/cache",
+      "method": "GET",
+      "operationId": "get_monitor_cache_info_monitor_cache_get",
+      "summary": "Get Monitor Cache Info",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/cache/getNames",
+      "method": "GET",
+      "operationId": "get_monitor_cache_name_monitor_cache_getNames_get",
+      "summary": "Get Monitor Cache Name",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/cache/getKeys/{cache_name}",
+      "method": "GET",
+      "operationId": "get_monitor_cache_key_monitor_cache_getKeys__cache_name__get",
+      "summary": "Get Monitor Cache Key",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/cache/getValue/{cache_name}/{cache_key}",
+      "method": "GET",
+      "operationId": "get_monitor_cache_value_monitor_cache_getValue__cache_name___cache_key__get",
+      "summary": "Get Monitor Cache Value",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/cache/clearCacheName/{cache_name}",
+      "method": "DELETE",
+      "operationId": "clear_monitor_cache_name_monitor_cache_clearCacheName__cache_name__delete",
+      "summary": "Clear Monitor Cache Name",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/cache/clearCacheKey/{cache_key}",
+      "method": "DELETE",
+      "operationId": "clear_monitor_cache_key_monitor_cache_clearCacheKey__cache_key__delete",
+      "summary": "Clear Monitor Cache Key",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/cache/clearCacheAll",
+      "method": "DELETE",
+      "operationId": "clear_monitor_cache_all_monitor_cache_clearCacheAll_delete",
+      "summary": "Clear Monitor Cache All",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/audit/list",
+      "method": "GET",
+      "operationId": "get_system_audit_log_list_monitor_audit_list_get",
+      "summary": "Get System Audit Log List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/audit/clean",
+      "method": "DELETE",
+      "operationId": "clear_system_audit_log_monitor_audit_clean_delete",
+      "summary": "Clear System Audit Log",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/audit/{audit_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_audit_log_monitor_audit__audit_ids__delete",
+      "summary": "Delete System Audit Log",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/dev/menu/signature",
+      "method": "GET",
+      "operationId": "get_dev_menu_signature_dev_menu_signature_get",
+      "summary": "Get Dev Menu Signature",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/dev/menu/status",
+      "method": "GET",
+      "operationId": "get_dev_menu_status_dev_menu_status_get",
+      "summary": "Get Dev Menu Status",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/dev/menu/events",
+      "method": "GET",
+      "operationId": "get_dev_menu_events_dev_menu_events_get",
+      "summary": "Get Dev Menu Events",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/dev/menu/sync",
+      "method": "POST",
+      "operationId": "post_dev_menu_sync_dev_menu_sync_post",
+      "summary": "Post Dev Menu Sync",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/project/list",
+      "method": "GET",
+      "operationId": "get_system_project_list_project_list_get",
+      "summary": "Get System Project List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project",
+      "method": "PUT",
+      "operationId": "edit_system_project_project_put",
+      "summary": "Edit System Project",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project",
+      "method": "POST",
+      "operationId": "add_system_project_project_post",
+      "summary": "Add System Project",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/{project_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_project_project__project_ids__delete",
+      "summary": "Delete System Project",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204,
+        409
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/{project_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_project_project__project_id__get",
+      "summary": "Query Detail System Project",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/topology/save",
+      "method": "POST",
+      "operationId": "save_project_topology_project_topology_save_post",
+      "summary": "Save Project Topology",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404,
+        409
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/topology/{project_id}",
+      "method": "GET",
+      "operationId": "get_project_topology_project_topology__project_id__get",
+      "summary": "Get Project Topology",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/export/{project_id}",
+      "method": "GET",
+      "operationId": "export_project_project_export__project_id__get",
+      "summary": "Export Project",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/export",
+      "method": "POST",
+      "operationId": "export_project_placeholder_project_export_post",
+      "summary": "Export Project Placeholder",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/project/export/batch",
+      "method": "POST",
+      "operationId": "export_projects_batch_project_export_batch_post",
+      "summary": "Export Projects Batch",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/import",
+      "method": "POST",
+      "operationId": "import_project_project_import_post",
+      "summary": "Import Project",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/project/import/batch",
+      "method": "POST",
+      "operationId": "import_projects_batch_project_import_batch_post",
+      "summary": "Import Projects Batch",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/list",
+      "method": "GET",
+      "operationId": "get_project_version_list_project_version_list_get",
+      "summary": "Get Project Version List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version",
+      "method": "PUT",
+      "operationId": "edit_project_version_project_version_put",
+      "summary": "Edit Project Version",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version",
+      "method": "POST",
+      "operationId": "add_project_version_project_version_post",
+      "summary": "Add Project Version",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/{version_ids}",
+      "method": "DELETE",
+      "operationId": "delete_project_version_project_version__version_ids__delete",
+      "summary": "Delete Project Version",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204,
+        409
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/{version_id}",
+      "method": "GET",
+      "operationId": "query_detail_project_version_project_version__version_id__get",
+      "summary": "Query Detail Project Version",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/clone",
+      "method": "POST",
+      "operationId": "clone_project_version_project_version_clone_post",
+      "summary": "Clone Project Version",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201,
+        409
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/lock",
+      "method": "PUT",
+      "operationId": "lock_project_version_project_version_lock_put",
+      "summary": "Lock Project Version",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/unlock/project/{project_id}",
+      "method": "PUT",
+      "operationId": "unlock_project_versions_by_project_project_version_unlock_project__project_id__put",
+      "summary": "Unlock Project Versions By Project",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/export",
+      "method": "POST",
+      "operationId": "export_project_version_project_version_export_post",
+      "summary": "Export Project Version",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/export-excel/{version_id}",
+      "method": "GET",
+      "operationId": "export_project_version_excel_project_version_export_excel__version_id__get",
+      "summary": "Export Project Version Excel",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/project/version/export-xml/{version_id}",
+      "method": "GET",
+      "operationId": "export_project_version_xml_project_version_export_xml__version_id__get",
+      "summary": "Export Project Version Xml",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/system/protocol/list",
+      "method": "GET",
+      "operationId": "get_protocol_list_system_protocol_list_get",
+      "summary": "Get Protocol List",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol",
+      "method": "PUT",
+      "operationId": "edit_protocol_system_protocol_put",
+      "summary": "Edit Protocol",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol",
+      "method": "POST",
+      "operationId": "add_protocol_system_protocol_post",
+      "summary": "Add Protocol",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/{protocol_ids}",
+      "method": "DELETE",
+      "operationId": "delete_protocol_system_protocol__protocol_ids__delete",
+      "summary": "Delete Protocol",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/deleteBatch",
+      "method": "POST",
+      "operationId": "delete_protocol_batch_system_protocol_deleteBatch_post",
+      "summary": "Delete Protocol Batch",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/importTemplate",
+      "method": "GET",
+      "operationId": "download_protocol_import_template_system_protocol_importTemplate_get",
+      "summary": "Download Protocol Import Template",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/importPreview",
+      "method": "POST",
+      "operationId": "protocol_import_preview_system_protocol_importPreview_post",
+      "summary": "Protocol Import Preview",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/export",
+      "method": "POST",
+      "operationId": "export_protocol_config_system_protocol_export_post",
+      "summary": "Export Protocol Config",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/import",
+      "method": "POST",
+      "operationId": "import_protocol_system_protocol_import_post",
+      "summary": "Import Protocol",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/importBatch",
+      "method": "POST",
+      "operationId": "import_protocol_batch_system_protocol_importBatch_post",
+      "summary": "Import Protocol Batch",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/system/protocol/{protocol_id}",
+      "method": "GET",
+      "operationId": "query_protocol_detail_system_protocol__protocol_id__get",
+      "summary": "Query Protocol Detail",
+      "verification": "historical_module_evidence_not_per_operation_reexecution",
+      "reference": "/Users/hqz/Downloads/element-plus/docs/reports/2026-10-18-form-contract-session-repair.md"
+    },
+    {
+      "path": "/monitor/job/list",
+      "method": "GET",
+      "operationId": "get_system_job_list_monitor_job_list_get",
+      "summary": "Get System Job List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/job",
+      "method": "PUT",
+      "operationId": "edit_system_job_monitor_job_put",
+      "summary": "Edit System Job",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/job",
+      "method": "POST",
+      "operationId": "add_system_job_monitor_job_post",
+      "summary": "Add System Job",
+      "verification": "current_live_receipt",
+      "statuses": [
+        201,
+        422
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/job/changeStatus",
+      "method": "PUT",
+      "operationId": "change_system_job_status_monitor_job_changeStatus_put",
+      "summary": "Change System Job Status",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/job/run",
+      "method": "PUT",
+      "operationId": "execute_system_job_monitor_job_run_put",
+      "summary": "Execute System Job",
+      "verification": "current_live_receipt",
+      "statuses": [
+        202
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/job/{job_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_job_monitor_job__job_ids__delete",
+      "summary": "Delete System Job",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/job/{job_id}",
+      "method": "GET",
+      "operationId": "query_detail_system_job_monitor_job__job_id__get",
+      "summary": "Query Detail System Job",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200,
+        404
+      ],
+      "evidence": [
+        "cases.json",
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/job/export",
+      "method": "POST",
+      "operationId": "export_system_job_list_monitor_job_export_post",
+      "summary": "Export System Job List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/jobLog/list",
+      "method": "GET",
+      "operationId": "get_system_job_log_list_monitor_jobLog_list_get",
+      "summary": "Get System Job Log List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/jobLog/clean",
+      "method": "DELETE",
+      "operationId": "clear_system_job_log_monitor_jobLog_clean_delete",
+      "summary": "Clear System Job Log",
+      "verification": "outside_scope_shared_destructive_operation"
+    },
+    {
+      "path": "/monitor/jobLog/{job_log_ids}",
+      "method": "DELETE",
+      "operationId": "delete_system_job_log_monitor_jobLog__job_log_ids__delete",
+      "summary": "Delete System Job Log",
+      "verification": "current_live_receipt",
+      "statuses": [
+        204
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/monitor/jobLog/export",
+      "method": "POST",
+      "operationId": "export_system_job_log_list_monitor_jobLog_export_post",
+      "summary": "Export System Job Log List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/tool/gen/list",
+      "method": "GET",
+      "operationId": "get_gen_table_list_tool_gen_list_get",
+      "summary": "Get Gen Table List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/tool/gen/db/list",
+      "method": "GET",
+      "operationId": "get_gen_db_table_list_tool_gen_db_list_get",
+      "summary": "Get Gen Db Table List",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/tool/gen/importTable",
+      "method": "POST",
+      "operationId": "import_gen_table_tool_gen_importTable_post",
+      "summary": "Import Gen Table",
+      "verification": "outside_scope_existing_schema_or_filesystem_write"
+    },
+    {
+      "path": "/tool/gen",
+      "method": "PUT",
+      "operationId": "edit_gen_table_tool_gen_put",
+      "summary": "Edit Gen Table",
+      "verification": "outside_scope_existing_schema_or_filesystem_write"
+    },
+    {
+      "path": "/tool/gen/{table_ids}",
+      "method": "DELETE",
+      "operationId": "delete_gen_table_tool_gen__table_ids__delete",
+      "summary": "Delete Gen Table",
+      "verification": "outside_scope_existing_schema_or_filesystem_write"
+    },
+    {
+      "path": "/tool/gen/createTable",
+      "method": "POST",
+      "operationId": "create_table_tool_gen_createTable_post",
+      "summary": "Create Table",
+      "verification": "outside_scope_existing_schema_or_filesystem_write"
+    },
+    {
+      "path": "/tool/gen/batchGenCode",
+      "method": "GET",
+      "operationId": "batch_gen_code_tool_gen_batchGenCode_get",
+      "summary": "Batch Gen Code",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/tool/gen/genCode/{table_name}",
+      "method": "GET",
+      "operationId": "gen_code_local_tool_gen_genCode__table_name__get",
+      "summary": "Gen Code Local",
+      "verification": "outside_scope_existing_schema_or_filesystem_write"
+    },
+    {
+      "path": "/tool/gen/{table_id}",
+      "method": "GET",
+      "operationId": "query_detail_gen_table_tool_gen__table_id__get",
+      "summary": "Query Detail Gen Table",
+      "verification": "not_live_exercised_alternate_or_unreachable_path"
+    },
+    {
+      "path": "/tool/gen/preview/{table_id}",
+      "method": "GET",
+      "operationId": "preview_code_tool_gen_preview__table_id__get",
+      "summary": "Preview Code",
+      "verification": "current_live_receipt",
+      "statuses": [
+        200
+      ],
+      "evidence": [
+        "network"
+      ]
+    },
+    {
+      "path": "/tool/gen/synchDb/{table_name}",
+      "method": "GET",
+      "operationId": "sync_db_tool_gen_synchDb__table_name__get",
+      "summary": "Sync Db",
+      "verification": "outside_scope_existing_schema_or_filesystem_write"
+    }
+  ],
+  "healthExtra": "health-after.json",
+  "pageCases": "cases.json",
+  "pageSurfaces": "surfaces.json"
+}

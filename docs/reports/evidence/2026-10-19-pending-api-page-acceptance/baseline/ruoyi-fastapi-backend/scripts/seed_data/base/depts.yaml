@@ -1,0 +1,118 @@
+# 部门数据
+# Department hierarchy data
+
+depts:
+  # === 集团总公司 ===
+  - dept_id: 100
+    parent_id: 0
+    ancestors: "0"
+    dept_name: 集团总公司
+    order_num: 0
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  # === 深圳分公司 ===
+  - dept_id: 101
+    parent_id: 100
+    ancestors: "0,100"
+    dept_name: 深圳分公司
+    order_num: 1
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  # === 长沙分公司 ===
+  - dept_id: 102
+    parent_id: 100
+    ancestors: "0,100"
+    dept_name: 长沙分公司
+    order_num: 2
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  # === 深圳分公司下属部门 ===
+  - dept_id: 103
+    parent_id: 101
+    ancestors: "0,100,101"
+    dept_name: 研发部门
+    order_num: 1
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  - dept_id: 104
+    parent_id: 101
+    ancestors: "0,100,101"
+    dept_name: 市场部门
+    order_num: 2
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  - dept_id: 105
+    parent_id: 101
+    ancestors: "0,100,101"
+    dept_name: 测试部门
+    order_num: 3
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  - dept_id: 106
+    parent_id: 101
+    ancestors: "0,100,101"
+    dept_name: 财务部门
+    order_num: 4
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  - dept_id: 107
+    parent_id: 101
+    ancestors: "0,100,101"
+    dept_name: 运维部门
+    order_num: 5
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  # === 长沙分公司下属部门 ===
+  - dept_id: 108
+    parent_id: 102
+    ancestors: "0,100,102"
+    dept_name: 市场部门
+    order_num: 1
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"
+
+  - dept_id: 109
+    parent_id: 102
+    ancestors: "0,100,102"
+    dept_name: 财务部门
+    order_num: 2
+    leader: 年糕
+    phone: "15888888888"
+    email: niangao@qq.com
+    status: "0"
+    del_flag: "0"

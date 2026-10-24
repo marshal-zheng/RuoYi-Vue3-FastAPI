@@ -1,0 +1,323 @@
+{
+  "events": [
+    {
+      "time": "2026-10-19T03:31:42.433Z",
+      "method": "GET",
+      "path": "/src/api/system/devMenuSync.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:42.450Z",
+      "method": "GET",
+      "path": "/src/api/system/dict/data.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:42.450Z",
+      "method": "GET",
+      "path": "/src/api/system/dict/type.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:42.450Z",
+      "method": "GET",
+      "path": "/src/api/login.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:42.450Z",
+      "method": "GET",
+      "path": "/src/api/menu.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:42.461Z",
+      "method": "GET",
+      "path": "/src/api/detail.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:42.795Z",
+      "method": "GET",
+      "path": "/api/captchaImage",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.597Z",
+      "method": "POST",
+      "path": "/api/login",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.627Z",
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.673Z",
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.680Z",
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.690Z",
+      "method": "GET",
+      "path": "/src/api/system/role.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.690Z",
+      "method": "GET",
+      "path": "/src/api/system/user.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.690Z",
+      "method": "GET",
+      "path": "/src/api/system/dept.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.778Z",
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.897Z",
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.906Z",
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:43.923Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.155Z",
+      "method": "GET",
+      "path": "/src/api/monitor/job.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.250Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_status",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.250Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_executor",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.252Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_job_group",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.263Z",
+      "method": "GET",
+      "path": "/api/monitor/job/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.465Z",
+      "method": "GET",
+      "path": "/src/api/monitor/jobLog.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.552Z",
+      "method": "GET",
+      "path": "/api/monitor/job/8",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.554Z",
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_common_status",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:49.588Z",
+      "method": "GET",
+      "path": "/api/monitor/jobLog/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:57.564Z",
+      "method": "POST",
+      "path": "/api/monitor/jobLog/export",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:57.770Z",
+      "method": "GET",
+      "path": "/src/api/monitor/online.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:31:57.835Z",
+      "method": "GET",
+      "path": "/api/monitor/online/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:19.643Z",
+      "method": "GET",
+      "path": "/src/api/monitor/server.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:19.681Z",
+      "method": "GET",
+      "path": "/src/api/dashboard.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.600Z",
+      "method": "GET",
+      "path": "/src/api/system/devMenuSync.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.663Z",
+      "method": "GET",
+      "path": "/src/api/login.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.663Z",
+      "method": "GET",
+      "path": "/src/api/menu.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.664Z",
+      "method": "GET",
+      "path": "/src/api/system/dict/data.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.664Z",
+      "method": "GET",
+      "path": "/src/api/system/dict/type.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.674Z",
+      "method": "GET",
+      "path": "/src/api/detail.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.906Z",
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.906Z",
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.947Z",
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.951Z",
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.971Z",
+      "method": "GET",
+      "path": "/src/api/monitor/online.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:22.978Z",
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:23.138Z",
+      "method": "GET",
+      "path": "/api/monitor/online/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:46.685Z",
+      "method": "GET",
+      "path": "/src/api/monitor/server.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:46.783Z",
+      "method": "GET",
+      "path": "/src/api/dashboard.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:46.995Z",
+      "method": "GET",
+      "path": "/api/monitor/server",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:47.042Z",
+      "method": "GET",
+      "path": "/api/system/dashboard/account/monitor-server",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:56.261Z",
+      "method": "GET",
+      "path": "/src/api/monitor/cache.ts",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:32:56.354Z",
+      "method": "GET",
+      "path": "/api/monitor/cache",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:33:04.950Z",
+      "method": "GET",
+      "path": "/api/monitor/cache/getNames",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T03:33:35.741Z",
+      "method": "GET",
+      "path": "/api/monitor/cache/getKeys/sys_config",
+      "status": 200
+    }
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,24 @@
+{
+  "status": 200,
+  "reopenDraft": "",
+  "read": {
+    "status": 200,
+    "body": {
+      "roleId": 94,
+      "roleName": "验收角色_mveu4gpz",
+      "roleKey": "zxqa_role_mveu4gpz",
+      "roleSort": 0,
+      "dataScope": "1",
+      "menuCheckStrictly": true,
+      "deptCheckStrictly": true,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "zxqa_h_mveu4gpz",
+      "createTime": "2026-10-19T06:58:15",
+      "updateBy": "zxqa_h_mveu4gpz",
+      "updateTime": "2026-10-19T06:58:28",
+      "remark": "role saved mveu4gpz",
+      "admin": false
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "ok": true,
+  "mode": "real business API + source @zxio/http + local FastAPI/MySQL",
+  "results": [
+    {
+      "tag": "cntmvam8xy2",
+      "before": {
+        "total": 0,
+        "items": 0
+      },
+      "afterAdd": {
+        "total": 1,
+        "items": 1
+      },
+      "afterDelete": {
+        "total": 1,
+        "items": 0
+      },
+      "staleAfterDelete": true
+    }
+  ],
+  "fixturesCleaned": true
+}

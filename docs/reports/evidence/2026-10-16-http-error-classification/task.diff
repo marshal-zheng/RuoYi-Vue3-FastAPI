@@ -1,0 +1,320 @@
+--- a/ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
++++ b/ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
+@@ -210,8 +210,8 @@
+ 
+     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+ 
+-    old_password: Optional[str] = Field(default=None, description='旧密码')
+-    new_password: Optional[str] = Field(default=None, description='新密码')
++    old_password: str = Field(min_length=1, description='旧密码')
++    new_password: str = Field(min_length=1, description='新密码')
+ 
+     @model_validator(mode='after')
+     def check_new_password(self) -> 'ResetPasswordModel':
+@@ -231,6 +231,12 @@
+     sms_code: Optional[str] = Field(default=None, description='验证码')
+     session_id: Optional[str] = Field(default=None, description='会话id')
+ 
++    def validate_fields(self):
++        # Password commands do not supply a full user profile; password syntax is validated on construction.
++        for field in ('user_name', 'nick_name', 'email', 'phonenumber', 'id_card'):
++            if field in self.model_fields_set:
++                getattr(self, f'get_{field}')()
++
+ 
+ class DeleteUserModel(CamelModelBase):
+     """
+--- a/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
++++ b/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
+@@ -9,7 +9,7 @@
+     ValidationException,
+     ResourceNotFoundException,
+     ResourceConflictException,
+-    AuthException,
++    PermissionException,
+ )
+ from config.error_codes import ErrorCode
+ from module_admin.entity.do.enums import StatusEnum
+@@ -185,7 +185,7 @@
+         :return: 校验结果
+         """
+         if check_user.admin:
+-            raise AuthException(
++            raise PermissionException(
+                 error_code=ErrorCode.ADMIN_USER_OPERATION_FORBIDDEN, user_message='不允许操作超级管理员用户'
+             )
+         else:
+@@ -206,7 +206,7 @@
+         if items:
+             return CrudResponseModel(is_success=True, message='校验通过')
+         else:
+-            raise AuthException(error_code=ErrorCode.DATA_SCOPE_PERMISSION_DENIED, user_message='没有权限访问用户数据')
++            raise PermissionException(error_code=ErrorCode.DATA_SCOPE_PERMISSION_DENIED, user_message='没有权限访问用户数据')
+     async def check_user_name_unique_services(self, query_db: AsyncSession, page_object: UserModel):
+         """
+         校验用户名是否唯一service
+@@ -486,7 +486,9 @@
+         if page_object.old_password:
+             user = (await user_repo.get_user_with_relations(user_id=page_object.user_id)).get('user_basic_info')
+             if not PwdUtil.verify_password(page_object.old_password, user.password):
+-                raise AuthException(error_code=ErrorCode.INVALID_PASSWORD, user_message='修改密码失败，旧密码错误')
++                raise ValidationException(
++                    error_code=ErrorCode.INVALID_PASSWORD, field='oldPassword', user_message='修改密码失败，旧密码错误'
++                )
+             elif PwdUtil.verify_password(page_object.password, user.password):
+                 raise ValidationException(
+                     error_code=ErrorCode.INVALID_INPUT, field='password', user_message='新密码不能与旧密码相同'
+--- a/ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py
++++ b/ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py
+@@ -22,6 +22,23 @@
+ def request_model(router, path, method='PUT'):
+     route = next(route for route in router.routes if route.path == path and method in route.methods)
+     return route.body_field.type_
++
++
++@pytest.mark.parametrize(
++    ('field', 'value'),
++    [(field, value) for field in ('oldPassword', 'newPassword') for value in ('missing', None, '')],
++)
++def test_profile_password_requires_both_credentials(field, value):
++    payload = {'oldPassword': 'Current123!', 'newPassword': 'Changed123!'}
++    if value == 'missing':
++        payload.pop(field)
++    else:
++        payload[field] = value
++
++    with pytest.raises(ValidationError) as failure:
++        request_model(userController, '/system/user/profile/updatePwd')(**payload)
++
++    assert any(error['loc'] == (field,) for error in failure.value.errors())
+ 
+ 
+ CASES = [
+--- a/ruoyi-fastapi-backend/tests/unit/services/test_user_service.py
++++ b/ruoyi-fastapi-backend/tests/unit/services/test_user_service.py
+@@ -6,12 +6,17 @@
+ import pytest
+ 
+ from config.constant import CommonConstant
+-from exceptions.exception import AuthException
++from config.error_codes import ErrorCode, ErrorType
++from exceptions.exception import PermissionException, ValidationException
+ from module_admin.entity.do.user_do import UserDO, UserPostDO, UserRoleDO
+-from module_admin.entity.vo.user_vo import EditUserModel, UserModel
++from module_admin.entity.vo.user_vo import EditUserModel, ResetUserModel, UserModel
++from modules.system.application.behaviors.command_behaviors import CommandValidationBehavior
++from modules.system.application.commands import ResetUserPasswordCommand
++from modules.system.application.handlers.command.user_command_handlers import ResetUserPasswordCommandHandler
+ from modules.system.application.services.user_service import UserService
+ from modules.system.infrastructure.user_post_repository import UserPostRepository
+ from modules.system.infrastructure.user_role_repository import UserRoleRepository
++from utils.pwd_util import PwdUtil
+ 
+ 
+ @pytest.mark.asyncio
+@@ -19,8 +24,80 @@
+     admin_user = UserModel(userId=1)
+     service = UserService()
+ 
+-    with pytest.raises(AuthException):
++    with pytest.raises(PermissionException) as failure:
+         await service.check_user_allowed_services(admin_user)
++
++    assert failure.value.http_status == 403
++    assert failure.value.error_code == ErrorCode.ADMIN_USER_OPERATION_FORBIDDEN
++    assert failure.value.error_type == ErrorType.AUTHORIZATION
++
++
++@pytest.mark.asyncio
++async def test_user_data_scope_denial_is_authorization_failure():
++    repository = SimpleNamespace(paginate_with_dept=AsyncMock(return_value=[]))
++    service = UserService(user_repo_factory=lambda _: repository)
++
++    with pytest.raises(PermissionException) as failure:
++        await service.check_user_data_scope_services(None, 42, 'self-only-scope')
++
++    assert failure.value.http_status == 403
++    assert failure.value.error_code == ErrorCode.DATA_SCOPE_PERMISSION_DENIED
++    assert failure.value.error_type == ErrorType.AUTHORIZATION
++    repository.paginate_with_dept.assert_awaited_once_with(
++        page=1, page_size=10000, user_id=42, data_scope_sql='self-only-scope'
++    )
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize('through_pipeline', [False, True])
++async def test_wrong_old_password_is_field_validation_without_writing(through_pipeline):
++    password_hash = PwdUtil.get_password_hash('Current123!')
++    user = SimpleNamespace(password=password_hash)
++    repository = SimpleNamespace(
++        get_user_with_relations=AsyncMock(return_value={'user_basic_info': user}),
++        get_by_id=AsyncMock(),
++        update=AsyncMock(),
++    )
++    service = UserService(user_repo_factory=lambda _: repository)
++    payload = ResetUserModel(userId=42, oldPassword='Incorrect123!', password='Changed123!')
++
++    with pytest.raises(ValidationException) as failure:
++        if through_pipeline:
++            command = ResetUserPasswordCommand(query_db=None, reset_user=payload)
++            handler = ResetUserPasswordCommandHandler(service)
++            await CommandValidationBehavior().handle(command, lambda: handler.handle(command))
++        else:
++            await service.reset_user_services(None, payload)
++
++    assert failure.value.http_status == 422
++    assert failure.value.error_code == ErrorCode.INVALID_PASSWORD
++    assert failure.value.error_type == ErrorType.VALIDATION
++    assert failure.value.extra['field'] == 'oldPassword'
++    assert user.password == password_hash
++    repository.get_user_with_relations.assert_awaited_once_with(user_id=42)
++    repository.get_by_id.assert_not_awaited()
++    repository.update.assert_not_awaited()
++
++
++@pytest.mark.asyncio
++async def test_sms_reset_command_keeps_separate_old_password_semantics():
++    user = SimpleNamespace(user_id=42, password='before')
++    repository = SimpleNamespace(
++        get_user_with_relations=AsyncMock(),
++        get_by_id=AsyncMock(return_value=user),
++        update=AsyncMock(),
++    )
++    service = UserService(user_repo_factory=lambda _: repository)
++    payload = ResetUserModel(userId=42, password='Changed123!', smsCode='verified', sessionId='sms-session')
++    command = ResetUserPasswordCommand(query_db=None, reset_user=payload)
++    handler = ResetUserPasswordCommandHandler(service)
++
++    result = await CommandValidationBehavior().handle(command, lambda: handler.handle(command))
++
++    assert result.success
++    assert PwdUtil.verify_password('Changed123!', user.password)
++    repository.get_user_with_relations.assert_not_awaited()
++    repository.update.assert_awaited_once_with(user)
+ 
+ 
+ @pytest.mark.asyncio
+--- a/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
++++ b/ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
+@@ -4242,13 +4242,13 @@
+    *
+    * 新密码
+    */
+-  newPassword?: string | null;
++  newPassword: string;
+   /**
+    * Oldpassword
+    *
+    * 旧密码
+    */
+-  oldPassword?: string | null;
++  oldPassword: string;
+ };
+ 
+ /**
+--- a/ruoyi-fastapi-frontend/src/utils/http.test.ts
++++ b/ruoyi-fastapi-frontend/src/utils/http.test.ts
+@@ -667,6 +667,58 @@
+     );
+   });
+ 
++  it.each([
++    [403, 30009, '不允许操作超级管理员用户'],
++    [403, 30010, '没有权限访问用户数据'],
++    [422, 30011, '修改密码失败，旧密码错误'],
++  ])(
++    'presents user failure %s/%s without expiring the session',
++    async (status, errorCode, detail) => {
++      const { clientConfig } = await loadModule();
++      const { isRelogin } = await import('@/utils/http');
++      const failure = {
++        config: { method: 'put', feedback: { mode: 'auto' as const } },
++        response: {
++          status,
++          data: {
++            type: 'about:blank',
++            title: detail,
++            status,
++            detail,
++            errorCode,
++            ...(status === 422
++              ? {
++                  errors: [
++                    {
++                      field: 'oldPassword',
++                      message: detail,
++                      code: 'value_error',
++                    },
++                  ],
++                }
++              : {}),
++          },
++          headers: {},
++        },
++      };
++
++      await expect(clientConfig.transforms[1].onError(failure)).rejects.toMatchObject({
++        status,
++        problem: expect.objectContaining({ status, errorCode, detail }),
++      });
++      await new Promise((resolve) => setTimeout(resolve, 0));
++
++      expect(presentProblemFeedback).toHaveBeenCalledTimes(1);
++      expect(presentProblemFeedback).toHaveBeenCalledWith(
++        expect.objectContaining({
++          problem: expect.objectContaining(failure.response.data),
++        })
++      );
++      expect(ElMessage).not.toHaveBeenCalled();
++      expect(isRelogin.show).toBe(false);
++    }
++  );
++
+   it('passes 422 validation problems through the unified error channel', async () => {
+     const { clientConfig } = await loadModule();
+     const onError = clientConfig.transforms[1].onError;
+--- a/shared/openapi.json
++++ b/shared/openapi.json
+@@ -7805,30 +7805,22 @@
+         "description": "重置密码模型",
+         "properties": {
+           "newPassword": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+             "description": "新密码",
+-            "title": "Newpassword"
++            "minLength": 1,
++            "title": "Newpassword",
++            "type": "string"
+           },
+           "oldPassword": {
+-            "anyOf": [
+-              {
+-                "type": "string"
+-              },
+-              {
+-                "type": "null"
+-              }
+-            ],
+             "description": "旧密码",
+-            "title": "Oldpassword"
+-          }
+-        },
++            "minLength": 1,
++            "title": "Oldpassword",
++            "type": "string"
++          }
++        },
++        "required": [
++          "oldPassword",
++          "newPassword"
++        ],
+         "title": "ResetPasswordModel",
+         "type": "object"
+       },

@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "mode": "production UserFormDialog/page handlers + source useFormDialog/useDialog/@zxio/http + real local FastAPI/MySQL; native UI and actual form validation not mounted; no computer use",
+  "resultCount": 7,
+  "results": [
+    {
+      "name": "real-fast-switch-selects-and-saves-only-latest-disabled-user",
+      "ok": true,
+      "realUpstreamStatuses": [
+        200,
+        200
+      ],
+      "staleXhrCancelled": true,
+      "loadingVisibleBeforeResponse": true,
+      "confirmationBlockedWhileLoading": true,
+      "finalSelectedUser": 34,
+      "savedUserId": 34,
+      "savedStatus": "1",
+      "otherUserUnchanged": true,
+      "rolesAndPostsPreserved": true
+    },
+    {
+      "name": "real-close-reopen-same-user-keeps-new-loading-and-saves-normal-user",
+      "ok": true,
+      "closedReadAborted": true,
+      "sameUserReopenedWithoutStaleData": true,
+      "newLoadingNotReleasedByOldRead": true,
+      "savedUserId": 33,
+      "savedStatus": "0",
+      "rolesAndPostsPreserved": true,
+      "noCancellationFeedback": true
+    },
+    {
+      "name": "real-current-404-preserves-error-disables-save-and-retries-same-user",
+      "ok": true,
+      "status": 404,
+      "originalAxiosCauseAndConfigPreserved": true,
+      "currentFailurePresentedOnce": true,
+      "emptyPlaceholderCannotBeSaved": true,
+      "retrySameUserSucceeded": true,
+      "pendingReleased": true
+    },
+    {
+      "name": "real-edit-to-create-opening-rejects-stale-edit-result",
+      "ok": true,
+      "creationMetadataFromRealAPI": true,
+      "staleEditCancelled": true,
+      "createFieldsNotOverwritten": true,
+      "pendingReleased": true
+    },
+    {
+      "name": "real-page-event-endpoint-consumes-already-presented-read-failure",
+      "ok": true,
+      "productionPageHandler": true,
+      "real404ConsumedAtEventBoundary": true,
+      "retryViaSameEntrySucceeded": true,
+      "oneFailureFeedback": true
+    },
+    {
+      "name": "real-unmount-cancels-read-without-late-feedback",
+      "ok": true,
+      "realUpstreamStatus": 200,
+      "realXhrCancelled": true,
+      "cancelReasonPreserved": true,
+      "noLateFeedback": true
+    },
+    {
+      "name": "cleanup-preserves-existing-users",
+      "ok": true,
+      "temporaryUsersDeleted": 2,
+      "remainingFixtureUsers": 0,
+      "existingUsersUnchanged": 1
+    }
+  ]
+}

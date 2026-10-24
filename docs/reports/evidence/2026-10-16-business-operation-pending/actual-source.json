@@ -1,0 +1,62 @@
+{
+  "mode": "source",
+  "axios": "1.20.0",
+  "transport": "Actual business modules and actual operation handlers through JSDOM XHR to real FastAPI :8088",
+  "boundary": "Confirmation approved by probe; refresh observed; no browser interaction. ConfigList handler extracted unchanged from production source. Forwarding gateway holds actual backend responses only.",
+  "records": "Only marked disposable local configuration records created/updated/deleted; cleanup verified by real list query.",
+  "cleanupVerified": true,
+  "results": [
+    {
+      "name": "real-business-login",
+      "ok": true,
+      "authenticated": true,
+      "durationMs": 544
+    },
+    {
+      "name": "actual-delete-handler-protects-reentry-during-slow-real-response",
+      "ok": true,
+      "actualBackendWrites": 1,
+      "triggerAttempts": 3,
+      "heldMoreThanOneSecond": true,
+      "confirmations": 1,
+      "refreshes": 1,
+      "pendingReleased": true,
+      "durationMs": 1464
+    },
+    {
+      "name": "actual-delete-handler-releases-real-409-and-retries-immediately",
+      "ok": true,
+      "firstStatus": 409,
+      "retryStatus": 204,
+      "retryWithinOneSecond": true,
+      "pendingReleasedAfterFailure": true,
+      "successfulRefreshes": 1,
+      "durationMs": 435
+    },
+    {
+      "name": "different-business-operation-instances-run-in-parallel",
+      "ok": true,
+      "actualBackendWrites": 2,
+      "independentOperationInstances": 2,
+      "bothDispatchedBeforeEitherResponseReleased": true,
+      "completionDoesNotReleaseOtherOperation": true,
+      "durationMs": 195
+    },
+    {
+      "name": "HTTP-allows-identical-real-writes-without-global-time-policy",
+      "ok": true,
+      "identicalConcurrentWritesCompleted": 2,
+      "noRepeatSubmitEscapeFlag": true,
+      "durationMs": 110
+    },
+    {
+      "name": "HTTP-allows-immediate-real-POST-retry-after-domain-failure",
+      "ok": true,
+      "firstStatus": 409,
+      "retryCreated": true,
+      "retryWithinOneSecond": true,
+      "samePostBody": true,
+      "durationMs": 157
+    }
+  ]
+}

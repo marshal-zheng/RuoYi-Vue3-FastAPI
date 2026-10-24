@@ -1,0 +1,532 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+created: 14/14 workers
+14 workers [7 items]
+
+FFFFFFF                                                                  [100%]
+=================================== FAILURES ===================================
+______ test_user_editor_role_writes_share_authorization_preflight[1-edit] ______
+[gw1] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11a2263e0>, <function authorization.<locals>.relations at 0x11a226480>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x119cda660>)
+operation = 'edit', role_id = 1
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['create', 'edit'])
+    @pytest.mark.parametrize('role_id', [1, 999, 22])
+    async def test_user_editor_role_writes_share_authorization_preflight(authorization, operation, role_id):
+        from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel
+        from modules.system.application.commands.user_commands import AddUserCommand, EditUserCommand
+        from modules.system.application.handlers.command.user_command_handlers import AddUserCommandHandler, EditUserCommandHandler
+    
+        _, relations, writes, db = authorization
+        user_service = UserService(query_db=db)
+        role_service = RoleService(RoleRepository(db), AsyncMock(), AsyncMock(), AsyncMock(), db)
+        before = await relations()
+        fields = dict(enforce_scope_checks=True, role_data_scope_sql='True', user_data_scope_sql='True')
+        if operation == 'create':
+            handler = AddUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = AddUserCommand(query_db=db, user=AddUserModel(userName='newuser', nickName='New', password='hash', roleIds=[role_id]), **fields)
+        else:
+            handler = EditUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = EditUserCommand(query_db=db, user=EditUserModel(userId=42, roleIds=[role_id]), **fields)
+>       with pytest.raises(PermissionException if role_id == 1 else ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+AddUserCommand = <class 'modules.system.application.commands.user_commands.AddUserCommand'>
+AddUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler'>
+AddUserModel = <class 'module_admin.entity.vo.user_vo.AddUserModel'>
+EditUserCommand = <class 'modules.system.application.commands.user_commands.EditUserCommand'>
+EditUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler'>
+EditUserModel = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+_          = <function authorization.<locals>.run at 0x11a2263e0>
+authorization = (<function authorization.<locals>.run at 0x11a2263e0>, <function authorization.<locals>.relations at 0x11a226480>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x119cda660>)
+before     = {(42, 20), (43, 21)}
+command    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession o...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x119cda660>
+fields     = {'enforce_scope_checks': True, 'role_data_scope_sql': 'True', 'user_data_scope_sql': 'True'}
+handler    = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x11a2163c0>
+operation  = 'edit'
+relations  = <function authorization.<locals>.relations at 0x11a226480>
+role_id    = 1
+role_service = <modules.system.application.services.role_service.RoleService object at 0x119f9afd0>
+user_service = <modules.system.application.services.user_service.UserService object at 0x119f9a210>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:195: Failed
+_____ test_user_editor_role_writes_share_authorization_preflight[1-create] _____
+[gw0] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11902e3e0>, <function authorization.<locals>.relations at 0x11902e480>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118cd2510>)
+operation = 'create', role_id = 1
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['create', 'edit'])
+    @pytest.mark.parametrize('role_id', [1, 999, 22])
+    async def test_user_editor_role_writes_share_authorization_preflight(authorization, operation, role_id):
+        from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel
+        from modules.system.application.commands.user_commands import AddUserCommand, EditUserCommand
+        from modules.system.application.handlers.command.user_command_handlers import AddUserCommandHandler, EditUserCommandHandler
+    
+        _, relations, writes, db = authorization
+        user_service = UserService(query_db=db)
+        role_service = RoleService(RoleRepository(db), AsyncMock(), AsyncMock(), AsyncMock(), db)
+        before = await relations()
+        fields = dict(enforce_scope_checks=True, role_data_scope_sql='True', user_data_scope_sql='True')
+        if operation == 'create':
+            handler = AddUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = AddUserCommand(query_db=db, user=AddUserModel(userName='newuser', nickName='New', password='hash', roleIds=[role_id]), **fields)
+        else:
+            handler = EditUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = EditUserCommand(query_db=db, user=EditUserModel(userId=42, roleIds=[role_id]), **fields)
+>       with pytest.raises(PermissionException if role_id == 1 else ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+AddUserCommand = <class 'modules.system.application.commands.user_commands.AddUserCommand'>
+AddUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler'>
+AddUserModel = <class 'module_admin.entity.vo.user_vo.AddUserModel'>
+EditUserCommand = <class 'modules.system.application.commands.user_commands.EditUserCommand'>
+EditUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler'>
+EditUserModel = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+_          = <function authorization.<locals>.run at 0x11902e3e0>
+authorization = (<function authorization.<locals>.run at 0x11902e3e0>, <function authorization.<locals>.relations at 0x11902e480>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118cd2510>)
+before     = {(42, 20), (43, 21)}
+command    = AddUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession ob...le_ids=[1], post_ids=[], type=None), enforce_scope_checks=True, dept_data_scope_sql='True', role_data_scope_sql='True')
+db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118cd2510>
+fields     = {'enforce_scope_checks': True, 'role_data_scope_sql': 'True', 'user_data_scope_sql': 'True'}
+handler    = <modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler object at 0x11901e270>
+operation  = 'create'
+relations  = <function authorization.<locals>.relations at 0x11902e480>
+role_id    = 1
+role_service = <modules.system.application.services.role_service.RoleService object at 0x118e8b390>
+user_service = <modules.system.application.services.user_service.UserService object at 0x118e8a210>
+writes     = ['INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:195: Failed
+____ test_user_editor_role_writes_share_authorization_preflight[999-create] ____
+[gw2] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11b62a3e0>, <function authorization.<locals>.relations at 0x11b62a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b1da660>)
+operation = 'create', role_id = 999
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['create', 'edit'])
+    @pytest.mark.parametrize('role_id', [1, 999, 22])
+    async def test_user_editor_role_writes_share_authorization_preflight(authorization, operation, role_id):
+        from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel
+        from modules.system.application.commands.user_commands import AddUserCommand, EditUserCommand
+        from modules.system.application.handlers.command.user_command_handlers import AddUserCommandHandler, EditUserCommandHandler
+    
+        _, relations, writes, db = authorization
+        user_service = UserService(query_db=db)
+        role_service = RoleService(RoleRepository(db), AsyncMock(), AsyncMock(), AsyncMock(), db)
+        before = await relations()
+        fields = dict(enforce_scope_checks=True, role_data_scope_sql='True', user_data_scope_sql='True')
+        if operation == 'create':
+            handler = AddUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = AddUserCommand(query_db=db, user=AddUserModel(userName='newuser', nickName='New', password='hash', roleIds=[role_id]), **fields)
+        else:
+            handler = EditUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = EditUserCommand(query_db=db, user=EditUserModel(userId=42, roleIds=[role_id]), **fields)
+        with pytest.raises(PermissionException if role_id == 1 else ResourceNotFoundException):
+>           await handler.handle(command)
+
+AddUserCommand = <class 'modules.system.application.commands.user_commands.AddUserCommand'>
+AddUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler'>
+AddUserModel = <class 'module_admin.entity.vo.user_vo.AddUserModel'>
+EditUserCommand = <class 'modules.system.application.commands.user_commands.EditUserCommand'>
+EditUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler'>
+EditUserModel = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+_          = <function authorization.<locals>.run at 0x11b62a3e0>
+authorization = (<function authorization.<locals>.run at 0x11b62a3e0>, <function authorization.<locals>.relations at 0x11b62a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b1da660>)
+before     = {(42, 20), (43, 21)}
+command    = AddUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession ob..._ids=[999], post_ids=[], type=None), enforce_scope_checks=True, dept_data_scope_sql='True', role_data_scope_sql='True')
+db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b1da660>
+fields     = {'enforce_scope_checks': True, 'role_data_scope_sql': 'True', 'user_data_scope_sql': 'True'}
+handler    = <modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler object at 0x11b61a3c0>
+operation  = 'create'
+relations  = <function authorization.<locals>.relations at 0x11b62a480>
+role_id    = 999
+role_service = <modules.system.application.services.role_service.RoleService object at 0x11b49b4d0>
+user_service = <modules.system.application.services.user_service.UserService object at 0x11b49a210>
+writes     = []
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py:56: in handle
+    await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+        request    = AddUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession ob..._ids=[999], post_ids=[], type=None), enforce_scope_checks=True, dept_data_scope_sql='True', role_data_scope_sql='True')
+        role_ids   = '999'
+        self       = <modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler object at 0x11b61a3c0>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.role_service.RoleService object at 0x11b49b4d0>
+role_ids = '999', data_scope_sql = 'True'
+
+    async def check_role_data_scope_services(self, role_ids: str, data_scope_sql: str):
+        """
+        校验角色是否有数据权限service
+    
+        :param role_ids: 角色id
+        :param data_scope_sql: 数据权限对应的查询sql语句
+        :return: 校验结果
+        """
+        role_id_list = role_ids.split(',') if role_ids else []
+        if role_id_list:
+            for role_id in role_id_list:
+                roles = await self.role_repo.paginate_with_filters(
+                    page=1,
+                    page_size=10000,
+                    role_id=int(role_id),
+                    data_scope_sql=data_scope_sql,
+                )
+                roles = roles.items if hasattr(roles, 'items') else roles
+                if roles:
+                    continue
+>               raise PermissionException(
+                    user_message='没有权限访问角色数据',
+                    developer_message=f'No permission to access role data: role_id={role_id}',
+                )
+E               exceptions.exception.PermissionException: 没有权限访问角色数据
+
+data_scope_sql = 'True'
+role_id    = '999'
+role_id_list = ['999']
+role_ids   = '999'
+roles      = []
+self       = <modules.system.application.services.role_service.RoleService object at 0x11b49b4d0>
+
+ruoyi-fastapi-backend/modules/system/application/services/role_service.py:169: PermissionException
+_____ test_user_editor_role_writes_share_authorization_preflight[999-edit] _____
+[gw3] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11912a3e0>, <function authorization.<locals>.relations at 0x11912a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118cda660>)
+operation = 'edit', role_id = 999
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['create', 'edit'])
+    @pytest.mark.parametrize('role_id', [1, 999, 22])
+    async def test_user_editor_role_writes_share_authorization_preflight(authorization, operation, role_id):
+        from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel
+        from modules.system.application.commands.user_commands import AddUserCommand, EditUserCommand
+        from modules.system.application.handlers.command.user_command_handlers import AddUserCommandHandler, EditUserCommandHandler
+    
+        _, relations, writes, db = authorization
+        user_service = UserService(query_db=db)
+        role_service = RoleService(RoleRepository(db), AsyncMock(), AsyncMock(), AsyncMock(), db)
+        before = await relations()
+        fields = dict(enforce_scope_checks=True, role_data_scope_sql='True', user_data_scope_sql='True')
+        if operation == 'create':
+            handler = AddUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = AddUserCommand(query_db=db, user=AddUserModel(userName='newuser', nickName='New', password='hash', roleIds=[role_id]), **fields)
+        else:
+            handler = EditUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = EditUserCommand(query_db=db, user=EditUserModel(userId=42, roleIds=[role_id]), **fields)
+        with pytest.raises(PermissionException if role_id == 1 else ResourceNotFoundException):
+>           await handler.handle(command)
+
+AddUserCommand = <class 'modules.system.application.commands.user_commands.AddUserCommand'>
+AddUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler'>
+AddUserModel = <class 'module_admin.entity.vo.user_vo.AddUserModel'>
+EditUserCommand = <class 'modules.system.application.commands.user_commands.EditUserCommand'>
+EditUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler'>
+EditUserModel = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+_          = <function authorization.<locals>.run at 0x11912a3e0>
+authorization = (<function authorization.<locals>.run at 0x11912a3e0>, <function authorization.<locals>.relations at 0x11912a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118cda660>)
+before     = {(42, 20), (43, 21)}
+command    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession o...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118cda660>
+fields     = {'enforce_scope_checks': True, 'role_data_scope_sql': 'True', 'user_data_scope_sql': 'True'}
+handler    = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x1191163c0>
+operation  = 'edit'
+relations  = <function authorization.<locals>.relations at 0x11912a480>
+role_id    = 999
+role_service = <modules.system.application.services.role_service.RoleService object at 0x118f9b4d0>
+user_service = <modules.system.application.services.user_service.UserService object at 0x118f9a210>
+writes     = []
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py:111: in handle
+    await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+        edit_type  = ''
+        request    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession o...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+        role_ids   = '999'
+        self       = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x1191163c0>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.role_service.RoleService object at 0x118f9b4d0>
+role_ids = '999', data_scope_sql = 'True'
+
+    async def check_role_data_scope_services(self, role_ids: str, data_scope_sql: str):
+        """
+        校验角色是否有数据权限service
+    
+        :param role_ids: 角色id
+        :param data_scope_sql: 数据权限对应的查询sql语句
+        :return: 校验结果
+        """
+        role_id_list = role_ids.split(',') if role_ids else []
+        if role_id_list:
+            for role_id in role_id_list:
+                roles = await self.role_repo.paginate_with_filters(
+                    page=1,
+                    page_size=10000,
+                    role_id=int(role_id),
+                    data_scope_sql=data_scope_sql,
+                )
+                roles = roles.items if hasattr(roles, 'items') else roles
+                if roles:
+                    continue
+>               raise PermissionException(
+                    user_message='没有权限访问角色数据',
+                    developer_message=f'No permission to access role data: role_id={role_id}',
+                )
+E               exceptions.exception.PermissionException: 没有权限访问角色数据
+
+data_scope_sql = 'True'
+role_id    = '999'
+role_id_list = ['999']
+role_ids   = '999'
+roles      = []
+self       = <modules.system.application.services.role_service.RoleService object at 0x118f9b4d0>
+
+ruoyi-fastapi-backend/modules/system/application/services/role_service.py:169: PermissionException
+____ test_user_editor_role_writes_share_authorization_preflight[22-create] _____
+[gw4] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11972a3e0>, <function authorization.<locals>.relations at 0x11972a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1193da660>)
+operation = 'create', role_id = 22
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['create', 'edit'])
+    @pytest.mark.parametrize('role_id', [1, 999, 22])
+    async def test_user_editor_role_writes_share_authorization_preflight(authorization, operation, role_id):
+        from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel
+        from modules.system.application.commands.user_commands import AddUserCommand, EditUserCommand
+        from modules.system.application.handlers.command.user_command_handlers import AddUserCommandHandler, EditUserCommandHandler
+    
+        _, relations, writes, db = authorization
+        user_service = UserService(query_db=db)
+        role_service = RoleService(RoleRepository(db), AsyncMock(), AsyncMock(), AsyncMock(), db)
+        before = await relations()
+        fields = dict(enforce_scope_checks=True, role_data_scope_sql='True', user_data_scope_sql='True')
+        if operation == 'create':
+            handler = AddUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = AddUserCommand(query_db=db, user=AddUserModel(userName='newuser', nickName='New', password='hash', roleIds=[role_id]), **fields)
+        else:
+            handler = EditUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = EditUserCommand(query_db=db, user=EditUserModel(userId=42, roleIds=[role_id]), **fields)
+        with pytest.raises(PermissionException if role_id == 1 else ResourceNotFoundException):
+>           await handler.handle(command)
+
+AddUserCommand = <class 'modules.system.application.commands.user_commands.AddUserCommand'>
+AddUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler'>
+AddUserModel = <class 'module_admin.entity.vo.user_vo.AddUserModel'>
+EditUserCommand = <class 'modules.system.application.commands.user_commands.EditUserCommand'>
+EditUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler'>
+EditUserModel = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+_          = <function authorization.<locals>.run at 0x11972a3e0>
+authorization = (<function authorization.<locals>.run at 0x11972a3e0>, <function authorization.<locals>.relations at 0x11972a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1193da660>)
+before     = {(42, 20), (43, 21)}
+command    = AddUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession ob...e_ids=[22], post_ids=[], type=None), enforce_scope_checks=True, dept_data_scope_sql='True', role_data_scope_sql='True')
+db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1193da660>
+fields     = {'enforce_scope_checks': True, 'role_data_scope_sql': 'True', 'user_data_scope_sql': 'True'}
+handler    = <modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler object at 0x11971e3c0>
+operation  = 'create'
+relations  = <function authorization.<locals>.relations at 0x11972a480>
+role_id    = 22
+role_service = <modules.system.application.services.role_service.RoleService object at 0x11959b390>
+user_service = <modules.system.application.services.user_service.UserService object at 0x11959a210>
+writes     = []
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py:56: in handle
+    await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+        request    = AddUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession ob...e_ids=[22], post_ids=[], type=None), enforce_scope_checks=True, dept_data_scope_sql='True', role_data_scope_sql='True')
+        role_ids   = '22'
+        self       = <modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler object at 0x11971e3c0>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.role_service.RoleService object at 0x11959b390>
+role_ids = '22', data_scope_sql = 'True'
+
+    async def check_role_data_scope_services(self, role_ids: str, data_scope_sql: str):
+        """
+        校验角色是否有数据权限service
+    
+        :param role_ids: 角色id
+        :param data_scope_sql: 数据权限对应的查询sql语句
+        :return: 校验结果
+        """
+        role_id_list = role_ids.split(',') if role_ids else []
+        if role_id_list:
+            for role_id in role_id_list:
+                roles = await self.role_repo.paginate_with_filters(
+                    page=1,
+                    page_size=10000,
+                    role_id=int(role_id),
+                    data_scope_sql=data_scope_sql,
+                )
+                roles = roles.items if hasattr(roles, 'items') else roles
+                if roles:
+                    continue
+>               raise PermissionException(
+                    user_message='没有权限访问角色数据',
+                    developer_message=f'No permission to access role data: role_id={role_id}',
+                )
+E               exceptions.exception.PermissionException: 没有权限访问角色数据
+
+data_scope_sql = 'True'
+role_id    = '22'
+role_id_list = ['22']
+role_ids   = '22'
+roles      = []
+self       = <modules.system.application.services.role_service.RoleService object at 0x11959b390>
+
+ruoyi-fastapi-backend/modules/system/application/services/role_service.py:169: PermissionException
+________________ test_user_editor_cannot_clear_protected_roles _________________
+[gw6] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x12482a340>, <function authorization.<locals>.relations at 0x12482a3e0>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1243da660>)
+
+    @pytest.mark.asyncio
+    async def test_user_editor_cannot_clear_protected_roles(authorization):
+        from module_admin.entity.vo.user_vo import EditUserModel
+        from modules.system.application.commands.user_commands import EditUserCommand
+        from modules.system.application.handlers.command.user_command_handlers import EditUserCommandHandler
+    
+        run, relations, writes, db = authorization
+        await run('grant', {'roleId': 1, 'userIds': [42]})
+        before = await relations()
+        writes.clear()
+        handler = EditUserCommandHandler(UserService(query_db=db), AsyncMock(), RoleService(RoleRepository(db), AsyncMock(), AsyncMock(), AsyncMock(), db))
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+EditUserCommand = <class 'modules.system.application.commands.user_commands.EditUserCommand'>
+EditUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler'>
+EditUserModel = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+authorization = (<function authorization.<locals>.run at 0x12482a340>, <function authorization.<locals>.relations at 0x12482a3e0>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1243da660>)
+before     = {(42, 1), (42, 20), (43, 21)}
+db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1243da660>
+handler    = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x12481aa50>
+relations  = <function authorization.<locals>.relations at 0x12482a3e0>
+run        = <function authorization.<locals>.run at 0x12482a340>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:212: Failed
+_____ test_user_editor_role_writes_share_authorization_preflight[22-edit] ______
+[gw5] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x117e2a3e0>, <function authorization.<locals>.relations at 0x117e2a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117ada660>)
+operation = 'edit', role_id = 22
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation', ['create', 'edit'])
+    @pytest.mark.parametrize('role_id', [1, 999, 22])
+    async def test_user_editor_role_writes_share_authorization_preflight(authorization, operation, role_id):
+        from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel
+        from modules.system.application.commands.user_commands import AddUserCommand, EditUserCommand
+        from modules.system.application.handlers.command.user_command_handlers import AddUserCommandHandler, EditUserCommandHandler
+    
+        _, relations, writes, db = authorization
+        user_service = UserService(query_db=db)
+        role_service = RoleService(RoleRepository(db), AsyncMock(), AsyncMock(), AsyncMock(), db)
+        before = await relations()
+        fields = dict(enforce_scope_checks=True, role_data_scope_sql='True', user_data_scope_sql='True')
+        if operation == 'create':
+            handler = AddUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = AddUserCommand(query_db=db, user=AddUserModel(userName='newuser', nickName='New', password='hash', roleIds=[role_id]), **fields)
+        else:
+            handler = EditUserCommandHandler(user_service, AsyncMock(), role_service)
+            command = EditUserCommand(query_db=db, user=EditUserModel(userId=42, roleIds=[role_id]), **fields)
+        with pytest.raises(PermissionException if role_id == 1 else ResourceNotFoundException):
+>           await handler.handle(command)
+
+AddUserCommand = <class 'modules.system.application.commands.user_commands.AddUserCommand'>
+AddUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.AddUserCommandHandler'>
+AddUserModel = <class 'module_admin.entity.vo.user_vo.AddUserModel'>
+EditUserCommand = <class 'modules.system.application.commands.user_commands.EditUserCommand'>
+EditUserCommandHandler = <class 'modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler'>
+EditUserModel = <class 'module_admin.entity.vo.user_vo.EditUserModel'>
+_          = <function authorization.<locals>.run at 0x117e2a3e0>
+authorization = (<function authorization.<locals>.run at 0x117e2a3e0>, <function authorization.<locals>.relations at 0x117e2a480>, [], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117ada660>)
+before     = {(42, 20), (43, 21)}
+command    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession o...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x117ada660>
+fields     = {'enforce_scope_checks': True, 'role_data_scope_sql': 'True', 'user_data_scope_sql': 'True'}
+handler    = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x117e1a3c0>
+operation  = 'edit'
+relations  = <function authorization.<locals>.relations at 0x117e2a480>
+role_id    = 22
+role_service = <modules.system.application.services.role_service.RoleService object at 0x117c9b250>
+user_service = <modules.system.application.services.user_service.UserService object at 0x117c9a210>
+writes     = []
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py{"text": "2026-10-16 15:58:49.237 | INFO     | config.job_registry:register_function:48 - Registered job function: module_task.scheduler_test.job\n", "record": {"elapsed": {"repr": "0:00:00.184487", "seconds": 0.184487}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "job_registry.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/config/job_registry.py"}, "function": "register_function", "level": {"icon": "ℹ️", "name": "INFO", "no": 20}, "line": 48, "message": "Registered job function: module_task.scheduler_test.job", "module": "job_registry", "name": "config.job_registry", "process": {"id": 41219, "name": "MainProcess"}, "thread": {"id": 8777146112, "name": "MainThread"}, "time": {"repr": "2026-10-16 15:58:49.237088+01:00", "timestamp": 1792162729.237088}}}
+{"text": "2026-10-16 15:58:49.245 | INFO     | config.job_registry:register_function:48 - Registered job function: module_task.scheduler_test.async_job\n", "record": {"elapsed": {"repr": "0:00:00.192915", "seconds": 0.192915}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "job_registry.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/config/job_registry.py"}, "function": "register_function", "level": {"icon": "ℹ️", "name": "INFO", "no": 20}, "line": 48, "message": "Registered job function: module_task.scheduler_test.async_job", "module": "job_registry", "name": "config.job_registry", "process": {"id": 41219, "name": "MainProcess"}, "thread": {"id": 8777146112, "name": "MainThread"}, "time": {"repr": "2026-10-16 15:58:49.245516+01:00", "timestamp": 1792162729.245516}}}
+:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py:111: in handle
+    await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+        edit_type  = ''
+        request    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSession o...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+        role_ids   = '22'
+        self       = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x117e1a3c0>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <modules.system.application.services.role_service.RoleService object at 0x117c9b250>
+role_ids = '22', data_scope_sql = 'True'
+
+    async def check_role_data_scope_services(self, role_ids: str, data_scope_sql: str):
+        """
+        校验角色是否有数据权限service
+    
+        :param role_ids: 角色id
+        :param data_scope_sql: 数据权限对应的查询sql语句
+        :return: 校验结果
+        """
+        role_id_list = role_ids.split(',') if role_ids else []
+        if role_id_list:
+            for role_id in role_id_list:
+                roles = await self.role_repo.paginate_with_filters(
+                    page=1,
+                    page_size=10000,
+                    role_id=int(role_id),
+                    data_scope_sql=data_scope_sql,
+                )
+                roles = roles.items if hasattr(roles, 'items') else roles
+                if roles:
+                    continue
+>               raise PermissionException(
+                    user_message='没有权限访问角色数据',
+                    developer_message=f'No permission to access role data: role_id={role_id}',
+                )
+E               exceptions.exception.PermissionException: 没有权限访问角色数据
+
+data_scope_sql = 'True'
+role_id    = '22'
+role_id_list = ['22']
+role_ids   = '22'
+roles      = []
+self       = <modules.system.application.services.role_service.RoleService object at 0x117c9b250>
+
+ruoyi-fastapi-backend/modules/system/application/services/role_service.py:169: PermissionException
+=========================== short test summary info ============================
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_user_editor_role_writes_share_authorization_preflight[1-edit]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_user_editor_role_writes_share_authorization_preflight[1-create]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_user_editor_role_writes_share_authorization_preflight[999-create]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_user_editor_role_writes_share_authorization_preflight[999-edit]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_user_editor_role_writes_share_authorization_preflight[22-create]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_user_editor_cannot_clear_protected_roles
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_user_editor_role_writes_share_authorization_preflight[22-edit]
+============================== 7 failed in 3.08s ===============================

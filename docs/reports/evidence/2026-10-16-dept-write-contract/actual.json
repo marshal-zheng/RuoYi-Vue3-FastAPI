@@ -1,0 +1,346 @@
+{
+  "ok": true,
+  "mode": "source",
+  "checks": 38,
+  "unhandledRejections": 0,
+  "evidence": "Production DeptDlg setup/confirm, API/request/feedback, source ZXUI hooks and HTTP, real Axios XHR/FastAPI/MySQL. Native form validation and visual UI were not rendered. No computer use.",
+  "results": [
+    {
+      "name": "admin-create-root-uses-virtual-zero",
+      "ok": true,
+      "rootIdPresent": true,
+      "serverAudit": true
+    },
+    {
+      "name": "post-rejects-delFlag",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "delFlag"
+    },
+    {
+      "name": "post-rejects-ancestors",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "ancestors"
+    },
+    {
+      "name": "post-rejects-createBy",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "createBy"
+    },
+    {
+      "name": "post-rejects-updateTime",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "updateTime"
+    },
+    {
+      "name": "put-rejects-delFlag",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "delFlag"
+    },
+    {
+      "name": "put-rejects-ancestors",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "ancestors"
+    },
+    {
+      "name": "put-rejects-createBy",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "createBy"
+    },
+    {
+      "name": "put-rejects-updateTime",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "updateTime"
+    },
+    {
+      "name": "edit-id-required-undefined",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "deptId"
+    },
+    {
+      "name": "edit-id-required-null",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "deptId"
+    },
+    {
+      "name": "edit-id-required-0",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "deptId"
+    },
+    {
+      "name": "rejected-inputs-did-not-mutate-department",
+      "ok": true,
+      "unchanged": true
+    },
+    {
+      "name": "missing-parent",
+      "ok": true,
+      "status": 404,
+      "errorCode": 42001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "missing-target",
+      "ok": true,
+      "status": 404,
+      "errorCode": 42001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "self-parent",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "descendant-parent",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "invalid-hierarchy-writes-are-atomic",
+      "ok": true,
+      "targetAndSubtreeUnchanged": true
+    },
+    {
+      "name": "production-edit-form-reparents-entire-subtree-with-allowlisted-payload",
+      "ok": true,
+      "productionSFCAndDialogHook": true,
+      "subtreeUpdated": true,
+      "payloadAllowlist": true
+    },
+    {
+      "name": "production-create-form-omits-edit-identity-and-read-metadata",
+      "ok": true,
+      "productionSFC": true,
+      "identityOmitted": true,
+      "serverAudit": true
+    },
+    {
+      "name": "disable-with-active-descendants",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "disabled-parent-rejects-create",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "status-only-disable-and-enable-preserve-department-fields",
+      "ok": true,
+      "statusOnly": true,
+      "ancestorsEnabled": true
+    },
+    {
+      "name": "root-edit-root-placement-and-null-contact-clearing",
+      "ok": true,
+      "rootPreserved": true,
+      "adminMoveToRoot": true,
+      "partialFieldsPreserved": true,
+      "contactsCleared": true
+    },
+    {
+      "name": "partial-move-of-active-department-enables-new-parent",
+      "ok": true,
+      "omittedStatusPreserved": true,
+      "newAncestorEnabled": true
+    },
+    {
+      "name": "scoped-user-edits-with-omitted-or-unchanged-outside-parent",
+      "ok": true,
+      "noAdditionalOldParentPermission": true
+    },
+    {
+      "name": "normal-form-status-does-not-touch-outside-normal-ancestors",
+      "ok": true,
+      "unchangedAncestorIncludingAudit": true,
+      "normalFormAllowed": true
+    },
+    {
+      "name": "scoped-reparent-denied-151",
+      "ok": true,
+      "status": 403,
+      "errorCode": 20004,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scoped-create-denied-151",
+      "ok": true,
+      "status": 403,
+      "errorCode": 20004,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scoped-reparent-denied-0",
+      "ok": true,
+      "status": 403,
+      "errorCode": 20004,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scoped-create-denied-0",
+      "ok": true,
+      "status": 403,
+      "errorCode": 20004,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scoped-target-denied",
+      "ok": true,
+      "status": 403,
+      "errorCode": 20004,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scoped-cycle-rejected",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scoped-denials-preserve-data-and-session",
+      "ok": true,
+      "targetUnchanged": true,
+      "sessionValid": true
+    },
+    {
+      "name": "scoped-legal-parent-create-and-reparent-succeed",
+      "ok": true,
+      "createUnderAuthorizedParent": true,
+      "moveToAuthorizedParent": true
+    },
+    {
+      "name": "scoped-enable-cannot-change-outside-ancestor",
+      "ok": true,
+      "status": 403,
+      "errorCode": 20004,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "denied-ancestor-activation-is-atomic-and-session-stays-valid",
+      "ok": true,
+      "targetUnchanged": true,
+      "outsideAncestorUnchanged": true,
+      "sessionValid": true
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "temporaryRecordsRemoved": true,
+      "originalBusinessListsAndTotalsExact": true
+    }
+  ]
+}

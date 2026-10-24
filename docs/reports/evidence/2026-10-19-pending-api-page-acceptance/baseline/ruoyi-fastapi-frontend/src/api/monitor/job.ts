@@ -1,0 +1,84 @@
+import { requestDetail } from '@/api/detail';
+export type JobRecord = Omit<JobModel, 'jobId'> & { jobId: number };
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type {
+  JobCreateModel,
+  JobModel,
+  JobPageQueryModel,
+  JobUpdateModel,
+  JobStatusUpdateModel,
+  JobRunModel,
+} from '@/api/_generated/types.gen';
+import request from '@/utils/request';
+
+// 查询定时任务调度列表
+export function listJob(query?: JobPageQueryModel) {
+  return request<HttpOffsetPage<JobRecord>>({
+    url: '/monitor/job/list',
+    method: 'get',
+    params: query,
+  });
+}
+
+// 查询定时任务调度详细
+export function getJob(jobId: number | string) {
+  return requestDetail<JobRecord>(
+    {
+      url: '/monitor/job/' + jobId,
+      method: 'get',
+    },
+    'jobId',
+    jobId
+  );
+}
+
+// 新增定时任务调度
+export function addJob(data: JobCreateModel) {
+  return request<JobRecord>({
+    url: '/monitor/job',
+    method: 'post',
+    data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.create' },
+  });
+}
+
+// 修改定时任务调度
+export function updateJob(data: JobUpdateModel) {
+  return request<JobRecord>({
+    url: '/monitor/job',
+    method: 'put',
+    data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.update' },
+  });
+}
+
+// 删除定时任务调度
+export function delJob(jobId: number | string) {
+  return request<null>({
+    url: '/monitor/job/' + jobId,
+    method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.job.delete' },
+  });
+}
+
+// 任务状态修改
+export function changeJobStatus(jobId: number | string, status: JobStatusUpdateModel['status']) {
+  const data: JobStatusUpdateModel = { jobId: Number(jobId), status };
+  return request<JobRecord>({
+    url: '/monitor/job/changeStatus',
+    method: 'put',
+    data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.change-status' },
+  });
+}
+
+// 定时任务立即执行一次
+export function runJob(jobId: number | string) {
+  const data: JobRunModel = { jobId: Number(jobId) };
+  return request<{ jobId: number; jobGroup: string; status: 'accepted' }>({
+    url: '/monitor/job/run',
+    method: 'put',
+    data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.run' },
+  });
+}

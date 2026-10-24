@@ -1,0 +1,19 @@
+--- baseline/ruoyi-fastapi-frontend/src/api/project/project.ts
++++ current/ruoyi-fastapi-frontend/src/api/project/project.ts
+@@ -3,6 +3,7 @@
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
+ import type {
++  ProjectCreatedModel,
+   ProjectModel,
+   GetSystemProjectListProjectListGetData,
+ } from '@/api/_generated/types.gen';
+@@ -28,7 +29,7 @@
+ 
+ // 新增工程
+ export function addProject(data: ProjectModel) {
+-  return request.post<ProjectRecord>('/project', data, {
++  return request.post<ProjectCreatedModel>('/project', data, {
+     feedback: { mode: 'auto', key: 'project.project.create' },
+   });
+ }

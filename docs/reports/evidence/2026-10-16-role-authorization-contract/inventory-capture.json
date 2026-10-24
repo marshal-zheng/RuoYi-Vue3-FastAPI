@@ -1,0 +1,34 @@
+{
+  "mode": "capture",
+  "ok": true,
+  "tables": {
+    "sys_user": {
+      "rows": 67,
+      "sha256": "aee9b3324b253cd3e48d4c3f2cd38f7dc1711d34f0f1be5c7d7f1dd16662cb54"
+    },
+    "sys_role": {
+      "rows": 36,
+      "sha256": "a5b13bf04d1b4d50d7109be334fbc162453be4c7cd7c6f1b9ecfda564a70eeda"
+    },
+    "sys_dept": {
+      "rows": 59,
+      "sha256": "495c7767db989d1acfdadd14bf76436ab96d12f76a26975e7477bab5e1d0ff5a"
+    },
+    "sys_user_role": {
+      "rows": 1,
+      "sha256": "2495a946ce450cb3317af17a1b9733d9685c3cb12a7f897aa9b795466927333d"
+    },
+    "sys_user_post": {
+      "rows": 1,
+      "sha256": "aafe66dae3d5533ef7883bd13c248358a0f1e746a0c7f350ae68f42b95cd6d4a"
+    },
+    "sys_role_menu": {
+      "rows": 87,
+      "sha256": "48dc6781533b9b05accb93121fe6224fedebaba9a79717558e51835be6f99bab"
+    },
+    "sys_role_dept": {
+      "rows": 3,
+      "sha256": "589f47bc5e61b941b147d2fe983f2dd22765637a42f0c0cb512afacff6f57b20"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "beforeOrigin": 1792392516995,
+  "state": {
+    "origin": 1792392516995,
+    "sameRouter": true,
+    "auth": true,
+    "matched": [
+      "/system/user-auth",
+      "AuthRole"
+    ],
+    "notFound": false
+  },
+  "errors": [],
+  "console": [
+    {
+      "time": 1792392518056,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392518056,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392525918,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392525918,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    }
+  ]
+}

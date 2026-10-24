@@ -1,0 +1,24 @@
+{
+  "exitCode": 0,
+  "files": 17,
+  "unchanged": true,
+  "hashes": {
+    "shared/openapi.json": "b594c22462cf10e5c233f7e3c2f0aa969cb0329ec0fee9e4c7741d100b77b85d",
+    "ruoyi-fastapi-frontend/src/api/_generated/client/client.gen.ts": "881b10263f6a6c6aa6eb15179d13238095391465362135586cd5a97a204d0a9c",
+    "ruoyi-fastapi-frontend/src/api/_generated/client/index.ts": "5dd429582164b102371a94e746d95b5bf9624ba9a123f5595c1a66036730823c",
+    "ruoyi-fastapi-frontend/src/api/_generated/client/types.gen.ts": "5a653b789d2f128a9c936d14fd864613088e6e42ff6069c0bac02097ceee7d33",
+    "ruoyi-fastapi-frontend/src/api/_generated/client/utils.gen.ts": "f12810e29f178dfa0fb93cff879bd0dd841151952b84595165c051dab6eb119f",
+    "ruoyi-fastapi-frontend/src/api/_generated/client.gen.ts": "e2d97f31402265e6b6bb2d621204907681b6d66e43fdc955399c6df3cd3d8321",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/auth.gen.ts": "3ea0839d5ef883c85064d41f644d1d76bf23657952c3afeb15a753f42d7376a2",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/bodySerializer.gen.ts": "a74163de6731f06f185948895cc4b5f8900e7d30ce76b9588717bad99ab165a7",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/params.gen.ts": "7a8f912a0d33133e21b5914a7e1905b07df8fe4dde6429a00485de026fee72ca",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/pathSerializer.gen.ts": "6ada56380fbc3ba1130c52afc03aa04c4dab5ec77936ad185992a310e0f49ed3",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/queryKeySerializer.gen.ts": "293a195d9a833f829ab172b024d68186d6a19e6b3636f14ae9b9d10858e7bfd0",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/serverSentEvents.gen.ts": "eaca8dd85d63a47ce07129d06e06c7f474eb943679b274539188b651b2398620",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/types.gen.ts": "2bfa0ff7c4a4c9694e36c55c1c11ffd839d7f1f5b04490733a5343b9245361a8",
+    "ruoyi-fastapi-frontend/src/api/_generated/core/utils.gen.ts": "6b89cd770d4a9e2e2dcfd1114b068101404aa5399fa22791470c0cc959bfd749",
+    "ruoyi-fastapi-frontend/src/api/_generated/index.ts": "5eab73efb7fe5b88dbd34330f87992345bf4dc22bdc433f41755aba97aa7e8a0",
+    "ruoyi-fastapi-frontend/src/api/_generated/sdk.gen.ts": "56a8c4bc136dad956183637b8819e4a2604e3c9251f79cae488e294bae5795a0",
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts": "3dd90a5956030cdced14e5d0d4371246795777399c0444b7d12d858f196bc151"
+  }
+}

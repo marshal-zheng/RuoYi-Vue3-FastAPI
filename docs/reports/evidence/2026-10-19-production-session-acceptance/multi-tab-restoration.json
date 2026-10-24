@@ -1,0 +1,110 @@
+{
+  "before": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "startNetwork": 5619,
+  "newTab": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "originalAfter": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 401,
+      "type": "xhr"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200,
+      "type": "xhr"
+    }
+  ]
+}

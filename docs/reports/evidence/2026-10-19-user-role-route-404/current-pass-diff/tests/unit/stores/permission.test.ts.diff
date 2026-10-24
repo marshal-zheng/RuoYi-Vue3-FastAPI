@@ -1,0 +1,10 @@
+--- tests/unit/stores/permission.test.ts (start)
++++ tests/unit/stores/permission.test.ts (end)
+@@ -47,6 +47,7 @@
+ }));
+ vi.mock('@/router', () => ({
+   default: mockRouter,
++  Layout: {},
+   constantRoutes: [
+     { path: '/login', name: 'Login', hidden: true },
+     { path: '/index', name: 'Index', hidden: false },

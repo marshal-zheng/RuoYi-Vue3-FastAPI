@@ -1,0 +1,46 @@
+{
+  "mutation": {
+    "deleted": 2,
+    "user": "146"
+  },
+  "networkStart": 348,
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 401,
+      "type": "xhr"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 401,
+      "type": "xhr"
+    }
+  ],
+  "promptCount": 1,
+  "promptBounds": {
+    "x": 592,
+    "y": 16,
+    "width": 256,
+    "height": 46
+  },
+  "loginPath": "/login?redirect=%2Fsystem%2Fuser",
+  "relogin": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  }
+}

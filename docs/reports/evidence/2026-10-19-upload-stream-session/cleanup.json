@@ -1,0 +1,48 @@
+{
+  "noticeDeleted": 11,
+  "usersDeleted": [
+    {
+      "userId": 126,
+      "userName": "zxqa_w_mvelcp2o"
+    },
+    {
+      "userId": 127,
+      "userName": "zxqa_v_mvelcp2o"
+    }
+  ],
+  "lastUser": {
+    "userId": 125,
+    "userName": "zxqa_u_mvelcp2o",
+    "deleteStatus": 204
+  },
+  "remainingOwnedUsers": 0,
+  "remainingOwnedNotices": 0,
+  "cleanupSessionLogout": 204,
+  "uploadedFilesDeleted": [
+    {
+      "fileName": "/profile/upload/2026/10/19/qa-upload_20261019024810A169.txt",
+      "sha256": "e126df15fceccbeba7383f27a5a10b0404d14f59f188baeba7864fcbbd8c5c7c"
+    },
+    {
+      "fileName": "/profile/upload/2026/10/19/qa-image_20261019024810A938.png",
+      "sha256": "2640059609118b695c139804676372eca75c30d30e5906775902d13e44f5356c"
+    },
+    {
+      "fileName": "/profile/upload/2026/10/19/qa-image_20261019025722A083.png",
+      "sha256": "e771ff6a90281f672016099e0b7ff48f8426ce0fffd717e9ea7413ee95cfe93f"
+    },
+    {
+      "fileName": "/profile/upload/2026/10/19/qa-upload_20261019030156A248.txt",
+      "sha256": "e126df15fceccbeba7383f27a5a10b0404d14f59f188baeba7864fcbbd8c5c7c"
+    },
+    {
+      "fileName": "/profile/upload/2026/10/19/qa-image_20261019030156A979.png",
+      "sha256": "e771ff6a90281f672016099e0b7ff48f8426ce0fffd717e9ea7413ee95cfe93f"
+    }
+  ],
+  "temporaryFixtureRemoved": true,
+  "sessions": {
+    "remainingKnownSessionKeys": 0,
+    "ownedCsrfDeleted": 2
+  }
+}

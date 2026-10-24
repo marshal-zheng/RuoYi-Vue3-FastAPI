@@ -1,0 +1,12 @@
+[
+  {
+    "path": "/monitor/cache/clearCacheName/zxqa_cache_mvet0wd2",
+    "ok": true,
+    "body": null
+  },
+  {
+    "path": "/monitor/cache/clearCacheKey/zxqa_exact_mvet0wd2:item",
+    "ok": true,
+    "body": null
+  }
+]

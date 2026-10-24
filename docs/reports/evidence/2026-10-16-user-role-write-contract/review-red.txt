@@ -1,0 +1,278 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 29 items / 21 deselected / 8 selected
+
+tests/unit/controllers/test_user_role_write_contract.py FFFFFFF.         [100%]
+
+=================================== FAILURES ===================================
+_ test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router0-/system/user-POST-payload0] _
+
+router = <fastapi.routing.APIRouter object at 0x122e78500>
+path = '/system/user', method = 'POST'
+payload = {'email': 'invalid', 'nickName': 'Alice', 'password': 'admin123', 'userName': 'alice'}
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'payload'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'nickName': 'Alice', 'password': 'admin123', 'email': 'invalid'}),
+        (userController, '/system/user', 'PUT', {'userId': 42, 'email': 'invalid'}),
+        (userController, '/system/user/profile', 'PUT', {'email': 'invalid'}),
+        (roleController, '/system/role', 'POST', {'roleName': ' ', 'roleKey': 'ops', 'roleSort': 1}),
+        (roleController, '/system/role', 'PUT', {'roleId': 42, 'roleName': ' '}),
+    ])
+    def test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper(router, path, method, payload):
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+method     = 'POST'
+path       = '/system/user'
+payload    = {'email': 'invalid', 'nickName': 'Alice', 'password': 'admin123', 'userName': 'alice'}
+router     = <fastapi.routing.APIRouter object at 0x122e78500>
+
+tests/unit/controllers/test_user_role_write_contract.py:208: Failed
+_ test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router1-/system/user-PUT-payload1] _
+
+router = <fastapi.routing.APIRouter object at 0x122e78500>
+path = '/system/user', method = 'PUT'
+payload = {'email': 'invalid', 'userId': 42}
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'payload'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'nickName': 'Alice', 'password': 'admin123', 'email': 'invalid'}),
+        (userController, '/system/user', 'PUT', {'userId': 42, 'email': 'invalid'}),
+        (userController, '/system/user/profile', 'PUT', {'email': 'invalid'}),
+        (roleController, '/system/role', 'POST', {'roleName': ' ', 'roleKey': 'ops', 'roleSort': 1}),
+        (roleController, '/system/role', 'PUT', {'roleId': 42, 'roleName': ' '}),
+    ])
+    def test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper(router, path, method, payload):
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+method     = 'PUT'
+path       = '/system/user'
+payload    = {'email': 'invalid', 'userId': 42}
+router     = <fastapi.routing.APIRouter object at 0x122e78500>
+
+tests/unit/controllers/test_user_role_write_contract.py:208: Failed
+_ test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router2-/system/user/profile-PUT-payload2] _
+
+router = <fastapi.routing.APIRouter object at 0x122e78500>
+path = '/system/user/profile', method = 'PUT', payload = {'email': 'invalid'}
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'payload'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'nickName': 'Alice', 'password': 'admin123', 'email': 'invalid'}),
+        (userController, '/system/user', 'PUT', {'userId': 42, 'email': 'invalid'}),
+        (userController, '/system/user/profile', 'PUT', {'email': 'invalid'}),
+        (roleController, '/system/role', 'POST', {'roleName': ' ', 'roleKey': 'ops', 'roleSort': 1}),
+        (roleController, '/system/role', 'PUT', {'roleId': 42, 'roleName': ' '}),
+    ])
+    def test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper(router, path, method, payload):
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+method     = 'PUT'
+path       = '/system/user/profile'
+payload    = {'email': 'invalid'}
+router     = <fastapi.routing.APIRouter object at 0x122e78500>
+
+tests/unit/controllers/test_user_role_write_contract.py:208: Failed
+_ test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router3-/system/role-POST-payload3] _
+
+router = <fastapi.routing.APIRouter object at 0x122da49b0>
+path = '/system/role', method = 'POST'
+payload = {'roleKey': 'ops', 'roleName': ' ', 'roleSort': 1}
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'payload'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'nickName': 'Alice', 'password': 'admin123', 'email': 'invalid'}),
+        (userController, '/system/user', 'PUT', {'userId': 42, 'email': 'invalid'}),
+        (userController, '/system/user/profile', 'PUT', {'email': 'invalid'}),
+        (roleController, '/system/role', 'POST', {'roleName': ' ', 'roleKey': 'ops', 'roleSort': 1}),
+        (roleController, '/system/role', 'PUT', {'roleId': 42, 'roleName': ' '}),
+    ])
+    def test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper(router, path, method, payload):
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+method     = 'POST'
+path       = '/system/role'
+payload    = {'roleKey': 'ops', 'roleName': ' ', 'roleSort': 1}
+router     = <fastapi.routing.APIRouter object at 0x122da49b0>
+
+tests/unit/controllers/test_user_role_write_contract.py:208: Failed
+_ test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router4-/system/role-PUT-payload4] _
+
+router = <fastapi.routing.APIRouter object at 0x122da49b0>
+path = '/system/role', method = 'PUT', payload = {'roleId': 42, 'roleName': ' '}
+
+    @pytest.mark.parametrize(('router', 'path', 'method', 'payload'), [
+        (userController, '/system/user', 'POST', {'userName': 'alice', 'nickName': 'Alice', 'password': 'admin123', 'email': 'invalid'}),
+        (userController, '/system/user', 'PUT', {'userId': 42, 'email': 'invalid'}),
+        (userController, '/system/user/profile', 'PUT', {'email': 'invalid'}),
+        (roleController, '/system/role', 'POST', {'roleName': ' ', 'roleKey': 'ops', 'roleSort': 1}),
+        (roleController, '/system/role', 'PUT', {'roleId': 42, 'roleName': ' '}),
+    ])
+    def test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper(router, path, method, payload):
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+method     = 'PUT'
+path       = '/system/role'
+payload    = {'roleId': 42, 'roleName': ' '}
+router     = <fastapi.routing.APIRouter object at 0x122da49b0>
+
+tests/unit/controllers/test_user_role_write_contract.py:208: Failed
+__ test_partial_user_edits_check_only_the_supplied_target_department[omitted] __
+
+dept = 'omitted'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('dept', ['omitted', 'null', 'outside'])
+    async def test_partial_user_edits_check_only_the_supplied_target_department(dept):
+        from exceptions.exception import PermissionException
+    
+        service = SimpleNamespace(
+            check_user_allowed_services=AsyncMock(), check_user_data_scope_services=AsyncMock(),
+            edit_user_services=AsyncMock(return_value=CrudResponseModel(is_success=True, message='更新成功')),
+        )
+        dept_service = SimpleNamespace(check_dept_data_scope_services=AsyncMock(side_effect=PermissionException(user_message='无部门权限')))
+        handler = EditUserCommandHandler(service, dept_service, AsyncMock())
+        payload = {'userId': 42, 'nickName': 'After'}
+        if dept != 'omitted':
+            payload['deptId'] = None if dept == 'null' else 999
+        command = EditUserCommand(query_db=object(), user=EditUserModel(**payload), enforce_scope_checks=True)
+        if dept == 'outside':
+            with pytest.raises(PermissionException):
+                await handler.handle(command)
+            dept_service.check_dept_data_scope_services.assert_awaited_once()
+            service.edit_user_services.assert_not_awaited()
+        else:
+>           await handler.handle(command)
+
+PermissionException = <class 'exceptions.exception.PermissionException'>
+command    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<object object at 0x1111ef020>, user=EditUserM...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+dept       = 'omitted'
+dept_service = namespace(check_dept_data_scope_services=<AsyncMock id='4882909904'>)
+handler    = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x1230b5010>
+payload    = {'nickName': 'After', 'userId': 42}
+service    = namespace(check_user_allowed_services=<AsyncMock id='4882907552'>, check_user_data_scope_services=<AsyncMock id='4882908560'>, edit_user_services=<AsyncMock id='4882909232'>)
+
+tests/unit/controllers/test_user_role_write_contract.py:233: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+modules/system/application/handlers/command/user_command_handlers.py:105: in handle
+    await self._dept_service.check_dept_data_scope_services(
+        edit_type  = ''
+        field      = 'id_card'
+        request    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<object object at 0x1111ef020>, user=EditUserM...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+        self       = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x1230b5010>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AsyncMock id='4882909904'>, args = (None, 'True'), kwargs = {}
+_call = call(None, 'True'), effect = PermissionException('无部门权限')
+
+    async def _execute_mock_call(self, /, *args, **kwargs):
+        # This is nearly just like super(), except for special handling
+        # of coroutines
+    
+        _call = _Call((args, kwargs), two=True)
+        self.await_count += 1
+        self.await_args = _call
+        self.await_args_list.append(_call)
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+>               raise effect
+E               exceptions.exception.PermissionException: 无部门权限
+
+_call      = call(None, 'True')
+args       = (None, 'True')
+effect     = PermissionException('无部门权限')
+kwargs     = {}
+self       = <AsyncMock id='4882909904'>
+
+/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py:2321: PermissionException
+___ test_partial_user_edits_check_only_the_supplied_target_department[null] ____
+
+dept = 'null'
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('dept', ['omitted', 'null', 'outside'])
+    async def test_partial_user_edits_check_only_the_supplied_target_department(dept):
+        from exceptions.exception import PermissionException
+    
+        service = SimpleNamespace(
+            check_user_allowed_services=AsyncMock(), check_user_data_scope_services=AsyncMock(),
+            edit_user_services=AsyncMock(return_value=CrudResponseModel(is_success=True, message='更新成功')),
+        )
+        dept_service = SimpleNamespace(check_dept_data_scope_services=AsyncMock(side_effect=PermissionException(user_message='无部门权限')))
+        handler = EditUserCommandHandler(service, dept_service, AsyncMock())
+        payload = {'userId': 42, 'nickName': 'After'}
+        if dept != 'omitted':
+            payload['deptId'] = None if dept == 'null' else 999
+        command = EditUserCommand(query_db=object(), user=EditUserModel(**payload), enforce_scope_checks=True)
+        if dept == 'outside':
+            with pytest.raises(PermissionException):
+                await handler.handle(command)
+            dept_service.check_dept_data_scope_services.assert_awaited_once()
+            service.edit_user_services.assert_not_awaited()
+        else:
+>           await handler.handle(command)
+
+PermissionException = <class 'exceptions.exception.PermissionException'>
+command    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<object object at 0x122da24d0>, user=EditUserM...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+dept       = 'null'
+dept_service = namespace(check_dept_data_scope_services=<AsyncMock id='4882915280'>)
+handler    = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x12301e490>
+payload    = {'deptId': None, 'nickName': 'After', 'userId': 42}
+service    = namespace(check_user_allowed_services=<AsyncMock id='4882912928'>, check_user_data_scope_services=<AsyncMock id='4882913936'>, edit_user_services=<AsyncMock id='4882914608'>)
+
+tests/unit/controllers/test_user_role_write_contract.py:233: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+modules/system/application/handlers/command/user_command_handlers.py:105: in handle
+    await self._dept_service.check_dept_data_scope_services(
+        edit_type  = ''
+        field      = 'id_card'
+        request    = EditUserCommand(operator=None, trace_id=None, request_id=None, query_db=<object object at 0x122da24d0>, user=EditUserM...ole=[]), enforce_scope_checks=True, user_data_scope_sql='True', dept_data_scope_sql='True', role_data_scope_sql='True')
+        self       = <modules.system.application.handlers.command.user_command_handlers.EditUserCommandHandler object at 0x12301e490>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AsyncMock id='4882915280'>, args = (None, 'True'), kwargs = {}
+_call = call(None, 'True'), effect = PermissionException('无部门权限')
+
+    async def _execute_mock_call(self, /, *args, **kwargs):
+        # This is nearly just like super(), except for special handling
+        # of coroutines
+    
+        _call = _Call((args, kwargs), two=True)
+        self.await_count += 1
+        self.await_args = _call
+        self.await_args_list.append(_call)
+    
+        effect = self.side_effect
+        if effect is not None:
+            if _is_exception(effect):
+>               raise effect
+E               exceptions.exception.PermissionException: 无部门权限
+
+_call      = call(None, 'True')
+args       = (None, 'True')
+effect     = PermissionException('无部门权限')
+kwargs     = {}
+self       = <AsyncMock id='4882915280'>
+
+/opt/homebrew/Cellar/python@3.13/3.13.12_1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/unittest/mock.py:2321: PermissionException
+=========================== short test summary info ============================
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router0-/system/user-POST-payload0]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router1-/system/user-PUT-payload1]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router2-/system/user/profile-PUT-payload2]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router3-/system/role-POST-payload3]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_existing_field_rules_fail_as_input_validation_before_the_audit_wrapper[router4-/system/role-PUT-payload4]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_partial_user_edits_check_only_the_supplied_target_department[omitted]
+FAILED tests/unit/controllers/test_user_role_write_contract.py::test_partial_user_edits_check_only_the_supplied_target_department[null]
+================== 7 failed, 1 passed, 21 deselected in 0.46s ==================

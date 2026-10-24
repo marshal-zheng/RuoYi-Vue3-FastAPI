@@ -1,0 +1,260 @@
+{
+  "ok": true,
+  "mode": "source",
+  "evidence": "Production five editor setup/open/confirm functions + API/HTTP/feedback + source ZXUI hooks, real Axios XHR/FastAPI/MySQL, loopback proxy only holds actual responses. Native forms/tree and visuals not rendered; no computer use.",
+  "results": [
+    {
+      "name": "config-real-switch-and-save-only-latest",
+      "ok": true,
+      "upstreamStatuses": [
+        200,
+        200
+      ],
+      "allOldXhrsCancelled": true,
+      "placeholderSaveBlocked": true,
+      "savedOnlyLatestId": 78,
+      "otherRecordUnchanged": true,
+      "selectionMatchedSaved": true,
+      "treePermissionsVerified": false
+    },
+    {
+      "name": "config-real-close-reopen-keeps-current-loading",
+      "ok": true,
+      "sameRecordReopened": true,
+      "oldFinallyDidNotClearLoading": true,
+      "noCancellationFeedback": true
+    },
+    {
+      "name": "config-real-edit-to-create",
+      "ok": true,
+      "newDraftSurvivesOldEdit": true,
+      "realCreationOptions": false,
+      "createDefaultsRetained": true
+    },
+    {
+      "name": "config-real-current-404-and-retry",
+      "ok": true,
+      "status": 404,
+      "originalCauseAndConfig": true,
+      "feedbackOnce": true,
+      "failedReadCannotSave": true,
+      "retrySameRecord": true
+    },
+    {
+      "name": "config-real-unmount-cancels-read",
+      "ok": true,
+      "xhrCancelled": true,
+      "cancelReasonRetained": true,
+      "noLateFeedback": true
+    },
+    {
+      "name": "dict-real-switch-and-save-only-latest",
+      "ok": true,
+      "upstreamStatuses": [
+        200,
+        200
+      ],
+      "allOldXhrsCancelled": true,
+      "placeholderSaveBlocked": true,
+      "savedOnlyLatestId": 119,
+      "otherRecordUnchanged": true,
+      "selectionMatchedSaved": true,
+      "treePermissionsVerified": false
+    },
+    {
+      "name": "dict-real-close-reopen-keeps-current-loading",
+      "ok": true,
+      "sameRecordReopened": true,
+      "oldFinallyDidNotClearLoading": true,
+      "noCancellationFeedback": true
+    },
+    {
+      "name": "dict-real-edit-to-create",
+      "ok": true,
+      "newDraftSurvivesOldEdit": true,
+      "realCreationOptions": false,
+      "createDefaultsRetained": true
+    },
+    {
+      "name": "dict-real-current-404-and-retry",
+      "ok": true,
+      "status": 404,
+      "originalCauseAndConfig": true,
+      "feedbackOnce": true,
+      "failedReadCannotSave": true,
+      "retrySameRecord": true
+    },
+    {
+      "name": "dict-real-unmount-cancels-read",
+      "ok": true,
+      "xhrCancelled": true,
+      "cancelReasonRetained": true,
+      "noLateFeedback": true
+    },
+    {
+      "name": "dept-real-switch-and-save-only-latest",
+      "ok": true,
+      "upstreamStatuses": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "allOldXhrsCancelled": true,
+      "placeholderSaveBlocked": true,
+      "savedOnlyLatestId": 119,
+      "otherRecordUnchanged": true,
+      "selectionMatchedSaved": true,
+      "treePermissionsVerified": false
+    },
+    {
+      "name": "dept-real-close-reopen-keeps-current-loading",
+      "ok": true,
+      "sameRecordReopened": true,
+      "oldFinallyDidNotClearLoading": true,
+      "noCancellationFeedback": true
+    },
+    {
+      "name": "dept-real-edit-to-create",
+      "ok": true,
+      "newDraftSurvivesOldEdit": true,
+      "realCreationOptions": true,
+      "createDefaultsRetained": true
+    },
+    {
+      "name": "dept-real-current-404-and-retry",
+      "ok": true,
+      "status": 404,
+      "originalCauseAndConfig": true,
+      "feedbackOnce": true,
+      "failedReadCannotSave": true,
+      "retrySameRecord": true
+    },
+    {
+      "name": "dept-real-unmount-cancels-read",
+      "ok": true,
+      "xhrCancelled": true,
+      "cancelReasonRetained": true,
+      "noLateFeedback": true
+    },
+    {
+      "name": "role-real-switch-and-save-only-latest",
+      "ok": true,
+      "upstreamStatuses": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "allOldXhrsCancelled": true,
+      "placeholderSaveBlocked": true,
+      "savedOnlyLatestId": 12,
+      "otherRecordUnchanged": true,
+      "selectionMatchedSaved": true,
+      "treePermissionsVerified": true
+    },
+    {
+      "name": "role-real-close-reopen-keeps-current-loading",
+      "ok": true,
+      "sameRecordReopened": true,
+      "oldFinallyDidNotClearLoading": true,
+      "noCancellationFeedback": true
+    },
+    {
+      "name": "role-real-edit-to-create",
+      "ok": true,
+      "newDraftSurvivesOldEdit": true,
+      "realCreationOptions": true,
+      "createDefaultsRetained": true
+    },
+    {
+      "name": "role-real-current-404-and-retry",
+      "ok": true,
+      "status": 404,
+      "originalCauseAndConfig": true,
+      "feedbackOnce": true,
+      "failedReadCannotSave": true,
+      "retrySameRecord": true
+    },
+    {
+      "name": "role-real-unmount-cancels-read",
+      "ok": true,
+      "xhrCancelled": true,
+      "cancelReasonRetained": true,
+      "noLateFeedback": true
+    },
+    {
+      "name": "scope-real-switch-and-save-only-latest",
+      "ok": true,
+      "upstreamStatuses": [
+        200,
+        200,
+        200,
+        200
+      ],
+      "allOldXhrsCancelled": true,
+      "placeholderSaveBlocked": true,
+      "savedOnlyLatestId": 12,
+      "otherRecordUnchanged": true,
+      "selectionMatchedSaved": true,
+      "treePermissionsVerified": true
+    },
+    {
+      "name": "scope-real-close-reopen-keeps-current-loading",
+      "ok": true,
+      "sameRecordReopened": true,
+      "oldFinallyDidNotClearLoading": true,
+      "noCancellationFeedback": true
+    },
+    {
+      "name": "scope-real-current-404-and-retry",
+      "ok": true,
+      "status": 404,
+      "originalCauseAndConfig": true,
+      "feedbackOnce": true,
+      "failedReadCannotSave": true,
+      "retrySameRecord": true
+    },
+    {
+      "name": "scope-real-unmount-cancels-read",
+      "ok": true,
+      "xhrCancelled": true,
+      "cancelReasonRetained": true,
+      "noLateFeedback": true
+    },
+    {
+      "name": "real-parent-event-endpoints-own-already-presented-read-rejections",
+      "ok": true,
+      "productionHandlers": 4,
+      "real404Consumed": true,
+      "noDuplicateFeedback": true,
+      "normalReopen": true
+    },
+    {
+      "name": "real-current-401-retains-relogin-action-and-retry",
+      "ok": true,
+      "status": 401,
+      "reloginActionOnce": true,
+      "originalSilentConfigRetained": true,
+      "validSessionRetry": true
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "temporaryRowsDeleted": {
+        "config": 2,
+        "dict": 2,
+        "dept": 2,
+        "role": 2
+      },
+      "originalCounts": {
+        "config": 7,
+        "dict": 21,
+        "dept": 10,
+        "role": 2
+      },
+      "originalDetailsAndTotalsUnchanged": true
+    }
+  ],
+  "unhandledRejections": 0
+}

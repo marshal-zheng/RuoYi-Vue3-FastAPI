@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <meta name="ProgId" content="Word.Document">
+  <meta name="Generator" content="Microsoft Word 15">
+  <meta name="Originator" content="Microsoft Word 15">
+  <title>Document</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:DoNotOptimizeForBrowser/>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    @page {
+      size: 11906twip 16838twip;
+      margin: 2.54cm 3.18cm 2.54cm 3.18cm;
+      mso-header-margin: 1.5cm;
+      mso-footer-margin: 1.75cm;
+      mso-paper-source: 0;
+    }
+    
+    body {
+      font-family: "宋体", SimSun, serif;
+      font-size: 12pt;
+      line-height: 1.5;
+    }
+    
+    h1 {
+      font-family: "黑体", SimHei, sans-serif;
+      font-size: 16pt;
+      font-weight: bold;
+      margin-top: 12pt;
+      margin-bottom: 6pt;
+    }
+    
+    h2 {
+      font-family: "黑体", SimHei, sans-serif;
+      font-size: 14pt;
+      font-weight: bold;
+      margin-top: 12pt;
+      margin-bottom: 6pt;
+    }
+    
+    p {
+      margin-top: 0;
+      margin-bottom: 6pt;
+    }
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid black;
+      padding: 5pt;
+    }
+    
+    img {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+<h2 style="text-align: center;"><span style="font-family: 黑体;">接口控制文件示列</span></h2><p><br></p><h1><span style="font-family: 黑体;">1 范围</span></h1><p style="text-indent: 28pt;"><span style="font-family: 宋体;">……</span></p><h1><span style="font-family: 黑体;">2 引用文件</span></h1><p style="text-indent: 28pt;"><span style="font-family: 宋体;">……</span></p><h1><span style="font-family: 黑体;">3 术语定义</span></h1><p style="text-align: justify;"><span style="font-family: 宋体;">……</span></p><p style="text-align: justify;"><br></p><h1><span style="font-family: 黑体;">4 信息交联关系</span></h1><p style="text-align: justify;"><span style="font-size: 16px; font-family: 宋体;"> &nbsp; &nbsp; &nbsp; &nbsp;信息交联关系见</span><span style="font-size: 16px;">图1</span><span style="font-size: 16px; font-family: 宋体;">。</span></p><p style="text-align: justify;"><br></p><p style="text-align: center;"><span style="font-size: 16px; font-family: 宋体;"><div style="width:100%;display:flex;align-items:center;justify-content:center;margin:4pt auto;"><img src="data:image/png;base64,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" style="display:block;max-width:9cm;max-height:12cm;object-fit:contain;height:auto;border:1pt solid #e6e6e6;padding:4pt;box-sizing:border-box;background:#fafafa;transform:rotate(90deg);transform-origin:center center;" alt="信息交联关系图" /></div></span></p><p style="text-align: center;"><span style="font-size: 16px; font-family: 宋体;">图 1 &nbsp;信息交换关系</span></p><p style="text-align: left;"><br></p><p style="text-align: left;"><span style="font-size: 16px; font-family: 宋体;"> &nbsp; &nbsp; &nbsp; &nbsp;</span></p><p><span style="font-size: 16px; font-family: 宋体;"> &nbsp; &nbsp;系统</span><span style="font-size: 16px;">各部件</span><span style="font-size: 16px; font-family: 宋体;">的</span><span style="font-size: 16px;">通信速率和通信周期</span><span style="font-size: 16px; font-family: 宋体;">见</span><span style="font-size: 16px;">表</span><span style="font-size: 16px; font-family: 宋体;">1所示</span><span style="font-size: 16px;">。</span></p><p><br></p><p style="text-align: center;"><span style="font-family: 宋体;">表</span>1<span style="font-family: 宋体;"> 部件通信速率及通信周期</span></p><p style="text-align: center;"><span style="font-family: 宋体;"><p style="text-align: center;">（暂无通信数据）</p></span></p><p style="text-align: left;"><br></p><h1><span style="font-family: 黑体;">5 通信</span><span style="font-family: 宋体;">要求</span></h1><h2><span style="font-family: 黑体;"> &nbsp; &nbsp;5.1 主要</span><span style="font-family: Arial;">数据类型</span><span style="font-family: 黑体;">说明</span></h2><p> &nbsp; &nbsp; &nbsp;<span style="font-family: 宋体;">……</span></p><h2><span style="font-family: 黑体;"> &nbsp; 5.2 </span><span style="font-family: 宋体;">信息帧格式要求</span></h2><p> &nbsp; &nbsp; &nbsp;<span style="font-family: 宋体;">……</span></p><h2><span style="font-family: 黑体;"> &nbsp; 5.3 RS</span><span style="font-family: Arial;">422</span><span style="font-family: 黑体;">要求</span></h2><p> &nbsp; &nbsp; &nbsp;<span style="font-family: 宋体;">……</span></p><h2><span style="font-family: 黑体;"> &nbsp; 5.4 </span><span style="font-family: 宋体;">以太网要求</span></h2><p> &nbsp; &nbsp; &nbsp;<span style="font-family: 宋体;">……</span></p><h2><span style="font-family: 黑体;"> &nbsp; 5.5 </span><span style="font-family: 宋体;">帧类别与对应端口号</span></h2><p> &nbsp; &nbsp; &nbsp;<span style="font-family: 宋体;">……</span></p><h2><span style="font-family: 黑体;"> &nbsp; 5.6 节点号</span><span style="font-family: Arial;">定义</span></h2><p><span style="font-family: 宋体;"> &nbsp; &nbsp; &nbsp;……</span></p><h2><span style="font-family: 黑体;"> &nbsp; 5.7 异常情况处理</span></h2><p> &nbsp; &nbsp; <span style="font-family: 宋体;">……</span></p><p><br></p><p><br></p><h2 style="text-align: center;"><span style="font-family: 黑体;">附录</span></h2><p style="text-align: center;">暂无协议数据</p><p><br></p>
+</body>
+</html>

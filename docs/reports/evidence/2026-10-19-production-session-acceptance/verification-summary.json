@@ -1,0 +1,50 @@
+{
+  "productionRouteStates": 9,
+  "finalRouteStates": 9,
+  "visualStatesReviewed": 18,
+  "httpSessionTests": 88,
+  "routePageTests": 68,
+  "sharedTests": 7,
+  "backendSessionTests": 18,
+  "newRegressionsRedThenGreen": 3,
+  "typecheck": "passed",
+  "scopedEslint": "passed",
+  "productionBuild": "passed",
+  "broadFrontendStandards": "blocked by existing excluded simulation changes",
+  "naturalExpiry": {
+    "sameUser": true,
+    "sameSession": true,
+    "newExpiry": true
+  },
+  "cleanup": {
+    "counts": {
+      "active_users": 0,
+      "user_roles": 0,
+      "user_posts": 0,
+      "active_roles": 0,
+      "role_menus": 0,
+      "role_depts": 0,
+      "menus": 0,
+      "device_categories": 0,
+      "accidental_devices": 0,
+      "own_session_metadata": 0,
+      "own_access_tokens": 0,
+      "own_active_pointers": 0,
+      "own_csrf": 0
+    },
+    "all_zero": true
+  },
+  "preservation": true,
+  "runtime": {
+    "requests": 1105,
+    "assetFailures": [],
+    "serverErrors": [],
+    "pageErrors": []
+  },
+  "services": {
+    "frontend80": 200,
+    "backendDocs8088": 200,
+    "temporaryContainerRemoved": true,
+    "ownTemporaryBuildsRemoved": true
+  }
+}

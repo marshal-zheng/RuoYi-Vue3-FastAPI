@@ -1,0 +1,394 @@
+[
+  {
+    "name": "AuthRole",
+    "url": "/system/user-auth/role/145",
+    "entry": {
+      "path": "/system/user-auth/role/145",
+      "name": "AuthRole",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/system/user-auth/role/145",
+      "name": "AuthRole",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "AuthUser",
+    "url": "/system/role-auth/user/98",
+    "entry": {
+      "path": "/system/role-auth/user/98",
+      "name": "AuthUser",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/system/role-auth/user/98",
+      "name": "AuthUser",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "Data",
+    "url": "/system/dict-data/index/1",
+    "entry": {
+      "path": "/system/dict-data/index/1",
+      "name": "Data",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/system/dict-data/index/1",
+      "name": "Data",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "JobLog",
+    "url": "/monitor/job-log/index/0",
+    "entry": {
+      "path": "/monitor/job-log/index/0",
+      "name": "JobLog",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/monitor/job-log/index/0",
+      "name": "JobLog",
+      "userId": 145,
+      "nickName": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "permissionCount": 94,
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "GenEdit",
+    "entry": {
+      "path": "/tool/gen-edit/index/1?page=1",
+      "name": "GenEdit",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/tool/gen-edit/index/1?page=1",
+      "name": "GenEdit",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "ProjectDetail",
+    "entry": {
+      "path": "/project/project-detail/index/1",
+      "name": "ProjectDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/project/project-detail/index/1",
+      "name": "ProjectDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "ProjectDetail",
+    "entry": {
+      "path": "/project/project-detail/index/1",
+      "name": "ProjectDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/project/project-detail/index/1",
+      "name": "ProjectDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "ProjectTopo",
+    "entry": {
+      "path": "/project/topo/index/1?versionId=1",
+      "name": "ProjectTopo",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/project/topo/index/1?versionId=1",
+      "name": "ProjectTopo",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "DeviceDetail",
+    "entry": {
+      "path": "/device/detail/index/1",
+      "name": "DeviceDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/device/detail/index/1",
+      "name": "DeviceDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  },
+  {
+    "name": "DeviceDraft",
+    "entry": {
+      "path": "/device/detail/index",
+      "name": "DeviceDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "refresh": {
+      "path": "/device/detail/index",
+      "name": "DeviceDetail",
+      "id": 145,
+      "nick": "生产验收 A",
+      "roles": [
+        "pqa1019_mveycco0"
+      ],
+      "hasDict": true,
+      "hasData": true,
+      "devSync": false,
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    "documentStatus": 200
+  }
+]

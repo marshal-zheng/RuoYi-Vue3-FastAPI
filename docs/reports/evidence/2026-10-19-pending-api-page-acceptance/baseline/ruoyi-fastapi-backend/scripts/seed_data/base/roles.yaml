@@ -1,0 +1,25 @@
+# 角色数据
+# Role data
+
+roles:
+  - role_id: 1
+    role_name: 超级管理员
+    role_key: admin
+    role_sort: 1
+    data_scope: "1"
+    menu_check_strictly: 1
+    dept_check_strictly: 1
+    status: "0"
+    del_flag: "0"
+    remark: 超级管理员
+
+  - role_id: 2
+    role_name: 普通角色
+    role_key: common
+    role_sort: 2
+    data_scope: "2"
+    menu_check_strictly: 1
+    dept_check_strictly: 1
+    status: "0"
+    del_flag: "0"
+    remark: 普通角色

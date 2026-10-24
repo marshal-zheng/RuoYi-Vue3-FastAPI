@@ -1,0 +1,9 @@
+<template>
+  <ZxContentWrap fill>
+    <ProjectList />
+  </ZxContentWrap>
+</template>
+
+<script setup name="Project">
+import ProjectList from './components/ProjectList.vue';
+</script>

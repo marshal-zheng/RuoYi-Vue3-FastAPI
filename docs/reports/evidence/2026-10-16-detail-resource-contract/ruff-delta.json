@@ -1,0 +1,133 @@
+{
+  "baselineDiagnostics": 571,
+  "currentDiagnostics": 550,
+  "added": [],
+  "removed": [
+    {
+      "file": "ruoyi-fastapi-backend/modules/project/application/services/project_version_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = CamelCaseUtil.transform_result(version) if version else CamelCaseUtil.transform_result({})` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/scheduler/application/job_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = JobModel(**CamelCaseUtil.transform_result(job)) if job else JobModel(**dict())` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/scheduler/application/job_service.py",
+      "code": "C408",
+      "message": "Unnecessary `dict()` call (rewrite as a literal)",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/handlers/query/dept_query_handlers.py",
+      "code": "I001",
+      "message": "Import block is un-sorted or un-formatted",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/handlers/query/dict_query_handlers.py",
+      "code": "I001",
+      "message": "Import block is un-sorted or un-formatted",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/handlers/query/role_query_handlers.py",
+      "code": "I001",
+      "message": "Import block is un-sorted or un-formatted",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/config_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = ConfigModel(**CamelCaseUtil.transform_result(config)) if config else ConfigModel(**dict())` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/config_service.py",
+      "code": "C408",
+      "message": "Unnecessary `dict()` call (rewrite as a literal)",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/dept_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = DeptModel(**CamelCaseUtil.transform_result(dept)) if dept else DeptModel(**dict())` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/dept_service.py",
+      "code": "C408",
+      "message": "Unnecessary `dict()` call (rewrite as a literal)",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = DictDataModel(**CamelCaseUtil.transform_result(dict_data)) if dict_data else DictDataModel(**dict())` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py",
+      "code": "C408",
+      "message": "Unnecessary `dict()` call (rewrite as a literal)",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/dict_type_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = DictTypeModel(**CamelCaseUtil.transform_result(dict_type)) if dict_type else DictTypeModel(**dict())` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/dict_type_service.py",
+      "code": "C408",
+      "message": "Unnecessary `dict()` call (rewrite as a literal)",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/menu_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = MenuModel(**CamelCaseUtil.transform_result(menu)) if menu else MenuModel(**{})` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/notice_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = NoticeModel(**CamelCaseUtil.transform_result(notice)) if notice else NoticeModel(**{})` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/post_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = PostModel(**CamelCaseUtil.transform_result(post)) if post else PostModel(**{})` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/role_service.py",
+      "code": "SIM108",
+      "message": "Use ternary operator `result = RoleModel(**CamelCaseUtil.transform_result(role)) if role else RoleModel(**{})` instead of `if`-`else`-block",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/tests/unit/services/test_config_service.py",
+      "code": "W293",
+      "message": "Blank line contains whitespace",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/tests/unit/services/test_dept_service.py",
+      "code": "F401",
+      "message": "`exceptions.exception.ResourceNotFoundException` imported but unused",
+      "count": 1
+    },
+    {
+      "file": "ruoyi-fastapi-backend/tests/unit/services/test_dept_service.py",
+      "code": "W293",
+      "message": "Blank line contains whitespace",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,389 @@
+{
+  "ok": true,
+  "mode": "source",
+  "checks": 52,
+  "unhandledRejections": 0,
+  "evidence": "Production API/HTTP and seven editor setup/open/confirm paths with source ZXUI hooks, real Axios XHR/FastAPI/MySQL. Invalid 200 cases corrupt only the ID of real responses. Native forms/tree/visuals not rendered; no computer use.",
+  "results": [
+    {
+      "name": "config-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "dict-type-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "dict-data-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "dept-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "role-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "menu-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "post-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "notice-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "project-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "system-project-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "version-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "protocol-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "job-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "generator-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "device-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "category-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "user-real-missing-detail-problem",
+      "ok": true,
+      "status": 404,
+      "problemDetails": true,
+      "originalCauseAndConfig": true
+    },
+    {
+      "name": "real-user-creation-options-and-empty-collections",
+      "ok": true,
+      "creationOptionsWithoutUser": true,
+      "emptyPage": true,
+      "emptyDictionary": true
+    },
+    {
+      "name": "role-real-old-empty-detail-cache-recovers",
+      "ok": true,
+      "invalidOwnedCacheReplaced": true,
+      "realDatabaseIdentity": 14
+    },
+    {
+      "name": "dept-real-old-empty-detail-cache-recovers",
+      "ok": true,
+      "invalidOwnedCacheReplaced": true,
+      "realDatabaseIdentity": 121
+    },
+    {
+      "name": "config-real-200-identity-missing",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "config-real-200-identity-foreign",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "config-real-normal-read-recovers",
+      "ok": true,
+      "requestedIdentityRetained": true,
+      "failedReadRecoverable": true
+    },
+    {
+      "name": "dict-real-200-identity-missing",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "dict-real-200-identity-foreign",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "dict-real-normal-read-recovers",
+      "ok": true,
+      "requestedIdentityRetained": true,
+      "failedReadRecoverable": true
+    },
+    {
+      "name": "dept-real-200-identity-missing",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "dept-real-200-identity-foreign",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "dept-real-normal-read-recovers",
+      "ok": true,
+      "requestedIdentityRetained": true,
+      "failedReadRecoverable": true
+    },
+    {
+      "name": "role-real-200-identity-missing",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "role-real-200-identity-foreign",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "role-real-normal-read-recovers",
+      "ok": true,
+      "requestedIdentityRetained": true,
+      "failedReadRecoverable": true
+    },
+    {
+      "name": "scope-real-200-identity-missing",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "scope-real-200-identity-foreign",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "scope-real-normal-read-recovers",
+      "ok": true,
+      "requestedIdentityRetained": true,
+      "failedReadRecoverable": true
+    },
+    {
+      "name": "user-real-200-identity-missing",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "user-real-200-identity-foreign",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "user-real-normal-read-recovers",
+      "ok": true,
+      "requestedIdentityRetained": true,
+      "failedReadRecoverable": true
+    },
+    {
+      "name": "protocol-real-200-identity-missing",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "protocol-real-200-identity-foreign",
+      "ok": true,
+      "realResponseIdentityCorruptedForFaultInjection": true,
+      "localIdentityError": true,
+      "feedbackOnce": true,
+      "writeBlocked": true
+    },
+    {
+      "name": "protocol-real-normal-read-recovers",
+      "ok": true,
+      "requestedIdentityRetained": true,
+      "failedReadRecoverable": true
+    },
+    {
+      "name": "config-real-edit-stays-put-and-reads-back-same-id",
+      "ok": true,
+      "method": "PUT",
+      "sameIdSaved": true,
+      "realDatabaseValue": "after"
+    },
+    {
+      "name": "real-missing-detail-preserves-delete-batch-rollback",
+      "ok": true,
+      "status": 404,
+      "firstRecordStillExists": true,
+      "transactionRolledBack": true
+    },
+    {
+      "name": "config-real-404-edit-cannot-become-create",
+      "ok": true,
+      "status": 404,
+      "editSaveBlocked": true,
+      "noPostOrPut": true,
+      "feedbackOnce": true
+    },
+    {
+      "name": "dict-real-404-edit-cannot-become-create",
+      "ok": true,
+      "status": 404,
+      "editSaveBlocked": true,
+      "noPostOrPut": true,
+      "feedbackOnce": true
+    },
+    {
+      "name": "dept-real-404-edit-cannot-become-create",
+      "ok": true,
+      "status": 404,
+      "editSaveBlocked": true,
+      "noPostOrPut": true,
+      "feedbackOnce": true
+    },
+    {
+      "name": "role-real-404-edit-cannot-become-create",
+      "ok": true,
+      "status": 404,
+      "editSaveBlocked": true,
+      "noPostOrPut": true,
+      "feedbackOnce": true
+    },
+    {
+      "name": "scope-real-404-edit-cannot-become-create",
+      "ok": true,
+      "status": 404,
+      "editSaveBlocked": true,
+      "noPostOrPut": true,
+      "feedbackOnce": true
+    },
+    {
+      "name": "user-real-404-edit-cannot-become-create",
+      "ok": true,
+      "status": 404,
+      "editSaveBlocked": true,
+      "noPostOrPut": true,
+      "feedbackOnce": true
+    },
+    {
+      "name": "protocol-real-404-edit-cannot-become-create",
+      "ok": true,
+      "status": 404,
+      "editSaveBlocked": true,
+      "noPostOrPut": true,
+      "feedbackOnce": true
+    },
+    {
+      "name": "real-deliberate-creation-after-failed-edit-remains-available",
+      "ok": true,
+      "creationEditors": 6,
+      "deptParentRetained": true,
+      "userOptionsRetained": true
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "originalListsAndTotalsExact": true,
+      "originalCounts": {
+        "config": 7,
+        "dict": 21,
+        "dept": 10,
+        "role": 2
+      }
+    }
+  ]
+}

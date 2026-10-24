@@ -1,0 +1,36 @@
+{
+  "operatorDelete": 204,
+  "users": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "pageSize": 10
+    }
+  },
+  "roles": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "pageSize": 10
+    }
+  },
+  "protocols": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "pageSize": 10
+    }
+  },
+  "online": {
+    "status": 200,
+    "body": {
+      "items": []
+    }
+  }
+}

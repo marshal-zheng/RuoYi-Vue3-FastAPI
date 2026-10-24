@@ -1,0 +1,66 @@
+{
+  "library": {
+    "tests": 102,
+    "files": 8,
+    "command": "pnpm exec vitest run packages/http/__tests__ --maxWorkers=1 --minWorkers=1",
+    "exitCode": 0,
+    "packageBuild": 0,
+    "lint": 0,
+    "testTypeCheck": 0
+  },
+  "business": {
+    "tests": 53,
+    "files": 5,
+    "command": "yarn test:run src/utils/http.test.ts src/utils/feedback/presenter.test.ts src/utils/feedback/registry.test.ts src/utils/request.download.test.ts src/utils/operation.test.ts",
+    "exitCode": 0,
+    "lintCheck": 0,
+    "typeCheck": 0,
+    "targetedLint": 0,
+    "formatCheck": 0
+  },
+  "builds": {
+    "source": {
+      "exitCode": 0,
+      "seconds": 25.3
+    },
+    "installed": {
+      "exitCode": 0,
+      "seconds": 24.35
+    }
+  },
+  "regressions": {
+    "libraryOriginalBehavior": "9 failed before implementation",
+    "businessOriginalBehavior": "4 failed and 3 unhandled rejections before implementation",
+    "downloadOriginalBehavior": "unhandled feedback rejection before implementation",
+    "staleCloseOriginalBehavior": "exit 1; unhandled rejection with plain callback and await removed",
+    "fixedBehavior": "all targeted tests pass; no unhandled errors"
+  },
+  "actual": {
+    "source": 10,
+    "installed": 10,
+    "adapterFaultInjectionOnly": true,
+    "nativeUiNotRendered": true,
+    "browserAutomationUsed": false,
+    "excelRowsPerExport": 4,
+    "unhandledRejections": 0
+  },
+  "cleanup": {
+    "actualConfigCount": 7,
+    "remainingObserverProbeConfigs": 0,
+    "existingConfigItemsUnchanged": true,
+    "ownBackendPid": 55063,
+    "ownBackendStopped": true,
+    "port8088ListenerAfterCleanup": false
+  },
+  "knownGateFailure": {
+    "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+    "exitCode": 1,
+    "file": "ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue",
+    "reason": "preexisting console usage; file unchanged this round"
+  },
+  "outOfScopeObservation": {
+    "backendCountCache": "after deleting four temporary configs, list items restored to seven while cached total remained eleven; direct MySQL count confirms seven and no probe records",
+    "changed": false
+  },
+  "noCommitOrNpmPublish": true
+}

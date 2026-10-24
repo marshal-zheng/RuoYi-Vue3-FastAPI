@@ -1,0 +1,245 @@
+<template>
+  <ZxContentWrap fill>
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadLogininforData"
+      :show-pagination="true"
+      :load-on-mounted="true"
+      fill
+    >
+      <template #form="{ query, refresh: handleRefresh, updateState }">
+        <DictStatus :types="['sys_common_status']" />
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
+            <ZxButton
+              type="danger"
+              icon="Delete"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['monitor:logininfor:remove']"
+              :loading="handleDeletePending"
+              >删除</ZxButton
+            >
+            <ZxButton
+              type="danger"
+              icon="Delete"
+              @click="handleClean"
+              v-hasPermi="['monitor:logininfor:remove']"
+              :loading="handleCleanPending"
+              >清空</ZxButton
+            >
+            <ZxButton
+              type="primary"
+              icon="Unlock"
+              :disabled="single"
+              @click="handleUnlock"
+              v-hasPermi="['monitor:logininfor:unlock']"
+              :loading="handleUnlockPending"
+              >解锁</ZxButton
+            >
+            <ZxButton
+              type="warning"
+              icon="Download"
+              @click="() => handleExport(query)"
+              v-hasPermi="['monitor:logininfor:export']"
+              >导出</ZxButton
+            >
+          </template>
+          <template #filters>
+            <zx-input
+              v-model="query.ipaddr"
+              placeholder="请输入登录地址"
+              clearable
+              style="width: 240px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+            <zx-input
+              v-model="query.userName"
+              placeholder="请输入用户名称"
+              clearable
+              style="width: 240px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+            <DictSelect
+              dict-type="sys_common_status"
+              v-model="query.status"
+              placeholder="登录状态"
+              clearable
+              style="width: 240px"
+              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
+            />
+            <el-date-picker
+              v-model="query.dateRange"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
+              style="width: 308px"
+              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+            />
+          </template>
+        </ZxListToolbar>
+      </template>
+
+      <template #table="{ grid, refresh: handleRefresh, updateState }">
+        <el-table
+          ref="logininforRef"
+          v-loading="grid.loading"
+          :data="grid.list || []"
+          @selection-change="handleSelectionChange"
+          :default-sort="defaultSort"
+          @sort-change="(c) => onSortChange(c, { updateState, handleRefresh })"
+        >
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="访问编号" align="center" prop="infoId" />
+          <el-table-column
+            label="用户名称"
+            align="center"
+            prop="userName"
+            :show-overflow-tooltip="true"
+            sortable="custom"
+            :sort-orders="['descending', 'ascending']"
+          />
+          <el-table-column
+            label="地址"
+            align="center"
+            prop="ipaddr"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            label="登录地点"
+            align="center"
+            prop="loginLocation"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            label="操作系统"
+            align="center"
+            prop="os"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            label="浏览器"
+            align="center"
+            prop="browser"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column label="登录状态" align="center" prop="status">
+            <template #default="scope">
+              <dict-tag :options="sys_common_status" :value="scope.row.status" />
+            </template>
+          </el-table-column>
+          <el-table-column label="描述" align="center" prop="msg" :show-overflow-tooltip="true" />
+          <el-table-column
+            label="访问时间"
+            align="center"
+            prop="loginTime"
+            sortable="custom"
+            :sort-orders="['descending', 'ascending']"
+            width="180"
+          >
+            <template #default="scope">
+              <span>{{ parseTime(scope.row.loginTime) }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </ZxGridList>
+  </ZxContentWrap>
+</template>
+
+<script setup name="Logininfor">
+import { useOperation } from '@/utils/operation';
+import { list, delLogininfor, cleanLogininfor, unlockLogininfor } from '@/api/monitor/logininfor';
+
+const { proxy } = getCurrentInstance();
+const { sys_common_status } = proxy.useDict('sys_common_status');
+
+const ids = ref([]);
+const single = ref(true);
+const multiple = ref(true);
+const selectName = ref('');
+const defaultSort = ref({ prop: 'loginTime', order: 'descending' });
+const gridListRef = ref(null);
+
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+
+/** GridList 数据加载函数 - 不处理参数转换 */
+async function loadLogininforData(params) {
+  try {
+    return await list(params);
+  } catch {
+    return { data: [], total: 0 };
+  }
+}
+function onFilterChange(field, value, { handleRefresh, updateState }) {
+  updateState(`query.${field}`, value);
+  handleRefresh();
+}
+function onSearch({ handleRefresh }) {
+  handleRefresh();
+}
+function onSortChange(c, { updateState, handleRefresh }) {
+  updateState('query.orderByColumn', c.prop);
+  updateState('query.isAsc', c.order);
+  handleRefresh();
+}
+/** 多选框选中数据 */
+function handleSelectionChange(selection) {
+  ids.value = selection.map((item) => item.infoId);
+  multiple.value = !selection.length;
+  single.value = selection.length != 1;
+  selectName.value = selection.map((item) => item.userName);
+}
+/** 删除按钮操作 */
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
+  const infoIds = row.infoId || ids.value;
+  await proxy.$modal
+    .confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?')
+    .then(function () {
+      return delLogininfor(infoIds);
+    })
+    .then(() => {
+      gridListRef.value?.refresh();
+    })
+    .catch(() => {});
+});
+/** 清空按钮操作 */
+const { run: handleClean, pending: handleCleanPending } = useOperation(async () => {
+  await proxy.$modal
+    .confirm('是否确认清空所有登录日志数据项?')
+    .then(function () {
+      return cleanLogininfor();
+    })
+    .then(() => {
+      gridListRef.value?.refresh();
+    })
+    .catch(() => {});
+});
+/** 解锁按钮操作 */
+const { run: handleUnlock, pending: handleUnlockPending } = useOperation(async () => {
+  const username = selectName.value;
+  await proxy.$modal
+    .confirm('是否确认解锁用户"' + username + '"数据项?')
+    .then(function () {
+      return unlockLogininfor(username);
+    })
+    .then(() => {})
+    .catch(() => {});
+});
+function handleExport(query) {
+  const params = proxy.addDateRange(
+    {
+      ipaddr: query?.ipaddr,
+      userName: query?.userName,
+      status: query?.status,
+      orderByColumn: query?.orderByColumn,
+      isAsc: query?.isAsc,
+    },
+    query?.dateRange || []
+  );
+  proxy.download('monitor/logininfor/export', params, `logininfor_${new Date().getTime()}.xlsx`);
+}
+</script>

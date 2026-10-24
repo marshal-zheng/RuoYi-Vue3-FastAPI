@@ -1,0 +1,16 @@
+{
+  "vitest.config.ts": "efe2d06366ec4819c7ca55346258faff18e4d602f46d8073b6ef8aed1c7e3ea3",
+  "src/permission.ts": "69f6feb41c88488320425e998e7d839cfafe4b0d1c9892e855b76181dc916514",
+  "src/plugins/dev-menu-hot-sync.test.ts": "cc48037c88ead35ea7b1981605613a58be13e7c1978fcce1e179866fd8ae373d",
+  "src/plugins/dev-menu-hot-sync.ts": "df9725acb6683a3b7155d635ace21d65e3ff5ed926d4878a4292749bd2e6d796",
+  "src/router/index.js": "7111d04768b201663010341e084d67eb2b3a4fd2af491cd6f6137eac3fa524c2",
+  "src/store/modules/permission.ts": "f52b9aa460e2e4cf59d0c2b4c480ad6e287255654cf5c499ceb4873d347a30a7",
+  "src/store/modules/user.login.test.ts": "e94703e216e97e4a9ed990aa41d3e70da94d5df886f8e236bd04012a07dbc851",
+  "src/store/modules/user.ts": "b2ad6906750c8a0c195531e716e8aa724a5b25f56eca9f8193f30907e5facfe7",
+  "src/views/tool/gen/editTable.vue": "6109dd1cb21c1344c3882c92236973f8629ee8b33315a751548cd2fceb410c86",
+  "src/views/system/dict/data.vue": "c54df9458248c206689477dc7fec2816ed1934b81f0cfc19276edb1c48f5a1da",
+  "src/views/system/user/profile/userAvatar.vue": "db36403521f936ce2d7a1d1909f50f6c480bd3e0f69c43657fca33208beff576",
+  "src/views/project/components/VersionList.vue": "2a7d794d171f2b282e9434447a79a72e2fb150ef61ebef02198e3e38a953dcb4",
+  "tests/unit/stores/permission.test.ts": "d5f97d6123f7c5e7160171a447147c84186dc6f8789df803d1c409a091b6bbcb",
+  "tests/unit/router/permission-layout.test.ts": "b8973c65e1c72859216141136c2f1734dabfcc84f2ffcfd9e3c30b36525b2034"
+}

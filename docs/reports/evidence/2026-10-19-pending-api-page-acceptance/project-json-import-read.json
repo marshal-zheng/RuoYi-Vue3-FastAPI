@@ -1,0 +1,26 @@
+{
+  "status": 200,
+  "body": {
+    "items": [
+      {
+        "versionName": "owned version",
+        "versionId": 21,
+        "status": "1",
+        "lockedTime": null,
+        "delFlag": "0",
+        "updateTime": "2026-10-19T06:30:45",
+        "updateBy": "zxqa_p_mvet0wd2",
+        "projectId": 17,
+        "versionNumber": "v1.0",
+        "description": "JSON import version",
+        "isLocked": "0",
+        "lockedBy": null,
+        "createTime": "2026-10-19T06:30:45",
+        "createBy": "zxqa_p_mvet0wd2"
+      }
+    ],
+    "total": 1,
+    "page": 1,
+    "pageSize": 10
+  }
+}

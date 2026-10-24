@@ -1,0 +1,11 @@
+{
+  "beforeOrigin": 1792393013449.7,
+  "state": {
+    "origin": 1792393168287.1,
+    "sameRouter": false,
+    "hasAuth": true,
+    "route": "AuthRole",
+    "notFound": false
+  },
+  "consoleErrors": []
+}

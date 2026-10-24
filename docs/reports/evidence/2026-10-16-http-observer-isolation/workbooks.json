@@ -1,0 +1,40 @@
+[
+  {
+    "mode": "source",
+    "validExcel": true,
+    "rows": 4,
+    "headers": [
+      "参数主键",
+      "参数名称",
+      "参数键名",
+      "参数键值",
+      "系统内置",
+      "创建者",
+      "创建时间",
+      "更新者",
+      "更新时间",
+      "备注"
+    ],
+    "onlyFilteredFixtures": true,
+    "duplicateKeys": false
+  },
+  {
+    "mode": "installed",
+    "validExcel": true,
+    "rows": 4,
+    "headers": [
+      "参数主键",
+      "参数名称",
+      "参数键名",
+      "参数键值",
+      "系统内置",
+      "创建者",
+      "创建时间",
+      "更新者",
+      "更新时间",
+      "备注"
+    ],
+    "onlyFilteredFixtures": true,
+    "duplicateKeys": false
+  }
+]

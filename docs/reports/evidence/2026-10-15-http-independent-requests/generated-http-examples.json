@@ -1,0 +1,402 @@
+{
+  "name": "http-client",
+  "summary": {
+    "text": "http-client: 10 examples (basic 1, intermediate 5, advanced 4)",
+    "total": 10,
+    "byLevel": {
+      "basic": 1,
+      "intermediate": 5,
+      "advanced": 4
+    }
+  },
+  "examples": [
+    {
+      "name": "basic",
+      "title": "Basic Usage",
+      "description": "Basic HTTP client request methods",
+      "level": "basic",
+      "content": "<!--\n  @title Basic Usage\n  @description Basic HTTP client request methods\n  @level basic\n  @deps element-plus, @zxio/http\n  @factory-options axiosConfig\n  @scene API requests, data fetching\n-->\n<template>\n  <div class=\"demo-row\">\n    <zx-button @click=\"handleGet\">GET Request</zx-button>\n    <zx-button type=\"primary\" @click=\"handlePost\">POST Request</zx-button>\n    <zx-button type=\"success\" @click=\"handlePut\">PUT Request</zx-button>\n    <zx-button type=\"danger\" @click=\"handleDelete\">DELETE Request</zx-button>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createHttpClient } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async () => ({\n      data: { code: 0, data: { id: 1, name: 'test' }, message: 'success' },\n      status: 200,\n      statusText: 'OK',\n      headers: {},\n      config: {} as any,\n    }),\n  },\n})\n\nconst handleGet = async () => {\n  await http.get({ url: '/users' })\n  void feedback.success('GET successful')\n}\n\nconst handlePost = async () => {\n  await http.post({ url: '/users', data: { name: 'John' } })\n  void feedback.success('POST successful')\n}\n\nconst handlePut = async () => {\n  await http.put({ url: '/users/1', data: { name: 'Jane' } })\n  void feedback.success('PUT successful')\n}\n\nconst handleDelete = async () => {\n  await http.delete({ url: '/users/1' })\n  void feedback.success('DELETE successful')\n}\n</script>\n\n<style scoped>\n.demo-row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 12px;\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-row\">\n    <zx-button @click=\"handleGet\">GET Request</zx-button>\n    <zx-button type=\"primary\" @click=\"handlePost\">POST Request</zx-button>\n    <zx-button type=\"success\" @click=\"handlePut\">PUT Request</zx-button>\n    <zx-button type=\"danger\" @click=\"handleDelete\">DELETE Request</zx-button>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createHttpClient } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async () => ({\n      data: { code: 0, data: { id: 1, name: 'test' }, message: 'success' },\n      status: 200,\n      statusText: 'OK',\n      headers: {},\n      config: {} as any,\n    }),\n  },\n})\n\nconst handleGet = async () => {\n  await http.get({ url: '/users' })\n  void feedback.success('GET successful')\n}\n\nconst handlePost = async () => {\n  await http.post({ url: '/users', data: { name: 'John' } })\n  void feedback.success('POST successful')\n}\n\nconst handlePut = async () => {\n  await http.put({ url: '/users/1', data: { name: 'Jane' } })\n  void feedback.success('PUT successful')\n}\n\nconst handleDelete = async () => {\n  await http.delete({ url: '/users/1' })\n  void feedback.success('DELETE successful')\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "API requests",
+        "data fetching"
+      ],
+      "components": [
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "cancellation",
+      "title": "Independent HTTP Requests",
+      "description": "Send two identical requests independently and cancel only the selected call with AbortSignal",
+      "level": "intermediate",
+      "content": "<!--\n  @title Independent HTTP Requests\n  @description Send two identical requests independently and cancel only the selected call with AbortSignal\n  @level intermediate\n  @deps element-plus, @zxio/http\n  @factory-options axiosConfig\n  @scene Explicit cancellation owned by one interaction\n-->\n<template>\n  <div class=\"demo-col\">\n    <div class=\"demo-row\">\n      <zx-button type=\"primary\" :loading=\"loading\" @click=\"runRequests\">\n        Send Two Independent Requests\n      </zx-button>\n      <zx-button :disabled=\"!loading\" @click=\"cancelFirst\">\n        Cancel First Request\n      </zx-button>\n    </div>\n    <p v-for=\"(result, index) in results\" :key=\"index\">{{ result }}</p>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { onScopeDispose, ref } from 'vue'\nimport { createHttpClient, isAbortError } from '@zxio/http'\n\nconst loading = ref(false)\nconst results = ref<string[]>([])\nlet controllers: AbortController[] = []\nlet dispatched = 0\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async (config) => {\n      const call = ++dispatched\n      await new Promise((resolve) => setTimeout(resolve, 1000))\n      return {\n        data: { code: 0, data: `Request ${call} completed` },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst cancelFirst = () => controllers[0]?.abort('cancel-first')\n\nconst runRequests = async () => {\n  loading.value = true\n  results.value = []\n  dispatched = 0\n  controllers = [new AbortController(), new AbortController()]\n  try {\n    const settled = await Promise.allSettled(\n      controllers.map((controller) =>\n        http.get<string>({ url: '/users', signal: controller.signal })\n      )\n    )\n    results.value = settled.map((result, index) =>\n      result.status === 'fulfilled'\n        ? result.value\n        : isAbortError(result.reason)\n        ? `Request ${index + 1} cancelled`\n        : `Request ${index + 1} failed`\n    )\n  } finally {\n    loading.value = false\n  }\n}\n\nonScopeDispose(() => controllers.forEach((controller) => controller.abort()))\n</script>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-col\">\n    <div class=\"demo-row\">\n      <zx-button type=\"primary\" :loading=\"loading\" @click=\"runRequests\">\n        Send Two Independent Requests\n      </zx-button>\n      <zx-button :disabled=\"!loading\" @click=\"cancelFirst\">\n        Cancel First Request\n      </zx-button>\n    </div>\n    <p v-for=\"(result, index) in results\" :key=\"index\">{{ result }}</p>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { onScopeDispose, ref } from 'vue'\nimport { createHttpClient, isAbortError } from '@zxio/http'\n\nconst loading = ref(false)\nconst results = ref<string[]>([])\nlet controllers: AbortController[] = []\nlet dispatched = 0\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async (config) => {\n      const call = ++dispatched\n      await new Promise((resolve) => setTimeout(resolve, 1000))\n      return {\n        data: { code: 0, data: `Request ${call} completed` },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst cancelFirst = () => controllers[0]?.abort('cancel-first')\n\nconst runRequests = async () => {\n  loading.value = true\n  results.value = []\n  dispatched = 0\n  controllers = [new AbortController(), new AbortController()]\n  try {\n    const settled = await Promise.allSettled(\n      controllers.map((controller) =>\n        http.get<string>({ url: '/users', signal: controller.signal })\n      )\n    )\n    results.value = settled.map((result, index) =>\n      result.status === 'fulfilled'\n        ? result.value\n        : isAbortError(result.reason)\n        ? `Request ${index + 1} cancelled`\n        : `Request ${index + 1} failed`\n    )\n  } finally {\n    loading.value = false\n  }\n}\n\nonScopeDispose(() => controllers.forEach((controller) => controller.abort()))\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Explicit cancellation owned by one interaction"
+      ],
+      "components": [
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus",
+        "vue"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "concurrency",
+      "title": "HTTP Concurrency Control",
+      "description": "Use createConcurrencyPlugin to limit maximum concurrent requests",
+      "level": "advanced",
+      "content": "<!--\n  @title HTTP Concurrency Control\n  @description Use createConcurrencyPlugin to limit maximum concurrent requests\n  @level advanced\n  @deps element-plus, @zxio/http\n  @factory-options plugins, axiosConfig\n  @plugin-options maxConcurrent\n  @request-options priority\n  @scene Limit simultaneous requests, avoid server overload\n-->\n<template>\n  <div class=\"demo-col\">\n    <zx-button type=\"primary\" @click=\"handleConcurrency\">\n      Send 10 Requests (Max 6 Concurrent)\n    </zx-button>\n    <div v-if=\"results.length > 0\" class=\"result-info\">\n      <div>Completed: {{ results.length }} / 10</div>\n      <div>Current Concurrent: {{ concurrent }}</div>\n    </div>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createConcurrencyPlugin, createHttpClient } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst results = ref<number[]>([])\nconst concurrent = ref(0)\n\nconst http = createHttpClient({\n  plugins: [createConcurrencyPlugin({ maxConcurrent: 6 })],\n  axiosConfig: {\n    adapter: async (config) => {\n      concurrent.value++\n      await new Promise((resolve) => setTimeout(resolve, 500))\n      concurrent.value--\n      return {\n        data: { code: 0, data: { id: Math.random() }, message: 'success' },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst handleConcurrency = async () => {\n  results.value = []\n  concurrent.value = 0\n\n  const promises = Array.from({ length: 10 }, (_, i) =>\n    http.get({ url: `/data/${i}` }, { priority: i > 7 ? 10 : 0 }).then(() => {\n      results.value.push(i)\n    })\n  )\n\n  await Promise.all(promises)\n  void feedback.success('All requests completed')\n}\n</script>\n\n<style scoped>\n.demo-col {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.result-info {\n  color: var(--el-text-color-secondary);\n  font-size: 14px;\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-col\">\n    <zx-button type=\"primary\" @click=\"handleConcurrency\">\n      Send 10 Requests (Max 6 Concurrent)\n    </zx-button>\n    <div v-if=\"results.length > 0\" class=\"result-info\">\n      <div>Completed: {{ results.length }} / 10</div>\n      <div>Current Concurrent: {{ concurrent }}</div>\n    </div>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createConcurrencyPlugin, createHttpClient } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst results = ref<number[]>([])\nconst concurrent = ref(0)\n\nconst http = createHttpClient({\n  plugins: [createConcurrencyPlugin({ maxConcurrent: 6 })],\n  axiosConfig: {\n    adapter: async (config) => {\n      concurrent.value++\n      await new Promise((resolve) => setTimeout(resolve, 500))\n      concurrent.value--\n      return {\n        data: { code: 0, data: { id: Math.random() }, message: 'success' },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst handleConcurrency = async () => {\n  results.value = []\n  concurrent.value = 0\n\n  const promises = Array.from({ length: 10 }, (_, i) =>\n    http.get({ url: `/data/${i}` }, { priority: i > 7 ? 10 : 0 }).then(() => {\n      results.value.push(i)\n    })\n  )\n\n  await Promise.all(promises)\n  void feedback.success('All requests completed')\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "plugins",
+            "rawName": "plugins",
+            "camelName": "plugins",
+            "kebabName": "plugins"
+          },
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Limit simultaneous requests",
+        "avoid server overload"
+      ],
+      "notes": [
+        "@plugin-options maxConcurrent",
+        "@request-options priority"
+      ],
+      "components": [
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus",
+        "vue"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "error-handling",
+      "title": "HTTP Error Handling",
+      "description": "Handle errors precisely by type: NetworkError, TimeoutError, ValidationError, ServerError",
+      "level": "intermediate",
+      "content": "<!--\n  @title HTTP Error Handling\n  @description Handle errors precisely by type: NetworkError, TimeoutError, ValidationError, ServerError\n  @level intermediate\n  @deps element-plus, @zxio/http\n  @factory-options axiosConfig\n  @scene Precise error handling, user-friendly messages\n-->\n<template>\n  <div class=\"demo-row\">\n    <zx-button type=\"warning\" @click=\"handleValidation\"\n      >Validation Error (4xx)</zx-button\n    >\n    <zx-button type=\"danger\" @click=\"handleServer\"\n      >Server Error (5xx)</zx-button\n    >\n    <zx-button @click=\"handleNetwork\">Network Error</zx-button>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport {\n  NetworkError,\n  ServerError,\n  ValidationError,\n  createHttpClient,\n} from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async (config) => {\n      if (config.url?.includes('validation')) {\n        return Promise.reject({\n          response: { status: 400, data: { message: 'Invalid parameters' } },\n          config,\n        })\n      }\n      if (config.url?.includes('server')) {\n        return Promise.reject({\n          response: { status: 500, data: { message: 'Server error' } },\n          config,\n        })\n      }\n      if (config.url?.includes('network')) {\n        return Promise.reject({ message: 'Network Error', config })\n      }\n    },\n  },\n})\n\nconst handleValidation = async () => {\n  try {\n    await http.get({ url: '/validation' })\n  } catch (e) {\n    if (e instanceof ValidationError) {\n      void feedback.warning(`Validation error: ${e.status}`)\n    }\n  }\n}\n\nconst handleServer = async () => {\n  try {\n    await http.get({ url: '/server' })\n  } catch (e) {\n    if (e instanceof ServerError) {\n      void feedback.error(`Server error: ${e.status}`)\n    }\n  }\n}\n\nconst handleNetwork = async () => {\n  try {\n    await http.get({ url: '/network' })\n  } catch (e) {\n    if (e instanceof NetworkError) {\n      void feedback.error('Network unavailable')\n    }\n  }\n}\n</script>\n\n<style scoped>\n.demo-row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 12px;\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-row\">\n    <zx-button type=\"warning\" @click=\"handleValidation\"\n      >Validation Error (4xx)</zx-button\n    >\n    <zx-button type=\"danger\" @click=\"handleServer\"\n      >Server Error (5xx)</zx-button\n    >\n    <zx-button @click=\"handleNetwork\">Network Error</zx-button>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport {\n  NetworkError,\n  ServerError,\n  ValidationError,\n  createHttpClient,\n} from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async (config) => {\n      if (config.url?.includes('validation')) {\n        return Promise.reject({\n          response: { status: 400, data: { message: 'Invalid parameters' } },\n          config,\n        })\n      }\n      if (config.url?.includes('server')) {\n        return Promise.reject({\n          response: { status: 500, data: { message: 'Server error' } },\n          config,\n        })\n      }\n      if (config.url?.includes('network')) {\n        return Promise.reject({ message: 'Network Error', config })\n      }\n    },\n  },\n})\n\nconst handleValidation = async () => {\n  try {\n    await http.get({ url: '/validation' })\n  } catch (e) {\n    if (e instanceof ValidationError) {\n      void feedback.warning(`Validation error: ${e.status}`)\n    }\n  }\n}\n\nconst handleServer = async () => {\n  try {\n    await http.get({ url: '/server' })\n  } catch (e) {\n    if (e instanceof ServerError) {\n      void feedback.error(`Server error: ${e.status}`)\n    }\n  }\n}\n\nconst handleNetwork = async () => {\n  try {\n    await http.get({ url: '/network' })\n  } catch (e) {\n    if (e instanceof NetworkError) {\n      void feedback.error('Network unavailable')\n    }\n  }\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Precise error handling",
+        "user-friendly messages"
+      ],
+      "components": [
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "grid-list-nested",
+      "title": "HTTP GridList Nested Adapter",
+      "description": "Use createGridListPlugin with custom resolvers for deeply nested response structures",
+      "level": "advanced",
+      "content": "<!--\n  @title HTTP GridList Nested Adapter\n  @description Use createGridListPlugin with custom resolvers for deeply nested response structures\n  @level advanced\n  @deps element-plus, @zxio/http\n  @factory-options plugins, axiosConfig\n  @plugin-options listField, totalField, resolveList, resolveTotal\n  @scene Compatible with deeply wrapped response structures, customize data parsing logic\n-->\n<template>\n  <div class=\"grid-list-example\" style=\"height: 520px\">\n    <zx-grid-list :load-data=\"loadData\">\n      <template #table=\"{ grid }\">\n        <el-table :data=\"grid.list\" height=\"100%\" border>\n          <el-table-column prop=\"id\" label=\"ID\" width=\"80\" />\n          <el-table-column prop=\"name\" label=\"Name\" />\n          <el-table-column prop=\"email\" label=\"Email\" />\n          <el-table-column prop=\"status\" label=\"Status\" width=\"120\">\n            <template #default=\"{ row }\">\n              <el-tag :type=\"row.status === 'active' ? 'success' : 'info'\">\n                {{ row.status }}\n              </el-tag>\n            </template>\n          </el-table-column>\n        </el-table>\n      </template>\n    </zx-grid-list>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { createGridListPlugin, createHttpClient } from '@zxio/http'\n\nconst http = createHttpClient({\n  plugins: [\n    createGridListPlugin({\n      listField: 'records',\n      totalField: 'totalCount',\n      resolveList: (payload) => payload.result?.records,\n      resolveTotal: (payload) => payload.result?.totalCount,\n    }),\n  ],\n  axiosConfig: {\n    adapter: async (config) => {\n      const params = (config.params ?? {}) as Record<string, any>\n      const page = Number(params.page ?? 1)\n      const size = Number(params.size ?? 3)\n      const total = 5\n      const start = (page - 1) * size\n      const list = Array.from(\n        { length: Math.min(size, total - start) },\n        (_, idx) => {\n          const id = start + idx + 1\n          return {\n            id,\n            name: `User ${id}`,\n            email: `user${id}@example.com`,\n            status: id % 3 === 0 ? 'inactive' : 'active',\n          }\n        }\n      )\n\n      return {\n        data: {\n          code: 0,\n          data: {\n            result: {\n              records: list,\n              totalCount: total,\n            },\n            traceId: 'mock-trace-id',\n          },\n          message: 'ok',\n        },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst loadData = async (params: any) => {\n  return http.get({ url: '/users/nested', params })\n}\n</script>\n\n<style scoped>\n.grid-list-example {\n  width: 100%;\n  background: var(--zx-semantic-surface-elevated);\n  border-radius: 6px;\n  padding: 12px;\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"grid-list-example\" style=\"height: 520px\">\n    <zx-grid-list :load-data=\"loadData\">\n      <template #table=\"{ grid }\">\n        <el-table :data=\"grid.list\" height=\"100%\" border>\n          <el-table-column prop=\"id\" label=\"ID\" width=\"80\" />\n          <el-table-column prop=\"name\" label=\"Name\" />\n          <el-table-column prop=\"email\" label=\"Email\" />\n          <el-table-column prop=\"status\" label=\"Status\" width=\"120\">\n            <template #default=\"{ row }\">\n              <el-tag :type=\"row.status === 'active' ? 'success' : 'info'\">\n                {{ row.status }}\n              </el-tag>\n            </template>\n          </el-table-column>\n        </el-table>\n      </template>\n    </zx-grid-list>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { createGridListPlugin, createHttpClient } from '@zxio/http'\n\nconst http = createHttpClient({\n  plugins: [\n    createGridListPlugin({\n      listField: 'records',\n      totalField: 'totalCount',\n      resolveList: (payload) => payload.result?.records,\n      resolveTotal: (payload) => payload.result?.totalCount,\n    }),\n  ],\n  axiosConfig: {\n    adapter: async (config) => {\n      const params = (config.params ?? {}) as Record<string, any>\n      const page = Number(params.page ?? 1)\n      const size = Number(params.size ?? 3)\n      const total = 5\n      const start = (page - 1) * size\n      const list = Array.from(\n        { length: Math.min(size, total - start) },\n        (_, idx) => {\n          const id = start + idx + 1\n          return {\n            id,\n            name: `User ${id}`,\n            email: `user${id}@example.com`,\n            status: id % 3 === 0 ? 'inactive' : 'active',\n          }\n        }\n      )\n\n      return {\n        data: {\n          code: 0,\n          data: {\n            result: {\n              records: list,\n              totalCount: total,\n            },\n            traceId: 'mock-trace-id',\n          },\n          message: 'ok',\n        },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst loadData = async (params: any) => {\n  return http.get({ url: '/users/nested', params })\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "plugins",
+            "rawName": "plugins",
+            "camelName": "plugins",
+            "kebabName": "plugins"
+          },
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Compatible with deeply wrapped response structures",
+        "customize data parsing logic"
+      ],
+      "notes": [
+        "@plugin-options listField, totalField, resolveList, resolveTotal"
+      ],
+      "components": [
+        "el-table",
+        "el-table-column",
+        "el-tag",
+        "zx-grid-list"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "grid-list",
+      "title": "HTTP GridList Adapter",
+      "description": "Use createGridListPlugin to auto-align pagination fields and list structure",
+      "level": "advanced",
+      "content": "<!--\n  @title HTTP GridList Adapter\n  @description Use createGridListPlugin to auto-align pagination fields and list structure\n  @level advanced\n  @deps element-plus, @zxio/http\n  @factory-options plugins, axiosConfig\n  @plugin-options listField, totalField\n  @scene Auto-handle pagination data with GridList component\n  @notes Uses el-form, el-table as ZXIO doesn't have equivalent components\n-->\n<template>\n  <div class=\"grid-list-example\" style=\"height: 620px\">\n    <zx-grid-list\n      :load-data=\"loadData\"\n      :initial-state=\"initialState\"\n      sync-url-state\n    >\n      <template #form=\"{ query, updateState, refresh }\">\n        <el-form :inline=\"true\">\n          <el-form-item label=\"Keyword\">\n            <el-input\n              v-model=\"keyword\"\n              placeholder=\"Enter and refresh\"\n              style=\"width: 220px\"\n            />\n          </el-form-item>\n          <el-form-item>\n            <zx-button\n              type=\"primary\"\n              :loading=\"refreshing\"\n              @click=\"handleSubmit(updateState, refresh)\"\n              >Refresh</zx-button\n            >\n            <zx-button @click=\"handleClear(updateState, refresh)\"\n              >Clear Query</zx-button\n            >\n            <zx-tag v-if=\"query.keyword\" type=\"info\"\n              >Current query: {{ query.keyword }}</zx-tag\n            >\n          </el-form-item>\n        </el-form>\n      </template>\n      <template #table=\"{ grid }\">\n        <el-table :data=\"grid.list\" height=\"100%\" border>\n          <el-table-column prop=\"id\" label=\"ID\" width=\"80\" />\n          <el-table-column prop=\"name\" label=\"Name\" />\n          <el-table-column prop=\"email\" label=\"Email\" />\n          <el-table-column prop=\"status\" label=\"Status\" width=\"120\">\n            <template #default=\"{ row }\">\n              <zx-tag :type=\"row.status === 'active' ? 'success' : 'info'\">{{\n                row.status\n              }}</zx-tag>\n            </template>\n          </el-table-column>\n        </el-table>\n      </template>\n    </zx-grid-list>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { createGridListPlugin, createHttpClient } from '@zxio/http'\n\nconst initialState = { query: { keyword: 'init-key' } }\nconst keyword = ref(initialState.query.keyword)\nconst refreshing = ref(false)\n\nconst mockUsers = Array.from({ length: 50 }, (_, i) => ({\n  id: i + 1,\n  name: `User ${i + 1}`,\n  email: `user${i + 1}@example.com`,\n  status: i % 2 === 0 ? 'active' : 'pending',\n}))\n\nasync function mockFetch(url: string) {\n  const u = new URL(url, 'https://mock.local')\n  const page = Number(u.searchParams.get('page') ?? 1)\n  const size = Number(u.searchParams.get('size') ?? 10)\n  const kw = (u.searchParams.get('keyword') || '').toLowerCase()\n  const filtered = kw\n    ? mockUsers.filter((user) =>\n        [user.name, user.email].some((v) => v.toLowerCase().includes(kw))\n      )\n    : mockUsers\n  const start = (page - 1) * size\n  const list = filtered.slice(start, start + size)\n  return new Response(\n    JSON.stringify({\n      code: 0,\n      data: { users: list, total: filtered.length },\n      message: 'ok',\n    }),\n    { status: 200, headers: { 'Content-Type': 'application/json' } }\n  )\n}\n\nconst http = createHttpClient({\n  plugins: [createGridListPlugin({ listField: 'users', totalField: 'total' })],\n  axiosConfig: {\n    adapter: async (config) => {\n      const params = new URLSearchParams()\n      const source = (config.params as Record<string, any>) || {}\n      Object.entries(source).forEach(([k, v]) => {\n        if (v !== undefined && v !== null) params.set(k, String(v))\n      })\n      const res = await mockFetch(\n        `https://mock.local/users?${params.toString()}`\n      )\n      const data = (await res.json()) as Record<string, any>\n      return {\n        data,\n        status: res.status,\n        statusText: res.statusText,\n        headers: Object.fromEntries(res.headers.entries()),\n        config,\n      }\n    },\n  },\n})\n\nconst handleSubmit = async (\n  updateState: (key: string, value: any) => void,\n  refresh: () => Promise<any> | void\n) => {\n  refreshing.value = true\n  updateState('query.keyword', keyword.value)\n  await refresh()\n  refreshing.value = false\n}\n\nconst handleClear = async (\n  updateState: (key: string, value: any) => void,\n  refresh: () => Promise<any> | void\n) => {\n  refreshing.value = true\n  keyword.value = ''\n  updateState('query', {})\n  await refresh()\n  refreshing.value = false\n}\n\nconst loadData = async (params: any) =>\n  http.get({\n    url: '/users/search',\n    params: { ...params.query, pager: params.pager },\n  })\n</script>\n\n<style scoped>\n.grid-list-example {\n  width: 100%;\n  background: var(--zx-semantic-surface-elevated);\n  border-radius: 6px;\n  padding: 12px;\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"grid-list-example\" style=\"height: 620px\">\n    <zx-grid-list\n      :load-data=\"loadData\"\n      :initial-state=\"initialState\"\n      sync-url-state\n    >\n      <template #form=\"{ query, updateState, refresh }\">\n        <el-form :inline=\"true\">\n          <el-form-item label=\"Keyword\">\n            <el-input\n              v-model=\"keyword\"\n              placeholder=\"Enter and refresh\"\n              style=\"width: 220px\"\n            />\n          </el-form-item>\n          <el-form-item>\n            <zx-button\n              type=\"primary\"\n              :loading=\"refreshing\"\n              @click=\"handleSubmit(updateState, refresh)\"\n              >Refresh</zx-button\n            >\n            <zx-button @click=\"handleClear(updateState, refresh)\"\n              >Clear Query</zx-button\n            >\n            <zx-tag v-if=\"query.keyword\" type=\"info\"\n              >Current query: {{ query.keyword }}</zx-tag\n            >\n          </el-form-item>\n        </el-form>\n      </template>\n      <template #table=\"{ grid }\">\n        <el-table :data=\"grid.list\" height=\"100%\" border>\n          <el-table-column prop=\"id\" label=\"ID\" width=\"80\" />\n          <el-table-column prop=\"name\" label=\"Name\" />\n          <el-table-column prop=\"email\" label=\"Email\" />\n          <el-table-column prop=\"status\" label=\"Status\" width=\"120\">\n            <template #default=\"{ row }\">\n              <zx-tag :type=\"row.status === 'active' ? 'success' : 'info'\">{{\n                row.status\n              }}</zx-tag>\n            </template>\n          </el-table-column>\n        </el-table>\n      </template>\n    </zx-grid-list>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { createGridListPlugin, createHttpClient } from '@zxio/http'\n\nconst initialState = { query: { keyword: 'init-key' } }\nconst keyword = ref(initialState.query.keyword)\nconst refreshing = ref(false)\n\nconst mockUsers = Array.from({ length: 50 }, (_, i) => ({\n  id: i + 1,\n  name: `User ${i + 1}`,\n  email: `user${i + 1}@example.com`,\n  status: i % 2 === 0 ? 'active' : 'pending',\n}))\n\nasync function mockFetch(url: string) {\n  const u = new URL(url, 'https://mock.local')\n  const page = Number(u.searchParams.get('page') ?? 1)\n  const size = Number(u.searchParams.get('size') ?? 10)\n  const kw = (u.searchParams.get('keyword') || '').toLowerCase()\n  const filtered = kw\n    ? mockUsers.filter((user) =>\n        [user.name, user.email].some((v) => v.toLowerCase().includes(kw))\n      )\n    : mockUsers\n  const start = (page - 1) * size\n  const list = filtered.slice(start, start + size)\n  return new Response(\n    JSON.stringify({\n      code: 0,\n      data: { users: list, total: filtered.length },\n      message: 'ok',\n    }),\n    { status: 200, headers: { 'Content-Type': 'application/json' } }\n  )\n}\n\nconst http = createHttpClient({\n  plugins: [createGridListPlugin({ listField: 'users', totalField: 'total' })],\n  axiosConfig: {\n    adapter: async (config) => {\n      const params = new URLSearchParams()\n      const source = (config.params as Record<string, any>) || {}\n      Object.entries(source).forEach(([k, v]) => {\n        if (v !== undefined && v !== null) params.set(k, String(v))\n      })\n      const res = await mockFetch(\n        `https://mock.local/users?${params.toString()}`\n      )\n      const data = (await res.json()) as Record<string, any>\n      return {\n        data,\n        status: res.status,\n        statusText: res.statusText,\n        headers: Object.fromEntries(res.headers.entries()),\n        config,\n      }\n    },\n  },\n})\n\nconst handleSubmit = async (\n  updateState: (key: string, value: any) => void,\n  refresh: () => Promise<any> | void\n) => {\n  refreshing.value = true\n  updateState('query.keyword', keyword.value)\n  await refresh()\n  refreshing.value = false\n}\n\nconst handleClear = async (\n  updateState: (key: string, value: any) => void,\n  refresh: () => Promise<any> | void\n) => {\n  refreshing.value = true\n  keyword.value = ''\n  updateState('query', {})\n  await refresh()\n  refreshing.value = false\n}\n\nconst loadData = async (params: any) =>\n  http.get({\n    url: '/users/search',\n    params: { ...params.query, pager: params.pager },\n  })\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "plugins",
+            "rawName": "plugins",
+            "camelName": "plugins",
+            "kebabName": "plugins"
+          },
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Auto-handle pagination data with GridList component"
+      ],
+      "notes": [
+        "@plugin-options listField, totalField",
+        "Uses el-form, el-table as ZXIO doesn't have equivalent components"
+      ],
+      "components": [
+        "el-form",
+        "el-form-item",
+        "el-input",
+        "el-table",
+        "el-table-column",
+        "zx-button",
+        "zx-grid-list",
+        "zx-tag"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus",
+        "vue"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "notifier",
+      "title": "HTTP Notifier Configuration",
+      "description": "Configure notifier for success/error notifications, supports message and modal modes",
+      "level": "intermediate",
+      "content": "<!--\n  @title HTTP Notifier Configuration\n  @description Configure notifier for success/error notifications, supports message and modal modes\n  @level intermediate\n  @deps element-plus, @zxio/http\n  @factory-options notifier, axiosConfig\n  @request-options showSuccessMessage, showErrorMessage, successMessageMode, errorMessageMode\n  @scene Request success/failure user notifications\n-->\n<template>\n  <div class=\"demo-row\">\n    <zx-button type=\"success\" @click=\"handleSuccess\"\n      >Success Notification (Message)</zx-button\n    >\n    <zx-button type=\"warning\" @click=\"handleError\"\n      >Error Notification (Message)</zx-button\n    >\n    <zx-button type=\"primary\" @click=\"handleModal\"\n      >Modal Notification (Modal)</zx-button\n    >\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { createHttpClient, createNotifier } from '@zxio/http'\nimport { useExampleThemeFeedback } from '../theme-feedback'\n\nconst feedback = useExampleThemeFeedback()\n\nconst notifier = createNotifier({\n  message(type, content) {\n    void feedback.message({ type, message: content })\n  },\n  modal(type, options) {\n    void feedback.confirm({\n      type,\n      message: options.content,\n      title: options.title ?? 'Notification',\n    })\n  },\n})\n\nconst http = createHttpClient({\n  notifier,\n  axiosConfig: {\n    adapter: async (config) => {\n      if (config.url?.includes('error')) {\n        return {\n          data: { code: 1001, message: 'Business error', data: null },\n          status: 200,\n          statusText: 'OK',\n          headers: {},\n          config,\n        }\n      }\n      return {\n        data: {\n          code: 0,\n          data: { success: true },\n          message: 'Operation successful',\n        },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst handleSuccess = () => {\n  http.post({\n    url: '/success',\n    requestOptions: { showSuccessMessage: true, successMessageMode: 'message' },\n  })\n}\n\nconst handleError = () => {\n  http.post({\n    url: '/error',\n    requestOptions: { showErrorMessage: true, errorMessageMode: 'message' },\n  })\n}\n\nconst handleModal = () => {\n  http.post({\n    url: '/success',\n    requestOptions: { showSuccessMessage: true, successMessageMode: 'modal' },\n  })\n}\n</script>\n\n<style scoped>\n.demo-row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 12px;\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-row\">\n    <zx-button type=\"success\" @click=\"handleSuccess\"\n      >Success Notification (Message)</zx-button\n    >\n    <zx-button type=\"warning\" @click=\"handleError\"\n      >Error Notification (Message)</zx-button\n    >\n    <zx-button type=\"primary\" @click=\"handleModal\"\n      >Modal Notification (Modal)</zx-button\n    >\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { createHttpClient, createNotifier } from '@zxio/http'\nimport { useExampleThemeFeedback } from '../theme-feedback'\n\nconst feedback = useExampleThemeFeedback()\n\nconst notifier = createNotifier({\n  message(type, content) {\n    void feedback.message({ type, message: content })\n  },\n  modal(type, options) {\n    void feedback.confirm({\n      type,\n      message: options.content,\n      title: options.title ?? 'Notification',\n    })\n  },\n})\n\nconst http = createHttpClient({\n  notifier,\n  axiosConfig: {\n    adapter: async (config) => {\n      if (config.url?.includes('error')) {\n        return {\n          data: { code: 1001, message: 'Business error', data: null },\n          status: 200,\n          statusText: 'OK',\n          headers: {},\n          config,\n        }\n      }\n      return {\n        data: {\n          code: 0,\n          data: { success: true },\n          message: 'Operation successful',\n        },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config,\n      }\n    },\n  },\n})\n\nconst handleSuccess = () => {\n  http.post({\n    url: '/success',\n    requestOptions: { showSuccessMessage: true, successMessageMode: 'message' },\n  })\n}\n\nconst handleError = () => {\n  http.post({\n    url: '/error',\n    requestOptions: { showErrorMessage: true, errorMessageMode: 'message' },\n  })\n}\n\nconst handleModal = () => {\n  http.post({\n    url: '/success',\n    requestOptions: { showSuccessMessage: true, successMessageMode: 'modal' },\n  })\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "notifier",
+            "rawName": "notifier",
+            "camelName": "notifier",
+            "kebabName": "notifier"
+          },
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Request success/failure user notifications"
+      ],
+      "notes": [
+        "@request-options showSuccessMessage, showErrorMessage, successMessageMode, errorMessageMode"
+      ],
+      "components": [
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "retry",
+      "title": "HTTP Request Retry",
+      "description": "Configure retry.count and retry.delay for automatic retry with exponential backoff",
+      "level": "intermediate",
+      "content": "<!--\n  @title HTTP Request Retry\n  @description Configure retry.count and retry.delay for automatic retry with exponential backoff\n  @level intermediate\n  @deps element-plus, @zxio/http\n  @factory-options retry.count, retry.delay, axiosConfig\n  @scene Auto retry on unstable network, improve request success rate\n-->\n<template>\n  <div class=\"demo-col\">\n    <zx-button type=\"primary\" :loading=\"loading\" @click=\"handleRetry\">\n      Simulate Network Failure (Auto retry 3 times)\n    </zx-button>\n    <div v-if=\"logs.length > 0\" class=\"retry-logs\">\n      <div\n        v-for=\"(log, index) in logs\"\n        :key=\"index\"\n        class=\"log-item\"\n        :class=\"log.type\"\n      >\n        <span class=\"log-time\">{{ log.time }}</span>\n        <span class=\"log-message\">{{ log.message }}</span>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createHttpClient, exponentialBackoff } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst loading = ref(false)\nconst logs = ref<Array<{ time: string; message: string; type: string }>>([])\nlet attemptCount = 0\n\nconst addLog = (message: string, type = 'info') => {\n  logs.value.push({\n    time: new Date().toLocaleTimeString(),\n    message,\n    type,\n  })\n}\n\nconst http = createHttpClient({\n  retry: {\n    count: 3,\n    delay: exponentialBackoff,\n  },\n  axiosConfig: {\n    adapter: async () => {\n      attemptCount++\n      addLog(`Attempt ${attemptCount}...`, 'info')\n      await new Promise((resolve) => setTimeout(resolve, 300))\n\n      if (attemptCount < 3) {\n        addLog(`❌ Failed - Network error`, 'error')\n        throw new Error('Network error')\n      }\n\n      addLog('✅ Attempt 3 succeeded!', 'success')\n      return {\n        data: { code: 0, data: { success: true }, message: 'success' },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config: {} as any,\n      }\n    },\n  },\n})\n\nconst handleRetry = async () => {\n  loading.value = true\n  logs.value = []\n  attemptCount = 0\n\n  try {\n    await http.get({ url: '/data' })\n    void feedback.success('Request finally succeeded')\n  } catch {\n    addLog('❌ Still failed after 3 retries', 'error')\n    void feedback.error('Request failed')\n  } finally {\n    loading.value = false\n  }\n}\n</script>\n\n<style scoped>\n.demo-col {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.retry-logs {\n  padding: 12px;\n  background: var(--zx-semantic-surface-elevated);\n  border-radius: 4px;\n}\n.log-item {\n  display: flex;\n  gap: 8px;\n  padding: 4px 0;\n  font-size: 13px;\n}\n.log-time {\n  color: var(--el-text-color-secondary);\n  min-width: 80px;\n}\n.log-item.error .log-message {\n  color: var(--zx-semantic-action-focus-ring);\n}\n.log-item.success .log-message {\n  color: var(--zx-semantic-action-focus-ring);\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-col\">\n    <zx-button type=\"primary\" :loading=\"loading\" @click=\"handleRetry\">\n      Simulate Network Failure (Auto retry 3 times)\n    </zx-button>\n    <div v-if=\"logs.length > 0\" class=\"retry-logs\">\n      <div\n        v-for=\"(log, index) in logs\"\n        :key=\"index\"\n        class=\"log-item\"\n        :class=\"log.type\"\n      >\n        <span class=\"log-time\">{{ log.time }}</span>\n        <span class=\"log-message\">{{ log.message }}</span>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createHttpClient, exponentialBackoff } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst loading = ref(false)\nconst logs = ref<Array<{ time: string; message: string; type: string }>>([])\nlet attemptCount = 0\n\nconst addLog = (message: string, type = 'info') => {\n  logs.value.push({\n    time: new Date().toLocaleTimeString(),\n    message,\n    type,\n  })\n}\n\nconst http = createHttpClient({\n  retry: {\n    count: 3,\n    delay: exponentialBackoff,\n  },\n  axiosConfig: {\n    adapter: async () => {\n      attemptCount++\n      addLog(`Attempt ${attemptCount}...`, 'info')\n      await new Promise((resolve) => setTimeout(resolve, 300))\n\n      if (attemptCount < 3) {\n        addLog(`❌ Failed - Network error`, 'error')\n        throw new Error('Network error')\n      }\n\n      addLog('✅ Attempt 3 succeeded!', 'success')\n      return {\n        data: { code: 0, data: { success: true }, message: 'success' },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config: {} as any,\n      }\n    },\n  },\n})\n\nconst handleRetry = async () => {\n  loading.value = true\n  logs.value = []\n  attemptCount = 0\n\n  try {\n    await http.get({ url: '/data' })\n    void feedback.success('Request finally succeeded')\n  } catch {\n    addLog('❌ Still failed after 3 retries', 'error')\n    void feedback.error('Request failed')\n  } finally {\n    loading.value = false\n  }\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "retry.count",
+            "rawName": "retry.count",
+            "camelName": "retry.count",
+            "kebabName": "retry.count"
+          },
+          {
+            "name": "retry.delay",
+            "rawName": "retry.delay",
+            "camelName": "retry.delay",
+            "kebabName": "retry.delay"
+          },
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Auto retry on unstable network",
+        "improve request success rate"
+      ],
+      "components": [
+        "Array",
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus",
+        "vue"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "timeout",
+      "title": "HTTP Timeout Control",
+      "description": "Configure different timeout for different request types",
+      "level": "intermediate",
+      "content": "<!--\n  @title HTTP Timeout Control\n  @description Configure different timeout for different request types\n  @level intermediate\n  @deps element-plus, @zxio/http\n  @factory-options axiosConfig\n  @request-options timeout\n  @scene Set appropriate timeout for different request types\n-->\n<template>\n  <div class=\"demo-col\">\n    <zx-button type=\"success\" :loading=\"loading === 1\" @click=\"handleFast\">\n      Fast Response (Complete within 1s)\n    </zx-button>\n    <zx-button type=\"warning\" :loading=\"loading === 2\" @click=\"handleSlow\">\n      Slow Response (2s timeout)\n    </zx-button>\n    <div v-if=\"logs.length\" class=\"timeout-logs\">\n      <div\n        v-for=\"(log, index) in logs\"\n        :key=\"index\"\n        class=\"log-item\"\n        :class=\"log.type\"\n      >\n        <span class=\"log-time\">{{ log.time }}</span>\n        <span class=\"log-message\">{{ log.message }}</span>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { TimeoutError, createHttpClient } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst loading = ref(0)\nconst logs = ref<Array<{ time: string; message: string; type: string }>>([])\n\nconst addLog = (message: string, type = 'info') => {\n  logs.value.push({ time: new Date().toLocaleTimeString(), message, type })\n}\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async (config) => {\n      const delay = config.url?.includes('fast') ? 800 : 5000\n      addLog(`Request started (server response time ${delay}ms)`, 'info')\n      const timeout = Number(config.timeout) || 0\n\n      if (timeout && delay > timeout) {\n        await new Promise((resolve) => setTimeout(resolve, timeout))\n        throw {\n          code: 'ECONNABORTED',\n          message: `timeout of ${timeout}ms exceeded`,\n          config,\n        }\n      }\n\n      await new Promise((resolve) => setTimeout(resolve, delay))\n      addLog('Server response completed', 'success')\n      return {\n        data: { code: 0, data: {}, message: 'success' },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config: config as any,\n      }\n    },\n  },\n})\n\nconst handleFast = async () => {\n  loading.value = 1\n  logs.value = []\n  try {\n    await http.get({ url: '/fast' }, { timeout: 3000 })\n    addLog('✅ Request successful (800ms < 3s timeout)', 'success')\n    void feedback.success('Request successful')\n  } catch (error) {\n    if (error instanceof TimeoutError) {\n      addLog('⏱️ Request timeout', 'error')\n      void feedback.error('Request timeout')\n    }\n  } finally {\n    loading.value = 0\n  }\n}\n\nconst handleSlow = async () => {\n  loading.value = 2\n  logs.value = []\n  try {\n    await http.get({ url: '/slow' }, { timeout: 2000 })\n  } catch (error) {\n    if (error instanceof TimeoutError) {\n      addLog(\n        '⏱️ Request timeout! (5s response time > 2s timeout setting)',\n        'error'\n      )\n      void feedback.error('Request timeout')\n    }\n  } finally {\n    loading.value = 0\n  }\n}\n</script>\n\n<style scoped>\n.demo-col {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n}\n.timeout-logs {\n  padding: 12px;\n  background: var(--zx-semantic-surface-elevated);\n  border-radius: 4px;\n}\n.log-item {\n  display: flex;\n  gap: 8px;\n  padding: 4px 0;\n  font-size: 13px;\n}\n.log-time {\n  color: var(--el-text-color-secondary);\n  min-width: 80px;\n}\n.log-item.error .log-message {\n  color: var(--zx-semantic-action-focus-ring);\n}\n.log-item.success .log-message {\n  color: var(--zx-semantic-action-focus-ring);\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-col\">\n    <zx-button type=\"success\" :loading=\"loading === 1\" @click=\"handleFast\">\n      Fast Response (Complete within 1s)\n    </zx-button>\n    <zx-button type=\"warning\" :loading=\"loading === 2\" @click=\"handleSlow\">\n      Slow Response (2s timeout)\n    </zx-button>\n    <div v-if=\"logs.length\" class=\"timeout-logs\">\n      <div\n        v-for=\"(log, index) in logs\"\n        :key=\"index\"\n        class=\"log-item\"\n        :class=\"log.type\"\n      >\n        <span class=\"log-time\">{{ log.time }}</span>\n        <span class=\"log-message\">{{ log.message }}</span>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { ref } from 'vue'\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { TimeoutError, createHttpClient } from '@zxio/http'\n\nconst feedback = useExampleThemeFeedback()\n\nconst loading = ref(0)\nconst logs = ref<Array<{ time: string; message: string; type: string }>>([])\n\nconst addLog = (message: string, type = 'info') => {\n  logs.value.push({ time: new Date().toLocaleTimeString(), message, type })\n}\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async (config) => {\n      const delay = config.url?.includes('fast') ? 800 : 5000\n      addLog(`Request started (server response time ${delay}ms)`, 'info')\n      const timeout = Number(config.timeout) || 0\n\n      if (timeout && delay > timeout) {\n        await new Promise((resolve) => setTimeout(resolve, timeout))\n        throw {\n          code: 'ECONNABORTED',\n          message: `timeout of ${timeout}ms exceeded`,\n          config,\n        }\n      }\n\n      await new Promise((resolve) => setTimeout(resolve, delay))\n      addLog('Server response completed', 'success')\n      return {\n        data: { code: 0, data: {}, message: 'success' },\n        status: 200,\n        statusText: 'OK',\n        headers: {},\n        config: config as any,\n      }\n    },\n  },\n})\n\nconst handleFast = async () => {\n  loading.value = 1\n  logs.value = []\n  try {\n    await http.get({ url: '/fast' }, { timeout: 3000 })\n    addLog('✅ Request successful (800ms < 3s timeout)', 'success')\n    void feedback.success('Request successful')\n  } catch (error) {\n    if (error instanceof TimeoutError) {\n      addLog('⏱️ Request timeout', 'error')\n      void feedback.error('Request timeout')\n    }\n  } finally {\n    loading.value = 0\n  }\n}\n\nconst handleSlow = async () => {\n  loading.value = 2\n  logs.value = []\n  try {\n    await http.get({ url: '/slow' }, { timeout: 2000 })\n  } catch (error) {\n    if (error instanceof TimeoutError) {\n      addLog(\n        '⏱️ Request timeout! (5s response time > 2s timeout setting)',\n        'error'\n      )\n      void feedback.error('Request timeout')\n    }\n  } finally {\n    loading.value = 0\n  }\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Set appropriate timeout for different request types"
+      ],
+      "notes": [
+        "@request-options timeout"
+      ],
+      "components": [
+        "Array",
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus",
+        "vue"
+      ],
+      "api": "composition"
+    },
+    {
+      "name": "typed-api",
+      "title": "HTTP Type-safe API",
+      "description": "Use createTypedAPI for type-safe API endpoints with path parameter extraction",
+      "level": "advanced",
+      "content": "<!--\n  @title HTTP Type-safe API\n  @description Use createTypedAPI for type-safe API endpoints with path parameter extraction\n  @level advanced\n  @deps element-plus, @zxio/http\n  @factory-options axiosConfig\n  @api-definition method, url\n  @scene Define API endpoints with full type inference\n-->\n<template>\n  <div class=\"demo-row\">\n    <zx-button type=\"primary\" @click=\"handleGetUser\">Get User</zx-button>\n    <zx-button type=\"success\" @click=\"handleCreateUser\">Create User</zx-button>\n    <zx-button @click=\"handleListUsers\">List Users</zx-button>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createHttpClient, createTypedAPI } from '@zxio/http'\n\ninterface User {\n  id: number\n  name: string\n  email: string\n}\n\nconst feedback = useExampleThemeFeedback()\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async () => ({\n      data: {\n        code: 0,\n        data: { id: 1, name: 'John', email: 'john@example.com' },\n        message: 'success',\n      },\n      status: 200,\n      statusText: 'OK',\n      headers: {},\n      config: {} as any,\n    }),\n  },\n})\n\nconst api = createTypedAPI(http, {\n  getUser: { method: 'GET', url: '/users/:id' },\n  createUser: { method: 'POST', url: '/users' },\n  listUsers: { method: 'GET', url: '/users' },\n})\n\nconst handleGetUser = async () => {\n  const user = (await api.getUser({ id: 1 })) as User\n  void feedback.success(`Get user: ${user.name}`)\n}\n\nconst handleCreateUser = async () => {\n  const user = (await api.createUser({\n    data: { name: 'Jane', email: 'jane@example.com' },\n  })) as User\n  void feedback.success(`Create user: ${user.name}`)\n}\n\nconst handleListUsers = async () => {\n  await api.listUsers({ params: { page: 1 } })\n  void feedback.success('Get user list')\n}\n</script>\n\n<style scoped>\n.demo-row {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 12px;\n}\n</style>\n",
+      "contentCompact": "<template>\n  <div class=\"demo-row\">\n    <zx-button type=\"primary\" @click=\"handleGetUser\">Get User</zx-button>\n    <zx-button type=\"success\" @click=\"handleCreateUser\">Create User</zx-button>\n    <zx-button @click=\"handleListUsers\">List Users</zx-button>\n  </div>\n</template>\n\n<script setup lang=\"ts\">\nimport { useExampleThemeFeedback } from '../theme-feedback'\nimport { createHttpClient, createTypedAPI } from '@zxio/http'\n\ninterface User {\n  id: number\n  name: string\n  email: string\n}\n\nconst feedback = useExampleThemeFeedback()\n\nconst http = createHttpClient({\n  axiosConfig: {\n    adapter: async () => ({\n      data: {\n        code: 0,\n        data: { id: 1, name: 'John', email: 'john@example.com' },\n        message: 'success',\n      },\n      status: 200,\n      statusText: 'OK',\n      headers: {},\n      config: {} as any,\n    }),\n  },\n})\n\nconst api = createTypedAPI(http, {\n  getUser: { method: 'GET', url: '/users/:id' },\n  createUser: { method: 'POST', url: '/users' },\n  listUsers: { method: 'GET', url: '/users' },\n})\n\nconst handleGetUser = async () => {\n  const user = (await api.getUser({ id: 1 })) as User\n  void feedback.success(`Get user: ${user.name}`)\n}\n\nconst handleCreateUser = async () => {\n  const user = (await api.createUser({\n    data: { name: 'Jane', email: 'jane@example.com' },\n  })) as User\n  void feedback.success(`Create user: ${user.name}`)\n}\n\nconst handleListUsers = async () => {\n  await api.listUsers({ params: { page: 1 } })\n  void feedback.success('Get user list')\n}\n</script>",
+      "kind": "factory",
+      "factory": {
+        "name": "createHttpClient",
+        "options": [
+          {
+            "name": "axiosConfig",
+            "rawName": "axiosConfig",
+            "camelName": "axiosConfig",
+            "kebabName": "axios-config"
+          }
+        ]
+      },
+      "useCases": [
+        "Define API endpoints with full type inference"
+      ],
+      "notes": [
+        "@api-definition method, url"
+      ],
+      "components": [
+        "zx-button"
+      ],
+      "packages": [
+        "@zxio/http",
+        "element-plus"
+      ],
+      "api": "composition"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+import { createApp } from 'vue';
+import ElementPlus from 'element-plus';
+import ZXUI from '@zxio/zxui';
+import 'element-plus/dist/index.css';
+import '@zxio/zxui/style';
+import { bindZxThemeHost } from '@/theme/zx-theme-host';
+import deployment from 'virtual:zxui-theme-deployment';
+import App from './App.vue';
+const app = createApp(App).use(ElementPlus).use(ZXUI);
+bindZxThemeHost(app, deployment);
+app.mount('#app');

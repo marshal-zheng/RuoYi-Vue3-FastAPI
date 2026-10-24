@@ -1,0 +1,11 @@
+--- baseline/ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts
++++ current/ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts
+@@ -561,7 +561,7 @@
+     expect(dialog.props('modelValue')).toBe(true);
+     expect(dialog.props('loading')).toBe(false);
+     expect(dialog.props('okDisabled')).toBe(true);
+-    expect(feedback.error).toHaveBeenCalledExactlyOnceWith(error.message);
++    expect(feedback.error).not.toHaveBeenCalled();
+     const retry = wrapper.findAll('button').find((button) => button.text() === '重试');
+     expect(retry).toBeDefined();
+     await retry!.trigger('click');

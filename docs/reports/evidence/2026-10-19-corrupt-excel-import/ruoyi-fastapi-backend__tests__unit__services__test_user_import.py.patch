@@ -1,0 +1,165 @@
+--- /dev/null
++++ after/ruoyi-fastapi-backend/tests/unit/services/test_user_import.py
+@@ -0,0 +1,162 @@
++"""Real workbook parsing at the user-import boundary, without database writes."""
++
++import io
++from pathlib import Path
++from types import SimpleNamespace
++from unittest.mock import AsyncMock, Mock
++from zipfile import ZipFile
++
++import pytest
++from fastapi import UploadFile
++from openpyxl import Workbook
++
++from config.error_codes import ErrorCode
++from exceptions.exception import ValidationException
++from modules.system.application.services.user_service import UserService
++
++HEADERS = ['部门编号', '登录名称', '用户名称', '用户邮箱', '手机号码', '用户性别', '帐号状态']
++ROW = [103, 'fixture_xlsx', 'Fixture XLSX', 'fixture_xlsx@example.com', '13800003456', '男', '正常']
++XLS_FIXTURE = Path(__file__).parents[2] / 'fixtures' / 'user_import_valid.xls'
++
++
++def xlsx_bytes(rows=None):
++    workbook = Workbook()
++    for row in rows if rows is not None else [HEADERS, ROW]:
++        workbook.active.append(row)
++    buffer = io.BytesIO()
++    workbook.save(buffer)
++    return buffer.getvalue()
++
++
++def zip_bytes(entries):
++    buffer = io.BytesIO()
++    with ZipFile(buffer, 'w') as archive:
++        for name, content in entries.items():
++            archive.writestr(name, content)
++    return buffer.getvalue()
++
++
++def malformed_xml(part):
++    with ZipFile(io.BytesIO(xlsx_bytes())) as archive:
++        return zip_bytes({name: b'<broken' if name == part else archive.read(name) for name in archive.namelist()})
++
++
++def import_service():
++    repository = SimpleNamespace(find_by_username=AsyncMock(return_value=None), add=AsyncMock())
++    factory = Mock(return_value=repository)
++    config = SimpleNamespace(query_config_list_from_cache_services=AsyncMock(return_value='Fixture123!'))
++    service = UserService(config_service=config, dept_service=Mock(), user_repo_factory=factory)
++    return service, repository, factory
++
++
++async def import_file(service, file):
++    request = SimpleNamespace(app=SimpleNamespace(state=SimpleNamespace(redis=object())))
++    current_user = SimpleNamespace(user=SimpleNamespace(user_name='import_operator', admin=True))
++    return await service.batch_import_user_services(request, None, file, False, current_user, '', '')
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize(
++    ('filename', 'contents'),
++    [
++        pytest.param('empty.xlsx', b'', id='empty'),
++        pytest.param('renamed.xlsx', b'not an Excel workbook', id='renamed-text'),
++        pytest.param('truncated.xlsx', xlsx_bytes()[:120], id='truncated-zip'),
++        pytest.param('ordinary.xlsx', zip_bytes({'note.txt': b'not a workbook'}), id='ordinary-zip'),
++        pytest.param('workbook.xlsx', malformed_xml('xl/workbook.xml'), id='malformed-workbook-xml'),
++        pytest.param('sheet.xlsx', malformed_xml('xl/worksheets/sheet1.xml'), id='malformed-sheet-xml'),
++        pytest.param('truncated.xls', XLS_FIXTURE.read_bytes()[:1024], id='truncated-biff8'),
++    ],
++)
++async def test_corrupt_workbook_is_file_validation_and_closes_before_repository_use(filename, contents):
++    service, repository, factory = import_service()
++    file = UploadFile(io.BytesIO(contents), filename=filename)
++
++    with pytest.raises(ValidationException) as failure:
++        await import_file(service, file)
++
++    assert failure.value.http_status == 422
++    assert failure.value.error_code == ErrorCode.INVALID_INPUT
++    assert failure.value.extra['field'] == 'file'
++    assert '重新保存后重试' in failure.value.user_message
++    assert file.file.closed
++    factory.assert_not_called()
++    repository.add.assert_not_awaited()
++
++
++@pytest.mark.asyncio
++async def test_wrong_template_is_file_validation_before_importing_any_rows():
++    service, _, factory = import_service()
++    file = UploadFile(io.BytesIO(xlsx_bytes([['登录名称'], ['fixture']])), filename='wrong-template.xlsx')
++
++    with pytest.raises(ValidationException) as failure:
++        await import_file(service, file)
++
++    assert failure.value.http_status == 422
++    assert failure.value.extra['field'] == 'file'
++    assert '缺少列：部门编号' in failure.value.user_message
++    assert file.file.closed
++    factory.assert_not_called()
++
++
++@pytest.mark.asyncio
++@pytest.mark.parametrize('suffix', ['xlsx', 'xls'])
++async def test_valid_workbook_keeps_successful_batch_contract(suffix):
++    service, repository, _ = import_service()
++    contents = xlsx_bytes() if suffix == 'xlsx' else XLS_FIXTURE.read_bytes()
++    file = UploadFile(io.BytesIO(contents), filename=f'valid.{suffix.upper()}')
++
++    response = await import_file(service, file)
++
++    assert response.is_success
++    assert response.result['summary'] == {'total': 1, 'succeeded': 1, 'failed': 0}
++    assert response.result['results'][0]['userName'] == f'fixture_{suffix}'
++    user = repository.add.await_args.args[0]
++    assert user.user_name == f'fixture_{suffix}'
++    assert user.sex == '0'
++    assert user.status == '0'
++    assert file.file.closed
++
++
++@pytest.mark.asyncio
++async def test_row_validation_still_returns_per_row_failure():
++    service, repository, _ = import_service()
++    bad_row = [*ROW]
++    bad_row[3] = 'invalid email'
++    file = UploadFile(io.BytesIO(xlsx_bytes([HEADERS, bad_row])), filename='invalid-row.xlsx')
++
++    response = await import_file(service, file)
++
++    assert response.result['summary'] == {'total': 1, 'succeeded': 0, 'failed': 1}
++    assert not response.result['results'][0]['success']
++    repository.add.assert_not_awaited()
++
++
++@pytest.mark.asyncio
++async def test_internal_parser_failure_is_not_misclassified_as_invalid_input(monkeypatch):
++    service, _, factory = import_service()
++    file = UploadFile(io.BytesIO(xlsx_bytes()), filename='valid.xlsx')
++    monkeypatch.setattr(
++        'modules.system.application.services.user_service.pd.read_excel',
++        Mock(side_effect=RuntimeError('internal failure')),
++    )
++
++    with pytest.raises(RuntimeError, match='internal failure'):
++        await import_file(service, file)
++
++    assert file.file.closed
++    factory.assert_not_called()
++
++
++@pytest.mark.asyncio
++async def test_file_read_failure_still_closes_the_upload():
++    service, _, factory = import_service()
++    file = SimpleNamespace(
++        filename='read-error.xlsx', read=AsyncMock(side_effect=OSError('read failed')), close=AsyncMock()
++    )
++
++    with pytest.raises(OSError, match='read failed'):
++        await import_file(service, file)
++
++    file.close.assert_awaited_once()
++    factory.assert_not_called()

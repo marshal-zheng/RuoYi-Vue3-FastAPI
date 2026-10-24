@@ -1,0 +1,18 @@
+{
+  "databaseCounts": {
+    "ownedPhysicalTables": 0,
+    "ownedGeneratorTables": 0,
+    "ownedGeneratorColumns": 0,
+    "ownedActiveProjects": 0,
+    "ownedActiveVersions": 0,
+    "ownedTopologies": 0,
+    "deletedAuditPresent": 0
+  },
+  "removedOwnedKeys": [
+    "zxqa_cache_mvet0wd2_adjacent:item",
+    "zxqa_adjacent_mvet0wd2:zxqa_exact_mvet0wd2:item",
+    "password_error_count:zxqa_unlock_mvet0wd2",
+    "account_lock:zxqa_t_mvet0wd2",
+    "password_error_count:zxqa_t_mvet0wd2"
+  ]
+}

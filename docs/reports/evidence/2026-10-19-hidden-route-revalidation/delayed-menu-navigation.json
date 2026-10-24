@@ -1,0 +1,15 @@
+{
+  "state": {
+    "path": "/user/profile",
+    "currentName": "Profile",
+    "resolved": "Profile",
+    "notFound": false,
+    "permissions": [
+      "",
+      "system:user:list",
+      "system:user:query"
+    ],
+    "registered": []
+  },
+  "heldMenu": true
+}

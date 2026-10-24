@@ -1,0 +1,22 @@
+--- baseline/ruoyi-fastapi-frontend/src/mocks/utils/request.ts
++++ current/ruoyi-fastapi-frontend/src/mocks/utils/request.ts
+@@ -1,7 +1,17 @@
+ export function getRequestToken(request: Request): string | undefined {
+   const raw = request.headers.get('authorization');
+-  if (!raw) return undefined;
+-  return raw.replace(/^Bearer\s+/i, '');
++  if (raw) return raw.replace(/^Bearer\s+/i, '');
++  const cookie = request.headers
++    .get('cookie')
++    ?.split(';')
++    .map((value) => value.trim())
++    .find((value) => value.startsWith('ruoyi_at='));
++  if (!cookie) return undefined;
++  try {
++    return decodeURIComponent(cookie.slice('ruoyi_at='.length)) || undefined;
++  } catch {
++    return undefined;
++  }
+ }
+ 
+ export async function readJsonBody<T = unknown>(request: Request): Promise<T | undefined> {

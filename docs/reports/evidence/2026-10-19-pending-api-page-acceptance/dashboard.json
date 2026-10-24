@@ -1,0 +1,550 @@
+{
+  "initial": {
+    "ok": true,
+    "body": {
+      "document": {
+        "uid": "monitor-server",
+        "title": "服务器监控",
+        "panels": [
+          {
+            "id": "cpu",
+            "title": "CPU 使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "id": "memory",
+            "title": "内存使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 8,
+              "y": 0
+            }
+          },
+          {
+            "id": "python",
+            "title": "Python 内存使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 16,
+              "y": 0
+            }
+          },
+          {
+            "id": "cpu-details",
+            "title": "CPU",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 6,
+              "w": 12,
+              "x": 0,
+              "y": 6
+            }
+          },
+          {
+            "id": "memory-details",
+            "title": "内存",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 6,
+              "w": 12,
+              "x": 12,
+              "y": 6
+            }
+          },
+          {
+            "id": "system",
+            "title": "服务器信息",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 0,
+              "y": 12
+            }
+          },
+          {
+            "id": "runtime",
+            "title": "Python 解释器",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 12,
+              "y": 12
+            }
+          },
+          {
+            "id": "disks",
+            "title": "磁盘状态",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 19
+            }
+          }
+        ],
+        "schemaVersion": 2,
+        "pluginVersions": {
+          "zx.bar": "1.0.0",
+          "zx.stat": "1.0.0",
+          "zx.text": "1.0.0",
+          "zx.gauge": "1.0.0",
+          "zx.table": "1.0.0",
+          "zx.iframe": "1.0.0",
+          "zx.time-series": "1.0.0",
+          "zx.status-light": "1.0.0"
+        }
+      },
+      "revision": 1,
+      "updatedAt": "2026-10-19T05:21:50+00:00",
+      "ownerId": 132,
+      "scope": "account",
+      "scopeKey": "monitor-server"
+    }
+  },
+  "changed": {
+    "ok": true,
+    "body": {
+      "document": {
+        "uid": "monitor-server",
+        "title": "服务器监控",
+        "panels": [
+          {
+            "id": "cpu",
+            "title": "CPU 使用率",
+            "params": {
+              "max": 100,
+              "min": 0,
+              "unit": "%",
+              "decimals": 2
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "id": "memory",
+            "title": "内存使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 8,
+              "y": 0
+            }
+          },
+          {
+            "id": "python",
+            "title": "Python 内存使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 16,
+              "y": 0
+            }
+          },
+          {
+            "id": "cpu-details",
+            "title": "CPU",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 6,
+              "w": 12,
+              "x": 0,
+              "y": 6
+            }
+          },
+          {
+            "id": "memory-details",
+            "title": "内存",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 6,
+              "w": 12,
+              "x": 12,
+              "y": 6
+            }
+          },
+          {
+            "id": "system",
+            "title": "服务器信息",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 0,
+              "y": 12
+            }
+          },
+          {
+            "id": "runtime",
+            "title": "Python 解释器",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 12,
+              "y": 12
+            }
+          },
+          {
+            "id": "disks",
+            "title": "磁盘状态",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 19
+            }
+          }
+        ],
+        "schemaVersion": 2,
+        "pluginVersions": {
+          "zx.bar": "1.0.0",
+          "zx.stat": "1.0.0",
+          "zx.text": "1.0.0",
+          "zx.gauge": "1.0.0",
+          "zx.table": "1.0.0",
+          "zx.iframe": "1.0.0",
+          "zx.time-series": "1.0.0",
+          "zx.status-light": "1.0.0"
+        }
+      },
+      "revision": 2,
+      "updatedAt": "2026-10-19T05:22:25+00:00",
+      "ownerId": 132,
+      "scope": "account",
+      "scopeKey": "monitor-server"
+    }
+  },
+  "stale": {
+    "ok": false,
+    "status": 409,
+    "problem": {
+      "type": "http://localhost/problems/dashboard-revision-conflict",
+      "title": "仪表盘已被其他操作修改",
+      "status": 409,
+      "detail": "仪表盘已被其他操作修改",
+      "instance": "/dev-api/system/dashboard/account/monitor-server",
+      "errorCode": "dashboard_revision_conflict",
+      "requestId": "95daf849f9e343c58d547957bf17177a",
+      "errors": [
+        {
+          "field": "expectedRevision",
+          "code": "conflict",
+          "remote": {
+            "document": {
+              "uid": "monitor-server",
+              "title": "服务器监控",
+              "panels": [
+                {
+                  "id": "cpu",
+                  "title": "CPU 使用率",
+                  "params": {
+                    "max": 100,
+                    "min": 0,
+                    "unit": "%",
+                    "decimals": 2
+                  },
+                  "widget": "zx.gauge",
+                  "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 0,
+                    "y": 0
+                  }
+                },
+                {
+                  "id": "memory",
+                  "title": "内存使用率",
+                  "params": {
+                    "unit": "%",
+                    "decimals": 1
+                  },
+                  "widget": "zx.gauge",
+                  "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 8,
+                    "y": 0
+                  }
+                },
+                {
+                  "id": "python",
+                  "title": "Python 内存使用率",
+                  "params": {
+                    "unit": "%",
+                    "decimals": 1
+                  },
+                  "widget": "zx.gauge",
+                  "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 16,
+                    "y": 0
+                  }
+                },
+                {
+                  "id": "cpu-details",
+                  "title": "CPU",
+                  "params": {},
+                  "widget": "zx.table",
+                  "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 0,
+                    "y": 6
+                  }
+                },
+                {
+                  "id": "memory-details",
+                  "title": "内存",
+                  "params": {},
+                  "widget": "zx.table",
+                  "gridPos": {
+                    "h": 6,
+                    "w": 12,
+                    "x": 12,
+                    "y": 6
+                  }
+                },
+                {
+                  "id": "system",
+                  "title": "服务器信息",
+                  "params": {},
+                  "widget": "zx.table",
+                  "gridPos": {
+                    "h": 7,
+                    "w": 12,
+                    "x": 0,
+                    "y": 12
+                  }
+                },
+                {
+                  "id": "runtime",
+                  "title": "Python 解释器",
+                  "params": {},
+                  "widget": "zx.table",
+                  "gridPos": {
+                    "h": 7,
+                    "w": 12,
+                    "x": 12,
+                    "y": 12
+                  }
+                },
+                {
+                  "id": "disks",
+                  "title": "磁盘状态",
+                  "params": {},
+                  "widget": "zx.table",
+                  "gridPos": {
+                    "h": 7,
+                    "w": 24,
+                    "x": 0,
+                    "y": 19
+                  }
+                }
+              ],
+              "schemaVersion": 2,
+              "pluginVersions": {
+                "zx.bar": "1.0.0",
+                "zx.stat": "1.0.0",
+                "zx.text": "1.0.0",
+                "zx.gauge": "1.0.0",
+                "zx.table": "1.0.0",
+                "zx.iframe": "1.0.0",
+                "zx.time-series": "1.0.0",
+                "zx.status-light": "1.0.0"
+              }
+            },
+            "revision": 2,
+            "updatedAt": "2026-10-19T05:22:25+00:00",
+            "ownerId": 132,
+            "scope": "account",
+            "scopeKey": "monitor-server"
+          }
+        }
+      ]
+    }
+  },
+  "reset": {
+    "ok": true,
+    "body": {
+      "document": {
+        "uid": "monitor-server",
+        "title": "服务器监控",
+        "panels": [
+          {
+            "id": "cpu",
+            "title": "CPU 使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "id": "memory",
+            "title": "内存使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 8,
+              "y": 0
+            }
+          },
+          {
+            "id": "python",
+            "title": "Python 内存使用率",
+            "params": {
+              "unit": "%",
+              "decimals": 1
+            },
+            "widget": "zx.gauge",
+            "gridPos": {
+              "h": 6,
+              "w": 8,
+              "x": 16,
+              "y": 0
+            }
+          },
+          {
+            "id": "cpu-details",
+            "title": "CPU",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 6,
+              "w": 12,
+              "x": 0,
+              "y": 6
+            }
+          },
+          {
+            "id": "memory-details",
+            "title": "内存",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 6,
+              "w": 12,
+              "x": 12,
+              "y": 6
+            }
+          },
+          {
+            "id": "system",
+            "title": "服务器信息",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 0,
+              "y": 12
+            }
+          },
+          {
+            "id": "runtime",
+            "title": "Python 解释器",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 12,
+              "x": 12,
+              "y": 12
+            }
+          },
+          {
+            "id": "disks",
+            "title": "磁盘状态",
+            "params": {},
+            "widget": "zx.table",
+            "gridPos": {
+              "h": 7,
+              "w": 24,
+              "x": 0,
+              "y": 19
+            }
+          }
+        ],
+        "schemaVersion": 2,
+        "pluginVersions": {
+          "zx.bar": "1.0.0",
+          "zx.stat": "1.0.0",
+          "zx.text": "1.0.0",
+          "zx.gauge": "1.0.0",
+          "zx.table": "1.0.0",
+          "zx.iframe": "1.0.0",
+          "zx.time-series": "1.0.0",
+          "zx.status-light": "1.0.0"
+        }
+      },
+      "revision": 3,
+      "updatedAt": "2026-10-19T05:22:25+00:00",
+      "ownerId": 132,
+      "scope": "account",
+      "scopeKey": "monitor-server"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "8088": {
+    "listeners": "",
+    "exit": 1
+  },
+  "16379": {
+    "listeners": "",
+    "exit": 1
+  },
+  "containers": [
+    "steamer-plane-plane-redis-1 Up About an hour",
+    "steamer-plane-plane-minio-1 Up About an hour",
+    "steamer-plane-plane-mq-1 Up About an hour",
+    "steamer-plane-plane-db-1 Up About an hour",
+    "ruoyi-redis-local Up About an hour",
+    "ruoyi-mysql-local Up About an hour",
+    "buildx_buildkit_multiarch0 Up About an hour"
+  ]
+}

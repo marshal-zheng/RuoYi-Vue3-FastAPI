@@ -1,0 +1,76 @@
+{
+  "status": 200,
+  "read": {
+    "status": 200,
+    "body": {
+      "depts": [
+        {
+          "id": 100,
+          "label": "集团总公司",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 101,
+              "label": "深圳分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 103,
+                  "label": "研发部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 104,
+                  "label": "市场部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 105,
+                  "label": "测试部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 106,
+                  "label": "财务部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 107,
+                  "label": "运维部门",
+                  "parentId": 101,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "label": "长沙分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 108,
+                  "label": "市场部门",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 109,
+                  "label": "财务部门",
+                  "parentId": 102,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "checkedKeys": [
+        103
+      ]
+    }
+  }
+}

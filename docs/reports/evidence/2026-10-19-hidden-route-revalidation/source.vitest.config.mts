@@ -1,0 +1,10 @@
+import base from '/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/vitest.config'
+import { zxuiSourceIntegrationPlugin } from '/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/vite/zxui-theme-packages'
+const root = '/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend'
+export default {
+  ...base, root,
+  plugins: [...(base.plugins ?? []), zxuiSourceIntegrationPlugin(root, '/Users/hqz/Downloads/element-plus')],
+  test: { ...base.test, watch: false, reporters: ['default'], outputFile: undefined,
+    include: ['tests/unit/components/DictDataRouteFilter.test.ts','src/store/modules/user.login.test.ts','tests/unit/router/permission-layout.test.ts','tests/unit/stores/permission.test.ts','src/api/menu-contract.test.ts','src/plugins/dev-menu-hot-sync.test.ts','tests/unit/components/RoleAuthorizationMounted.test.ts'],
+  },
+}

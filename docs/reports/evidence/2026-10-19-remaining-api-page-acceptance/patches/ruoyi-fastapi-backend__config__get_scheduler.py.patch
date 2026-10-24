@@ -1,0 +1,121 @@
+--- baseline/ruoyi-fastapi-backend/config/get_scheduler.py
++++ current/ruoyi-fastapi-backend/config/get_scheduler.py
+@@ -1,6 +1,6 @@
+ import json
+ import asyncio
+-from apscheduler.events import EVENT_ALL
++from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED, EVENT_JOB_MISSED
+ from apscheduler.job import Job
+ from apscheduler.executors.asyncio import AsyncIOExecutor
+ from apscheduler.executors.pool import ProcessPoolExecutor, ThreadPoolExecutor
+@@ -152,7 +152,7 @@
+             for item in job_list:
+                 cls.remove_scheduler_job(job_id=str(item.job_id))
+                 cls.add_scheduler_job(item)
+-        scheduler.add_listener(cls.scheduler_event_listener, EVENT_ALL)
++        scheduler.add_listener(cls.scheduler_event_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
+         logger.info('系统初始定时任务加载成功')
+ 
+     @classmethod
+@@ -288,63 +288,45 @@
+ 
+     @classmethod
+     def scheduler_event_listener(cls, event):
+-        # 获取事件类型和任务ID
+-        event_type = event.__class__.__name__
+-        # 获取任务执行异常信息
+-        status = '0'
+-        exception_info = ''
+-        if event_type == 'JobExecutionEvent' and event.exception:
+-            exception_info = str(event.exception)
+-            status = '1'
+-        if hasattr(event, 'job_id'):
+-            job_id = event.job_id
+-            query_job = cls.get_scheduler_job(job_id=job_id)
+-            if query_job:
+-                query_job_info = query_job.__getstate__()
+-                # 获取任务名称
+-                job_name = query_job_info.get('name')
+-                # 获取任务组名
+-                job_group = query_job._jobstore_alias
+-                # 获取任务执行器
+-                job_executor = query_job_info.get('executor')
+-                # 获取调用目标字符串
+-                invoke_target = query_job_info.get('func')
+-                # 获取调用函数位置参数
+-                job_args = ','.join(query_job_info.get('args'))
+-                # 获取调用函数关键字参数
+-                job_kwargs = json.dumps(query_job_info.get('kwargs'))
+-                # 获取任务触发器
+-                job_trigger = str(query_job_info.get('trigger'))
+-                # 构造日志消息
+-                job_message = f'事件类型: {event_type}, 任务ID: {job_id}, 任务名称: {job_name}, 执行于{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
+-                job_log = JobLogModel(
+-                    jobName=job_name,
+-                    jobGroup=job_group,
+-                    jobExecutor=job_executor,
+-                    invokeTarget=invoke_target,
+-                    jobArgs=job_args,
+-                    jobKwargs=job_kwargs,
+-                    jobTrigger=job_trigger,
+-                    jobMessage=job_message,
+-                    status=status,
+-                    exceptionInfo=exception_info,
+-                    createTime=datetime.now(),
+-                )
+-                try:
+-                    loop = asyncio.get_running_loop()
+-                except RuntimeError:
+-                    logger.warning('scheduler_event_listener 未检测到运行中的事件循环，跳过任务日志写入')
+-                    return
+-                task = loop.create_task(cls._persist_job_log(job_log))
+-                task.add_done_callback(cls._log_async_task_exception)
+-
+-    @classmethod
+-    async def _persist_job_log(cls, job_log: JobLogModel):
+-        async with AsyncSessionLocal() as session:
+-            job_log_service = JobLogService(
+-                job_log_repo=JobLogRepository(session),
+-                query_db=session,
++        # Registration/removal events do not represent an execution result.
++        if event.code not in (EVENT_JOB_EXECUTED, EVENT_JOB_ERROR, EVENT_JOB_MISSED):
++            return
++        try:
++            loop = asyncio.get_running_loop()
++        except RuntimeError:
++            logger.warning('scheduler_event_listener 未检测到运行中的事件循环，跳过任务日志写入')
++            return
++        task = loop.create_task(cls._persist_job_event(event))
++        task.add_done_callback(cls._log_async_task_exception)
++
++    @classmethod
++    async def _persist_job_event(cls, event):
++        # A DateTrigger is removed before its execution event is delivered. Read
++        # the durable job definition instead of looking it up in the scheduler.
++        async with AsyncSessionLocal() as session, session.begin():
++            job = await JobRepository(session).find_by_id(int(event.job_id))
++            if job is None:
++                logger.warning(f'任务 {event.job_id} 已删除，跳过执行日志写入')
++                return
++            missed = event.code == EVENT_JOB_MISSED
++            exception_info = '任务错过计划执行时间' if missed else str(event.exception or '')
++            job_log = JobLogModel(
++                jobName=job.job_name,
++                jobGroup=job.job_group,
++                jobExecutor=job.job_executor,
++                invokeTarget=job.invoke_target,
++                jobArgs=job.job_args,
++                jobKwargs=job.job_kwargs,
++                jobTrigger=job.cron_expression,
++                jobMessage=(
++                    f'事件类型: {event.__class__.__name__}, 任务ID: {event.job_id}, '
++                    f'任务名称: {job.job_name}, 计划执行于{event.scheduled_run_time.isoformat()}'
++                ),
++                status='0' if event.code == EVENT_JOB_EXECUTED else '1',
++                exceptionInfo=exception_info,
++                createTime=datetime.now(),
+             )
++            job_log_service = JobLogService(job_log_repo=JobLogRepository(session), query_db=session)
+             await job_log_service.add_job_log_services(job_log)
+ 
+     @staticmethod

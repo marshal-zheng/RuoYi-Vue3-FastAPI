@@ -1,0 +1,5 @@
+{
+  "reason": "Auxiliary login of the same account replaced its session under the actual single-login policy; no natural-expiry claim is made for this discarded attempt",
+  "started": 1792396557953,
+  "expire": 1792397157
+}

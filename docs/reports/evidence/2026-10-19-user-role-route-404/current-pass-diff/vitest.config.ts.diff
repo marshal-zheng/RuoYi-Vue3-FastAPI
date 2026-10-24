@@ -1,0 +1,10 @@
+--- vitest.config.ts (start)
++++ vitest.config.ts (end)
+@@ -6,6 +6,7 @@
+ export default defineConfig({
+   plugins: [vue() as any],
+   resolve: {
++    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+     alias: {
+       '@': resolve(__dirname, './src'),
+       'virtual:zxui-theme-deployment': resolve(

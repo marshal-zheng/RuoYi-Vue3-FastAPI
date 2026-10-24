@@ -1,0 +1,20 @@
+{
+  "generators": [
+    "generate-package-types.ts",
+    "generate-examples.ts",
+    ".vitepress/build/generate-llms.ts"
+  ],
+  "isolatedOutput": true,
+  "appliedFiles": [
+    "r/types/http-client.json",
+    "r/examples/http-client.json",
+    "r/examples/index.json",
+    "llms-components.json",
+    "llms-full.txt"
+  ],
+  "nonHttpAggregateEntriesUnchanged": true,
+  "updatedFullTextSections": 4,
+  "httpExampleCount": 10,
+  "newDemo": "http-client/cancellation",
+  "retiredDemoAbsent": true
+}

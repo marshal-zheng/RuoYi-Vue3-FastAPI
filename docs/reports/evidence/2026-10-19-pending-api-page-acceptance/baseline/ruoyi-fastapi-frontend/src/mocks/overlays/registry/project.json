@@ -1,0 +1,91 @@
+[
+  {
+    "id": "project-list-empty",
+    "name": "项目列表空态",
+    "stateType": "empty",
+    "target": {
+      "method": "GET",
+      "openapiPath": "/project/list",
+      "mswPath": "/api/project/list",
+      "handlerTag": "project:list"
+    },
+    "pages": ["project-list"],
+    "owner": "project",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/registry.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/project-page-state.spec.ts"
+    ],
+    "risk": "验证项目首页没有数据时的引导和默认成功链路隔离。",
+    "coreMatrix": true,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "response": {
+      "projection": "empty-page"
+    }
+  },
+  {
+    "id": "project-create-500",
+    "name": "项目创建服务端错误",
+    "stateType": "problem",
+    "target": {
+      "method": "POST",
+      "openapiPath": "/project",
+      "mswPath": "/api/project",
+      "handlerTag": "project:create"
+    },
+    "pages": ["project-list", "project-form"],
+    "owner": "project",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/project.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/project-page-state.spec.ts"
+    ],
+    "risk": "验证项目写入失败时不会写入 Dexie，且页面能展示受控错误。",
+    "coreMatrix": true,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "problem-response",
+      "reason": "错误态使用统一 problem response，不计入 2xx OpenAPI schema 响应。"
+    },
+    "response": {
+      "status": 500,
+      "reason": "项目创建服务暂不可用",
+      "errorCode": "MOCK_PROJECT_CREATE_FAILED"
+    }
+  },
+  {
+    "id": "project-update-429",
+    "name": "项目更新限流",
+    "stateType": "problem",
+    "target": {
+      "method": "PUT",
+      "openapiPath": "/project",
+      "mswPath": "/api/project",
+      "handlerTag": "project:update"
+    },
+    "pages": ["project-list", "project-form"],
+    "owner": "project",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/project.test.ts"
+    ],
+    "risk": "验证 429 限流错误保留可诊断 header 与统一错误结构。",
+    "coreMatrix": false,
+    "e2eEnabled": false,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "problem-response",
+      "reason": "错误态使用统一 problem response，不计入 2xx OpenAPI schema 响应。"
+    },
+    "response": {
+      "status": 429,
+      "reason": "项目更新请求过于频繁",
+      "errorCode": "MOCK_RATE_LIMITED"
+    }
+  }
+]

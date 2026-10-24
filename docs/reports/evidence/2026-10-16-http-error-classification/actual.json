@@ -1,0 +1,249 @@
+{
+  "ok": true,
+  "mode": "source",
+  "checks": 25,
+  "unhandledRejections": 0,
+  "evidence": "Production HTTP/API, production password-form setup/submit, source ZXUI, real Axios XHR/FastAPI/MySQL. Native validation and visual UI were not rendered. No computer use.",
+  "results": [
+    {
+      "name": "allowed-self-edit-and-profile-still-work",
+      "ok": true,
+      "realPartialEdit": true,
+      "sessionValid": true
+    },
+    {
+      "name": "out-of-scope-detail",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30010,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "out-of-scope-edit",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30010,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "out-of-scope-status",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30010,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "out-of-scope-delete",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30010,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "out-of-scope-reset-password",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30010,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 0,
+      "reloginCount": 0
+    },
+    {
+      "name": "protected-admin-edit",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30009,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "protected-admin-status",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30009,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "protected-admin-delete",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30009,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "protected-admin-reset-password",
+      "ok": true,
+      "status": 403,
+      "errorCode": 30009,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 0,
+      "reloginCount": 0
+    },
+    {
+      "name": "denied-writes-preserve-records-and-live-session",
+      "ok": true,
+      "otherUserAndAdminUnchanged": true,
+      "actorSessionStillValid": true
+    },
+    {
+      "name": "profile-password-rejects-oldPassword-missing",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "oldPassword"
+    },
+    {
+      "name": "profile-password-rejects-oldPassword-null",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "oldPassword"
+    },
+    {
+      "name": "profile-password-rejects-oldPassword-",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "oldPassword"
+    },
+    {
+      "name": "profile-password-rejects-newPassword-missing",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "newPassword"
+    },
+    {
+      "name": "profile-password-rejects-newPassword-null",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "newPassword"
+    },
+    {
+      "name": "profile-password-rejects-newPassword-",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "newPassword"
+    },
+    {
+      "name": "profile-form-wrong-old-password",
+      "ok": true,
+      "status": 422,
+      "errorCode": 30011,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "oldPassword"
+    },
+    {
+      "name": "wrong-password-preserves-session-and-allows-form-correction",
+      "ok": true,
+      "productionPasswordForm": true,
+      "wrongPasswordDidNotChangeCredential": true,
+      "correctedSubmissionSucceeded": true,
+      "newPasswordAuthenticated": true,
+      "pendingReleased": true
+    },
+    {
+      "name": "missing-interface-permission",
+      "ok": true,
+      "status": 403,
+      "errorCode": 20004,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "missing-authentication",
+      "ok": true,
+      "status": 401,
+      "errorCode": 20001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 1
+    },
+    {
+      "name": "invalid-authentication",
+      "ok": true,
+      "status": 401,
+      "errorCode": 20001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 1
+    },
+    {
+      "name": "revoked-session",
+      "ok": true,
+      "status": 401,
+      "errorCode": 20001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 1
+    },
+    {
+      "name": "valid-session-recovers-after-real-401",
+      "ok": true,
+      "realAuthenticatedRead": true,
+      "reloginPromptDismissed": true
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "temporaryRecordsRemoved": true,
+      "originalBusinessListsAndTotalsExact": true
+    }
+  ]
+}

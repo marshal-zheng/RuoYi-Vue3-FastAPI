@@ -1,0 +1,38 @@
+{
+  "boundary": "Memory probes execute actual production callbacks/handlers and real Vue/useOperation; API/UI dependencies are controlled stubs. Generator sources rendered with Jinja separately.",
+  "results": [
+    {
+      "name": "backend-generated-index.vue",
+      "scriptAndTemplateCompiled": true,
+      "duplicateOperationNotRepeated": true,
+      "originalFailurePreserved": true,
+      "immediateRetry": true,
+      "editableCheckboxArrayPreserved": true
+    },
+    {
+      "name": "backend-generated-index-tree.vue",
+      "scriptAndTemplateCompiled": true,
+      "duplicateOperationNotRepeated": true,
+      "originalFailurePreserved": true,
+      "immediateRetry": true,
+      "editableCheckboxArrayPreserved": true
+    },
+    {
+      "name": "actual-protocol-drawer-confirm",
+      "awaitsParentSave": true,
+      "successEmittedAfterWrite": true
+    },
+    {
+      "name": "actual-avatar-upload",
+      "cropCallbackAwaited": true,
+      "uploadAwaited": true,
+      "duplicateOperationNotRepeated": true
+    },
+    {
+      "name": "actual-user-status-handler",
+      "sameRowReentryProtected": true,
+      "differentRowsParallel": true,
+      "completionReleasesOnlyOwnRow": true
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "operationsRevalidated": 41,
+  "correspondingPageOperations": 39,
+  "alternateApiOnlyOperations": 2,
+  "historicalOnlyRemaining": 0,
+  "fixedIssues": 4,
+  "backendTestsPassed": 43,
+  "businessFrontendTestsPassed": 27,
+  "zxuiTestsPassed": 70,
+  "typechecks": [
+    "business frontend full",
+    "business frontend strict",
+    "ZXUI web"
+  ],
+  "linters": [
+    "affected business frontend files",
+    "affected ZXUI files",
+    "new Python test"
+  ],
+  "existingProtocolLint": {
+    "before": 90,
+    "after": 90,
+    "new": 0
+  },
+  "services": {
+    "backendHealth": 200,
+    "frontend": 200
+  },
+  "unresolvedObservation": "One early user-role navigation 404 did not reproduce after full reload; no cause or source fix is claimed. Three button navigations and a direct reload subsequently passed.",
+  "commitOrPushPerformedByThisRun": false
+}

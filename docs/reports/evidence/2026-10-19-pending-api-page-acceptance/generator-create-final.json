@@ -1,0 +1,69 @@
+{
+  "status": 200,
+  "read": {
+    "ok": true,
+    "body": {
+      "items": [
+        {
+          "tplCategory": "crud",
+          "options": null,
+          "updateBy": "zxqa_p_mvet0wd2",
+          "moduleName": "system",
+          "genPath": "/",
+          "genType": "0",
+          "createTime": "2026-10-19T06:28:22",
+          "updateTime": "2026-10-19T06:28:22",
+          "packageName": "module_admin.system",
+          "functionName": "验收临时 mvet0wd2",
+          "remark": null,
+          "subTableFkName": null,
+          "className": "ZxqaMvet0wd2A",
+          "createBy": "zxqa_p_mvet0wd2",
+          "tableName": "zxqa_mvet0wd2_a",
+          "subTableName": null,
+          "tableId": 5,
+          "tplWebType": "",
+          "tableComment": "验收临时表 mvet0wd2",
+          "businessName": "a",
+          "functionAuthor": "insistence",
+          "columns": []
+        }
+      ],
+      "total": 1,
+      "page": 1,
+      "pageSize": 10,
+      "pager": {
+        "mode": "offset",
+        "page": 1,
+        "size": 10,
+        "total": 1
+      },
+      "list": [
+        {
+          "tplCategory": "crud",
+          "options": null,
+          "updateBy": "zxqa_p_mvet0wd2",
+          "moduleName": "system",
+          "genPath": "/",
+          "genType": "0",
+          "createTime": "2026-10-19T06:28:22",
+          "updateTime": "2026-10-19T06:28:22",
+          "packageName": "module_admin.system",
+          "functionName": "验收临时 mvet0wd2",
+          "remark": null,
+          "subTableFkName": null,
+          "className": "ZxqaMvet0wd2A",
+          "createBy": "zxqa_p_mvet0wd2",
+          "tableName": "zxqa_mvet0wd2_a",
+          "subTableName": null,
+          "tableId": 5,
+          "tplWebType": "",
+          "tableComment": "验收临时表 mvet0wd2",
+          "businessName": "a",
+          "functionAuthor": "insistence",
+          "columns": []
+        }
+      ]
+    }
+  }
+}

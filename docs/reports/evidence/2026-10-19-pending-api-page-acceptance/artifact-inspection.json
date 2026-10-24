@@ -1,0 +1,19 @@
+{
+  "archive": "generator-a.zip",
+  "entryCount": 8,
+  "entries": [
+    "backend/module_admin/system/controller/a_controller.py",
+    "backend/module_admin/system/repository/a_repository.py",
+    "backend/module_admin/system/entity/do/a_do.py",
+    "backend/module_admin/system/service/a_service.py",
+    "backend/module_admin/system/entity/vo/a_vo.py",
+    "backend/sql/a_menu.sql",
+    "frontend/api/system/a.js",
+    "frontend/views/system/a/index.vue"
+  ],
+  "pythonParsed": 5,
+  "vueSfcErrors": 0,
+  "vueTemplateCompileErrors": 0,
+  "vueVerification": "@vue/compiler-sfc parse and compileTemplate, executed against the archive source",
+  "departmentWorkbook": "department-inspection.json"
+}

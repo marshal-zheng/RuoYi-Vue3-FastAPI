@@ -1,0 +1,93 @@
+{
+  "checks": [
+    {
+      "name": "backend-focused",
+      "exitCode": 0,
+      "testsPassed": 98,
+      "filesPassed": 8,
+      "evidence": "backend-focused.txt",
+      "command": "./venv/bin/python -m pytest tests/unit/services/test_user_service.py tests/unit/services/test_login_service_core.py tests/unit/services/test_security_token_service.py tests/unit/test_exceptions.py modules/system/tests/test_user_write_commands.py modules/system/tests/test_command_pipeline_behaviors.py tests/unit/controllers/test_user_role_write_contract.py tests/unit/test_log_annotation.py -q --no-cov -n0"
+    },
+    {
+      "name": "frontend-focused",
+      "exitCode": 0,
+      "testsPassed": 45,
+      "filesPassed": 3,
+      "command": "yarn vitest run src/utils/http.test.ts src/utils/feedback/presenter.test.ts src/utils/operation.test.ts --reporter=dot",
+      "evidence": "frontend-focused.txt"
+    },
+    {
+      "name": "lint",
+      "exitCode": 0,
+      "command": "yarn lint:check",
+      "evidence": "lint.txt"
+    },
+    {
+      "name": "typecheck",
+      "exitCode": 0,
+      "command": "yarn type-check",
+      "evidence": "typecheck.txt"
+    },
+    {
+      "name": "openapi-check",
+      "exitCode": 0,
+      "command": "./venv/bin/python scripts/export_openapi.py --check --output ../shared/openapi.json",
+      "evidence": "openapi-check.txt"
+    },
+    {
+      "name": "generator-idempotence",
+      "exitCode": 0,
+      "command": "bash scripts/generate-api-types.sh --artifact",
+      "evidence": "generation-idempotence.json"
+    },
+    {
+      "name": "test-ruff",
+      "exitCode": 0,
+      "command": "./venv/bin/ruff check tests/unit/services/test_user_service.py tests/unit/controllers/test_user_role_write_contract.py",
+      "evidence": "test-ruff.txt"
+    },
+    {
+      "name": "test-format",
+      "exitCode": 0,
+      "command": "./venv/bin/ruff format --check tests/unit/services/test_user_service.py tests/unit/controllers/test_user_role_write_contract.py",
+      "evidence": "test-format.txt"
+    },
+    {
+      "name": "backend-conventions",
+      "exitCode": 0,
+      "command": "bash .cursor/skills/backend-conventions/scripts/validate.sh --changed",
+      "evidence": "backend-conventions.txt",
+      "scope": "Guardrails pass; script skips Ruff not found on PATH, standalone Ruff and baseline delta recorded."
+    },
+    {
+      "name": "frontend-conventions",
+      "exitCode": 1,
+      "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+      "evidence": "frontend-conventions.txt",
+      "baselineOnly": "VersionList.vue console usage; baseline content unchanged."
+    },
+    {
+      "name": "real-business",
+      "exitCode": 0,
+      "command": "node actual-probe.cjs",
+      "checksPassed": 25,
+      "evidence": "actual.json"
+    }
+  ],
+  "ruffDelta": {
+    "baseline": 118,
+    "current": 116,
+    "added": [],
+    "removed": [
+      {
+        "file": "ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py",
+        "rule": "UP045",
+        "message": "Use `X | None` for type annotations",
+        "count": 2
+      }
+    ]
+  },
+  "fullSuiteClaim": false,
+  "frontendProductionBehaviorChanged": false,
+  "zxuiImplementationChanged": false
+}

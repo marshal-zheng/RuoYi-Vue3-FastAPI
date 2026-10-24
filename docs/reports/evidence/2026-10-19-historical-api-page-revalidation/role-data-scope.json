@@ -1,0 +1,98 @@
+{
+  "status": 200,
+  "role": {
+    "status": 200,
+    "body": {
+      "roleId": 94,
+      "roleName": "验收角色_mveu4gpz",
+      "roleKey": "zxqa_role_mveu4gpz",
+      "roleSort": 0,
+      "dataScope": "2",
+      "menuCheckStrictly": true,
+      "deptCheckStrictly": true,
+      "status": "0",
+      "delFlag": "0",
+      "createBy": "zxqa_h_mveu4gpz",
+      "createTime": "2026-10-19T06:58:15",
+      "updateBy": "zxqa_h_mveu4gpz",
+      "updateTime": "2026-10-19T06:58:48",
+      "remark": "role saved mveu4gpz",
+      "admin": false
+    }
+  },
+  "tree": {
+    "status": 200,
+    "body": {
+      "depts": [
+        {
+          "id": 100,
+          "label": "集团总公司",
+          "parentId": 0,
+          "children": [
+            {
+              "id": 101,
+              "label": "深圳分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 103,
+                  "label": "研发部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 104,
+                  "label": "市场部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 105,
+                  "label": "测试部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 106,
+                  "label": "财务部门",
+                  "parentId": 101,
+                  "children": []
+                },
+                {
+                  "id": 107,
+                  "label": "运维部门",
+                  "parentId": 101,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "id": 102,
+              "label": "长沙分公司",
+              "parentId": 100,
+              "children": [
+                {
+                  "id": 108,
+                  "label": "市场部门",
+                  "parentId": 102,
+                  "children": []
+                },
+                {
+                  "id": 109,
+                  "label": "财务部门",
+                  "parentId": 102,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "checkedKeys": [
+        100,
+        101,
+        103
+      ]
+    }
+  }
+}

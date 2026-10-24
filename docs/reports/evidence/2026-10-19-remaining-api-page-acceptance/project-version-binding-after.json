@@ -1,0 +1,415 @@
+{
+  "created": {
+    "projectId": 14,
+    "versionId": 14
+  },
+  "saveStatus": 200,
+  "savePayload": {
+    "projectId": 14,
+    "versionId": 14,
+    "topologyData": {
+      "version": "3.9.0",
+      "savedAt": "2026-10-19T03:20:26.555Z",
+      "graph": {
+        "cells": [
+          {
+            "position": {
+              "x": 240,
+              "y": 270
+            },
+            "size": {
+              "width": 102,
+              "height": 87
+            },
+            "view": "vue-shape-view",
+            "shape": "device-port-node",
+            "effect": [
+              "data"
+            ],
+            "ports": {
+              "groups": {
+                "top": {
+                  "position": {
+                    "name": "absolute",
+                    "args": {
+                      "x": "50%",
+                      "y": 0
+                    }
+                  },
+                  "attrs": {
+                    "circle": {
+                      "r": 8,
+                      "magnet": "passive",
+                      "stroke": "var(--zx-semantic-accent-base)",
+                      "strokeWidth": 2,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "opacity": 0,
+                      "data-port-type": "STANDARD"
+                    },
+                    "portBody": {
+                      "width": 24,
+                      "height": 12,
+                      "x": -12,
+                      "y": -6,
+                      "magnet": true,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "strokeWidth": 1,
+                      "cursor": "crosshair",
+                      "rx": 0,
+                      "ry": 0
+                    },
+                    "portLabel": {
+                      "text": "",
+                      "fontSize": 7,
+                      "fontFamily": "Arial, sans-serif",
+                      "fontWeight": 500,
+                      "fill": "var(--zx-semantic-surface-field-on-text)",
+                      "textAnchor": "middle",
+                      "textVerticalAnchor": "middle",
+                      "x": 0,
+                      "y": 0,
+                      "pointerEvents": "none"
+                    }
+                  },
+                  "markup": [
+                    {
+                      "tagName": "rect",
+                      "selector": "portBody"
+                    },
+                    {
+                      "tagName": "text",
+                      "selector": "portLabel"
+                    }
+                  ]
+                },
+                "bottom": {
+                  "position": {
+                    "name": "absolute",
+                    "args": {
+                      "x": "50%",
+                      "y": 0
+                    }
+                  },
+                  "attrs": {
+                    "circle": {
+                      "r": 8,
+                      "magnet": true,
+                      "stroke": "var(--zx-semantic-accent-base)",
+                      "strokeWidth": 2,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "opacity": 0,
+                      "data-port-type": "STANDARD"
+                    },
+                    "portBody": {
+                      "width": 24,
+                      "height": 12,
+                      "x": -12,
+                      "y": -6,
+                      "magnet": true,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "strokeWidth": 1,
+                      "cursor": "crosshair",
+                      "rx": 0,
+                      "ry": 0
+                    },
+                    "portLabel": {
+                      "text": "",
+                      "fontSize": 7,
+                      "fontFamily": "Arial, sans-serif",
+                      "fontWeight": 500,
+                      "fill": "var(--zx-semantic-surface-field-on-text)",
+                      "textAnchor": "middle",
+                      "textVerticalAnchor": "middle",
+                      "x": 0,
+                      "y": 0,
+                      "pointerEvents": "none"
+                    }
+                  },
+                  "markup": [
+                    {
+                      "tagName": "rect",
+                      "selector": "portBody"
+                    },
+                    {
+                      "tagName": "text",
+                      "selector": "portLabel"
+                    }
+                  ]
+                },
+                "left": {
+                  "position": {
+                    "name": "absolute",
+                    "args": {
+                      "x": 0,
+                      "y": "50%"
+                    }
+                  },
+                  "attrs": {
+                    "circle": {
+                      "r": 8,
+                      "magnet": true,
+                      "stroke": "var(--zx-semantic-accent-base)",
+                      "strokeWidth": 2,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "opacity": 0,
+                      "data-port-type": "STANDARD"
+                    },
+                    "portBody": {
+                      "width": 32,
+                      "height": 12,
+                      "x": -16,
+                      "y": -6,
+                      "magnet": true,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "strokeWidth": 1,
+                      "cursor": "crosshair",
+                      "rx": 0,
+                      "ry": 0
+                    },
+                    "portLabel": {
+                      "text": "",
+                      "fontSize": 7,
+                      "fontFamily": "Arial, sans-serif",
+                      "fontWeight": 500,
+                      "fill": "var(--zx-semantic-surface-field-on-text)",
+                      "textAnchor": "middle",
+                      "textVerticalAnchor": "middle",
+                      "x": 0,
+                      "y": 0,
+                      "pointerEvents": "none"
+                    }
+                  },
+                  "markup": [
+                    {
+                      "tagName": "rect",
+                      "selector": "portBody"
+                    },
+                    {
+                      "tagName": "text",
+                      "selector": "portLabel"
+                    }
+                  ]
+                },
+                "right": {
+                  "position": {
+                    "name": "absolute",
+                    "args": {
+                      "x": 0,
+                      "y": "50%"
+                    }
+                  },
+                  "attrs": {
+                    "circle": {
+                      "r": 8,
+                      "magnet": true,
+                      "stroke": "var(--zx-semantic-accent-base)",
+                      "strokeWidth": 2,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "opacity": 0,
+                      "data-port-type": "STANDARD"
+                    },
+                    "portBody": {
+                      "width": 32,
+                      "height": 12,
+                      "x": -16,
+                      "y": -6,
+                      "magnet": true,
+                      "fill": "var(--zx-semantic-surface-field-fill)",
+                      "strokeWidth": 1,
+                      "cursor": "crosshair",
+                      "rx": 0,
+                      "ry": 0
+                    },
+                    "portLabel": {
+                      "text": "",
+                      "fontSize": 7,
+                      "fontFamily": "Arial, sans-serif",
+                      "fontWeight": 500,
+                      "fill": "var(--zx-semantic-surface-field-on-text)",
+                      "textAnchor": "middle",
+                      "textVerticalAnchor": "middle",
+                      "x": 0,
+                      "y": 0,
+                      "pointerEvents": "none"
+                    }
+                  },
+                  "markup": [
+                    {
+                      "tagName": "rect",
+                      "selector": "portBody"
+                    },
+                    {
+                      "tagName": "text",
+                      "selector": "portLabel"
+                    }
+                  ]
+                }
+              },
+              "items": [
+                {
+                  "id": "port-1",
+                  "group": "right",
+                  "args": {
+                    "x": 86,
+                    "y": 43.5
+                  },
+                  "attrs": {
+                    "portBody": {
+                      "stroke": "#10b981"
+                    },
+                    "portLabel": {
+                      "text": "LAN"
+                    }
+                  },
+                  "position": {
+                    "name": "absolute"
+                  }
+                }
+              ]
+            },
+            "id": "7137e5f1-47e7-421b-a70c-16516b2489bd",
+            "data": {
+              "type": "root-node",
+              "layoutDirection": "horizontal",
+              "collapsed": false,
+              "properties": {
+                "content": {
+                  "id": "1792380019924qln1q5s1v",
+                  "label": "新设备"
+                },
+                "weight": 50,
+                "otherData": {},
+                "parentNodeId": null,
+                "customType": "",
+                "customProperties": "",
+                "unit": "",
+                "priority": "",
+                "defaultValue": "",
+                "notes": "",
+                "level": 1
+              },
+              "id": "1792380019924jzje5c38q",
+              "label": "新设备",
+              "status": "default",
+              "description": "设备",
+              "originalData": {
+                "name": "新设备",
+                "value": "设备",
+                "deviceId": 1
+              },
+              "deviceId": 1,
+              "ports": [
+                {
+                  "id": "port-1",
+                  "interfaceId": 1,
+                  "interfaceName": "LAN",
+                  "interfaceType": "LAN",
+                  "busType": "LAN",
+                  "direction": "bidirectional",
+                  "group": "right",
+                  "description": "ZXUI 本地端口",
+                  "color": "#10b981",
+                  "dataRate": "",
+                  "protocolType": "",
+                  "protocolConfig": {},
+                  "messageConfig": {},
+                  "params": {
+                    "port": 8080,
+                    "protocol": "TCP",
+                    "ipAddress": "192.168.1.100"
+                  }
+                }
+              ],
+              "nodeType": "device-port-node",
+              "level": 1,
+              "otherData": {},
+              "customType": "",
+              "customProperties": "",
+              "unit": "",
+              "priority": "",
+              "defaultValue": "",
+              "notes": "",
+              "hasChildren": false
+            },
+            "draggable": true,
+            "locked": false,
+            "zIndex": 1
+          }
+        ]
+      },
+      "nodes": [
+        {
+          "id": "7137e5f1-47e7-421b-a70c-16516b2489bd",
+          "data": {
+            "type": "root-node",
+            "layoutDirection": "horizontal",
+            "collapsed": false,
+            "properties": {
+              "content": {
+                "id": "1792380019924qln1q5s1v",
+                "label": "新设备"
+              },
+              "weight": 50,
+              "otherData": {},
+              "parentNodeId": null,
+              "customType": "",
+              "customProperties": "",
+              "unit": "",
+              "priority": "",
+              "defaultValue": "",
+              "notes": "",
+              "level": 1
+            },
+            "id": "1792380019924jzje5c38q",
+            "label": "新设备",
+            "status": "default",
+            "description": "设备",
+            "originalData": {
+              "name": "新设备",
+              "value": "设备",
+              "deviceId": 1
+            },
+            "deviceId": 1,
+            "ports": [
+              {
+                "id": "port-1",
+                "interfaceId": 1,
+                "interfaceName": "LAN",
+                "interfaceType": "LAN",
+                "busType": "LAN",
+                "direction": "bidirectional",
+                "group": "right",
+                "description": "ZXUI 本地端口",
+                "color": "#10b981",
+                "dataRate": "",
+                "protocolType": "",
+                "protocolConfig": {},
+                "messageConfig": {},
+                "params": {
+                  "port": 8080,
+                  "protocol": "TCP",
+                  "ipAddress": "192.168.1.100"
+                }
+              }
+            ],
+            "nodeType": "device-port-node",
+            "level": 1,
+            "otherData": {},
+            "customType": "",
+            "customProperties": "",
+            "unit": "",
+            "priority": "",
+            "defaultValue": "",
+            "notes": "",
+            "hasChildren": false
+          }
+        }
+      ],
+      "edges": []
+    }
+  },
+  "readback": {
+    "versionId": 14,
+    "nodes": 1
+  }
+}

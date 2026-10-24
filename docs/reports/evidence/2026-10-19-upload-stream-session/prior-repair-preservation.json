@@ -1,0 +1,106 @@
+[
+  {
+    "path": "packages/components/_shared/form-model.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/dialog/src/use-dialog-confirm.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/drawer/src/drawer.vue",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/hooks/use-dialog/index.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/hooks/use-drawer/README.md",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/hooks/use-drawer/__tests__/use-drawer.test.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/hooks/use-drawer/index.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/icon-select/src/icon-select.vue",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/icon-select/src/props.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/select/__tests__/select.test.tsx",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/select/src/select.vue",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/tags-input/src/props.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/tags-input/src/tags-input.vue",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/upload/src/props.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/upload/src/upload.vue",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/constants/form-modal.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/zxui/hooks/index.ts",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "docs/zh-CN/component/select.md",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "docs/zh-CN/component/icon-select.md",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "docs/zh-CN/component/tags-input.md",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "docs/zh-CN/component/upload.md",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "docs/zh-CN/component/dialog.md",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "docs/zh-CN/component/drawer.md",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/_shared/__tests__/form-field-contract.test.tsx",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/_shared/__tests__/form-session-contract.test.tsx",
+    "unchangedSincePriorRepair": true
+  },
+  {
+    "path": "packages/components/upload/__tests__/upload.lifecycle.test.tsx",
+    "unchangedSincePriorRepair": true
+  }
+]

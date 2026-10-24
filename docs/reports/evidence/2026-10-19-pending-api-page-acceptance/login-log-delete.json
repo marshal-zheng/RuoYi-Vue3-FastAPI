@@ -1,0 +1,36 @@
+{
+  "status": 204,
+  "id": 472,
+  "read": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "ipaddr": "",
+          "browser": "Other",
+          "infoId": 473,
+          "status": "0",
+          "loginTime": "2026-10-19T06:34:52",
+          "userName": "zxqa_t_mvet0wd2",
+          "loginLocation": "未知",
+          "os": "Other",
+          "msg": ""
+        },
+        {
+          "ipaddr": "",
+          "browser": "Other",
+          "infoId": 470,
+          "status": "1",
+          "loginTime": "2026-10-19T06:32:42",
+          "userName": "zxqa_t_mvet0wd2",
+          "loginLocation": "未知",
+          "os": "Other",
+          "msg": "账号已锁定，请稍后再试"
+        }
+      ],
+      "total": 2,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

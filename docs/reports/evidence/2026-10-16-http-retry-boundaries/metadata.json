@@ -1,0 +1,13 @@
+{
+  "generators": [
+    "current components generator",
+    "current llms generator"
+  ],
+  "isolatedOutput": true,
+  "changedFiles": [
+    "llms-full.txt",
+    "r/types/http-client.json"
+  ],
+  "updatedHttpFullTextSections": 4,
+  "nonHttpAggregateEntriesUnchanged": true
+}

@@ -1,0 +1,22 @@
+{
+  "removedExports": [
+    "AxiosCanceler",
+    "getPendingKey",
+    "DedupManager",
+    "createDedupManager",
+    "defaultKeyGenerator",
+    "describeRequestPayload",
+    "normalizeParams",
+    "createUrlSearchParams",
+    "isFormData",
+    "isNil"
+  ],
+  "removedOptions": [
+    "deduplication",
+    "deduplicate",
+    "ignoreCancelToken",
+    "parameterMode"
+  ],
+  "allAbsent": true,
+  "nativeSignalInheritedFromAxios": true
+}

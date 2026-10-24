@@ -1,0 +1,102 @@
+{
+  "owner": {
+    "userId": 131,
+    "userName": "zxqa_r_mvenpxba"
+  },
+  "records": [
+    {
+      "kind": "config",
+      "id": 81,
+      "marker": "zxqa_cfg_mvenpxba",
+      "key": "zxqa.remaining.mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "dept",
+      "id": 197,
+      "marker": "zxqa_dept_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "post",
+      "id": 31,
+      "marker": "zxqa_post_mvenpxba",
+      "code": "zxqa_post_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "menu",
+      "id": 1078,
+      "marker": "zxqa_menu_mvenpxba_edited",
+      "deleted": true
+    },
+    {
+      "kind": "dictType",
+      "id": 131,
+      "marker": "zxqa_dict_mvenpxba",
+      "type": "zxqa_dict_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "dictData",
+      "id": 208,
+      "marker": "zxqa_label_mvenpxba",
+      "type": "zxqa_dict_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "notice",
+      "id": 12,
+      "marker": "zxqa_notice_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "project",
+      "id": 13,
+      "marker": "zxqa_project_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "project",
+      "id": 14,
+      "marker": "zxqa_project_fixed_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "project",
+      "id": 15,
+      "marker": "zxqa_project_fixed_mvenpxba-外部导入",
+      "deleted": true
+    },
+    {
+      "kind": "job",
+      "id": 8,
+      "marker": "zxqa_job_mvenpxba",
+      "deleted": true
+    },
+    {
+      "kind": "dictType",
+      "id": 132,
+      "marker": "zxqa_export_mvenpxba",
+      "type": "zxqa_export_mvenpxba",
+      "fixture": "export regression",
+      "deleted": true
+    },
+    {
+      "kind": "dictData",
+      "id": 209,
+      "marker": "zxqa_export_label_mvenpxba",
+      "type": "zxqa_export_mvenpxba",
+      "fixture": "export regression",
+      "deleted": true
+    },
+    {
+      "kind": "project",
+      "id": 16,
+      "marker": "zxqa_cascade_mvenpxba",
+      "fixture": "aggregate regression",
+      "deleted": true
+    }
+  ],
+  "temporaryMenus": []
+}

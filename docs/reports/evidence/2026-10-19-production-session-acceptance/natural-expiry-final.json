@@ -1,0 +1,98 @@
+{
+  "startedAt": "2026-10-19T08:08:42.237Z",
+  "readAt": "2026-10-19T08:19:02.256Z",
+  "elapsedMs": 620010,
+  "originalExpiresAt": "2026-10-19T08:18:41.000Z",
+  "before": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "serverBefore": {
+    "accessTTL": -2,
+    "sessionExists": true
+  },
+  "roleChange": "removed dict grants immediately before the expired-session query",
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200,
+      "type": "xhr"
+    },
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200,
+      "type": "xhr"
+    }
+  ],
+  "renewal": {
+    "sameUser": true,
+    "sameSession": true,
+    "newExpiry": true
+  },
+  "after": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "reloginPrompts": 0,
+  "afterPermissionRefresh": {
+    "path": "/system/dict-data/index/1",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "regrantRefresh": {
+    "path": "/system/dict-data/index/1",
+    "name": "Data",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  }
+}

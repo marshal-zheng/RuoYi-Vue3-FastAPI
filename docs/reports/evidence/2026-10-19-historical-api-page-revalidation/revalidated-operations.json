@@ -1,0 +1,664 @@
+[
+  {
+    "path": "/system/user",
+    "method": "PUT",
+    "operationId": "edit_system_user_system_user_put",
+    "summary": "Edit System User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-edit.json"
+    ],
+    "pageAction": "用户编辑保存并读回"
+  },
+  {
+    "path": "/system/user",
+    "method": "POST",
+    "operationId": "add_system_user_system_user_post",
+    "summary": "Add System User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      201,
+      422
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-create.json"
+    ],
+    "pageAction": "用户新增并读回"
+  },
+  {
+    "path": "/system/user/{user_ids}",
+    "method": "DELETE",
+    "operationId": "delete_system_user_system_user__user_ids__delete",
+    "summary": "Delete System User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-delete.json"
+    ],
+    "pageAction": "单项及批量删除"
+  },
+  {
+    "path": "/system/user/resetPwd",
+    "method": "PUT",
+    "operationId": "reset_system_user_pwd_system_user_resetPwd_put",
+    "summary": "Reset System User Pwd",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-reset-password.json"
+    ],
+    "pageAction": "重置密码后独立登录"
+  },
+  {
+    "path": "/system/user/changeStatus",
+    "method": "PUT",
+    "operationId": "change_system_user_status_system_user_changeStatus_put",
+    "summary": "Change System User Status",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-status.json"
+    ],
+    "pageAction": "停用及启用"
+  },
+  {
+    "path": "/system/user/profile",
+    "method": "GET",
+    "operationId": "query_detail_system_user_profile_system_user_profile_get",
+    "summary": "Query Detail System User Profile",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "profile-final-page.json"
+    ],
+    "pageAction": "打开个人中心"
+  },
+  {
+    "path": "/system/user/profile",
+    "method": "PUT",
+    "operationId": "change_system_user_profile_info_system_user_profile_put",
+    "summary": "Change System User Profile Info",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "profile-update.json"
+    ],
+    "pageAction": "修改昵称/手机/邮箱"
+  },
+  {
+    "path": "/system/user/",
+    "method": "GET",
+    "operationId": "query_detail_system_user_system_user__get",
+    "summary": "Query Detail System User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-create.json"
+    ],
+    "pageAction": "打开新增用户读取选项"
+  },
+  {
+    "path": "/system/user/{user_id}",
+    "method": "GET",
+    "operationId": "query_detail_system_user_system_user__user_id__get",
+    "summary": "Query Detail System User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-edit.json"
+    ],
+    "pageAction": "打开编辑读取详情"
+  },
+  {
+    "path": "/system/user/profile/avatar",
+    "method": "POST",
+    "operationId": "change_system_user_profile_avatar_system_user_profile_avatar_post",
+    "summary": "Change System User Profile Avatar",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "avatar-upload.json"
+    ],
+    "pageAction": "裁剪上传头像并确认图片加载"
+  },
+  {
+    "path": "/system/user/profile/updatePwd",
+    "method": "PUT",
+    "operationId": "reset_system_user_password_system_user_profile_updatePwd_put",
+    "summary": "Reset System User Password",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "profile-password.json"
+    ],
+    "pageAction": "修改密码、退出后新密码登录"
+  },
+  {
+    "path": "/system/user/importData",
+    "method": "POST",
+    "operationId": "batch_import_system_user_system_user_importData_post",
+    "summary": "Batch Import System User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-import.json"
+    ],
+    "pageAction": "下载模板填入两条有效和一条无效部门数据后导入"
+  },
+  {
+    "path": "/system/user/importTemplate",
+    "method": "POST",
+    "operationId": "export_system_user_template_system_user_importTemplate_post",
+    "summary": "Export System User Template",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-template.xlsx"
+    ],
+    "pageAction": "用户导入弹框下载模板"
+  },
+  {
+    "path": "/system/user/export",
+    "method": "POST",
+    "operationId": "export_system_user_list_system_user_export_post",
+    "summary": "Export System User List",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-export.xlsx"
+    ],
+    "pageAction": "用户列表按名称筛选导出"
+  },
+  {
+    "path": "/system/user/authRole/{user_id}",
+    "method": "GET",
+    "operationId": "get_system_allocated_role_list_system_user_authRole__user_id__get",
+    "summary": "Get System Allocated Role List",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-assign-role.json"
+    ],
+    "pageAction": "用户页进入角色授权"
+  },
+  {
+    "path": "/system/user/authRole",
+    "method": "PUT",
+    "operationId": "update_system_role_user_system_user_authRole_put",
+    "summary": "Update System Role User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "user-clear-roles.json"
+    ],
+    "pageAction": "角色勾选保存及清空保存"
+  },
+  {
+    "path": "/system/role/deptTree/{role_id}",
+    "method": "GET",
+    "operationId": "get_system_role_dept_tree_system_role_deptTree__role_id__get",
+    "summary": "Get System Role Dept Tree",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-data-scope-after.json"
+    ],
+    "pageAction": "打开数据权限树并保存后重读"
+  },
+  {
+    "path": "/system/role/list",
+    "method": "GET",
+    "operationId": "get_system_role_list_system_role_list_get",
+    "summary": "Get System Role List",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-create.json"
+    ],
+    "pageAction": "角色列表/筛选"
+  },
+  {
+    "path": "/system/role",
+    "method": "PUT",
+    "operationId": "edit_system_role_system_role_put",
+    "summary": "Edit System Role",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-edit.json"
+    ],
+    "pageAction": "角色修改、取消重开、保存"
+  },
+  {
+    "path": "/system/role",
+    "method": "POST",
+    "operationId": "add_system_role_system_role_post",
+    "summary": "Add System Role",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      201
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-create.json"
+    ],
+    "pageAction": "新增角色并配置菜单"
+  },
+  {
+    "path": "/system/role/dataScope",
+    "method": "PUT",
+    "operationId": "edit_system_role_datascope_system_role_dataScope_put",
+    "summary": "Edit System Role Datascope",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-data-scope-after.json"
+    ],
+    "pageAction": "只勾选研发部门并验证受限账号边界"
+  },
+  {
+    "path": "/system/role/{role_ids}",
+    "method": "DELETE",
+    "operationId": "delete_system_role_system_role__role_ids__delete",
+    "summary": "Delete System Role",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-delete.json"
+    ],
+    "pageAction": "删除验收角色并读列表"
+  },
+  {
+    "path": "/system/role/{role_id}",
+    "method": "GET",
+    "operationId": "query_detail_system_role_system_role__role_id__get",
+    "summary": "Query Detail System Role",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200,
+      403
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-edit.json"
+    ],
+    "pageAction": "角色编辑详情读取"
+  },
+  {
+    "path": "/system/role/export",
+    "method": "POST",
+    "operationId": "export_system_role_list_system_role_export_post",
+    "summary": "Export System Role List",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-export.xlsx"
+    ],
+    "pageAction": "角色筛选后导出"
+  },
+  {
+    "path": "/system/role/changeStatus",
+    "method": "PUT",
+    "operationId": "reset_system_role_status_system_role_changeStatus_put",
+    "summary": "Reset System Role Status",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-status.json"
+    ],
+    "pageAction": "角色停用及启用"
+  },
+  {
+    "path": "/system/role/authUser/allocatedList",
+    "method": "GET",
+    "operationId": "get_system_allocated_user_list_system_role_authUser_allocatedList_get",
+    "summary": "Get System Allocated User List",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-after-user-delete.json"
+    ],
+    "pageAction": "角色分配用户列表"
+  },
+  {
+    "path": "/system/role/authUser/unallocatedList",
+    "method": "GET",
+    "operationId": "get_system_unallocated_user_list_system_role_authUser_unallocatedList_get",
+    "summary": "Get System Unallocated User List",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-grant-users.json"
+    ],
+    "pageAction": "添加用户对话框查询未分配用户"
+  },
+  {
+    "path": "/system/role/authUser/selectAll",
+    "method": "PUT",
+    "operationId": "add_system_role_user_system_role_authUser_selectAll_put",
+    "summary": "Add System Role User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-grant-users.json"
+    ],
+    "pageAction": "勾选三位自有用户并授权"
+  },
+  {
+    "path": "/system/role/authUser/cancel",
+    "method": "PUT",
+    "operationId": "cancel_system_role_user_system_role_authUser_cancel_put",
+    "summary": "Cancel System Role User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-revoke-users.json"
+    ],
+    "pageAction": "单项取消授权"
+  },
+  {
+    "path": "/system/role/authUser/cancelAll",
+    "method": "PUT",
+    "operationId": "batch_cancel_system_role_user_system_role_authUser_cancelAll_put",
+    "summary": "Batch Cancel System Role User",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "role-revoke-users.json"
+    ],
+    "pageAction": "批量取消授权"
+  },
+  {
+    "path": "/system/protocol/list",
+    "method": "GET",
+    "operationId": "get_protocol_list_system_protocol_list_get",
+    "summary": "Get Protocol List",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "owned-protocols.json"
+    ],
+    "pageAction": "协议列表及名称筛选"
+  },
+  {
+    "path": "/system/protocol",
+    "method": "PUT",
+    "operationId": "edit_protocol_system_protocol_put",
+    "summary": "Edit Protocol",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-edit.json"
+    ],
+    "pageAction": "协议编辑取消重开及保存"
+  },
+  {
+    "path": "/system/protocol",
+    "method": "POST",
+    "operationId": "add_protocol_system_protocol_post",
+    "summary": "Add Protocol",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      201
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-create.json"
+    ],
+    "pageAction": "新建 RS422 协议并导入字段配置"
+  },
+  {
+    "path": "/system/protocol/{protocol_ids}",
+    "method": "DELETE",
+    "operationId": "delete_protocol_system_protocol__protocol_ids__delete",
+    "summary": "Delete Protocol",
+    "verification": "historical_followup_live_contract",
+    "surface": "direct_api_no_page_consumer",
+    "statuses": [
+      204
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-direct-delete.json"
+    ],
+    "pageAction": "直接 DELETE 备用入口，无页面调用"
+  },
+  {
+    "path": "/system/protocol/deleteBatch",
+    "method": "POST",
+    "operationId": "delete_protocol_batch_system_protocol_deleteBatch_post",
+    "summary": "Delete Protocol Batch",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-page-batch-delete.json"
+    ],
+    "pageAction": "页面单项及批量删除均调用 deleteBatch"
+  },
+  {
+    "path": "/system/protocol/importTemplate",
+    "method": "GET",
+    "operationId": "download_protocol_import_template_system_protocol_importTemplate_get",
+    "summary": "Download Protocol Import Template",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-template.xlsx"
+    ],
+    "pageAction": "协议配置导入弹框下载模板"
+  },
+  {
+    "path": "/system/protocol/importPreview",
+    "method": "POST",
+    "operationId": "protocol_import_preview_system_protocol_importPreview_post",
+    "summary": "Protocol Import Preview",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200,
+      422,
+      500
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-corrupt-preview-after.json"
+    ],
+    "pageAction": "有效文件预览与损坏文件 422 反馈"
+  },
+  {
+    "path": "/system/protocol/export",
+    "method": "POST",
+    "operationId": "export_protocol_config_system_protocol_export_post",
+    "summary": "Export Protocol Config",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-export.xlsx"
+    ],
+    "pageAction": "导出后逐单元格读取并回导"
+  },
+  {
+    "path": "/system/protocol/import",
+    "method": "POST",
+    "operationId": "import_protocol_system_protocol_import_post",
+    "summary": "Import Protocol",
+    "verification": "historical_followup_live_contract",
+    "surface": "direct_api_no_page_consumer",
+    "statuses": [
+      201,
+      422
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-single-import.json"
+    ],
+    "pageAction": "直接 multipart 单文件导入，无页面调用"
+  },
+  {
+    "path": "/system/protocol/importBatch",
+    "method": "POST",
+    "operationId": "import_protocol_batch_system_protocol_importBatch_post",
+    "summary": "Import Protocol Batch",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-batch-page-feedback.json"
+    ],
+    "pageAction": "页面上传两份文件，1 成功/1 失败且有可见通知"
+  },
+  {
+    "path": "/system/protocol/{protocol_id}",
+    "method": "GET",
+    "operationId": "query_protocol_detail_system_protocol__protocol_id__get",
+    "summary": "Query Protocol Detail",
+    "verification": "historical_followup_live_contract",
+    "surface": "real_page_and_live_api",
+    "statuses": [
+      200,
+      404
+    ],
+    "evidence": [
+      "browser-receipts.json",
+      "protocol-edit.json"
+    ],
+    "pageAction": "打开协议编辑读取详情"
+  }
+]

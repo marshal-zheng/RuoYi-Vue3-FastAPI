@@ -1,0 +1,384 @@
+{
+  "ok": true,
+  "checks": 40,
+  "mode": "source",
+  "unhandledRejections": 0,
+  "evidence": "Production job page setup/submit, API/request/feedback, source ZXUI and real Axios XHR/FastAPI/MySQL/APScheduler/Redis job store; harmless registered test task only. Temporary server wrapper supplies diagnostics and controlled commit/scheduler failure injection. No computer use or native visual/form validation.",
+  "results": [
+    {
+      "name": "production-create-form-sends-only-business-fields",
+      "ok": true,
+      "productionSetupAndSubmit": true,
+      "pausedInDatabaseAndScheduler": true
+    },
+    {
+      "name": "production-edit-form-filters-read-metadata-and-keeps-arguments",
+      "ok": true,
+      "explicitPayload": true,
+      "parametersPersisted": true
+    },
+    {
+      "name": "post-rejects-type",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "type"
+    },
+    {
+      "name": "post-rejects-createBy",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "createBy"
+    },
+    {
+      "name": "put-rejects-type",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "type"
+    },
+    {
+      "name": "put-rejects-createBy",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "createBy"
+    },
+    {
+      "name": "put/changeStatus-rejects-type",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "type"
+    },
+    {
+      "name": "put/changeStatus-rejects-createBy",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "createBy"
+    },
+    {
+      "name": "put/run-rejects-type",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "type"
+    },
+    {
+      "name": "put/run-rejects-createBy",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "createBy"
+    },
+    {
+      "name": "-requires-id-undefined",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobId"
+    },
+    {
+      "name": "-requires-id-0",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobId"
+    },
+    {
+      "name": "/changeStatus-requires-id-undefined",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobId"
+    },
+    {
+      "name": "/changeStatus-requires-id-0",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobId"
+    },
+    {
+      "name": "/run-requires-id-undefined",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobId"
+    },
+    {
+      "name": "/run-requires-id-0",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobId"
+    },
+    {
+      "name": "create-rejects-client-id",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobId"
+    },
+    {
+      "name": "status-rejects-configuration",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "invokeTarget"
+    },
+    {
+      "name": "run-rejects-client-group",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0,
+      "validationField": "jobGroup"
+    },
+    {
+      "name": "partial-edit-preserves-paused-state-and-omitted-configuration",
+      "ok": true,
+      "omissionPreserved": true
+    },
+    {
+      "name": "enable-installs-effective-persisted-task",
+      "ok": true,
+      "databaseAndSchedulerAgree": true
+    },
+    {
+      "name": "invalid-target",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "invalid-cron",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "invalid-kwargs",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "invalid-group",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "invalid-executor",
+      "ok": true,
+      "status": 422,
+      "errorCode": 10001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "active-partial-edit-keeps-schedule-registered",
+      "ok": true,
+      "omittedStatusPreserved": true
+    },
+    {
+      "name": "commit-failure-preserves-original-task",
+      "ok": true,
+      "status": 500,
+      "errorCode": 50000,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scheduler-failure-compensates-database-and-task",
+      "ok": true,
+      "status": 500,
+      "errorCode": 50000,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "concurrent-failure-cannot-overwrite-success-under-mysql-repeatable-read",
+      "ok": true,
+      "mysqlIsolation": "REPEATABLE-READ",
+      "staleSnapshotEstablished": true,
+      "sameJobSerialized": true,
+      "currentReadAfterWait": true,
+      "databaseAndSchedulerAgree": true,
+      "errorFeedbackCount": 1,
+      "successFeedbackCount": 1
+    },
+    {
+      "name": "commit-failed-create-never-executes",
+      "ok": true,
+      "status": 500,
+      "errorCode": 50000,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "scheduler-failed-create-never-executes",
+      "ok": true,
+      "status": 500,
+      "errorCode": 50000,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "job-group-move-preserves-a-single-schedule",
+      "ok": true,
+      "realRedisJobStore": true,
+      "noDuplicateSchedules": true
+    },
+    {
+      "name": "enabled-run-once-executes-persisted-args-and-keeps-recurring-task",
+      "ok": true,
+      "accepted202Contract": true,
+      "executedExactlyOnce": true,
+      "recurringScheduleRetained": true
+    },
+    {
+      "name": "disable-removes-recurring-schedule",
+      "ok": true,
+      "databaseAndSchedulerAgree": true
+    },
+    {
+      "name": "paused-run-once-executes-without-enabling-recurring-task",
+      "ok": true,
+      "pausedStatusPreserved": true,
+      "oneShotRemoved": true
+    },
+    {
+      "name": "missing-target-",
+      "ok": true,
+      "status": 404,
+      "errorCode": 47001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "missing-target-/changeStatus",
+      "ok": true,
+      "status": 404,
+      "errorCode": 47001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "missing-target-/run",
+      "ok": true,
+      "status": 404,
+      "errorCode": 47001,
+      "problemDetails": true,
+      "errorContextPreserved": true,
+      "feedbackCount": 1,
+      "reloginCount": 0
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "temporaryJobsAndLogsRemoved": true,
+      "originalBusinessInventoriesExact": true
+    }
+  ]
+}

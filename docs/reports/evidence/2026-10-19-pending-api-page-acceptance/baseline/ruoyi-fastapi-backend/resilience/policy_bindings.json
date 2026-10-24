@@ -1,0 +1,75 @@
+{
+  "retry_policies": {
+    "default": {
+      "enabled": true,
+      "max_retries": 2,
+      "base_delay": 0.05,
+      "max_delay": 0.5,
+      "jitter": 0.1,
+      "retry_exceptions": [
+        "TimeoutError",
+        "ConnectionError",
+        "OSError"
+      ]
+    },
+    "external_api": {
+      "enabled": true,
+      "max_retries": 3,
+      "base_delay": 0.1,
+      "max_delay": 1.0,
+      "jitter": 0.2,
+      "retry_exceptions": [
+        "TimeoutError",
+        "ConnectionError",
+        "OSError"
+      ]
+    }
+  },
+  "circuit_policies": {
+    "default": {
+      "enabled": true,
+      "failure_threshold": 5,
+      "recovery_timeout_seconds": 20.0,
+      "half_open_max_calls": 2,
+      "half_open_success_threshold": 1
+    }
+  },
+  "bulkhead_policies": {
+    "default": {
+      "enabled": true,
+      "max_concurrency": 64,
+      "max_wait_seconds": 0.2
+    },
+    "redis": {
+      "enabled": true,
+      "max_concurrency": 128,
+      "max_wait_seconds": 0.1
+    },
+    "external": {
+      "enabled": true,
+      "max_concurrency": 32,
+      "max_wait_seconds": 0.3
+    }
+  },
+  "bindings": [
+    {"operation": "redis.get", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.set", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.setex", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.setnx", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.expire", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.delete", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.keys", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.info", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.dbsize", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.rpush", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.ltrim", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.llen", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.lrange", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "redis.ping", "retry_policy": "default", "circuit_policy": "default", "bulkhead_policy": "redis", "critical": false, "degraded_service": "redis"},
+    {"operation": "http.requests_get", "retry_policy": "external_api", "circuit_policy": "default", "bulkhead_policy": "external", "critical": false, "degraded_service": "ip_geo"}
+  ],
+  "deep_health": {
+    "timeout_seconds": 2.0,
+    "external_urls": []
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "path": "ruoyi-fastapi-frontend/src/views/login.vue",
+  "baseline": "exact getCode function previously read; no initial whole-file snapshot",
+  "sha256": "b6825b5348d3b140b2006b8a8c7377d71c4988e2a34775642a4766e9cf955d76"
+}

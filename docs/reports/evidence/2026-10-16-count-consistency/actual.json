@@ -1,0 +1,92 @@
+{
+  "ok": true,
+  "mode": "production business API/HTTP modules + source @zxio/http + real local FastAPI/MySQL/Redis; no browser automation",
+  "resultCount": 7,
+  "results": [
+    {
+      "name": "real-new-parameters-immediately-change-total",
+      "ok": true,
+      "initialTotal": 0,
+      "totalsAfterCreate": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "unfilteredTotalsAfterCreate": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "gridPagerTotalConsistent": true
+    },
+    {
+      "name": "real-page-sizes-filters-and-old-count-key",
+      "ok": true,
+      "total": 4,
+      "pageSizes": [
+        1,
+        2
+      ],
+      "pagesCombined": 4,
+      "noDuplicatesOrMissingRecords": true,
+      "emptyTrailingPage": true,
+      "combinedFilterTotal": 1,
+      "poisonedLegacyCountZeroIgnoredAndUntouched": true
+    },
+    {
+      "name": "real-filtered-count-changes-after-update",
+      "ok": true,
+      "normalTotal": 3,
+      "builtInTotal": 1,
+      "combinedTotal": 4
+    },
+    {
+      "name": "real-partial-delete-rolls-back-without-changing-total",
+      "ok": true,
+      "status": 409,
+      "firstDeleteRolledBack": true,
+      "total": 4,
+      "rows": 4,
+      "builtInDeleteRestrictionPreserved": true,
+      "parameterValueCacheStillAvailable": true
+    },
+    {
+      "name": "real-single-delete-immediately-shrinks-total-and-pages",
+      "ok": true,
+      "total": 3,
+      "pageSize": 2,
+      "pageLengths": [
+        2,
+        1,
+        0
+      ],
+      "deletedRecordAbsent": true,
+      "noDuplicatesOrMissingRecords": true
+    },
+    {
+      "name": "real-bulk-delete-immediately-restores-zero-filtered-total",
+      "ok": true,
+      "filteredTotals": [
+        0,
+        0,
+        0
+      ],
+      "pageSizes": [
+        1,
+        2,
+        10
+      ],
+      "unfilteredTotal": 7,
+      "legacyKeyDidNotResurrectTotal": true
+    },
+    {
+      "name": "cleanup-restores-existing-parameters",
+      "ok": true,
+      "temporaryRecords": 4,
+      "remainingTemporaryRecords": 0,
+      "existingRecordsUnchanged": 7
+    }
+  ]
+}

@@ -1,0 +1,1819 @@
+--- a/ruoyi-fastapi-frontend/src/api/project/project.ts
++++ b/ruoyi-fastapi-frontend/src/api/project/project.ts
+@@ -1,8 +1,7 @@
+ import { requestDetail } from '@/api/detail';
+-import request from '@/utils/request';
++import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
+-import type { AxiosRequestConfig } from 'axios';
+ import type {
+   ProjectModel,
+   GetSystemProjectListProjectListGetData,
+@@ -14,7 +13,7 @@
+ }
+ 
+ // 查询工程详细
+-export function getProject(projectId: number | string, options: AxiosRequestConfig = {}) {
++export function getProject(projectId: number | string, options: ExtendedAxiosRequestConfig = {}) {
+   return requestDetail<ProjectRecord>(
+     {
+       ...options,
+--- a/ruoyi-fastapi-frontend/src/api/protocol/protocol.ts
++++ b/ruoyi-fastapi-frontend/src/api/protocol/protocol.ts
+@@ -11,7 +11,7 @@
+ 
+ import type { HttpOffsetPage, BatchResult } from '@/types/http-contract';
+ import type { ProtocolModel } from '@/api/_generated/types.gen';
+-import request from '@/utils/request';
++import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+ 
+ // 查询协议列表
+ export function listProtocol(query?: ProtocolListQuery) {
+@@ -23,9 +23,13 @@
+ }
+ 
+ // 查询协议详细
+-export function getProtocol(protocolId: number | string) {
++export function getProtocol(
++  protocolId: number | string,
++  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
++) {
+   return requestDetail<ProtocolRecord>(
+     {
++      ...config,
+       url: '/system/protocol/' + protocolId,
+       method: 'get',
+     },
+--- a/ruoyi-fastapi-frontend/src/api/system/dict/data.ts
++++ b/ruoyi-fastapi-frontend/src/api/system/dict/data.ts
+@@ -2,7 +2,7 @@
+ export type DataRecord = Omit<DictDataModel, 'dictCode'> & { dictCode: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type { DictDataModel, DictDataPageQueryModel } from '@/api/_generated/types.gen';
+-import request from '@/utils/request';
++import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+ import type { HttpCollection } from '@/types/http-contract';
+ 
+ export interface DictData {
+@@ -24,9 +24,13 @@
+ }
+ 
+ // 查询字典数据详细
+-export function getData(dictCode: number | string) {
++export function getData(
++  dictCode: number | string,
++  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
++) {
+   return requestDetail<DataRecord>(
+     {
++      ...config,
+       url: '/system/dict/data/' + dictCode,
+       method: 'get',
+     },
+--- a/ruoyi-fastapi-frontend/src/api/system/menu.ts
++++ b/ruoyi-fastapi-frontend/src/api/system/menu.ts
+@@ -27,9 +27,13 @@
+ }
+ 
+ // 查询菜单详细
+-export function getMenu(menuId: number | string) {
++export function getMenu(
++  menuId: number | string,
++  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
++) {
+   return requestDetail<MenuRecord>(
+     {
++      ...config,
+       url: '/system/menu/' + menuId,
+       method: 'get',
+       feedback: { mode: 'auto' },
+--- a/ruoyi-fastapi-frontend/src/api/system/notice.ts
++++ b/ruoyi-fastapi-frontend/src/api/system/notice.ts
+@@ -5,7 +5,7 @@
+ export type NoticeRecord = Omit<NoticePayload, 'noticeId'> & { noticeId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type { GetSystemNoticeListSystemNoticeListGetData } from '@/api/_generated/types.gen';
+-import request from '@/utils/request';
++import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+ 
+ // 查询公告列表
+ export function listNotice(
+@@ -19,9 +19,13 @@
+ }
+ 
+ // 查询公告详细
+-export function getNotice(noticeId: number | string) {
++export function getNotice(
++  noticeId: number | string,
++  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
++) {
+   return requestDetail<NoticeRecord>(
+     {
++      ...config,
+       url: '/system/notice/' + noticeId,
+       method: 'get',
+       feedback: { mode: 'auto' },
+--- a/ruoyi-fastapi-frontend/src/api/system/post.ts
++++ b/ruoyi-fastapi-frontend/src/api/system/post.ts
+@@ -2,7 +2,7 @@
+ export type PostRecord = Omit<PostModel, 'postId'> & { postId: number };
+ import type { HttpOffsetPage } from '@/types/http-contract';
+ import type { PostModel, PostPageQueryModel } from '@/api/_generated/types.gen';
+-import request from '@/utils/request';
++import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+ 
+ // 查询岗位列表
+ export function listPost(query?: PostPageQueryModel) {
+@@ -14,9 +14,13 @@
+ }
+ 
+ // 查询岗位详细
+-export function getPost(postId: number | string) {
++export function getPost(
++  postId: number | string,
++  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
++) {
+   return requestDetail<PostRecord>(
+     {
++      ...config,
+       url: '/system/post/' + postId,
+       method: 'get',
+     },
+--- a/ruoyi-fastapi-frontend/src/api/system/project.ts
++++ b/ruoyi-fastapi-frontend/src/api/system/project.ts
+@@ -5,7 +5,7 @@
+   GetSystemProjectListProjectListGetData,
+   ProjectModel,
+ } from '@/api/_generated/types.gen';
+-import request from '@/utils/request';
++import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+ 
+ // 查询工程列表
+ export function listProject(query?: NonNullable<GetSystemProjectListProjectListGetData['query']>) {
+@@ -17,9 +17,13 @@
+ }
+ 
+ // 查询工程详细
+-export function getProject(projectId: number | string) {
++export function getProject(
++  projectId: number | string,
++  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
++) {
+   return requestDetail<ProjectRecord>(
+     {
++      ...config,
+       url: '/project/' + projectId,
+       method: 'get',
+       feedback: { mode: 'auto' },
+--- a/ruoyi-fastapi-frontend/src/components/business/Protocol/ProtocolFormDrawer.vue
++++ b/ruoyi-fastapi-frontend/src/components/business/Protocol/ProtocolFormDrawer.vue
+@@ -10,7 +10,11 @@
+     loadingType="skeleton"
+     class="protocol-drawer"
+   >
++    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
++      <el-button link type="primary" @click="handleRetry">重试</el-button>
++    </el-alert>
+     <el-form
++      v-show="!loadError"
+       ref="formRef"
+       :model="drawer.state.data"
+       :rules="formRules"
+@@ -82,6 +86,7 @@
+ 
+ <script setup name="ProtocolFormDrawer">
+ import { ref, computed } from 'vue';
++import { useEditorRead } from '@/utils/editor-read';
+ import { useDrawer } from '@zxio/zxui';
+ import { getProtocol } from '@/api/protocol/protocol';
+ import ProtocolTypeSelector from './selector/ProtocolTypeSelector.vue';
+@@ -139,6 +144,7 @@
+   async onConfirm() {
+     if (
+       drawerLoading.value ||
++      loadError.value ||
+       !detailReady.value ||
+       drawer.state.data.protocolId !== editTargetId.value
+     ) {
+@@ -240,33 +246,46 @@
+   drawer.state.data.protocolConfig = config;
+ };
+ 
+-const openDrawer = async (protocolData) => {
+-  editTargetId.value = protocolData?.protocolId ?? null;
+-  detailReady.value = editTargetId.value === null;
+-  if (protocolData && protocolData.protocolId) {
+-    drawer.open({ protocolId: editTargetId.value });
+-    drawerLoading.value = true;
+-    try {
+-      // 调用详情接口获取完整数据（包含 protocolConfig）
+-      // http 客户端已解包 payload.data，res 直接是协议数据
+-      const detail = await getProtocol(protocolData.protocolId);
+-      if (detail.protocolId !== editTargetId.value) return;
+-      drawer.state.data = {
+-        protocolId: detail.protocolId,
+-        protocolName: detail.protocolName || '',
+-        protocolType: detail.protocolType || '',
+-        description: detail.description || '',
+-        remark: detail.remark || '',
+-        protocolConfig: normalizeHeader(detail.protocolConfig || {}),
+-      };
+-      detailReady.value = true;
+-    } finally {
+-      drawerLoading.value = false;
+-    }
+-  } else {
+-    drawer.open();
+-  }
+-};
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => drawer.state.visible, drawerLoading);
++
++const openDrawer = (protocolData) => {
++  const id = protocolData?.protocolId ?? null;
++  editTargetId.value = id;
++  return runRead(async (read) => {
++    detailReady.value = id === null;
++    drawer.open(id === null ? undefined : { protocolId: id });
++    drawer.setDisabled(true);
++    if (id === null) {
++      drawer.setDisabled(false);
++      return;
++    }
++    const detail = await getProtocol(id, { signal: read.signal, silentError: true });
++    if (!read.isCurrent()) return;
++    drawer.open({
++      protocolId: detail.protocolId,
++      protocolName: detail.protocolName || '',
++      protocolType: detail.protocolType || '',
++      description: detail.description || '',
++      remark: detail.remark || '',
++      protocolConfig: normalizeHeader(detail.protocolConfig || {}),
++    });
++    detailReady.value = true;
++    drawer.setDisabled(false);
++  });
++};
++function closeDrawer() {
++  cancelRead();
++  return drawer.close();
++}
++function handleRetry() {
++  return openDrawer({ protocolId: editTargetId.value }).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
+ 
+ // 兼容后端 header 字段命名（errorHandling -> errorHandle 等）
+ const normalizeHeader = (rawConfig = {}) => {
+@@ -282,7 +301,7 @@
+ 
+ defineExpose({
+   open: openDrawer,
+-  close: drawer.close,
++  close: closeDrawer,
+ });
+ </script>
+ 
+--- a/ruoyi-fastapi-frontend/src/views/project/components/ProjectFormDialog.vue
++++ b/ruoyi-fastapi-frontend/src/views/project/components/ProjectFormDialog.vue
+@@ -1,6 +1,9 @@
+ <template>
+   <ZxDialog v-bind="dialogProps" v-on="dialogEvents" data-testid="project-form-dialog">
+-    <div class="py-4">
++    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
++      <el-button link type="primary" @click="handleRetry">重试</el-button>
++    </el-alert>
++    <div v-show="!loadError" class="py-4">
+       <el-form ref="formRef" :model="state.data" :rules="formRules" v-bind="formProps">
+         <FormGrid v-bind="layoutProps">
+           <el-form-item label="工程名称" prop="projectName">
+@@ -29,20 +32,24 @@
+ 
+ <script setup>
+ import { ref, computed } from 'vue';
++import { useEditorRead } from '@/utils/editor-read';
+ import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+ import { getProject, addProject, updateProject } from '@/api/project/project';
+ 
+ const emit = defineEmits(['success']);
+ 
+ const formRef = ref();
++const detailLoading = ref(false);
++let requestedId = null;
+ 
+ const formRules = computed(() => ({
+   projectName: [{ required: true, message: '工程名称不能为空', trigger: 'blur' }],
+ }));
+ 
+-const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setLoading } =
++const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
+   useFormDialog({
+     columns: 1,
++    loading: detailLoading,
+     title: (data) => (data?.projectId ? '编辑工程' : '添加工程'),
+ 
+     okText: computed(() => (state.data.projectId ? '保存' : '下一步')),
+@@ -56,6 +63,7 @@
+       projectDesc: '',
+     }),
+     onConfirm: async (data) => {
++      if (detailLoading.value || loadError.value || data.projectId !== requestedId) return false;
+       if (data.projectId) {
+         const res = await updateProject(data);
+         emit('success', { mode: 'edit', data: res });
+@@ -69,30 +77,45 @@
+     },
+   });
+ 
+-async function openDialog(payload) {
+-  if (
+-    payload &&
+-    (payload.projectId || typeof payload === 'number' || typeof payload === 'string')
+-  ) {
+-    const id = payload.projectId || payload;
+-    setLoading(true);
+-    try {
+-      const resp = await getProject(id);
+-      const detail = resp || {};
+-      open({
+-        projectId: detail.projectId,
+-        projectName: detail.projectName,
+-        projectDesc: detail.projectDesc,
+-      });
+-    } finally {
+-      setLoading(false);
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => state.visible, detailLoading);
++
++function openDialog(payload) {
++  const id =
++    payload?.projectId ||
++    (typeof payload === 'number' || typeof payload === 'string' ? payload : null);
++  requestedId = id === null ? null : Number(id);
++  return runRead(async (read) => {
++    open(id ? { projectId: requestedId } : undefined);
++    setDisabled(true);
++    if (!id) {
++      setDisabled(false);
++      return;
+     }
+-  } else {
+-    open();
+-  }
++    const detail = await getProject(id, { signal: read.signal, silentError: true });
++    if (!read.isCurrent()) return;
++    open({
++      projectId: detail.projectId,
++      projectName: detail.projectName ?? '',
++      projectDesc: detail.projectDesc ?? '',
++    });
++    setDisabled(false);
++  });
++}
++function closeDialog() {
++  cancelRead();
++  return close();
++}
++function handleRetry() {
++  return openDialog(requestedId).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
+ }
+ 
+-defineExpose({ open: openDialog, close });
++defineExpose({ open: openDialog, close: closeDialog });
+ </script>
+ 
+ <style scoped></style>
+--- a/ruoyi-fastapi-frontend/src/views/project/index.vue
++++ b/ruoyi-fastapi-frontend/src/views/project/index.vue
+@@ -302,7 +302,9 @@
+ }
+ 
+ function handleAdd() {
+-  projectDialogRef.value && projectDialogRef.value.open();
++  return projectDialogRef.value?.open().catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
+ }
+ 
+ function toggleSelection(project) {
+@@ -405,7 +407,9 @@
+ }
+ 
+ function handleEdit(project) {
+-  projectDialogRef.value && projectDialogRef.value.open(project.projectId);
++  return projectDialogRef.value?.open(project.projectId).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
+ }
+ 
+ const { run: handleUnlockProjectVersions } = useOperation(async (project) => {
+--- a/ruoyi-fastapi-frontend/src/views/system/dict/data.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/dict/data.vue
+@@ -154,7 +154,15 @@
+     :destroy-on-close="false"
+     :close-on-click-modal="true"
+   >
+-    <el-form ref="dataRef" :model="form" :rules="rules" v-bind="dataDialog.formProps"
++    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
++      <el-button link type="primary" @click="handleRetry">重试</el-button>
++    </el-alert>
++    <el-form
++      v-show="!loadError"
++      ref="dataRef"
++      :model="form"
++      :rules="rules"
++      v-bind="dataDialog.formProps"
+       ><FormGrid v-bind="dataDialog.layoutProps">
+         <el-form-item label="字典类型">
+           <zx-input v-model="form.dictType" :disabled="true" />
+@@ -194,7 +202,13 @@
+     ></el-form>
+     <template #footer>
+       <div class="dialog-footer">
+-        <el-button type="primary" @click="submitForm" :loading="submitFormPending">确 定</el-button>
++        <el-button
++          type="primary"
++          @click="submitForm"
++          :loading="submitFormPending"
++          :disabled="detailLoading || !!loadError"
++          >确 定</el-button
++        >
+         <el-button @click="cancel">取 消</el-button>
+       </div>
+     </template>
+@@ -202,6 +216,9 @@
+ </template>
+ 
+ <script setup name="Data">
++import { ref, reactive, computed, toRef, toRefs, getCurrentInstance } from 'vue';
++import { useRoute } from 'vue-router';
++import { useEditorRead } from '@/utils/editor-read';
+ import { useOperation } from '@/utils/operation';
+ import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+ 
+@@ -242,8 +259,11 @@
+ 
+ const { rules } = toRefs(data);
+ const dataRef = ref();
++const detailLoading = ref(false);
++let requestedId;
+ const dataDialog = useFormDialog({
+   columns: 1,
++  loading: detailLoading,
+   formRef: dataRef,
+   title: computed(() => title.value),
+   closeOnClickModal: true,
+@@ -254,6 +274,11 @@
+ });
+ const form = toRef(dataDialog.state, 'data');
+ const open = toRef(dataDialog.state, 'visible');
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => open.value, detailLoading);
+ 
+ /** GridList 数据加载 */
+ async function loadDictData(params) {
+@@ -290,6 +315,7 @@
+ }
+ /** 取消按钮 */
+ function cancel() {
++  cancelRead();
+   open.value = false;
+   reset();
+ }
+@@ -330,10 +356,9 @@
+ }
+ /** 新增按钮操作 */
+ function handleAdd() {
+-  reset();
+-  open.value = true;
+-  title.value = '添加字典数据';
+-  form.value.dictType = defaultDictType.value;
++  return openEditor().catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
+ }
+ /** 多选框选中数据 */
+ function handleSelectionChange(selection) {
+@@ -343,21 +368,39 @@
+ }
+ /** 修改按钮操作 */
+ function handleUpdate(row) {
+-  reset();
+-  const dictCode = row?.dictCode || ids.value[0];
+-  if (!dictCode) return;
+-  getData(dictCode)
+-    .then((response) => {
+-      form.value = response;
+-      open.value = true;
+-      title.value = '修改字典数据';
+-    })
+-    .catch(() => {
+-      /* 详情读取已负责反馈，失败时不打开编辑表单。 */
+-    });
++  const id = row?.dictCode || ids.value[0];
++  if (!id) return;
++  return openEditor(id).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
++function openEditor(id) {
++  requestedId = id;
++  return runRead(async (read) => {
++    reset();
++    form.value.dictCode = id;
++    form.value.dictType = defaultDictType.value;
++    title.value = id ? '修改字典数据' : '添加字典数据';
++    open.value = true;
++    dataDialog.setDisabled(true);
++    if (!id) {
++      dataDialog.setDisabled(false);
++      return;
++    }
++    const detail = await getData(id, { signal: read.signal, silentError: true });
++    if (!read.isCurrent()) return;
++    form.value = detail;
++    dataDialog.setDisabled(false);
++  });
++}
++function handleRetry() {
++  return openEditor(requestedId).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
+ }
+ /** 提交按钮 */
+ const { run: submitForm, pending: submitFormPending } = useOperation(async () => {
++  if (detailLoading.value || loadError.value || form.value.dictCode !== requestedId) return false;
+   const valid = await proxy.$refs['dataRef'].validate().catch(() => false);
+ 
+   if (valid) {
+--- a/ruoyi-fastapi-frontend/src/views/system/menu/components/MenuDrawer.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/menu/components/MenuDrawer.vue
+@@ -1,6 +1,20 @@
+ <template>
+-  <ZxDrawer v-bind="drawer.drawerProps.value" v-on="drawer.drawerEvents.value">
+-    <el-form ref="formRef" :model="drawer.state.data" :rules="formRules" label-position="top">
++  <ZxDrawer
++    v-bind="drawer.drawerProps.value"
++    v-on="drawer.drawerEvents.value"
++    :loading="detailLoading"
++    :ok-disabled="detailLoading || !!loadError || drawer.state.disabled"
++  >
++    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
++      <el-button link type="primary" @click="handleRetry">重试</el-button>
++    </el-alert>
++    <el-form
++      v-show="!loadError"
++      ref="formRef"
++      :model="drawer.state.data"
++      :rules="formRules"
++      label-position="top"
++    >
+       <el-form-item label="上级菜单">
+         <el-tree-select
+           v-model="drawer.state.data.parentId"
+@@ -192,7 +206,8 @@
+ 
+ <script setup lang="ts" name="MenuDrawer">
+ import { ref } from 'vue';
+-import { addMenu, updateMenu, treeselect, type MenuTreeNode } from '@/api/system/menu';
++import { useEditorRead } from '@/utils/editor-read';
++import { getMenu, addMenu, updateMenu, treeselect, type MenuTreeNode } from '@/api/system/menu';
+ import { useDrawer } from '@zxio/zxui';
+ import { QuestionFilled, Search } from '@element-plus/icons-vue';
+ import { IconSelect } from '@/components/ui';
+@@ -228,6 +243,8 @@
+ 
+ const menuOptions = ref<MenuTreeNode[]>([]);
+ const formRef = ref();
++const detailLoading = ref(false);
++let requested: { menuId?: number; parentId?: number } = {};
+ const iconSelectRef = ref();
+ 
+ const formRules = {
+@@ -258,6 +275,7 @@
+     query: undefined,
+   }),
+   onConfirm: async (data: MenuForm) => {
++    if (detailLoading.value || loadError.value || data.menuId !== requested.menuId) return false;
+     if (data.menuId !== undefined) {
+       await updateMenu(data);
+     } else {
+@@ -268,16 +286,56 @@
+   },
+ });
+ 
+-/** 打开抽屉 */
+-async function openDrawer(data?: MenuForm) {
+-  // 先打开抽屉
+-  drawer.open(data);
+-
+-  // 加载菜单树数据
+-  const response = await treeselect();
+-  const menus = response.items;
+-  // 添加主类目根节点，允许选择顶级菜单
+-  menuOptions.value = [{ id: 0, label: '主类目', children: menus }];
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => drawer.state.visible, detailLoading);
++
++/** 只接收编辑身份或新增父级，不用列表快照回填详情。 */
++function openDrawer(data?: { menuId?: number; parentId?: number }) {
++  requested = { menuId: data?.menuId, parentId: data?.parentId ?? 0 };
++  const target = requested;
++  return runRead(async (read) => {
++    drawer.open(target);
++    drawer.setDisabled(true);
++    menuOptions.value = [];
++    const config = { signal: read.signal, silentError: true };
++    const [tree, detail] = await Promise.all([
++      treeselect(config),
++      target.menuId ? getMenu(target.menuId, config) : undefined,
++    ]);
++    if (!read.isCurrent()) return;
++    menuOptions.value = [{ id: 0, label: '主类目', children: tree.items }];
++    if (detail) {
++      drawer.open({
++        menuId: detail.menuId,
++        parentId: detail.parentId ?? 0,
++        menuName: detail.menuName ?? undefined,
++        menuType: detail.menuType ?? undefined,
++        icon: detail.icon ?? undefined,
++        orderNum: detail.orderNum ?? 0,
++        isFrame: detail.isFrame ?? '1',
++        isCache: detail.isCache ?? '0',
++        visible: detail.visible ?? '0',
++        status: detail.status ?? '0',
++        path: detail.path ?? undefined,
++        component: detail.component ?? undefined,
++        perms: detail.perms ?? undefined,
++        query: detail.query ?? undefined,
++      });
++    }
++    drawer.setDisabled(false);
++  });
++}
++function closeDrawer() {
++  cancelRead();
++  return drawer.close();
++}
++function handleRetry() {
++  return openDrawer(requested).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
+ }
+ 
+ /** 图标弹窗显示时重置搜索 */
+@@ -290,5 +348,5 @@
+   drawer.state.data.icon = name;
+ }
+ 
+-defineExpose({ open: openDrawer });
++defineExpose({ open: openDrawer, close: closeDrawer });
+ </script>
+--- a/ruoyi-fastapi-frontend/src/views/system/menu/components/MenuList.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/menu/components/MenuList.vue
+@@ -146,7 +146,7 @@
+   updateState: ZxGridListInstance['updateState'];
+ };
+ import { ref, nextTick, getCurrentInstance } from 'vue';
+-import { listMenu, getMenu, delMenu } from '@/api/system/menu';
++import { listMenu, delMenu } from '@/api/system/menu';
+ import MenuDrawer from './MenuDrawer.vue';
+ 
+ const proxy = getCurrentInstance()!.proxy!;
+@@ -192,7 +192,9 @@
+ 
+ function handleAdd(row?: MenuRecord) {
+   const data = row?.menuId ? { parentId: row.menuId } : {};
+-  menuDrawerRef.value?.open(data);
++  return menuDrawerRef.value?.open(data).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
+ }
+ 
+ function toggleExpandAll() {
+@@ -203,24 +205,9 @@
+   });
+ }
+ 
+-async function handleUpdate(row: MenuRecord) {
+-  const response = await getMenu(row.menuId).catch(() => null);
+-  if (!response) return;
+-  menuDrawerRef.value?.open({
+-    menuId: response.menuId ?? undefined,
+-    parentId: response.parentId ?? undefined,
+-    menuName: response.menuName ?? undefined,
+-    menuType: response.menuType ?? undefined,
+-    icon: response.icon ?? undefined,
+-    orderNum: response.orderNum ?? undefined,
+-    isFrame: response.isFrame ?? undefined,
+-    isCache: response.isCache ?? undefined,
+-    visible: response.visible ?? undefined,
+-    status: response.status ?? undefined,
+-    path: response.path ?? undefined,
+-    component: response.component ?? undefined,
+-    perms: response.perms ?? undefined,
+-    query: response.query ?? undefined,
++function handleUpdate(row: MenuRecord) {
++  return menuDrawerRef.value?.open({ menuId: row.menuId }).catch(() => {
++    /* 当前读取已负责反馈。 */
+   });
+ }
+ 
+--- a/ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeDlg.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeDlg.vue
+@@ -1,6 +1,15 @@
+ <template>
+   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+-    <el-form ref="formRef" :model="state.data" :rules="formRules" v-bind="formProps">
++    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
++      <el-button link type="primary" @click="handleRetry">重试</el-button>
++    </el-alert>
++    <el-form
++      v-show="!loadError"
++      ref="formRef"
++      :model="state.data"
++      :rules="formRules"
++      v-bind="formProps"
++    >
+       <FormGrid v-bind="layoutProps">
+         <el-form-item label="公告标题" prop="noticeTitle">
+           <zx-input v-model="state.data.noticeTitle" placeholder="请输入公告标题" />
+@@ -37,7 +46,8 @@
+ import type { FormInstance } from 'element-plus';
+ const formRef = ref<FormInstance>();
+ 
+-import { addNotice, updateNotice } from '@/api/system/notice';
++import { getNotice, addNotice, updateNotice } from '@/api/system/notice';
++import { useEditorRead } from '@/utils/editor-read';
+ import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+ import { ref } from 'vue';
+ import { useDict } from '@/utils/dict';
+@@ -53,6 +63,9 @@
+   status?: '0' | '1';
+ }
+ 
++const detailLoading = ref(false);
++let requestedId: number | undefined;
++
+ const emit = defineEmits(['success']);
+ 
+ const formRules = {
+@@ -60,8 +73,9 @@
+   noticeType: [{ required: true, message: '公告类型不能为空', trigger: 'change' }],
+ };
+ 
+-const { formProps, layoutProps, state, dialogProps, dialogEvents, open } =
++const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
+   useFormDialog<NoticeForm>({
++    loading: detailLoading,
+     columns: 2,
+     formRef: formRef,
+     title: (data: NoticeForm) => (data?.noticeId ? '修改公告' : '添加公告'),
+@@ -74,6 +88,7 @@
+       status: '0',
+     }),
+     onConfirm: async (data: NoticeForm) => {
++      if (detailLoading.value || loadError.value || data.noticeId !== requestedId) return false;
+       if (data.noticeId !== undefined) {
+         await updateNotice(data);
+       } else {
+@@ -84,5 +99,42 @@
+     },
+   });
+ 
+-defineExpose({ open });
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => state.visible, detailLoading);
++
++function openDialog(id?: number) {
++  requestedId = id;
++  return runRead(async (read) => {
++    open(id ? { noticeId: id } : undefined);
++    setDisabled(true);
++    if (!id) {
++      setDisabled(false);
++      return;
++    }
++    const data = await getNotice(id, { signal: read.signal, silentError: true });
++    if (!read.isCurrent()) return;
++    open({
++      noticeId: data.noticeId ?? undefined,
++      noticeTitle: data.noticeTitle ?? undefined,
++      noticeType: data.noticeType ?? undefined,
++      noticeContent: data.noticeContent ?? undefined,
++      status: data.status ?? '0',
++    });
++    setDisabled(false);
++  });
++}
++function closeDialog() {
++  cancelRead();
++  return close();
++}
++function handleRetry() {
++  return openDialog(requestedId).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
++
++defineExpose({ open: openDialog, close: closeDialog });
+ </script>
+--- a/ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeList.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeList.vue
+@@ -131,7 +131,7 @@
+   handleRefresh: ZxGridListInstance['refresh'];
+   updateState: ZxGridListInstance['updateState'];
+ };
+-import { listNotice, getNotice, delNotice } from '@/api/system/notice';
++import { listNotice, delNotice } from '@/api/system/notice';
+ import { parseTime } from '@/utils/ruoyi';
+ import NoticeDlg from './NoticeDlg.vue';
+ 
+@@ -184,21 +184,16 @@
+ }
+ 
+ function handleAdd() {
+-  noticeDlgRef.value?.open();
+-}
+-
+-async function handleUpdate(row?: NoticeRecord) {
+-  const noticeId = row?.noticeId || ids.value[0];
+-  if (!noticeId) return;
+-
+-  const response = await getNotice(noticeId).catch(() => null);
+-  if (!response) return;
+-  noticeDlgRef.value?.open({
+-    noticeId: response.noticeId ?? undefined,
+-    noticeTitle: response.noticeTitle ?? undefined,
+-    noticeType: response.noticeType ?? undefined,
+-    noticeContent: response.noticeContent ?? undefined,
+-    status: response.status ?? undefined,
++  return noticeDlgRef.value?.open().catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
++
++function handleUpdate(row?: NoticeRecord) {
++  const id = row?.noticeId || ids.value[0];
++  if (!id) return;
++  return noticeDlgRef.value?.open(id).catch(() => {
++    /* 当前读取已负责反馈。 */
+   });
+ }
+ 
+--- a/ruoyi-fastapi-frontend/src/views/system/post/components/PostDlg.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/post/components/PostDlg.vue
+@@ -1,6 +1,15 @@
+ <template>
+   <zx-dialog v-bind="dialogProps" :form-ref="formRef" v-on="dialogEvents">
+-    <el-form ref="formRef" :model="state.data" :rules="rules" v-bind="formProps">
++    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
++      <el-button link type="primary" @click="handleRetry">重试</el-button>
++    </el-alert>
++    <el-form
++      v-show="!loadError"
++      ref="formRef"
++      :model="state.data"
++      :rules="rules"
++      v-bind="formProps"
++    >
+       <FormGrid v-bind="layoutProps">
+         <el-form-item label="岗位名称" prop="postName">
+           <zx-input v-model="state.data.postName" placeholder="请输入岗位名称" />
+@@ -28,9 +37,13 @@
+ 
+ <script setup lang="ts">
+ import { ref } from 'vue';
++import { useEditorRead } from '@/utils/editor-read';
+ import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+-import { addPost, updatePost } from '@/api/system/post';
++import { getPost, addPost, updatePost } from '@/api/system/post';
+ import { useDict } from '@/utils/dict';
++
++const detailLoading = ref(false);
++let requestedId: number | undefined;
+ 
+ const emit = defineEmits<{
+   (e: 'confirm'): void;
+@@ -56,29 +69,70 @@
+   postSort: [{ required: true, message: '岗位顺序不能为空', trigger: 'blur' }],
+ };
+ 
+-const { formProps, layoutProps, state, dialogProps, dialogEvents, open } = useFormDialog<PostForm>({
+-  columns: 1,
+-  formRef: formRef,
+-  title: (data: PostForm) => (data.postId ? '修改岗位' : '添加岗位'),
++const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
++  useFormDialog<PostForm>({
++    loading: detailLoading,
++    columns: 1,
++    formRef: formRef,
++    title: (data: PostForm) => (data.postId ? '修改岗位' : '添加岗位'),
+ 
+-  defaultData: () => ({
+-    postId: undefined,
+-    postName: '',
+-    postCode: '',
+-    postSort: 0,
+-    status: '0',
+-    remark: '',
+-  }),
+-  onConfirm: async (data: PostForm) => {
+-    if (data.postId) {
+-      await updatePost(data);
+-    } else {
+-      await addPost(data);
++    defaultData: () => ({
++      postId: undefined,
++      postName: '',
++      postCode: '',
++      postSort: 0,
++      status: '0',
++      remark: '',
++    }),
++    onConfirm: async (data: PostForm) => {
++      if (detailLoading.value || loadError.value || data.postId !== requestedId) return false;
++      if (data.postId) {
++        await updatePost(data);
++      } else {
++        await addPost(data);
++      }
++      emit('confirm');
++      return true;
++    },
++  });
++
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => state.visible, detailLoading);
++
++function openDialog(id?: number) {
++  requestedId = id;
++  return runRead(async (read) => {
++    open(id ? { postId: id } : undefined);
++    setDisabled(true);
++    if (!id) {
++      setDisabled(false);
++      return;
+     }
+-    emit('confirm');
+-    return true;
+-  },
+-});
++    const data = await getPost(id, { signal: read.signal, silentError: true });
++    if (!read.isCurrent()) return;
++    open({
++      postId: data.postId ?? undefined,
++      postName: data.postName ?? '',
++      postCode: data.postCode ?? '',
++      postSort: data.postSort ?? 0,
++      status: data.status ?? '0',
++      remark: data.remark ?? '',
++    });
++    setDisabled(false);
++  });
++}
++function closeDialog() {
++  cancelRead();
++  return close();
++}
++function handleRetry() {
++  return openDialog(requestedId).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
+ 
+-defineExpose({ open });
++defineExpose({ open: openDialog, close: closeDialog });
+ </script>
+--- a/ruoyi-fastapi-frontend/src/views/system/post/components/PostList.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/post/components/PostList.vue
+@@ -128,7 +128,7 @@
+   updateState: ZxGridListInstance['updateState'];
+ };
+ import { parseTime } from '@/utils/ruoyi';
+-import { listPost, getPost, delPost } from '@/api/system/post';
++import { listPost, delPost } from '@/api/system/post';
+ import PostDlg from './PostDlg.vue';
+ 
+ const proxy = getCurrentInstance()!.proxy!;
+@@ -181,22 +181,16 @@
+ }
+ 
+ function handleAdd() {
+-  postDlgRef.value?.open();
+-}
+-
+-async function handleUpdate(row?: PostRecord) {
+-  const postId = row?.postId || ids.value[0];
+-  if (!postId) return;
+-  const response = await getPost(postId).catch(() => null);
+-  if (!response) return;
+-  const data = response;
+-  postDlgRef.value?.open({
+-    postId: data.postId ?? undefined,
+-    postName: data.postName ?? undefined,
+-    postCode: data.postCode ?? undefined,
+-    postSort: data.postSort ?? undefined,
+-    status: data.status ?? undefined,
+-    remark: data.remark ?? undefined,
++  return postDlgRef.value?.open().catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
++
++function handleUpdate(row?: PostRecord) {
++  const id = row?.postId || ids.value[0];
++  if (!id) return;
++  return postDlgRef.value?.open(id).catch(() => {
++    /* 当前读取已负责反馈。 */
+   });
+ }
+ 
+--- a/ruoyi-fastapi-frontend/src/views/system/project/components/ProjectDlg.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/project/components/ProjectDlg.vue
+@@ -1,6 +1,15 @@
+ <template>
+   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+-    <el-form ref="formRef" :model="state.data" :rules="formRules" v-bind="formProps">
++    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
++      <el-button link type="primary" @click="handleRetry">重试</el-button>
++    </el-alert>
++    <el-form
++      v-show="!loadError"
++      ref="formRef"
++      :model="state.data"
++      :rules="formRules"
++      v-bind="formProps"
++    >
+       <FormGrid v-bind="layoutProps">
+         <el-form-item label="工程描述" prop="projectDesc">
+           <zx-input
+@@ -21,7 +30,8 @@
+ import type { FormInstance } from 'element-plus';
+ const formRef = ref<FormInstance>();
+ 
+-import { addProject, updateProject } from '@/api/system/project';
++import { getProject, addProject, updateProject } from '@/api/system/project';
++import { useEditorRead } from '@/utils/editor-read';
+ import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+ 
+ interface ProjectForm {
+@@ -29,14 +39,18 @@
+   projectDesc?: string;
+ }
+ 
++const detailLoading = ref(false);
++let requestedId: number | undefined;
++
+ const emit = defineEmits(['success']);
+ 
+ const formRules = {
+   projectDesc: [{ required: false, message: '工程描述不能为空', trigger: 'blur' }],
+ };
+ 
+-const { formProps, layoutProps, state, dialogProps, dialogEvents, open } =
++const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
+   useFormDialog<ProjectForm>({
++    loading: detailLoading,
+     columns: 1,
+     formRef: formRef,
+     title: (data: ProjectForm) => (data?.projectId ? '修改工程' : '添加工程'),
+@@ -46,6 +60,7 @@
+       projectDesc: undefined,
+     }),
+     onConfirm: async (data: ProjectForm) => {
++      if (detailLoading.value || loadError.value || data.projectId !== requestedId) return false;
+       if (data.projectId !== undefined) {
+         await updateProject(data);
+       } else {
+@@ -56,5 +71,39 @@
+     },
+   });
+ 
+-defineExpose({ open });
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => state.visible, detailLoading);
++
++function openDialog(id?: number) {
++  requestedId = id;
++  return runRead(async (read) => {
++    open(id ? { projectId: id } : undefined);
++    setDisabled(true);
++    if (!id) {
++      setDisabled(false);
++      return;
++    }
++    const data = await getProject(id, { signal: read.signal, silentError: true });
++    if (!read.isCurrent()) return;
++    open({
++      projectId: data.projectId ?? undefined,
++      projectDesc: data.projectDesc ?? undefined,
++    });
++    setDisabled(false);
++  });
++}
++function closeDialog() {
++  cancelRead();
++  return close();
++}
++function handleRetry() {
++  return openDialog(requestedId).catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
++
++defineExpose({ open: openDialog, close: closeDialog });
+ </script>
+--- a/ruoyi-fastapi-frontend/src/views/system/project/components/ProjectList.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/project/components/ProjectList.vue
+@@ -196,18 +196,16 @@
+ }
+ 
+ function handleAdd() {
+-  projectDlgRef.value?.open();
+-}
+-
+-async function handleUpdate(row?: ProjectRecord) {
+-  const projectId = row?.projectId || ids.value[0];
+-  if (!projectId) return;
+-
+-  const response = await getProject(projectId).catch(() => null);
+-  if (!response) return;
+-  projectDlgRef.value?.open({
+-    projectId: response.projectId ?? undefined,
+-    projectDesc: response.projectDesc ?? undefined,
++  return projectDlgRef.value?.open().catch(() => {
++    /* 当前读取已负责反馈。 */
++  });
++}
++
++function handleUpdate(row?: ProjectRecord) {
++  const id = row?.projectId || ids.value[0];
++  if (!id) return;
++  return projectDlgRef.value?.open(id).catch(() => {
++    /* 当前读取已负责反馈。 */
+   });
+ }
+ 
+--- a/ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue
++++ b/ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue
+@@ -103,12 +103,10 @@
+ </template>
+ 
+ <script setup>
+-import { ref, computed, watch, onBeforeUnmount } from 'vue';
+-import { isAbortError } from '@zxio/http';
+-import { ElMessage } from 'element-plus';
++import { ref, computed } from 'vue';
++import { useEditorRead } from '@/utils/editor-read';
+ import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+ import { getUser, addUser, updateUser } from '@/api/system/user';
+-import { presentProblemFeedback, resolveFeedbackOptions } from '@/utils/feedback/presenter';
+ 
+ defineProps({
+   deptOptions: { type: Array, default: () => [] },
+@@ -122,8 +120,7 @@
+ const postOptions = ref([]);
+ const roleOptions = ref([]);
+ const detailLoading = ref(false);
+-const loadError = ref('');
+-let activeRead;
++let requestedId;
+ 
+ const formRules = computed(() => ({
+   userName: [
+@@ -209,42 +206,26 @@
+ 
+ const isEdit = computed(() => !!state.data.userId);
+ 
+-function cancelRead() {
+-  const read = activeRead;
+-  activeRead = undefined;
+-  detailLoading.value = false;
+-  read?.controller.abort('user-editor-opening-ended');
+-}
+-
+-watch(
+-  () => state.visible,
+-  (visible) => {
+-    if (!visible) cancelRead();
+-  },
+-  { flush: 'sync' }
+-);
+-onBeforeUnmount(cancelRead);
+-
+-/** 打开对话框 */
+-async function openDialog(userId) {
+-  cancelRead();
+-  const read = { controller: new AbortController() };
+-  activeRead = read;
+-  // 先显示本次打开的加载态，让关闭操作立即拥有这次读取。
+-  open(userId ? { userId } : undefined);
+-  postOptions.value = [];
+-  roleOptions.value = [];
+-  loadError.value = '';
+-  detailLoading.value = true;
+-  setDisabled(true);
+-  try {
+-    const response = await getUser(userId, { signal: read.controller.signal, silentError: true });
+-    if (activeRead !== read) return;
++const {
++  error: loadError,
++  run: runRead,
++  cancel: cancelRead,
++} = useEditorRead(() => state.visible, detailLoading);
++
++/** 打开对话框；新增也需要本次打开的岗位和角色选项。 */
++function openDialog(userId) {
++  requestedId = userId;
++  return runRead(async (read) => {
++    open(userId ? { userId } : undefined);
++    postOptions.value = [];
++    roleOptions.value = [];
++    setDisabled(true);
++    const response = await getUser(userId, { signal: read.signal, silentError: true });
++    if (!read.isCurrent()) return;
+     postOptions.value = response.posts || [];
+     roleOptions.value = response.roles || [];
+-
+     if (userId) {
+-      const userData = response.data || {};
++      const userData = response.data;
+       open({
+         userId: userData.userId,
+         deptId: userData.deptId,
+@@ -262,27 +243,7 @@
+       open();
+     }
+     setDisabled(false);
+-  } catch (error) {
+-    if (activeRead === read && !isAbortError(error)) {
+-      loadError.value = error instanceof Error ? error.message : '获取用户信息失败，请重试';
+-      if (error?.problem) {
+-        presentProblemFeedback({
+-          problem: error.problem,
+-          meta: error.meta || { status: error.status || 0 },
+-          feedback: resolveFeedbackOptions({ mode: 'auto' }),
+-        });
+-      } else {
+-        ElMessage.error(loadError.value);
+-      }
+-    }
+-    throw error;
+-  } finally {
+-    // 旧响应的 finally 不能释放新打开操作的 loading。
+-    if (activeRead === read) {
+-      activeRead = undefined;
+-      detailLoading.value = false;
+-    }
+-  }
++  });
+ }
+ 
+ function closeDialog() {
+@@ -291,7 +252,7 @@
+ }
+ 
+ function handleRetry() {
+-  return openDialog(state.data.userId).catch(() => {
++  return openDialog(requestedId).catch(() => {
+     // 当前读取已负责反馈；重试点击只承接拒绝。
+   });
+ }
+--- /dev/null
++++ b/ruoyi-fastapi-frontend/tests/unit/components/RemainingEditorReadLifecycle.test.ts
+@@ -0,0 +1,471 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import { mount, flushPromises } from '@vue/test-utils';
++import * as Vue from 'vue';
++import MenuDrawer from '@/views/system/menu/components/MenuDrawer.vue';
++import NoticeDlg from '@/views/system/notice/components/NoticeDlg.vue';
++import PostDlg from '@/views/system/post/components/PostDlg.vue';
++import ProjectDlg from '@/views/system/project/components/ProjectDlg.vue';
++import ProjectFormDialog from '@/views/project/components/ProjectFormDialog.vue';
++import ProtocolFormDrawer from '@/components/business/Protocol/ProtocolFormDrawer.vue';
++import DictData from '@/views/system/dict/data.vue';
++import UserFormDialog from '@/views/system/user/components/UserFormDialog.vue';
++
++const api = vi.hoisted(() => ({
++  menu: vi.fn(),
++  tree: vi.fn(),
++  notice: vi.fn(),
++  post: vi.fn(),
++  project: vi.fn(),
++  projectMain: vi.fn(),
++  protocol: vi.fn(),
++  dictData: vi.fn(),
++  user: vi.fn(),
++  write: vi.fn(),
++  error: vi.fn(),
++  recovery: vi.fn(),
++}));
++vi.mock('@/api/system/menu', () => ({
++  getMenu: api.menu,
++  treeselect: api.tree,
++  addMenu: api.write,
++  updateMenu: api.write,
++}));
++vi.mock('@/api/system/notice', () => ({
++  getNotice: api.notice,
++  addNotice: api.write,
++  updateNotice: api.write,
++}));
++vi.mock('@/api/system/post', () => ({
++  getPost: api.post,
++  addPost: api.write,
++  updatePost: api.write,
++}));
++vi.mock('@/api/system/project', () => ({
++  getProject: api.project,
++  addProject: api.write,
++  updateProject: api.write,
++}));
++vi.mock('@/api/project/project', () => ({
++  getProject: api.projectMain,
++  addProject: api.write,
++  updateProject: api.write,
++}));
++vi.mock('@/api/protocol/protocol', () => ({ getProtocol: api.protocol }));
++vi.mock('@/api/system/dict/data', () => ({
++  getData: api.dictData,
++  listData: vi.fn(),
++  delData: vi.fn(),
++  addData: api.write,
++  updateData: api.write,
++}));
++vi.mock('@/api/system/dict/type', () => ({
++  getType: () => Promise.resolve({ dictType: 'test_type' }),
++  optionselect: () => Promise.resolve({ items: [] }),
++}));
++vi.mock('vue-router', () => ({ useRoute: () => ({ params: { dictId: 1 } }) }));
++vi.mock('@/store/modules/dict', () => ({ default: () => ({ removeDict: vi.fn() }) }));
++vi.mock('@/api/system/user', () => ({
++  getUser: api.user,
++  addUser: api.write,
++  updateUser: api.write,
++}));
++vi.mock('@/utils/http', () => ({ presentRequestError: api.recovery }));
++vi.mock('element-plus', () => ({ ElMessage: { error: api.error } }));
++vi.mock('@/utils/feedback/presenter', () => ({
++  presentProblemFeedback: api.error,
++  resolveFeedbackOptions: (v: unknown) => v,
++}));
++vi.mock('@/utils/dict', () => ({
++  useDict: () => ({ sys_normal_disable: [], sys_notice_status: [], sys_notice_type: [] }),
++}));
++vi.mock('@/components/ui', () => ({ IconSelect: { template: '<div />' } }));
++vi.mock('@/components/business/Protocol/selector/ProtocolTypeSelector.vue', () => ({
++  default: { template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/EthernetProtocolTemplate.vue', () => ({
++  default: { template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/RS422ProtocolTemplate.vue', () => ({
++  default: { template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/CANProtocolTemplate.vue', () => ({
++  default: { template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/templates/Protocol1553BTemplate.vue', () => ({
++  default: { template: '<div />' },
++}));
++vi.mock('@/components/business/Protocol/ImportFileDialog.vue', () => ({
++  default: { inheritAttrs: false, template: '<div />' },
++}));
++const slot = { inheritAttrs: false, template: '<div><slot /></div>' };
++const shell = Vue.defineComponent({
++  name: 'EditorShell',
++  inheritAttrs: false,
++  props: ['modelValue', 'formModel', 'confirm', 'okDisabled', 'loading'],
++  emits: ['update:modelValue', 'close'],
++  setup(_, { emit, expose, slots }) {
++    expose({
++      close: async () => {
++        emit('update:modelValue', false);
++        emit('close');
++      },
++    });
++    return () => Vue.h('section', [slots.default?.(), slots.footer?.()]);
++  },
++});
++const detail = (id: number, text = `Record ${id}`) => ({
++  menuId: id,
++  menuName: text,
++  parentId: 1,
++  menuType: 'F',
++  orderNum: 0,
++  noticeId: id,
++  noticeTitle: text,
++  noticeType: '1',
++  noticeContent: '<p>Content</p>',
++  postId: id,
++  postName: text,
++  postCode: `post_${id}`,
++  postSort: 1,
++  projectId: id,
++  projectName: text,
++  projectDesc: text,
++  protocolId: id,
++  protocolName: text,
++  protocolType: '',
++  protocolConfig: { fields: [{ name: 'data' }] },
++  dictCode: id,
++  dictType: 'test_type',
++  dictLabel: text,
++  dictValue: String(id),
++  dictSort: 0,
++  status: '0',
++  data: { userId: id, nickName: text },
++  posts: [],
++  roles: [],
++  postIds: [id],
++  roleIds: [id],
++});
++function deferred<T = ReturnType<typeof detail>>() {
++  let resolve!: (v: T) => void, reject!: (e: unknown) => void;
++  const promise = new Promise<T>((ok, fail) => {
++    resolve = ok;
++    reject = fail;
++  });
++  return { promise, resolve, reject };
++}
++const cases = [
++  {
++    name: 'menu',
++    component: MenuDrawer,
++    read: api.menu,
++    id: 'menuId',
++    field: 'menuName',
++    arg: (id?: number) => (id ? { menuId: id } : { parentId: 1 }),
++  },
++  {
++    name: 'notice',
++    component: NoticeDlg,
++    read: api.notice,
++    id: 'noticeId',
++    field: 'noticeTitle',
++    arg: (id?: number) => id,
++  },
++  {
++    name: 'post',
++    component: PostDlg,
++    read: api.post,
++    id: 'postId',
++    field: 'postName',
++    arg: (id?: number) => id,
++  },
++  {
++    name: 'system project',
++    component: ProjectDlg,
++    read: api.project,
++    id: 'projectId',
++    field: 'projectDesc',
++    arg: (id?: number) => id,
++  },
++  {
++    name: 'project',
++    component: ProjectFormDialog,
++    read: api.projectMain,
++    id: 'projectId',
++    field: 'projectName',
++    arg: (id?: number) => id,
++  },
++  {
++    name: 'protocol',
++    component: ProtocolFormDrawer,
++    read: api.protocol,
++    id: 'protocolId',
++    field: 'protocolName',
++    arg: (id?: number) => (id ? { protocolId: id } : undefined),
++  },
++  {
++    name: 'dict data',
++    component: DictData,
++    read: api.dictData,
++    id: 'dictCode',
++    field: 'dictLabel',
++    arg: (id?: number) => (id ? { dictCode: id } : undefined),
++  },
++  {
++    name: 'user',
++    component: UserFormDialog,
++    read: api.user,
++    id: 'userId',
++    field: 'nickName',
++    arg: (id?: number) => id,
++  },
++];
++const mounted: ReturnType<typeof mount>[] = [];
++function editor(item: (typeof cases)[number]) {
++  const wrapper = mount(item.component as Vue.Component, {
++    props:
++      item.name === 'protocol'
++        ? { save: api.write }
++        : item.name === 'menu'
++          ? { sysShowHide: [], sysNormalDisable: [] }
++          : {},
++    global: {
++      config: {
++        globalProperties: {
++          useDict: () => ({ sys_normal_disable: [] }),
++          resetForm: vi.fn(),
++        } as unknown as Vue.ComponentCustomProperties,
++      },
++      directives: { hasPermi: () => {}, loading: () => {} },
++      stubs: {
++        ZxDialog: shell,
++        ZxDrawer: shell,
++        ElForm: Vue.defineComponent({
++          ...slot,
++          setup(_, { expose }) {
++            expose({ validate: () => Promise.resolve(true) });
++          },
++        }),
++        ElFormItem: slot,
++        FormGrid: slot,
++        ElAlert: { props: ['title'], template: '<aside><slot /></aside>' },
++        ElButton: {
++          props: ['disabled'],
++          template: '<button :disabled="disabled"><slot /></button>',
++        },
++        ZxInput: true,
++        ElTreeSelect: {
++          name: 'ElTreeSelect',
++          props: ['data'],
++          inheritAttrs: false,
++          template: '<div />',
++        },
++        ElSelect: slot,
++        ElOption: true,
++        ElRadioGroup: slot,
++        ElRadio: true,
++        ElInputNumber: true,
++        ElTooltip: slot,
++        ElIcon: slot,
++        ElPopover: slot,
++        QuestionFilled: true,
++        Search: true,
++        SvgIcon: true,
++        DictTag: true,
++        Editor: true,
++        ElTag: true,
++        ZxContentWrap: true,
++        ZxGridList: true,
++        ZxButton: true,
++        ZxListToolbar: true,
++        ZxSearch: true,
++        ElTable: true,
++        ElTableColumn: true,
++      },
++    },
++  });
++  mounted.push(wrapper);
++  const setup = (
++    wrapper.vm.$ as unknown as {
++      setupState: {
++        openEditor: (id?: number) => Promise<void>;
++        submitForm: () => Promise<unknown>;
++      };
++    }
++  ).setupState;
++  const exposed = wrapper.vm as unknown as {
++    open: (id?: unknown) => Promise<void>;
++    close: () => Promise<void>;
++  };
++  const modal = () => wrapper.findComponent(shell);
++  return {
++    wrapper,
++    modal,
++    open: (id?: number) =>
++      item.name === 'dict data' ? setup.openEditor(id) : exposed.open(item.arg(id)),
++    model: () => modal().props('formModel') as Record<string, unknown>,
++    confirm: () =>
++      item.name === 'dict data'
++        ? setup.submitForm()
++        : modal().props('confirm')(modal().props('formModel')),
++  };
++}
++const outcome = <T>(p: Promise<T>) =>
++  p.then(
++    (value) => ({ value }),
++    (error) => ({ error })
++  );
++beforeEach(() => {
++  vi.resetAllMocks();
++  cases.forEach((item) => item.read.mockImplementation(async (id) => detail(id)));
++  api.tree.mockResolvedValue({ items: [] });
++});
++afterEach(() => {
++  mounted.splice(0).forEach((w) => w.unmount());
++  vi.unstubAllGlobals();
++});
++for (const item of cases)
++  describe(`${item.name} opening ownership`, () => {
++    it('opens immediately and keeps the latest response when older success arrives last', async () => {
++      const a = deferred(),
++        b = deferred();
++      item.read.mockReturnValueOnce(a.promise).mockReturnValueOnce(b.promise);
++      const e = editor(item),
++        first = e.open(11);
++      await Vue.nextTick();
++      expect(e.modal().props('modelValue')).toBe(true);
++      expect(e.modal().props('loading')).toBe(true);
++      expect(await e.confirm()).toBe(false);
++      expect(api.write).not.toHaveBeenCalled();
++      const second = e.open(22);
++      expect(item.read.mock.calls[0][1]?.signal.aborted).toBe(true);
++      b.resolve(detail(22));
++      await second;
++      a.resolve(detail(11));
++      await first;
++      await Vue.nextTick();
++      expect(e.model()[item.id]).toBe(22);
++      expect(e.model()[item.field]).toBe('Record 22');
++      expect(e.modal().props('loading')).toBe(false);
++      expect(e.modal().props('okDisabled')).toBe(false);
++    });
++    it('ignores old failure and old finally while the new opening is pending', async () => {
++      const a = deferred(),
++        b = deferred();
++      item.read.mockReturnValueOnce(a.promise).mockReturnValueOnce(b.promise);
++      const e = editor(item),
++        old = outcome(e.open(11)),
++        current = e.open(22);
++      a.reject(new Error('old error'));
++      await old;
++      await Vue.nextTick();
++      expect(e.modal().props('loading')).toBe(true);
++      expect(e.modal().props('okDisabled')).toBe(true);
++      expect(api.error).not.toHaveBeenCalled();
++      b.resolve(detail(22));
++      await current;
++    });
++    it('cancels a closed opening and isolates a reopen of the same ID', async () => {
++      const a = deferred(),
++        b = deferred();
++      item.read.mockReturnValueOnce(a.promise).mockReturnValueOnce(b.promise);
++      const e = editor(item),
++        old = e.open(11);
++      await Vue.nextTick();
++      e.modal().vm.$emit('update:modelValue', false);
++      expect(item.read.mock.calls[0][1]?.signal.aborted).toBe(true);
++      const current = e.open(11);
++      a.resolve(detail(11, 'Old'));
++      await old;
++      await Vue.nextTick();
++      expect(e.modal().props('loading')).toBe(true);
++      expect(e.model()[item.field]).toBeFalsy();
++      b.resolve(detail(11, 'Reopened'));
++      await current;
++      expect(e.model()[item.field]).toBe('Reopened');
++    });
++    it('retains an intentional create draft after the previous edit completes', async () => {
++      const a = deferred();
++      item.read.mockReturnValueOnce(a.promise);
++      const e = editor(item);
++      await flushPromises();
++      const old = e.open(11);
++      await e.open();
++      a.resolve(detail(11));
++      await old;
++      expect(e.model()[item.id] == null).toBe(true);
++      expect(e.model()[item.field]).toBeFalsy();
++      expect(e.modal().props('okDisabled')).toBe(false);
++      if (item.name === 'menu') expect(e.model().parentId).toBe(1);
++      if (item.name === 'dict data') expect(e.model().dictType).toBe('test_type');
++    });
++    it('blocks failed edits and retries the original ID', async () => {
++      const failure = new Error('current failed');
++      item.read.mockRejectedValueOnce(failure);
++      const e = editor(item);
++      expect(await outcome(e.open(11))).toEqual({ error: failure });
++      await Vue.nextTick();
++      expect(e.modal().props('okDisabled')).toBe(true);
++      expect(await e.confirm()).toBe(false);
++      expect(api.write).not.toHaveBeenCalled();
++      expect(api.error).toHaveBeenCalledExactlyOnceWith(failure.message);
++      const retry = e.wrapper.findAll('button').find((b) => b.text() === '重试');
++      expect(retry).toBeDefined();
++      await retry!.trigger('click');
++      await flushPromises();
++      expect(e.model()[item.id]).toBe(11);
++      expect(e.modal().props('okDisabled')).toBe(false);
++    });
++    it('aborts at scope disposal without consuming late success', async () => {
++      const a = deferred();
++      item.read.mockReturnValueOnce(a.promise);
++      const e = editor(item),
++        old = e.open(11);
++      e.wrapper.unmount();
++      expect(item.read.mock.calls[0][1]?.signal.aborted).toBe(true);
++      a.resolve(detail(11));
++      await old;
++      expect(api.error).not.toHaveBeenCalled();
++    });
++    it('restores current 401 recovery and keeps stale 401 silent', async () => {
++      const a = deferred(),
++        b = deferred();
++      item.read.mockReturnValueOnce(a.promise).mockReturnValueOnce(b.promise);
++      const e = editor(item),
++        old = outcome(e.open(11)),
++        current = outcome(e.open(22));
++      const failure = Object.assign(new Error('expired'), {
++        problem: { status: 401 },
++        meta: { status: 401 },
++        config: { silentError: true },
++      });
++      a.reject(failure);
++      await old;
++      expect(api.recovery).not.toHaveBeenCalled();
++      b.reject(failure);
++      await current;
++      expect(api.recovery).toHaveBeenCalledExactlyOnceWith(
++        failure,
++        expect.objectContaining({ silentError: false, feedback: { mode: 'auto' } })
++      );
++      expect(failure.config.silentError).toBe(true);
++    });
++  });
++it('owns menu options together with the detail and preserves root creation', async () => {
++  const a = deferred<{ items: { id: number; label: string }[] }>(),
++    b = deferred<{ items: { id: number; label: string }[] }>();
++  api.tree.mockReturnValueOnce(a.promise).mockReturnValueOnce(b.promise);
++  const e = editor(cases[0]);
++  const old = e.open(11),
++    current = e.open(22);
++  b.resolve({ items: [{ id: 22, label: 'Current' }] });
++  await current;
++  a.resolve({ items: [{ id: 11, label: 'Old' }] });
++  await old;
++  expect(e.wrapper.findComponent({ name: 'ElTreeSelect' }).props('data')).toEqual([
++    { id: 0, label: '主类目', children: [{ id: 22, label: 'Current' }] },
++  ]);
++  await (e.wrapper.vm as unknown as { open: () => Promise<void> }).open();
++  expect(e.model().parentId).toBe(0);
++  expect(e.modal().props('okDisabled')).toBe(false);
++});
+--- /dev/null
++++ b/ruoyi-fastapi-frontend/src/api/editor-read-options.test.ts
+@@ -0,0 +1,35 @@
++import { beforeEach, describe, expect, it, vi } from 'vitest';
++import { getMenu } from '@/api/system/menu';
++import { getNotice } from '@/api/system/notice';
++import { getPost } from '@/api/system/post';
++import { getProject } from '@/api/system/project';
++import { getProject as getBusinessProject } from '@/api/project/project';
++import { getProtocol } from '@/api/protocol/protocol';
++import { getData } from '@/api/system/dict/data';
++
++const request = vi.hoisted(() => vi.fn());
++vi.mock('@/utils/request', () => ({ default: request }));
++beforeEach(() => request.mockReset());
++describe('editor detail read cancellation and feedback options', () => {
++  it.each([
++    [getMenu, '/system/menu/', 'menuId'],
++    [getNotice, '/system/notice/', 'noticeId'],
++    [getPost, '/system/post/', 'postId'],
++    [getProject, '/project/', 'projectId'],
++    [getBusinessProject, '/project/', 'projectId'],
++    [getProtocol, '/system/protocol/', 'protocolId'],
++    [getData, '/system/dict/data/', 'dictCode'],
++  ] as const)('forwards the opening signal and silent feedback for %s', async (read, url, id) => {
++    const controller = new AbortController();
++    request.mockResolvedValue({ [id]: 11 });
++    await read(11, { signal: controller.signal, silentError: true });
++    expect(request).toHaveBeenCalledExactlyOnceWith(
++      expect.objectContaining({
++        url: url + '11',
++        method: 'get',
++        signal: controller.signal,
++        silentError: true,
++      })
++    );
++  });
++});

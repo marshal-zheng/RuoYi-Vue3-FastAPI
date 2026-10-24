@@ -1,0 +1,149 @@
+{
+  "ok": true,
+  "mode": "production Vue handlers + local real FastAPI + source @zxio/http; UI form/loading/file-save adapters stubbed; no browser automation",
+  "resultCount": 7,
+  "results": [
+    {
+      "name": "incomplete-real-configuration-blocks-ZIP",
+      "ok": true,
+      "status": 400,
+      "message": "请先完善生成配置信息",
+      "pendingReleased": true,
+      "loadingReleased": true,
+      "noFileSaved": true
+    },
+    {
+      "name": "blank-description-is-rejected-without-persistence",
+      "ok": true,
+      "status": 422,
+      "message": "表描述不能为空",
+      "unchanged": true
+    },
+    {
+      "name": "blank-function-name-is-rejected-without-persistence",
+      "ok": true,
+      "status": 422,
+      "message": "生成功能名不能为空",
+      "unchanged": true
+    },
+    {
+      "name": "existing-edit-handler-saves-confirmed-configuration",
+      "ok": true,
+      "pendingReleased": true,
+      "realPutApi": true,
+      "formValidationCallbacksStubbed": true,
+      "noCustomPathGeneration": true
+    },
+    {
+      "name": "readback-retains-mapping-and-existing-names",
+      "ok": true,
+      "tableId": 1,
+      "tableName": "sys_post",
+      "tableComment": "岗位信息表",
+      "functionName": "岗位信息",
+      "tplWebType": "element-plus",
+      "parentMenuId": 1,
+      "parentMenuName": "系统管理",
+      "columnMappingsPreserved": 10,
+      "primaryKey": "post_id"
+    },
+    {
+      "name": "real-sys-post-ZIP-after-repair",
+      "ok": true,
+      "bytes": 9315,
+      "filename": "vfadmin.zip",
+      "entries": [
+        "backend/module_admin/system/controller/post_controller.py",
+        "backend/module_admin/system/repository/post_repository.py",
+        "backend/module_admin/system/entity/do/post_do.py",
+        "backend/module_admin/system/service/post_service.py",
+        "backend/module_admin/system/entity/vo/post_vo.py",
+        "backend/sql/post_menu.sql",
+        "frontend/api/system/post.js",
+        "frontend/views/system/post/index.vue"
+      ],
+      "crcValid": true,
+      "nonemptyFiles": true,
+      "vue3Template": true,
+      "confirmedMenuParent": 1,
+      "pendingReleased": true,
+      "loadingReleased": true,
+      "failureThenRetrySucceeded": true
+    },
+    {
+      "name": "business-posts-and-unrelated-generator-configuration-unchanged",
+      "ok": true,
+      "businessPostRowsUnchanged": 4,
+      "generatorTableCount": 1,
+      "menuRowsUnchanged": 94,
+      "noGeneratedCodeWrittenToBusiness": true
+    }
+  ],
+  "configuration": {
+    "before": {
+      "tableId": 1,
+      "tableName": "sys_post",
+      "tableComment": "",
+      "functionName": "",
+      "tplWebType": "",
+      "parentMenuId": null,
+      "options": null,
+      "className": "SysPost",
+      "packageName": "module_admin.system",
+      "moduleName": "system",
+      "businessName": "post",
+      "functionAuthor": "insistence",
+      "genType": "0",
+      "genPath": "/"
+    },
+    "after": {
+      "tableId": 1,
+      "tableName": "sys_post",
+      "tableComment": "岗位信息表",
+      "functionName": "岗位信息",
+      "tplWebType": "element-plus",
+      "parentMenuId": 1,
+      "options": "{\"treeCode\": null, \"treeParentCode\": null, \"treeName\": null, \"parentMenuId\": 1}",
+      "className": "SysPost",
+      "packageName": "module_admin.system",
+      "moduleName": "system",
+      "businessName": "post",
+      "functionAuthor": "insistence",
+      "genType": "0",
+      "genPath": "/"
+    },
+    "databaseMetadata": {
+      "tableName": "sys_post",
+      "databaseTableComment": "",
+      "readOnlyMetadataQuery": true
+    }
+  },
+  "independentReadOnlyReview": {
+    "conclusion": "现有完整编辑保存可完成配置，不需要本轮修改生产代码或放宽生成保护",
+    "scope": "静态核对初始化、保存、模板准备及完整更新契约；真实 API 和 ZIP 由主代理验证"
+  },
+  "completion": {
+    "workspacePreservation": {
+      "business": {
+        "baselineFiles": 3390,
+        "changedExistingFiles": [],
+        "newFiles": [
+          "docs/reports/2026-10-16-sys-post-generator-config.md",
+          "docs/reports/evidence/2026-10-16-sys-post-generator-config/actual.json"
+        ]
+      },
+      "zxui": {
+        "baselineFiles": 7942,
+        "changedExistingFiles": [],
+        "newFiles": []
+      }
+    },
+    "temporaryZipRemoved": true,
+    "probeLoginLoggedOut": true,
+    "taskStartedBackendStopped": true,
+    "port8088ListenerRemaining": false,
+    "correctedGeneratorConfigurationRetained": true,
+    "productionSourceFilesChanged": 0,
+    "additionalRegressionTestsAdded": 0
+  }
+}

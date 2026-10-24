@@ -1,0 +1,22 @@
+{
+  "importedUsersDeleted": [
+    {
+      "userId": 129,
+      "userName": "zxqa_i_mvemh76k"
+    },
+    {
+      "userId": 130,
+      "userName": "zxqa_emh76k"
+    }
+  ],
+  "ownerDeleted": {
+    "userId": 128,
+    "userName": "zxqa_e_mvemh76k",
+    "status": 204
+  },
+  "ownedUsersRemaining": 0,
+  "ownerLogout": 204,
+  "adminCleanupLogout": 204,
+  "knownOwnerSessionKeysRemaining": 0,
+  "finalBrowserUrl": "http://localhost/login"
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterfaceControlDocument>
+  <VersionInfo>
+    <VersionId>15</VersionId>
+    <ProjectId>14</ProjectId>
+    <VersionNumber>v1.0.1</VersionNumber>
+    <VersionName>zxqa_clone_mvenpxba</VersionName>
+    <Description>项目初始版本</Description>
+    <Creator>zxqa_r_mvenpxba</Creator>
+    <CreateTime>2026-10-19 04:20:39</CreateTime>
+    <Updater>zxqa_r_mvenpxba</Updater>
+    <UpdateTime>2026-10-19 04:20:57</UpdateTime>
+    <IsLocked>0</IsLocked>
+    <LockedBy/>
+    <LockedTime/>
+  </VersionInfo>
+  <CommunicationSummary empty="true"/>
+  <Devices empty="true"/>
+</InterfaceControlDocument>

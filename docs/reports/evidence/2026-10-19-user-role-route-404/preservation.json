@@ -1,0 +1,29 @@
+{
+  "baselineFiles": 13,
+  "modifiedExistingFiles": [
+    "vitest.config.ts",
+    "src/api/menu-contract.test.ts",
+    "src/router/index.js",
+    "src/store/modules/permission.ts",
+    "tests/unit/stores/permission.test.ts"
+  ],
+  "unchangedBaselines": [
+    "src/permission.ts",
+    "src/plugins/dev-menu-hot-sync.test.ts",
+    "src/plugins/dev-menu-hot-sync.ts",
+    "src/layout/index.vue",
+    "src/store/modules/user.ts",
+    "src/views/system/user/index.vue",
+    "src/views/system/user/authRole.vue",
+    "src/layout/components/Sidebar/index.vue"
+  ],
+  "newFiles": [
+    "tests/unit/router/permission-layout.test.ts"
+  ],
+  "missingFiles": [],
+  "headsUnchanged": {
+    "ruoyi": false,
+    "zxui": false
+  },
+  "commitOrPushPerformedByThisRun": false
+}

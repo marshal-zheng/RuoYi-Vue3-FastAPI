@@ -1,0 +1,15 @@
+--- baseline/ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py
++++ current/ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py
+@@ -267,9 +267,9 @@
+         """
+         mapping_dict = {
+             'dictCode': '字典编码',
+-            'dictSort': '字典标签',
+-            'dictLabel': '字典键值',
+-            'dictValue': '字典排序',
++            'dictSort': '字典排序',
++            'dictLabel': '字典标签',
++            'dictValue': '字典键值',
+             'dictType': '字典类型',
+             'cssClass': '样式属性',
+             'listClass': '表格回显样式',

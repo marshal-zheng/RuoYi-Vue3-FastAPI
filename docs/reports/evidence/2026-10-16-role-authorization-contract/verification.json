@@ -1,0 +1,33 @@
+{
+  "backend": {
+    "passed": 117,
+    "command": "cd ruoyi-fastapi-backend && ./venv/bin/python -m pytest tests/unit/controllers/test_role_authorization_contract.py tests/unit/services/test_role_authorization.py modules/system/tests/test_user_write_commands.py modules/system/tests/test_role_write_commands.py tests/unit/controllers/test_user_role_write_contract.py tests/unit/services/test_role_write_relations.py tests/unit/services/test_user_service.py -q --no-cov"
+  },
+  "frontend": {
+    "passed": 28,
+    "command": "cd ruoyi-fastapi-frontend && ./node_modules/.bin/vitest run src/api/role-authorization-contract.test.ts tests/unit/components/RoleAuthorization.test.ts src/api/menu-contract.test.ts tests/unit/api/role.test.ts src/utils/operation.test.ts"
+  },
+  "actual": {
+    "passed": 86,
+    "command": "node /tmp/ruoyi-role-authorization/actual-probe.cjs",
+    "path": "actual.json"
+  },
+  "gates": {
+    "lint": "yarn lint:check: exit 0",
+    "typecheck": "yarn type-check: exit 0",
+    "build": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod: exit 0",
+    "backendConventions": "passed",
+    "frontendConventions": "blocked by pre-existing VersionList.vue console usage",
+    "newBackendRuffDiagnostics": 0,
+    "uiStandards": "yarn ui:standards: exit 0, 14 tests passed"
+  },
+  "independentReview": {
+    "testsPassed": 101,
+    "blockingFindings": 0
+  },
+  "limitations": [
+    "No computer use, native browser rendering or native form validation",
+    "Generic commit-failure 500 omits server request id; client request/response context retained, one feedback, no relogin",
+    "Full repository test suites were not run"
+  ]
+}

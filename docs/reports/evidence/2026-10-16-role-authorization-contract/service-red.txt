@@ -1,0 +1,1416 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+created: 14/14 workers
+14 workers [28 items]
+
+..FFFFFFFFFFFFFFFFFFF.FFFFF.                                             [100%]
+=================================== FAILURES ===================================
+____ test_missing_or_deleted_party_rejected_before_writes[replace-payload0] ____
+[gw0] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x118621300>, <function authorization.<locals>.relations at 0x1186213a0>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1181e6510>)
+operation = 'replace', payload = {'roleIds': [], 'userId': 999}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1181e6510>
+authorization = (<function authorization.<locals>.run at 0x118621300>, <function authorization.<locals>.relations at 0x1186213a0>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1181e6510>)
+before     = {(42, 20), (43, 21)}
+operation  = 'replace'
+payload    = {'roleIds': [], 'userId': 999}
+relations  = <function authorization.<locals>.relations at 0x1186213a0>
+run        = <function authorization.<locals>.run at 0x118621300>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[batch-payload3] _
+[gw6] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x12431d260>, <function authorization.<locals>.relations at 0x12431d300>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123fde900>)
+operation = 'batch', payload = {'roleId': 20, 'userIds': [42, 1]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123fde900>
+authorization = (<function authorization.<locals>.run at 0x12431d260>, <function authorization.<locals>.relations at 0x12431d300>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123fde900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'batch'
+payload    = {'roleId': 20, 'userIds': [42, 1]}
+relations  = <function authorization.<locals>.relations at 0x12431d300>
+run        = <function authorization.<locals>.run at 0x12431d260>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?', 'DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+_____ test_missing_or_deleted_party_rejected_before_writes[grant-payload4] _____
+[gw2] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11b21d300>, <function authorization.<locals>.relations at 0x11b21d3a0>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11aade900>)
+operation = 'grant', payload = {'roleId': 999, 'userIds': [44]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11aade900>
+authorization = (<function authorization.<locals>.run at 0x11b21d300>, <function authorization.<locals>.relations at 0x11b21d3a0>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11aade900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'grant'
+payload    = {'roleId': 999, 'userIds': [44]}
+relations  = <function authorization.<locals>.relations at 0x11b21d3a0>
+run        = <function authorization.<locals>.run at 0x11b21d300>
+writes     = ['INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+____ test_missing_or_deleted_party_rejected_before_writes[replace-payload1] ____
+[gw0] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x118681080>, <function authorization.<locals>.relations at 0x118681260>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118475090>)
+operation = 'replace', payload = {'roleIds': [20, 999], 'userId': 42}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118475090>
+authorization = (<function authorization.<locals>.run at 0x118681080>, <function authorization.<locals>.relations at 0x118681260>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x118475090>)
+before     = {(42, 20), (43, 21)}
+operation  = 'replace'
+payload    = {'roleIds': [20, 999], 'userId': 42}
+relations  = <function authorization.<locals>.relations at 0x118681260>
+run        = <function authorization.<locals>.run at 0x118681080>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+____ test_missing_or_deleted_party_rejected_before_writes[revoke-payload6] _____
+[gw4] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x125e1d300>, <function authorization.<locals>.relations at 0x125e1d3a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1258de900>)
+operation = 'revoke', payload = {'roleId': 999, 'userId': 42}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1258de900>
+authorization = (<function authorization.<locals>.run at 0x125e1d300>, <function authorization.<locals>.relations at 0x125e1d3a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1258de900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'revoke'
+payload    = {'roleId': 999, 'userId': 42}
+relations  = <function authorization.<locals>.relations at 0x125e1d3a0>
+run        = <function authorization.<locals>.run at 0x125e1d300>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+____ test_missing_or_deleted_party_rejected_before_writes[replace-payload2] ____
+[gw1] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x12081d300>, <function authorization.<locals>.relations at 0x12081d3a0>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1204ea510>)
+operation = 'replace', payload = {'roleIds': [22], 'userId': 42}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1204ea510>
+authorization = (<function authorization.<locals>.run at 0x12081d300>, <function authorization.<locals>.relations at 0x12081d3a0>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1204ea510>)
+before     = {(42, 20), (43, 21)}
+operation  = 'replace'
+payload    = {'roleIds': [22], 'userId': 42}
+relations  = <function authorization.<locals>.relations at 0x12081d3a0>
+run        = <function authorization.<locals>.run at 0x12081d300>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+_________ test_both_data_scopes_preflight_entire_batch[batch-payload7] _________
+[gw12] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x120b19300>, <function authorization.<locals>.relations at 0x120b193a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1206de900>)
+operation = 'batch', payload = {'roleId': 21, 'userIds': [42]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 43, 'roleIds': [20]}),
+        ('replace', {'userId': 42, 'roleIds': [21]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 43]}),
+        ('grant', {'roleId': 21, 'userIds': [44]}),
+        ('revoke', {'roleId': 20, 'userId': 43}),
+        ('revoke', {'roleId': 21, 'userId': 42}),
+        ('batch', {'roleId': 20, 'userIds': [42, 43]}),
+        ('batch', {'roleId': 21, 'userIds': [42]}),
+    ])
+    async def test_both_data_scopes_preflight_entire_batch(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1206de900>
+authorization = (<function authorization.<locals>.run at 0x120b19300>, <function authorization.<locals>.relations at 0x120b193a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1206de900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'batch'
+payload    = {'roleId': 21, 'userIds': [42]}
+relations  = <function authorization.<locals>.relations at 0x120b193a0>
+run        = <function authorization.<locals>.run at 0x120b19300>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:121: Failed
+_____ test_missing_or_deleted_party_rejected_before_writes[batch-payload8] _____
+[gw3] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11da1d300>, <function authorization.<locals>.relations at 0x11da1d3a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11c4de900>)
+operation = 'batch', payload = {'roleId': 20, 'userIds': [42, 999]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11c4de900>
+authorization = (<function authorization.<locals>.run at 0x11da1d300>, <function authorization.<locals>.relations at 0x11da1d3a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11c4de900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'batch'
+payload    = {'roleId': 20, 'userIds': [42, 999]}
+relations  = <function authorization.<locals>.relations at 0x11da1d3a0>
+run        = <function authorization.<locals>.run at 0x11da1d300>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?', 'DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[batch-payload7] _
+[gw8] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x122921260>, <function authorization.<locals>.relations at 0x122921300>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1225de900>)
+operation = 'batch', payload = {'roleId': 1, 'userIds': [42]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1225de900>
+authorization = (<function authorization.<locals>.run at 0x122921260>, <function authorization.<locals>.relations at 0x122921300>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x1225de900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'batch'
+payload    = {'roleId': 1, 'userIds': [42]}
+relations  = <function authorization.<locals>.relations at 0x122921300>
+run        = <function authorization.<locals>.run at 0x122921260>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+________ test_both_data_scopes_preflight_entire_batch[revoke-payload5] _________
+[gw11] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x10dd1d300>, <function authorization.<locals>.relations at 0x10dd1d3a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d8de900>)
+operation = 'revoke', payload = {'roleId': 21, 'userId': 42}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 43, 'roleIds': [20]}),
+        ('replace', {'userId': 42, 'roleIds': [21]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 43]}),
+        ('grant', {'roleId': 21, 'userIds': [44]}),
+        ('revoke', {'roleId': 20, 'userId': 43}),
+        ('revoke', {'roleId': 21, 'userId': 42}),
+        ('batch', {'roleId': 20, 'userIds': [42, 43]}),
+        ('batch', {'roleId': 21, 'userIds': [42]}),
+    ])
+    async def test_both_data_scopes_preflight_entire_batch(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d8de900>
+authorization = (<function authorization.<locals>.run at 0x10dd1d300>, <function authorization.<locals>.relations at 0x10dd1d3a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d8de900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'revoke'
+payload    = {'roleId': 21, 'userId': 42}
+relations  = <function authorization.<locals>.relations at 0x10dd1d3a0>
+run        = <function authorization.<locals>.run at 0x10dd1d300>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:121: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[grant-payload1] _
+[gw5] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11dc1d260>, <function authorization.<locals>.relations at 0x11dc1d300>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11d8de900>)
+operation = 'grant', payload = {'roleId': 20, 'userIds': [44, 1]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11d8de900>
+authorization = (<function authorization.<locals>.run at 0x11dc1d260>, <function authorization.<locals>.relations at 0x11dc1d300>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11d8de900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'grant'
+payload    = {'roleId': 20, 'userIds': [44, 1]}
+relations  = <function authorization.<locals>.relations at 0x11dc1d300>
+run        = <function authorization.<locals>.run at 0x11dc1d260>
+writes     = ['INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+_____ test_missing_or_deleted_party_rejected_before_writes[grant-payload5] _____
+[gw2] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11b289f80>, <function authorization.<locals>.relations at 0x11b28a020>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11aa8aad0>)
+operation = 'grant', payload = {'roleId': 20, 'userIds': [44, 45]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11aa8aad0>
+authorization = (<function authorization.<locals>.run at 0x11b289f80>, <function authorization.<locals>.relations at 0x11b28a020>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11aa8aad0>)
+before     = {(42, 20), (43, 21)}
+operation  = 'grant'
+payload    = {'roleId': 20, 'userIds': [44, 45]}
+relations  = <function authorization.<locals>.relations at 0x11b28a020>
+run        = <function authorization.<locals>.run at 0x11b289f80>
+writes     = ['INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[grant-payload5] _
+[gw7] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11b61d260>, <function authorization.<locals>.relations at 0x11b61d300>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b1de900>)
+operation = 'grant', payload = {'roleId': 1, 'userIds': [44]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b1de900>
+authorization = (<function authorization.<locals>.run at 0x11b61d260>, <function authorization.<locals>.relations at 0x11b61d300>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b1de900>)
+before     = {(42, 20), (43, 21)}
+operation  = 'grant'
+payload    = {'roleId': 1, 'userIds': [44]}
+relations  = <function authorization.<locals>.relations at 0x11b61d300>
+run        = <function authorization.<locals>.run at 0x11b61d260>
+writes     = ['INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+____ test_missing_or_deleted_party_rejected_before_writes[revoke-payload7] _____
+[gw4] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x125e85260>, <function authorization.<locals>.relations at 0x125e853a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x12588ead0>)
+operation = 'revoke', payload = {'roleId': 20, 'userId': 999}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x12588ead0>
+authorization = (<function authorization.<locals>.run at 0x125e85260>, <function authorization.<locals>.relations at 0x125e853a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x12588ead0>)
+before     = {(42, 20), (43, 21)}
+operation  = 'revoke'
+payload    = {'roleId': 20, 'userId': 999}
+relations  = <function authorization.<locals>.relations at 0x125e853a0>
+run        = <function authorization.<locals>.run at 0x125e85260>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+________ test_both_data_scopes_preflight_entire_batch[revoke-payload4] _________
+[gw10] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11aefdb20>, <function authorization.<locals>.relations at 0x11b0aaa20>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b073750>)
+operation = 'revoke', payload = {'roleId': 20, 'userId': 43}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 43, 'roleIds': [20]}),
+        ('replace', {'userId': 42, 'roleIds': [21]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 43]}),
+        ('grant', {'roleId': 21, 'userIds': [44]}),
+        ('revoke', {'roleId': 20, 'userId': 43}),
+        ('revoke', {'roleId': 21, 'userId': 42}),
+        ('batch', {'roleId': 20, 'userIds': [42, 43]}),
+        ('batch', {'roleId': 21, 'userIds': [42]}),
+    ])
+    async def test_both_data_scopes_preflight_entire_batch(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b073750>
+authorization = (<function authorization.<locals>.run at 0x11aefdb20>, <function authorization.<locals>.relations at 0x11b0aaa20>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b073750>)
+before     = {(42, 20), (43, 21)}
+operation  = 'revoke'
+payload    = {'roleId': 20, 'userId': 43}
+relations  = <function authorization.<locals>.relations at 0x11b0aaa20>
+run        = <function authorization.<locals>.run at 0x11aefdb20>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:121: Failed
+_________ test_both_data_scopes_preflight_entire_batch[grant-payload2] _________
+[gw9] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x119a191c0>, <function authorization.<locals>.relations at 0x1198aaa20>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x119875f90>)
+operation = 'grant', payload = {'roleId': 20, 'userIds': [44, 43]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 43, 'roleIds': [20]}),
+        ('replace', {'userId': 42, 'roleIds': [21]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 43]}),
+        ('grant', {'roleId': 21, 'userIds': [44]}),
+        ('revoke', {'roleId': 20, 'userId': 43}),
+        ('revoke', {'roleId': 21, 'userId': 42}),
+        ('batch', {'roleId': 20, 'userIds': [42, 43]}),
+        ('batch', {'roleId': 21, 'userIds': [42]}),
+    ])
+    async def test_both_data_scopes_preflight_entire_batch(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x119875f90>
+authorization = (<function authorization.<locals>.run at 0x119a191c0>, <function authorization.<locals>.relations at 0x1198aaa20>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x119875f90>)
+before     = {(42, 20), (43, 21)}
+operation  = 'grant'
+payload    = {'roleId': 20, 'userIds': [44, 43]}
+relations  = <function authorization.<locals>.relations at 0x1198aaa20>
+run        = <function authorization.<locals>.run at 0x119a191c0>
+writes     = ['INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:121: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[replace-payload4] _
+[gw6] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x124381080>, <function authorization.<locals>.relations at 0x1243811c0>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123f8aad0>)
+operation = 'replace', payload = {'roleIds': [1], 'userId': 42}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123f8aad0>
+authorization = (<function authorization.<locals>.run at 0x124381080>, <function authorization.<locals>.relations at 0x1243811c0>, ['D... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x123f8aad0>)
+before     = {(42, 20), (43, 21)}
+operation  = 'replace'
+payload    = {'roleIds': [1], 'userId': 42}
+relations  = <function authorization.<locals>.relations at 0x1243811c0>
+run        = <function authorization.<locals>.run at 0x124381080>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+_____ test_missing_or_deleted_party_rejected_before_writes[grant-payload3] _____
+[gw1] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x120889e40>, <function authorization.<locals>.relations at 0x120889da0>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x120675090>)
+operation = 'grant', payload = {'roleId': 20, 'userIds': [44, 999]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 999, 'roleIds': []}),
+        ('replace', {'userId': 42, 'roleIds': [20, 999]}),
+        ('replace', {'userId': 42, 'roleIds': [22]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 999]}),
+        ('grant', {'roleId': 999, 'userIds': [44]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 45]}),
+        ('revoke', {'roleId': 999, 'userId': 42}),
+        ('revoke', {'roleId': 20, 'userId': 999}),
+        ('batch', {'roleId': 20, 'userIds': [42, 999]}),
+    ])
+    async def test_missing_or_deleted_party_rejected_before_writes(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(ResourceNotFoundException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.ResourceNotFoundException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x120675090>
+authorization = (<function authorization.<locals>.run at 0x120889e40>, <function authorization.<locals>.relations at 0x120889da0>, ['I... sys_user_role (user_id, role_id) VALUES (?, ?)'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x120675090>)
+before     = {(42, 20), (43, 21)}
+operation  = 'grant'
+payload    = {'roleId': 20, 'userIds': [44, 999]}
+relations  = <function authorization.<locals>.relations at 0x120889da0>
+run        = <function authorization.<locals>.run at 0x120889e40>
+writes     = ['INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:81: Failed
+_________ test_both_data_scopes_preflight_entire_batch[batch-payload6] _________
+[gw11] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x10dd81260>, <function authorization.<locals>.relations at 0x10dd813a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d88aad0>)
+operation = 'batch', payload = {'roleId': 20, 'userIds': [42, 43]}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 43, 'roleIds': [20]}),
+        ('replace', {'userId': 42, 'roleIds': [21]}),
+        ('grant', {'roleId': 20, 'userIds': [44, 43]}),
+        ('grant', {'roleId': 21, 'userIds': [44]}),
+        ('revoke', {'roleId': 20, 'userId': 43}),
+        ('revoke', {'roleId': 21, 'userId': 42}),
+        ('batch', {'roleId': 20, 'userIds': [42, 43]}),
+        ('batch', {'roleId': 21, 'userIds': [42]}),
+    ])
+    async def test_both_data_scopes_preflight_entire_batch(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d88aad0>
+authorization = (<function authorization.<locals>.run at 0x10dd81260>, <function authorization.<locals>.relations at 0x10dd813a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d88aad0>)
+before     = {(42, 20), (43, 21)}
+operation  = 'batch'
+payload    = {'roleId': 20, 'userIds': [42, 43]}
+relations  = <function authorization.<locals>.relations at 0x10dd813a0>
+run        = <function authorization.<locals>.run at 0x10dd81260>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?', 'DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:121: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[revoke-payload2] _
+[gw5] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11dcb16c0>, <function authorization.<locals>.relations at 0x11dcb1800>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11d88ead0>)
+operation = 'revoke', payload = {'roleId': 20, 'userId': 1}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11d88ead0>
+authorization = (<function authorization.<locals>.run at 0x11dcb16c0>, <function authorization.<locals>.relations at 0x11dcb1800>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11d88ead0>)
+before     = {(42, 20), (43, 21)}
+operation  = 'revoke'
+payload    = {'roleId': 20, 'userId': 1}
+relations  = <function authorization.<locals>.relations at 0x11dcb1800>
+run        = <function authorization.<locals>.run at 0x11dcb16c0>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[revoke-payload6] _
+[gw7] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11b6b16c0>, <function authorization.<locals>.relations at 0x11b6b13a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b18aad0>)
+operation = 'revoke', payload = {'roleId': 1, 'userId': 42}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b18aad0>
+authorization = (<function authorization.<locals>.run at 0x11b6b16c0>, <function authorization.<locals>.relations at 0x11b6b13a0>, ['D..._role.user_id = ? AND sys_user_role.role_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11b18aad0>)
+before     = {(42, 20), (43, 21)}
+operation  = 'revoke'
+payload    = {'roleId': 1, 'userId': 42}
+relations  = <function authorization.<locals>.relations at 0x11b6b13a0>
+run        = <function authorization.<locals>.run at 0x11b6b16c0>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ? AND sys_user_role.role_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+_ test_protected_objects_rejected_even_with_unrestricted_data_scope[replace-payload0] _
+[gw3] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x11da84f40>, <function authorization.<locals>.relations at 0x11da85080>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11c48aad0>)
+operation = 'replace', payload = {'roleIds': [], 'userId': 1}
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize('operation,payload', [
+        ('replace', {'userId': 1, 'roleIds': []}),
+        ('grant', {'roleId': 20, 'userIds': [44, 1]}),
+        ('revoke', {'roleId': 20, 'userId': 1}),
+        ('batch', {'roleId': 20, 'userIds': [42, 1]}),
+        ('replace', {'userId': 42, 'roleIds': [1]}),
+        ('grant', {'roleId': 1, 'userIds': [44]}),
+        ('revoke', {'roleId': 1, 'userId': 42}),
+        ('batch', {'roleId': 1, 'userIds': [42]}),
+    ])
+    async def test_protected_objects_rejected_even_with_unrestricted_data_scope(authorization, operation, payload):
+        run, relations, writes, _ = authorization
+        before = await relations()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11c48aad0>
+authorization = (<function authorization.<locals>.run at 0x11da84f40>, <function authorization.<locals>.relations at 0x11da85080>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x11c48aad0>)
+before     = {(42, 20), (43, 21)}
+operation  = 'replace'
+payload    = {'roleIds': [], 'userId': 1}
+relations  = <function authorization.<locals>.relations at 0x11da85080>
+run        = <function authorization.<locals>.run at 0x11da84f40>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:101: Failed
+_______________ test_replacement_also_checks_roles_being_removed _______________
+[gw12] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+authorization = (<function authorization.<locals>.run at 0x120b81080>, <function authorization.<locals>.relations at 0x120b81300>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x120b10690>)
+
+    @pytest.mark.asyncio
+    async def test_replacement_also_checks_roles_being_removed(authorization):
+        run, relations, writes, _ = authorization
+        await run('grant', {'roleId': 1, 'userIds': [42]})
+        before = await relations()
+        writes.clear()
+>       with pytest.raises(PermissionException):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'exceptions.exception.PermissionException'>
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x120b10690>
+authorization = (<function authorization.<locals>.run at 0x120b81080>, <function authorization.<locals>.relations at 0x120b81300>, ['D...M sys_user_role WHERE sys_user_role.user_id = ?'], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x120b10690>)
+before     = {(42, 1), (42, 20), (43, 21)}
+relations  = <function authorization.<locals>.relations at 0x120b81300>
+run        = <function authorization.<locals>.run at 0x120b81080>
+writes     = ['DELETE FROM sys_user_role WHERE sys_user_role.user_id = ?']
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:133: Failed
+___ test_admin_assignment_incremental_idempotence_clear_and_targeted_revoke ____
+[gw13] darwin -- Python 3.13.12 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+
+self = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+dialect = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+context = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+statement = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x10d38f550>
+parameters = [(42, 21)]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Any]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        if self._has_events or self.engine._has_events:
+            for fn in self.dispatch.before_cursor_execute:
+                str_statement, effective_parameters = fn(
+                    self,
+                    cursor,
+                    str_statement,
+                    effective_parameters,
+                    context,
+                    context.executemany,
+                )
+    
+        if self._echo:
+            self._log_info(str_statement)
+    
+            stats = context._get_cache_stats()
+    
+            if not self.engine.hide_parameters:
+                self._log_info(
+                    "[%s] %r",
+                    stats,
+                    sql_util._repr_params(
+                        effective_parameters,
+                        batches=10,
+                        ismulti=context.executemany,
+                    ),
+                )
+            else:
+                self._log_info(
+                    "[%s] [SQL parameters hidden due to hide_parameters=True]",
+                    stats,
+                )
+    
+        evt_handled: bool = False
+        try:
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+context    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+cursor     = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+dialect    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+effective_parameters = (42, 21)
+evt_handled = False
+fn         = <function ConnectionEvents._listen.<locals>.wrap_before_cursor_execute at 0x10d5191c0>
+parameters = [(42, 21)]
+self       = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+statement  = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x10d38f550>
+str_statement = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1967: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+        context    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+        cursor     = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+        parameters = (42, 21)
+        self       = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+        statement  = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:182: in execute
+    self._adapt_connection._handle_exception(error)
+        _cursor    = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+        operation  = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+        parameters = (42, 21)
+        self       = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:342: in _handle_exception
+    raise error
+        error      = IntegrityError('UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id')
+        self       = <AdaptedConnection <aiosqlite.core.Connection object at 0x10d1deba0>>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:164: in execute
+    self.await_(_cursor.execute(operation, parameters))
+        _cursor    = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+        operation  = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+        parameters = (42, 21)
+        self       = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        awaitable  = <coroutine object Cursor.execute at 0x10d5399a0>
+        current    = <_AsyncIoGreenlet object at 0x10d53df80 (otid=0x103793270) dead>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+        _require_await = False
+        args       = ()
+        context    = <_AsyncIoGreenlet object at 0x10d53df80 (otid=0x103793270) dead>
+        fn         = <bound method Session.flush of <sqlalchemy.orm.session.Session object at 0x10d1df0e0>>
+        kwargs     = {'objects': None}
+        result     = <coroutine object Cursor.close at 0x10d530d00>
+        switch_occurred = True
+        value      = None
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/cursor.py:40: in execute
+    await self._execute(self._cursor.execute, sql, parameters)
+        parameters = (42, 21)
+        self       = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+        sql        = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/cursor.py:32: in _execute
+    return await self._conn._execute(fn, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        args       = ('INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', (42, 21))
+        fn         = <built-in method execute of sqlite3.Cursor object at 0x10d50f140>
+        kwargs     = {}
+        self       = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/core.py:160: in _execute
+    return await future
+           ^^^^^^^^^^^^
+        args       = ('INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', (42, 21))
+        fn         = <built-in method execute of sqlite3.Cursor object at 0x10d50f140>
+        function   = functools.partial(<built-in method execute of sqlite3.Cursor object at 0x10d50f140>, 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', (42, 21))
+        future     = <Future finished exception=IntegrityError('UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id')>
+        kwargs     = {}
+        self       = <aiosqlite.core.Connection object at 0x10d1deba0>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tx = <_queue.SimpleQueue object at 0x10d223e20>
+
+    def _connection_worker_thread(tx: _TxQueue):
+        """
+        Execute function calls on a separate thread.
+    
+        :meta private:
+        """
+        while True:
+            # Continues running until all queue items are processed,
+            # even after connection is closed (so we can finalize all
+            # futures)
+    
+            future, function = tx.get()
+    
+            try:
+                LOG.debug("executing %s", function)
+>               result = function()
+                         ^^^^^^^^^^
+E               sqlite3.IntegrityError: UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id
+
+function   = functools.partial(<built-in method close of sqlite3.Cursor object at 0x10d4f2bc0>)
+future     = <Future finished result=None>
+result     = None
+tx         = <_queue.SimpleQueue object at 0x10d223e20>
+
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/core.py:63: IntegrityError
+
+The above exception was the direct cause of the following exception:
+
+authorization = (<function authorization.<locals>.run at 0x10d519300>, <function authorization.<locals>.relations at 0x10d5193a0>, ['I...user_role (user_id, role_id) VALUES (?, ?)', ...], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>)
+
+    @pytest.mark.asyncio
+    async def test_admin_assignment_incremental_idempotence_clear_and_targeted_revoke(authorization):
+        run, relations, _, _ = authorization
+        await run('grant', {'roleId': 1, 'userIds': [42, 42, 44]})
+        await run('grant', {'roleId': 1, 'userIds': [42]})
+        assert await relations() == {(42, 20), (43, 21), (42, 1), (44, 1)}
+        await run('revoke', {'roleId': 1, 'userId': 42})
+        assert await relations() == {(42, 20), (43, 21), (44, 1)}
+>       await run('replace', {'userId': 42, 'roleIds': [20, 21, 21]})
+
+_          = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>
+authorization = (<function authorization.<locals>.run at 0x10d519300>, <function authorization.<locals>.relations at 0x10d5193a0>, ['I...user_role (user_id, role_id) VALUES (?, ?)', ...], <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>)
+relations  = <function authorization.<locals>.relations at 0x10d5193a0>
+run        = <function authorization.<locals>.run at 0x10d519300>
+
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:147: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py:54: in run
+    return await handler.handle(command_type(
+        command_type = <class 'modules.system.application.commands.user_commands.AssignUserRolesCommand'>
+        db_session = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>
+        field      = 'user_role'
+        handler    = <modules.system.application.handlers.command.user_command_handlers.AssignUserRolesCommandHandler object at 0x10d35b100>
+        model      = <class 'module_admin.entity.vo.user_vo.CrudUserRoleModel'>
+        operation  = 'replace'
+        payload    = {'roleIds': '20,21,21', 'userId': 42}
+        role_scope = 'True'
+        role_service = <modules.system.application.services.role_service.RoleService object at 0x10d485010>
+        scoped     = False
+        user_scope = 'True'
+        user_service = <modules.system.application.services.user_service.UserService object at 0x10d1df620>
+ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py:246: in handle
+    assign_result = await self._user_service.add_user_role_services(request.query_db, request.user_role)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        request    = AssignUserRolesCommand(operator=None, trace_id=None, request_id=None, query_db=<sqlalchemy.ext.asyncio.session.AsyncSe...role_id=None, role_ids='20,21,21'), enforce_scope_checks=False, user_data_scope_sql='True', role_data_scope_sql='True')
+        self       = <modules.system.application.handlers.command.user_command_handlers.AssignUserRolesCommandHandler object at 0x10d35b100>
+ruoyi-fastapi-backend/utils/transaction_manager.py:325: in wrapper
+    return await _execute()
+           ^^^^^^^^^^^^^^^^
+        _execute   = <function transactional.<locals>.decorator.<locals>.wrapper.<locals>._execute at 0x10d519da0>
+        arg        = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>
+        args       = (<modules.system.application.services.user_service.UserService object at 0x10d1df620>, <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>, CrudUserRoleModel(user_id=42, user_ids=None, role_id=None, role_ids='20,21,21'))
+        db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>
+        func       = <function UserService.add_user_role_services at 0x10cdc4360>
+        isolation_level = None
+        kwargs     = {}
+        max_retries = 3
+        retry_on_deadlock = False
+        timeout    = None
+ruoyi-fastapi-backend/utils/transaction_manager.py:316: in _execute
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        args       = (<modules.system.application.services.user_service.UserService object at 0x10d1df620>, <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>, CrudUserRoleModel(user_id=42, user_ids=None, role_id=None, role_ids='20,21,21'))
+        db         = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>
+        func       = <function UserService.add_user_role_services at 0x10cdc4360>
+        isolation_level = None
+        kwargs     = {}
+        timeout    = None
+ruoyi-fastapi-backend/modules/system/application/services/user_service.py:748: in add_user_role_services
+    await user_role_repo.add(db_user_role)
+        db_user_role = <module_admin.entity.do.user_do.UserRoleDO object at 0x10d524490>
+        page_object = CrudUserRoleModel(user_id=42, user_ids=None, role_id=None, role_ids='20,21,21')
+        query_db   = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>
+        role_id    = '21'
+        role_id_list = ['20', '21', '21']
+        self       = <modules.system.application.services.user_service.UserService object at 0x10d1df620>
+        user_role_repo = <modules.system.infrastructure.user_role_repository.UserRoleRepository object at 0x10d524270>
+ruoyi-fastapi-backend/module_admin/repository/base_repository.py:266: in add
+    await self.db.flush()
+        entity     = <module_admin.entity.do.user_do.UserRoleDO object at 0x10d524490>
+        self       = <modules.system.infrastructure.user_role_repository.UserRoleRepository object at 0x10d524270>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/ext/asyncio/session.py:787: in flush
+    await greenlet_spawn(self.sync_session.flush, objects=objects)
+        objects    = None
+        self       = <sqlalchemy.ext.asyncio.session.AsyncSession object at 0x10d1de900>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/util/_concurrency_py3k.py:203: in greenlet_spawn
+    result = context.switch(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+        _require_await = False
+        args       = ()
+        context    = <_AsyncIoGreenlet object at 0x10d53df80 (otid=0x103793270) dead>
+        fn         = <bound method Session.flush of <sqlalchemy.orm.session.Session object at 0x10d1df0e0>>
+        kwargs     = {'objects': None}
+        result     = <coroutine object Cursor.close at 0x10d530d00>
+        switch_occurred = True
+        value      = None
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4331: in flush
+    self._flush(objects)
+        objects    = None
+        self       = <sqlalchemy.orm.session.Session object at 0x10d1df0e0>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4466: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+        _reg       = True
+        deleted    = set()
+        dirty      = set()
+        flush_context = <sqlalchemy.orm.unitofwork.UOWTransaction object at 0x10d521370>
+        is_orphan  = False
+        is_persistent_orphan = False
+        new        = {<sqlalchemy.orm.state.InstanceState object at 0x10d52d550>}
+        objects    = None
+        objset     = None
+        proc       = set()
+        processed  = {<sqlalchemy.orm.state.InstanceState object at 0x10d52d550>}
+        self       = <sqlalchemy.orm.session.Session object at 0x10d1df0e0>
+        state      = <sqlalchemy.orm.state.InstanceState object at 0x10d52d550>
+        transaction = <sqlalchemy.orm.session.SessionTransaction object at 0x10d53e1d0>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/util/langhelpers.py:121: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+        exc_tb     = <traceback object at 0x10d54a6c0>
+        exc_type   = <class 'sqlalchemy.exc.IntegrityError'>
+        exc_value  = IntegrityError('(sqlite3.IntegrityError) UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id')
+        self       = <sqlalchemy.util.langhelpers.safe_reraise object at 0x10d3147f0>
+        traceback  = None
+        type_      = None
+        value      = None
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/orm/session.py:4427: in _flush
+    flush_context.execute()
+        _reg       = True
+        deleted    = set()
+        dirty      = set()
+        flush_context = <sqlalchemy.orm.unitofwork.UOWTransaction object at 0x10d521370>
+        is_orphan  = False
+        is_persistent_orphan = False
+        new        = {<sqlalchemy.orm.state.InstanceState object at 0x10d52d550>}
+        objects    = None
+        objset     = None
+        proc       = set()
+        processed  = {<sqlalchemy.orm.state.InstanceState object at 0x10d52d550>}
+        self       = <sqlalchemy.orm.session.Session object at 0x10d1df0e0>
+        state      = <sqlalchemy.orm.state.InstanceState object at 0x10d52d550>
+        transaction = <sqlalchemy.orm.session.SessionTransaction object at 0x10d53e1d0>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:466: in execute
+    rec.execute(self)
+        postsort_actions = [DeleteAll(Mapper[UserRoleDO(sys_user_role)]), SaveUpdateAll(Mapper[UserRoleDO(sys_user_role)])]
+        rec        = SaveUpdateAll(Mapper[UserRoleDO(sys_user_role)])
+        self       = <sqlalchemy.orm.unitofwork.UOWTransaction object at 0x10d521370>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/orm/unitofwork.py:642: in execute
+    util.preloaded.orm_persistence.save_obj(
+        self       = SaveUpdateAll(Mapper[UserRoleDO(sys_user_role)])
+        uow        = <sqlalchemy.orm.unitofwork.UOWTransaction object at 0x10d521370>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:93: in save_obj
+    _emit_insert_statements(
+        base_mapper = <Mapper at 0x10c6574d0; UserRoleDO>
+        connection = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        dict_      = {'_sa_instance_state': <sqlalchemy.orm.state.InstanceState object at 0x10d52d550>, 'role_id': 21, 'user_id': 42}
+        has_identity = False
+        insert     = <generator object _collect_insert_commands at 0x10d366a70>
+        mapper     = <Mapper at 0x10c6574d0; UserRoleDO>
+        row_switch = None
+        single     = False
+        state      = <sqlalchemy.orm.state.InstanceState object at 0x10d52d550>
+        states     = <generator object UOWTransaction.states_for_mapper_hierarchy at 0x100d2dc60>
+        states_to_insert = [(<sqlalchemy.orm.state.InstanceState object at 0x10d52d550>, {'_sa_instance_state': <sqlalchemy.orm.state.InstanceSta...': 21, 'user_id': 42}, <Mapper at 0x10c6574d0; UserRoleDO>, <sqlalchemy.engine.base.Connection object at 0x10d373890>)]
+        states_to_update = []
+        table      = Table('sys_user_role', MetaData(), Column('user_id', Integer(), table=<sys_user_role>, primary_key=True, nullable=Fals...'), Column('role_id', Integer(), table=<sys_user_role>, primary_key=True, nullable=False, comment='角色ID'), schema=None)
+        uowtransaction = <sqlalchemy.orm.unitofwork.UOWTransaction object at 0x10d521370>
+        update     = <generator object _collect_update_commands at 0x10d135a80>
+        update_version_id = None
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/orm/persistence.py:1048: in _emit_insert_statements
+    result = connection.execute(
+        _          = {'role_id', 'user_id'}
+        base_mapper = <Mapper at 0x10c6574d0; UserRoleDO>
+        bookkeeping = True
+        cached_stmt = <sqlalchemy.sql.dml.Insert object at 0x10d35ab10>
+        connection = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        deterministic_results_reqd = True
+        exec_opt   = {'compiled_cache': <sqlalchemy.util._collections.LRUCache object at 0x10d3eda30>}
+        execution_options = {'compiled_cache': <sqlalchemy.util._collections.LRUCache object at 0x10d3eda30>}
+        has_all_defaults = True
+        has_all_pks = True
+        hasvalue   = False
+        insert     = <generator object _collect_insert_commands at 0x10d366a70>
+        mapper     = <Mapper at 0x10c6574d0; UserRoleDO>
+        multiparams = [{'role_id': 21, 'user_id': 42}]
+        records    = [(<sqlalchemy.orm.state.InstanceState object at 0x10d52d550>, {'_sa_instance_state': <sqlalchemy.orm.state.InstanceSta...ser_id': 42}, <Mapper at 0x10c6574d0; UserRoleDO>, <sqlalchemy.engine.base.Connection object at 0x10d373890>, {}, ...)]
+        return_result = None
+        returning_is_required_anyway = False
+        statement  = <sqlalchemy.sql.dml.Insert object at 0x10d35ab10>
+        table      = Table('sys_user_role', MetaData(), Column('user_id', Integer(), table=<sys_user_role>, primary_key=True, nullable=Fals...'), Column('role_id', Integer(), table=<sys_user_role>, primary_key=True, nullable=False, comment='角色ID'), schema=None)
+        uowtransaction = <sqlalchemy.orm.unitofwork.UOWTransaction object at 0x10d521370>
+        use_orm_insert_stmt = None
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1419: in execute
+    return meth(
+        distilled_parameters = [{'role_id': 21, 'user_id': 42}]
+        execution_options = {'compiled_cache': <sqlalchemy.util._collections.LRUCache object at 0x10d3eda30>}
+        meth       = <bound method ClauseElement._execute_on_connection of <sqlalchemy.sql.dml.Insert object at 0x10d35ab10>>
+        parameters = [{'role_id': 21, 'user_id': 42}]
+        self       = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        statement  = <sqlalchemy.sql.dml.Insert object at 0x10d35ab10>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/sql/elements.py:527: in _execute_on_connection
+    return connection._execute_clauseelement(
+        connection = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        distilled_params = [{'role_id': 21, 'user_id': 42}]
+        execution_options = {'compiled_cache': <sqlalchemy.util._collections.LRUCache object at 0x10d3eda30>}
+        self       = <sqlalchemy.sql.dml.Insert object at 0x10d35ab10>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1641: in _execute_clauseelement
+    ret = self._execute_context(
+        cache_hit  = <CacheStats.CACHE_HIT: 0>
+        compiled_cache = <sqlalchemy.util._collections.LRUCache object at 0x10d3eda30>
+        compiled_sql = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x10d38f550>
+        dialect    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+        distilled_parameters = [{'role_id': 21, 'user_id': 42}]
+        elem       = <sqlalchemy.sql.dml.Insert object at 0x10d35ab10>
+        event_multiparams = []
+        event_params = {'role_id': 21, 'user_id': 42}
+        execution_options = immutabledict({'compiled_cache': <sqlalchemy.util._collections.LRUCache object at 0x10d3eda30>})
+        extracted_params = []
+        for_executemany = False
+        has_events = True
+        keys       = ['role_id', 'user_id']
+        schema_translate_map = None
+        self       = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1846: in _execute_context
+    return self._exec_single_context(
+        args       = (<sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x10d38f550>, [{'role_id': 21, 'user_id': 42}], <sqlalchemy.sql.dml.Insert object at 0x10d35ab10>, [])
+        conn       = <sqlalchemy.pool.base._ConnectionFairy object at 0x10d4ab0b0>
+        constructor = <bound method DefaultExecutionContext._init_compiled of <class 'sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite'>>
+        context    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+        dialect    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+        execution_options = immutabledict({'compiled_cache': <sqlalchemy.util._collections.LRUCache object at 0x10d3eda30>})
+        kw         = {'cache_hit': <CacheStats.CACHE_HIT: 0>}
+        parameters = [{'role_id': 21, 'user_id': 42}]
+        self       = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        statement  = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x10d38f550>
+        yp         = None
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1986: in _exec_single_context
+    self._handle_dbapi_exception(
+        context    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+        cursor     = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+        dialect    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+        effective_parameters = (42, 21)
+        evt_handled = False
+        fn         = <function ConnectionEvents._listen.<locals>.wrap_before_cursor_execute at 0x10d5191c0>
+        parameters = [(42, 21)]
+        self       = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        statement  = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x10d38f550>
+        str_statement = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:2363: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+        context    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+        cursor     = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+        e          = IntegrityError('UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id')
+        exc_info   = (<class 'sqlite3.IntegrityError'>, IntegrityError('UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id'), <traceback object at 0x10d548700>)
+        invalidate_pool_on_disconnect = True
+        is_exit_exception = False
+        is_sub_exec = False
+        ismulti    = False
+        newraise   = None
+        parameters = (42, 21)
+        self       = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        should_wrap = True
+        sqlalchemy_exception = IntegrityError('(sqlite3.IntegrityError) UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id')
+        statement  = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/base.py:1967: in _exec_single_context
+    self.dialect.do_execute(
+        context    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+        cursor     = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+        dialect    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+        effective_parameters = (42, 21)
+        evt_handled = False
+        fn         = <function ConnectionEvents._listen.<locals>.wrap_before_cursor_execute at 0x10d5191c0>
+        parameters = [(42, 21)]
+        self       = <sqlalchemy.engine.base.Connection object at 0x10d373890>
+        statement  = <sqlalchemy.dialects.sqlite.base.SQLiteCompiler object at 0x10d38f550>
+        str_statement = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/engine/default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+        context    = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteExecutionContext_aiosqlite object at 0x10d530b90>
+        cursor     = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+        parameters = (42, 21)
+        self       = <sqlalchemy.dialects.sqlite.aiosqlite.SQLiteDialect_aiosqlite object at 0x10d1de3c0>
+        statement  = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:182: in execute
+    self._adapt_connection._handle_exception(error)
+        _cursor    = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+        operation  = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+        parameters = (42, 21)
+        self       = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:342: in _handle_exception
+    raise error
+        error      = IntegrityError('UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id')
+        self       = <AdaptedConnection <aiosqlite.core.Connection object at 0x10d1deba0>>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py:164: in execute
+    self.await_(_cursor.execute(operation, parameters))
+        _cursor    = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+        operation  = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+        parameters = (42, 21)
+        self       = <sqlalchemy.dialects.sqlite.aiosqlite.AsyncAdapt_aiosqlite_cursor object at 0x10d52d720>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        awaitable  = <coroutine object Cursor.execute at 0x10d5399a0>
+        current    = <_AsyncIoGreenlet object at 0x10d53df80 (otid=0x103793270) dead>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+        _require_await = False
+        args       = ()
+        context    = <_AsyncIoGreenlet object at 0x10d53df80 (otid=0x103793270) dead>
+        fn         = <bound method Session.flush of <sqlalchemy.orm.session.Session object at 0x10d1df0e0>>
+        kwargs     = {'objects': None}
+        result     = <coroutine object Cursor.close at 0x10d530d00>
+        switch_occurred = True
+        value      = None
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/cursor.py:40: in execute
+    await self._execute(self._cursor.execute, sql, parameters)
+        parameters = (42, 21)
+        self       = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+        sql        = 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)'
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/cursor.py:32: in _execute
+    return await self._conn._execute(fn, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        args       = ('INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', (42, 21))
+        fn         = <built-in method execute of sqlite3.Cursor object at 0x10d50f140>
+        kwargs     = {}
+        self       = <aiosqlite.cursor.Cursor object at 0x10d52d790>
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/core.py:160: in _execute
+    return await future
+           ^^^^^^^^^^^^
+        args       = ('INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', (42, 21))
+        fn         = <built-in method execute of sqlite3.Cursor object at 0x10d50f140>
+        function   = functools.partial(<built-in method execute of sqlite3.Cursor object at 0x10d50f140>, 'INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)', (42, 21))
+        future     = <Future finished exception=IntegrityError('UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id')>
+        kwargs     = {}
+        self       = <aiosqlite.core.Connection object at 0x10d1deba0>
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tx = <_queue.SimpleQueue object at 0x10d223e20>
+
+    def _connection_worker_thread(tx: _TxQueue):
+        """
+        Execute function calls on a separate thread.
+    
+        :meta private:
+        """
+        while True:
+            # Continues running until all queue items are processed,
+            # even after connection is closed (so we can finalize all
+            # futures)
+    
+            future, function = tx.get()
+    
+            try:
+                LOG.debug("executing %s", function)
+>               result = function()
+                         ^^^^^^^^^^
+E               sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id
+E               [SQL: INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)]
+E               [parameters: (42, 21)]
+E               (Background on this error at: https://sqlalche.me/e/20/gkpj)
+
+function   = functools.partial(<built-in method close of sqlite3.Cursor object at 0x10d4f2bc0>)
+future     = <Future finished result=None>
+result     = None
+tx         = <_queue.SimpleQueue object at 0x10d223e20>
+
+ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/aiosqlite/core.py:63: IntegrityError
+----------------------------- Captured stderr call -----------------------------
+{"text": "2026-10-16 15:52:41.029 | ERROR    | utils.transaction_manager:transaction:97 - Transaction 4515031296: Nested transaction rolled back (duration: 0.007s) - (sqlite3.IntegrityError) UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id\n[SQL: INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)]\n[parameters: (42, 21)]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)\n", "record": {"elapsed": {"repr": "0:00:00.366661", "seconds": 0.366661}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "transaction_manager.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/utils/transaction_manager.py"}, "function": "transaction", "level": {"icon": "❌", "name": "ERROR", "no": 40}, "line": 97, "message": "Transaction 4515031296: Nested transaction rolled back (duration: 0.007s) - (sqlite3.IntegrityError) UNIQUE constraint failed: sys_user_role.user_id, sys_user_role.role_id\n[SQL: INSERT INTO sys_user_role (user_id, role_id) VALUES (?, ?)]\n[parameters: (42, 21)]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)", "module": "transaction_manager", "name": "utils.transaction_manager", "process": {"id": 37306, "name": "MainProcess"}, "thread": {"id": 8777146112, "name": "MainThread"}, "time": {"repr": "2026-10-16 15:52:41.029353+01:00", "timestamp": 1792162361.029353}}}
+=========================== short test summary info ============================
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[replace-payload0]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[batch-payload3]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[grant-payload4]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[replace-payload1]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[revoke-payload6]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[replace-payload2]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_both_data_scopes_preflight_entire_batch[batch-payload7]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[batch-payload8]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[batch-payload7]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_both_data_scopes_preflight_entire_batch[revoke-payload5]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[grant-payload1]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[grant-payload5]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[grant-payload5]{"text": "2026-10-16 15:52:39.324 | INFO     | config.job_registry:register_function:48 - Registered job function: module_task.scheduler_test.job\n", "record": {"elapsed": {"repr": "0:00:00.172809", "seconds": 0.172809}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "job_registry.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/config/job_registry.py"}, "function": "register_function", "level": {"icon": "ℹ️", "name": "INFO", "no": 20}, "line": 48, "message": "Registered job function: module_task.scheduler_test.job", "module": "job_registry", "name": "config.job_registry", "process": {"id": 37283, "name": "MainProcess"}, "thread": {"id": 8777146112, "name": "MainThread"}, "time": {"repr": "2026-10-16 15:52:39.324230+01:00", "timestamp": 1792162359.32423}}}
+{"text": "2026-10-16 15:52:39.331 | INFO     | config.job_registry:register_function:48 - Registered job function: module_task.scheduler_test.async_job\n", "record": {"elapsed": {"repr": "0:00:00.180426", "seconds": 0.180426}, "exception": null, "extra": {"trace_id": "", "request_id": ""}, "file": {"name": "job_registry.py", "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/config/job_registry.py"}, "function": "register_function", "level": {"icon": "ℹ️", "name": "INFO", "no": 20}, "line": 48, "message": "Registered job function: module_task.scheduler_test.async_job", "module": "job_registry", "name": "config.job_registry", "process": {"id": 37283, "name": "MainProcess"}, "thread": {"id": 8777146112, "name": "MainThread"}, "time": {"repr": "2026-10-16 15:52:39.331847+01:00", "timestamp": 1792162359.331847}}}
+
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[revoke-payload7]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_both_data_scopes_preflight_entire_batch[revoke-payload4]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_both_data_scopes_preflight_entire_batch[grant-payload2]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[replace-payload4]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_missing_or_deleted_party_rejected_before_writes[grant-payload3]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_both_data_scopes_preflight_entire_batch[batch-payload6]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[revoke-payload2]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[revoke-payload6]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_protected_objects_rejected_even_with_unrestricted_data_scope[replace-payload0]
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_replacement_also_checks_roles_being_removed
+FAILED ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py::test_admin_assignment_incremental_idempotence_clear_and_targeted_revoke
+========================= 24 failed, 4 passed in 2.93s =========================

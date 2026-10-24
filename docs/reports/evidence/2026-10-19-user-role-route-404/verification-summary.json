@@ -1,0 +1,39 @@
+{
+  "rootCause": "Two timestamped evaluations created distinct Router instances; the mounted instance had no login guard/dynamic routes. Synchronous Layout/permission imports also failed during HMR.",
+  "repairs": [
+    "shared lazy Layout",
+    "Vite hot.data document-local Router identity"
+  ],
+  "testsPassed": 46,
+  "typecheckPassed": true,
+  "lintPassed": true,
+  "productionBuildPassed": true,
+  "ui": [
+    "grant and persisted readback",
+    "clear and persisted readback",
+    "repeated open/close",
+    "reload",
+    "history back/forward",
+    "slow real menu request during navigation",
+    "Layout HMR during click",
+    "1440x1000 and 1100x800"
+  ],
+  "moduleProbe": "Three t-version imports return the mounted Router",
+  "permissionNegative": {
+    "assignmentButtons": 0,
+    "hiddenRouteRegistered": false,
+    "writeStatus": 403
+  },
+  "cleanup": {
+    "database": {
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoles": 0,
+      "roleMenus": 0,
+      "roleDepts": 0
+    },
+    "sessionKeysRemoved": 2,
+    "remainingOwnedSessions": 0
+  },
+  "commitOrPushPerformedByThisRun": false
+}

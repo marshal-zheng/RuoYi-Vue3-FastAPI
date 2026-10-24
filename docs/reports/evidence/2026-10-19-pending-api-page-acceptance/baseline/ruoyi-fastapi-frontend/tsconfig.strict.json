@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true
+  },
+  "include": ["src/settings.ts", "src/mocks/**/*", "tests/mocks/**/*", "tests/setup.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-demo-offline",
+    "src/mocks/handlers/api-contract.test.ts"
+  ]
+}

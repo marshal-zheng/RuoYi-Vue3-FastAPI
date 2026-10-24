@@ -1,0 +1,457 @@
+{
+  "trace": [
+    {
+      "time": 1792391798972,
+      "type": "before",
+      "to": "/system/user-auth/role/141",
+      "from": "/system/user",
+      "names": [
+        "/system/user-auth",
+        "AuthRole"
+      ]
+    },
+    {
+      "time": 1792391798978,
+      "type": "after",
+      "to": "/system/user-auth/role/141",
+      "names": [
+        "/system/user-auth",
+        "AuthRole"
+      ]
+    },
+    {
+      "time": 1792391809645,
+      "type": "action",
+      "store": "permission",
+      "name": "reloadDynamicRoutes"
+    },
+    {
+      "time": 1792391809645,
+      "type": "action",
+      "store": "permission",
+      "name": "fetchRouteBundle"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "fetchRouteBundle",
+      "auth": true
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "removeRegisteredDynamicRoutes"
+    },
+    {
+      "time": 1792391809691,
+      "type": "removeRoute",
+      "route": "Projectoperlog"
+    },
+    {
+      "time": 1792391809691,
+      "type": "removeRoute",
+      "route": "Project"
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "setRegisteredRouteNames"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "setRegisteredRouteNames",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "removeRegisteredDynamicRoutes",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "applyRouteBundle"
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "setRoutes"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "setRoutes",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "setSidebarRouters"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "setSidebarRouters",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "setDefaultRoutes"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "setDefaultRoutes",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "setTopbarRoutes"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "setTopbarRoutes",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "setFirstMenuPath"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "setFirstMenuPath",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "registerDynamicRouteRecords"
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/system",
+        "name": "System"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/monitor",
+        "name": "Monitor"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/tool",
+        "name": "Tool"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/project",
+        "name": "Project"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "appendRegisteredRouteNames"
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "appendRegisteredRouteNames",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "registerDynamicRouteRecords",
+      "auth": false
+    },
+    {
+      "time": 1792391809691,
+      "type": "action",
+      "store": "permission",
+      "name": "registerDynamicRouteRecords"
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/system/user-auth"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/system/role-auth"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/system/dict-data"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/monitor/job-log"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/tool/gen-edit"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/project/project-detail"
+      }
+    },
+    {
+      "time": 1792391809691,
+      "type": "addRoute",
+      "route": {
+        "path": "/device/detail"
+      }
+    },
+    {
+      "time": 1792391809692,
+      "type": "addRoute",
+      "route": {
+        "path": "/project/topo"
+      }
+    },
+    {
+      "time": 1792391809692,
+      "type": "addRoute",
+      "route": {
+        "path": "/project/simulation"
+      }
+    },
+    {
+      "time": 1792391809692,
+      "type": "action",
+      "store": "permission",
+      "name": "appendRegisteredRouteNames"
+    },
+    {
+      "time": 1792391809692,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "appendRegisteredRouteNames",
+      "auth": true
+    },
+    {
+      "time": 1792391809692,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "registerDynamicRouteRecords",
+      "auth": true
+    },
+    {
+      "time": 1792391809692,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "applyRouteBundle",
+      "auth": true
+    },
+    {
+      "time": 1792391809694,
+      "type": "actionDone",
+      "store": "permission",
+      "name": "reloadDynamicRoutes",
+      "auth": true
+    },
+    {
+      "time": 1792391809719,
+      "type": "before",
+      "to": "/system/user",
+      "from": "/system/user-auth/role/141",
+      "names": [
+        "System",
+        "User"
+      ]
+    },
+    {
+      "time": 1792391809724,
+      "type": "after",
+      "to": "/system/user",
+      "names": [
+        "System",
+        "User"
+      ]
+    },
+    {
+      "time": 1792391810019,
+      "type": "before",
+      "to": "/system/user-auth/role/141",
+      "from": "/system/user",
+      "names": [
+        "/system/user-auth",
+        "AuthRole"
+      ]
+    },
+    {
+      "time": 1792391810025,
+      "type": "after",
+      "to": "/system/user-auth/role/141",
+      "names": [
+        "/system/user-auth",
+        "AuthRole"
+      ]
+    }
+  ],
+  "console": [
+    {
+      "time": 1792391767598,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792391767617,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792391767954,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    }
+  ],
+  "network": [
+    {
+      "time": 1792391768035,
+      "method": "GET",
+      "path": "/api/captchaImage",
+      "status": 200
+    },
+    {
+      "time": 1792391768292,
+      "method": "POST",
+      "path": "/api/login",
+      "status": 200
+    },
+    {
+      "time": 1792391768313,
+      "method": "GET",
+      "path": "/api/getInfo",
+      "status": 200
+    },
+    {
+      "time": 1792391768355,
+      "method": "GET",
+      "path": "/api/dev/menu/signature",
+      "status": 200
+    },
+    {
+      "time": 1792391768359,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792391768457,
+      "method": "GET",
+      "path": "/api/dev/menu/events",
+      "status": 200
+    },
+    {
+      "time": 1792391768498,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792391768504,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792391768513,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792391799092,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    },
+    {
+      "time": 1792391809694,
+      "method": "GET",
+      "path": "/api/getRouters",
+      "status": 200
+    },
+    {
+      "time": 1792391809849,
+      "method": "GET",
+      "path": "/api/system/dict/data/type/sys_normal_disable",
+      "status": 200
+    },
+    {
+      "time": 1792391809850,
+      "method": "GET",
+      "path": "/api/system/user/deptTree",
+      "status": 200
+    },
+    {
+      "time": 1792391809855,
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": 1792391810126,
+      "method": "GET",
+      "path": "/api/system/user/authRole/141",
+      "status": 200
+    }
+  ]
+}

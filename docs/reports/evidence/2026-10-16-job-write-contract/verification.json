@@ -1,0 +1,65 @@
+{
+  "scope": "Scheduled job create/edit/status/run only",
+  "backend": {
+    "command": "./venv/bin/python -m pytest -o addopts= tests/unit/controllers/test_job_write_contract.py tests/unit/services/test_job_writes.py tests/integration/test_success_contract_responses.py",
+    "passed": 70,
+    "newPythonFilesRuffCheck": true,
+    "newPythonFilesRuffFormat": true,
+    "existingPythonDiagnosticsAdded": 0,
+    "conventions": "passed; script skipped Ruff/mypy/pytest not available on its PATH; focused tests and Ruff ran separately"
+  },
+  "frontend": {
+    "command": "./node_modules/.bin/vitest run tests/unit/components/JobWriteContract.test.ts src/utils/http.test.ts src/utils/operation.test.ts --reporter=verbose",
+    "files": 3,
+    "passed": 39,
+    "lint": "passed",
+    "typeCheck": "passed",
+    "productionBuild": "passed with ZXUI source connection; existing large-chunk and Browserslist warnings",
+    "conventions": "failed only at unchanged VersionList.vue console usage; global ESLint passed"
+  },
+  "actualBusiness": {
+    "checks": 40,
+    "unhandledRejections": 0,
+    "mysqlIsolation": "REPEATABLE-READ",
+    "originalInventoriesExact": true,
+    "testDataCleaned": true,
+    "boundary": "Production SFC setup/submission, actual API/request/error presenter/source ZXUI hooks/HTTP, Axios XHR, FastAPI, local MySQL, APScheduler and Redis job store. Native UI/render/validation not exercised. Temporary process-only instrumentation supplied diagnostics and failure injection."
+  },
+  "openapi": {
+    "changedOperations": [
+      "POST /monitor/job",
+      "PUT /monitor/job",
+      "PUT /monitor/job/changeStatus",
+      "PUT /monitor/job/run"
+    ],
+    "newSchemas": [
+      "JobCreateModel",
+      "JobUpdateModel",
+      "JobStatusUpdateModel",
+      "JobRunModel"
+    ],
+    "removedSchemas": [
+      "EditJobModel"
+    ],
+    "generatedFilesAndArtifact": 17,
+    "repeatHashesStable": true,
+    "semanticSchemaMatchesApp": true,
+    "rawCheckLimitation": "Existing operation-log enum member ordering differs by import/cache order; retained original unrelated artifact ordering. Semantic comparison normalizes enum member order only."
+  },
+  "independentReview": {
+    "result": "passed with no remaining blocking findings",
+    "fixedFindings": [
+      "Candidate schedule must not become executable before a successful database commit",
+      "Failed compensation must not overwrite another same-job successful mutation; current read after waiting must refresh MySQL and ORM snapshots"
+    ]
+  },
+  "limits": [
+    "Focused regressions only; full repository suites not run",
+    "Request-level compensation and per-process job mutex; no claim of cross-system ACID, process-crash recovery, multi-worker coordination or persistent-store outage recovery",
+    "No computer use or visual acceptance"
+  ],
+  "delivery": {
+    "committed": false,
+    "published": false
+  }
+}

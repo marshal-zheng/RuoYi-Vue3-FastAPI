@@ -1,0 +1,56 @@
+{
+  "business": {
+    "baselineFiles": 3502,
+    "changed": [
+      "ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py",
+      "ruoyi-fastapi-backend/modules/system/application/services/user_service.py",
+      "ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py",
+      "ruoyi-fastapi-backend/tests/unit/services/test_user_service.py",
+      "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+      "ruoyi-fastapi-frontend/src/utils/http.test.ts",
+      "shared/openapi.json"
+    ],
+    "deleted": [],
+    "added": [
+      "docs/plans/2026-10-16-http-error-classification.md",
+      "docs/reports/2026-10-16-http-error-classification.md",
+      "docs/reports/evidence/2026-10-16-http-error-classification/actual-probe.cjs",
+      "docs/reports/evidence/2026-10-16-http-error-classification/actual.json",
+      "docs/reports/evidence/2026-10-16-http-error-classification/actual.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/backend-conventions.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/backend-focused.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/changed-files.json",
+      "docs/reports/evidence/2026-10-16-http-error-classification/frontend-conventions.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/frontend-focused.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/generate.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/generation-idempotence.json",
+      "docs/reports/evidence/2026-10-16-http-error-classification/generation-idempotence.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/lint.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/openapi-check.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/openapi-delta.json",
+      "docs/reports/evidence/2026-10-16-http-error-classification/openapi-export.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/password-input-red.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/pipeline-red.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/red.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/review.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/ruff-delta.json",
+      "docs/reports/evidence/2026-10-16-http-error-classification/runtime.json",
+      "docs/reports/evidence/2026-10-16-http-error-classification/task.diff",
+      "docs/reports/evidence/2026-10-16-http-error-classification/test-format.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/test-ruff.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/typecheck.txt",
+      "docs/reports/evidence/2026-10-16-http-error-classification/validation.json"
+    ],
+    "headUnchanged": true,
+    "indexUnchanged": true,
+    "nonTaskBaselineFilesUnchanged": true
+  },
+  "zxui": {
+    "baselineFiles": 7938,
+    "changed": [],
+    "deleted": [],
+    "added": [],
+    "headUnchanged": true,
+    "indexUnchanged": true
+  }
+}

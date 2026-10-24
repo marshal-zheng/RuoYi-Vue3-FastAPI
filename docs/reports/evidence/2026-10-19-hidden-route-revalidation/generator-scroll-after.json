@@ -1,0 +1,21 @@
+{
+  "scroll": [
+    {
+      "left": 802,
+      "width": 818,
+      "total": 1620
+    }
+  ],
+  "submit": {
+    "x": 534,
+    "y": 687,
+    "width": 60,
+    "height": 32
+  },
+  "columnName": {
+    "x": 241,
+    "y": 146,
+    "width": 150,
+    "height": 41
+  }
+}

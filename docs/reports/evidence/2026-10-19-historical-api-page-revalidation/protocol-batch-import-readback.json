@@ -1,0 +1,128 @@
+{
+  "valid": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "protocolName": "QA批量_mveu4gpz",
+          "protocolType": "RS422",
+          "description": null,
+          "delFlag": "0",
+          "updateTime": "2026-10-19T07:14:06",
+          "updateBy": "zxqa_h_mveu4gpz",
+          "status": "0",
+          "protocolId": 16,
+          "protocolConfig": {
+            "port": null,
+            "canId": "",
+            "speed": "9600",
+            "fields": [
+              {
+                "id": "field_0_2e975bec70b749128be7455b2e62031c",
+                "unit": "℃",
+                "scale": "0.1",
+                "remark": "mveu4gpz",
+                "dataType": "UINT16",
+                "parentId": null,
+                "byteCount": 2,
+                "fieldName": "验收温度",
+                "valueRange": "0..100",
+                "byteSequence": "0-1"
+              }
+            ],
+            "method": "",
+            "sender": "",
+            "baudRate": null,
+            "duration": null,
+            "receiver": "",
+            "frequency": "",
+            "subAddress": "",
+            "errorHandle": "",
+            "frameLength": 2,
+            "fieldsConfig": [
+              {
+                "id": "field_0_2e975bec70b749128be7455b2e62031c",
+                "unit": "℃",
+                "scale": "0.1",
+                "remark": "mveu4gpz",
+                "dataType": "UINT16",
+                "parentId": null,
+                "byteCount": 2,
+                "fieldName": "验收温度",
+                "valueRange": "0..100",
+                "byteSequence": "0-1"
+              }
+            ],
+            "headerConfig": {
+              "port": null,
+              "canId": "",
+              "speed": "9600",
+              "method": "",
+              "sender": "",
+              "baudRate": null,
+              "duration": null,
+              "receiver": "",
+              "frequency": "",
+              "subAddress": "",
+              "errorHandle": "",
+              "frameLength": 2,
+              "protocolType": "RS422",
+              "sendDuration": null,
+              "errorHandling": ""
+            },
+            "protocolType": "RS422",
+            "sendDuration": null,
+            "errorHandling": "",
+            "messageConfig": {
+              "fields": [
+                {
+                  "id": "field_0_2e975bec70b749128be7455b2e62031c",
+                  "unit": "℃",
+                  "scale": "0.1",
+                  "remark": "mveu4gpz",
+                  "dataType": "UINT16",
+                  "parentId": null,
+                  "byteCount": 2,
+                  "fieldName": "验收温度",
+                  "valueRange": "0..100",
+                  "byteSequence": "0-1"
+                }
+              ],
+              "header": {
+                "port": null,
+                "canId": "",
+                "speed": "9600",
+                "method": "",
+                "sender": "",
+                "baudRate": null,
+                "duration": null,
+                "receiver": "",
+                "frequency": "",
+                "subAddress": "",
+                "errorHandle": "",
+                "frameLength": 2,
+                "protocolType": "RS422",
+                "sendDuration": null,
+                "errorHandling": ""
+              }
+            }
+          },
+          "createTime": "2026-10-19T07:14:06",
+          "createBy": "zxqa_h_mveu4gpz"
+        }
+      ],
+      "total": 1,
+      "page": 1,
+      "pageSize": 10
+    }
+  },
+  "corrupt": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

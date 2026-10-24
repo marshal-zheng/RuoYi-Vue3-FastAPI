@@ -1,0 +1,61 @@
+{
+  "backend": {
+    "command": "./venv/bin/python -m pytest tests/unit/services/test_detail_resource_contract.py tests/unit/services/test_config_service.py tests/unit/services/test_dict_service.py tests/unit/services/test_dept_service.py tests/unit/services/test_role_service.py tests/unit/services/test_menu_service.py tests/unit/services/test_notice_service.py modules/system/tests/test_config_read_queries.py modules/system/tests/test_dict_read_queries.py modules/system/tests/test_dept_read_queries.py modules/system/tests/test_role_read_queries.py modules/system/tests/test_menu_read_queries.py modules/system/tests/test_post_read_queries.py modules/system/tests/test_notice_read_queries.py modules/system/tests/test_config_write_commands.py modules/system/tests/test_dict_write_commands.py modules/system/tests/test_role_write_commands.py modules/system/tests/test_menu_write_commands.py modules/system/tests/test_post_write_commands.py modules/system/tests/test_notice_write_commands.py --no-cov -n 0 -q",
+    "files": 20,
+    "passed": 152,
+    "exitCode": 0
+  },
+  "frontend": {
+    "command": "yarn test:run src/api/detail-contract.test.ts tests/unit/components/ProtocolDetailIdentity.test.ts tests/unit/components/EditorReadLifecycle.test.ts tests/unit/components/RoleFormDrawer.test.ts tests/unit/components/UserFormDialog.test.ts src/api/menu-contract.test.ts src/utils/http.test.ts tests/unit/components/ListQueryContract.test.ts",
+    "files": 8,
+    "passed": 232,
+    "exitCode": 0
+  },
+  "lint": {
+    "command": "yarn lint:check",
+    "exitCode": 0
+  },
+  "types": {
+    "command": "yarn type-check",
+    "exitCode": 0
+  },
+  "sourceBuild": {
+    "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod",
+    "exitCode": 0
+  },
+  "uiStandards": {
+    "command": "yarn ui:standards",
+    "exitCode": 0,
+    "files": 505,
+    "violations": 0,
+    "passedTests": 14
+  },
+  "actual": {
+    "command": "node /tmp/ruoyi-detail-contract/actual-probe.cjs",
+    "exitCode": 0,
+    "passedChecks": 52,
+    "unhandledRejections": 0,
+    "nativeUiVisualVerified": false
+  },
+  "conventions": {
+    "frontendExitCode": 1,
+    "frontendUnchangedFailure": "VersionList.vue console usage",
+    "backendExitCode": 1,
+    "backendLimit": "Existing Ruff lint and format diagnostics; venv Ruff explicitly present on PATH for the saved run",
+    "addedRuffDiagnosticsOnAffectedFiles": 0,
+    "newTestRuffExitCode": 0
+  },
+  "independentReview": {
+    "agent": "/root/editor_lifecycle_audit",
+    "mode": "read-only",
+    "finalFindings": []
+  },
+  "backendProcess": {
+    "pid": 18620,
+    "startedByThisTask": true,
+    "stopped": true
+  },
+  "implementationTestFiles": 53,
+  "noZxuiSourceOrDependencyChanges": true,
+  "noCommitOrPublication": true
+}

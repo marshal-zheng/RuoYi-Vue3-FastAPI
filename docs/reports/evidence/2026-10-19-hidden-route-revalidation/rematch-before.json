@@ -1,0 +1,16 @@
+{
+  "path": "/system/dict-data/index/1",
+  "currentName": null,
+  "resolved": "Data",
+  "notFound": true,
+  "permissions": [
+    "",
+    "system:user:list",
+    "system:user:query",
+    "system:dict:add",
+    "system:dict:list"
+  ],
+  "registered": [
+    "Data"
+  ]
+}

@@ -1,0 +1,67 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/utils/operation.test.ts > business operation lifecycle > keeps synchronous pending observers inside the same operation 1ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > acquires synchronously and runs the complete operation once during reentry 51ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > keeps a slow operation protected beyond one second 1ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > retains failure and allows immediate retry 0ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > retains cancellation and allows immediate retry 0ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > retains synchronous throw and allows immediate retry 0ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > does not lock other operation instances and retains arguments and return values 0ms
+ ✓ tests/unit/components/RoleAuthorization.test.ts > user role page submits full selection and an explicit empty array 6ms
+ ✓ tests/unit/components/RoleAuthorization.test.ts > role page revokes only the selected relation(s) with numeric route ID 2ms
+ ✓ tests/unit/components/RoleAuthorization.test.ts > selector submits an incremental array using numeric role ID 2ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > loads role list and detail through the HTTP contract 45ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > handles role mutations through real request serialization 30ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 51ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 37ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > covers role authorization and dept tree endpoints via MSW 29ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > surfaces role API failures from the request error mapping 43ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms 15ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > serializes 'put' '/system/user/authRole' according to its write contract 10ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > serializes 'put' '/system/role/authUser/cancelAll' according to its write contract 8ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > serializes 'put' '/system/role/authUser/selectAll' according to its write contract 9ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > serializes 'post' '/tool/gen/importTable' according to its write contract 9ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > serializes 'post' '/tool/gen/createTable' according to its write contract 9ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'bare array' responses without registering routes 9ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'legacy data wrapper' responses without registering routes 8ms
+ ✓ src/api/role-authorization-contract.test.ts > authorization mutation uses typed JSON: function updateAuthRole(data) {
+  return __vite_ssr_import_1__.default({
+    url: "/system/user/authRole",
+    method: "put",
+    data,
+    feedback: { mode: "auto", key: "system.user.assign-role" }
+  });
+} 2ms
+ ✓ src/api/role-authorization-contract.test.ts > authorization mutation uses typed JSON: function authUserSelectAll(data) {
+  return __vite_ssr_import_1__.default({
+    url: "/system/role/authUser/selectAll",
+    method: "put",
+    data,
+    feedback: { mode: "auto", key: "system.role.auth-user.assign" }
+  });
+} 0ms
+ ✓ src/api/role-authorization-contract.test.ts > authorization mutation uses typed JSON: function authUserCancel(data) {
+  return __vite_ssr_import_1__.default({
+    url: "/system/role/authUser/cancel",
+    method: "put",
+    data,
+    feedback: { mode: "auto", key: "system.role.auth-user.remove" }
+  });
+} 0ms
+ ✓ src/api/role-authorization-contract.test.ts > authorization mutation uses typed JSON: function authUserCancelAll(data) {
+  return __vite_ssr_import_1__.default({
+    url: "/system/role/authUser/cancelAll",
+    method: "put",
+    data,
+    feedback: { mode: "auto", key: "system.role.auth-user.remove" }
+  });
+} 0ms
+
+ Test Files  5 passed (5)
+      Tests  28 passed (28)
+   Start at  16:14:47
+   Duration  2.32s (transform 1.07s, setup 1.23s, collect 3.80s, tests 386ms, environment 758ms, prepare 163ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

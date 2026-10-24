@@ -1,0 +1,43 @@
+{
+  "beforeRelease": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "identityBefore": {
+    "id": "146",
+    "sid": "a951d68b47644184b2bd247722de2840",
+    "exp": 1792397133
+  },
+  "afterRelease": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "accessStillB": true,
+  "refreshCookieUnchanged": true
+}

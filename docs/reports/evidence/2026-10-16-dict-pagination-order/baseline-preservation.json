@@ -1,0 +1,15 @@
+{
+  "business": {
+    "initialFilesChecked": 3380,
+    "changedInitialFiles": [
+      "ruoyi-fastapi-backend/modules/system/infrastructure/dict_repository.py"
+    ],
+    "unexpectedChanges": []
+  },
+  "zxui": {
+    "initialFilesChecked": 7942,
+    "changedInitialFiles": [],
+    "unexpectedChanges": []
+  },
+  "temporaryExcelRemaining": []
+}

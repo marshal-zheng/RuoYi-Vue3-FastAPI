@@ -1,0 +1,82 @@
+{
+  "api": [
+    {
+      "resource": "userB",
+      "id": 146,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "roleB",
+      "id": 99,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "userA",
+      "id": 145,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "roleA",
+      "id": 98,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "menu",
+      "id": 1086,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "menu",
+      "id": 1085,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "menu",
+      "id": 1084,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "menu",
+      "id": 1083,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "menu",
+      "id": 1082,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "menu",
+      "id": 1081,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "deviceCategory",
+      "id": 2,
+      "status": 204,
+      "body": null
+    }
+  ],
+  "browserLogout": {
+    "path": "/login",
+    "localTokenCleared": true
+  },
+  "adminLogoutStatus": 204,
+  "redis": {
+    "csrfRemoved": 3,
+    "finalUserAccessExists": false,
+    "ownAdminAccessExists": false,
+    "ownAdminMetadataExists": false
+  },
+  "browserClosed": true
+}

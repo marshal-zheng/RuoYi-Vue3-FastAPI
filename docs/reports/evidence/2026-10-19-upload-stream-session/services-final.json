@@ -1,0 +1,14 @@
+{
+  "frontend": 200,
+  "backendDocs": 200,
+  "containers": [
+    {
+      "name": "ruoyi-mysql-local",
+      "running": true
+    },
+    {
+      "name": "ruoyi-redis-local",
+      "running": true
+    }
+  ]
+}

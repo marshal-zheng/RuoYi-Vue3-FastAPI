@@ -1,0 +1,28 @@
+{
+  "cache": [
+    {
+      "path": "/monitor/cache/clearCacheName/zxqa_cache_mvet0wd2",
+      "status": 204,
+      "body": null
+    },
+    {
+      "path": "/monitor/cache/clearCacheKey/zxqa_exact_mvet0wd2:item",
+      "status": 204,
+      "body": null
+    }
+  ],
+  "projectImport": {
+    "status": 201,
+    "body": {
+      "projectId": 17,
+      "projectCode": "PRJ202610190001",
+      "delFlag": "0",
+      "updateTime": "2026-10-19T06:30:45",
+      "updateBy": "zxqa_p_mvet0wd2",
+      "projectDesc": "owned JSON import",
+      "projectName": "zxqa_json_mvet0wd2-外部导入",
+      "createTime": "2026-10-19T06:30:45",
+      "createBy": "zxqa_p_mvet0wd2"
+    }
+  }
+}

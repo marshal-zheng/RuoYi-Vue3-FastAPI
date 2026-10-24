@@ -1,0 +1,72 @@
+{
+  "passed": 20,
+  "total": 20,
+  "checks": {
+    "threeCorruptKinds422": true,
+    "problemFileField": true,
+    "noImport500": true,
+    "onlyTwoSuccessfulImports": true,
+    "badFilesDidNotCreateUsers": true,
+    "failedFileRetained": true,
+    "submitRestored": true,
+    "updateSupportFalse": true,
+    "xlsxSuccessReadback": true,
+    "xlsSuccessReadback": true,
+    "reopenReset": true,
+    "cancelReset": true,
+    "smallErrorFits": true,
+    "resultDialogFits": true,
+    "noFormalPageErrors": true,
+    "ownedUsersCleaned": true,
+    "ownerSessionRevoked": true,
+    "previous15FilesPreserved": true,
+    "ruffZeroDiagnostics": true,
+    "servicesAvailable": true
+  },
+  "backendTests": 30,
+  "frontendTests": 8,
+  "actualImportRequests": [
+    {
+      "time": "2026-10-19T02:18:28.603Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 422
+    },
+    {
+      "time": "2026-10-19T02:18:57.835Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 422
+    },
+    {
+      "time": "2026-10-19T02:19:12.788Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 422
+    },
+    {
+      "time": "2026-10-19T02:19:39.524Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 422
+    },
+    {
+      "time": "2026-10-19T02:20:03.463Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T02:20:24.446Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 422
+    },
+    {
+      "time": "2026-10-19T02:20:50.517Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 200
+    }
+  ]
+}

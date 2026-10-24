@@ -1,0 +1,88 @@
+{
+  "date": "2026-10-16",
+  "businessTests": {
+    "passed": 167,
+    "files": 23,
+    "exitCode": 0,
+    "command": "yarn vitest run --config ../docs/reports/evidence/2026-10-15-http-independent-requests/vitest-source.config.mts src/api src/utils src/store/modules/user.login.test.ts tests/generator-form-contract.test.ts tests/unit/composables/useEventTrigger.test.ts tests/unit/simulation/websocket-state.test.ts tests/unit/composables/useSimulationControl.test.ts",
+    "operationLifecycleCases": 7
+  },
+  "backendGeneratorExistingTests": {
+    "passed": 4,
+    "exitCode": 0,
+    "command": "./venv/bin/pytest tests/unit/module_generator/test_message_governance_templates.py -q"
+  },
+  "backendJinjaTemplates": {
+    "renderedAndScriptTemplateCompiled": 2,
+    "runtimeReentryRetryChecks": 2
+  },
+  "memoryLifecycleSeams": {
+    "passed": 5,
+    "mockedApiUi": true
+  },
+  "realBackend": {
+    "sourceCases": 6,
+    "installedCases": 6,
+    "cleanupVerified": true,
+    "browserInteraction": false
+  },
+  "quality": {
+    "frontendLint": true,
+    "frontendTypeCheck": true,
+    "frontendChangedConventions": true,
+    "backendChangedConventions": {
+      "guardrailsPassed": true,
+      "pythonChecksSkipped": [
+        "Ruff lint: not found in script PATH",
+        "Ruff format: not found in script PATH",
+        "Mypy",
+        "embedded Pytest"
+      ],
+      "scope": "Only two Jinja templates changed this round; existing generator tests ran separately."
+    },
+    "gitDiffCheck": true
+  },
+  "productionBuild": {
+    "exitCode": 0,
+    "sourceLink": true,
+    "seconds": 23.39,
+    "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod --outDir /tmp/ruoyi-http-pending/build-source",
+    "warning": "Existing chunk-size warning"
+  },
+  "redEvidence": {
+    "legacyFingerprintRegressionFailed": 1,
+    "operationModuleInitiallyMissing": true,
+    "simulationRegressionFailures": 2,
+    "sessionSwitchRegressionFailedBeforeRepair": true,
+    "synchronousPendingObserverRegressionFailedBeforeRepair": true
+  },
+  "review": {
+    "remainingBlockers": 0,
+    "fixedFindings": [
+      "Await code generation ZIP download",
+      "Invalidate stale WebSocket ticket completions on session disconnect/switch"
+    ],
+    "reviewerModifiedFiles": false
+  },
+  "retiredFrontendOptionsAbsent": true,
+  "httpLibraryChangedThisRound": false,
+  "protectedBaselineFilesUnchanged": [
+    "AGENTS.md",
+    "ruoyi-fastapi-frontend/package.json",
+    "ruoyi-fastapi-frontend/yarn.lock",
+    "ruoyi-fastapi-frontend/src/api/menu-contract.test.ts",
+    "ruoyi-fastapi-frontend/src/views/project/composables/useTopology.js"
+  ],
+  "committed": false,
+  "published": false,
+  "runtimeCleanup": {
+    "onlyTaskOwnedBackendStopped": true,
+    "probeRecordsRemaining": 0
+  },
+  "existingZxuiConfirmationTests": {
+    "passed": 11,
+    "exitCode": 0,
+    "command": "pnpm exec vitest run packages/components/hooks/use-form-modal/__tests__/use-form-modal.test.ts",
+    "installedImplementationInspected": true
+  }
+}

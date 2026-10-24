@@ -1,0 +1,66 @@
+[
+  {
+    "file": "ruoyi-fastapi-backend/module_admin/annotation/log_annotation.py",
+    "beforeCount": 15,
+    "afterCount": 15,
+    "addedRuleCounts": {},
+    "beforeMessages": [
+      "Too many statements (137 > 50)",
+      "Too many branches (39 > 12)",
+      "Too many statements (136 > 50)"
+    ],
+    "afterMessages": [
+      "Too many statements (130 > 50)",
+      "Too many branches (36 > 12)",
+      "Too many statements (129 > 50)"
+    ]
+  },
+  {
+    "file": "ruoyi-fastapi-backend/module_generator/repository/gen_repository.py",
+    "beforeCount": 120,
+    "afterCount": 120,
+    "addedRuleCounts": {},
+    "beforeMessages": [],
+    "afterMessages": []
+  },
+  {
+    "file": "ruoyi-fastapi-backend/module_generator/service/gen_service.py",
+    "beforeCount": 18,
+    "afterCount": 17,
+    "addedRuleCounts": {},
+    "beforeMessages": [],
+    "afterMessages": []
+  },
+  {
+    "file": "ruoyi-fastapi-backend/modules/system/application/services/cache_service.py",
+    "beforeCount": 3,
+    "afterCount": 3,
+    "addedRuleCounts": {},
+    "beforeMessages": [],
+    "afterMessages": []
+  },
+  {
+    "file": "ruoyi-fastapi-backend/modules/system/infrastructure/dict_repository.py",
+    "beforeCount": 40,
+    "afterCount": 40,
+    "addedRuleCounts": {},
+    "beforeMessages": [],
+    "afterMessages": []
+  },
+  {
+    "file": "ruoyi-fastapi-backend/ports/external.py",
+    "beforeCount": 1,
+    "afterCount": 1,
+    "addedRuleCounts": {},
+    "beforeMessages": [],
+    "afterMessages": []
+  },
+  {
+    "file": "ruoyi-fastapi-backend/tests/fakes/external_fakes.py",
+    "beforeCount": 0,
+    "afterCount": 0,
+    "addedRuleCounts": {},
+    "beforeMessages": [],
+    "afterMessages": []
+  }
+]

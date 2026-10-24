@@ -1,0 +1,761 @@
+{
+  "ok": true,
+  "checks": 86,
+  "mode": "source",
+  "unhandledRejections": 0,
+  "evidence": "Production SFC setup/actions, API/request/feedback, source ZXUI HTTP, Axios XHR, FastAPI, local MySQL and isolated Redis; no computer use or visual/native form verification.",
+  "results": [
+    {
+      "name": "reject-pollution-/system/user/authRole",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/user/authRole-0",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/user/authRole--1",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/user/authRole-true",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/user/authRole-42",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/user/authRole-1.5",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/user/authRole-null",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-missing-/system/user/authRole",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-pollution-/system/role/authUser/selectAll",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/selectAll-0",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/selectAll--1",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/selectAll-true",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/selectAll-42",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/selectAll-1.5",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/selectAll-null",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-missing-/system/role/authUser/selectAll",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-pollution-/system/role/authUser/cancel",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancel-0",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancel--1",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancel-true",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancel-42",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancel-1.5",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancel-null",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-missing-/system/role/authUser/cancel",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-pollution-/system/role/authUser/cancelAll",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancelAll-0",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancelAll--1",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancelAll-true",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancelAll-42",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancelAll-1.5",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-id-/system/role/authUser/cancelAll-null",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-missing-/system/role/authUser/cancelAll",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/user/authRole-null",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/user/authRole-\"1,2\"",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/user/authRole-[0]",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/user/authRole-[true]",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/selectAll-null",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/selectAll-\"1,2\"",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/selectAll-[0]",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/selectAll-[true]",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-empty-/system/role/authUser/selectAll",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/cancelAll-null",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/cancelAll-\"1,2\"",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/cancelAll-[0]",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-collection-/system/role/authUser/cancelAll-[true]",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "reject-empty-/system/role/authUser/cancelAll",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "old-query-only-fails",
+      "ok": true,
+      "status": 422,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "missing-party-/system/user/authRole-{\"userId\":2147483647,\"roleIds\":[]}",
+      "ok": true,
+      "status": 404,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "missing-party-/system/user/authRole-{\"userId\":81,\"roleIds\":[49,2147483647]}",
+      "ok": true,
+      "status": 404,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "missing-party-/system/role/authUser/selectAll-{\"roleId\":49,\"userIds\":[82,2147483647]}",
+      "ok": true,
+      "status": 404,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "missing-party-/system/role/authUser/selectAll-{\"roleId\":2147483647,\"userIds\":[82]}",
+      "ok": true,
+      "status": 404,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "missing-party-/system/role/authUser/cancel-{\"roleId\":49,\"userId\":2147483647}",
+      "ok": true,
+      "status": 404,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "missing-party-/system/role/authUser/cancelAll-{\"roleId\":49,\"userIds\":[81,2147483647]}",
+      "ok": true,
+      "status": 404,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "protect-admin-user-/system/user/authRole",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "protect-admin-user-/system/role/authUser/selectAll",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "protect-admin-user-/system/role/authUser/cancel",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "protect-admin-user-/system/role/authUser/cancelAll",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/user/authRole-{\"userId\":83,\"roleIds\":[49]}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/user/authRole-{\"userId\":81,\"roleIds\":[49,50]}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/role/authUser/selectAll-{\"roleId\":49,\"userIds\":[82,83]}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/role/authUser/selectAll-{\"roleId\":50,\"userIds\":[82]}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/role/authUser/cancel-{\"roleId\":49,\"userId\":83}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/role/authUser/cancel-{\"roleId\":50,\"userId\":81}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/role/authUser/cancelAll-{\"roleId\":49,\"userIds\":[81,83]}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scope-denial-/system/role/authUser/cancelAll-{\"roleId\":50,\"userIds\":[81]}",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "scoped-actor-valid-grant-and-revoke",
+      "ok": true,
+      "bothScopes": true
+    },
+    {
+      "name": "all-scope-cannot-operate-role1-/system/user/authRole",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "all-scope-cannot-operate-role1-/system/role/authUser/selectAll",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "all-scope-cannot-operate-role1-/system/role/authUser/cancel",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "all-scope-cannot-operate-role1-/system/role/authUser/cancelAll",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "all-scope-cannot-operate-role1-/system/user",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "create-user-cannot-assign-role1",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "operation-permission-denied-/system/user/authRole",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "operation-permission-denied-/system/role/authUser/selectAll",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "operation-permission-denied-/system/role/authUser/cancel",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "operation-permission-denied-/system/role/authUser/cancelAll",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "admin-can-grant-role1-to-normal-user",
+      "ok": true,
+      "allowed": true
+    },
+    {
+      "name": "empty-replacement-cannot-remove-protected-role",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "ordinary-user-editor-cannot-clear-protected-role",
+      "ok": true,
+      "status": 403,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "replacement-deduplicates-and-empty-clears",
+      "ok": true,
+      "deduplicated": true,
+      "clear": true
+    },
+    {
+      "name": "incremental-and-revoke-preserve-other-associations",
+      "ok": true,
+      "incremental": true,
+      "idempotent": true
+    },
+    {
+      "name": "second-insert-rolls-back-batch",
+      "ok": true,
+      "status": 500,
+      "serverRequestId": true,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "commit-failure-rolls-back-batch",
+      "ok": true,
+      "status": 500,
+      "serverRequestId": false,
+      "singleFeedback": true,
+      "unchangedRelations": true,
+      "noRelogin": true
+    },
+    {
+      "name": "production-user-role-page-load-save-and-clear",
+      "ok": true,
+      "productionSetup": true,
+      "emptyArray": true
+    },
+    {
+      "name": "production-role-user-selector-and-revocation",
+      "ok": true,
+      "productionSetup": true,
+      "routeConvertedToNumber": true
+    },
+    {
+      "name": "cleanup",
+      "ok": true,
+      "temporaryRecordsRemoved": true,
+      "originalBusinessListsAndTotalsExact": true,
+      "originalRelationsExact": true
+    }
+  ]
+}

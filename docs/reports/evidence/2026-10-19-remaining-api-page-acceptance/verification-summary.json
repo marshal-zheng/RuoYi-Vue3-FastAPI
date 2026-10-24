@@ -1,0 +1,29 @@
+{
+  "checks": {
+    "backend127Passed": true,
+    "frontend205Passed": true,
+    "frontendNoUnhandledTestErrors": true,
+    "frontendTypecheckClean": true,
+    "frontendLintClean": true,
+    "productionBuildPassed": true,
+    "openapiCurrent": true,
+    "noNewBackendDiagnostics": true,
+    "priorRepairsPreserved": true,
+    "ownedRecordsMarkedDeleted": true,
+    "cascadeReadbackClosed": true,
+    "loginNetworkRecovery": true,
+    "noCheckedSecretsInEvidence": true,
+    "swaggerHealthy": true,
+    "ownedAccountRemoved": true,
+    "lastOwnedSessionClosed": true,
+    "servicesHealthy": true,
+    "reportLinksExist": true
+  },
+  "passed": 18,
+  "total": 18,
+  "sourceBaselineFiles": 451,
+  "sourceChangedFilesWithSnapshot": 43,
+  "newSourceFiles": 10,
+  "loginBaselineNote": "login-source-note.json",
+  "scope": "coverage.json"
+}

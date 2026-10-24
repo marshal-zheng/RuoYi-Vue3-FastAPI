@@ -1,0 +1,176 @@
+{
+  "get_simulation_messages": {
+    "items": [
+      {
+        "messageId": "message-1",
+        "sendTimestamp": 1000,
+        "payloadHex": "AA",
+        "fieldValues": {
+          "sequence": 1
+        }
+      }
+    ]
+  },
+  "get_simulation_bandwidth": {
+    "items": [
+      {
+        "timestamp": 1000,
+        "bandwidthMbps": 12,
+        "portId": "port-1"
+      }
+    ]
+  },
+  "get_simulation_alarms": {
+    "items": [
+      {
+        "alarmId": "alarm-1",
+        "timestamp": 1000,
+        "severity": "warning",
+        "message": "wire warning",
+        "details": {
+          "connections": [
+            {
+              "edgeId": "edge-1"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "list_events": {
+    "items": [
+      {
+        "eventId": "event-1",
+        "name": "Wire event",
+        "status": "pending",
+        "condition": {
+          "type": "time",
+          "value": {
+            "time": 1
+          }
+        },
+        "action": {
+          "type": "log",
+          "params": {
+            "message": "ready"
+          }
+        }
+      }
+    ]
+  },
+  "list_faults": {
+    "items": [
+      {
+        "faultId": "fault-1",
+        "faultType": "disconnect",
+        "targetId": "edge-1",
+        "targetType": "edge",
+        "status": "active"
+      }
+    ]
+  },
+  "query_faults": {
+    "items": [
+      {
+        "faultId": "fault-1",
+        "faultType": "disconnect",
+        "targetId": "edge-1",
+        "targetType": "edge",
+        "status": "active"
+      }
+    ]
+  },
+  "get_fill_strategies": {
+    "items": [
+      {
+        "value": "random",
+        "label": "随机值",
+        "description": "在指定值域范围内随机生成数据",
+        "icon": "Dice",
+        "params": [
+          "valueRange"
+        ]
+      },
+      {
+        "value": "increment",
+        "label": "序列递增",
+        "description": "计数器模式，数值按步长递增，到达上限后循环",
+        "icon": "TrendCharts",
+        "params": [
+          "startValue",
+          "step",
+          "valueRange"
+        ]
+      },
+      {
+        "value": "fixed",
+        "label": "固定值",
+        "description": "使用预设的固定值填充",
+        "icon": "Lock",
+        "params": [
+          "fixedValue"
+        ]
+      },
+      {
+        "value": "cycle",
+        "label": "循环模式",
+        "description": "按顺序循环使用预设数据集中的值",
+        "icon": "Refresh",
+        "params": [
+          "presetValues"
+        ]
+      },
+      {
+        "value": "sine_wave",
+        "label": "正弦波",
+        "description": "模拟周期性数据变化，适合传感器数据仿真",
+        "icon": "DataLine",
+        "params": [
+          "amplitude",
+          "offset",
+          "frequency",
+          "phase"
+        ]
+      }
+    ]
+  },
+  "embedded_resource": {
+    "events": [
+      {
+        "eventId": "event-1",
+        "name": "Wire event",
+        "status": "pending",
+        "condition": {
+          "type": "time",
+          "value": {
+            "time": 1
+          }
+        },
+        "action": {
+          "type": "log",
+          "params": {
+            "message": "ready"
+          }
+        }
+      }
+    ]
+  },
+  "start_accepted": {
+    "body": {
+      "sessionId": "session-1",
+      "action": "start",
+      "status": "accepted"
+    },
+    "status": 202,
+    "location": "http://127.0.0.1:8088/simulation/sessions/session-1/status"
+  },
+  "stop_accepted": {
+    "body": {
+      "sessionId": "session-1",
+      "action": "stop",
+      "status": "accepted"
+    },
+    "status": 202,
+    "location": "http://127.0.0.1:8088/simulation/sessions/session-1/status"
+  }
+}

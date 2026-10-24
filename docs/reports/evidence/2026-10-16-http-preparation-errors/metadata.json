@@ -1,0 +1,17 @@
+{
+  "generators": [
+    "components type generator",
+    "generate-examples.ts",
+    "generate-llms.ts"
+  ],
+  "isolatedOutput": true,
+  "appliedFiles": [
+    "r/types/http-client.json",
+    "r/examples/http-client.json",
+    "llms-components.json",
+    "llms-full.txt"
+  ],
+  "updatedFullTextSections": 4,
+  "nonHttpAggregateEntriesUnchanged": true,
+  "fullTypesGeneratorLimitation": "Unrelated text-editor generator cannot load ./src/core from keybindings dist; targeted component/HTTP generator completed separately."
+}

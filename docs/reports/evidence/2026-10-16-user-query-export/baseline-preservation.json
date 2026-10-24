@@ -1,0 +1,47 @@
+{
+  "business": {
+    "baselineFiles": 470,
+    "changedFromTaskStart": [
+      "ruoyi-fastapi-frontend/src/views/system/user/index.vue"
+    ],
+    "unrelatedBaselineChanges": [],
+    "newPresentFilesFromTaskStart": [
+      "ruoyi-fastapi-frontend/tests/user-query-export.test.ts"
+    ],
+    "deletedEntriesNotHashedAtTaskStart": [
+      ".cursor/skills/init-ai-workspace/AI开发规范V1.pdf",
+      ".cursor/skills/init-ai-workspace/README.md",
+      ".cursor/skills/init-ai-workspace/README_副本.pdf",
+      ".cursor/skills/init-ai-workspace/SKILL.md",
+      ".cursor/skills/init-ai-workspace/assets/commands/faq.md",
+      ".cursor/skills/init-ai-workspace/assets/commands/learn.md",
+      ".cursor/skills/init-ai-workspace/assets/commands/skill-stubs.md",
+      ".cursor/skills/init-ai-workspace/assets/commands/task-alignment-review.md",
+      ".cursor/skills/init-ai-workspace/assets/commands/update-codemaps.md",
+      ".cursor/skills/init-ai-workspace/reference/agents-template.md",
+      ".cursor/skills/init-ai-workspace/scripts/init.js",
+      ".cursor/skills/init-ai-workspace/scripts/install-skills.js"
+    ]
+  },
+  "zxui": {
+    "baselineFiles": 141,
+    "changedFromTaskStart": [],
+    "unrelatedBaselineChanges": [],
+    "newPresentFilesFromTaskStart": [],
+    "deletedEntriesNotHashedAtTaskStart": [
+      "docs/examples/http-client/deduplication.vue",
+      "packages/dashboard/__tests__/dashboard-dark-mode.test.tsx",
+      "packages/http/__tests__/canceler.test.ts",
+      "packages/http/__tests__/dedup.test.ts",
+      "packages/http/src/canceler.ts",
+      "packages/http/src/dedup.ts"
+    ]
+  },
+  "addedByThisTask": [
+    "ruoyi-fastapi-frontend/tests/user-query-export.test.ts",
+    "docs/reports/2026-10-16-user-query-export.md",
+    "docs/reports/evidence/2026-10-16-user-query-export/actual.json",
+    "docs/reports/evidence/2026-10-16-user-query-export/checks.json",
+    "docs/reports/evidence/2026-10-16-user-query-export/baseline-preservation.json"
+  ]
+}

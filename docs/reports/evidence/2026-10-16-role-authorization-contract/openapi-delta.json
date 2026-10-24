@@ -1,0 +1,17 @@
+{
+  "paths": [
+    "/system/role/authUser/cancel",
+    "/system/role/authUser/cancelAll",
+    "/system/role/authUser/selectAll",
+    "/system/user/authRole"
+  ],
+  "schemas": [
+    "CrudUserRoleModel",
+    "RoleUserRevokeModel",
+    "RoleUsersGrantModel",
+    "RoleUsersRevokeModel",
+    "UserCreateModel",
+    "UserRolesAssignModel",
+    "UserUpdateModel"
+  ]
+}

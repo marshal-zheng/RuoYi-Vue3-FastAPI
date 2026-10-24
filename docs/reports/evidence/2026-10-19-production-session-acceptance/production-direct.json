@@ -1,0 +1,38 @@
+[
+  {
+    "name": "DeviceDetail",
+    "direct": "/device/detail/index/1"
+  },
+  {
+    "name": "DeviceDraft",
+    "direct": "/device/detail/index"
+  },
+  {
+    "name": "GenEdit",
+    "direct": "/tool/gen-edit/index/1?page=1"
+  },
+  {
+    "name": "ProjectTopo",
+    "direct": "/project/topo/index/1?versionId=1"
+  },
+  {
+    "name": "Data",
+    "direct": "/system/dict-data/index/1"
+  },
+  {
+    "name": "AuthUser",
+    "direct": "/system/role-auth/user/98"
+  },
+  {
+    "name": "AuthRole",
+    "direct": "/system/user-auth/role/145"
+  },
+  {
+    "name": "JobLog",
+    "direct": "/monitor/job-log/index/0"
+  },
+  {
+    "name": "ProjectDetail",
+    "direct": "/project/project-detail/index/1"
+  }
+]

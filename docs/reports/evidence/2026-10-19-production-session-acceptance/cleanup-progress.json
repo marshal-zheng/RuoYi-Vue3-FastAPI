@@ -1,0 +1,16 @@
+{
+  "api": [
+    {
+      "resource": "userB",
+      "id": 146,
+      "status": 204,
+      "body": null
+    },
+    {
+      "resource": "roleB",
+      "id": 99,
+      "status": 204,
+      "body": null
+    }
+  ]
+}

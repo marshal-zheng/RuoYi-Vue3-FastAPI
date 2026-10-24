@@ -1,0 +1,57 @@
+[
+  {
+    "kind": "config",
+    "id": 81,
+    "status": 404
+  },
+  {
+    "kind": "dept",
+    "id": 197,
+    "status": 403
+  },
+  {
+    "kind": "post",
+    "id": 31,
+    "status": 404
+  },
+  {
+    "kind": "menu",
+    "id": 1078,
+    "status": 404
+  },
+  {
+    "kind": "dictType",
+    "id": 131,
+    "status": 404
+  },
+  {
+    "kind": "dictData",
+    "id": 208,
+    "status": 404
+  },
+  {
+    "kind": "notice",
+    "id": 12,
+    "status": 404
+  },
+  {
+    "kind": "project",
+    "id": 13,
+    "status": 404
+  },
+  {
+    "kind": "project",
+    "id": 14,
+    "status": 404
+  },
+  {
+    "kind": "project",
+    "id": 15,
+    "status": 404
+  },
+  {
+    "kind": "job",
+    "id": 8,
+    "status": 404
+  }
+]

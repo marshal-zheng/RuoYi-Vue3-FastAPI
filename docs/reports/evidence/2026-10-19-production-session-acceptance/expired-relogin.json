@@ -1,0 +1,40 @@
+{
+  "mutation": {
+    "deleted": 2,
+    "user": "146"
+  },
+  "start": 3668,
+  "prompts": 1,
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 401,
+      "type": "xhr"
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 401,
+      "type": "xhr"
+    }
+  ],
+  "loginPath": "/login?redirect=%2Fsystem%2Fuser",
+  "relogin": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "path": "/system/dict-data/index/1",
+  "currentName": "Data",
+  "resolved": "Data",
+  "notFound": false,
+  "permissions": [
+    "*:*:*"
+  ],
+  "registered": [
+    "AuthRole",
+    "AuthUser",
+    "Data",
+    "JobLog",
+    "GenEdit",
+    "ProjectDetail",
+    "DeviceDetail",
+    "ProjectTopo"
+  ]
+}

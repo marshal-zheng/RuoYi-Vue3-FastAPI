@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "cycle": 1,
+      "url": "http://127.0.0.1/system/user-auth/role/135",
+      "roleVisible": true
+    },
+    {
+      "cycle": 2,
+      "url": "http://127.0.0.1/system/user-auth/role/135",
+      "roleVisible": true
+    },
+    {
+      "cycle": 3,
+      "url": "http://127.0.0.1/system/user-auth/role/135",
+      "roleVisible": true
+    },
+    {
+      "cycle": "reload",
+      "url": "http://127.0.0.1/system/user-auth/role/135",
+      "roleVisible": true
+    }
+  ],
+  "pageErrors": []
+}

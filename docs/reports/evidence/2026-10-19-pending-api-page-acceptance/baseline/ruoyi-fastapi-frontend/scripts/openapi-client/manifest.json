@@ -1,0 +1,20 @@
+{
+  "generatorVersion": "0.97.0",
+  "files": [
+    {
+      "path": "client/client.gen.ts",
+      "upstreamSha256": "2fc63944fdb1b7d3105096b96cd26c18a15232ae57be543cca5cae7136cacfc5",
+      "template": "client-client.gen.ts.template"
+    },
+    {
+      "path": "client/types.gen.ts",
+      "upstreamSha256": "f169884febad30e83ca50e726d79256f4641fa7ffbaf6dbd4be6252e43a2646c",
+      "template": "client-types.gen.ts.template"
+    },
+    {
+      "path": "core/serverSentEvents.gen.ts",
+      "upstreamSha256": "df993567abbe3e5b477d81517fb967cf63cf40b7866957d5dc6cc03238cb1426",
+      "template": "core-serverSentEvents.gen.ts.template"
+    }
+  ]
+}

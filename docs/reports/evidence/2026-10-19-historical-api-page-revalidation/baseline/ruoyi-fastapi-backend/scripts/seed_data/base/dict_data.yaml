@@ -1,0 +1,2 @@
+# Deprecated after module-manifest cutover. Keep empty to avoid dual-write.
+dict_data: []

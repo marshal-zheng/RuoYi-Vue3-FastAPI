@@ -1,0 +1,77 @@
+[
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/FileUpload/index.vue",
+    "before": "56b7d61680ccfbbf690fd069bec5cd5f205d5384d7c158596b055e1c10ee5a9f",
+    "after": "3cf17835de0f11781a2528c3b25f5831f942fe187b32d61a24807d04ede7b8d8"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/ImageUpload/index.vue",
+    "before": "1b805c0b4fc359d410be028a4a3effb9d2f055c90c40b3200dcf8b24bffda0dc",
+    "after": "109077cff38b38a05d788a2f393e25c6d8d43745e8cf454975f4c5b9f83667cc"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/Editor/index.vue",
+    "before": "f7e6dbe4838b0155551b648ec7f7b44409bdab2780bd508c1469211c1a6ec0a7",
+    "after": "e563ae72054ff339de867477419ce3d1b35b72af38549c24892a3e93cef6b5c3"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.ts",
+    "before": "5438e900816d48e1811e4d6c1f76bcdce632140acb2070d1085782500c858eb6",
+    "after": "df9725acb6683a3b7155d635ace21d65e3ff5ed926d4878a4292749bd2e6d796"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.test.ts",
+    "before": "16468601a23b6826cf0233b5f382e0554844bec5df7227d473c9f737e5c5aa03",
+    "after": "cc48037c88ead35ea7b1981605613a58be13e7c1978fcce1e179866fd8ae373d"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/api/security_controller.py",
+    "before": "4396012e06399e96d1c64dbda98ca55984ab25b8630e566c64d7e00f932cc2b1",
+    "after": "18274308839c37f0a8e2bf6f40389ecc1145385e6cfc8667be5e97048cb419a5"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py",
+    "before": "f4122cd44b6002d78fd40e148575ca69212f6c976fb5914e2e001581a26517c7",
+    "after": "bb5207290c03b770ddf63c7433c176f084fc53d3ad3e6319f4649ea7676d4c84"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_security_token_service.py",
+    "before": "07e1145727a31f0fc87fdd98a924c410300315661f18662025cf28a6d54e7a09",
+    "after": "d20f5e637a43f308beb3fddc1fed063b5f05e22872bea0a54e65a92c5cfab616"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/vite.config.ts",
+    "before": "74763cd6c2f9762a196abb83f528d0cff0e9308f50b3a1ed9701c3c811e04c38",
+    "after": "9a73b1edcc86f0b19abdee4fcb74687d6b31bfe3200a42d088e0eef567180a39"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/application/services/login_service.py",
+    "before": "7d32f117670f60c2a9171cfb2a31f600ea9747f2d7fffd2efd9a996fc9e30960",
+    "after": "9b8fd2a5f7b83072f85cac5f36157203fb0728edf7df171b207e24882f1c1da3"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/project/simulation/composables/useSimulationWebSocket.ts",
+    "before": "9d25b15d11c3e976c48d046a4471342a5261c89aa8007c986535d8c1d7eafc97",
+    "after": "5f7ee503d99efb8ecc6559dc3ade93e0334d27d6a14129e6d5f6df2d2303adad"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/composables/useAuthenticatedUpload.ts",
+    "before": null,
+    "after": "2f4ebd938c02ceb37738a3eb98762522b9c8014cdab66acf7b121a76ba3bb13b"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/composables/useUploadModel.ts",
+    "before": null,
+    "after": "08d4df987bb4aa93ade631605a5810de0b69ce6911a1da4a4c3aa35c726b22cc"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts",
+    "before": null,
+    "after": "c360921f36469b299f48527a7407514cd7c4a91624e660769e32f4bf72828a5b"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/WebSocketSession.test.ts",
+    "before": null,
+    "after": "337bc1d9cb1fc73f6dffec287a4138a3b07a1548614b011ddf81de28c4408c55"
+  }
+]

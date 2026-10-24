@@ -1,0 +1,9 @@
+{
+  "path": "/tool/build",
+  "matched": [
+    "/:pathMatch(.*)*"
+  ],
+  "resolved": [
+    "/:pathMatch(.*)*"
+  ]
+}

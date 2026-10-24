@@ -1,0 +1,45 @@
+{
+  "badFileStatus": 500,
+  "retainedAfterFailure": true,
+  "status": 200,
+  "result": {
+    "results": [
+      {
+        "itemId": "zxqa_v_mvelcp2o",
+        "success": true,
+        "rowNumber": 1,
+        "userName": "zxqa_v_mvelcp2o",
+        "action": "created"
+      }
+    ],
+    "summary": {
+      "total": 1,
+      "succeeded": 1,
+      "failed": 0
+    }
+  },
+  "events": [
+    {
+      "time": "2026-10-19T02:00:44.107Z",
+      "method": "POST",
+      "path": "/api/system/user/importData",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T02:00:44.160Z",
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T02:00:53.293Z",
+      "method": "GET",
+      "path": "/api/system/user/list",
+      "status": 200
+    }
+  ],
+  "readback": {
+    "userId": 127,
+    "userName": "zxqa_v_mvelcp2o"
+  }
+}

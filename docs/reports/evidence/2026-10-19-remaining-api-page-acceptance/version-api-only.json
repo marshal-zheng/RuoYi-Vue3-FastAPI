@@ -1,0 +1,8 @@
+{
+  "createdId": 20,
+  "create": 201,
+  "detail": 200,
+  "update": 200,
+  "updatedDescription": "QA API-only update",
+  "delete": 204
+}

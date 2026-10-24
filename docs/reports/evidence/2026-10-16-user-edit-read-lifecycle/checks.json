@@ -1,0 +1,151 @@
+{
+  "scope": {
+    "productionFiles": [
+      "ruoyi-fastapi-frontend/src/api/system/user.ts",
+      "ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue",
+      "ruoyi-fastapi-frontend/src/views/system/user/index.vue"
+    ],
+    "testFile": "ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts",
+    "zxuiChanges": false,
+    "backendChanges": false
+  },
+  "regressions": {
+    "added": 6,
+    "oldSource": {
+      "failed": 6,
+      "existingPassed": 4,
+      "unhandledErrors": 0
+    },
+    "fixedUserEditor": {
+      "passed": 10,
+      "exitCode": 0
+    },
+    "finalFocused": {
+      "command": "yarn vitest run tests/unit/components/UserFormDialog.test.ts tests/unit/components/UserImportDialog.test.ts src/utils/http.test.ts src/utils/io-toolkit/upload.contract.test.ts --reporter=dot",
+      "files": 4,
+      "passed": 39,
+      "exitCode": 0
+    },
+    "evidence": [
+      "regression-red.txt",
+      "focused-tests.txt"
+    ]
+  },
+  "quality": {
+    "lint": {
+      "command": "yarn lint:check",
+      "exitCode": 0
+    },
+    "types": {
+      "command": "yarn type-check",
+      "exitCode": 0
+    },
+    "testFileLint": {
+      "command": "./node_modules/.bin/eslint tests/unit/components/UserFormDialog.test.ts --max-warnings 0",
+      "cwd": "ruoyi-fastapi-frontend",
+      "exitCode": 0
+    },
+    "sourceBuild": {
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod",
+      "exitCode": 0,
+      "seconds": 23.5,
+      "existingChunkSizeWarning": true
+    },
+    "conventions": {
+      "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+      "exitCode": 1,
+      "existingFailure": "VersionList.vue console usage; verify unchanged with baseline hash",
+      "baselineConfirmed": "VersionList.vue and every unrelated file retain baseline SHA256"
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  },
+  "independentReadOnlyReview": {
+    "result": "passed; no blocking findings or required ZXUI changes",
+    "independentTestsPassed": 10,
+    "examined": [
+      "read success/error/finally ownership",
+      "close/reopen/unmount cancellation",
+      "loading body inert and disabled confirmation",
+      "full open resets initial form snapshot",
+      "original rejection and page/retry event boundaries"
+    ],
+    "evidenceBoundary": "source inspection and component tests; real XHR/backend verified by primary agent"
+  },
+  "realVerification": {
+    "command": "node /tmp/ruoyi-user-edit-read/actual-probe.cjs",
+    "exitCode": 0,
+    "checks": 7,
+    "sourceConnected": true,
+    "productionComponentAndPageHandlers": true,
+    "sourceUseFormDialogAndUseDialog": true,
+    "realFastAPIAndMySQL": true,
+    "uiAndNativeFormValidationMounted": false,
+    "computerUse": false,
+    "notClaimed": "visual/browser-click acceptance or all other domain editor migration"
+  },
+  "inventory": {
+    "similarReadEntriesReviewed": [
+      "system/role/components/RoleFormDrawer.vue",
+      "system/role/components/RoleDataScopeDrawer.vue",
+      "system/config/components/ConfigList.vue",
+      "system/dict/components/DictList.vue",
+      "system/post/components/PostList.vue",
+      "system/dept/components/DeptList.vue",
+      "system/notice/components/NoticeList.vue"
+    ],
+    "implementationBoundary": "user editor and its actual page entry points; no global URL deduplication or automatic request sharing"
+  },
+  "planStageCheckpoint": {
+    "STATUS": "PLAN_DRAFTED",
+    "FILES_WRITTEN": [
+      "docs/plans/2026-10-16-user-edit-read-lifecycle.md"
+    ],
+    "EVIDENCE": [
+      "READ: both AGENTS.md, user detail/edit sources, shared FormDialog, ZXUI HTTP/Dialog lifecycle and tests",
+      "SEARCH: actual user editor open/getUser consumers and similar domain read entries",
+      "COMMAND: plan structure verification passed before production changes"
+    ],
+    "PLAN_CHANGES": [
+      "none beyond the scoped opening lifecycle and explicit retry/save guard"
+    ],
+    "WORK_ITEM_SYNC_SUGGESTION": "none",
+    "NEXT_ACTION": "completed implementation, real verification, independent review and task-owned runtime cleanup",
+    "BLOCK_REASON": "none",
+    "UNBLOCK_ACTION": "none"
+  },
+  "completion": {
+    "workspacePreservation": {
+      "business": {
+        "baselineFiles": 3400,
+        "changedExistingFiles": [
+          "ruoyi-fastapi-frontend/src/api/system/user.ts",
+          "ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue",
+          "ruoyi-fastapi-frontend/src/views/system/user/index.vue",
+          "ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts"
+        ],
+        "newFiles": [
+          "docs/plans/2026-10-16-user-edit-read-lifecycle.md",
+          "docs/reports/2026-10-16-user-edit-read-lifecycle.md",
+          "docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/actual.json",
+          "docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/checks.json",
+          "docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/focused-tests.txt",
+          "docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/regression-red.txt"
+        ],
+        "unrelatedChanges": 0
+      },
+      "zxui": {
+        "baselineFiles": 7942,
+        "changedExistingFiles": [],
+        "newFiles": [],
+        "unrelatedChanges": 0
+      }
+    },
+    "probeLoginLoggedOut": true,
+    "temporaryUsersRemaining": 0,
+    "taskStartedBackendStopped": true,
+    "gitDiffCheckPassed": true
+  }
+}

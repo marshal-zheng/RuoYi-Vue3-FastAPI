@@ -1,0 +1,1076 @@
+[
+  {
+    "time": 1792391768035,
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200
+  },
+  {
+    "time": 1792391768292,
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200
+  },
+  {
+    "time": 1792391768313,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792391768355,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792391768359,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792391768457,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792391768498,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792391768504,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792391768513,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792391799092,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792391809694,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792391809849,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792391809850,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792391809855,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792391810126,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792391891863,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792391891872,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792391891929,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792391891929,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792391892008,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792391892154,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392080787,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392080794,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392080821,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392081123,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392136621,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392136647,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392136725,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392136776,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392136853,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392136878,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392152127,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392152133,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392152156,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392152434,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392154086,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392154093,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392154140,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392154141,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392154199,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392154483,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392242406,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392242411,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392242441,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392243356,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392246531,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392246531,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392246731,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392246731,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392246788,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392246897,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392253614,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392253616,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392253853,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392253853,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392253898,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392253960,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392300480,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392300485,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392300491,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392300988,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392302158,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392302165,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392302207,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392302207,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392302445,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392302598,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392308999,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392309001,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392309044,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392309045,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392309087,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392309273,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392476685,
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 200
+  },
+  {
+    "time": 1792392476733,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392476742,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392476797,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392476797,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392476886,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392477005,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392517396,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392517399,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392517444,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392517444,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392517499,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392517565,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392517706,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392517711,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392517717,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392518271,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392526010,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392596106,
+    "method": "PUT",
+    "path": "/api/system/user/authRole",
+    "status": 204
+  },
+  {
+    "time": 1792392596212,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392596212,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392596213,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392596561,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392630470,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392630473,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392630474,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392630663,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392631257,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392631565,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392632249,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392633737,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392633763,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392787450,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392787453,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392787505,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392787506,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392787580,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392787674,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392844749,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392844751,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392844989,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392844994,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392845399,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392845572,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392875469,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392875477,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392875523,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392875524,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392875593,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392875674,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392905073,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392905503,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392905512,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392905561,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392905562,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392905633,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392905710,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392956422,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792392956428,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792392956435,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792392956731,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392957392,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392957736,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392958427,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792392958485,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392959317,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792392959320,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392959362,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792392959362,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792392959414,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792392959481,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393026133,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792393026145,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792393026180,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792393026180,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792393026209,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792393026313,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393026753,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393099149,
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 200
+  },
+  {
+    "time": 1792393099252,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393099363,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792393099367,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792393099374,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792393108788,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_user_sex",
+    "status": 200
+  },
+  {
+    "time": 1792393108800,
+    "method": "GET",
+    "path": "/api/system/user/",
+    "status": 200
+  },
+  {
+    "time": 1792393113866,
+    "method": "GET",
+    "path": "/api/system/user/",
+    "status": 200
+  },
+  {
+    "time": 1792393117664,
+    "method": "GET",
+    "path": "/api/system/user/",
+    "status": 200
+  },
+  {
+    "time": 1792393162942,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393168996,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792393169010,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792393169072,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792393169072,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792393169437,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792393169549,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393177098,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393200535,
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200
+  },
+  {
+    "time": 1792393200536,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792393200578,
+    "method": "GET",
+    "path": "/api/dev/menu/signature",
+    "status": 200
+  },
+  {
+    "time": 1792393200579,
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200
+  },
+  {
+    "time": 1792393200636,
+    "method": "GET",
+    "path": "/api/dev/menu/events",
+    "status": 200
+  },
+  {
+    "time": 1792393200707,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  },
+  {
+    "time": 1792393200920,
+    "method": "PUT",
+    "path": "/api/system/user/authRole",
+    "status": 204
+  },
+  {
+    "time": 1792393201038,
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200
+  },
+  {
+    "time": 1792393201045,
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200
+  },
+  {
+    "time": 1792393201051,
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200
+  },
+  {
+    "time": 1792393201414,
+    "method": "GET",
+    "path": "/api/system/user/authRole/141",
+    "status": 200
+  }
+]

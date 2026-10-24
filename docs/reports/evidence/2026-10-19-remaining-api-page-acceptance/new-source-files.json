@@ -1,0 +1,42 @@
+[
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/monitor/database.ts",
+    "sha256": "e866ec3f27ad5054f2cded05c3f962fdb406cb1ecbcaf8b867f2198b107763c6"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/PostSaveFeedback.test.ts",
+    "sha256": "075ea825547db1a998b56d47053b7c01c6998890518f46c491314f7d3f0d49d5"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/api/post.feedback.test.ts",
+    "sha256": "f8e4574f2fb12d95e9b765dc66f04f3a90d1e0cb47ad3a244c549cff0662a545"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/VersionCloneFeedback.test.ts",
+    "sha256": "cce207ab0a39fc6b034f54559d48df74fadd58efe193a64baa1789669d8be844"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/VersionExportDialog.test.ts",
+    "sha256": "da7dab8543623e4fb5ebc091868e5f1efca8ab8d69f8a89da3c05b3fb6a210a9"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_scheduler_execution_logs.py",
+    "sha256": "9172c2860647138b604fc9704d9da699462847c5ccc6f2be6f25baa80d26bd45"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_server_disk_usage.py",
+    "sha256": "2a58ba3ce8c0dd6064b42c774c22399e5f6a19709e5b73f059e2ebbe8e9e507a"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/controllers/test_health_resource_responses.py",
+    "sha256": "e7cd43db6575adce477a4fbb096fb74da57737861963c5ea38012590ce76ac4f"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_dict_data_export.py",
+    "sha256": "78e67c842ae9200dd57194f85c111bc49da279f8441b2c84a054282b37b873ec"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_project_aggregate_boundaries.py",
+    "sha256": "0fd54053023ddf0841df5e37672af9fe2bfa4019e9b7464cc69e9d872e659476"
+  }
+]

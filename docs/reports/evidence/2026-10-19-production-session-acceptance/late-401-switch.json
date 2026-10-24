@@ -1,0 +1,47 @@
+{
+  "before": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "mutation": {
+    "deleted": 1,
+    "id": "145"
+  },
+  "started": 1792396762748,
+  "heldStatus": 401,
+  "failureAfterLogout": {
+    "errorText": "net::ERR_ABORTED"
+  },
+  "elapsedMs": 2411,
+  "after": {
+    "path": "/system/user",
+    "name": "User",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "pqa1019_mveycco0limited"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "reloginPrompts": 0
+}

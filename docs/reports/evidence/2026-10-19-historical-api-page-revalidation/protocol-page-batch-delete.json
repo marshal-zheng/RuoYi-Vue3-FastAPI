@@ -1,0 +1,39 @@
+{
+  "status": 200,
+  "body": {
+    "results": [
+      {
+        "itemId": 19,
+        "success": true,
+        "attempts": 1,
+        "data": null
+      },
+      {
+        "itemId": 18,
+        "success": true,
+        "attempts": 1,
+        "data": null
+      },
+      {
+        "itemId": 16,
+        "success": true,
+        "attempts": 1,
+        "data": null
+      }
+    ],
+    "summary": {
+      "total": 3,
+      "succeeded": 3,
+      "failed": 0
+    }
+  },
+  "remaining": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

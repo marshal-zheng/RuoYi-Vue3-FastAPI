@@ -1,0 +1,58 @@
+[
+  {
+    "kind": "business",
+    "changedExisting": [
+      "ruoyi-fastapi-frontend/src/api/project/project.ts",
+      "ruoyi-fastapi-frontend/src/api/protocol/protocol.ts",
+      "ruoyi-fastapi-frontend/src/api/system/dict/data.ts",
+      "ruoyi-fastapi-frontend/src/api/system/menu.ts",
+      "ruoyi-fastapi-frontend/src/api/system/notice.ts",
+      "ruoyi-fastapi-frontend/src/api/system/post.ts",
+      "ruoyi-fastapi-frontend/src/api/system/project.ts",
+      "ruoyi-fastapi-frontend/src/components/business/Protocol/ProtocolFormDrawer.vue",
+      "ruoyi-fastapi-frontend/src/views/project/components/ProjectFormDialog.vue",
+      "ruoyi-fastapi-frontend/src/views/project/index.vue",
+      "ruoyi-fastapi-frontend/src/views/system/dict/data.vue",
+      "ruoyi-fastapi-frontend/src/views/system/menu/components/MenuDrawer.vue",
+      "ruoyi-fastapi-frontend/src/views/system/menu/components/MenuList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeDlg.vue",
+      "ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/post/components/PostDlg.vue",
+      "ruoyi-fastapi-frontend/src/views/system/post/components/PostList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/project/components/ProjectDlg.vue",
+      "ruoyi-fastapi-frontend/src/views/system/project/components/ProjectList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue"
+    ],
+    "newFiles": [
+      "docs/reports/2026-10-16-remaining-editor-read-lifecycle.md",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/actual-probe.cjs",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/actual.json",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/actual.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/build-source.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/conventions.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/focused.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/lint.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/red-summary.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/review.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/task.diff",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/typecheck.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/ui-standards.txt",
+      "docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/zxui-hooks.txt",
+      "ruoyi-fastapi-frontend/src/api/editor-read-options.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/components/RemainingEditorReadLifecycle.test.ts"
+    ],
+    "headUnchanged": true,
+    "indexEmpty": true,
+    "VersionListUnchanged": true
+  },
+  {
+    "kind": "zxui",
+    "changedExisting": [],
+    "externalNewFilesPreserved": [
+      "docs/specs/http-vue-query/design.md",
+      "docs/specs/http-vue-query/requirements.md"
+    ],
+    "headUnchanged": true,
+    "indexEmpty": true
+  }
+]

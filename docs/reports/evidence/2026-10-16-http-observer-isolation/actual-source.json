@@ -1,0 +1,86 @@
+{
+  "ok": true,
+  "mode": "source",
+  "environment": "production ConfigDlg/useFormDialog/useDialog, HTTP/feedback modules and real local FastAPI/MySQL; UI adapters fail by injection; no browser or native form validation",
+  "resultCount": 10,
+  "results": [
+    {
+      "name": "real-login-with-throwing-generic-logger-and-notifier",
+      "ok": true,
+      "authenticated": true,
+      "throwingStartLoggerDidNotPreventSend": true,
+      "successNotifierDidNotReplaceSession": true,
+      "sourceConnected": true
+    },
+    {
+      "name": "real-dialog-write-survives-feedback-failure-and-releases-pending",
+      "ok": true,
+      "realConfigWrites": 3,
+      "synchronousThrowAsyncRejectAndNeverSettlingFeedback": true,
+      "productionDialogOnConfirm": true,
+      "pendingReleased": true,
+      "writeReadbackVerified": true
+    },
+    {
+      "name": "real-conflict-retains-original-error-and-allows-dialog-retry",
+      "ok": true,
+      "status": 409,
+      "originalAxiosErrorRawBodyAndRequestContext": true,
+      "failedNotificationContained": true,
+      "pendingReleased": true,
+      "explicitRetrySucceeded": true
+    },
+    {
+      "name": "real-validation-response-retains-422-when-field-presentation-throws",
+      "ok": true,
+      "status": 422,
+      "originalProblemAndCausePreserved": true,
+      "failedFieldPresentationContained": true
+    },
+    {
+      "name": "real-write-ignores-formatter-error-without-swallowing-transforms",
+      "ok": true,
+      "formatterFailureDoesNotUndoSuccessfulWrite": true,
+      "responseTransformAndSuccessResolverStillReject": true
+    },
+    {
+      "name": "real-auth-failure-preserves-auth-semantics-and-relogin-recovery",
+      "ok": true,
+      "real401": true,
+      "throwingErrorNotifierDoesNotSkipAuthHook": true,
+      "authHookErrorRetainedByIdentity": true,
+      "failedPromptAllowsNextPrompt": true,
+      "failedCloseDoesNotLeavePromptState": true,
+      "validSessionRetained": true
+    },
+    {
+      "name": "real-download-success-and-failure-preserve-outcomes",
+      "ok": true,
+      "excelBytes": 5394,
+      "excelSaved": true,
+      "real404OriginalCauseAndContext": true,
+      "throwingDownloadErrorFeedbackContained": true,
+      "loadingReleased": true
+    },
+    {
+      "name": "real-cancel-does-not-run-notification-or-hold-operation-pending",
+      "ok": true,
+      "realXhrStarted": true,
+      "cancelReasonPreserved": true,
+      "noCancellationNotification": true,
+      "pendingReleased": true
+    },
+    {
+      "name": "cleanup-restores-existing-configs",
+      "ok": true,
+      "temporaryConfigsDeleted": 4,
+      "existingConfigsUnchanged": 7,
+      "observedCachedTotal": 7
+    },
+    {
+      "name": "no-unhandled-observer-rejections",
+      "ok": true,
+      "unhandledRejections": 0
+    }
+  ]
+}

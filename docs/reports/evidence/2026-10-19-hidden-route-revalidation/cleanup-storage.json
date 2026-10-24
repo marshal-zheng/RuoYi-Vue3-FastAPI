@@ -1,0 +1,14 @@
+{
+  "database": {
+    "activeUsers": 0,
+    "activeRoles": 0,
+    "userRoles": 0,
+    "roleMenus": 0,
+    "roleDepts": 0,
+    "menus": 0,
+    "categories": 0,
+    "unexpectedSavedDevices": 0
+  },
+  "sessionKeysRemoved": 2,
+  "remainingOwnedSessions": 0
+}

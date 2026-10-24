@@ -1,0 +1,1127 @@
+{
+  "boundary": "Static inventory is an audit map, not a browser execution claim. Most simulation UI/form migration is explicitly out of scope; dependencies on removed HTTP heuristic received the two narrow pending fixes described.",
+  "apiMutationMethods": 117,
+  "staticApiCallSites": 114,
+  "staticConsumerFiles": 58,
+  "operationWrappersMigrated": 56,
+  "operationWrapperFiles": 35,
+  "rowScopedStatusHandlers": 3,
+  "dispositionCounts": {
+    "Existing ZXUI awaited confirmation lifecycle reused": 29,
+    "Operation-owned pending covering validation/confirmation/request/completion": 55,
+    "Authentication business flow owned by login/Navbar/relogin; restoreSessionOnce retained; no HTTP-layer lock": 2,
+    "Existing synchronous importing guard and finally cleanup reused; multi-file batch retained": 2,
+    "Page-owned operation per row, with row disabled while pending; other rows run independently": 3,
+    "Unused source helper; no active consumer found; preserved unchanged": 1,
+    "Read/export operation; independent requests allowed; existing download lifecycle retained": 2,
+    "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic": 16,
+    "Manual triggers retain explicit repeat semantics; automatic trigger caller now tracks pending per session/event": 1,
+    "Every deliberate step is an independent command; no coalescing or serialization added": 1,
+    "Protocol drawer awaits the business save callback; existing confirmation lifecycle now covers the write": 2
+  },
+  "entries": [
+    {
+      "file": "src/components/business/Device/CategoryFormDialog.vue",
+      "owner": "onConfirm",
+      "api": "updateDeviceCategory",
+      "method": "put",
+      "at": 48,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/components/business/Device/CategoryFormDialog.vue",
+      "owner": "onConfirm",
+      "api": "addDeviceCategory",
+      "method": "post",
+      "at": 50,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/components/business/Device/DeviceCloneDialog.vue",
+      "owner": "onConfirm",
+      "api": "cloneDevice",
+      "method": "post",
+      "at": 46,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/components/business/Monitor/OperlogGrid.vue",
+      "owner": "deleteSelected",
+      "api": "delOperlog",
+      "method": "delete",
+      "at": 66,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/components/business/Monitor/OperlogGrid.vue",
+      "owner": "cleanAll",
+      "api": "cleanOperlog",
+      "method": "delete",
+      "at": 78,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/components/business/Protocol/ImportFileDialog.vue",
+      "owner": "onConfirm",
+      "api": "previewProtocolImport",
+      "method": "post",
+      "at": 100,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/store/modules/user.ts",
+      "owner": "login",
+      "api": "login",
+      "method": "post",
+      "at": 53,
+      "simulation": false,
+      "disposition": "Authentication business flow owned by login/Navbar/relogin; restoreSessionOnce retained; no HTTP-layer lock"
+    },
+    {
+      "file": "src/store/modules/user.ts",
+      "owner": "logOut",
+      "api": "logout",
+      "method": "post",
+      "at": 148,
+      "simulation": false,
+      "disposition": "Authentication business flow owned by login/Navbar/relogin; restoreSessionOnce retained; no HTTP-layer lock"
+    },
+    {
+      "file": "src/views/device/category/index.vue",
+      "owner": "handleDelete",
+      "api": "delDeviceCategory",
+      "method": "delete",
+      "at": 53,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/device/detail.vue",
+      "owner": "handleSave",
+      "api": "updateDevice",
+      "method": "put",
+      "at": 166,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/device/detail.vue",
+      "owner": "handleSave",
+      "api": "addDevice",
+      "method": "post",
+      "at": 169,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/device/index.vue",
+      "owner": "doImportFiles",
+      "api": "importDeviceBatch",
+      "method": "post",
+      "at": 99,
+      "simulation": false,
+      "disposition": "Existing synchronous importing guard and finally cleanup reused; multi-file batch retained"
+    },
+    {
+      "file": "src/views/device/index.vue",
+      "owner": "handleDelete",
+      "api": "delDevice",
+      "method": "delete",
+      "at": 148,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/audit/index.vue",
+      "owner": "handleDelete",
+      "api": "delAuditLog",
+      "method": "delete",
+      "at": 54,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/audit/index.vue",
+      "owner": "handleClean",
+      "api": "cleanAuditLog",
+      "method": "delete",
+      "at": 65,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/cache/list.vue",
+      "owner": "handleClearCacheName",
+      "api": "clearCacheName",
+      "method": "delete",
+      "at": 34,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/cache/list.vue",
+      "owner": "handleClearCacheKey",
+      "api": "clearCacheKey",
+      "method": "delete",
+      "at": 60,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/cache/list.vue",
+      "owner": "handleClearCacheAll",
+      "api": "clearCacheAll",
+      "method": "delete",
+      "at": 84,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "owner": "handleStatusChange",
+      "api": "changeJobStatus",
+      "method": "put",
+      "at": 116,
+      "simulation": false,
+      "disposition": "Page-owned operation per row, with row disabled while pending; other rows run independently"
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "owner": "handleRun",
+      "api": "runJob",
+      "method": "put",
+      "at": 127,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "owner": "submitForm",
+      "api": "updateJob",
+      "method": "put",
+      "at": 180,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "owner": "submitForm",
+      "api": "addJob",
+      "method": "post",
+      "at": 185,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "owner": "handleDelete",
+      "api": "delJob",
+      "method": "delete",
+      "at": 199,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/job/log.vue",
+      "owner": "handleDelete",
+      "api": "delJobLog",
+      "method": "delete",
+      "at": 83,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/job/log.vue",
+      "owner": "handleClean",
+      "api": "cleanJobLog",
+      "method": "delete",
+      "at": 95,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/logininfor/index.vue",
+      "owner": "handleDelete",
+      "api": "delLogininfor",
+      "method": "delete",
+      "at": 49,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/logininfor/index.vue",
+      "owner": "handleClean",
+      "api": "cleanLogininfor",
+      "method": "delete",
+      "at": 61,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/monitor/online/index.vue",
+      "owner": "handleForceLogout",
+      "api": "forceLogout",
+      "method": "delete",
+      "at": 27,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/components/ProjectFormDialog.vue",
+      "owner": "onConfirm",
+      "api": "updateProject",
+      "method": "put",
+      "at": 31,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/project/components/ProjectFormDialog.vue",
+      "owner": "onConfirm",
+      "api": "addProject",
+      "method": "post",
+      "at": 35,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/project/components/VersionCloneDialog.vue",
+      "owner": "confirmCloneVersion",
+      "api": "cloneProjectVersion",
+      "method": "post",
+      "at": 23,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/project/components/VersionExportDialog.vue",
+      "owner": "onConfirm",
+      "api": "exportProjectVersion",
+      "method": "post",
+      "at": 54,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "owner": "handleDeleteVersion",
+      "api": "delProjectVersion",
+      "method": "delete",
+      "at": 209,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "owner": "handleSaveEditVersion",
+      "api": "updateProjectVersion",
+      "method": "put",
+      "at": 269,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "owner": "handleSaveEditVersion",
+      "api": "addProjectVersion",
+      "method": "post",
+      "at": 271,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "owner": "handleLockVersion",
+      "api": "lockProjectVersion",
+      "method": "put",
+      "at": 288,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "owner": "handleUnlockVersion",
+      "api": "lockProjectVersion",
+      "method": "put",
+      "at": 310,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/composables/useTopology.js",
+      "owner": "saveTopo",
+      "api": "saveProjectTopology",
+      "method": "post",
+      "at": 87,
+      "simulation": false,
+      "disposition": "Unused source helper; no active consumer found; preserved unchanged"
+    },
+    {
+      "file": "src/views/project/index.vue",
+      "owner": "handleDelete",
+      "api": "delProject",
+      "method": "delete",
+      "at": 105,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/index.vue",
+      "owner": "handleUnlockProjectVersions",
+      "api": "unlockProjectVersions",
+      "method": "put",
+      "at": 167,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/index.vue",
+      "owner": "handleBatchExport",
+      "api": "exportProjectBatch",
+      "method": "post",
+      "at": 231,
+      "simulation": false,
+      "disposition": "Read/export operation; independent requests allowed; existing download lifecycle retained"
+    },
+    {
+      "file": "src/views/project/index.vue",
+      "owner": "handleImportFileChange",
+      "api": "importProjectBatch",
+      "method": "post",
+      "at": 267,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useEventTrigger.ts",
+      "owner": "createEvent",
+      "api": "createEvent",
+      "method": "post",
+      "at": 410,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useEventTrigger.ts",
+      "owner": "updateEvent",
+      "api": "updateEvent",
+      "method": "put",
+      "at": 450,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useEventTrigger.ts",
+      "owner": "deleteEvent",
+      "api": "deleteEvent",
+      "method": "delete",
+      "at": 470,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useEventTrigger.ts",
+      "owner": "triggerEvent",
+      "api": "triggerEvent",
+      "method": "post,post",
+      "at": 489,
+      "simulation": true,
+      "disposition": "Manual triggers retain explicit repeat semantics; automatic trigger caller now tracks pending per session/event"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useFaultInjection.ts",
+      "owner": "injectFault",
+      "api": "injectFault",
+      "method": "post",
+      "at": 375,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useFaultInjection.ts",
+      "owner": "clearFault",
+      "api": "clearFault",
+      "method": "delete",
+      "at": 401,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useFaultInjection.ts",
+      "owner": "clearAllFaults",
+      "api": "clearAllFaults",
+      "method": "delete",
+      "at": 416,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationApi.ts",
+      "owner": "createSession",
+      "api": "createSimulationSession",
+      "method": "post",
+      "at": 75,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationApi.ts",
+      "owner": "startSession",
+      "api": "startSimulationSession",
+      "method": "post",
+      "at": 98,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationApi.ts",
+      "owner": "stopSession",
+      "api": "stopSimulationSession",
+      "method": "post",
+      "at": 118,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationApi.ts",
+      "owner": "exportData",
+      "api": "exportSimulationData",
+      "method": "post",
+      "at": 198,
+      "simulation": true,
+      "disposition": "Read/export operation; independent requests allowed; existing download lifecycle retained"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+      "owner": "createSession",
+      "api": "createSimulationSession",
+      "method": "post",
+      "at": 197,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+      "owner": "start",
+      "api": "startSimulationSession",
+      "method": "post",
+      "at": 225,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+      "owner": "pause",
+      "api": "pauseSimulationSession",
+      "method": "post",
+      "at": 250,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+      "owner": "resume",
+      "api": "resumeSimulationSession",
+      "method": "post",
+      "at": 268,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+      "owner": "stop",
+      "api": "stopSimulationSession",
+      "method": "post",
+      "at": 287,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+      "owner": "step",
+      "api": "stepSimulationSession",
+      "method": "post",
+      "at": 306,
+      "simulation": true,
+      "disposition": "Every deliberate step is an independent command; no coalescing or serialization added"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+      "owner": "setSpeed",
+      "api": "setSimulationSpeed",
+      "method": "post",
+      "at": 327,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/simulation/index.vue",
+      "owner": "loadReadonlySimulationSnapshot",
+      "api": "createSimulationSession",
+      "method": "post",
+      "at": 506,
+      "simulation": true,
+      "disposition": "Simulation domain command outside broad form migration; retains explicit caller/state-transition semantics, no HTTP heuristic"
+    },
+    {
+      "file": "src/views/project/topo.vue",
+      "owner": "handleSaveTopo",
+      "api": "saveProjectTopology",
+      "method": "post",
+      "at": 477,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/protocol/index.vue",
+      "owner": "handleDelete",
+      "api": "delProtocolBatch",
+      "method": "post",
+      "at": 93,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/protocol/index.vue",
+      "owner": "handleProtocolSaveSuccess",
+      "api": "updateProtocol",
+      "method": "put",
+      "at": 117,
+      "simulation": false,
+      "disposition": "Protocol drawer awaits the business save callback; existing confirmation lifecycle now covers the write"
+    },
+    {
+      "file": "src/views/protocol/index.vue",
+      "owner": "handleProtocolSaveSuccess",
+      "api": "addProtocol",
+      "method": "post",
+      "at": 119,
+      "simulation": false,
+      "disposition": "Protocol drawer awaits the business save callback; existing confirmation lifecycle now covers the write"
+    },
+    {
+      "file": "src/views/protocol/index.vue",
+      "owner": "doImportFiles",
+      "api": "importProtocolBatch",
+      "method": "post",
+      "at": 195,
+      "simulation": false,
+      "disposition": "Existing synchronous importing guard and finally cleanup reused; multi-file batch retained"
+    },
+    {
+      "file": "src/views/register.vue",
+      "owner": "handleRegister",
+      "api": "register",
+      "method": "post",
+      "at": 49,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/config/components/ConfigDlg.vue",
+      "owner": "onConfirm",
+      "api": "updateConfig",
+      "method": "put",
+      "at": 44,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/config/components/ConfigDlg.vue",
+      "owner": "onConfirm",
+      "api": "addConfig",
+      "method": "post",
+      "at": 46,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/config/components/ConfigList.vue",
+      "owner": "handleDelete",
+      "api": "delConfig",
+      "method": "delete",
+      "at": 101,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/config/components/ConfigList.vue",
+      "owner": "handleRefreshCache",
+      "api": "refreshCache",
+      "method": "delete",
+      "at": 115,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/dept/components/DeptDlg.vue",
+      "owner": "onConfirm",
+      "api": "updateDept",
+      "method": "put",
+      "at": 67,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/dept/components/DeptDlg.vue",
+      "owner": "onConfirm",
+      "api": "addDept",
+      "method": "post",
+      "at": 69,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/dept/components/DeptList.vue",
+      "owner": "handleDelete",
+      "api": "delDept",
+      "method": "delete",
+      "at": 87,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/dict/components/DictDlg.vue",
+      "owner": "onConfirm",
+      "api": "updateType",
+      "method": "put",
+      "at": 39,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/dict/components/DictDlg.vue",
+      "owner": "onConfirm",
+      "api": "addType",
+      "method": "post",
+      "at": 41,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/dict/components/DictList.vue",
+      "owner": "handleDelete",
+      "api": "delType",
+      "method": "delete",
+      "at": 95,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/dict/components/DictList.vue",
+      "owner": "handleRefreshCache",
+      "api": "refreshCache",
+      "method": "delete",
+      "at": 110,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "owner": "submitForm",
+      "api": "updateData",
+      "method": "put",
+      "at": 152,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "owner": "submitForm",
+      "api": "addData",
+      "method": "post",
+      "at": 158,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "owner": "handleDelete",
+      "api": "delData",
+      "method": "delete",
+      "at": 173,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "owner": "onConfirm",
+      "api": "updateMenu",
+      "method": "put",
+      "at": 70,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "owner": "onConfirm",
+      "api": "addMenu",
+      "method": "post",
+      "at": 72,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/menu/components/MenuList.vue",
+      "owner": "handleDelete",
+      "api": "delMenu",
+      "method": "delete",
+      "at": 95,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/notice/components/NoticeDlg.vue",
+      "owner": "onConfirm",
+      "api": "updateNotice",
+      "method": "put",
+      "at": 43,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/notice/components/NoticeDlg.vue",
+      "owner": "onConfirm",
+      "api": "addNotice",
+      "method": "post",
+      "at": 45,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/notice/components/NoticeList.vue",
+      "owner": "handleDelete",
+      "api": "delNotice",
+      "method": "delete",
+      "at": 89,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/post/components/PostDlg.vue",
+      "owner": "onConfirm",
+      "api": "updatePost",
+      "method": "put",
+      "at": 46,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/post/components/PostDlg.vue",
+      "owner": "onConfirm",
+      "api": "addPost",
+      "method": "post",
+      "at": 48,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/post/components/PostList.vue",
+      "owner": "handleDelete",
+      "api": "delPost",
+      "method": "delete",
+      "at": 88,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/project/components/ProjectDlg.vue",
+      "owner": "onConfirm",
+      "api": "updateProject",
+      "method": "put",
+      "at": 33,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/project/components/ProjectDlg.vue",
+      "owner": "onConfirm",
+      "api": "addProject",
+      "method": "post",
+      "at": 35,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/project/components/ProjectList.vue",
+      "owner": "handleDelete",
+      "api": "delProject",
+      "method": "delete",
+      "at": 93,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/role/authUser.vue",
+      "owner": "cancelAuthUser",
+      "api": "authUserCancel",
+      "method": "put",
+      "at": 50,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/role/authUser.vue",
+      "owner": "cancelAuthUserAll",
+      "api": "authUserCancelAll",
+      "method": "put",
+      "at": 64,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/role/components/RoleDataScopeDrawer.vue",
+      "owner": "onConfirm",
+      "api": "dataScope",
+      "method": "put",
+      "at": 37,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/role/components/RoleFormDrawer.vue",
+      "owner": "onConfirm",
+      "api": "updateRole",
+      "method": "put",
+      "at": 55,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/role/components/RoleFormDrawer.vue",
+      "owner": "onConfirm",
+      "api": "addRole",
+      "method": "post",
+      "at": 57,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/role/index.vue",
+      "owner": "handleDelete",
+      "api": "delRole",
+      "method": "delete",
+      "at": 47,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/role/index.vue",
+      "owner": "handleStatusChange",
+      "api": "changeRoleStatus",
+      "method": "put",
+      "at": 71,
+      "simulation": false,
+      "disposition": "Page-owned operation per row, with row disabled while pending; other rows run independently"
+    },
+    {
+      "file": "src/views/system/role/selectUser.vue",
+      "owner": "handleSelectUser",
+      "api": "authUserSelectAll",
+      "method": "put",
+      "at": 67,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/user/authRole.vue",
+      "owner": "submitForm",
+      "api": "updateAuthRole",
+      "method": "put",
+      "at": 43,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "owner": "onConfirm",
+      "api": "updateUser",
+      "method": "put",
+      "at": 87,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "owner": "onConfirm",
+      "api": "addUser",
+      "method": "post",
+      "at": 89,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/system/user/index.vue",
+      "owner": "handleDelete",
+      "api": "delUser",
+      "method": "delete",
+      "at": 105,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/user/index.vue",
+      "owner": "handleStatusChange",
+      "api": "changeUserStatus",
+      "method": "put",
+      "at": 128,
+      "simulation": false,
+      "disposition": "Page-owned operation per row, with row disabled while pending; other rows run independently"
+    },
+    {
+      "file": "src/views/system/user/index.vue",
+      "owner": "handleResetPwd",
+      "api": "resetUserPwd",
+      "method": "put",
+      "at": 156,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/user/profile/resetPwd.vue",
+      "owner": "submit",
+      "api": "updateUserPwd",
+      "method": "put",
+      "at": 36,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/user/profile/userAvatar.vue",
+      "owner": "uploadImg",
+      "api": "uploadAvatar",
+      "method": "post",
+      "at": 68,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/system/user/profile/userInfo.vue",
+      "owner": "submit",
+      "api": "updateUserProfile",
+      "method": "put",
+      "at": 29,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/tool/gen/createTable.vue",
+      "owner": "handleImportTable",
+      "api": "createTable",
+      "method": "post",
+      "at": 27,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/tool/gen/editTable.vue",
+      "owner": "submitForm",
+      "api": "updateGenTable",
+      "method": "put",
+      "at": 32,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    },
+    {
+      "file": "src/views/tool/gen/importTable.vue",
+      "owner": "handleImportTable",
+      "api": "importTable",
+      "method": "post",
+      "at": 72,
+      "simulation": false,
+      "disposition": "Existing ZXUI awaited confirmation lifecycle reused"
+    },
+    {
+      "file": "src/views/tool/gen/index.vue",
+      "owner": "handleDelete",
+      "api": "delTable",
+      "method": "delete",
+      "at": 142,
+      "simulation": false,
+      "disposition": "Operation-owned pending covering validation/confirmation/request/completion"
+    }
+  ],
+  "extraEntrypoints": [
+    {
+      "file": "src/views/login.vue",
+      "owner": "handleLogin",
+      "disposition": "Operation pending owns validation, login/CSRF and navigation; original loading consumes pending"
+    },
+    {
+      "file": "src/layout/components/Navbar.vue",
+      "owner": "logout",
+      "disposition": "Operation owns confirmation, logout and redirect"
+    },
+    {
+      "file": "src/views/tool/gen/index.vue",
+      "owner": "handleGenTable",
+      "disposition": "Operation owns side-effecting GET or awaited ZIP download; previously outside one-second guard"
+    },
+    {
+      "file": "src/views/tool/gen/index.vue",
+      "owner": "handleSynchDb",
+      "disposition": "Operation owns confirmation and side-effecting GET; previously outside one-second guard"
+    },
+    {
+      "file": "src/views/monitor/logininfor/index.vue",
+      "owner": "handleUnlock",
+      "disposition": "Operation owns side-effecting GET; previously outside one-second guard"
+    },
+    {
+      "file": "src/store/modules/user.ts",
+      "owner": "restoreSession",
+      "disposition": "Existing permission.ts restoreSessionOnce promise reused"
+    },
+    {
+      "file": "src/views/project/simulation/composables/useSimulationWebSocket.ts",
+      "owner": "connectInternal",
+      "disposition": "Ticket pending and CONNECTING gate; disconnect generation invalidates old completions"
+    },
+    {
+      "file": "src/components/ui/FileUpload/index.vue",
+      "owner": "upload queue",
+      "disposition": "Element upload transport owns each queued file; never passed through old HTTP heuristic"
+    },
+    {
+      "file": "src/components/ui/ImageUpload/index.vue",
+      "owner": "upload queue",
+      "disposition": "Element upload transport owns each queued file; preserve parallel multi-file uploads"
+    },
+    {
+      "file": "src/views/system/user/components/UserImportDialog.vue",
+      "owner": "import queue",
+      "disposition": "Upload component submits ready files; no new global batch lock"
+    },
+    {
+      "file": "src/components/ui/Editor/index.vue",
+      "owner": "editor upload",
+      "disposition": "Upload component transport; no global write lock added"
+    },
+    {
+      "file": "unused API/helper exports",
+      "owner": "RichEditor/upload, uploadFormData, exchangeEmbedGrant, postDevMenuSync",
+      "disposition": "No production consumer found; no speculative lifecycle added"
+    }
+  ],
+  "postDownloadEntrypoints": [
+    "ruoyi-fastapi-frontend/src/views/system/dict/components/DictList.vue:253:  proxy.download('system/dict/type/export', q, `dict_${new Date().getTime()}.xlsx`);",
+    "ruoyi-fastapi-frontend/src/views/system/dict/data.vue:387:  proxy.download(",
+    "ruoyi-fastapi-frontend/src/views/system/post/components/PostList.vue:216:  proxy.download('system/post/export', query, `post_${new Date().getTime()}.xlsx`);",
+    "ruoyi-fastapi-frontend/src/views/system/user/components/UserImportDialog.vue:138:  proxy.download('system/user/importTemplate', {}, `user_template_${new Date().getTime()}.xlsx`);",
+    "ruoyi-fastapi-frontend/src/views/system/user/index.vue:361:  proxy.download(",
+    "ruoyi-fastapi-frontend/src/views/system/role/index.vue:222:  proxy.download('system/role/export', query, `role_${new Date().getTime()}.xlsx`);",
+    "ruoyi-fastapi-frontend/src/views/system/config/components/ConfigList.vue:252:  proxy.download('system/config/export', query, `config_${new Date().getTime()}.xlsx`);",
+    "ruoyi-fastapi-frontend/src/components/business/Monitor/OperlogGrid.vue:230:  proxy.download('monitor/operlog/export', query, `operlog_${new Date().getTime()}.xlsx`);",
+    "ruoyi-fastapi-frontend/src/views/protocol/index.vue:289:  proxy.download(",
+    "ruoyi-fastapi-frontend/src/views/monitor/logininfor/index.vue:248:  proxy.download('monitor/logininfor/export', params, `logininfor_${new Date().getTime()}.xlsx`);",
+    "ruoyi-fastapi-frontend/src/views/monitor/job/log.vue:323:  proxy.download(",
+    "ruoyi-fastapi-frontend/src/views/monitor/job/index.vue:596:  proxy.download('monitor/job/export', query, `job_${new Date().getTime()}.xlsx`);"
+  ],
+  "postDownloadDisposition": "Read/export semantics: independent calls allowed, existing download/loading lifecycle preserved; no submission lock added."
+}

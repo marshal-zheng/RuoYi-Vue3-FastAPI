@@ -1,0 +1,23 @@
+{
+  "projectId": 16,
+  "initialVersionId": 18,
+  "cloneId": 19,
+  "validSave": 200,
+  "deleteVersion": 204,
+  "lastVersionGuard": 409,
+  "deletedVersionRead": 404,
+  "topologyGuards": {
+    "locked": 409,
+    "mismatched": 404,
+    "deletedProject": 404
+  },
+  "lockedProjectDelete": 409,
+  "bulkUnlock": 200,
+  "projectDelete": 204,
+  "readback": {
+    "project": 404,
+    "topology": 404,
+    "version": 404,
+    "versions": 0
+  }
+}

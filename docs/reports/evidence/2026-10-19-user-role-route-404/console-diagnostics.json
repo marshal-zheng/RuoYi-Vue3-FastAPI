@@ -1,0 +1,967 @@
+{
+  "console": [
+    {
+      "time": 1792391767598,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792391767617,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792391767954,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792391890652,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792391890658,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792391891782,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392066576,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/components/Sidebar/index.vue"
+    },
+    {
+      "time": 1792392066576,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392081448,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/components/Sidebar/index.vue"
+    },
+    {
+      "time": 1792392081448,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392134714,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392134714,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392134714,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392134714,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392135559,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392135585,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392136491,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392152778,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392152779,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392152779,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392152779,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392153458,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392153466,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392153990,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392243219,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392243219,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392243219,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392243219,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392243382,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392245654,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392246178,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392253075,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392253075,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392253075,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392253075,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392253376,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392253386,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392253567,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392300861,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392300861,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392300861,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392300862,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392301007,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392301577,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392302089,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392308521,
+      "type": "info",
+      "text": "[hmr] /src/layout/index.vue failed to apply HMR as it's within a circular import. Reloading page to reset the execution order. To debug and break the circular import, you can run `vite --debug hmr` to log the circular dependency path if a file change triggered it."
+    },
+    {
+      "time": 1792392308521,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392308521,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392308521,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392308782,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392308788,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392308949,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392420603,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392439291,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392476643,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392517193,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392517201,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392517357,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392518056,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392518056,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392525918,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792392525918,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392633421,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392633433,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392633654,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392636297,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392636297,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392674805,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392674805,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392674805,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392677656,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392677656,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392677660,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792392786647,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392786653,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392787368,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392843341,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392843914,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392844337,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392874504,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392874522,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392875393,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392903618,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392903632,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392904900,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392905095,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392905257,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392905437,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792392958567,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792392959085,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792392959276,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792393014036,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792393014044,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792393026092,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792393026667,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792393026667,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792393162534,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792393162537,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792393168725,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792393168741,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792393168930,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    },
+    {
+      "time": 1792393176962,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/layout/index.vue"
+    },
+    {
+      "time": 1792393176962,
+      "type": "debug",
+      "text": "[vite] hot updated: /src/assets/styles/tailwind.css"
+    },
+    {
+      "time": 1792393200312,
+      "type": "debug",
+      "text": "[vite] connecting..."
+    },
+    {
+      "time": 1792393200340,
+      "type": "debug",
+      "text": "[vite] connected."
+    },
+    {
+      "time": 1792393200489,
+      "type": "info",
+      "text": "[dev-menu-hot-sync] sse mode enabled, listening for /dev/menu/events"
+    }
+  ],
+  "errors": [
+    {
+      "time": 1792392300426,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392300491,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300491,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300495,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300495,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392300861,
+      "type": "error",
+      "text": "ReferenceError: Cannot access 'Layout' before initialization\n    at http://127.0.0.1/src/router/index.js?t=1792392300708:32:16"
+    },
+    {
+      "time": 1792392300861,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392308521,
+      "type": "error",
+      "text": "ReferenceError: Cannot access 'Layout' before initialization\n    at http://127.0.0.1/src/router/index.js?t=1792392308418:32:16"
+    },
+    {
+      "time": 1792392308521,
+      "type": "error",
+      "text": "[hmr] Failed to reload /src/layout/index.vue. This could be due to syntax errors or importing non-existent modules. (see errors above)"
+    },
+    {
+      "time": 1792392517661,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392517717,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392517717,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392517722,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392517722,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392518113,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392518113,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392518115,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392518115,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392518135,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392596140,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392596140,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392596140,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392596140,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392596146,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392630219,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630219,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630219,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630219,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630250,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392630828,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630828,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630828,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630828,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392630828,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392631432,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631432,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631432,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631432,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631432,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392631824,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631824,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631824,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631824,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392631824,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392956355,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392956435,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956435,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956438,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956438,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956984,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956984,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956984,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956984,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392956985,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392957634,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957634,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957634,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957634,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957634,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792392957982,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957982,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957982,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957982,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792392957982,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792393099109,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792393099318,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792393099375,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393099375,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393099378,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393099378,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393099381,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393099381,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393162659,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393162660,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393162663,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393162663,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393162666,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393162667,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393162699,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792393200992,
+      "type": "warning",
+      "text": "[ZxGridList] fill chain breaks at this ancestor; it needs `display: flex; flex-direction: column; min-height: 0` and `flex: 1 1 0` (or data-zx-fill). JSHandle@node {display: flex, flexDirection: row, minHeight: 0px, flexGrow: 1}"
+    },
+    {
+      "time": 1792393201051,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393201051,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393201055,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393201055,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393201057,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    },
+    {
+      "time": 1792393201057,
+      "type": "warning",
+      "text": "ElementPlusError: [props] [API] type.text is about to be deprecated in version 3.0.0, please use link instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/button.html#button-attributes\n\n    at debugWarn (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:1856:37)\n    at watch.immediate (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v=c3018b7c:8679:9)\n    at callWithErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2597:19)\n    at callWithAsyncErrorHandling (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:2604:17)\n    at baseWatchOptions.call (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3225:47)\n    at job (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1565:18)\n    at watch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:1600:7)\n    at doWatch (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3253:23)\n    at watch2 (http://127.0.0.1/node_modules/.vite/deps/chunk-WDM6CJSZ.js?v=c3018b7c:3186:10)\n    at useDeprecated (http://127.0.0.1/node_modules/.vite/deps/chunk-F7YPIVLI.js?v="
+    }
+  ],
+  "pageErrors": []
+}

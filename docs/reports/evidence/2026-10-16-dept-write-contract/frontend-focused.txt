@@ -1,0 +1,12 @@
+ ✓ tests/unit/components/RemainingEditorReadLifecycle.test.ts > user opening ownership > blocks failed edits and retries the original ID 4ms
+ ✓ tests/unit/components/RemainingEditorReadLifecycle.test.ts > user opening ownership > aborts at scope disposal without consuming late success 1ms
+ ✓ tests/unit/components/RemainingEditorReadLifecycle.test.ts > user opening ownership > restores current 401 recovery and keeps stale 401 silent 2ms
+ ✓ tests/unit/components/RemainingEditorReadLifecycle.test.ts > owns menu options together with the detail and preserves root creation 7ms
+
+ Test Files  4 passed (4)
+      Tests  240 passed (240)
+   Start at  11:54:14
+   Duration  1.64s (transform 588ms, setup 1.14s, collect 1.87s, tests 394ms, environment 636ms, prepare 127ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

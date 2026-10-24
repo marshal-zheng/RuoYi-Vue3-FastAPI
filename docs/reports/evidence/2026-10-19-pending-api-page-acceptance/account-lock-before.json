@@ -1,0 +1,80 @@
+[
+  {
+    "attempt": 1,
+    "status": 401,
+    "problem": {
+      "type": "http://localhost/problems/unauthorized",
+      "title": "密码错误",
+      "status": 401,
+      "detail": "密码错误",
+      "instance": "/dev-api/login",
+      "errorCode": 20001,
+      "requestId": "ea6432fef80e4f039559a005b4ed883a"
+    }
+  },
+  {
+    "attempt": 2,
+    "status": 401,
+    "problem": {
+      "type": "http://localhost/problems/unauthorized",
+      "title": "密码错误",
+      "status": 401,
+      "detail": "密码错误",
+      "instance": "/dev-api/login",
+      "errorCode": 20001,
+      "requestId": "0623b0f8155845c2b95a0d5c282e6e57"
+    }
+  },
+  {
+    "attempt": 3,
+    "status": 401,
+    "problem": {
+      "type": "http://localhost/problems/unauthorized",
+      "title": "密码错误",
+      "status": 401,
+      "detail": "密码错误",
+      "instance": "/dev-api/login",
+      "errorCode": 20001,
+      "requestId": "d3ee79ac4f38406795cecafacde02f77"
+    }
+  },
+  {
+    "attempt": 4,
+    "status": 401,
+    "problem": {
+      "type": "http://localhost/problems/unauthorized",
+      "title": "密码错误",
+      "status": 401,
+      "detail": "密码错误",
+      "instance": "/dev-api/login",
+      "errorCode": 20001,
+      "requestId": "ca20cd3b820243c788c2fdfca4d10251"
+    }
+  },
+  {
+    "attempt": 5,
+    "status": 401,
+    "problem": {
+      "type": "http://localhost/problems/unauthorized",
+      "title": "密码错误",
+      "status": 401,
+      "detail": "密码错误",
+      "instance": "/dev-api/login",
+      "errorCode": 20001,
+      "requestId": "7acc558923424887b660883177a653cd"
+    }
+  },
+  {
+    "attempt": 6,
+    "status": 401,
+    "problem": {
+      "type": "http://localhost/problems/unauthorized",
+      "title": "10分钟内密码已输错超过5次，账号已锁定，请10分钟后再试",
+      "status": 401,
+      "detail": "10分钟内密码已输错超过5次，账号已锁定，请10分钟后再试",
+      "instance": "/dev-api/login",
+      "errorCode": 20001,
+      "requestId": "f89afe01b4f54bd8b99b412befbe6b5b"
+    }
+  }
+]

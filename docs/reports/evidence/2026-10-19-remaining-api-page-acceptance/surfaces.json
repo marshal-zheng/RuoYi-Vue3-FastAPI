@@ -1,0 +1,94 @@
+[
+  {
+    "module": "online",
+    "url": "http://localhost/monitor/online",
+    "visibleOwnSession": true,
+    "status": 200
+  },
+  {
+    "module": "server",
+    "url": "http://localhost/monitor/server",
+    "api": [
+      {
+        "time": "2026-10-19T03:32:46.995Z",
+        "method": "GET",
+        "path": "/api/monitor/server",
+        "status": 200
+      }
+    ],
+    "loaded": true
+  },
+  {
+    "module": "cache",
+    "url": "http://localhost/monitor/cache",
+    "api": [
+      {
+        "time": "2026-10-19T03:32:56.354Z",
+        "method": "GET",
+        "path": "/api/monitor/cache",
+        "status": 200
+      }
+    ],
+    "loaded": true
+  },
+  {
+    "module": "cache-list",
+    "url": "http://localhost/monitor/cacheList",
+    "ownedConfigRead": "beta",
+    "readOnly": true
+  },
+  {
+    "module": "database-monitor",
+    "url": "http://localhost/monitor/druid",
+    "pool": 200,
+    "queries": 200,
+    "networkFailure": "inline only",
+    "retry": 200
+  },
+  {
+    "module": "login-log",
+    "url": "http://localhost/system/log/logininfor",
+    "filteredOwnIdentity": true,
+    "export": "login-owned.xlsx"
+  },
+  {
+    "module": "operation-log",
+    "url": "http://localhost/system/log/operlog",
+    "ownFilter": true,
+    "detail": true,
+    "export": "operation-owned.xlsx"
+  },
+  {
+    "module": "audit-log",
+    "url": "http://localhost/system/log/audit",
+    "ownFilter": true,
+    "status": 200
+  },
+  {
+    "module": "generator",
+    "url": "http://localhost/tool/gen",
+    "list": 200,
+    "preview": 200,
+    "readSchema": 200,
+    "writes": false
+  },
+  {
+    "module": "form-builder",
+    "url": "http://localhost/tool/build",
+    "addTextField": true,
+    "export": "builder-owned.vue"
+  },
+  {
+    "module": "swagger",
+    "url": "http://localhost/tool/swagger",
+    "localAssets": true,
+    "tags": 30,
+    "healthExecution": 200
+  },
+  {
+    "module": "reference-exports",
+    "post": "董事长",
+    "dictType": "用户性别",
+    "writes": false
+  }
+]

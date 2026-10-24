@@ -1,0 +1,51 @@
+{
+  "initialRed": {
+    "command": "yarn vitest run src/utils/request.download.test.ts --reporter=verbose",
+    "result": "4 existing tests passed, 4 new ZIP lifecycle tests failed as expected before implementation"
+  },
+  "eventRed": {
+    "result": "Vue callWithAsyncErrorHandling reached app errorHandler twice for ZIP cancellation before page-event adapter; regression failed as expected"
+  },
+  "focusedTests": {
+    "command": "yarn vitest run src/utils/request.download.test.ts src/utils/io-toolkit/download.contract.test.ts src/utils/http.test.ts src/utils/operation.test.ts --reporter=verbose",
+    "exitCode": 0,
+    "files": 4,
+    "passed": 44,
+    "newRegressions": 5
+  },
+  "actualBusiness": {
+    "command": "node /tmp/ruoyi-legacy-download/actual-probe.cjs",
+    "exitCode": 0,
+    "scenarios": 9,
+    "zipEntries": 8,
+    "zipCrcValid": true,
+    "boundary": "Actual production handlers and source HTTP through JSDOM XHR to real backend. Controlled delayed gateway only holds real upstream bytes; UI surfaces recorded, no computer use."
+  },
+  "eslint": {
+    "command": "yarn lint:check",
+    "exitCode": 0
+  },
+  "types": {
+    "command": "yarn type-check",
+    "exitCode": 0
+  },
+  "sourceBuild": {
+    "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod --outDir /tmp/ruoyi-legacy-download/build-source",
+    "exitCode": 0,
+    "durationSeconds": 25.57
+  },
+  "diffCheck": {
+    "command": "git diff --check",
+    "exitCode": 0
+  },
+  "independentReview": {
+    "result": "No blocking findings after page event-boundary fix; lifecycle tests independently passed 9/9"
+  },
+  "changedConventions": {
+    "command": "bash .cursor/skills/frontend-conventions/scripts/validate.sh --changed",
+    "exitCode": 1,
+    "reason": "Pre-existing console usage in src/views/project/components/VersionList.vue, unchanged from task baseline"
+  },
+  "scope": "Three production frontend files and existing download test updated. No ZXUI/backend/schema/retry/pending-policy changes.",
+  "knownBusinessCondition": "Existing sys_post generation metadata has incomplete options and remains unchanged. Successful ZIP used temporary sys_config generator metadata configured through normal business APIs, then deleted; the business table schema and rows were not modified."
+}

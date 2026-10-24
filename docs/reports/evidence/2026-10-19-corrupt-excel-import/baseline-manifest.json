@@ -1,0 +1,5 @@
+{
+  "ruoyi-fastapi-backend/modules/system/application/services/user_service.py": "540a7d3e606a17c419f819c8a8963372736b50792e2ffe4ca64ad3f85ef7d42c",
+  "ruoyi-fastapi-backend/requirements.txt": "25a5508b1b32accf3b0a1bdc37d982606116d99803e2c6a59c1b1f2481861476",
+  "ruoyi-fastapi-backend/requirements-pg.txt": "24d92adf04d91f1712124049fa649305fbee56b266c167304a4aac2ce2369c0f"
+}

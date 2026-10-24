@@ -1,0 +1,19 @@
+{
+  "archive": "vendor/zxio-http-1.0.0-parameters.20261015.tgz",
+  "sha256": "99d10c0e50ed69b8f329334fc22fad8a7d8397a27e310222eb25432847155791",
+  "bytes": 46906,
+  "comparedDistPayloadFiles": 49,
+  "installedPayloadMatchesDist": true,
+  "installedAndPackedManifestsSemanticallyMatchDist": true,
+  "manifestWhitespaceNote": "pnpm pack removes final newline only",
+  "archivePayloadMatchesDist": true,
+  "archiveContainsSource": false,
+  "peerDependencies": {
+    "axios": "^1.18.0"
+  },
+  "entryPoints": {
+    "main": "cjs/index.js",
+    "module": "esm/index.js",
+    "types": "types/index.d.ts"
+  }
+}

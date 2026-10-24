@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "filesCompared": 53,
+  "archiveSha256": "08945bf665bba4d9a8bf634c49eaca2c70ab372ed610e7ba85b12cfd00f4164e",
+  "archiveStagingInstalledEqual": true,
+  "manifestComparison": "semantic JSON",
+  "axiosVersion": "1.20.0"
+}

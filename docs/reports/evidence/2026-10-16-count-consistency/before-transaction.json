@@ -1,0 +1,13 @@
+{
+  "isolation": "REPEATABLE-READ",
+  "warmTotal": 0,
+  "beforeWriterCommit": {
+    "total": 0,
+    "items": 0
+  },
+  "afterWriterCommit": {
+    "total": 0,
+    "items": 1
+  },
+  "oldCountRefilledBeforeCommit": true
+}

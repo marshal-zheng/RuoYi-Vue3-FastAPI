@@ -1,0 +1,35 @@
+# Bootstrap 种子数据加载清单
+# Bootstrap Seed Data Loading Manifest
+version: "1.0"
+
+# 加载顺序（按外键依赖）
+# Load order (by foreign key dependencies)
+# 受管引用数据（menus / role_menus / dicts / configs）已迁移到 db_workflow
+load_order:
+  - depts       # 部门（无依赖）
+  - posts       # 岗位（无依赖）
+  - roles       # 角色（无依赖）
+  # 以下在 overlay 中定义
+  - users       # 用户（依赖 depts）
+  - user_roles  # 用户角色关联
+  - user_posts  # 用户岗位关联
+  - role_depts  # 角色部门关联
+
+# 表名映射
+# Table name mappings
+table_mappings:
+  depts: sys_dept
+  posts: sys_post
+  roles: sys_role
+  users: sys_user
+  user_roles: sys_user_role
+  user_posts: sys_user_post
+  role_depts: sys_role_dept
+
+# 主键字段映射
+# Primary key field mappings
+primary_keys:
+  depts: dept_id
+  posts: post_id
+  roles: role_id
+  users: user_id

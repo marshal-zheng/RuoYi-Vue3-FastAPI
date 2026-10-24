@@ -1,0 +1,42 @@
+{
+  "modifiedExistingFiles": 7,
+  "files": [
+    {
+      "path": "ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py",
+      "beforeSha256": "a462b3bc110eb0d05cc73fe8b964f3c5bcea12668de6ec88ab3e7ee72c99bc0f",
+      "afterSha256": "2a740d2794fba99e7b33a45dca816595be182663ce1226b690857910df626dc2"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/application/services/user_service.py",
+      "beforeSha256": "13d3b35cd3bc65c09529ef7db4979c190c228f8611916e2dfa6141134aefeafe",
+      "afterSha256": "d06125e247562989f192e3543a277650cf6a38088cf54a64600064909b210b69"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py",
+      "beforeSha256": "d1a3c7597e7d50fc1099ade58d2314f624895437737ea638c78ff77f05ef54ce",
+      "afterSha256": "81c696f0fd4b3963039fb1eae7bfd4681d35b8a1bbc2b7ebbdfa1d610f434a45"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/tests/unit/services/test_user_service.py",
+      "beforeSha256": "7d47072d26d5a5bc1f4a9c86c74ac38de87bfdc4a818fa12ce765923658d1101",
+      "afterSha256": "232ec16f4b8723ea5c97e4dd1be1365a905ff8161d5499f243c6d1f75c1288c2"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+      "beforeSha256": "43303792882225246e132a9fb0e314652d47065e2fbb16321837e8f0cb389eaa",
+      "afterSha256": "6f02246f657645dbd14b7106a4a20d7a17a8eba6d2e0db0fbf5ee848604d6aca"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/utils/http.test.ts",
+      "beforeSha256": "cedcaf0704c6ced1219baa5b2b4812184ec9c9dcf11540020776d2aa1101fa2f",
+      "afterSha256": "c9005afbccb45e30882bc1cd568d0d3b387c19b4842029d62cc8769e1480d5a6"
+    },
+    {
+      "path": "shared/openapi.json",
+      "beforeSha256": "2b0d9722e46979e822b6b2cf47ee53384dc4918565684fa36ddc3faddaee7bc0",
+      "afterSha256": "ff64bf415d2fd7dabf13aa827a726a6dcf1235840ae914db5c8953f37b78e5c5"
+    }
+  ],
+  "frontendProductionErrorPolicyUnchanged": true,
+  "unrelatedConventionFailureFileUnchanged": true
+}

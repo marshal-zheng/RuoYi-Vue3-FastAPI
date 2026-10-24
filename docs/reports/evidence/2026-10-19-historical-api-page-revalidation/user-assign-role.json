@@ -1,0 +1,148 @@
+{
+  "status": 204,
+  "read": {
+    "status": 200,
+    "body": {
+      "roles": [
+        {
+          "roleId": 94,
+          "roleName": "验收角色_mveu4gpz",
+          "roleKey": "zxqa_role_mveu4gpz",
+          "roleSort": 0,
+          "dataScope": "2",
+          "status": "0",
+          "createTime": "2026-10-19T06:58:15",
+          "flag": true
+        },
+        {
+          "roleId": 2,
+          "roleName": "普通角色",
+          "roleKey": "common",
+          "roleSort": 2,
+          "dataScope": "2",
+          "status": "0",
+          "createTime": "2026-09-20T06:41:45",
+          "flag": false
+        }
+      ],
+      "user": {
+        "userId": 135,
+        "deptId": 100,
+        "userName": "zxqa_u_mveu4gpz",
+        "nickName": "验收用户_mveu4gpz_已改",
+        "userType": "00",
+        "email": "mveu4gpz@example.com",
+        "phonenumber": "13800991341",
+        "idCard": "",
+        "sex": "0",
+        "avatar": "",
+        "status": "0",
+        "delFlag": "0",
+        "loginIp": "",
+        "loginDate": "2026-10-19T06:55:31",
+        "createBy": "zxqa_h_mveu4gpz",
+        "createTime": "2026-10-19T06:53:54",
+        "updateBy": "zxqa_h_mveu4gpz",
+        "updateTime": "2026-10-19T06:55:31",
+        "remark": "",
+        "roleIds": "94",
+        "postIds": "",
+        "dept": {
+          "deptId": 100,
+          "parentId": 0,
+          "ancestors": "0",
+          "deptName": "集团总公司",
+          "orderNum": 0,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        "role": [
+          {
+            "roleId": 94,
+            "roleName": "验收角色_mveu4gpz",
+            "roleKey": "zxqa_role_mveu4gpz",
+            "roleSort": 0,
+            "dataScope": "2",
+            "menuCheckStrictly": true,
+            "deptCheckStrictly": true,
+            "status": "0",
+            "delFlag": "0",
+            "createBy": "zxqa_h_mveu4gpz",
+            "createTime": "2026-10-19T06:58:15",
+            "updateBy": "zxqa_h_mveu4gpz",
+            "updateTime": "2026-10-19T07:01:09",
+            "remark": "role saved mveu4gpz",
+            "admin": false
+          }
+        ]
+      }
+    }
+  },
+  "reverse": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "userId": 136,
+          "userName": "zxqa_i1_mveu4gpz",
+          "nickName": "验收导入一",
+          "email": "i1_mveu4gpz@example.com",
+          "phonenumber": "13800991342",
+          "status": "0",
+          "createTime": "2026-10-19T06:56:09",
+          "dept": {
+            "deptId": 103,
+            "parentId": 101,
+            "ancestors": "0,100,101",
+            "deptName": "研发部门",
+            "orderNum": 1,
+            "leader": "年糕",
+            "phone": "15888888888",
+            "email": "niangao@qq.com",
+            "status": "0",
+            "delFlag": "0",
+            "createBy": "admin",
+            "createTime": "2026-09-20T06:41:45",
+            "updateBy": "",
+            "updateTime": "2026-09-20T06:41:45"
+          }
+        },
+        {
+          "userId": 135,
+          "userName": "zxqa_u_mveu4gpz",
+          "nickName": "验收用户_mveu4gpz_已改",
+          "email": "mveu4gpz@example.com",
+          "phonenumber": "13800991341",
+          "status": "0",
+          "createTime": "2026-10-19T06:53:54",
+          "dept": {
+            "deptId": 100,
+            "parentId": 0,
+            "ancestors": "0",
+            "deptName": "集团总公司",
+            "orderNum": 0,
+            "leader": "年糕",
+            "phone": "15888888888",
+            "email": "niangao@qq.com",
+            "status": "0",
+            "delFlag": "0",
+            "createBy": "admin",
+            "createTime": "2026-09-20T06:41:45",
+            "updateBy": "",
+            "updateTime": "2026-09-20T06:41:45"
+          }
+        }
+      ],
+      "total": 2,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

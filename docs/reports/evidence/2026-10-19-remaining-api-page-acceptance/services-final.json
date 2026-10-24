@@ -1,0 +1,10 @@
+{
+  "frontend": 200,
+  "backendDocs": 200,
+  "health": 200,
+  "ready": 200,
+  "containers": [
+    "ruoyi-redis-local Up 3 hours",
+    "ruoyi-mysql-local Up 3 hours"
+  ]
+}

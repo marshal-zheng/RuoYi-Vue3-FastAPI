@@ -1,0 +1,12 @@
+{
+  "archive": "zxio-http-1.0.0-independent.20261015.tgz",
+  "sha256": "6f1215e6cd1a9307a958335ed1d3a55f8088ba266a563d0e7e92fd25285baa78",
+  "packedFiles": 50,
+  "builtDistributionFiles": 49,
+  "installedMatchesArchive": true,
+  "builtPayloadMatchesArchive": true,
+  "manifestMatchesBuiltDistribution": true,
+  "readmeMatchesSource": true,
+  "retiredArtifactsAbsent": true,
+  "axiosPeer": "^1.18.0"
+}

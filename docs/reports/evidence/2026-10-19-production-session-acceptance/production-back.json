@@ -1,0 +1,38 @@
+[
+  {
+    "name": "AuthRole",
+    "back": "/system/user"
+  },
+  {
+    "name": "AuthUser",
+    "back": "/system/user"
+  },
+  {
+    "name": "Data",
+    "back": "/system/user"
+  },
+  {
+    "name": "JobLog",
+    "back": "/system/user"
+  },
+  {
+    "name": "GenEdit",
+    "back": "/system/user"
+  },
+  {
+    "name": "ProjectDetail",
+    "back": "/system/user"
+  },
+  {
+    "name": "ProjectTopo",
+    "back": "/system/user"
+  },
+  {
+    "name": "DeviceDetail",
+    "back": "/system/user"
+  },
+  {
+    "name": "DeviceDraft",
+    "back": "/system/user"
+  }
+]

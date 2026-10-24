@@ -1,0 +1,19 @@
+{
+  "resource": {
+    "projectId": 14,
+    "versionNumber": "v1.0.1",
+    "description": "项目初始版本",
+    "isLocked": "0",
+    "lockedBy": null,
+    "createTime": "2026-10-19T04:20:39",
+    "createBy": "zxqa_r_mvenpxba",
+    "versionName": "zxqa_clone_mvenpxba",
+    "versionId": 15,
+    "status": "1",
+    "lockedTime": null,
+    "delFlag": "0",
+    "updateTime": "2026-10-19T04:20:39",
+    "updateBy": ""
+  },
+  "nodes": 1
+}

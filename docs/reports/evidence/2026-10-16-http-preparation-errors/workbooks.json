@@ -1,0 +1,18 @@
+[
+  {
+    "mode": "source",
+    "sheets": 1,
+    "rows": 2,
+    "columns": 13,
+    "expectedUserFound": true,
+    "temporaryBinaryRemoved": true
+  },
+  {
+    "mode": "installed",
+    "sheets": 1,
+    "rows": 2,
+    "columns": 13,
+    "expectedUserFound": true,
+    "temporaryBinaryRemoved": true
+  }
+]

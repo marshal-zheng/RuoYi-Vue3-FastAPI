@@ -1,0 +1,27 @@
+{
+  "business": {
+    "initialFilesChecked": 3374,
+    "changedInitialFiles": [
+      "ruoyi-fastapi-frontend/src/components/business/Monitor/OperlogGrid.vue",
+      "ruoyi-fastapi-frontend/src/views/system/dict/components/DictList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/config/components/ConfigList.vue",
+      "ruoyi-fastapi-frontend/src/views/system/role/index.vue",
+      "ruoyi-fastapi-frontend/src/views/system/dict/data.vue"
+    ],
+    "unexpectedChanges": [],
+    "newTaskFiles": [
+      "ruoyi-fastapi-frontend/tests/list-export-query-parity.test.ts",
+      "docs/plans/2026-10-16-list-export-query-parity.md",
+      "docs/reports/2026-10-16-list-export-query-parity.md",
+      "docs/reports/evidence/2026-10-16-list-export-query-parity/actual.json",
+      "docs/reports/evidence/2026-10-16-list-export-query-parity/checks.json",
+      "docs/reports/evidence/2026-10-16-list-export-query-parity/baseline-preservation.json"
+    ]
+  },
+  "zxui": {
+    "initialFilesChecked": 7942,
+    "changedInitialFiles": [],
+    "unexpectedChanges": []
+  },
+  "temporaryExcelFilesRemaining": []
+}

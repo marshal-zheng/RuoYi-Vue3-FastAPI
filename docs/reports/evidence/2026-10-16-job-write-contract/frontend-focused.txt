@@ -1,0 +1,53 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/utils/operation.test.ts > business operation lifecycle > keeps synchronous pending observers inside the same operation 1ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > acquires synchronously and runs the complete operation once during reentry 52ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > keeps a slow operation protected beyond one second 1ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > retains failure and allows immediate retry 0ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > retains cancellation and allows immediate retry 0ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > retains synchronous throw and allows immediate retry 0ms
+ ✓ src/utils/operation.test.ts > business operation lifecycle > does not lock other operation instances and retains arguments and return values 0ms
+ ✓ src/utils/http.test.ts > http contract client > leaves repeated writes to the business operation and never records a time fingerprint 24ms
+ ✓ src/utils/http.test.ts > http contract client > preserves preparation failure detail and request feedback context (silentError=false) 3ms
+ ✓ src/utils/http.test.ts > http contract client > preserves preparation failure detail and request feedback context (silentError=true) 1ms
+ ✓ src/utils/http.test.ts > http contract client > keeps cancellation recognizable and suppresses all business failure feedback 1ms
+ ✓ src/utils/http.test.ts > http contract client > adds business problem metadata while preserving the original failure context 2ms
+ ✓ src/utils/http.test.ts > http contract client > reads binary problem details without replacing the original response body 5ms
+ ✓ src/utils/http.test.ts > http contract client > retains the decoded text failure message 46ms
+ ✓ src/utils/http.test.ts > http contract client > retains the decoded message failure message 2ms
+ ✓ src/utils/http.test.ts > http contract client > retains the decoded msg failure message 1ms
+ ✓ src/utils/http.test.ts > http contract client > configures multi-status success handling and items-based grid paging 1ms
+ ✓ src/utils/http.test.ts > http contract client > treats 201, 202 and 204 as successful contract responses 1ms
+ ✓ src/utils/http.test.ts > http contract client > attaches response headers and offset pager metadata for auto mutation feedback 1ms
+ ✓ src/utils/http.test.ts > http contract client > detects pure collection and cursor paging shapes without forcing query success toasts 1ms
+ ✓ src/utils/http.test.ts > http contract client > does not show expired-session feedback when already on the login page 1ms
+ ✓ src/utils/http.test.ts > http contract client > prompts relogin when a protected page receives an expired session 1ms
+ ✓ src/utils/http.test.ts > http contract client > does not prompt relogin for silent session restore failures 1ms
+ ✓ src/utils/http.test.ts > http contract client > closes an in-flight relogin prompt when entering the login route 1ms
+ ✓ src/utils/http.test.ts > http contract client > presents skipped relogin auth problems through the unified error channel 1ms
+ ✓ src/utils/http.test.ts > http contract client > normalizes problem details and forwards rate-limit headers to the problem presenter 1ms
+ ✓ src/utils/http.test.ts > http contract client > presents user failure 403/30009 without expiring the session 2ms
+ ✓ src/utils/http.test.ts > http contract client > presents user failure 403/30010 without expiring the session 2ms
+ ✓ src/utils/http.test.ts > http contract client > presents user failure 422/30011 without expiring the session 3ms
+ ✓ src/utils/http.test.ts > http contract client > passes 422 validation problems through the unified error channel 1ms
+ ✓ src/utils/http.test.ts > http contract client > releases failed relogin presentation without replacing the original 401 2ms
+ ✓ src/utils/http.test.ts > http contract client > clears relogin state even if a message handle cannot close 1ms
+ ✓ src/utils/http.test.ts > http contract client > contains asynchronous close failures from stale relogin prompts 2ms
+ ✓ src/utils/http.test.ts > http contract client > reuses auth recovery for a current read without changing its silent transport context 2ms
+ ✓ src/utils/http.test.ts > http contract client > uses transport status 401 for auth when problem status is 500 2ms
+ ✓ src/utils/http.test.ts > http contract client > uses transport status 400 for auth when problem status is 401 2ms
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ tests/unit/components/JobWriteContract.test.ts > job add submits operation fields without response metadata 7ms
+ ✓ tests/unit/components/JobWriteContract.test.ts > job edit submits operation fields without response metadata 1ms
+ ✓ tests/unit/components/JobWriteContract.test.ts > run submits identity without client-supplied group 1ms
+
+ Test Files  3 passed (3)
+      Tests  39 passed (39)
+   Start at  15:17:06
+   Duration  1.08s (transform 296ms, setup 786ms, collect 661ms, tests 184ms, environment 452ms, prepare 97ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

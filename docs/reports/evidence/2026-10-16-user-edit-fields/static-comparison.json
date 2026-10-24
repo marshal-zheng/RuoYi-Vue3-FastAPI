@@ -1,0 +1,32 @@
+{
+  "modifiedBackendRuff": {
+    "baseline": 34,
+    "current": 29,
+    "added": []
+  },
+  "modifiedBackendFormat": {
+    "baseline": {
+      "exitCode": 1,
+      "wouldReformat": true
+    },
+    "current": {
+      "exitCode": 1,
+      "wouldReformat": true
+    }
+  },
+  "backendChangedWorkspaceScript": {
+    "exitCode": 1,
+    "existingRuffDiagnostics": 233,
+    "formatFiles": [
+      "modules/identity/application/services/login_service.py",
+      "modules/system/application/services/user_service.py",
+      "modules/system/infrastructure/user_repository.py"
+    ],
+    "guardrailsPassed": true
+  },
+  "frontendChangedWorkspaceScript": {
+    "exitCode": 1,
+    "knownFailure": "Existing VersionList.vue console usage; initial file hash unchanged.",
+    "guardrailsOtherwisePassed": true
+  }
+}

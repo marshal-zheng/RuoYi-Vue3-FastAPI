@@ -1,0 +1,16 @@
+{
+  "state": {
+    "path": "/system/dict-data/index/1",
+    "currentName": null,
+    "resolved": null,
+    "notFound": true,
+    "permissions": [
+      "",
+      "system:user:list",
+      "system:user:query"
+    ],
+    "registered": []
+  },
+  "visible404": 1,
+  "network": []
+}

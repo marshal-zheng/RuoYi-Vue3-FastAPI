@@ -1,0 +1,467 @@
+[
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/faults",
+    "mswPath": "/api/simulation/faults",
+    "handlerTag": "simulation:faults",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/faults",
+    "mswPath": "/api/simulation/faults",
+    "handlerTag": "simulation:fault-create-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持故障注入写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/simulation/faults/{fault_id}",
+    "mswPath": "/api/simulation/faults/:faultId",
+    "handlerTag": "simulation:fault-delete-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持故障删除写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions",
+    "mswPath": "/api/simulation/sessions",
+    "handlerTag": "simulation:session:create-readonly",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/sessions/{session_id}/alarms",
+    "mswPath": "/api/simulation/sessions/:sessionId/alarms",
+    "handlerTag": "simulation:alarms",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/sessions/{session_id}/bandwidth",
+    "mswPath": "/api/simulation/sessions/:sessionId/bandwidth",
+    "handlerTag": "simulation:bandwidth",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/duration",
+    "owner": "simulation",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/sessions/{session_id}/events",
+    "mswPath": "/api/simulation/sessions/:sessionId/events",
+    "handlerTag": "simulation:events",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/events",
+    "mswPath": "/api/simulation/sessions/:sessionId/events",
+    "handlerTag": "simulation:event-create-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持事件创建写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/simulation/sessions/{session_id}/events/{event_id}",
+    "mswPath": "/api/simulation/sessions/:sessionId/events/:eventId",
+    "handlerTag": "simulation:event-delete-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持事件删除写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/simulation/sessions/{session_id}/events/{event_id}",
+    "mswPath": "/api/simulation/sessions/:sessionId/events/:eventId",
+    "handlerTag": "simulation:event-update-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持事件更新写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/events/{event_id}/reset",
+    "owner": "simulation",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/events/{event_id}/trigger",
+    "mswPath": "/api/simulation/sessions/:sessionId/events/:eventId/trigger",
+    "handlerTag": "simulation:event-trigger-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持事件触发写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/export",
+    "mswPath": "/api/simulation/sessions/:sessionId/export",
+    "handlerTag": "simulation:export",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/simulation/sessions/{session_id}/faults",
+    "mswPath": "/api/simulation/sessions/:sessionId/faults",
+    "handlerTag": "simulation:fault-clear-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持清空故障写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/sessions/{session_id}/faults",
+    "mswPath": "/api/simulation/sessions/:sessionId/faults",
+    "handlerTag": "simulation:session-faults",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/faults",
+    "owner": "simulation",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/simulation/sessions/{session_id}/faults/{fault_id}",
+    "owner": "simulation",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/sessions/{session_id}/messages",
+    "mswPath": "/api/simulation/sessions/:sessionId/messages",
+    "handlerTag": "simulation:messages",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/pause",
+    "mswPath": "/api/simulation/sessions/:sessionId/pause",
+    "handlerTag": "simulation:session-pause-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持暂停控制写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/resume",
+    "mswPath": "/api/simulation/sessions/:sessionId/resume",
+    "handlerTag": "simulation:session-resume-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持继续控制写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/speed",
+    "mswPath": "/api/simulation/sessions/:sessionId/speed",
+    "handlerTag": "simulation:session-speed-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持速度控制写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/start",
+    "mswPath": "/api/simulation/sessions/:sessionId/start",
+    "handlerTag": "simulation:session-start-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持启动控制写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/sessions/{session_id}/status",
+    "mswPath": "/api/simulation/sessions/:sessionId/status",
+    "handlerTag": "simulation:status",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/step",
+    "mswPath": "/api/simulation/sessions/:sessionId/step",
+    "handlerTag": "simulation:session-step-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持单步控制写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/sessions/{session_id}/stop",
+    "mswPath": "/api/simulation/sessions/:sessionId/stop",
+    "handlerTag": "simulation:session-stop-unsupported",
+    "owner": "simulation",
+    "status": "unsupported-501",
+    "critical": true,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "unsupported-501",
+    "reason": "demo-offline 首批只读仿真链路不支持停止控制写入。",
+    "impact": "demo-offline exposes a deterministic 501 instead of mutating unsupported write state.",
+    "migrationTarget": "Add a Dexie-backed mock handler when this workflow becomes part of the offline demo main path."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/simulation/strategies",
+    "mswPath": "/api/simulation/strategies",
+    "handlerTag": "simulation:strategies",
+    "owner": "simulation",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/simulation.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/simulation/topology/validate",
+    "owner": "simulation",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  }
+]

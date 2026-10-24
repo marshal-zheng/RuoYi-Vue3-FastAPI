@@ -1,0 +1,67 @@
+{
+  "library": {
+    "tests": 134,
+    "files": 9,
+    "newBoundaryRegressions": 32,
+    "build": "passed",
+    "lint": "passed",
+    "format": "passed",
+    "testTypes": "passed (preserveSymlinks=false for pnpm type resolution)"
+  },
+  "business": {
+    "tests": 68,
+    "files": 7,
+    "testResolution": "installed vendor tgz; Vitest has no @zxio/http source alias",
+    "lint": "passed",
+    "types": "passed",
+    "sourceBuild": {
+      "passed": true,
+      "seconds": 26.62,
+      "environment": {
+        "VITE_ZXUI_LOCAL": "true",
+        "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus"
+      }
+    },
+    "installedBuild": {
+      "passed": true,
+      "seconds": 23.51,
+      "environment": {
+        "VITE_ZXUI_LOCAL": "false"
+      }
+    },
+    "conventions": "failed only at unchanged VersionList.vue console policy"
+  },
+  "actual": {
+    "sourceChecks": 14,
+    "installedChecks": 14,
+    "transport": "production Axios 1.20.0 XHR + local FastAPI/MySQL through a loopback fault injection proxy",
+    "ui": "feedback delivery stubbed; no computer use or visual validation",
+    "fixturesPerRun": 2,
+    "originalConfigs": 7,
+    "originalItemsAndTotalUnchanged": true
+  },
+  "redEvidence": {
+    "initial": "21 failed, 4 passed before implementation",
+    "adapterAndCancellationReview": "3 failed, 26 passed before review fixes",
+    "fetchAndConfigReuseReview": "3 failed, 29 passed before adapter fixes"
+  },
+  "independentReview": {
+    "rounds": 3,
+    "findingsFixed": [
+      "Axios transformResponse/strict JSON parsing still inside axios.request retry boundary",
+      "RetryManager cancellation reason inferred from last error config",
+      "fetch adapter environment omitted during adapter resolution",
+      "reused config retained retry wrapper and multiplied attempts"
+    ],
+    "final": "no remaining directly related findings; 32 boundary tests independently passed"
+  },
+  "scope": {
+    "businessHttpConfigUnchanged": true,
+    "noCommit": true,
+    "noNpmPublish": true,
+    "noWorktree": true,
+    "noComputerUse": true,
+    "backendStartedPid": 81071,
+    "backendStopped": true
+  }
+}

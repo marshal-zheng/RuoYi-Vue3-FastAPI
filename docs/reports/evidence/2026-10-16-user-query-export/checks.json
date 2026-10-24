@@ -1,0 +1,104 @@
+{
+  "scope": "User list/export filter ownership only; no ZXUI, HTTP, backend, dependency, or publication changes.",
+  "commands": [
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn test:run tests/user-query-export.test.ts (task-start page restored)",
+      "exitCode": 1,
+      "files": 1,
+      "failed": 2,
+      "expectedRed": true
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn test:run tests/user-query-export.test.ts (fixed page)",
+      "exitCode": 0,
+      "files": 1,
+      "passed": 2
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn test:run tests/user-query-export.test.ts tests/unit/components/ListQueryContract.test.ts tests/unit/utils/ruoyi.test.ts src/utils/request.download.test.ts tests/unit/utils/request.test.ts",
+      "exitCode": 0,
+      "files": 5,
+      "passed": 103
+    },
+    {
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm exec vitest run packages/components/grid-list/__tests__/use-grid-request.test.ts",
+      "exitCode": 0,
+      "files": 1,
+      "passed": 12
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn eslint src/views/system/user/index.vue tests/user-query-export.test.ts --fix",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn lint:check",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "yarn type-check",
+      "exitCode": 0
+    },
+    {
+      "cwd": "ruoyi-fastapi-frontend",
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod --outDir /tmp/ruoyi-user-query-export/build-source",
+      "exitCode": 0,
+      "seconds": 25.37,
+      "warnings": [
+        "CSS syntax warning",
+        "chunk size",
+        "static/dynamic import overlap",
+        "Browserslist database age"
+      ]
+    },
+    {
+      "cwd": ".",
+      "command": "bash .agents/skills/frontend-conventions/scripts/validate.sh --changed",
+      "exitCode": 1,
+      "knownFailure": "Existing console usage in ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue; task-start SHA256 unchanged. Other guardrails passed."
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "cwd": ".",
+      "command": "node /tmp/ruoyi-user-query-export/actual-probe.cjs source (ephemeral harness, not retained because it includes local login setup)",
+      "exitCode": 0,
+      "passed": 7,
+      "boundary": "Actual page handlers and GridList source state/request logic, actual business HTTP and download modules, real FastAPI/database, JSDOM XHR. UI feedback/loading/save observers; no browser interaction."
+    }
+  ],
+  "independentReview": {
+    "result": "No blockers",
+    "checks": "Reviewer ran the two new regressions and diff check independently; checked filter ownership, reset paging, nonpaged export, date clearing and removal of asynchronous query cache."
+  },
+  "cleanup": {
+    "allAttemptsMarkedUsersSoftDeletedThroughApi": true,
+    "visibleMarkerUsersAfterEachAttempt": 0,
+    "normalAuditAndSoftDeleteHistoryRetained": true,
+    "temporaryExcelFilesRemaining": 0,
+    "taskBackendStopped": true,
+    "port8088Released": true,
+    "existingDockerAndRedisUnchanged": true
+  },
+  "outOfScopeFinding": "Adding a disabled user commits it, then returns 404 because user detail read excludes disabled accounts. Recorded only, not fixed.",
+  "notVerified": [
+    "Browser clicking and visual acceptance",
+    "User exports beyond existing backend limit of 10000 rows"
+  ],
+  "committed": false,
+  "published": false
+}

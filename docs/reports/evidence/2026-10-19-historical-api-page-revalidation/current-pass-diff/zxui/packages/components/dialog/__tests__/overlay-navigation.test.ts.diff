@@ -1,0 +1,48 @@
+--- zxui/packages/components/dialog/__tests__/overlay-navigation.test.ts (start)
++++ zxui/packages/components/dialog/__tests__/overlay-navigation.test.ts (end)
+@@ -11,6 +11,45 @@
+ import { createPortalTestOwner } from '../../theme-provider/__tests__/fixtures/portal-test-owner'
+ 
+ import type { Component } from 'vue'
++
++it('opens a dialog above an already opened drawer using the shared overlay counter', async () => {
++  const portal = await createPortalTestOwner('runtime:drawer-dialog-stacking')
++  const global = {
++    provide: portal.provide,
++    plugins: [ElementPlus],
++    stubs: { teleport: false },
++  }
++  const parent = mount(ZxDrawer, {
++    props: { modelValue: true, title: 'Parent drawer' },
++    global,
++  })
++  let child: ReturnType<typeof mount> | undefined
++  try {
++    await vi.waitFor(() =>
++      expect(document.querySelector('.el-drawer')).not.toBeNull()
++    )
++    child = mount(ZxDialog, {
++      props: { modelValue: false, title: 'Child dialog' },
++      global,
++    })
++    await child.setProps({ modelValue: true })
++    await vi.waitFor(() => {
++      const drawer = document
++        .querySelector('.el-drawer')
++        ?.closest<HTMLElement>('.el-overlay')
++      const dialog = document
++        .querySelector('.el-dialog')
++        ?.closest<HTMLElement>('.el-overlay')
++      expect(Number(dialog?.style.zIndex)).toBeGreaterThan(
++        Number(drawer?.style.zIndex)
++      )
++    })
++  } finally {
++    child?.unmount()
++    parent.unmount()
++    await portal.dispose()
++  }
++})
+ 
+ const press = (element: HTMLElement, key: string, repeat = false) => {
+   const event = new KeyboardEvent('keydown', {

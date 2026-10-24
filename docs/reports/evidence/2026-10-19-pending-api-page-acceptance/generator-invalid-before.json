@@ -1,0 +1,12 @@
+{
+  "status": 500,
+  "problem": {
+    "type": "about:blank",
+    "title": "建表语句不合法",
+    "status": 500,
+    "detail": "建表语句不合法",
+    "instance": "/dev-api/tool/gen/createTable",
+    "errorCode": 50000,
+    "requestId": "fa71e2dabe6c4125baa5ec5406588783"
+  }
+}

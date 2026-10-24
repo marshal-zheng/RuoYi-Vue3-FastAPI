@@ -1,0 +1,23 @@
+{
+  "text": "\t\ndefault\n\t\n1\n\t\n正常\n\t\n默认分组\n\t\n2026-09-20 06:41:48\n\t\n修改\n删除\n\n\n\t\n13\n\t\n默认\n\t\ndefault\n\t\n1\n\t\n正常\n\t\n线程池\n\t\n2026-09-20 06:41:48\n\t\n修改\n删除\n\n\n\t\n15\n\t\n是\n\t\nY\n\t\n1\n\t\n正常\n\t\n系统默认是\n\t\n2026-09-20 06:41:48\n\t\n修改\n删除\n\n\n\t\n17\n\t\n通知\n\t\n1\n\t\n1\n\t\n正常\n\t\n通知\n\t\n2026-09-20 06:41:48\n\t\n修改\n删除\n\n\n\t\n19\n\t\n正常\n\t\n0\n\t\n1\n\t\n正常\n\t\n正常状态\n\t\n2026-09-20 06:41:48\n\t\n修改\n删除\n\n\n\t\n22\n\t\n新增\n\t\n1\n\t\n1\n\t\n正常\n\t\n新增操作\n\t\n2026-09-20 06:41:48\n\t\n修改\n删除\n共 84 条\n10条/页\n1\n2\n3\n4\n5\n6\n9\n前往\n页",
+  "rows": 10,
+  "state": {
+    "path": "/system/dict-data/index/1",
+    "currentName": "Data",
+    "resolved": "Data",
+    "notFound": false,
+    "permissions": [
+      "*:*:*"
+    ],
+    "registered": [
+      "AuthRole",
+      "AuthUser",
+      "Data",
+      "JobLog",
+      "GenEdit",
+      "ProjectDetail",
+      "DeviceDetail",
+      "ProjectTopo"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "ruff": {
+    "baseline": 169,
+    "current": 169,
+    "new": []
+  },
+  "format": {
+    "baseline": {
+      "exitCode": 1,
+      "wouldReformat": [
+        "login_service.py",
+        "user_repository.py"
+      ]
+    },
+    "current": {
+      "exitCode": 1,
+      "wouldReformat": [
+        "login_service.py",
+        "user_repository.py"
+      ]
+    }
+  },
+  "existingRefreshTest": {
+    "failure": "Refresh test expects body.data.token but the existing endpoint returns a flat token resource.",
+    "refreshFunctionUnchangedFromHead": true,
+    "testUnchangedFromHead": true,
+    "changedMethodsNotOnRefreshPath": [
+      "UserRepository.get_user_with_relations",
+      "LoginService._resolve_current_user",
+      "LoginService.get_current_user_routers"
+    ]
+  },
+  "existingEditFailure": {
+    "observed": "Actual UserFormDialog edit submit returned HTTP 500, KeyError role.",
+    "cause": "edit_user_services excludes unset fields from payload, then unconditionally deletes role.",
+    "serviceUnchangedFromHead": true,
+    "notChangedInThisTask": true,
+    "scope": "Recorded separately; does not affect creating disabled users or status-only changes."
+  }
+}

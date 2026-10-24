@@ -1,0 +1,24 @@
+{
+  "status": 204,
+  "detail": {
+    "status": 403,
+    "body": {
+      "type": "http://localhost/problems/forbidden",
+      "title": "没有权限访问角色数据",
+      "status": 403,
+      "detail": "没有权限访问角色数据",
+      "instance": "/dev-api/system/role/94",
+      "errorCode": 20004,
+      "requestId": "cd10ed67d2ef492990998083a39a12d4"
+    }
+  },
+  "list": {
+    "status": 200,
+    "body": {
+      "items": [],
+      "total": 0,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "frontend": {
+    "status": 200
+  },
+  "backend": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "app": "RuoYi-FastAPI",
+      "version": "1.6.2",
+      "providers": {
+        "redis": {
+          "initialized": true,
+          "healthy": true,
+          "detail": "ready"
+        },
+        "scheduler": {
+          "initialized": true,
+          "healthy": true,
+          "detail": "ready"
+        },
+        "queryCache": {
+          "initialized": true,
+          "healthy": true,
+          "detail": "enabled"
+        }
+      }
+    }
+  },
+  "dailyContainers": [
+    "ruoyi-redis-local Up 4 hours",
+    "ruoyi-mysql-local Up 4 hours"
+  ]
+}

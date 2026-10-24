@@ -1,0 +1,89 @@
+{
+  "mode": "source",
+  "axios": "1.20.0",
+  "transport": "Actual business modules/operation handler, Vue pending and JSDOM XHR to real FastAPI :8088",
+  "boundary": "Preparation failures are injected into actual hooks/token provider/Axios encoder; recovery and cancellation use real backend responses. UI feedback/loading/save are recorded substitutes; no browser clicks.",
+  "cleanupVerified": true,
+  "results": [
+    {
+      "name": "real-business-login",
+      "ok": true,
+      "authenticated": true,
+      "durationMs": 307
+    },
+    {
+      "name": "actual-delete-handler-preparation-failure-releases-pending-and-retries",
+      "ok": true,
+      "zeroDispatchOnFailure": true,
+      "originalCausePreserved": true,
+      "latestContextPreserved": true,
+      "feedbackOnce": true,
+      "duplicateJoined": true,
+      "pendingReleased": true,
+      "retryBackendDeleteSucceeded": true,
+      "durationMs": 158
+    },
+    {
+      "name": "actual-api-token-failure-releases-operation-and-allows-real-retry",
+      "ok": true,
+      "originalFrozenErrorPreserved": true,
+      "targetNotClassifiedAsNetwork": true,
+      "zeroDispatchOnFailure": true,
+      "noAutomaticRetry": true,
+      "pendingReleased": true,
+      "realRetrySucceeded": true,
+      "durationMs": 45
+    },
+    {
+      "name": "actual-api-Axios-encoding-failure-is-local-and-retryable-by-user",
+      "ok": true,
+      "rawEncodingCausePreserved": true,
+      "noNetworkMisclassification": true,
+      "encodingAttempts": 1,
+      "pendingReleased": true,
+      "realRetrySucceeded": true,
+      "durationMs": 35
+    },
+    {
+      "name": "preparation-custom-abort-reason-remains-silent-and-releases-pending",
+      "ok": true,
+      "causeAndReasonIdentityPreserved": true,
+      "signalPreserved": true,
+      "zeroDispatch": true,
+      "noFeedback": true,
+      "pendingReleased": true,
+      "realRetrySucceeded": true,
+      "durationMs": 38
+    },
+    {
+      "name": "business-download-preparation-failure-releases-loading-then-real-user-Excel-succeeds",
+      "ok": true,
+      "causePreserved": true,
+      "silentContextPreserved": true,
+      "downloadFeedbackOnce": true,
+      "pendingAndLoadingReleased": true,
+      "realExcelBytes": 5326,
+      "durationMs": 92
+    },
+    {
+      "name": "real-query-cancellation-preserves-reason-and-releases-operation",
+      "ok": true,
+      "realBackendResponded": true,
+      "reasonAndSignalPreserved": true,
+      "noFeedback": true,
+      "pendingReleased": true,
+      "subsequentRealRequestSucceeded": true,
+      "durationMs": 105
+    },
+    {
+      "name": "real-user-export-cancellation-releases-loading-without-saving-or-feedback",
+      "ok": true,
+      "realBackendExcelResponded": true,
+      "reasonPreserved": true,
+      "pendingAndLoadingReleased": true,
+      "noFileSaved": true,
+      "noFeedback": true,
+      "durationMs": 79
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+--- ruoyi/ruoyi-fastapi-frontend/src/views/system/user/profile/index.vue (start)
++++ ruoyi/ruoyi-fastapi-frontend/src/views/system/user/profile/index.vue (end)
+@@ -12,34 +12,34 @@
+             <div class="text-center">
+               <userAvatar />
+             </div>
+-            <ul class="list-group list-group-striped">
+-              <li class="list-group-item">
+-                <svg-icon icon-class="user" />用户名称
+-                <div class="pull-right">{{ state.user.userName }}</div>
+-              </li>
+-              <li class="list-group-item">
+-                <svg-icon icon-class="phone" />手机号码
+-                <div class="pull-right">{{ state.user.phonenumber }}</div>
+-              </li>
+-              <li class="list-group-item">
+-                <svg-icon icon-class="email" />用户邮箱
+-                <div class="pull-right">{{ state.user.email }}</div>
+-              </li>
+-              <li class="list-group-item">
+-                <svg-icon icon-class="tree" />所属部门
+-                <div class="pull-right" v-if="state.user.dept">
+-                  {{ state.user.dept.deptName }} / {{ state.postGroup }}
+-                </div>
+-              </li>
+-              <li class="list-group-item">
+-                <svg-icon icon-class="peoples" />所属角色
+-                <div class="pull-right">{{ state.roleGroup }}</div>
+-              </li>
+-              <li class="list-group-item">
+-                <svg-icon icon-class="date" />创建日期
+-                <div class="pull-right">{{ state.user.createTime }}</div>
+-              </li>
+-            </ul>
++            <dl class="profile-details">
++              <div>
++                <dt><svg-icon icon-class="user" />用户名称</dt>
++                <dd>{{ state.user.userName }}</dd>
++              </div>
++              <div>
++                <dt><svg-icon icon-class="phone" />手机号码</dt>
++                <dd>{{ state.user.phonenumber }}</dd>
++              </div>
++              <div>
++                <dt><svg-icon icon-class="email" />用户邮箱</dt>
++                <dd>{{ state.user.email }}</dd>
++              </div>
++              <div>
++                <dt><svg-icon icon-class="tree" />所属部门</dt>
++                <dd v-if="state.user.dept">
++                  {{ state.user.dept.deptName }}{{ state.postGroup ? ' / ' + state.postGroup : '' }}
++                </dd>
++              </div>
++              <div>
++                <dt><svg-icon icon-class="peoples" />所属角色</dt>
++                <dd>{{ state.roleGroup }}</dd>
++              </div>
++              <div>
++                <dt><svg-icon icon-class="date" />创建日期</dt>
++                <dd>{{ parseTime(state.user.createTime) }}</dd>
++              </div>
++            </dl>
+           </div>
+         </el-card>
+       </el-col>
+@@ -73,8 +73,8 @@
+ const activeTab = ref('userinfo');
+ const state = reactive({
+   user: {},
+-  roleGroup: {},
+-  postGroup: {},
++  roleGroup: '',
++  postGroup: '',
+ });
+ 
+ function getUser() {
+@@ -87,3 +87,22 @@
+ 
+ getUser();
+ </script>
++
++<style scoped>
++.profile-details {
++  display: grid;
++  gap: 16px;
++  margin: 20px 0 0;
++}
++
++.profile-details dt {
++  display: flex;
++  align-items: center;
++  gap: 6px;
++}
++
++.profile-details dd {
++  margin: 4px 0 0;
++  overflow-wrap: anywhere;
++}
++</style>

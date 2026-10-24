@@ -1,0 +1,101 @@
+[
+  {
+    "name": "AuthRole",
+    "path": "/system/user-auth/role/143",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "AuthUser",
+    "path": "/system/role-auth/user/97",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "Data",
+    "path": "/system/dict-data/index/1",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "JobLog",
+    "path": "/monitor/job-log/index/0",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "GenEdit",
+    "path": "/tool/gen-edit/index/1?page=1",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "ProjectDetail",
+    "path": "/project/project-detail/index/1",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "DeviceDetail",
+    "path": "/device/detail/index/1",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "DeviceDetail",
+    "path": "/device/detail/index",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  },
+  {
+    "name": "ProjectTopo",
+    "path": "/project/topo/index/1?versionId=1",
+    "realControlEntry": true,
+    "refresh": true,
+    "hmr": true,
+    "sameDocumentHmr": true,
+    "revokedRedirect": true,
+    "denied404": true,
+    "grantRecoversCurrentUrl": true
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-15",
+  "library": {
+    "command": "pnpm exec vitest run packages/http/__tests__",
+    "files": 7,
+    "passed": 80,
+    "exitCode": 0
+  },
+  "redBeforeRuntimeChanges": {
+    "files": 2,
+    "failed": 16,
+    "passed": 39,
+    "expectedFailure": true
+  },
+  "gridAndGenerator": {
+    "command": "pnpm exec vitest run packages/components/grid-list/__tests__/use-grid-request.test.ts docs/scripts/__tests__/generate-examples.test.ts",
+    "gridPassed": 12,
+    "generatorPassed": 6,
+    "exitCode": 0
+  },
+  "businessSource": {
+    "command": "yarn vitest run --config /tmp/ruoyi-http-source.pVzUd4/vitest-source.config.mts src/api src/utils src/store/modules/user.login.test.ts tests/unit/components/ListQueryContract.test.ts",
+    "files": 19,
+    "passed": 94,
+    "exitCode": 0,
+    "preservedConfig": "vitest-source.config.mts"
+  },
+  "businessInstalled": {
+    "command": "yarn vitest run src/api src/utils src/store/modules/user.login.test.ts tests/unit/components/ListQueryContract.test.ts",
+    "files": 19,
+    "passed": 94,
+    "exitCode": 0
+  },
+  "builds": [
+    {
+      "command": "pnpm -C packages/http build",
+      "exitCode": 0
+    },
+    {
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod --outDir /tmp/ruoyi-http-independent/build-source",
+      "seconds": 18.78,
+      "exitCode": 0
+    },
+    {
+      "command": "VITE_ZXUI_LOCAL=false yarn build:prod --outDir /tmp/ruoyi-http-independent/build-installed",
+      "seconds": 17.32,
+      "exitCode": 0
+    }
+  ],
+  "quality": {
+    "httpTargetedEslint": true,
+    "httpAffectedTestsStrictTypes": true,
+    "businessLint": true,
+    "businessTypeCheck": true,
+    "businessChangedConventions": true,
+    "bothGitDiffChecks": true,
+    "newExampleScriptAndTemplateCompiled": true
+  },
+  "realBackend": {
+    "sourceCasesPassed": 15,
+    "installedCasesPassed": 15,
+    "axios": "1.20.0",
+    "xhrTransport": true,
+    "browserInteraction": false
+  },
+  "warnings": [
+    "Existing package peer dependency warnings",
+    "Vite chunk-size warnings; no build errors",
+    "Private registry .npmrc placeholder warning during pnpm commands"
+  ],
+  "runtimeCleanup": {
+    "onlyTaskOwnedBackendStopped": true,
+    "port8088HasNoListener": true,
+    "rawExportsRemoved": true
+  },
+  "independentReview": {
+    "blockingFindings": 0,
+    "independentlyVerifiedHttpTests": 80,
+    "independentlyVerifiedGridTests": 12,
+    "installedFilesCompared": 50,
+    "scope": "HTTP independent requests, parameter hard cut, affected consumers and docs"
+  },
+  "committed": false,
+  "published": false
+}

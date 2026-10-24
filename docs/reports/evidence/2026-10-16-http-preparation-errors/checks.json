@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-16",
+  "newRegressionCases": {
+    "libraryExistingFile": 13,
+    "businessExistingFile": 2,
+    "newTestFiles": 0
+  },
+  "libraryTests": {
+    "httpPassed": 93,
+    "exampleGeneratorPassed": 6,
+    "files": 8,
+    "exitCode": 0,
+    "command": "pnpm exec vitest run packages/http/__tests__ docs/scripts/__tests__/generate-examples.test.ts"
+  },
+  "businessTests": {
+    "sourcePassed": 195,
+    "installedPassed": 195,
+    "filesPerMode": 24,
+    "exitCode": 0,
+    "sourceConfig": "docs/reports/evidence/2026-10-15-http-independent-requests/vitest-source.config.mts",
+    "scope": [
+      "src/api",
+      "src/utils",
+      "src/store/modules/user.login.test.ts",
+      "tests/generator-form-contract.test.ts",
+      "tests/unit/composables/useEventTrigger.test.ts",
+      "tests/unit/simulation/websocket-state.test.ts",
+      "tests/unit/composables/useSimulationControl.test.ts",
+      "tests/unit/utils/request.test.ts"
+    ]
+  },
+  "quality": {
+    "frontendLint": true,
+    "frontendTypeCheck": true,
+    "httpScopedLint": true,
+    "httpStrictTestTypes": true,
+    "httpEsmCjsBuild": true,
+    "gitDiffCheckBothRepositories": true,
+    "fullChangedConventions": {
+      "exitCode": 1,
+      "reason": "Preexisting console calls in VersionList.vue; file byte-identical to round-three baseline",
+      "otherGuardrailsPassed": true,
+      "embeddedTypeCheckAndTestsSkipped": true
+    }
+  },
+  "build": {
+    "sourceSeconds": 21.39,
+    "installedSeconds": 19.98,
+    "exitCode": 0,
+    "sourceEnvironment": {
+      "VITE_ZXUI_LOCAL": "true",
+      "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus"
+    },
+    "outDirRoot": "/tmp/ruoyi-http-preparation",
+    "warning": "Existing chunk-size warning"
+  },
+  "realBackend": {
+    "sourcePassed": 8,
+    "installedPassed": 8,
+    "cleanupVerifiedBothModes": true,
+    "xlsxParsedBothModes": true,
+    "browserInteraction": false
+  },
+  "errorBoundary": {
+    "preparationOutsideRetry": true,
+    "explicitPreparationErrorsNeverRetried": true,
+    "unknownLocalErrorsNotGuessedAsNetwork": true,
+    "unknownLocalErrorsDefaultNoRetry": true,
+    "explicitUnknownCustomRetryPolicyRetained": true,
+    "normalizedErrorHookType": "HttpError",
+    "originalCauseAndCancellationReasonPreserved": true,
+    "currentConfigFallbackPreserved": true
+  },
+  "review": {
+    "remainingBlockers": 0,
+    "reviewerModifiedFiles": false,
+    "independentlyVerifiedHttpCases": 93,
+    "independentlyVerifiedBusinessHttpCases": 20,
+    "sourceEsmCjsTypesPassed": true
+  },
+  "metadata": {
+    "targetedHttpComponentGeneratorPassed": true,
+    "examplesAndLlmsGeneratorsPassed": true,
+    "nonHttpAggregateEntriesUnchanged": true,
+    "fullTypesGeneratorLimitation": "Unrelated text-editor generator could not resolve keybindings declaration dependency"
+  },
+  "runtimeCleanup": {
+    "probeRecordsRemaining": 0,
+    "temporaryWorkbooksRemoved": true,
+    "onlyTaskOwnedBackendStopped": true
+  },
+  "businessSubmissionPolicyChanged": false,
+  "backendCodeChanged": false,
+  "unrelatedChangesPreserved": true,
+  "committed": false,
+  "published": false
+}

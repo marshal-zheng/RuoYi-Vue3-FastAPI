@@ -1,0 +1,24 @@
+import { http, HttpResponse } from 'msw';
+
+import { createApiPath } from '../constants';
+import type { MockRuntimeHandler, MockStrategy } from '../types';
+import { resultSuccess } from '../utils/response';
+import { withBackendFallback } from '../utils/with-backend-fallback';
+
+export function createTestHandlers(strategy: MockStrategy): MockRuntimeHandler[] {
+  return [
+    http.get(createApiPath('/test/mock'), ({ request }) =>
+      withBackendFallback(
+        request,
+        () =>
+          HttpResponse.json(
+            resultSuccess({
+              message: 'mock ssss',
+              timestamp: Date.now(),
+            })
+          ),
+        { strategy, tag: 'test:mock' }
+      )
+    ),
+  ];
+}

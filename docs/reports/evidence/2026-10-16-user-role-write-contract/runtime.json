@@ -1,0 +1,7 @@
+{
+  "ownedBackendPid": 56083,
+  "ownedBackendStopped": true,
+  "port8088Listening": false,
+  "existingDockerMySQLAndRedisLeftRunning": true,
+  "computerUse": false
+}

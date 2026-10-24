@@ -1,0 +1,42 @@
+{
+  "loginIat": 1792374409,
+  "originalExp": 1792375009,
+  "uploadAt": "2026-10-19T01:57:22.540Z",
+  "elapsedSeconds": 633.539999961853,
+  "cacheBefore": {
+    "accessTtl": -2,
+    "sessionTtl": 604167
+  },
+  "events": [
+    {
+      "time": "2026-10-19T01:57:22.573Z",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T01:57:22.594Z",
+      "method": "POST",
+      "path": "/api/common/upload",
+      "status": 200
+    },
+    {
+      "time": "2026-10-19T01:57:22.598Z",
+      "method": "GET",
+      "path": "/api/profile/upload/2026/10/19/qa-image_20261019025722A083.png",
+      "status": 200
+    }
+  ],
+  "editorImage": {
+    "src": "/api/profile/upload/2026/10/19/qa-image_20261019025722A083.png",
+    "loaded": true,
+    "width": 64
+  },
+  "noticeSaveStatus": 201,
+  "noticeId": 11,
+  "noticeReadback": {
+    "id": 11,
+    "title": "zxqa_notice_mvelcp2o",
+    "containsUploadedImage": true
+  }
+}

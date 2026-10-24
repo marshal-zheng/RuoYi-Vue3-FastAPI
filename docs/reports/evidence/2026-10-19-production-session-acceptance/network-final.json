@@ -1,0 +1,6632 @@
+[
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-KyJfv-q3.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-OZr--2fy.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dept-BICcGWdP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/system-list-navigation-D4qM4L-n.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserFormDialog-_zeQ94yD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserImportDialog-CmEJqfGL.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/upload-COXn0HZn.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 401,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-KyJfv-q3.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-OZr--2fy.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dept-BICcGWdP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/system-list-navigation-D4qM4L-n.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserFormDialog-_zeQ94yD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/upload-COXn0HZn.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserImportDialog-CmEJqfGL.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 401,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-KyJfv-q3.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-OZr--2fy.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dept-BICcGWdP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/system-list-navigation-D4qM4L-n.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserFormDialog-_zeQ94yD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserImportDialog-CmEJqfGL.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/upload-COXn0HZn.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 401,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-KyJfv-q3.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-OZr--2fy.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/system-list-navigation-D4qM4L-n.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dept-BICcGWdP.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserFormDialog-_zeQ94yD.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserImportDialog-CmEJqfGL.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/upload-COXn0HZn.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 304,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-KyJfv-q3.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-OZr--2fy.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dept-BICcGWdP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/system-list-navigation-D4qM4L-n.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserFormDialog-_zeQ94yD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserImportDialog-CmEJqfGL.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/upload-COXn0HZn.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 401,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 401,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/login",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-KyJfv-q3.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-OZr--2fy.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dept-BICcGWdP.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/system-list-navigation-D4qM4L-n.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserFormDialog-_zeQ94yD.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserImportDialog-CmEJqfGL.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/upload-COXn0HZn.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 304,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/system/user-auth/role/145",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/authRole-BbiAFnTz.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 304,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/authRole/145",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/system/role-auth/user/98",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/selectUser-Dk8AUCKj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/authUser-vJB5tIqM.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/role/authUser/allocatedList",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/system/dict-data/index/1",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dict-management-BXyer0_U.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/data-8Xy8xjJQ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DMxg61l5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/type/1",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/type/optionselect",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/monitor/job-log/index/0",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/job-Do4w52hw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/log-DluUgLUI.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DFrHEVQu.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_job_executor",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/monitor/jobLog/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_job_group",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_common_status",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/tool/gen-edit/index/1",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DFrHEVQu.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/gen-CVwzQKBr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/basicInfoForm-CBcFd0ez.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editTable-Bxc7sJsz.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/menu-D4phAUxc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/genInfoForm-CQhjXs_1.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-TBFhpSYB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/defaults-DWtitEDU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/menu/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/tool/gen/1",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/type/optionselect",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/project/project-detail/index/1",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-TBFhpSYB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/defaults-DWtitEDU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/project-BJH9A1cl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/detail-B2NoNI47.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DjrqsTya.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Editor-Bqmu4uNq.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionDetailDialog-CTU2Vaik.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate-BLa4JDxY.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionCloneDialog-CLpBqEIC.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CzJmB7a2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-C0bDiqmI.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionExportDialog-J6r3ZItG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FileTypeSelector-BabmLNw9.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionList-C3bz-k--.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/detail-CFGko95X.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ImportFileDialog-Dwrj8Mqg.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ProtocolConfigDrawer-9m8YhSVv.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/MessageConfigTab-ya4spsMJ.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ProtocolEditDialog-B6bwTBHt.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/NodeEditDrawer-C0XuX0sr.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DcT6UF47.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionList-BHuRVPy7.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/version-DlNfB4xJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionDetailDialog-BL22zSJq.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionPreviewDialog-gO0e7lo-.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionCloneDialog-YRq_60W4.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionExportDialog-DTOzIIBQ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Editor.vue_vue_type_style_index_1_scoped_1fdd185e_lang-y1Ohqofu.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/uniq-DOBySK-1.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DLyZ3H5J.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/union-C4dBA0bj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isEmpty-9sbkqz87.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionExportDialog.vue_vue_type_style_index_0_scoped_e7c2ea7c_lang-CVexx_TY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate.vue_vue_type_style_index_0_scoped_05f8127b_lang-Bq1opj_C.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FileTypeSelector-Bfq7r6_U.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/_baseUniq-Dld9zxFZ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-CrMazItw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/project/1",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/project/version/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/project/topo/index/1",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-CrMazItw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/uniq-DOBySK-1.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/_baseUniq-Dld9zxFZ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/union-C4dBA0bj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isEmpty-9sbkqz87.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-C0bDiqmI.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate.vue_vue_type_style_index_0_scoped_05f8127b_lang-Bq1opj_C.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DLyZ3H5J.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DcT6UF47.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate-BLa4JDxY.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CzJmB7a2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ImportFileDialog-Dwrj8Mqg.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/MessageConfigTab-ya4spsMJ.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ProtocolEditDialog-B6bwTBHt.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/NodeEditDrawer-C0XuX0sr.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Editor.vue_vue_type_style_index_1_scoped_1fdd185e_lang-y1Ohqofu.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Editor-Bqmu4uNq.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionExportDialog.vue_vue_type_style_index_0_scoped_e7c2ea7c_lang-CVexx_TY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionExportDialog-J6r3ZItG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ProtocolConfigDrawer-9m8YhSVv.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionDetailDialog-CTU2Vaik.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionCloneDialog-CLpBqEIC.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FileTypeSelector-BabmLNw9.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/VersionList-C3bz-k--.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BSy443Nc.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CTdJTnm9.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/topo-BwZJyhNa.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-ChUBIpHj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/topo-D219Wduo.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BLuoctMZ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ProtocolEditDialog-Bw6IYSRB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/NodeEditDrawer-DeOijOR-.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-cB7TYeYD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-yigWsx49.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate-B3WKyd4h.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/MessageConfigTab-DYVk8YSC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/device-DNcIMU63.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ImportFileDialog-QTaVwe71.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/topologyGraph-D82RRKzY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/portColor-B-QmuEu3.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/device/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/project/topology/1",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/device/detail/index/1",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-CrMazItw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/uniq-DOBySK-1.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/_baseUniq-Dld9zxFZ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/union-C4dBA0bj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isEmpty-9sbkqz87.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-C0bDiqmI.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-cB7TYeYD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate-B3WKyd4h.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate.vue_vue_type_style_index_0_scoped_05f8127b_lang-Bq1opj_C.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DLyZ3H5J.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DcT6UF47.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate-BLa4JDxY.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-ChUBIpHj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BSy443Nc.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/device-DNcIMU63.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CzJmB7a2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DjrqsTya.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-TBFhpSYB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/defaults-DWtitEDU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-yigWsx49.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DMxg61l5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/MessageConfigTab-DYVk8YSC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ImportFileDialog-QTaVwe71.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ImportFileDialog-Dwrj8Mqg.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/MessageConfigTab-ya4spsMJ.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/portColor-B-QmuEu3.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/CategorySelector-BAUwiBXw.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/detail-14eh0vdN.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ProtocolListDrawer-CnZzQ3jY.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/CategorySelector.vue_vue_type_style_index_0_scoped_7b01f8ab_lang-Bl_E79hm.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/detail-DQ9iqhpn.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/DeviceNameDialog-Dj_PNOqq.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/device/1",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/device/detail/index",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/detail-DQ9iqhpn.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-CrMazItw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/uniq-DOBySK-1.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/_baseUniq-Dld9zxFZ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/union-C4dBA0bj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isEmpty-9sbkqz87.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/registerDagShapes-C0bDiqmI.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-cB7TYeYD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate-B3WKyd4h.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate.vue_vue_type_style_index_0_scoped_05f8127b_lang-Bq1opj_C.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DLyZ3H5J.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/vue.runtime.esm-bundler-DcT6UF47.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/Protocol1553BTemplate-BLa4JDxY.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-ChUBIpHj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BSy443Nc.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/device-DNcIMU63.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/CategorySelector.vue_vue_type_style_index_0_scoped_7b01f8ab_lang-Bl_E79hm.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/CategorySelector-BAUwiBXw.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CzJmB7a2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DjrqsTya.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-TBFhpSYB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/defaults-DWtitEDU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-yigWsx49.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DMxg61l5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/MessageConfigTab-DYVk8YSC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ImportFileDialog-QTaVwe71.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ImportFileDialog-Dwrj8Mqg.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/MessageConfigTab-ya4spsMJ.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/DeviceNameDialog-Dj_PNOqq.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/portColor-B-QmuEu3.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/detail-14eh0vdN.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ProtocolListDrawer-CnZzQ3jY.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/system/user",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C1a1g8sU.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/user-DPBXbZ-r.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/permission-_wc3oXiX.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuPuZiLK.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-G5PQ-bjC.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DGY2isoG.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-0GjJJQ7m.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-iuDjV5hN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-KyJfv-q3.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-OZr--2fy.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserFormDialog-_zeQ94yD.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/system-list-navigation-D4qM4L-n.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/UserImportDialog-CmEJqfGL.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dept-BICcGWdP.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/upload-COXn0HZn.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/deptTree",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/refresh",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/user/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/system/dict-data/index/1",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/404-ChQ2SuLY.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/404-CRiNYW0k.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/404_cloud-CPexjtDj.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/404-N4aRkdWY.png",
+    "status": 200,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/system/dict-data/index/1",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getInfo",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/getRouters",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhdxolXD.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BRg5iRuN.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DHwizwis.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/app-SysbJG2k.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-DB1PA7UG.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DPKzpnfr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CjWmRjhC.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CuHEcSqw.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Dchh08DY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BY0CK24i.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/data-8Xy8xjJQ.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D-MsZzOb.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DnymKu65.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BNF7uvU2.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-d1sqDAdA.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DgHgyXO5.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/editor-read-DKOCCnu_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CgjyBGVe.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-UgJCQbPP.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/dict-management-BXyer0_U.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BhtFJ6by.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/merge-DEl2VoX_.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-dBdvfDYE.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DrmJ57Wa.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/isArrayLikeObject-D8qHxiYc.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/raf-h8zECuZJ.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DMxg61l5.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/FormGrid-wYFjgHDi.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-BK9XQk2w.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-Bkr4yIvr.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/logo-BjsPc2xl.png",
+    "status": 304,
+    "type": "image"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/type/1",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/type/sys_normal_disable",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/type/optionselect",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/api/system/dict/data/list",
+    "status": 200,
+    "type": "xhr"
+  },
+  {
+    "method": "POST",
+    "path": "/api/auth/logout",
+    "status": 204,
+    "type": "xhr"
+  },
+  {
+    "method": "GET",
+    "path": "/login",
+    "status": 200,
+    "type": "document"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-CO7JoSiB.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCs4SW7E.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/d9e13c35fa3460bdacdb3c81df815491f01cd925c25259e9ba9f725bf76ca30e.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-D3GceiQx.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-C8aU0MBY.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/index-DCnSb-Sj.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/icon.vue_vue_type_script_lang-BhDQqSHN.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/operation-DwWsmhSS.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/js.cookie-Cz0CWeBA.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-PszsKXKl.js",
+    "status": 200,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/ZxThemePresetSwitch-DBYe015F.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-Dkm2pvnw.css",
+    "status": 304,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/ebc68364c261b73e34daf8568a97368c10ebe567ca86accfc05ee013cd97d797.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/login-DgKR73id.js",
+    "status": 304,
+    "type": "script"
+  },
+  {
+    "method": "GET",
+    "path": "/zx-theme-assets/c6f2b1c451bc72a94fad14a7209398e019c67b19aecff41877de6e173ff71cb6.css",
+    "status": 200,
+    "type": "stylesheet"
+  },
+  {
+    "method": "GET",
+    "path": "/api/captchaImage",
+    "status": 200,
+    "type": "xhr"
+  }
+]

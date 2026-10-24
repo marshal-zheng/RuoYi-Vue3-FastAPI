@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ruoyi-fastapi.local/mock-contract-coverage-registry.schema.json",
+  "title": "Mock contract coverage registry file",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "method",
+      "openapiPath",
+      "owner",
+      "status",
+      "critical",
+      "schemaStatus",
+      "tests"
+    ],
+    "properties": {
+      "method": {
+        "type": "string",
+        "enum": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+      },
+      "openapiPath": {
+        "type": "string",
+        "pattern": "^/"
+      },
+      "mswPath": {
+        "type": "string"
+      },
+      "handlerTag": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9][A-Za-z0-9:-]*[A-Za-z0-9]$"
+      },
+      "owner": {
+        "type": "string",
+        "minLength": 1
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "mock-handled",
+          "real-only",
+          "unsupported-501",
+          "legacy-local-contract",
+          "missing"
+        ]
+      },
+      "critical": {
+        "type": "boolean"
+      },
+      "schemaStatus": {
+        "type": "string",
+        "enum": [
+          "openapi-validated",
+          "schema-unavailable",
+          "binary-response",
+          "local-schema-validated",
+          "not-applicable"
+        ]
+      },
+      "tests": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "persistence": {
+        "type": "string",
+        "enum": ["dexie", "readonly", "unsupported-501", "real-only", "none"]
+      },
+      "localContract": {
+        "type": "string",
+        "minLength": 1
+      },
+      "reason": {
+        "type": "string",
+        "minLength": 1
+      },
+      "impact": {
+        "type": "string",
+        "minLength": 1
+      },
+      "migrationTarget": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

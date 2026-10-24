@@ -1,0 +1,84 @@
+--- before/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
++++ after/ruoyi-fastapi-backend/modules/system/application/services/user_service.py
+@@ -1,11 +1,17 @@
+ import io
+-from collections.abc import Callable
++import struct
++import zlib
++from collections.abc import Callable, Collection
+ from datetime import datetime
+ from typing import Any
++from zipfile import BadZipFile
+ 
+ import pandas as pd
+ from fastapi import Request, UploadFile
++from openpyxl.utils.exceptions import InvalidFileException
+ from sqlalchemy.ext.asyncio import AsyncSession
++from xlrd.biffh import XLRDError
++from xlrd.compdoc import CompDocError
+ 
+ from config.constant import CommonConstant
+ from config.error_codes import ErrorCode
+@@ -45,6 +51,51 @@
+ from utils.transaction_manager import transactional
+ 
+ 
++async def _read_user_import_workbook(file: UploadFile, required_headers: Collection[str]) -> pd.DataFrame:
++    try:
++        suffix = (file.filename or '').rsplit('.', 1)[-1].lower()
++        if suffix not in {'xls', 'xlsx'}:
++            raise ValidationException(
++                user_message='仅支持 XLS、XLSX 格式的用户导入文件',
++                error_code=ErrorCode.INVALID_INPUT,
++                field='file',
++            )
++        contents = await file.read()
++        try:
++            frame = pd.read_excel(io.BytesIO(contents), engine='xlrd' if suffix == 'xls' else 'openpyxl')
++        except (
++            ValueError,
++            BadZipFile,
++            InvalidFileException,
++            SyntaxError,  # Both stdlib and lxml XML parse errors derive from SyntaxError.
++            XLRDError,
++            CompDocError,
++            KeyError,
++            IndexError,
++            EOFError,
++            OSError,
++            struct.error,
++            zlib.error,
++        ) as exc:
++            # Only parser failures are input errors; dependency and service failures keep their classification.
++            raise ValidationException(
++                user_message='Excel 文件无法读取，可能已损坏或加密，请使用未加密的导入模板重新保存后重试',
++                developer_message=f'Invalid user import workbook: {type(exc).__name__}: {exc}',
++                error_code=ErrorCode.INVALID_INPUT,
++                field='file',
++            ) from exc
++    finally:
++        await file.close()
++    missing_headers = [header for header in required_headers if header not in frame.columns]
++    if missing_headers:
++        raise ValidationException(
++            user_message=f'导入模板不正确，缺少列：{"、".join(missing_headers)}。请下载最新模板后重试',
++            error_code=ErrorCode.INVALID_INPUT,
++            field='file',
++        )
++    return frame
++
++
+ def _normalize_user_import_row(row) -> dict[str, Any]:
+     normalized = dict(row)
+     sex_map = {'男': '0', '女': '1', '未知': '2'}
+@@ -561,9 +612,7 @@
+             '用户性别': 'sex',
+             '帐号状态': 'status',
+         }
+-        contents = await file.read()
+-        df = pd.read_excel(io.BytesIO(contents))
+-        await file.close()
++        df = await _read_user_import_workbook(file, header_dict)
+         df.rename(columns=header_dict, inplace=True)
+         results: list[dict[str, Any]] = []
+         succeeded = 0

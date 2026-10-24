@@ -1,0 +1,51 @@
+{
+  "before": {
+    "path": "/system/dict-data/index/1",
+    "name": "Data",
+    "id": 145,
+    "nick": "生产验收 A",
+    "roles": [
+      "pqa1019_mveycco0"
+    ],
+    "hasDict": true,
+    "hasData": true,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "after": {
+    "path": "/index",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "ROLE_DEFAULT"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  },
+  "direct": {
+    "path": "/",
+    "id": 146,
+    "nick": "生产验收 B",
+    "roles": [
+      "ROLE_DEFAULT"
+    ],
+    "hasDict": false,
+    "hasData": false,
+    "devSync": false,
+    "viewport": {
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440
+    }
+  }
+}

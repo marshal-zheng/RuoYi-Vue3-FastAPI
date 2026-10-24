@@ -1,0 +1,390 @@
+ D ".cursor/skills/init-ai-workspace/AI\345\274\200\345\217\221\350\247\204\350\214\203V1.pdf"
+ D .cursor/skills/init-ai-workspace/README.md
+ D ".cursor/skills/init-ai-workspace/README_\345\211\257\346\234\254.pdf"
+ D .cursor/skills/init-ai-workspace/SKILL.md
+ D .cursor/skills/init-ai-workspace/assets/commands/faq.md
+ D .cursor/skills/init-ai-workspace/assets/commands/learn.md
+ D .cursor/skills/init-ai-workspace/assets/commands/skill-stubs.md
+ D .cursor/skills/init-ai-workspace/assets/commands/task-alignment-review.md
+ D .cursor/skills/init-ai-workspace/assets/commands/update-codemaps.md
+ D .cursor/skills/init-ai-workspace/reference/agents-template.md
+ D .cursor/skills/init-ai-workspace/scripts/init.js
+ D .cursor/skills/init-ai-workspace/scripts/install-skills.js
+ M AGENTS.md
+ M docs/codemaps/.diff-report.txt
+ M docs/codemaps/backend.md
+ M docs/codemaps/data.md
+ M ruoyi-fastapi-backend/alembic/env.py
+ M ruoyi-fastapi-backend/config/env.py
+ M ruoyi-fastapi-backend/config/get_scheduler.py
+ M ruoyi-fastapi-backend/container/app_container.py
+ M ruoyi-fastapi-backend/container/providers.py
+ M ruoyi-fastapi-backend/middlewares/trace_middleware/span.py
+ M ruoyi-fastapi-backend/module_admin/annotation/log_annotation.py
+ M ruoyi-fastapi-backend/module_admin/controller/protocol_controller.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/dept_vo.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/job_vo.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/project_vo.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
+ M ruoyi-fastapi-backend/module_admin/repository/base_repository.py
+ M ruoyi-fastapi-backend/module_admin/service/protocol_service.py
+ M ruoyi-fastapi-backend/module_generator/repository/gen_repository.py
+ M ruoyi-fastapi-backend/module_generator/service/gen_service.py
+ M ruoyi-fastapi-backend/module_generator/templates/vue/v3/index-tree.vue.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/vue/v3/index.vue.jinja2
+ M ruoyi-fastapi-backend/module_task/__init__.py
+ M ruoyi-fastapi-backend/modules/identity/api/login_controller.py
+ M ruoyi-fastapi-backend/modules/identity/api/security_controller.py
+ M ruoyi-fastapi-backend/modules/identity/application/services/login_service.py
+ M ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py
+ M ruoyi-fastapi-backend/modules/project/api/project_controller.py
+ M ruoyi-fastapi-backend/modules/project/api/project_version_controller.py
+ M ruoyi-fastapi-backend/modules/project/application/services/project_service.py
+ M ruoyi-fastapi-backend/modules/project/application/services/project_topology_service.py
+ M ruoyi-fastapi-backend/modules/project/application/services/project_version_service.py
+ M ruoyi-fastapi-backend/modules/project/infrastructure/project_repository.py
+ M ruoyi-fastapi-backend/modules/project/infrastructure/project_version_repository.py
+ M ruoyi-fastapi-backend/modules/registry.py
+ M ruoyi-fastapi-backend/modules/scheduler/api/job_controller.py
+ M ruoyi-fastapi-backend/modules/scheduler/application/job_log_service.py
+ M ruoyi-fastapi-backend/modules/scheduler/application/job_service.py
+ M ruoyi-fastapi-backend/modules/scheduler/infrastructure/job_repository.py
+ M ruoyi-fastapi-backend/modules/system/api/dept_controller.py
+ M ruoyi-fastapi-backend/modules/system/api/menu_controller.py
+ M ruoyi-fastapi-backend/modules/system/api/user_controller.py
+ M ruoyi-fastapi-backend/modules/system/application/commands/dept_commands.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/command/dept_command_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/config_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/dept_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/dict_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/menu_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/notice_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/post_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/role_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/services/cache_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/config_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/dept_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/dict_data_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/dict_type_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/menu_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/notice_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/post_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/server_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/user_service.py
+ M ruoyi-fastapi-backend/modules/system/infrastructure/dept_repository.py
+ M ruoyi-fastapi-backend/modules/system/infrastructure/dict_repository.py
+ M ruoyi-fastapi-backend/modules/system/infrastructure/user_repository.py
+ M ruoyi-fastapi-backend/modules/system/tests/test_dept_write_commands.py
+ M ruoyi-fastapi-backend/modules/system/tests/test_post_read_queries.py
+ M ruoyi-fastapi-backend/modules/system/tests/test_user_write_commands.py
+ M ruoyi-fastapi-backend/ports/external.py
+ M ruoyi-fastapi-backend/ports/repositories.py
+ M ruoyi-fastapi-backend/ports/services.py
+ M ruoyi-fastapi-backend/requirements-pg.txt
+ M ruoyi-fastapi-backend/requirements.txt
+ M ruoyi-fastapi-backend/scripts/internal/db_workflow/schema_apply_atlas.py
+ M ruoyi-fastapi-backend/server.py
+ M ruoyi-fastapi-backend/tests/conftest.py
+ M ruoyi-fastapi-backend/tests/fakes/external_fakes.py
+ M ruoyi-fastapi-backend/tests/integration/conftest.py
+ M ruoyi-fastapi-backend/tests/integration/test_dept_management.py
+ M ruoyi-fastapi-backend/tests/integration/test_error_handling_rfc7807.py
+ M ruoyi-fastapi-backend/tests/integration/test_menu_management.py
+ M ruoyi-fastapi-backend/tests/integration/test_project_integration.py
+ M ruoyi-fastapi-backend/tests/integration/test_success_contract_responses.py
+ M ruoyi-fastapi-backend/tests/integration/test_system_cqrs_cutover.py
+ M ruoyi-fastapi-backend/tests/integration/test_user_management.py
+ M ruoyi-fastapi-backend/tests/test_migrations.py
+ M ruoyi-fastapi-backend/tests/unit/controllers/test_login_controller_refresh.py
+ M ruoyi-fastapi-backend/tests/unit/controllers/test_simulation_controller.py
+ M ruoyi-fastapi-backend/tests/unit/module_generator/test_gen_table_paging.py
+ M ruoyi-fastapi-backend/tests/unit/security/test_sql_injection.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_config_service.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_dept_service.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_dict_service.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_security_token_service.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_user_service.py
+ D ruoyi-fastapi-backend/utils/count_cache.py
+ M ruoyi-fastapi-backend/utils/page_util.py
+ M ruoyi-fastapi-frontend/package.json
+ M ruoyi-fastapi-frontend/src/api/_generated/index.ts
+ M ruoyi-fastapi-frontend/src/api/_generated/sdk.gen.ts
+ M ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
+ M ruoyi-fastapi-frontend/src/api/login.ts
+ M ruoyi-fastapi-frontend/src/api/monitor/cache.ts
+ M ruoyi-fastapi-frontend/src/api/monitor/server.ts
+ M ruoyi-fastapi-frontend/src/api/project/project.ts
+ M ruoyi-fastapi-frontend/src/api/project/version.ts
+ M ruoyi-fastapi-frontend/src/components/business/Protocol/ProtocolFormDrawer.vue
+ M ruoyi-fastapi-frontend/src/components/ui/Editor/index.vue
+ M ruoyi-fastapi-frontend/src/components/ui/FileUpload/index.vue
+ M ruoyi-fastapi-frontend/src/components/ui/FormDialog/index.ts
+ M ruoyi-fastapi-frontend/src/components/ui/ImageUpload/index.vue
+ M ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts
+ M ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts
+ M ruoyi-fastapi-frontend/src/mocks/handlers/project.ts
+ M ruoyi-fastapi-frontend/src/mocks/handlers/user.ts
+ M ruoyi-fastapi-frontend/src/mocks/store/datasource.ts
+ M ruoyi-fastapi-frontend/src/mocks/utils/request.ts
+ M ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.test.ts
+ M ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.ts
+ M ruoyi-fastapi-frontend/src/store/modules/user.login.test.ts
+ M ruoyi-fastapi-frontend/src/store/modules/user.ts
+ M ruoyi-fastapi-frontend/src/utils/auth.ts
+ M ruoyi-fastapi-frontend/src/utils/editor-read.ts
+ M ruoyi-fastapi-frontend/src/utils/http.ts
+ M ruoyi-fastapi-frontend/src/views/login.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/cache/list.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/druid/index.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/server/index.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/NodeEditDrawer.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/ProjectFormDialog.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/ProtocolConfigDrawer.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/VersionCloneDialog.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/VersionExportDialog.vue
+ D ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmPanelFloating.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/components/BandwidthChartPanel.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/components/DataInjectionPanel.vue
+ D ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultBoardFloating.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/components/TimingLatencyPanel.vue
+ M ruoyi-fastapi-frontend/src/views/project/simulation/composables/useSimulationWebSocket.ts
+ M ruoyi-fastapi-frontend/src/views/project/simulation/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/role/components/RoleDataScopeDrawer.vue
+ M ruoyi-fastapi-frontend/src/views/system/user/profile/index.vue
+ M ruoyi-fastapi-frontend/src/views/tool/gen/importTable.vue
+ M ruoyi-fastapi-frontend/src/views/tool/swagger/index.vue
+ M ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts
+ M ruoyi-fastapi-frontend/tests/unit/components/RemainingEditorReadLifecycle.test.ts
+ M ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts
+ M ruoyi-fastapi-frontend/vite.config.ts
+ M ruoyi-fastapi-frontend/vite/zxui-theme-packages.ts
+ M ruoyi-fastapi-frontend/yarn.lock
+ M shared/openapi.json
+?? .agents/
+?? .cursor/handoffs/
+?? docs/plans/2026-09-23-zxui-theme-cascade-and-business-shell.md
+?? docs/plans/2026-09-26-zxui-business-theme-audit.md
+?? docs/plans/2026-09-26-zxui-list-toolbar.md
+?? docs/plans/2026-09-26-zxui-priority-fixes.md
+?? docs/plans/2026-09-26-zxui-table-density.md
+?? docs/plans/2026-09-26-zxui-vite-theme-deployment.md
+?? docs/plans/2026-09-27-third-party-density.md
+?? docs/plans/2026-09-27-zxui-remaining-theme-convergence.md
+?? docs/plans/2026-09-28-zxui-live-theme-followup.md
+?? docs/plans/2026-10-12-zxui-business-theme-parity.md
+?? docs/plans/2026-10-13-zxui-theme-consumption-recheck.md
+?? docs/plans/2026-10-15-http-independent-requests.md
+?? docs/plans/2026-10-15-http-parameter-semantics.md
+?? docs/plans/2026-10-16-business-operation-pending.md
+?? docs/plans/2026-10-16-count-consistency.md
+?? docs/plans/2026-10-16-dept-write-contract.md
+?? docs/plans/2026-10-16-http-error-classification.md
+?? docs/plans/2026-10-16-http-observer-isolation.md
+?? docs/plans/2026-10-16-http-preparation-errors.md
+?? docs/plans/2026-10-16-job-write-contract.md
+?? docs/plans/2026-10-16-list-export-query-parity.md
+?? docs/plans/2026-10-16-user-edit-read-lifecycle.md
+?? docs/plans/2026-10-16-user-excel-import.md
+?? docs/plans/2026-10-16-user-role-write-contract.md
+?? docs/plans/2026-10-18-session-renewal.md
+?? docs/plans/2026-10-19-historical-api-page-revalidation.md
+?? docs/plans/2026-10-19-pending-api-page-acceptance.md
+?? docs/plans/2026-10-19-remaining-api-page-acceptance.md
+?? docs/plans/2026-10-19-upload-stream-session.md
+?? docs/reports/2026-09-23-zxui-theme-cascade-audit.md
+?? docs/reports/2026-09-26-enterprise-display-scaling-research.md
+?? docs/reports/2026-09-26-zxui-business-theme-audit.md
+?? docs/reports/2026-09-26-zxui-list-toolbar.md
+?? docs/reports/2026-09-26-zxui-priority-fixes.md
+?? docs/reports/2026-09-26-zxui-ruoyi-display-scaling-assessment.md
+?? docs/reports/2026-09-26-zxui-table-density.md
+?? docs/reports/2026-09-26-zxui-vite-theme-deployment.md
+?? docs/reports/2026-09-27-third-party-density.md
+?? docs/reports/2026-09-27-zxui-remaining-theme-convergence.md
+?? docs/reports/2026-09-28-zxui-button-disabled-foreground.md
+?? docs/reports/2026-09-28-zxui-density-commit.md
+?? docs/reports/2026-09-28-zxui-live-theme-followup.md
+?? docs/reports/2026-10-12-zxui-business-theme-parity.md
+?? docs/reports/2026-10-13-message-rich-content-refinement.md
+?? docs/reports/2026-10-13-message-visual-validation.md
+?? docs/reports/2026-10-13-notification-review.md
+?? docs/reports/2026-10-13-system-messagebox-review.md
+?? docs/reports/2026-10-13-zxui-message-review.md
+?? docs/reports/2026-10-14-page-agent-integration-assessment.md
+?? docs/reports/2026-10-15-http-independent-requests.md
+?? docs/reports/2026-10-15-http-parameter-semantics.md
+?? docs/reports/2026-10-16-business-operation-pending.md
+?? docs/reports/2026-10-16-count-consistency.md
+?? docs/reports/2026-10-16-dept-write-contract.md
+?? docs/reports/2026-10-16-detail-resource-contract.md
+?? docs/reports/2026-10-16-dict-pagination-order.md
+?? docs/reports/2026-10-16-disabled-user-create.md
+?? docs/reports/2026-10-16-editor-read-lifecycle.md
+?? docs/reports/2026-10-16-http-error-classification.md
+?? docs/reports/2026-10-16-http-observer-isolation.md
+?? docs/reports/2026-10-16-http-preparation-errors.md
+?? docs/reports/2026-10-16-http-retry-boundaries.md
+?? docs/reports/2026-10-16-job-write-contract.md
+?? docs/reports/2026-10-16-legacy-download-convergence.md
+?? docs/reports/2026-10-16-list-export-query-parity.md
+?? docs/reports/2026-10-16-remaining-editor-read-lifecycle.md
+?? docs/reports/2026-10-16-role-authorization-contract.md
+?? docs/reports/2026-10-16-sys-post-generator-config.md
+?? docs/reports/2026-10-16-user-edit-fields.md
+?? docs/reports/2026-10-16-user-edit-read-lifecycle.md
+?? docs/reports/2026-10-16-user-excel-import.md
+?? docs/reports/2026-10-16-user-query-export.md
+?? docs/reports/2026-10-16-user-role-write-contract.md
+?? docs/reports/2026-10-17-zxui-font-chunk.md
+?? docs/reports/2026-10-18-session-renewal.md
+?? docs/reports/2026-10-19-corrupt-excel-import.md
+?? docs/reports/2026-10-19-historical-api-page-revalidation.md
+?? docs/reports/2026-10-19-pending-api-page-acceptance.md
+?? docs/reports/2026-10-19-remaining-api-page-acceptance.md
+?? docs/reports/2026-10-19-upload-stream-session.md
+?? docs/reports/assets/
+?? docs/reports/evidence/2026-09-26-zxui-list-toolbar/
+?? docs/reports/evidence/2026-09-26-zxui-priority-fixes/
+?? docs/reports/evidence/2026-09-26-zxui-table-density/
+?? docs/reports/evidence/2026-09-26-zxui-vite-theme-deployment/
+?? docs/reports/evidence/2026-09-27-third-party-density/
+?? docs/reports/evidence/2026-09-27-zxui-remaining-theme-convergence/
+?? docs/reports/evidence/2026-09-28-zxui-button-disabled/
+?? docs/reports/evidence/2026-09-28-zxui-live-theme-followup/
+?? docs/reports/evidence/2026-10-12-zxui-business-theme-parity/
+?? docs/reports/evidence/2026-10-15-http-independent-requests/
+?? docs/reports/evidence/2026-10-15-http-parameter-semantics/
+?? docs/reports/evidence/2026-10-16-business-operation-pending/
+?? docs/reports/evidence/2026-10-16-count-consistency/
+?? docs/reports/evidence/2026-10-16-dept-write-contract/
+?? docs/reports/evidence/2026-10-16-detail-resource-contract/
+?? docs/reports/evidence/2026-10-16-dict-pagination-order/
+?? docs/reports/evidence/2026-10-16-disabled-user-create/
+?? docs/reports/evidence/2026-10-16-editor-read-lifecycle/
+?? docs/reports/evidence/2026-10-16-http-error-classification/
+?? docs/reports/evidence/2026-10-16-http-observer-isolation/
+?? docs/reports/evidence/2026-10-16-http-preparation-errors/
+?? docs/reports/evidence/2026-10-16-http-retry-boundaries/
+?? docs/reports/evidence/2026-10-16-job-write-contract/
+?? docs/reports/evidence/2026-10-16-legacy-download-convergence/
+?? docs/reports/evidence/2026-10-16-list-export-query-parity/
+?? docs/reports/evidence/2026-10-16-remaining-editor-read-lifecycle/
+?? docs/reports/evidence/2026-10-16-role-authorization-contract/
+?? docs/reports/evidence/2026-10-16-sys-post-generator-config/
+?? docs/reports/evidence/2026-10-16-user-edit-fields/
+?? docs/reports/evidence/2026-10-16-user-edit-read-lifecycle/
+?? docs/reports/evidence/2026-10-16-user-excel-import/
+?? docs/reports/evidence/2026-10-16-user-query-export/
+?? docs/reports/evidence/2026-10-16-user-role-write-contract/
+?? docs/reports/evidence/2026-10-19-corrupt-excel-import/
+?? docs/reports/evidence/2026-10-19-historical-api-page-revalidation/
+?? docs/reports/evidence/2026-10-19-pending-api-page-acceptance/
+?? docs/reports/evidence/2026-10-19-remaining-api-page-acceptance/
+?? docs/reports/evidence/2026-10-19-upload-stream-session/
+?? docs/reports/evidence/2026-10-19-user-role-route-404/
+?? docs/reports/zxui-theme-audit-2026-09-26/
+?? docs/specs/zxui-display-scaling/
+?? ruoyi-fastapi-backend/alembic/versions/20261017_add_dashboard.py
+?? ruoyi-fastapi-backend/module_admin/entity/do/dashboard_do.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/dashboard_vo.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/dept_write_vo.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/job_write_vo.py
+?? ruoyi-fastapi-backend/module_admin/entity/vo/user_write_vo.py
+?? ruoyi-fastapi-backend/modules/system/api/dashboard_controller.py
+?? ruoyi-fastapi-backend/modules/system/application/services/dashboard_service.py
+?? ruoyi-fastapi-backend/modules/system/infrastructure/dashboard_repository.py
+?? ruoyi-fastapi-backend/modules/system/tests/test_dashboard_persistence.py
+?? ruoyi-fastapi-backend/tests/fixtures/
+?? ruoyi-fastapi-backend/tests/integration/security/
+?? ruoyi-fastapi-backend/tests/integration/test_failed_login_log_persistence.py
+?? ruoyi-fastapi-backend/tests/integration/test_isolated_monitor_cleanup.py
+?? ruoyi-fastapi-backend/tests/integration/test_local_mysql_codegen_ddl.py
+?? ruoyi-fastapi-backend/tests/unit/controllers/test_dept_write_contract.py
+?? ruoyi-fastapi-backend/tests/unit/controllers/test_health_resource_responses.py
+?? ruoyi-fastapi-backend/tests/unit/controllers/test_job_write_contract.py
+?? ruoyi-fastapi-backend/tests/unit/controllers/test_user_role_write_contract.py
+?? ruoyi-fastapi-backend/tests/unit/module_generator/test_create_table_boundary.py
+?? ruoyi-fastapi-backend/tests/unit/module_generator/test_editor_templates.py
+?? ruoyi-fastapi-backend/tests/unit/repositories/test_dept_repository.py
+?? ruoyi-fastapi-backend/tests/unit/repositories/test_user_repository.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_cache_delete_boundary.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_dept_write_boundaries.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_detail_resource_contract.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_dict_data_export.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_job_writes.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_project_aggregate_boundaries.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_protocol_import_validation.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_role_write_relations.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_scheduler_execution_logs.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_server_disk_usage.py
+?? ruoyi-fastapi-backend/tests/unit/services/test_user_import.py
+?? ruoyi-fastapi-backend/tests/unit/test_log_annotation.py
+?? ruoyi-fastapi-backend/tests/unit/utils/test_page_count_consistency.py
+?? ruoyi-fastapi-frontend/src/api/dashboard.ts
+?? ruoyi-fastapi-frontend/src/api/monitor/database.ts
+?? ruoyi-fastapi-frontend/src/components/business/Dashboard/
+?? ruoyi-fastapi-frontend/src/composables/
+?? ruoyi-fastapi-frontend/src/mocks/contracts/coverage/registry/dashboard.json
+?? ruoyi-fastapi-frontend/src/utils/session.test.ts
+?? ruoyi-fastapi-frontend/src/utils/session.ts
+?? ruoyi-fastapi-frontend/src/views/monitor/server/dashboard.vue
+?? ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmDashboardPanel.vue
+?? ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultBoardPanel.vue
+?? ruoyi-fastapi-frontend/src/views/project/simulation/dashboard/
+?? ruoyi-fastapi-frontend/tests/unit/api/cache-key.test.ts
+?? ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts
+?? ruoyi-fastapi-frontend/tests/unit/components/RoleDataScopeDrawer.test.ts
+?? ruoyi-fastapi-frontend/tests/unit/components/VersionCloneFeedback.test.ts
+?? ruoyi-fastapi-frontend/tests/unit/components/VersionExportDialog.test.ts
+?? ruoyi-fastapi-frontend/tests/unit/components/WebSocketSession.test.ts
+?? ruoyi-fastapi-frontend/tests/unit/components/dashboard-chart-settings.test.ts
+?? ruoyi-fastapi-frontend/vendor/zxio-chart-2.0.0-dashboard-task11.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-convergence.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-task12-accepted.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0-final.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0-final2.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0-final4.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-p0.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-schema-card.20261019.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-schema-card.final.20261019.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-widgets-0.1.0-dashboard-task12-accepted.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-widgets-0.1.0-schema-card.20261019.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-widgets-0.1.0-schema-card.final.20261019.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-independent.20261015.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-observers.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-parameters.20261015.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-preparation.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-query.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-http-1.0.0-retry.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-air-gray-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-army-pine-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-dashboard-task11.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-display.20260928.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-overlay-validation.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.1.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-query.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-query.final.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-source.20260927.1.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-default-2.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-defense-green-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-factory-blue-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-industrial-blue-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-pap-olive-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-rocket-moss-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-tech-blue-1.0.0-vite.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-vue-query-1.0.0-phase-a.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-checks.final4.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-divider.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-font-chunk.final2.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-footprint.final2.20261017.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-layout.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-overlay-layout.20261013.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-query.final.20261016.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-remaining.20260927.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-table.20260926.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-toolbar.20260926.1.tgz

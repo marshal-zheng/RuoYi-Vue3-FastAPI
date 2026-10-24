@@ -1,0 +1,650 @@
+[
+  {
+    "module": "config",
+    "id": 81,
+    "invalidPosts": 0,
+    "create": 201,
+    "cancelRestored": "beta",
+    "update": 200,
+    "readback": {
+      "value": "beta",
+      "keyValue": "beta"
+    },
+    "filter": {
+      "url": "zxqa_cfg_mvenpxba",
+      "total": 1
+    },
+    "export": "config-owned.xlsx",
+    "clearTotal": 8,
+    "earlyFillProbe": "input was filled before detail readiness; request contained old alpha; excluded from update signoff"
+  },
+  {
+    "module": "dept",
+    "id": 197,
+    "invalidPosts": 0,
+    "create": 201,
+    "update": 200,
+    "readback": {
+      "name": "zxqa_dept_mvenpxba",
+      "leader": "QA Updated",
+      "parentId": 100
+    },
+    "cancelRestored": "QA Updated"
+  },
+  {
+    "module": "post",
+    "id": 31,
+    "invalidPosts": 0,
+    "create": 201,
+    "dirtyContinue": "discard-me",
+    "cancelRestored": "",
+    "update": 200,
+    "readback": {
+      "name": "zxqa_post_mvenpxba",
+      "remark": "QA Updated"
+    },
+    "duplicateStatus": 409,
+    "feedbackAfter": {
+      "inline": 1,
+      "global": 0
+    },
+    "exportBeforeFix": "post-reference-readonly.xlsx",
+    "export": "post-reference-readonly-after.xlsx",
+    "exportReferenceRecord": 1
+  },
+  {
+    "module": "menu",
+    "id": 1078,
+    "invalidPosts": 0,
+    "create": 201,
+    "update": 200,
+    "readback": {
+      "name": "zxqa_menu_mvenpxba_edited",
+      "icon": "system",
+      "visible": "1"
+    },
+    "notFound": 404,
+    "retryRecovered": true,
+    "singleError": true,
+    "delayedClose": {
+      "held": true,
+      "newName": "",
+      "canceled": [
+        "net::ERR_ABORTED"
+      ],
+      "control": "header close; footer disabled during read"
+    }
+  },
+  {
+    "module": "dictType",
+    "id": 131,
+    "invalidPosts": 0,
+    "create": 201,
+    "update": 200,
+    "readback": {
+      "name": "zxqa_dict_mvenpxba",
+      "type": "zxqa_dict_mvenpxba",
+      "remark": "QA Updated"
+    },
+    "export": "dict-type-reference-readonly.xlsx",
+    "exportReferenceRecord": 1
+  },
+  {
+    "module": "dictData",
+    "id": 208,
+    "invalidPosts": 0,
+    "create": 201,
+    "update": 200,
+    "readback": {
+      "label": "zxqa_label_mvenpxba",
+      "value": "qa_value_updated",
+      "lookup": {
+        "items": [
+          {
+            "dictCode": 208,
+            "dictSort": 0,
+            "dictLabel": "zxqa_label_mvenpxba",
+            "dictValue": "qa_value_updated",
+            "dictType": "zxqa_dict_mvenpxba",
+            "cssClass": null,
+            "listClass": "default",
+            "isDefault": "N",
+            "status": "0",
+            "createBy": "zxqa_r_mvenpxba",
+            "createTime": "2026-10-19T04:09:02",
+            "updateBy": "zxqa_r_mvenpxba",
+            "updateTime": "2026-10-19T04:09:02.233824",
+            "remark": null
+          }
+        ],
+        "pager": {
+          "mode": "collection",
+          "total": 1,
+          "page": 1,
+          "size": 10
+        },
+        "list": [
+          {
+            "dictCode": 208,
+            "dictSort": 0,
+            "dictLabel": "zxqa_label_mvenpxba",
+            "dictValue": "qa_value_updated",
+            "dictType": "zxqa_dict_mvenpxba",
+            "cssClass": null,
+            "listClass": "default",
+            "isDefault": "N",
+            "status": "0",
+            "createBy": "zxqa_r_mvenpxba",
+            "createTime": "2026-10-19T04:09:02",
+            "updateBy": "zxqa_r_mvenpxba",
+            "updateTime": "2026-10-19T04:09:02.233824",
+            "remark": null
+          }
+        ]
+      }
+    },
+    "export": "dict-data-owned-after.xlsx",
+    "exportBeforeFix": "dict-data-owned.xlsx",
+    "exportFixture": "API-created type132/data209; real page download"
+  },
+  {
+    "module": "notice",
+    "id": 12,
+    "invalidPosts": 0,
+    "create": 201,
+    "update": 200,
+    "notFoundRecovery": {
+      "inline": [
+        "通知公告不存在重试"
+      ],
+      "notifications": [],
+      "saveDisabled": true
+    },
+    "readback": {
+      "title": "zxqa_notice_mvenpxba",
+      "content": "<p>QA notice updated</p>"
+    }
+  },
+  {
+    "module": "project",
+    "preFixProjectId": 13,
+    "projectId": 14,
+    "importedProjectId": 15,
+    "create": 201,
+    "update": 200,
+    "versionBinding": {
+      "created": {
+        "projectId": 14,
+        "versionId": 14
+      },
+      "saveStatus": 200,
+      "savePayload": {
+        "projectId": 14,
+        "versionId": 14,
+        "topologyData": {
+          "version": "3.9.0",
+          "savedAt": "2026-10-19T03:20:26.555Z",
+          "graph": {
+            "cells": [
+              {
+                "position": {
+                  "x": 240,
+                  "y": 270
+                },
+                "size": {
+                  "width": 102,
+                  "height": 87
+                },
+                "view": "vue-shape-view",
+                "shape": "device-port-node",
+                "effect": [
+                  "data"
+                ],
+                "ports": {
+                  "groups": {
+                    "top": {
+                      "position": {
+                        "name": "absolute",
+                        "args": {
+                          "x": "50%",
+                          "y": 0
+                        }
+                      },
+                      "attrs": {
+                        "circle": {
+                          "r": 8,
+                          "magnet": "passive",
+                          "stroke": "var(--zx-semantic-accent-base)",
+                          "strokeWidth": 2,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "opacity": 0,
+                          "data-port-type": "STANDARD"
+                        },
+                        "portBody": {
+                          "width": 24,
+                          "height": 12,
+                          "x": -12,
+                          "y": -6,
+                          "magnet": true,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "strokeWidth": 1,
+                          "cursor": "crosshair",
+                          "rx": 0,
+                          "ry": 0
+                        },
+                        "portLabel": {
+                          "text": "",
+                          "fontSize": 7,
+                          "fontFamily": "Arial, sans-serif",
+                          "fontWeight": 500,
+                          "fill": "var(--zx-semantic-surface-field-on-text)",
+                          "textAnchor": "middle",
+                          "textVerticalAnchor": "middle",
+                          "x": 0,
+                          "y": 0,
+                          "pointerEvents": "none"
+                        }
+                      },
+                      "markup": [
+                        {
+                          "tagName": "rect",
+                          "selector": "portBody"
+                        },
+                        {
+                          "tagName": "text",
+                          "selector": "portLabel"
+                        }
+                      ]
+                    },
+                    "bottom": {
+                      "position": {
+                        "name": "absolute",
+                        "args": {
+                          "x": "50%",
+                          "y": 0
+                        }
+                      },
+                      "attrs": {
+                        "circle": {
+                          "r": 8,
+                          "magnet": true,
+                          "stroke": "var(--zx-semantic-accent-base)",
+                          "strokeWidth": 2,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "opacity": 0,
+                          "data-port-type": "STANDARD"
+                        },
+                        "portBody": {
+                          "width": 24,
+                          "height": 12,
+                          "x": -12,
+                          "y": -6,
+                          "magnet": true,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "strokeWidth": 1,
+                          "cursor": "crosshair",
+                          "rx": 0,
+                          "ry": 0
+                        },
+                        "portLabel": {
+                          "text": "",
+                          "fontSize": 7,
+                          "fontFamily": "Arial, sans-serif",
+                          "fontWeight": 500,
+                          "fill": "var(--zx-semantic-surface-field-on-text)",
+                          "textAnchor": "middle",
+                          "textVerticalAnchor": "middle",
+                          "x": 0,
+                          "y": 0,
+                          "pointerEvents": "none"
+                        }
+                      },
+                      "markup": [
+                        {
+                          "tagName": "rect",
+                          "selector": "portBody"
+                        },
+                        {
+                          "tagName": "text",
+                          "selector": "portLabel"
+                        }
+                      ]
+                    },
+                    "left": {
+                      "position": {
+                        "name": "absolute",
+                        "args": {
+                          "x": 0,
+                          "y": "50%"
+                        }
+                      },
+                      "attrs": {
+                        "circle": {
+                          "r": 8,
+                          "magnet": true,
+                          "stroke": "var(--zx-semantic-accent-base)",
+                          "strokeWidth": 2,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "opacity": 0,
+                          "data-port-type": "STANDARD"
+                        },
+                        "portBody": {
+                          "width": 32,
+                          "height": 12,
+                          "x": -16,
+                          "y": -6,
+                          "magnet": true,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "strokeWidth": 1,
+                          "cursor": "crosshair",
+                          "rx": 0,
+                          "ry": 0
+                        },
+                        "portLabel": {
+                          "text": "",
+                          "fontSize": 7,
+                          "fontFamily": "Arial, sans-serif",
+                          "fontWeight": 500,
+                          "fill": "var(--zx-semantic-surface-field-on-text)",
+                          "textAnchor": "middle",
+                          "textVerticalAnchor": "middle",
+                          "x": 0,
+                          "y": 0,
+                          "pointerEvents": "none"
+                        }
+                      },
+                      "markup": [
+                        {
+                          "tagName": "rect",
+                          "selector": "portBody"
+                        },
+                        {
+                          "tagName": "text",
+                          "selector": "portLabel"
+                        }
+                      ]
+                    },
+                    "right": {
+                      "position": {
+                        "name": "absolute",
+                        "args": {
+                          "x": 0,
+                          "y": "50%"
+                        }
+                      },
+                      "attrs": {
+                        "circle": {
+                          "r": 8,
+                          "magnet": true,
+                          "stroke": "var(--zx-semantic-accent-base)",
+                          "strokeWidth": 2,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "opacity": 0,
+                          "data-port-type": "STANDARD"
+                        },
+                        "portBody": {
+                          "width": 32,
+                          "height": 12,
+                          "x": -16,
+                          "y": -6,
+                          "magnet": true,
+                          "fill": "var(--zx-semantic-surface-field-fill)",
+                          "strokeWidth": 1,
+                          "cursor": "crosshair",
+                          "rx": 0,
+                          "ry": 0
+                        },
+                        "portLabel": {
+                          "text": "",
+                          "fontSize": 7,
+                          "fontFamily": "Arial, sans-serif",
+                          "fontWeight": 500,
+                          "fill": "var(--zx-semantic-surface-field-on-text)",
+                          "textAnchor": "middle",
+                          "textVerticalAnchor": "middle",
+                          "x": 0,
+                          "y": 0,
+                          "pointerEvents": "none"
+                        }
+                      },
+                      "markup": [
+                        {
+                          "tagName": "rect",
+                          "selector": "portBody"
+                        },
+                        {
+                          "tagName": "text",
+                          "selector": "portLabel"
+                        }
+                      ]
+                    }
+                  },
+                  "items": [
+                    {
+                      "id": "port-1",
+                      "group": "right",
+                      "args": {
+                        "x": 86,
+                        "y": 43.5
+                      },
+                      "attrs": {
+                        "portBody": {
+                          "stroke": "#10b981"
+                        },
+                        "portLabel": {
+                          "text": "LAN"
+                        }
+                      },
+                      "position": {
+                        "name": "absolute"
+                      }
+                    }
+                  ]
+                },
+                "id": "7137e5f1-47e7-421b-a70c-16516b2489bd",
+                "data": {
+                  "type": "root-node",
+                  "layoutDirection": "horizontal",
+                  "collapsed": false,
+                  "properties": {
+                    "content": {
+                      "id": "1792380019924qln1q5s1v",
+                      "label": "新设备"
+                    },
+                    "weight": 50,
+                    "otherData": {},
+                    "parentNodeId": null,
+                    "customType": "",
+                    "customProperties": "",
+                    "unit": "",
+                    "priority": "",
+                    "defaultValue": "",
+                    "notes": "",
+                    "level": 1
+                  },
+                  "id": "1792380019924jzje5c38q",
+                  "label": "新设备",
+                  "status": "default",
+                  "description": "设备",
+                  "originalData": {
+                    "name": "新设备",
+                    "value": "设备",
+                    "deviceId": 1
+                  },
+                  "deviceId": 1,
+                  "ports": [
+                    {
+                      "id": "port-1",
+                      "interfaceId": 1,
+                      "interfaceName": "LAN",
+                      "interfaceType": "LAN",
+                      "busType": "LAN",
+                      "direction": "bidirectional",
+                      "group": "right",
+                      "description": "ZXUI 本地端口",
+                      "color": "#10b981",
+                      "dataRate": "",
+                      "protocolType": "",
+                      "protocolConfig": {},
+                      "messageConfig": {},
+                      "params": {
+                        "port": 8080,
+                        "protocol": "TCP",
+                        "ipAddress": "192.168.1.100"
+                      }
+                    }
+                  ],
+                  "nodeType": "device-port-node",
+                  "level": 1,
+                  "otherData": {},
+                  "customType": "",
+                  "customProperties": "",
+                  "unit": "",
+                  "priority": "",
+                  "defaultValue": "",
+                  "notes": "",
+                  "hasChildren": false
+                },
+                "draggable": true,
+                "locked": false,
+                "zIndex": 1
+              }
+            ]
+          },
+          "nodes": [
+            {
+              "id": "7137e5f1-47e7-421b-a70c-16516b2489bd",
+              "data": {
+                "type": "root-node",
+                "layoutDirection": "horizontal",
+                "collapsed": false,
+                "properties": {
+                  "content": {
+                    "id": "1792380019924qln1q5s1v",
+                    "label": "新设备"
+                  },
+                  "weight": 50,
+                  "otherData": {},
+                  "parentNodeId": null,
+                  "customType": "",
+                  "customProperties": "",
+                  "unit": "",
+                  "priority": "",
+                  "defaultValue": "",
+                  "notes": "",
+                  "level": 1
+                },
+                "id": "1792380019924jzje5c38q",
+                "label": "新设备",
+                "status": "default",
+                "description": "设备",
+                "originalData": {
+                  "name": "新设备",
+                  "value": "设备",
+                  "deviceId": 1
+                },
+                "deviceId": 1,
+                "ports": [
+                  {
+                    "id": "port-1",
+                    "interfaceId": 1,
+                    "interfaceName": "LAN",
+                    "interfaceType": "LAN",
+                    "busType": "LAN",
+                    "direction": "bidirectional",
+                    "group": "right",
+                    "description": "ZXUI 本地端口",
+                    "color": "#10b981",
+                    "dataRate": "",
+                    "protocolType": "",
+                    "protocolConfig": {},
+                    "messageConfig": {},
+                    "params": {
+                      "port": 8080,
+                      "protocol": "TCP",
+                      "ipAddress": "192.168.1.100"
+                    }
+                  }
+                ],
+                "nodeType": "device-port-node",
+                "level": 1,
+                "otherData": {},
+                "customType": "",
+                "customProperties": "",
+                "unit": "",
+                "priority": "",
+                "defaultValue": "",
+                "notes": "",
+                "hasChildren": false
+              }
+            }
+          ],
+          "edges": []
+        }
+      },
+      "readback": {
+        "versionId": 14,
+        "nodes": 1
+      }
+    },
+    "clone": {
+      "status": 201,
+      "versionId": 15,
+      "nodes": 1
+    },
+    "lock": 200,
+    "unlock": 200,
+    "exports": [
+      "version-owned.xml",
+      "version-owned-excel.zip",
+      "version-owned.doc",
+      "project-owned.zip"
+    ],
+    "import": {
+      "status": 200,
+      "projectId": 15,
+      "versions": [
+        {
+          "versionId": 16,
+          "versionNumber": "v1.0.0"
+        },
+        {
+          "versionId": 17,
+          "versionNumber": "v1.0.1"
+        }
+      ],
+      "visibleNodes": 1
+    },
+    "cancelRestored": "QA version bound topology",
+    "aggregateDeletionEvidence": "project-aggregate-after.json",
+    "batchExport": "project-cascade-batch.zip",
+    "alternateVersionApiEvidence": "version-api-only.json"
+  },
+  {
+    "module": "scheduler",
+    "id": 8,
+    "create": 201,
+    "update": 200,
+    "enable": 200,
+    "pause": 200,
+    "run": 202,
+    "executionLog": [
+      {
+        "id": 42,
+        "status": "0",
+        "message": "事件类型: JobExecutionEvent, 任务ID: 8, 任务名称: zxqa_job_mvenpxba, 计划执行于2026-10-19T04:30:44.383180+01:00"
+      },
+      {
+        "id": 38,
+        "status": "0",
+        "message": "事件类型: JobEvent, 任务ID: 8, 任务名称: zxqa_job_mvenpxba, 执行于2026-10-19 04:24:50"
+      },
+      {
+        "id": 37,
+        "status": "0",
+        "message": "事件类型: JobEvent, 任务ID: 8, 任务名称: zxqa_job_mvenpxba, 执行于2026-10-19 04:24:43"
+      }
+    ],
+    "export": "job-owned-logs-after.xlsx"
+  }
+]

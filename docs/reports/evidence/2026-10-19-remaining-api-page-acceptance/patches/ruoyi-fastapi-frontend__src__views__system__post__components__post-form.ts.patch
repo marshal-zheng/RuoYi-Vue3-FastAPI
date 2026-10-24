@@ -1,0 +1,35 @@
+--- baseline/ruoyi-fastapi-frontend/src/views/system/post/components/post-form.ts
++++ current/ruoyi-fastapi-frontend/src/views/system/post/components/post-form.ts
+@@ -1,5 +1,6 @@
+-import type { RuleFor, Values } from '@zxio/schema-form/form-create';
++import type { FieldIssue, RuleFor, Values } from '@zxio/schema-form/form-create';
+ import type { PostModel } from '@/api/_generated/types.gen';
++import { isProblemDetails, isRecord } from '@/types/http-contract';
+ 
+ export type PostValues = {
+   postName: string;
+@@ -122,3 +123,24 @@
+     ...(postId === undefined ? {} : { postId }),
+   };
+ }
++
++/** Server field identities are explicit; error messages are never parsed for routing. */
++export function postFieldIssues(error: unknown): FieldIssue[] {
++  if (
++    !isRecord(error) ||
++    !isProblemDetails(error.problem) ||
++    !Array.isArray(error.problem.errors)
++  ) {
++    return [];
++  }
++  const aliases: Record<string, keyof PostValues> = {
++    post_name: 'postName',
++    post_code: 'postCode',
++    post_sort: 'postSort',
++  };
++  return error.problem.errors.flatMap((issue) =>
++    isRecord(issue) && typeof issue.field === 'string' && typeof issue.message === 'string'
++      ? [{ field: aliases[issue.field] ?? issue.field, message: issue.message }]
++      : []
++  );
++}

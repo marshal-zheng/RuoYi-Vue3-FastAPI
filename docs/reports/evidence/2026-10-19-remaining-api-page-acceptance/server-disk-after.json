@@ -1,0 +1,83 @@
+[
+  {
+    "dirName": "/dev/disk3s1s1",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/）",
+    "total": "460.4GB",
+    "used": "17.2GB",
+    "free": "40.1GB",
+    "usage": "30.0%"
+  },
+  {
+    "dirName": "/dev/disk3s6",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/VM）",
+    "total": "460.4GB",
+    "used": "24.0KB",
+    "free": "40.1GB",
+    "usage": "0.0%"
+  },
+  {
+    "dirName": "/dev/disk3s2",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/Preboot）",
+    "total": "460.4GB",
+    "used": "15.1GB",
+    "free": "40.1GB",
+    "usage": "27.3%"
+  },
+  {
+    "dirName": "/dev/disk3s4",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/Update）",
+    "total": "460.4GB",
+    "used": "770.2MB",
+    "free": "40.1GB",
+    "usage": "1.8%"
+  },
+  {
+    "dirName": "/dev/disk1s2",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/xarts）",
+    "total": "500.0MB",
+    "used": "6.0MB",
+    "free": "478.8MB",
+    "usage": "1.2%"
+  },
+  {
+    "dirName": "/dev/disk1s1",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/iSCPreboot）",
+    "total": "500.0MB",
+    "used": "5.5MB",
+    "free": "478.8MB",
+    "usage": "1.1%"
+  },
+  {
+    "dirName": "/dev/disk1s3",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/Hardware）",
+    "total": "500.0MB",
+    "used": "4.9MB",
+    "free": "478.8MB",
+    "usage": "1.0%"
+  },
+  {
+    "dirName": "/dev/disk3s5",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/Data）",
+    "total": "460.4GB",
+    "used": "384.9GB",
+    "free": "40.1GB",
+    "usage": "90.6%"
+  },
+  {
+    "dirName": "/dev/disk3s1",
+    "sysTypeName": "apfs",
+    "typeName": "本地固定磁盘（/System/Volumes/Update/mnt1）",
+    "total": "460.4GB",
+    "used": "17.2GB",
+    "free": "40.1GB",
+    "usage": "30.0%"
+  }
+]

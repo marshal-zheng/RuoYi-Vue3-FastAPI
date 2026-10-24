@@ -1,0 +1,11 @@
+{
+  "archive": "zxio-http-1.0.0-preparation.20261016.tgz",
+  "sha256": "ba26957e31c606076ea94c584415389b9a8e1b8e9b66d4ae8e45c2b1bdb42162",
+  "packedFiles": 50,
+  "installedPayloadMatchesArchive": true,
+  "builtPayloadMatchesArchive": true,
+  "manifestSemanticallyEqual": true,
+  "manifestFormattingNormalizedByPackOrInstall": true,
+  "licenseFromRepositoryRoot": true,
+  "readmeMatchesSource": true
+}

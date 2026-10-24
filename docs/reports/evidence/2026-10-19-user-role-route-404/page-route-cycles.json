@@ -1,0 +1,26 @@
+{
+  "cycles": [
+    {
+      "cycle": 1,
+      "path": "http://127.0.0.1/system/user-auth/role/141",
+      "checked": true
+    },
+    {
+      "cycle": 2,
+      "path": "http://127.0.0.1/system/user-auth/role/141",
+      "checked": true
+    },
+    {
+      "cycle": 3,
+      "path": "http://127.0.0.1/system/user-auth/role/141",
+      "checked": true
+    }
+  ],
+  "slowMenuReloadAndClick": {
+    "path": "/system/user-auth/role/141",
+    "currentName": "AuthRole",
+    "hasAuth": true,
+    "notFound": false
+  },
+  "directReloadPassed": true
+}

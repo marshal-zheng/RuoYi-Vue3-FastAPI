@@ -1,0 +1,88 @@
+{
+  "status": 204,
+  "read": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "userId": 136,
+          "userName": "zxqa_i1_mveu4gpz",
+          "nickName": "验收导入一",
+          "email": "i1_mveu4gpz@example.com",
+          "phonenumber": "13800991342",
+          "status": "0",
+          "createTime": "2026-10-19T06:56:09",
+          "dept": {
+            "deptId": 103,
+            "parentId": 101,
+            "ancestors": "0,100,101",
+            "deptName": "研发部门",
+            "orderNum": 1,
+            "leader": "年糕",
+            "phone": "15888888888",
+            "email": "niangao@qq.com",
+            "status": "0",
+            "delFlag": "0",
+            "createBy": "admin",
+            "createTime": "2026-09-20T06:41:45",
+            "updateBy": "",
+            "updateTime": "2026-09-20T06:41:45"
+          }
+        },
+        {
+          "userId": 137,
+          "userName": "zxqa_i2_mveu4gpz",
+          "nickName": "验收导入二",
+          "email": "i2_mveu4gpz@example.com",
+          "phonenumber": "13800991343",
+          "status": "0",
+          "createTime": "2026-10-19T06:56:09",
+          "dept": {
+            "deptId": 103,
+            "parentId": 101,
+            "ancestors": "0,100,101",
+            "deptName": "研发部门",
+            "orderNum": 1,
+            "leader": "年糕",
+            "phone": "15888888888",
+            "email": "niangao@qq.com",
+            "status": "0",
+            "delFlag": "0",
+            "createBy": "admin",
+            "createTime": "2026-09-20T06:41:45",
+            "updateBy": "",
+            "updateTime": "2026-09-20T06:41:45"
+          }
+        },
+        {
+          "userId": 135,
+          "userName": "zxqa_u_mveu4gpz",
+          "nickName": "验收用户_mveu4gpz_已改",
+          "email": "mveu4gpz@example.com",
+          "phonenumber": "13800991341",
+          "status": "0",
+          "createTime": "2026-10-19T06:53:54",
+          "dept": {
+            "deptId": 100,
+            "parentId": 0,
+            "ancestors": "0",
+            "deptName": "集团总公司",
+            "orderNum": 0,
+            "leader": "年糕",
+            "phone": "15888888888",
+            "email": "niangao@qq.com",
+            "status": "0",
+            "delFlag": "0",
+            "createBy": "admin",
+            "createTime": "2026-09-20T06:41:45",
+            "updateBy": "",
+            "updateTime": "2026-09-20T06:41:45"
+          }
+        }
+      ],
+      "total": 3,
+      "page": 1,
+      "pageSize": 10
+    }
+  }
+}

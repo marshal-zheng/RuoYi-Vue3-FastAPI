@@ -1,0 +1,119 @@
+{
+  "status": 200,
+  "read": {
+    "status": 200,
+    "body": {
+      "data": {
+        "userId": 135,
+        "deptId": 100,
+        "userName": "zxqa_u_mveu4gpz",
+        "nickName": "验收用户_mveu4gpz_已改",
+        "userType": "00",
+        "email": "mveu4gpz@example.com",
+        "phonenumber": "13800991341",
+        "idCard": "",
+        "sex": "0",
+        "avatar": "",
+        "status": "0",
+        "delFlag": "0",
+        "loginIp": "",
+        "loginDate": null,
+        "createBy": "zxqa_h_mveu4gpz",
+        "createTime": "2026-10-19T06:53:54",
+        "updateBy": "zxqa_h_mveu4gpz",
+        "updateTime": "2026-10-19T06:54:15",
+        "remark": "",
+        "roleIds": "",
+        "postIds": "",
+        "dept": {
+          "deptId": 100,
+          "parentId": 0,
+          "ancestors": "0",
+          "deptName": "集团总公司",
+          "orderNum": 0,
+          "leader": "年糕",
+          "phone": "15888888888",
+          "email": "niangao@qq.com",
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45"
+        },
+        "role": []
+      },
+      "postIds": [],
+      "posts": [
+        {
+          "postId": 1,
+          "postCode": "ceo",
+          "postName": "董事长",
+          "postSort": 1,
+          "status": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45",
+          "remark": ""
+        },
+        {
+          "postId": 2,
+          "postCode": "se",
+          "postName": "项目经理",
+          "postSort": 2,
+          "status": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45",
+          "remark": ""
+        },
+        {
+          "postId": 3,
+          "postCode": "hr",
+          "postName": "人力资源",
+          "postSort": 3,
+          "status": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45",
+          "remark": ""
+        },
+        {
+          "postId": 4,
+          "postCode": "user",
+          "postName": "普通员工",
+          "postSort": 4,
+          "status": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45",
+          "remark": ""
+        }
+      ],
+      "roleIds": [],
+      "roles": [
+        {
+          "roleId": 2,
+          "roleName": "普通角色",
+          "roleKey": "common",
+          "roleSort": 2,
+          "dataScope": "2",
+          "menuCheckStrictly": true,
+          "deptCheckStrictly": true,
+          "status": "0",
+          "delFlag": "0",
+          "createBy": "admin",
+          "createTime": "2026-09-20T06:41:45",
+          "updateBy": "",
+          "updateTime": "2026-09-20T06:41:45",
+          "remark": "普通角色",
+          "admin": false
+        }
+      ]
+    }
+  }
+}

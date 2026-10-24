@@ -1,0 +1,10 @@
+--- baseline/ruoyi-fastapi-frontend/src/views/project/components/VersionExportDialog.vue
++++ current/ruoyi-fastapi-frontend/src/views/project/components/VersionExportDialog.vue
+@@ -1,6 +1,6 @@
+ <template>
+   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+-    <el-form ref="formRef" v-bind="formProps" label-position="left">
++    <el-form ref="formRef" :model="state.data" v-bind="formProps" label-position="left">
+       <FormGrid v-bind="layoutProps">
+         <el-form-item label="版本名称">
+           <span class="text-zx-surface-blocking-on-text">{{ state.data.versionName }}</span>

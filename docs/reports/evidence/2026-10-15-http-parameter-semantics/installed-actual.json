@@ -1,0 +1,88 @@
+{
+  "mode": "installed",
+  "axios": "1.20.0",
+  "transport": "JSDOM XMLHttpRequest through actual business modules to real FastAPI :8088",
+  "uiBoundary": "Feedback/loading/file-save entry points stubbed; no browser clicks",
+  "domainRecordsModified": false,
+  "results": [
+    {
+      "name": "real-login-through-URLSearchParams-body",
+      "ok": true,
+      "authenticated": true,
+      "mode": "axios",
+      "durationMs": 287
+    },
+    {
+      "name": "real-user-list-through-existing-business-API",
+      "ok": true,
+      "status": 200,
+      "rows": 1,
+      "queryPreserved": true,
+      "durationMs": 41
+    },
+    {
+      "name": "real-user-list-URLSearchParams-repeated-empty-and-timestamp",
+      "ok": true,
+      "status": 200,
+      "repeatedQueryKeys": true,
+      "emptyValue": true,
+      "timestampAdded": true,
+      "callerUnchanged": true,
+      "durationMs": 52
+    },
+    {
+      "name": "real-Excel-valid-form-independent-of-invalid-query",
+      "ok": true,
+      "status": 200,
+      "bytes": 5326,
+      "formAndQueryIndependent": true,
+      "loadingClosed": 1,
+      "feedbackCount": 0,
+      "durationMs": 80
+    },
+    {
+      "name": "real-Excel-URLSearchParams-form-and-query-repeated-keys",
+      "ok": true,
+      "status": 200,
+      "bytes": 5326,
+      "repeatedBodyAndQueryKeys": true,
+      "callerInputsUnchanged": true,
+      "loadingClosed": 1,
+      "durationMs": 76
+    },
+    {
+      "name": "real-Word-existing-export-API-preserves-explicit-JSON-null",
+      "ok": true,
+      "status": 200,
+      "bytes": 5336,
+      "explicitNullOnWire": true,
+      "durationMs": 51
+    },
+    {
+      "name": "real-Word-explicit-query-joining-and-custom-serializer",
+      "ok": true,
+      "status": 200,
+      "serializerCalls": 1,
+      "queryJoinedOnce": true,
+      "bodyAndNullPreserved": true,
+      "durationMs": 54
+    },
+    {
+      "name": "real-Excel-invalid-form-cannot-be-repaired-by-valid-query",
+      "ok": true,
+      "status": 422,
+      "queryCannotOverwriteBody": true,
+      "originalBlobPreserved": true,
+      "feedbackCount": 1,
+      "loadingClosed": 1,
+      "durationMs": 42
+    },
+    {
+      "name": "server-and-authenticated-query-remain-responsive",
+      "ok": true,
+      "docsStatus": 200,
+      "authenticatedQueryCompleted": true,
+      "durationMs": 46
+    }
+  ]
+}

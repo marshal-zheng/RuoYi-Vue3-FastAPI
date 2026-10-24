@@ -1,0 +1,39 @@
+{
+  "ruoyi": {
+    "headBefore": "4ed36ba3eb0500d6202ea8740e5533d212f6f5a9",
+    "headAfter": "4ed36ba3eb0500d6202ea8740e5533d212f6f5a9",
+    "changedBaselineFiles": [
+      "ruoyi-fastapi-frontend/src/utils/session.test.ts",
+      "ruoyi-fastapi-frontend/src/utils/session.ts",
+      "ruoyi-fastapi-frontend/src/api/login.ts",
+      "ruoyi-fastapi-frontend/src/store/modules/user.ts",
+      "ruoyi-fastapi-frontend/src/utils/auth.ts"
+    ],
+    "missingBaselineFiles": [],
+    "unrelatedChanges": []
+  },
+  "zxui": {
+    "headBefore": "09257a69055f2e397c75f1665935a71ec18e0732",
+    "headAfter": "09257a69055f2e397c75f1665935a71ec18e0732",
+    "changedBaselineFiles": [],
+    "missingBaselineFiles": [],
+    "unrelatedChanges": []
+  },
+  "ownFiles": [
+    "ruoyi-fastapi-frontend/src/utils/auth.ts",
+    "ruoyi-fastapi-frontend/src/utils/session.ts",
+    "ruoyi-fastapi-frontend/src/api/login.ts",
+    "ruoyi-fastapi-frontend/src/store/modules/user.ts",
+    "ruoyi-fastapi-frontend/src/utils/session.test.ts",
+    "ruoyi-fastapi-frontend/src/utils/session-cookie-lock.test.ts"
+  ],
+  "ownSha256": {
+    "ruoyi-fastapi-frontend/src/utils/auth.ts": "f92f47dc3920daf266bb2842ac96ac18a197033d79181e628b0958ffbf6dc687",
+    "ruoyi-fastapi-frontend/src/utils/session.ts": "5ad34e654d6a3595f0bbb321ae94149c7c66a816ba9bec7c05e02adb47f9fbfe",
+    "ruoyi-fastapi-frontend/src/api/login.ts": "fd43a79e44b379b75b0939040c6e8182e1f321c99052f5d10811d71990005c74",
+    "ruoyi-fastapi-frontend/src/store/modules/user.ts": "b838e4658d5795108e81bde00f4435655e542d27b03736a5cbbd1f00db44f7d8",
+    "ruoyi-fastapi-frontend/src/utils/session.test.ts": "2bdb138b265baad576cda6fed1c3dabb683bb80fb3ae4da9a416bb36942993cb",
+    "ruoyi-fastapi-frontend/src/utils/session-cookie-lock.test.ts": "ea4009af6135fafd4eab4a8f4f9804c70a883af2fabad88643064397bff063e7"
+  },
+  "existingChangesPreserved": true
+}

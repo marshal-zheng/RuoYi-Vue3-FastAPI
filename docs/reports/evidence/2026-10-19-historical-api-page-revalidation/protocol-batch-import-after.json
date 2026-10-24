@@ -1,0 +1,30 @@
+{
+  "status": 200,
+  "body": {
+    "results": [
+      {
+        "itemId": "QA复导_mveu4gpz.xlsx",
+        "protocolId": 18,
+        "filename": "QA复导_mveu4gpz.xlsx",
+        "protocolName": "QA复导_mveu4gpz",
+        "protocolType": "RS422",
+        "success": true
+      },
+      {
+        "itemId": "QA损坏_mveu4gpz.xlsx",
+        "filename": "QA损坏_mveu4gpz.xlsx",
+        "success": false,
+        "error": {
+          "errorCode": null,
+          "title": "导入失败",
+          "detail": "文件无法解析，请确认格式正确并重新保存后重试"
+        }
+      }
+    ],
+    "summary": {
+      "total": 2,
+      "succeeded": 1,
+      "failed": 1
+    }
+  }
+}

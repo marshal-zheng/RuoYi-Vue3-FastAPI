@@ -1,0 +1,36 @@
+{
+  "focused": {
+    "exitCode": 0,
+    "files": 7,
+    "tests": 277
+  },
+  "zxuiHooks": {
+    "exitCode": 0,
+    "tests": 20
+  },
+  "uiStandards": {
+    "exitCode": 0,
+    "tests": 14
+  },
+  "sourceBuild": {
+    "exitCode": 0,
+    "seconds": 24.09
+  },
+  "lint": {
+    "exitCode": 0
+  },
+  "typecheck": {
+    "exitCode": 0
+  },
+  "conventions": {
+    "exitCode": 1,
+    "baselineFailure": "VersionList.vue console"
+  },
+  "realBusiness": {
+    "exitCode": 0,
+    "checks": 43,
+    "cleanupExact": true
+  },
+  "independentReview": "two passes, no confirmed issue",
+  "backend": "Only own PID 31419 started and terminated; port 8088 stopped"
+}

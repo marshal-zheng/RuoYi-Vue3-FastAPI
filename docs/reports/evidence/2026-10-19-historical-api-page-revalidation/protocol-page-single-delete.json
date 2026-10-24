@@ -1,0 +1,30 @@
+{
+  "status": 200,
+  "body": {
+    "results": [
+      {
+        "itemId": 15,
+        "success": true,
+        "attempts": 1,
+        "data": null
+      }
+    ],
+    "summary": {
+      "total": 1,
+      "succeeded": 1,
+      "failed": 0
+    }
+  },
+  "detail": {
+    "status": 404,
+    "body": {
+      "type": "about:blank",
+      "title": "协议不存在",
+      "status": 404,
+      "detail": "协议不存在",
+      "instance": "/dev-api/system/protocol/15",
+      "errorCode": 45001,
+      "requestId": "0f86cd65ad4542ecbb6d552735aa23a9"
+    }
+  }
+}

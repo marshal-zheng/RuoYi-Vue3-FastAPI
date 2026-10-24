@@ -1,0 +1,49 @@
+--- baseline/ruoyi-fastapi-frontend/src/views/tool/gen/importTable.vue
++++ current/ruoyi-fastapi-frontend/src/views/tool/gen/importTable.vue
+@@ -1,6 +1,6 @@
+ <template>
+   <!-- 导入表 -->
+-  <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
++  <ZxDialog v-bind="dialogProps" v-on="dialogEvents" @opened="loadTables">
+     <ZxGridList
+       ref="gridListRef"
+       :load-data="loadDbTableData"
+@@ -44,6 +44,7 @@
+ 
+       <template #table="{ grid }">
+         <el-table
++          ref="tableRef"
+           v-loading="grid.loading"
+           :data="grid.list || []"
+           @row-click="clickRow"
+@@ -68,6 +69,7 @@
+ import { serializeDateRange } from '@/utils/ruoyi';
+ 
+ const gridListRef = ref(null);
++const tableRef = ref(null);
+ const tables = ref([]);
+ 
+ const emit = defineEmits(['ok']);
+@@ -95,16 +97,16 @@
+   tables.value = [];
+   // 打开对话框后再加载数据
+   open();
+-  // 延迟加载以确保对话框已打开
+-  nextTick(() => {
+-    gridListRef.value?.refresh();
+-  });
++}
++
++// Dialog content is lazy-mounted; its opened event owns the first request.
++function loadTables() {
++  return gridListRef.value?.refresh();
+ }
+ 
+ /** 单击选择行 */
+ function clickRow(row) {
+-  const table = gridListRef.value?.$refs?.tableRef;
+-  table?.toggleRowSelection(row);
++  tableRef.value?.toggleRowSelection(row);
+ }
+ 
+ /** 多选框选中数据 */

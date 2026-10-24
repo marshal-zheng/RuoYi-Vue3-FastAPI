@@ -1,0 +1,10 @@
+{
+  "delete": {
+    "ok": true,
+    "body": null
+  },
+  "read": {
+    "ok": true,
+    "body": null
+  }
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/application/services/user_service.py",
+    "before": "540a7d3e606a17c419f819c8a8963372736b50792e2ffe4ca64ad3f85ef7d42c",
+    "after": "5b09476de093dd88d4fd0eb6db9de570b651e8785e0b618028aaf85028d172a2"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/requirements.txt",
+    "before": "25a5508b1b32accf3b0a1bdc37d982606116d99803e2c6a59c1b1f2481861476",
+    "after": "8a9a9214d3e5f946a40927f605e62d1ee892c35b9f1dfbf88d689cff5ae94928"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/requirements-pg.txt",
+    "before": "24d92adf04d91f1712124049fa649305fbee56b266c167304a4aac2ce2369c0f",
+    "after": "130dcc4ff007a99566c1ad183f532fd3ea6905f43159eb77bfd216281296a65d"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_user_import.py",
+    "before": null,
+    "after": "2804de4b4c0dc7c619222a4c7e9fafcb337dca167d1e7b7c8dd0df576b97b71d"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/fixtures/user_import_valid.xls",
+    "before": null,
+    "after": "885751e060ec1fd76fce019f1f9d21397a81ca66a894a8b8de21870ce1dea604"
+  }
+]

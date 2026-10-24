@@ -1,0 +1,8 @@
+{
+  "bind": "127.0.0.1:18080",
+  "backend": "http://host.docker.internal:8088",
+  "image": "nginx:1.27-alpine",
+  "indexMatchesBuild": true,
+  "assets": 3282,
+  "indexSha256": "4d77bb88a44e306753f8e90d56e095cbc4ed547bd1d30ebc7b1b83f3a17b2783"
+}

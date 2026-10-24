@@ -1,0 +1,62 @@
+[
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/FileUpload/index.vue",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/ImageUpload/index.vue",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/components/ui/Editor/index.vue",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.ts",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.test.ts",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/api/security_controller.py",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-backend/tests/unit/services/test_security_token_service.py",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/vite.config.ts",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/identity/application/services/login_service.py",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/views/project/simulation/composables/useSimulationWebSocket.ts",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/composables/useAuthenticatedUpload.ts",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/composables/useUploadModel.ts",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts",
+    "unchanged": true
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/tests/unit/components/WebSocketSession.test.ts",
+    "unchanged": true
+  }
+]

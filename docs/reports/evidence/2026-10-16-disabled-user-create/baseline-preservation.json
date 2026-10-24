@@ -1,0 +1,23 @@
+{
+  "business": {
+    "existingFilesChecked": 475,
+    "existingFilesChanged": []
+  },
+  "zxui": {
+    "existingFilesChecked": 141,
+    "existingFilesChanged": []
+  },
+  "taskModifiedPreviouslyCleanFiles": [
+    "ruoyi-fastapi-backend/modules/system/infrastructure/user_repository.py",
+    "ruoyi-fastapi-backend/modules/identity/application/services/login_service.py",
+    "ruoyi-fastapi-backend/ports/repositories.py"
+  ],
+  "taskAddedFiles": [
+    "ruoyi-fastapi-backend/tests/unit/repositories/test_user_repository.py",
+    "docs/reports/2026-10-16-disabled-user-create.md",
+    "docs/reports/evidence/2026-10-16-disabled-user-create/actual.json",
+    "docs/reports/evidence/2026-10-16-disabled-user-create/checks.json",
+    "docs/reports/evidence/2026-10-16-disabled-user-create/static-comparison.json",
+    "docs/reports/evidence/2026-10-16-disabled-user-create/baseline-preservation.json"
+  ]
+}

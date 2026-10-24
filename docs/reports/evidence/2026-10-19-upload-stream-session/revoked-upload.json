@@ -1,0 +1,20 @@
+{
+  "loginActions": 1,
+  "warningCount": 1,
+  "model": "",
+  "url": "http://localhost/system/user",
+  "events": [
+    {
+      "time": "2026-10-19T02:03:11.719Z",
+      "method": "POST",
+      "path": "/api/common/upload",
+      "status": 401
+    },
+    {
+      "time": "2026-10-19T02:03:11.727Z",
+      "method": "POST",
+      "path": "/api/auth/refresh",
+      "status": 401
+    }
+  ]
+}

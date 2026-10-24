@@ -1,0 +1,61 @@
+{
+  "backendFocused": {
+    "passed": 124,
+    "command": "cd ruoyi-fastapi-backend && ./venv/bin/pytest tests/unit/controllers/test_dept_write_contract.py tests/unit/services/test_dept_write_boundaries.py tests/unit/services/test_dept_service.py tests/unit/services/test_detail_resource_contract.py tests/unit/repositories/test_dept_repository.py modules/system/tests/test_dept_write_commands.py --no-cov -n 0 -q"
+  },
+  "frontendFocused": {
+    "passed": 240,
+    "command": "cd ruoyi-fastapi-frontend && yarn vitest run tests/unit/components/EditorReadLifecycle.test.ts tests/unit/components/RemainingEditorReadLifecycle.test.ts src/api/detail-contract.test.ts src/api/editor-read-options.test.ts"
+  },
+  "frontendLint": {
+    "ok": true,
+    "command": "yarn lint:check"
+  },
+  "frontendTypes": {
+    "ok": true,
+    "command": "yarn type-check"
+  },
+  "frontendBuild": {
+    "ok": true,
+    "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod",
+    "warning": "Existing large chunk warning"
+  },
+  "backendNewFiles": {
+    "ruffCheck": true,
+    "ruffFormatCheck": true,
+    "files": [
+      "module_admin/entity/vo/dept_write_vo.py",
+      "tests/unit/controllers/test_dept_write_contract.py",
+      "tests/unit/services/test_dept_write_boundaries.py",
+      "tests/unit/repositories/test_dept_repository.py"
+    ]
+  },
+  "redBeforeGreen": {
+    "initialBackendFailed": 48,
+    "initialBackendPassed": 6,
+    "frontendPayloadFailed": 2,
+    "ancestorActivationFailed": 3,
+    "realSqlSubtreeFailed": 1,
+    "normalAncestorTimestampFailed": 1
+  },
+  "conventionsBackend": {
+    "ok": true,
+    "note": "Guardrails passed; Ruff/Mypy/Pytest skipped by script; Ruff and focused pytest executed independently."
+  },
+  "conventionsFrontend": {
+    "ok": false,
+    "unchangedBaseline": "Console usage in src/views/project/components/VersionList.vue; task baseline hash confirms untouched."
+  },
+  "review": {
+    "blockingFindingsRemaining": 0,
+    "fixedFindings": [
+      "Activation of disabled ancestors outside data scope",
+      "Omitted status on active-department reparent"
+    ]
+  },
+  "verificationBoundary": "No computer use. Production DeptDlg setup/confirm, source ZXUI hooks/HTTP, real frontend API/feedback and Axios XHR -> FastAPI/MySQL. Native form validation and visual UI were not rendered.",
+  "runtime": {
+    "ownedBackendStopped": true,
+    "preexistingServicesPreserved": true
+  }
+}

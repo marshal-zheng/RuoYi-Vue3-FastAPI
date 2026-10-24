@@ -1,0 +1,27 @@
+[
+  {
+    "path": "r/types/http-client.json",
+    "sha256": "6a73f11da54cac290da71ad5d134fabf3843437d52262c0a8e9f25fe108e5e45",
+    "bytes": 1894
+  },
+  {
+    "path": "r/examples/http-client.json",
+    "sha256": "be9bd8b6f4881473cdbb226db9c319cc8329447f8fd4abe08c991a3e94ba43e1",
+    "bytes": 59303
+  },
+  {
+    "path": "r/examples/index.json",
+    "sha256": "30ae23483f643958d4003c6b70732c108f446c79359af01ce8bf5da77286b83f",
+    "bytes": 12713
+  },
+  {
+    "path": "llms-components.json",
+    "sha256": "9f8ee60f51e0f8f80cb86ff0a941b213d5c5d815b1568936c6e2f55313b9fb07",
+    "bytes": 226579
+  },
+  {
+    "path": "llms-full.txt",
+    "sha256": "8d4cc14e5a6b9d3304aaa732e8b00a3bd5bf4afda1a42e7f2120cdd00ef3c699",
+    "bytes": 1520992
+  }
+]

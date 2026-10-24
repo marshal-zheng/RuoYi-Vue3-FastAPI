@@ -1,0 +1,2 @@
+/* Compatibility entry; new consumers import the public ZXUI bridge directly. */
+@import "@zxio/zxui/style/vxe-table.css";

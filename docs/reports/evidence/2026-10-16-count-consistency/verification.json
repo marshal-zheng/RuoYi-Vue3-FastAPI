@@ -1,0 +1,77 @@
+{
+  "scope": "Remove transparent cross-transaction COUNT result cache; preserve existing transaction and other cache semantics.",
+  "regressions": {
+    "newTests": 3,
+    "before": "3 failed",
+    "after": "91 passed across affected pagination, repository, service, transaction, container and pipeline suites",
+    "command": "./venv/bin/python -m pytest tests/unit/utils/test_page_count_consistency.py tests/unit/module_generator/test_gen_table_paging.py tests/unit/container tests/unit/repositories/test_base_repository.py tests/unit/utils/test_transaction_manager.py tests/unit/services/test_config_service.py modules/system/tests/test_command_pipeline_behaviors.py -o addopts='' -q",
+    "exitCode": 0
+  },
+  "quality": {
+    "backendConventions": {
+      "command": "bash .cursor/skills/backend-conventions/scripts/validate.sh --changed",
+      "exitCode": 0
+    },
+    "modifiedTestsRuff": 0,
+    "modifiedTestsFormat": 0,
+    "changedPythonCompile": 0,
+    "legacyRuffComparison": {
+      "baseline": 468,
+      "current": 431,
+      "newDiagnostics": 0,
+      "rawFullFileCheckPass": false
+    }
+  },
+  "realVerification": {
+    "beforeDeletion": {
+      "total": 1,
+      "items": 0
+    },
+    "beforeCommitRefill": {
+      "total": 0,
+      "items": 1
+    },
+    "businessChecks": 7,
+    "mysqlChecks": 5,
+    "mysqlIsolation": "REPEATABLE-READ",
+    "nativeUiUsed": false,
+    "browserAutomationUsed": false,
+    "frontendBuildRequired": false
+  },
+  "performanceObservation": {
+    "localRows": 9,
+    "countSqlSamples": 19,
+    "countSqlMedianMs": 0.493,
+    "countSqlMaxMs": 2.358,
+    "largeDatasetBenchmark": false,
+    "tradeoff": "One database COUNT per paginated query instead of reusing a cached total."
+  },
+  "review": {
+    "result": "No remaining critical, important or minor issues",
+    "independentTestsPassed": 87
+  },
+  "cleanup": {
+    "businessFixtureParameters": 4,
+    "mysqlFixtureParameters": 2,
+    "remainingProbeParameters": 0,
+    "existingParameters": 7,
+    "baselineItemsUnchanged": true,
+    "ownedLegacyRedisProbeKeysRemoved": true,
+    "backendPidsStopped": [
+      63071,
+      64669
+    ],
+    "port8088ListenerAfterCleanup": false
+  },
+  "unchanged": [
+    "ConfigService",
+    "ConfigRepository",
+    "TransactionManager",
+    "get_db",
+    "business sys_config Redis cache",
+    "query_cache",
+    "frontend",
+    "ZXUI"
+  ],
+  "noCommitOrPublish": true
+}

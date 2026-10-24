@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "files": [
+    {
+      "file": "ruoyi-fastapi-backend/ports/services.py",
+      "baselineDiagnostics": 0,
+      "currentDiagnostics": 0,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/tests/test_dept_write_commands.py",
+      "baselineDiagnostics": 0,
+      "currentDiagnostics": 0,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/api/dept_controller.py",
+      "baselineDiagnostics": 0,
+      "currentDiagnostics": 0,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/infrastructure/dept_repository.py",
+      "baselineDiagnostics": 104,
+      "currentDiagnostics": 103,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/commands/dept_commands.py",
+      "baselineDiagnostics": 0,
+      "currentDiagnostics": 0,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/services/dept_service.py",
+      "baselineDiagnostics": 13,
+      "currentDiagnostics": 12,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/modules/system/application/handlers/command/dept_command_handlers.py",
+      "baselineDiagnostics": 1,
+      "currentDiagnostics": 1,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/module_admin/entity/vo/dept_vo.py",
+      "baselineDiagnostics": 24,
+      "currentDiagnostics": 24,
+      "newDiagnostics": 0
+    },
+    {
+      "file": "ruoyi-fastapi-backend/tests/unit/services/test_dept_service.py",
+      "baselineDiagnostics": 75,
+      "currentDiagnostics": 74,
+      "newDiagnostics": 0
+    }
+  ],
+  "added": []
+}

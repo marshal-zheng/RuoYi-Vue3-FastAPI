@@ -1,0 +1,6 @@
+最终独立只读复核：/root/dto_assessment。
+两个 PermissionException 保留原权限/保护判定，旧密码 ValidationException 在写入前抛出；CQRS/事务/审计仍保留原异常；真实token/session继续401。
+复核指出放通密码CQRS后，旧的可空HTTP oldPassword会使跳过核验的路径可达，使用纯内存哨兵在写入前确认。该P1已修复：profile专用输入两字段必需且非空，6类缺失/null/空串拒绝，字符规则保留；内部SMS命令仍允许无oldPassword。
+最终复核：P1已闭环，无其他阻塞发现。OpenAPI仅ResetPasswordModel变化，路径一致，生成类型同步。
+曾指出HTTP测试全文件格式变化；已恢复基线前后内容，只保留新增测试块。
+未修改文件、未发HTTP、未写业务数据、未使用computer use。

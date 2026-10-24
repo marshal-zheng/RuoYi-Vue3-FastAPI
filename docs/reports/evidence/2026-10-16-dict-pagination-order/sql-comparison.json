@@ -1,0 +1,18 @@
+{
+  "before": {
+    "clauses": [
+      "sys_dict_data.update_time DESC",
+      "sys_dict_data.dict_sort"
+    ],
+    "sql": "SELECT DISTINCT sys_dict_data.dict_code, sys_dict_data.dict_sort, sys_dict_data.dict_label, sys_dict_data.dict_value, sys_dict_data.dict_type, sys_dict_data.css_class, sys_dict_data.list_class, sys_dict_data.is_default, sys_dict_data.status, sys_dict_data.remark, sys_dict_data.create_time, sys_dict_data.update_time, sys_dict_data.create_by, sys_dict_data.update_by \nFROM sys_dict_data \nWHERE sys_dict_data.dict_type = 'sys_normal_disable' AND sys_dict_data.dict_label LIKE '%%正常%%' AND sys_dict_data.status = '0' ORDER BY sys_dict_data.update_time DESC, sys_dict_data.dict_sort \n LIMIT 1, 1"
+  },
+  "after": {
+    "clauses": [
+      "sys_dict_data.update_time DESC",
+      "sys_dict_data.dict_sort",
+      "sys_dict_data.dict_code"
+    ],
+    "sql": "SELECT DISTINCT sys_dict_data.dict_code, sys_dict_data.dict_sort, sys_dict_data.dict_label, sys_dict_data.dict_value, sys_dict_data.dict_type, sys_dict_data.css_class, sys_dict_data.list_class, sys_dict_data.is_default, sys_dict_data.status, sys_dict_data.remark, sys_dict_data.create_time, sys_dict_data.update_time, sys_dict_data.create_by, sys_dict_data.update_by \nFROM sys_dict_data \nWHERE sys_dict_data.dict_type = 'sys_normal_disable' AND sys_dict_data.dict_label LIKE '%%正常%%' AND sys_dict_data.status = '0' ORDER BY sys_dict_data.update_time DESC, sys_dict_data.dict_sort, sys_dict_data.dict_code \n LIMIT 1, 1"
+  },
+  "onlyUniqueTiebreakerAdded": true
+}

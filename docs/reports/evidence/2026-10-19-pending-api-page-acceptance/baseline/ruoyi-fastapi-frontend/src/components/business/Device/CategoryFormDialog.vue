@@ -1,0 +1,110 @@
+<template>
+  <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+    <div class="py-4">
+      <el-form
+        ref="formRef"
+        :model="state.data"
+        :rules="formRules"
+        v-bind="dialogController.formProps"
+        label-position="right"
+      >
+        <FormGrid v-bind="dialogController.layoutProps">
+          <el-form-item label="分类名称" prop="name">
+            <zx-input
+              v-model="state.data.name"
+              placeholder="请输入分类名称"
+              maxlength="50"
+              show-word-limit
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <zx-input
+              v-model="state.data.remark"
+              type="textarea"
+              placeholder="请输入备注"
+              :rows="3"
+              maxlength="500"
+              show-word-limit
+            />
+          </el-form-item>
+        </FormGrid>
+      </el-form>
+    </div>
+  </ZxDialog>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+import { addDeviceCategory, updateDeviceCategory, getDeviceCategory } from '@/api/device/category';
+
+const emit = defineEmits<{ success: [data: Awaited<ReturnType<typeof addDeviceCategory>>] }>();
+
+const formRef = ref();
+
+interface CategoryForm {
+  deviceCategoryId: number | null;
+  name: string;
+  remark: string;
+}
+
+const formRules = {
+  name: [
+    { required: true, message: '请输入分类名称', trigger: 'blur' },
+    { min: 2, max: 50, message: '分类名称长度在 2 到 50 个字符', trigger: 'blur' },
+  ],
+  remark: [{ max: 500, message: '备注不能超过 500 个字符', trigger: 'blur' }],
+};
+
+let state = {} as { data: CategoryForm };
+
+const dialogController = useFormDialog<CategoryForm>({
+  columns: 1,
+  title: (data: CategoryForm) => (data?.deviceCategoryId ? '修改设备分类' : '添加设备分类'),
+
+  okText: computed(() => (state.data.deviceCategoryId ? '保存' : '创建')),
+  formRef,
+  preValidate: true,
+  autoScrollToError: true,
+  autoResetForm: true,
+  defaultData: () => ({
+    deviceCategoryId: null,
+    name: '',
+    remark: '',
+  }),
+  onConfirm: async (data: CategoryForm) => {
+    const submitData = {
+      deviceCategoryId: data.deviceCategoryId,
+      name: data.name,
+      remark: data.remark,
+    };
+    let res;
+    if (submitData.deviceCategoryId) {
+      res = await updateDeviceCategory(submitData);
+    } else {
+      res = await addDeviceCategory(submitData);
+    }
+    emit('success', res);
+    return res;
+  },
+});
+
+state = dialogController.state;
+const { dialogProps, dialogEvents, open, close } = dialogController;
+
+const openDialog = async (payload?: { id?: number }) => {
+  if (payload?.id) {
+    const detail = await getDeviceCategory(payload.id);
+    open({
+      deviceCategoryId: detail.deviceCategoryId,
+      name: detail?.name || '',
+      remark: detail?.remark || '',
+    });
+  } else {
+    open();
+  }
+};
+
+defineExpose({ open: openDialog, close });
+</script>

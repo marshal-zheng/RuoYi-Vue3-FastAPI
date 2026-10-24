@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ruoyi-fastapi.local/mock-overlay-registry.schema.json",
+  "title": "Mock scenario overlay registry file",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "name",
+      "stateType",
+      "target",
+      "pages",
+      "owner",
+      "tests",
+      "risk",
+      "coreMatrix",
+      "e2eEnabled",
+      "resetStrategy",
+      "composition"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "stateType": {
+        "type": "string",
+        "enum": [
+          "empty",
+          "latency",
+          "problem",
+          "forbidden",
+          "timeout",
+          "unsupported",
+          "readonly"
+        ]
+      },
+      "target": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["method", "openapiPath", "mswPath", "handlerTag"],
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          },
+          "openapiPath": {
+            "type": "string",
+            "pattern": "^/"
+          },
+          "mswPath": {
+            "type": "string",
+            "pattern": "^/api(/|$)"
+          },
+          "handlerTag": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9:-]*[A-Za-z0-9]$"
+          }
+        }
+      },
+      "pages": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "owner": {
+        "type": "string",
+        "minLength": 1
+      },
+      "tests": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "risk": {
+        "type": "string",
+        "minLength": 1
+      },
+      "coreMatrix": {
+        "type": "boolean"
+      },
+      "e2eEnabled": {
+        "type": "boolean"
+      },
+      "resetStrategy": {
+        "type": "string",
+        "enum": ["overlay-only"]
+      },
+      "composition": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "compatibleWith": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+            }
+          },
+          "conflictsWith": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$"
+            }
+          }
+        }
+      },
+      "contract": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "exception": {
+            "type": "string",
+            "enum": [
+              "problem-response",
+              "schema-unavailable",
+              "local-contract",
+              "unhandled-api",
+              "not-applicable"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "response": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          },
+          "delayMs": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 30000
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "errorCode": {
+            "anyOf": [
+              { "type": "integer" },
+              { "type": "string", "minLength": 1 }
+            ]
+          },
+          "projection": {
+            "type": "string",
+            "enum": ["empty-page", "empty-list", "readonly-view"]
+          }
+        }
+      }
+    }
+  }
+}

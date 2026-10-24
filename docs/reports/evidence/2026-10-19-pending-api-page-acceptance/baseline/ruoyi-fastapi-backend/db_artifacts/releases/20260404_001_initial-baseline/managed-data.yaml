@@ -1,0 +1,4611 @@
+version: '1'
+bundle_id: 20260404_001_initial-baseline
+artifact_type: managed-data
+managed_object_count: 296
+operation_count: 296
+summary:
+  by_operation:
+    upsert-row: 207
+    ensure-link: 89
+  by_entity:
+    sys_menu: 96
+    sys_role_menu: 89
+    sys_dict_type: 21
+    sys_dict_data: 84
+    sys_config: 6
+    sys_dict_type: 21
+    sys_dict_data: 84
+    sys_config: 6
+operations:
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1
+  match_fields:
+    menu_id: 1
+  values:
+    menu_id: 1
+    menu_name: 系统管理
+    parent_id: 0
+    order_num: 1
+    path: system
+    component: null
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: M
+    visible: '0'
+    status: '0'
+    perms: ''
+    icon: system
+    remark: 系统管理目录
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:2
+  match_fields:
+    menu_id: 2
+  values:
+    menu_id: 2
+    menu_name: 系统监控
+    parent_id: 0
+    order_num: 2
+    path: monitor
+    component: null
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: M
+    visible: '0'
+    status: '0'
+    perms: ''
+    icon: monitor
+    remark: 系统监控目录
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:3
+  match_fields:
+    menu_id: 3
+  values:
+    menu_id: 3
+    menu_name: 系统工具
+    parent_id: 0
+    order_num: 3
+    path: tool
+    component: null
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: M
+    visible: '0'
+    status: '0'
+    perms: ''
+    icon: tool
+    remark: 系统工具目录
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:4
+  match_fields:
+    menu_id: 4
+  values:
+    menu_id: 4
+    menu_name: 工程管理
+    parent_id: 0
+    order_num: 4
+    path: project
+    component: null
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: M
+    visible: '0'
+    status: '0'
+    perms: ''
+    icon: build
+    remark: 工程管理目录
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:100
+  match_fields:
+    menu_id: 100
+  values:
+    menu_id: 100
+    menu_name: 用户管理
+    parent_id: 1
+    order_num: 1
+    path: user
+    component: system/user/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:user:list
+    icon: user
+    remark: 用户管理菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:101
+  match_fields:
+    menu_id: 101
+  values:
+    menu_id: 101
+    menu_name: 角色管理
+    parent_id: 1
+    order_num: 2
+    path: role
+    component: system/role/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:role:list
+    icon: peoples
+    remark: 角色管理菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:102
+  match_fields:
+    menu_id: 102
+  values:
+    menu_id: 102
+    menu_name: 菜单管理
+    parent_id: 1
+    order_num: 3
+    path: menu
+    component: system/menu/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:menu:list
+    icon: tree-table
+    remark: 菜单管理菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:103
+  match_fields:
+    menu_id: 103
+  values:
+    menu_id: 103
+    menu_name: 部门管理
+    parent_id: 1
+    order_num: 4
+    path: dept
+    component: system/dept/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:dept:list
+    icon: tree
+    remark: 部门管理菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:104
+  match_fields:
+    menu_id: 104
+  values:
+    menu_id: 104
+    menu_name: 岗位管理
+    parent_id: 1
+    order_num: 5
+    path: post
+    component: system/post/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:post:list
+    icon: post
+    remark: 岗位管理菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:105
+  match_fields:
+    menu_id: 105
+  values:
+    menu_id: 105
+    menu_name: 字典管理
+    parent_id: 1
+    order_num: 6
+    path: dict
+    component: system/dict/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:dict:list
+    icon: dict
+    remark: 字典管理菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:106
+  match_fields:
+    menu_id: 106
+  values:
+    menu_id: 106
+    menu_name: 参数设置
+    parent_id: 1
+    order_num: 7
+    path: config
+    component: system/config/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:config:list
+    icon: edit
+    remark: 参数设置菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:107
+  match_fields:
+    menu_id: 107
+  values:
+    menu_id: 107
+    menu_name: 通知公告
+    parent_id: 1
+    order_num: 8
+    path: notice
+    component: system/notice/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: system:notice:list
+    icon: message
+    remark: 通知公告菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:108
+  match_fields:
+    menu_id: 108
+  values:
+    menu_id: 108
+    menu_name: 日志管理
+    parent_id: 1
+    order_num: 9
+    path: log
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: M
+    visible: '0'
+    status: '0'
+    perms: ''
+    icon: log
+    remark: 日志管理菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:109
+  match_fields:
+    menu_id: 109
+  values:
+    menu_id: 109
+    menu_name: 在线用户
+    parent_id: 2
+    order_num: 1
+    path: online
+    component: monitor/online/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:online:list
+    icon: online
+    remark: 在线用户菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:110
+  match_fields:
+    menu_id: 110
+  values:
+    menu_id: 110
+    menu_name: 定时任务
+    parent_id: 2
+    order_num: 2
+    path: job
+    component: monitor/job/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:job:list
+    icon: job
+    remark: 定时任务菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:111
+  match_fields:
+    menu_id: 111
+  values:
+    menu_id: 111
+    menu_name: 数据监控
+    parent_id: 2
+    order_num: 3
+    path: druid
+    component: monitor/druid/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:druid:list
+    icon: druid
+    remark: 数据监控菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:112
+  match_fields:
+    menu_id: 112
+  values:
+    menu_id: 112
+    menu_name: 服务监控
+    parent_id: 2
+    order_num: 4
+    path: server
+    component: monitor/server/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:server:list
+    icon: server
+    remark: 服务监控菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:113
+  match_fields:
+    menu_id: 113
+  values:
+    menu_id: 113
+    menu_name: 缓存监控
+    parent_id: 2
+    order_num: 5
+    path: cache
+    component: monitor/cache/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:cache:list
+    icon: redis
+    remark: 缓存监控菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:114
+  match_fields:
+    menu_id: 114
+  values:
+    menu_id: 114
+    menu_name: 缓存列表
+    parent_id: 2
+    order_num: 6
+    path: cacheList
+    component: monitor/cache/list
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:cache:list
+    icon: redis-list
+    remark: 缓存列表菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:115
+  match_fields:
+    menu_id: 115
+  values:
+    menu_id: 115
+    menu_name: 表单构建
+    parent_id: 3
+    order_num: 1
+    path: build
+    component: tool/build/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: tool:build:list
+    icon: build
+    remark: 表单构建菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:116
+  match_fields:
+    menu_id: 116
+  values:
+    menu_id: 116
+    menu_name: 代码生成
+    parent_id: 3
+    order_num: 2
+    path: gen
+    component: tool/gen/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: tool:gen:list
+    icon: code
+    remark: 代码生成菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:117
+  match_fields:
+    menu_id: 117
+  values:
+    menu_id: 117
+    menu_name: 系统接口
+    parent_id: 3
+    order_num: 3
+    path: swagger
+    component: tool/swagger/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: tool:swagger:list
+    icon: swagger
+    remark: 系统接口菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:118
+  match_fields:
+    menu_id: 118
+  values:
+    menu_id: 118
+    menu_name: 工程列表
+    parent_id: 4
+    order_num: 1
+    path: project
+    component: project/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: project:project:list
+    icon: list
+    remark: 工程列表菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:119
+  match_fields:
+    menu_id: 119
+  values:
+    menu_id: 119
+    menu_name: 操作日志
+    parent_id: 4
+    order_num: 2
+    path: operlog
+    component: monitor/operlog/index
+    query: null
+    route_name: projectOperLog
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:operlog:list
+    icon: form
+    remark: 工程操作日志
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:500
+  match_fields:
+    menu_id: 500
+  values:
+    menu_id: 500
+    menu_name: 操作日志
+    parent_id: 108
+    order_num: 1
+    path: operlog
+    component: monitor/operlog/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:operlog:list
+    icon: form
+    remark: 操作日志菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:501
+  match_fields:
+    menu_id: 501
+  values:
+    menu_id: 501
+    menu_name: 登录日志
+    parent_id: 108
+    order_num: 2
+    path: logininfor
+    component: monitor/logininfor/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:logininfor:list
+    icon: logininfor
+    remark: 登录日志菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:502
+  match_fields:
+    menu_id: 502
+  values:
+    menu_id: 502
+    menu_name: 审计日志
+    parent_id: 108
+    order_num: 3
+    path: audit
+    component: monitor/audit/index
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: C
+    visible: '0'
+    status: '0'
+    perms: monitor:audit:list
+    icon: log
+    remark: 审计日志菜单
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1000
+  match_fields:
+    menu_id: 1000
+  values:
+    menu_id: 1000
+    menu_name: 用户查询
+    parent_id: 100
+    order_num: 1
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:user:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1001
+  match_fields:
+    menu_id: 1001
+  values:
+    menu_id: 1001
+    menu_name: 用户新增
+    parent_id: 100
+    order_num: 2
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:user:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1002
+  match_fields:
+    menu_id: 1002
+  values:
+    menu_id: 1002
+    menu_name: 用户修改
+    parent_id: 100
+    order_num: 3
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:user:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1003
+  match_fields:
+    menu_id: 1003
+  values:
+    menu_id: 1003
+    menu_name: 用户删除
+    parent_id: 100
+    order_num: 4
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:user:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1004
+  match_fields:
+    menu_id: 1004
+  values:
+    menu_id: 1004
+    menu_name: 用户导出
+    parent_id: 100
+    order_num: 5
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:user:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1005
+  match_fields:
+    menu_id: 1005
+  values:
+    menu_id: 1005
+    menu_name: 用户导入
+    parent_id: 100
+    order_num: 6
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:user:import
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1006
+  match_fields:
+    menu_id: 1006
+  values:
+    menu_id: 1006
+    menu_name: 重置密码
+    parent_id: 100
+    order_num: 7
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:user:resetPwd
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1007
+  match_fields:
+    menu_id: 1007
+  values:
+    menu_id: 1007
+    menu_name: 角色查询
+    parent_id: 101
+    order_num: 1
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:role:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1008
+  match_fields:
+    menu_id: 1008
+  values:
+    menu_id: 1008
+    menu_name: 角色新增
+    parent_id: 101
+    order_num: 2
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:role:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1009
+  match_fields:
+    menu_id: 1009
+  values:
+    menu_id: 1009
+    menu_name: 角色修改
+    parent_id: 101
+    order_num: 3
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:role:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1010
+  match_fields:
+    menu_id: 1010
+  values:
+    menu_id: 1010
+    menu_name: 角色删除
+    parent_id: 101
+    order_num: 4
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:role:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1011
+  match_fields:
+    menu_id: 1011
+  values:
+    menu_id: 1011
+    menu_name: 角色导出
+    parent_id: 101
+    order_num: 5
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:role:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1012
+  match_fields:
+    menu_id: 1012
+  values:
+    menu_id: 1012
+    menu_name: 菜单查询
+    parent_id: 102
+    order_num: 1
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:menu:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1013
+  match_fields:
+    menu_id: 1013
+  values:
+    menu_id: 1013
+    menu_name: 菜单新增
+    parent_id: 102
+    order_num: 2
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:menu:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1014
+  match_fields:
+    menu_id: 1014
+  values:
+    menu_id: 1014
+    menu_name: 菜单修改
+    parent_id: 102
+    order_num: 3
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:menu:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1015
+  match_fields:
+    menu_id: 1015
+  values:
+    menu_id: 1015
+    menu_name: 菜单删除
+    parent_id: 102
+    order_num: 4
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:menu:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1016
+  match_fields:
+    menu_id: 1016
+  values:
+    menu_id: 1016
+    menu_name: 部门查询
+    parent_id: 103
+    order_num: 1
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dept:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1017
+  match_fields:
+    menu_id: 1017
+  values:
+    menu_id: 1017
+    menu_name: 部门新增
+    parent_id: 103
+    order_num: 2
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dept:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1018
+  match_fields:
+    menu_id: 1018
+  values:
+    menu_id: 1018
+    menu_name: 部门修改
+    parent_id: 103
+    order_num: 3
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dept:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1019
+  match_fields:
+    menu_id: 1019
+  values:
+    menu_id: 1019
+    menu_name: 部门删除
+    parent_id: 103
+    order_num: 4
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dept:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1020
+  match_fields:
+    menu_id: 1020
+  values:
+    menu_id: 1020
+    menu_name: 岗位查询
+    parent_id: 104
+    order_num: 1
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:post:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1021
+  match_fields:
+    menu_id: 1021
+  values:
+    menu_id: 1021
+    menu_name: 岗位新增
+    parent_id: 104
+    order_num: 2
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:post:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1022
+  match_fields:
+    menu_id: 1022
+  values:
+    menu_id: 1022
+    menu_name: 岗位修改
+    parent_id: 104
+    order_num: 3
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:post:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1023
+  match_fields:
+    menu_id: 1023
+  values:
+    menu_id: 1023
+    menu_name: 岗位删除
+    parent_id: 104
+    order_num: 4
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:post:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1024
+  match_fields:
+    menu_id: 1024
+  values:
+    menu_id: 1024
+    menu_name: 岗位导出
+    parent_id: 104
+    order_num: 5
+    path: ''
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:post:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1025
+  match_fields:
+    menu_id: 1025
+  values:
+    menu_id: 1025
+    menu_name: 字典查询
+    parent_id: 105
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dict:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1026
+  match_fields:
+    menu_id: 1026
+  values:
+    menu_id: 1026
+    menu_name: 字典新增
+    parent_id: 105
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dict:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1027
+  match_fields:
+    menu_id: 1027
+  values:
+    menu_id: 1027
+    menu_name: 字典修改
+    parent_id: 105
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dict:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1028
+  match_fields:
+    menu_id: 1028
+  values:
+    menu_id: 1028
+    menu_name: 字典删除
+    parent_id: 105
+    order_num: 4
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dict:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1029
+  match_fields:
+    menu_id: 1029
+  values:
+    menu_id: 1029
+    menu_name: 字典导出
+    parent_id: 105
+    order_num: 5
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:dict:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1030
+  match_fields:
+    menu_id: 1030
+  values:
+    menu_id: 1030
+    menu_name: 参数查询
+    parent_id: 106
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:config:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1031
+  match_fields:
+    menu_id: 1031
+  values:
+    menu_id: 1031
+    menu_name: 参数新增
+    parent_id: 106
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:config:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1032
+  match_fields:
+    menu_id: 1032
+  values:
+    menu_id: 1032
+    menu_name: 参数修改
+    parent_id: 106
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:config:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1033
+  match_fields:
+    menu_id: 1033
+  values:
+    menu_id: 1033
+    menu_name: 参数删除
+    parent_id: 106
+    order_num: 4
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:config:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1034
+  match_fields:
+    menu_id: 1034
+  values:
+    menu_id: 1034
+    menu_name: 参数导出
+    parent_id: 106
+    order_num: 5
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:config:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1035
+  match_fields:
+    menu_id: 1035
+  values:
+    menu_id: 1035
+    menu_name: 公告查询
+    parent_id: 107
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:notice:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1036
+  match_fields:
+    menu_id: 1036
+  values:
+    menu_id: 1036
+    menu_name: 公告新增
+    parent_id: 107
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:notice:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1037
+  match_fields:
+    menu_id: 1037
+  values:
+    menu_id: 1037
+    menu_name: 公告修改
+    parent_id: 107
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:notice:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1038
+  match_fields:
+    menu_id: 1038
+  values:
+    menu_id: 1038
+    menu_name: 公告删除
+    parent_id: 107
+    order_num: 4
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: system:notice:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1039
+  match_fields:
+    menu_id: 1039
+  values:
+    menu_id: 1039
+    menu_name: 操作查询
+    parent_id: 500
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:operlog:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1040
+  match_fields:
+    menu_id: 1040
+  values:
+    menu_id: 1040
+    menu_name: 操作删除
+    parent_id: 500
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:operlog:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1041
+  match_fields:
+    menu_id: 1041
+  values:
+    menu_id: 1041
+    menu_name: 日志导出
+    parent_id: 500
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:operlog:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1042
+  match_fields:
+    menu_id: 1042
+  values:
+    menu_id: 1042
+    menu_name: 登录查询
+    parent_id: 501
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:logininfor:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1043
+  match_fields:
+    menu_id: 1043
+  values:
+    menu_id: 1043
+    menu_name: 登录删除
+    parent_id: 501
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:logininfor:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1044
+  match_fields:
+    menu_id: 1044
+  values:
+    menu_id: 1044
+    menu_name: 日志导出
+    parent_id: 501
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:logininfor:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1045
+  match_fields:
+    menu_id: 1045
+  values:
+    menu_id: 1045
+    menu_name: 账户解锁
+    parent_id: 501
+    order_num: 4
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:logininfor:unlock
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1046
+  match_fields:
+    menu_id: 1046
+  values:
+    menu_id: 1046
+    menu_name: 在线查询
+    parent_id: 109
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:online:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1047
+  match_fields:
+    menu_id: 1047
+  values:
+    menu_id: 1047
+    menu_name: 批量强退
+    parent_id: 109
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:online:batchLogout
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1048
+  match_fields:
+    menu_id: 1048
+  values:
+    menu_id: 1048
+    menu_name: 单条强退
+    parent_id: 109
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:online:forceLogout
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1049
+  match_fields:
+    menu_id: 1049
+  values:
+    menu_id: 1049
+    menu_name: 任务查询
+    parent_id: 110
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:job:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1050
+  match_fields:
+    menu_id: 1050
+  values:
+    menu_id: 1050
+    menu_name: 任务新增
+    parent_id: 110
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:job:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1051
+  match_fields:
+    menu_id: 1051
+  values:
+    menu_id: 1051
+    menu_name: 任务修改
+    parent_id: 110
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:job:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1052
+  match_fields:
+    menu_id: 1052
+  values:
+    menu_id: 1052
+    menu_name: 任务删除
+    parent_id: 110
+    order_num: 4
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:job:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1053
+  match_fields:
+    menu_id: 1053
+  values:
+    menu_id: 1053
+    menu_name: 状态修改
+    parent_id: 110
+    order_num: 5
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:job:changeStatus
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1054
+  match_fields:
+    menu_id: 1054
+  values:
+    menu_id: 1054
+    menu_name: 任务导出
+    parent_id: 110
+    order_num: 6
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:job:export
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1055
+  match_fields:
+    menu_id: 1055
+  values:
+    menu_id: 1055
+    menu_name: 生成查询
+    parent_id: 116
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: tool:gen:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1056
+  match_fields:
+    menu_id: 1056
+  values:
+    menu_id: 1056
+    menu_name: 生成修改
+    parent_id: 116
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: tool:gen:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1057
+  match_fields:
+    menu_id: 1057
+  values:
+    menu_id: 1057
+    menu_name: 生成删除
+    parent_id: 116
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: tool:gen:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1058
+  match_fields:
+    menu_id: 1058
+  values:
+    menu_id: 1058
+    menu_name: 导入代码
+    parent_id: 116
+    order_num: 4
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: tool:gen:import
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1059
+  match_fields:
+    menu_id: 1059
+  values:
+    menu_id: 1059
+    menu_name: 预览代码
+    parent_id: 116
+    order_num: 5
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: tool:gen:preview
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1060
+  match_fields:
+    menu_id: 1060
+  values:
+    menu_id: 1060
+    menu_name: 生成代码
+    parent_id: 116
+    order_num: 6
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: tool:gen:code
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1061
+  match_fields:
+    menu_id: 1061
+  values:
+    menu_id: 1061
+    menu_name: 工程查询
+    parent_id: 118
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: project:project:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1062
+  match_fields:
+    menu_id: 1062
+  values:
+    menu_id: 1062
+    menu_name: 工程新增
+    parent_id: 118
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: project:project:add
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1063
+  match_fields:
+    menu_id: 1063
+  values:
+    menu_id: 1063
+    menu_name: 工程修改
+    parent_id: 118
+    order_num: 3
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: project:project:edit
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1064
+  match_fields:
+    menu_id: 1064
+  values:
+    menu_id: 1064
+    menu_name: 工程删除
+    parent_id: 118
+    order_num: 4
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: project:project:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1065
+  match_fields:
+    menu_id: 1065
+  values:
+    menu_id: 1065
+    menu_name: 审计查询
+    parent_id: 502
+    order_num: 1
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:audit:query
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_menu
+  object_key: sys_menu:1066
+  match_fields:
+    menu_id: 1066
+  values:
+    menu_id: 1066
+    menu_name: 审计删除
+    parent_id: 502
+    order_num: 2
+    path: '#'
+    component: ''
+    query: null
+    route_name: ''
+    is_frame: 1
+    is_cache: 0
+    menu_type: F
+    visible: '0'
+    status: '0'
+    perms: monitor:audit:remove
+    icon: '#'
+    remark: ''
+    managed_by_seed: 1
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:1
+  match_fields:
+    dict_id: 1
+  values:
+    dict_id: 1
+    dict_name: 用户性别
+    dict_type: sys_user_sex
+    status: '0'
+    remark: 用户性别列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:2
+  match_fields:
+    dict_id: 2
+  values:
+    dict_id: 2
+    dict_name: 菜单状态
+    dict_type: sys_show_hide
+    status: '0'
+    remark: 菜单状态列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:3
+  match_fields:
+    dict_id: 3
+  values:
+    dict_id: 3
+    dict_name: 系统开关
+    dict_type: sys_normal_disable
+    status: '0'
+    remark: 系统开关列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:4
+  match_fields:
+    dict_id: 4
+  values:
+    dict_id: 4
+    dict_name: 任务状态
+    dict_type: sys_job_status
+    status: '0'
+    remark: 任务状态列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:5
+  match_fields:
+    dict_id: 5
+  values:
+    dict_id: 5
+    dict_name: 任务分组
+    dict_type: sys_job_group
+    status: '0'
+    remark: 任务分组列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:6
+  match_fields:
+    dict_id: 6
+  values:
+    dict_id: 6
+    dict_name: 任务执行器
+    dict_type: sys_job_executor
+    status: '0'
+    remark: 任务执行器列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:7
+  match_fields:
+    dict_id: 7
+  values:
+    dict_id: 7
+    dict_name: 系统是否
+    dict_type: sys_yes_no
+    status: '0'
+    remark: 系统是否列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:8
+  match_fields:
+    dict_id: 8
+  values:
+    dict_id: 8
+    dict_name: 通知类型
+    dict_type: sys_notice_type
+    status: '0'
+    remark: 通知类型列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:9
+  match_fields:
+    dict_id: 9
+  values:
+    dict_id: 9
+    dict_name: 通知状态
+    dict_type: sys_notice_status
+    status: '0'
+    remark: 通知状态列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:10
+  match_fields:
+    dict_id: 10
+  values:
+    dict_id: 10
+    dict_name: 操作类型
+    dict_type: sys_oper_type
+    status: '0'
+    remark: 操作类型列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:11
+  match_fields:
+    dict_id: 11
+  values:
+    dict_id: 11
+    dict_name: 系统状态
+    dict_type: sys_common_status
+    status: '0'
+    remark: 登录状态列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:100
+  match_fields:
+    dict_id: 100
+  values:
+    dict_id: 100
+    dict_name: 协议类型
+    dict_type: sys_protocol_type
+    status: '0'
+    remark: 协议通信类型列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:101
+  match_fields:
+    dict_id: 101
+  values:
+    dict_id: 101
+    dict_name: 传输频率
+    dict_type: sys_protocol_frequency
+    status: '0'
+    remark: 协议传输频率列表
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:102
+  match_fields:
+    dict_id: 102
+  values:
+    dict_id: 102
+    dict_name: 以太网传输速率
+    dict_type: sys_protocol_speed_ethernet
+    status: '0'
+    remark: 以太网协议传输速率
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:103
+  match_fields:
+    dict_id: 103
+  values:
+    dict_id: 103
+    dict_name: RS422传输速率
+    dict_type: sys_protocol_speed_rs422
+    status: '0'
+    remark: RS422协议传输速率
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:104
+  match_fields:
+    dict_id: 104
+  values:
+    dict_id: 104
+    dict_name: CAN传输速率
+    dict_type: sys_protocol_speed_can
+    status: '0'
+    remark: CAN协议传输速率
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:105
+  match_fields:
+    dict_id: 105
+  values:
+    dict_id: 105
+    dict_name: 1553B传输速率
+    dict_type: sys_protocol_speed_1553b
+    status: '0'
+    remark: 1553B协议传输速率
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:106
+  match_fields:
+    dict_id: 106
+  values:
+    dict_id: 106
+    dict_name: 以太网传输方式
+    dict_type: sys_protocol_method_ethernet
+    status: '0'
+    remark: 以太网协议传输方式
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:107
+  match_fields:
+    dict_id: 107
+  values:
+    dict_id: 107
+    dict_name: CAN传输方式
+    dict_type: sys_protocol_method_can
+    status: '0'
+    remark: CAN协议传输方式
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:108
+  match_fields:
+    dict_id: 108
+  values:
+    dict_id: 108
+    dict_name: 数据类型
+    dict_type: sys_protocol_data_type
+    status: '0'
+    remark: 协议字段数据类型
+- op_type: upsert-row
+  entity_type: sys_dict_type
+  object_key: sys_dict_type:109
+  match_fields:
+    dict_id: 109
+  values:
+    dict_id: 109
+    dict_name: 错误处理
+    dict_type: sys_protocol_error_handling
+    status: '0'
+    remark: 协议错误处理策略
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:1
+  match_fields:
+    dict_code: 1
+  values:
+    dict_code: 1
+    dict_sort: 1
+    dict_label: 男
+    dict_value: '0'
+    dict_type: sys_user_sex
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: 性别男
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:2
+  match_fields:
+    dict_code: 2
+  values:
+    dict_code: 2
+    dict_sort: 2
+    dict_label: 女
+    dict_value: '1'
+    dict_type: sys_user_sex
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 性别女
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:3
+  match_fields:
+    dict_code: 3
+  values:
+    dict_code: 3
+    dict_sort: 3
+    dict_label: 未知
+    dict_value: '2'
+    dict_type: sys_user_sex
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 性别未知
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:4
+  match_fields:
+    dict_code: 4
+  values:
+    dict_code: 4
+    dict_sort: 1
+    dict_label: 显示
+    dict_value: '0'
+    dict_type: sys_show_hide
+    css_class: ''
+    list_class: primary
+    is_default: Y
+    status: '0'
+    remark: 显示菜单
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:5
+  match_fields:
+    dict_code: 5
+  values:
+    dict_code: 5
+    dict_sort: 2
+    dict_label: 隐藏
+    dict_value: '1'
+    dict_type: sys_show_hide
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 隐藏菜单
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:6
+  match_fields:
+    dict_code: 6
+  values:
+    dict_code: 6
+    dict_sort: 1
+    dict_label: 正常
+    dict_value: '0'
+    dict_type: sys_normal_disable
+    css_class: ''
+    list_class: primary
+    is_default: Y
+    status: '0'
+    remark: 正常状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:7
+  match_fields:
+    dict_code: 7
+  values:
+    dict_code: 7
+    dict_sort: 2
+    dict_label: 停用
+    dict_value: '1'
+    dict_type: sys_normal_disable
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 停用状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:8
+  match_fields:
+    dict_code: 8
+  values:
+    dict_code: 8
+    dict_sort: 1
+    dict_label: 正常
+    dict_value: '0'
+    dict_type: sys_job_status
+    css_class: ''
+    list_class: primary
+    is_default: Y
+    status: '0'
+    remark: 正常状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:9
+  match_fields:
+    dict_code: 9
+  values:
+    dict_code: 9
+    dict_sort: 2
+    dict_label: 暂停
+    dict_value: '1'
+    dict_type: sys_job_status
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 停用状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:10
+  match_fields:
+    dict_code: 10
+  values:
+    dict_code: 10
+    dict_sort: 1
+    dict_label: 默认
+    dict_value: default
+    dict_type: sys_job_group
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: 默认分组
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:11
+  match_fields:
+    dict_code: 11
+  values:
+    dict_code: 11
+    dict_sort: 2
+    dict_label: 数据库
+    dict_value: sqlalchemy
+    dict_type: sys_job_group
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 数据库分组
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:12
+  match_fields:
+    dict_code: 12
+  values:
+    dict_code: 12
+    dict_sort: 3
+    dict_label: redis
+    dict_value: redis
+    dict_type: sys_job_group
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: redis分组
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:13
+  match_fields:
+    dict_code: 13
+  values:
+    dict_code: 13
+    dict_sort: 1
+    dict_label: 默认
+    dict_value: default
+    dict_type: sys_job_executor
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 线程池
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:14
+  match_fields:
+    dict_code: 14
+  values:
+    dict_code: 14
+    dict_sort: 2
+    dict_label: 进程池
+    dict_value: processpool
+    dict_type: sys_job_executor
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 进程池
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:15
+  match_fields:
+    dict_code: 15
+  values:
+    dict_code: 15
+    dict_sort: 1
+    dict_label: 是
+    dict_value: Y
+    dict_type: sys_yes_no
+    css_class: ''
+    list_class: primary
+    is_default: Y
+    status: '0'
+    remark: 系统默认是
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:16
+  match_fields:
+    dict_code: 16
+  values:
+    dict_code: 16
+    dict_sort: 2
+    dict_label: 否
+    dict_value: N
+    dict_type: sys_yes_no
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 系统默认否
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:17
+  match_fields:
+    dict_code: 17
+  values:
+    dict_code: 17
+    dict_sort: 1
+    dict_label: 通知
+    dict_value: '1'
+    dict_type: sys_notice_type
+    css_class: ''
+    list_class: warning
+    is_default: Y
+    status: '0'
+    remark: 通知
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:18
+  match_fields:
+    dict_code: 18
+  values:
+    dict_code: 18
+    dict_sort: 2
+    dict_label: 公告
+    dict_value: '2'
+    dict_type: sys_notice_type
+    css_class: ''
+    list_class: success
+    is_default: N
+    status: '0'
+    remark: 公告
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:19
+  match_fields:
+    dict_code: 19
+  values:
+    dict_code: 19
+    dict_sort: 1
+    dict_label: 正常
+    dict_value: '0'
+    dict_type: sys_notice_status
+    css_class: ''
+    list_class: primary
+    is_default: Y
+    status: '0'
+    remark: 正常状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:20
+  match_fields:
+    dict_code: 20
+  values:
+    dict_code: 20
+    dict_sort: 2
+    dict_label: 关闭
+    dict_value: '1'
+    dict_type: sys_notice_status
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 关闭状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:21
+  match_fields:
+    dict_code: 21
+  values:
+    dict_code: 21
+    dict_sort: 99
+    dict_label: 其他
+    dict_value: '0'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: info
+    is_default: N
+    status: '0'
+    remark: 其他操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:22
+  match_fields:
+    dict_code: 22
+  values:
+    dict_code: 22
+    dict_sort: 1
+    dict_label: 新增
+    dict_value: '1'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: info
+    is_default: N
+    status: '0'
+    remark: 新增操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:23
+  match_fields:
+    dict_code: 23
+  values:
+    dict_code: 23
+    dict_sort: 2
+    dict_label: 修改
+    dict_value: '2'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: info
+    is_default: N
+    status: '0'
+    remark: 修改操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:24
+  match_fields:
+    dict_code: 24
+  values:
+    dict_code: 24
+    dict_sort: 3
+    dict_label: 删除
+    dict_value: '3'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 删除操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:25
+  match_fields:
+    dict_code: 25
+  values:
+    dict_code: 25
+    dict_sort: 4
+    dict_label: 授权
+    dict_value: '4'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: primary
+    is_default: N
+    status: '0'
+    remark: 授权操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:26
+  match_fields:
+    dict_code: 26
+  values:
+    dict_code: 26
+    dict_sort: 5
+    dict_label: 导出
+    dict_value: '5'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: warning
+    is_default: N
+    status: '0'
+    remark: 导出操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:27
+  match_fields:
+    dict_code: 27
+  values:
+    dict_code: 27
+    dict_sort: 6
+    dict_label: 导入
+    dict_value: '6'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: warning
+    is_default: N
+    status: '0'
+    remark: 导入操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:28
+  match_fields:
+    dict_code: 28
+  values:
+    dict_code: 28
+    dict_sort: 7
+    dict_label: 强退
+    dict_value: '7'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 强退操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:29
+  match_fields:
+    dict_code: 29
+  values:
+    dict_code: 29
+    dict_sort: 8
+    dict_label: 生成代码
+    dict_value: '8'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: warning
+    is_default: N
+    status: '0'
+    remark: 生成操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:30
+  match_fields:
+    dict_code: 30
+  values:
+    dict_code: 30
+    dict_sort: 9
+    dict_label: 清空数据
+    dict_value: '9'
+    dict_type: sys_oper_type
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 清空操作
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:31
+  match_fields:
+    dict_code: 31
+  values:
+    dict_code: 31
+    dict_sort: 1
+    dict_label: 成功
+    dict_value: '0'
+    dict_type: sys_common_status
+    css_class: ''
+    list_class: primary
+    is_default: N
+    status: '0'
+    remark: 正常状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:32
+  match_fields:
+    dict_code: 32
+  values:
+    dict_code: 32
+    dict_sort: 2
+    dict_label: 失败
+    dict_value: '1'
+    dict_type: sys_common_status
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 停用状态
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:100
+  match_fields:
+    dict_code: 100
+  values:
+    dict_code: 100
+    dict_sort: 1
+    dict_label: LAN
+    dict_value: LAN
+    dict_type: sys_protocol_type
+    css_class: ''
+    list_class: primary
+    is_default: N
+    status: '0'
+    remark: 以太网协议
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:101
+  match_fields:
+    dict_code: 101
+  values:
+    dict_code: 101
+    dict_sort: 2
+    dict_label: RS422
+    dict_value: RS422
+    dict_type: sys_protocol_type
+    css_class: ''
+    list_class: success
+    is_default: N
+    status: '0'
+    remark: RS422串口协议
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:102
+  match_fields:
+    dict_code: 102
+  values:
+    dict_code: 102
+    dict_sort: 3
+    dict_label: RS485
+    dict_value: RS485
+    dict_type: sys_protocol_type
+    css_class: ''
+    list_class: success
+    is_default: N
+    status: '0'
+    remark: RS485串口协议
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:103
+  match_fields:
+    dict_code: 103
+  values:
+    dict_code: 103
+    dict_sort: 4
+    dict_label: CAN
+    dict_value: CAN
+    dict_type: sys_protocol_type
+    css_class: ''
+    list_class: warning
+    is_default: N
+    status: '0'
+    remark: CAN总线协议
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:104
+  match_fields:
+    dict_code: 104
+  values:
+    dict_code: 104
+    dict_sort: 5
+    dict_label: 1553B
+    dict_value: 1553B
+    dict_type: sys_protocol_type
+    css_class: ''
+    list_class: danger
+    is_default: N
+    status: '0'
+    remark: 1553B总线协议
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:110
+  match_fields:
+    dict_code: 110
+  values:
+    dict_code: 110
+    dict_sort: 1
+    dict_label: 单次
+    dict_value: once
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 单次传输
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:111
+  match_fields:
+    dict_code: 111
+  values:
+    dict_code: 111
+    dict_sort: 2
+    dict_label: 10ms
+    dict_value: '10'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 10毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:112
+  match_fields:
+    dict_code: 112
+  values:
+    dict_code: 112
+    dict_sort: 3
+    dict_label: 20ms
+    dict_value: '20'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 20毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:113
+  match_fields:
+    dict_code: 113
+  values:
+    dict_code: 113
+    dict_sort: 4
+    dict_label: 50ms
+    dict_value: '50'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 50毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:114
+  match_fields:
+    dict_code: 114
+  values:
+    dict_code: 114
+    dict_sort: 5
+    dict_label: 100ms
+    dict_value: '100'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 100毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:115
+  match_fields:
+    dict_code: 115
+  values:
+    dict_code: 115
+    dict_sort: 6
+    dict_label: 160ms
+    dict_value: '160'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 160毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:116
+  match_fields:
+    dict_code: 116
+  values:
+    dict_code: 116
+    dict_sort: 7
+    dict_label: 200ms
+    dict_value: '200'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 200毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:117
+  match_fields:
+    dict_code: 117
+  values:
+    dict_code: 117
+    dict_sort: 8
+    dict_label: 500ms
+    dict_value: '500'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 500毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:118
+  match_fields:
+    dict_code: 118
+  values:
+    dict_code: 118
+    dict_sort: 9
+    dict_label: 1000ms
+    dict_value: '1000'
+    dict_type: sys_protocol_frequency
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 1000毫秒周期
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:120
+  match_fields:
+    dict_code: 120
+  values:
+    dict_code: 120
+    dict_sort: 1
+    dict_label: 10M
+    dict_value: 10M
+    dict_type: sys_protocol_speed_ethernet
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 10Mbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:121
+  match_fields:
+    dict_code: 121
+  values:
+    dict_code: 121
+    dict_sort: 2
+    dict_label: 100M
+    dict_value: 100M
+    dict_type: sys_protocol_speed_ethernet
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: 100Mbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:122
+  match_fields:
+    dict_code: 122
+  values:
+    dict_code: 122
+    dict_sort: 3
+    dict_label: 1000M
+    dict_value: 1000M
+    dict_type: sys_protocol_speed_ethernet
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 1000Mbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:130
+  match_fields:
+    dict_code: 130
+  values:
+    dict_code: 130
+    dict_sort: 1
+    dict_label: 9.6K
+    dict_value: 9.6K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 9600bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:131
+  match_fields:
+    dict_code: 131
+  values:
+    dict_code: 131
+    dict_sort: 2
+    dict_label: 19.2K
+    dict_value: 19.2K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 19200bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:132
+  match_fields:
+    dict_code: 132
+  values:
+    dict_code: 132
+    dict_sort: 3
+    dict_label: 38.4K
+    dict_value: 38.4K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 38400bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:133
+  match_fields:
+    dict_code: 133
+  values:
+    dict_code: 133
+    dict_sort: 4
+    dict_label: 57.6K
+    dict_value: 57.6K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 57600bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:134
+  match_fields:
+    dict_code: 134
+  values:
+    dict_code: 134
+    dict_sort: 5
+    dict_label: 115.2K
+    dict_value: 115.2K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 115200bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:135
+  match_fields:
+    dict_code: 135
+  values:
+    dict_code: 135
+    dict_sort: 6
+    dict_label: 230.4K
+    dict_value: 230.4K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 230400bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:136
+  match_fields:
+    dict_code: 136
+  values:
+    dict_code: 136
+    dict_sort: 7
+    dict_label: 460.8K
+    dict_value: 460.8K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: 460800bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:137
+  match_fields:
+    dict_code: 137
+  values:
+    dict_code: 137
+    dict_sort: 8
+    dict_label: 921.6K
+    dict_value: 921.6K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 921600bps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:140
+  match_fields:
+    dict_code: 140
+  values:
+    dict_code: 140
+    dict_sort: 1
+    dict_label: 125K
+    dict_value: 125K
+    dict_type: sys_protocol_speed_can
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 125Kbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:141
+  match_fields:
+    dict_code: 141
+  values:
+    dict_code: 141
+    dict_sort: 2
+    dict_label: 250K
+    dict_value: 250K
+    dict_type: sys_protocol_speed_can
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 250Kbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:142
+  match_fields:
+    dict_code: 142
+  values:
+    dict_code: 142
+    dict_sort: 3
+    dict_label: 500K
+    dict_value: 500K
+    dict_type: sys_protocol_speed_can
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: 500Kbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:143
+  match_fields:
+    dict_code: 143
+  values:
+    dict_code: 143
+    dict_sort: 4
+    dict_label: 1000K
+    dict_value: 1000K
+    dict_type: sys_protocol_speed_can
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 1000Kbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:150
+  match_fields:
+    dict_code: 150
+  values:
+    dict_code: 150
+    dict_sort: 1
+    dict_label: 1M
+    dict_value: 1M
+    dict_type: sys_protocol_speed_1553b
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: 1Mbps
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:160
+  match_fields:
+    dict_code: 160
+  values:
+    dict_code: 160
+    dict_sort: 1
+    dict_label: UDP单播
+    dict_value: udp_unicast
+    dict_type: sys_protocol_method_ethernet
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: UDP单播传输
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:161
+  match_fields:
+    dict_code: 161
+  values:
+    dict_code: 161
+    dict_sort: 2
+    dict_label: UDP组播
+    dict_value: udp_multicast
+    dict_type: sys_protocol_method_ethernet
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: UDP组播传输
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:162
+  match_fields:
+    dict_code: 162
+  values:
+    dict_code: 162
+    dict_sort: 3
+    dict_label: UDP广播
+    dict_value: udp_broadcast
+    dict_type: sys_protocol_method_ethernet
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: UDP广播传输
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:163
+  match_fields:
+    dict_code: 163
+  values:
+    dict_code: 163
+    dict_sort: 4
+    dict_label: TCP
+    dict_value: tcp
+    dict_type: sys_protocol_method_ethernet
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: TCP传输
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:170
+  match_fields:
+    dict_code: 170
+  values:
+    dict_code: 170
+    dict_sort: 1
+    dict_label: CAN标准帧
+    dict_value: can_standard
+    dict_type: sys_protocol_method_can
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: CAN标准帧
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:171
+  match_fields:
+    dict_code: 171
+  values:
+    dict_code: 171
+    dict_sort: 2
+    dict_label: CAN扩展帧
+    dict_value: can_extended
+    dict_type: sys_protocol_method_can
+    css_class: ''
+    list_class: ''
+    is_default: Y
+    status: '0'
+    remark: CAN扩展帧
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:180
+  match_fields:
+    dict_code: 180
+  values:
+    dict_code: 180
+    dict_sort: 1
+    dict_label: UINT8
+    dict_value: UINT8
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 无符号8位整数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:181
+  match_fields:
+    dict_code: 181
+  values:
+    dict_code: 181
+    dict_sort: 2
+    dict_label: UINT16
+    dict_value: UINT16
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 无符号16位整数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:182
+  match_fields:
+    dict_code: 182
+  values:
+    dict_code: 182
+    dict_sort: 3
+    dict_label: UINT32
+    dict_value: UINT32
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 无符号32位整数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:183
+  match_fields:
+    dict_code: 183
+  values:
+    dict_code: 183
+    dict_sort: 4
+    dict_label: INT8
+    dict_value: INT8
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 有符号8位整数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:184
+  match_fields:
+    dict_code: 184
+  values:
+    dict_code: 184
+    dict_sort: 5
+    dict_label: INT16
+    dict_value: INT16
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 有符号16位整数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:185
+  match_fields:
+    dict_code: 185
+  values:
+    dict_code: 185
+    dict_sort: 6
+    dict_label: INT32
+    dict_value: INT32
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 有符号32位整数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:186
+  match_fields:
+    dict_code: 186
+  values:
+    dict_code: 186
+    dict_sort: 7
+    dict_label: FLOAT
+    dict_value: FLOAT
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 单精度浮点数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:187
+  match_fields:
+    dict_code: 187
+  values:
+    dict_code: 187
+    dict_sort: 8
+    dict_label: DOUBLE
+    dict_value: DOUBLE
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 双精度浮点数
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:188
+  match_fields:
+    dict_code: 188
+  values:
+    dict_code: 188
+    dict_sort: 9
+    dict_label: STRING
+    dict_value: STRING
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 字符串
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:189
+  match_fields:
+    dict_code: 189
+  values:
+    dict_code: 189
+    dict_sort: 10
+    dict_label: BOOL
+    dict_value: BOOL
+    dict_type: sys_protocol_data_type
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 布尔值
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:190
+  match_fields:
+    dict_code: 190
+  values:
+    dict_code: 190
+    dict_sort: 1
+    dict_label: 不判断
+    dict_value: none
+    dict_type: sys_protocol_error_handling
+    css_class: ''
+    list_class: info
+    is_default: N
+    status: '0'
+    remark: 不进行错误判断
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:191
+  match_fields:
+    dict_code: 191
+  values:
+    dict_code: 191
+    dict_sort: 2
+    dict_label: 超时重传
+    dict_value: timeout_retry
+    dict_type: sys_protocol_error_handling
+    css_class: ''
+    list_class: warning
+    is_default: N
+    status: '0'
+    remark: 超时后重传
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:192
+  match_fields:
+    dict_code: 192
+  values:
+    dict_code: 192
+    dict_sort: 3
+    dict_label: CRC校验
+    dict_value: crc_check
+    dict_type: sys_protocol_error_handling
+    css_class: ''
+    list_class: primary
+    is_default: N
+    status: '0'
+    remark: CRC循环冗余校验
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:193
+  match_fields:
+    dict_code: 193
+  values:
+    dict_code: 193
+    dict_sort: 4
+    dict_label: 奇偶校验
+    dict_value: parity_check
+    dict_type: sys_protocol_error_handling
+    css_class: ''
+    list_class: success
+    is_default: N
+    status: '0'
+    remark: 奇偶校验
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:194
+  match_fields:
+    dict_code: 194
+  values:
+    dict_code: 194
+    dict_sort: 5
+    dict_label: 超时重传 3 次, 100ms
+    dict_value: timeout_retry_3_100ms
+    dict_type: sys_protocol_error_handling
+    css_class: ''
+    list_class: warning
+    is_default: Y
+    status: '0'
+    remark: 超时重传3次，间隔100ms
+- op_type: upsert-row
+  entity_type: sys_dict_data
+  object_key: sys_dict_data:195
+  match_fields:
+    dict_code: 195
+  values:
+    dict_code: 195
+    dict_sort: 6
+    dict_label: '-'
+    dict_value: default
+    dict_type: sys_protocol_error_handling
+    css_class: ''
+    list_class: ''
+    is_default: N
+    status: '0'
+    remark: 默认处理
+- op_type: upsert-row
+  entity_type: sys_config
+  object_key: sys_config:1
+  match_fields:
+    config_id: 1
+  values:
+    config_id: 1
+    config_name: 主框架页-默认皮肤样式名称
+    config_key: sys.index.skinName
+    config_value: skin-blue
+    config_type: Y
+    remark: 蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow
+- op_type: upsert-row
+  entity_type: sys_config
+  object_key: sys_config:2
+  match_fields:
+    config_id: 2
+  values:
+    config_id: 2
+    config_name: 用户管理-账号初始密码
+    config_key: sys.user.initPassword
+    config_value: '123456'
+    config_type: Y
+    remark: 初始化密码 123456
+- op_type: upsert-row
+  entity_type: sys_config
+  object_key: sys_config:3
+  match_fields:
+    config_id: 3
+  values:
+    config_id: 3
+    config_name: 主框架页-侧边栏主题
+    config_key: sys.index.sideTheme
+    config_value: theme-dark
+    config_type: Y
+    remark: 深色主题theme-dark，浅色主题theme-light
+- op_type: upsert-row
+  entity_type: sys_config
+  object_key: sys_config:4
+  match_fields:
+    config_id: 4
+  values:
+    config_id: 4
+    config_name: 账号自助-验证码开关
+    config_key: sys.account.captchaEnabled
+    config_value: 'false'
+    config_type: Y
+    remark: 是否开启验证码功能（true开启，false关闭）
+- op_type: upsert-row
+  entity_type: sys_config
+  object_key: sys_config:5
+  match_fields:
+    config_id: 5
+  values:
+    config_id: 5
+    config_name: 账号自助-是否开启用户注册功能
+    config_key: sys.account.registerUser
+    config_value: 'false'
+    config_type: Y
+    remark: 是否开启注册用户功能（true开启，false关闭）
+- op_type: upsert-row
+  entity_type: sys_config
+  object_key: sys_config:6
+  match_fields:
+    config_id: 6
+  values:
+    config_id: 6
+    config_name: 用户登录-黑名单列表
+    config_key: sys.login.blackIPList
+    config_value: ''
+    config_type: Y
+    remark: 设置登录IP黑名单限制，多个匹配项以;分隔，支持匹配（*通配、网段）
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1
+  match_fields:
+    role_id: 2
+    menu_id: 1
+  values:
+    role_id: 2
+    menu_id: 1
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:2
+  match_fields:
+    role_id: 2
+    menu_id: 2
+  values:
+    role_id: 2
+    menu_id: 2
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:3
+  match_fields:
+    role_id: 2
+    menu_id: 3
+  values:
+    role_id: 2
+    menu_id: 3
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:100
+  match_fields:
+    role_id: 2
+    menu_id: 100
+  values:
+    role_id: 2
+    menu_id: 100
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:101
+  match_fields:
+    role_id: 2
+    menu_id: 101
+  values:
+    role_id: 2
+    menu_id: 101
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:102
+  match_fields:
+    role_id: 2
+    menu_id: 102
+  values:
+    role_id: 2
+    menu_id: 102
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:103
+  match_fields:
+    role_id: 2
+    menu_id: 103
+  values:
+    role_id: 2
+    menu_id: 103
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:104
+  match_fields:
+    role_id: 2
+    menu_id: 104
+  values:
+    role_id: 2
+    menu_id: 104
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:105
+  match_fields:
+    role_id: 2
+    menu_id: 105
+  values:
+    role_id: 2
+    menu_id: 105
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:106
+  match_fields:
+    role_id: 2
+    menu_id: 106
+  values:
+    role_id: 2
+    menu_id: 106
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:107
+  match_fields:
+    role_id: 2
+    menu_id: 107
+  values:
+    role_id: 2
+    menu_id: 107
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:108
+  match_fields:
+    role_id: 2
+    menu_id: 108
+  values:
+    role_id: 2
+    menu_id: 108
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:109
+  match_fields:
+    role_id: 2
+    menu_id: 109
+  values:
+    role_id: 2
+    menu_id: 109
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:110
+  match_fields:
+    role_id: 2
+    menu_id: 110
+  values:
+    role_id: 2
+    menu_id: 110
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:111
+  match_fields:
+    role_id: 2
+    menu_id: 111
+  values:
+    role_id: 2
+    menu_id: 111
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:112
+  match_fields:
+    role_id: 2
+    menu_id: 112
+  values:
+    role_id: 2
+    menu_id: 112
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:113
+  match_fields:
+    role_id: 2
+    menu_id: 113
+  values:
+    role_id: 2
+    menu_id: 113
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:114
+  match_fields:
+    role_id: 2
+    menu_id: 114
+  values:
+    role_id: 2
+    menu_id: 114
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:115
+  match_fields:
+    role_id: 2
+    menu_id: 115
+  values:
+    role_id: 2
+    menu_id: 115
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:116
+  match_fields:
+    role_id: 2
+    menu_id: 116
+  values:
+    role_id: 2
+    menu_id: 116
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:117
+  match_fields:
+    role_id: 2
+    menu_id: 117
+  values:
+    role_id: 2
+    menu_id: 117
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:500
+  match_fields:
+    role_id: 2
+    menu_id: 500
+  values:
+    role_id: 2
+    menu_id: 500
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:501
+  match_fields:
+    role_id: 2
+    menu_id: 501
+  values:
+    role_id: 2
+    menu_id: 501
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:502
+  match_fields:
+    role_id: 2
+    menu_id: 502
+  values:
+    role_id: 2
+    menu_id: 502
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1000
+  match_fields:
+    role_id: 2
+    menu_id: 1000
+  values:
+    role_id: 2
+    menu_id: 1000
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1001
+  match_fields:
+    role_id: 2
+    menu_id: 1001
+  values:
+    role_id: 2
+    menu_id: 1001
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1002
+  match_fields:
+    role_id: 2
+    menu_id: 1002
+  values:
+    role_id: 2
+    menu_id: 1002
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1003
+  match_fields:
+    role_id: 2
+    menu_id: 1003
+  values:
+    role_id: 2
+    menu_id: 1003
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1004
+  match_fields:
+    role_id: 2
+    menu_id: 1004
+  values:
+    role_id: 2
+    menu_id: 1004
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1005
+  match_fields:
+    role_id: 2
+    menu_id: 1005
+  values:
+    role_id: 2
+    menu_id: 1005
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1006
+  match_fields:
+    role_id: 2
+    menu_id: 1006
+  values:
+    role_id: 2
+    menu_id: 1006
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1007
+  match_fields:
+    role_id: 2
+    menu_id: 1007
+  values:
+    role_id: 2
+    menu_id: 1007
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1008
+  match_fields:
+    role_id: 2
+    menu_id: 1008
+  values:
+    role_id: 2
+    menu_id: 1008
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1009
+  match_fields:
+    role_id: 2
+    menu_id: 1009
+  values:
+    role_id: 2
+    menu_id: 1009
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1010
+  match_fields:
+    role_id: 2
+    menu_id: 1010
+  values:
+    role_id: 2
+    menu_id: 1010
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1011
+  match_fields:
+    role_id: 2
+    menu_id: 1011
+  values:
+    role_id: 2
+    menu_id: 1011
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1012
+  match_fields:
+    role_id: 2
+    menu_id: 1012
+  values:
+    role_id: 2
+    menu_id: 1012
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1013
+  match_fields:
+    role_id: 2
+    menu_id: 1013
+  values:
+    role_id: 2
+    menu_id: 1013
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1014
+  match_fields:
+    role_id: 2
+    menu_id: 1014
+  values:
+    role_id: 2
+    menu_id: 1014
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1015
+  match_fields:
+    role_id: 2
+    menu_id: 1015
+  values:
+    role_id: 2
+    menu_id: 1015
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1016
+  match_fields:
+    role_id: 2
+    menu_id: 1016
+  values:
+    role_id: 2
+    menu_id: 1016
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1017
+  match_fields:
+    role_id: 2
+    menu_id: 1017
+  values:
+    role_id: 2
+    menu_id: 1017
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1018
+  match_fields:
+    role_id: 2
+    menu_id: 1018
+  values:
+    role_id: 2
+    menu_id: 1018
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1019
+  match_fields:
+    role_id: 2
+    menu_id: 1019
+  values:
+    role_id: 2
+    menu_id: 1019
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1020
+  match_fields:
+    role_id: 2
+    menu_id: 1020
+  values:
+    role_id: 2
+    menu_id: 1020
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1021
+  match_fields:
+    role_id: 2
+    menu_id: 1021
+  values:
+    role_id: 2
+    menu_id: 1021
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1022
+  match_fields:
+    role_id: 2
+    menu_id: 1022
+  values:
+    role_id: 2
+    menu_id: 1022
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1023
+  match_fields:
+    role_id: 2
+    menu_id: 1023
+  values:
+    role_id: 2
+    menu_id: 1023
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1024
+  match_fields:
+    role_id: 2
+    menu_id: 1024
+  values:
+    role_id: 2
+    menu_id: 1024
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1025
+  match_fields:
+    role_id: 2
+    menu_id: 1025
+  values:
+    role_id: 2
+    menu_id: 1025
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1026
+  match_fields:
+    role_id: 2
+    menu_id: 1026
+  values:
+    role_id: 2
+    menu_id: 1026
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1027
+  match_fields:
+    role_id: 2
+    menu_id: 1027
+  values:
+    role_id: 2
+    menu_id: 1027
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1028
+  match_fields:
+    role_id: 2
+    menu_id: 1028
+  values:
+    role_id: 2
+    menu_id: 1028
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1029
+  match_fields:
+    role_id: 2
+    menu_id: 1029
+  values:
+    role_id: 2
+    menu_id: 1029
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1030
+  match_fields:
+    role_id: 2
+    menu_id: 1030
+  values:
+    role_id: 2
+    menu_id: 1030
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1031
+  match_fields:
+    role_id: 2
+    menu_id: 1031
+  values:
+    role_id: 2
+    menu_id: 1031
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1032
+  match_fields:
+    role_id: 2
+    menu_id: 1032
+  values:
+    role_id: 2
+    menu_id: 1032
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1033
+  match_fields:
+    role_id: 2
+    menu_id: 1033
+  values:
+    role_id: 2
+    menu_id: 1033
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1034
+  match_fields:
+    role_id: 2
+    menu_id: 1034
+  values:
+    role_id: 2
+    menu_id: 1034
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1035
+  match_fields:
+    role_id: 2
+    menu_id: 1035
+  values:
+    role_id: 2
+    menu_id: 1035
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1036
+  match_fields:
+    role_id: 2
+    menu_id: 1036
+  values:
+    role_id: 2
+    menu_id: 1036
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1037
+  match_fields:
+    role_id: 2
+    menu_id: 1037
+  values:
+    role_id: 2
+    menu_id: 1037
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1038
+  match_fields:
+    role_id: 2
+    menu_id: 1038
+  values:
+    role_id: 2
+    menu_id: 1038
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1039
+  match_fields:
+    role_id: 2
+    menu_id: 1039
+  values:
+    role_id: 2
+    menu_id: 1039
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1040
+  match_fields:
+    role_id: 2
+    menu_id: 1040
+  values:
+    role_id: 2
+    menu_id: 1040
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1041
+  match_fields:
+    role_id: 2
+    menu_id: 1041
+  values:
+    role_id: 2
+    menu_id: 1041
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1042
+  match_fields:
+    role_id: 2
+    menu_id: 1042
+  values:
+    role_id: 2
+    menu_id: 1042
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1043
+  match_fields:
+    role_id: 2
+    menu_id: 1043
+  values:
+    role_id: 2
+    menu_id: 1043
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1044
+  match_fields:
+    role_id: 2
+    menu_id: 1044
+  values:
+    role_id: 2
+    menu_id: 1044
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1045
+  match_fields:
+    role_id: 2
+    menu_id: 1045
+  values:
+    role_id: 2
+    menu_id: 1045
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1046
+  match_fields:
+    role_id: 2
+    menu_id: 1046
+  values:
+    role_id: 2
+    menu_id: 1046
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1047
+  match_fields:
+    role_id: 2
+    menu_id: 1047
+  values:
+    role_id: 2
+    menu_id: 1047
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1048
+  match_fields:
+    role_id: 2
+    menu_id: 1048
+  values:
+    role_id: 2
+    menu_id: 1048
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1049
+  match_fields:
+    role_id: 2
+    menu_id: 1049
+  values:
+    role_id: 2
+    menu_id: 1049
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1050
+  match_fields:
+    role_id: 2
+    menu_id: 1050
+  values:
+    role_id: 2
+    menu_id: 1050
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1051
+  match_fields:
+    role_id: 2
+    menu_id: 1051
+  values:
+    role_id: 2
+    menu_id: 1051
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1052
+  match_fields:
+    role_id: 2
+    menu_id: 1052
+  values:
+    role_id: 2
+    menu_id: 1052
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1053
+  match_fields:
+    role_id: 2
+    menu_id: 1053
+  values:
+    role_id: 2
+    menu_id: 1053
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1054
+  match_fields:
+    role_id: 2
+    menu_id: 1054
+  values:
+    role_id: 2
+    menu_id: 1054
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1055
+  match_fields:
+    role_id: 2
+    menu_id: 1055
+  values:
+    role_id: 2
+    menu_id: 1055
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1056
+  match_fields:
+    role_id: 2
+    menu_id: 1056
+  values:
+    role_id: 2
+    menu_id: 1056
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1057
+  match_fields:
+    role_id: 2
+    menu_id: 1057
+  values:
+    role_id: 2
+    menu_id: 1057
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1058
+  match_fields:
+    role_id: 2
+    menu_id: 1058
+  values:
+    role_id: 2
+    menu_id: 1058
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1059
+  match_fields:
+    role_id: 2
+    menu_id: 1059
+  values:
+    role_id: 2
+    menu_id: 1059
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1060
+  match_fields:
+    role_id: 2
+    menu_id: 1060
+  values:
+    role_id: 2
+    menu_id: 1060
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1065
+  match_fields:
+    role_id: 2
+    menu_id: 1065
+  values:
+    role_id: 2
+    menu_id: 1065
+- op_type: ensure-link
+  entity_type: sys_role_menu
+  object_key: sys_role_menu:2:1066
+  match_fields:
+    role_id: 2
+    menu_id: 1066
+  values:
+    role_id: 2
+    menu_id: 1066

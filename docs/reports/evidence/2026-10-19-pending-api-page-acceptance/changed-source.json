@@ -1,0 +1,56 @@
+[
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-backend/module_admin/annotation/log_annotation.py",
+    "before": "71c50bf694d12b3470566535a665d8548f424a9ce8139e1fcea2e1b4de8f6efe",
+    "after": "30a851262c9bd9f5f37b8c5872d8713edb9a529332693d483455f2e081e4ce16"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-backend/module_generator/repository/gen_repository.py",
+    "before": "b0aa7a3648f03bd06c295fa8965df9bbf2849b2cc5a61769406e5891767fb107",
+    "after": "7345eab8988575a7459c78d866544cb004ad67444b1d2a46a7a083425e2a1b3e"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-backend/module_generator/service/gen_service.py",
+    "before": "eb5c2483b72da9b732f808145397a592fec3eb69917e98f8fb445a0c1c5f83a0",
+    "after": "0c939c879fb5f27ae3dc7746f9b58ecb9cda3f5f3bfe546af2fbfcee37b909e3"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-backend/modules/system/application/services/cache_service.py",
+    "before": "035e4f6d4b31b23c9f81f2f62496200115861ec0272e94bf7e8ed9a62737b722",
+    "after": "e620e03e03a5be0f218539eac5f99e8062afba25bafb85f16a826445990e449d"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-backend/modules/system/infrastructure/dict_repository.py",
+    "before": "47d6315bb75e36e2256bb6f5aff8d590812bf4417e682f23b967c86660506b89",
+    "after": "c2ca0cb787b3bf36a0e50c7dfb647e92c5eb0bfd841549c81f5e4a95a786d1e3"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-backend/ports/external.py",
+    "before": "c7fb8de77512b4a164093bac334f06b7672490a7523ae1080809bde4ff8f25cc",
+    "after": "1f4abc9818f0899da1756a238ad65bf12bfc4658b96d700b7352c9f4221602fd"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-backend/tests/fakes/external_fakes.py",
+    "before": "d8d99297a2c152a8864ebc450a282b703ebbf00fffa86ebfcbcb27be5597556a",
+    "after": "0de5e6609e215717ca18731071b734c536297ea4391d44bdf678fcd1c3eda5b8"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-frontend/src/api/monitor/cache.ts",
+    "before": "209ec6f05bf0a255311bb289cb4bb202a7b52d732310b403832745c47d979a9d",
+    "after": "d884d9c0a25ee1d082b4da732ab8218f6b26ad0b5c0f73b5634970e9dcc62027"
+  },
+  {
+    "repository": "ruoyi",
+    "path": "ruoyi-fastapi-frontend/src/views/monitor/cache/list.vue",
+    "before": "1027b4dcb90f63a2c03b666baee3a8fdb58d00c4f7c7c45b3891b5322cba71ec",
+    "after": "4519008680524ddd78ad42a3a3a1abcadfb333ea7d57f55e6ef7d904b85f37ad"
+  }
+]
