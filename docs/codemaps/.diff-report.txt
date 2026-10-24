@@ -1,11 +1,27 @@
 # Codemap Diff Report
-Generated: 2026-02-11
 
-- docs/codemaps/overview.md | status=new_file | baseline_lines=0 | added_lines=63 | removed_lines=0 | changed_lines=63 | change_ratio=new_file
-- docs/codemaps/backend.md | status=new_file | baseline_lines=0 | added_lines=90 | removed_lines=0 | changed_lines=90 | change_ratio=new_file
-- docs/codemaps/frontend.md | status=new_file | baseline_lines=0 | added_lines=88 | removed_lines=0 | changed_lines=88 | change_ratio=new_file
-- docs/codemaps/data.md | status=new_file | baseline_lines=0 | added_lines=76 | removed_lines=0 | changed_lines=76 | change_ratio=new_file
+Generated: 2026-10-17
+Current dir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps
+Draft dir: /tmp/dashboard-task12-20261017/codemaps/business
+Scope changed: no
+Approval required: no
 
-Notes:
-- 本次为首次生成，写入前已完成文件范围确认。
-- 变更比例按新文件规则标记为 new_file。
+## Map Scope
+
+Existing maps: /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/backend.md, /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/data.md, /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/frontend.md, /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/overview.md
+Selected maps: /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/backend.md, /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/data.md, /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/frontend.md, /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/overview.md
+Added maps: none
+Removed maps: none
+
+## File Changes
+
+| File | Status | Changed | Baseline | Ratio | Gate |
+| --- | --- | ---: | ---: | ---: | --- |
+| `/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/backend.md` | existing | 18 | 89 | 0.202 | direct-write |
+| `/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/data.md` | existing | 7 | 75 | 0.093 | direct-write |
+| `/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/frontend.md` | existing | 0 | 87 | 0.000 | direct-write |
+| `/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/codemaps/overview.md` | existing | 0 | 62 | 0.000 | direct-write |
+
+## Pending Approval
+
+none

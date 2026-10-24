@@ -1,4 +1,4 @@
-<!-- Updated: 2026-02-11 -->
+<!-- Updated: 2026-10-17 -->
 # 数据与迁移 Codemap
 
 > 数据层由 SQLAlchemy DO/VO、Repository 抽象、Alembic 迁移与 YAML 种子数据共同组成，覆盖从模型定义到环境初始化的全链路。
@@ -11,6 +11,8 @@
 - `ruoyi-fastapi-backend/module_admin/entity/do/base.py` — ORM 基础字段与基类。
 - `ruoyi-fastapi-backend/module_admin/entity/do/*.py` — 业务持久化模型（用户、角色、菜单、项目、仿真等）。
 - `ruoyi-fastapi-backend/module_admin/entity/vo/*.py` — 业务返回模型与请求/响应对象。
+- `ruoyi-fastapi-backend/module_admin/entity/do/dashboard_do.py` — Dashboard 当前布局与版本；scope/key/account 和 dashboard/revision 分别唯一。
+- `ruoyi-fastapi-backend/module_admin/entity/vo/dashboard_vo.py` — 有界布局 JSON 与预期修订号请求。
 - `ruoyi-fastapi-backend/module_generator/entity/do/gen_do.py` — 代码生成域模型。
 - `ruoyi-fastapi-backend/module_generator/entity/vo/gen_vo.py` — 代码生成域 VO。
 
@@ -26,11 +28,12 @@
 - `ruoyi-fastapi-backend/module_admin/repository/base_repository.py` — 通用仓储基类。
 - `ruoyi-fastapi-backend/module_admin/repository/query_builder.py` — 动态查询构造。
 - `ruoyi-fastapi-backend/module_admin/repository/specification.py` — 查询规格抽象。
+- `ruoyi-fastapi-backend/modules/system/infrastructure/dashboard_repository.py` — 条件写入与版本快照同事务；删除清空内容/历史但保留修订号，防止删除重建后误接受旧写入。
 - `ruoyi-fastapi-backend/docs/REPOSITORY_LAYER_POLICY.md` — 仓储层治理规则。
 
 **依赖关系：** Service 仅依赖 Repository；Repository 依赖 `config/database.py` 的 Session 与 `entity/do`；CI 通过脚本检查禁止运行时回流 DAO。
 
-**架构模式：** Repository 模式；查询构建器；架构约束自动化守卫。
+**架构模式：** Repository 模式；查询构建器；架构约束自动化守卫。Dashboard 账号范围取认证身份，场景范围使用共享 account_id=0 并校验真实工程和项目查询/编辑权限。
 
 ## 数据库连接与事务边界
 
@@ -53,6 +56,8 @@
 **关键文件：**
 - `ruoyi-fastapi-backend/alembic/env.py` — 迁移环境配置、模型导入与在线/离线迁移。
 - `ruoyi-fastapi-backend/alembic/versions/*.py` — 版本化迁移脚本。
+- `ruoyi-fastapi-backend/alembic/versions/20261017_add_dashboard.py` — 创建 sys_dashboard、sys_dashboard_version 及唯一约束和外键。
+- `ruoyi-fastapi-backend/scripts/internal/db_workflow/schema_apply_atlas.py` — 开发 Atlas 模型注册，与 Alembic 环境共同包含 Dashboard。
 - `ruoyi-fastapi-backend/alembic.ini` — Alembic 主配置。
 - `ruoyi-fastapi-backend/scripts/db.py` — 统一数据库工作流入口。
 

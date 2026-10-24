@@ -1,4 +1,4 @@
-<!-- Updated: 2026-02-11 -->
+<!-- Updated: 2026-10-17 -->
 # 后端架构 Codemap
 
 > 后端以 FastAPI 为核心，采用 Controller -> Service -> Repository 分层并内建缓存、审计、追踪、指标等横切能力。
@@ -12,7 +12,7 @@
 - `ruoyi-fastapi-backend/server.py` — FastAPI 实例、生命周期、健康检查、Prometheus 输出、路由注册。
 - `ruoyi-fastapi-backend/sub_applications/handle.py` — 子应用挂载入口（静态资源）。
 
-**依赖关系：** `server.py` 依赖 `config/*` 初始化数据库/Redis/调度器；依赖 `middlewares/handle.py` 与 `exceptions/handle.py` 注入横切逻辑；依赖 `module_admin/controller/*` 与 `module_generator/controller/gen_controller.py` 注册 API。
+**依赖关系：** `server.py` 依赖 `config/*` 初始化数据库/Redis/调度器；依赖 `middlewares/handle.py` 与 `exceptions/handle.py` 注入横切逻辑；通过 `modules/registry.py` 注册 API 并应用模块能力门禁。
 
 **架构模式：** 集中式应用装配；生命周期内聚初始化；路由聚合注册。
 
@@ -46,6 +46,22 @@
 **依赖关系：** Controller 调用 Service；Service 调用 Repository；Repository 依赖 `entity/do` 与 `config/database.py`；VO 与共享响应被 Controller/Service 共同使用。
 
 **架构模式：** 严格分层；仓储模式（Repository）；DO/VO 分离；领域子模块化（用户、角色、项目、仿真等）。
+
+## Dashboard 文档持久化 `modules/system`
+
+**用途：** 为账号布局与工程场景共享布局提供带修订号的持久化边界。
+
+**关键文件：**
+- `ruoyi-fastapi-backend/modules/registry.py` — 将 Dashboard API 注册到 system/platform 能力门禁。
+- `ruoyi-fastapi-backend/modules/system/api/dashboard_controller.py` — 布局读写删除入口与 409 冲突响应。
+- `ruoyi-fastapi-backend/modules/system/application/services/dashboard_service.py` — 认证账号隔离、工程存在性及项目查询/编辑权限校验。
+- `ruoyi-fastapi-backend/modules/system/infrastructure/dashboard_repository.py` — 条件写入、版本快照与删除墓碑。
+- `ruoyi-fastapi-backend/module_admin/entity/do/dashboard_do.py`、`ruoyi-fastapi-backend/module_admin/entity/vo/dashboard_vo.py` — 当前文档/版本存储与有界 JSON 请求契约。
+- `ruoyi-fastapi-backend/alembic/versions/20261017_add_dashboard.py` — Dashboard 两表迁移。
+
+**依赖关系：** API 复用 identity、请求级数据库会话及容器 project 服务；模型接入 Alembic/Atlas。前端共享 `PersistentDashboard.vue` 负责布局冲突交互，server monitor 通过标准 widget 包提供真实数据。
+
+**架构模式：** 服务端派生身份；共享场景校验全局项目权限；文档与版本同事务提交；删除清空内容/历史并保留递增计数，防止旧版本覆盖重建文档。
 
 ## 代码生成域 `module_generator`
 
