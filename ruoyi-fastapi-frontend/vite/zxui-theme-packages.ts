@@ -40,9 +40,10 @@ export function zxuiThemeDeploymentPlugin(options: {
       );
     }
   }
-  // Theme manifests are versioned deployment assets. Keep their compiler paired
-  // with the installed packages; source UI resolution is independently opt-in.
-  const { themeDeploymentPlugin } = loadThemeCompiler(frontendRoot);
+  // Theme manifests are versioned deployment assets: validate them with the
+  // compiler of the same revision. Local mode deploys the checkout's theme
+  // packages, so it must use that checkout's compiler as well.
+  const { themeDeploymentPlugin } = loadThemeCompiler(frontendRoot, localRepoRoot);
   return themeDeploymentPlugin({
     packages: ZX_THEME_PACKAGE_CHOICES.map(({ packageName, id }) => ({
       packageName,
