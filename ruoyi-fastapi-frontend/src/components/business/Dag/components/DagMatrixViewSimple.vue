@@ -111,9 +111,7 @@
               <el-button size="small" type="primary" text @click="handleAddChild(row)">
                 添加
               </el-button>
-              <el-button size="small" type="warning" text @click="handleEdit(row)">
-                编辑
-              </el-button>
+              <el-button size="small" text @click="handleEdit(row)"> 编辑 </el-button>
               <el-button size="small" type="danger" text @click="handleDelete(row)">
                 删除
               </el-button>
