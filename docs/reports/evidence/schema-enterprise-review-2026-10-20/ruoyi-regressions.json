@@ -1,0 +1,20 @@
+{
+  "command": [
+    "./node_modules/.bin/vitest",
+    "run",
+    "src/views/system/post/components/post-form.test.ts",
+    "tests/unit/components/PostSaveFeedback.test.ts",
+    "src/components/ui/FormDialog/index.test.ts",
+    "tests/unit/components/RemainingEditorReadLifecycle.test.ts",
+    "tests/ui-standards.test.ts",
+    "tests/unit/components/dashboard-chart-settings.test.ts",
+    "--reporter=verbose"
+  ],
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+  "started_at": "2026-10-20T08:52:35.793159+00:00",
+  "elapsed_seconds": 7.979,
+  "exit_code": 0,
+  "log": "ruoyi-regressions.log",
+  "log_bytes": 16298,
+  "log_sha256": "992f4c3a1bfa2cd58ef35e6ffb36971b8f07ea5f45ac5d0694b32d87dbaf4a34"
+}

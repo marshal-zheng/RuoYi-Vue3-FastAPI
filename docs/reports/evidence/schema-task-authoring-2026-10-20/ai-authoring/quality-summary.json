@@ -1,0 +1,109 @@
+{
+  "completed_at_utc": "2026-10-20T13:15:14.968417+00:00",
+  "scope": "Same current API/types/artifact and fixed ordinary Post CRUD task; documentation bundle only intervention, two paired ABBA repeats; unmodified first answers. No browser/full engine or identical interaction-design claim.",
+  "first_attempt_quality": {
+    "full_docs": {
+      "passed": 2,
+      "total": 2
+    },
+    "task_docs": {
+      "passed": 2,
+      "total": 2
+    }
+  },
+  "runs": [
+    {
+      "id": "01-baseline",
+      "document_arm": "baseline",
+      "api_contract": "current",
+      "automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "protocol_valid": true,
+      "manual_passed": true,
+      "author_defects": [],
+      "non_gating_observations": [],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4379,
+      "first_attempt_accepted": true,
+      "raw_final_sha256": "4e08960b57ba1839f5874f6fa0d55e852b074f2b70eca3ccbf3e3f594345f293"
+    },
+    {
+      "id": "02-current",
+      "document_arm": "current",
+      "api_contract": "current",
+      "automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "protocol_valid": true,
+      "manual_passed": true,
+      "author_defects": [],
+      "non_gating_observations": [
+        "status使用ZxInput+enum校验，而非选择控件。固定任务没有指定状态控件种类，因此不计失败；这说明本次功能通过不代表两组交互方案完全相同。"
+      ],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4191,
+      "first_attempt_accepted": true,
+      "raw_final_sha256": "aaff88d5d7bb47a8e5eb305a77cf078332e09b73e5e017d21f45fbea39f90e56"
+    },
+    {
+      "id": "03-current",
+      "document_arm": "current",
+      "api_contract": "current",
+      "automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "protocol_valid": true,
+      "manual_passed": true,
+      "author_defects": [],
+      "non_gating_observations": [
+        "与02同样使用文本框+enum校验表达status；固定任务未规定必须选择控件，因此不计失败。两组交互方案并非完全同质。",
+        "选择任务允许的原生Rule.col布局，而没有使用当前columns/fullWidth快捷能力；不能把功能通过解释为所有生成代码都采用最简公共写法。"
+      ],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4672,
+      "first_attempt_accepted": true,
+      "raw_final_sha256": "d385857cc1fe68000a5c0ee50aa6ddf0dc9354272201b2aeb755a6d04e0238f3"
+    },
+    {
+      "id": "04-baseline",
+      "document_arm": "baseline",
+      "api_contract": "current",
+      "automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "protocol_valid": true,
+      "manual_passed": true,
+      "author_defects": [],
+      "non_gating_observations": [],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4671,
+      "first_attempt_accepted": true,
+      "raw_final_sha256": "696cdba14b78bd511164551b78335733dc978915317b89d20ed5add9d267dd12"
+    }
+  ],
+  "quality_protocol_unchanged": true,
+  "checker_freeze_sha256": "cc51b27d75c515cfd646f45947cfa69db31e0ff8131d8438cc3d9556e96a95cb",
+  "generator_repairs": 0,
+  "model_retries": 0,
+  "observed_control_choices": {
+    "full_docs": [
+      "ZxSelect",
+      "ZxSelect"
+    ],
+    "task_docs": [
+      "ZxInput + enum validation",
+      "ZxInput + enum validation"
+    ]
+  },
+  "interaction_limit": "The task fixes status values, not widget choice. Functional acceptance does not establish equivalent UX. Two samples in each arm cannot isolate why these choices differ. Native Rule.col was explicitly allowed and appears once in the task-docs arm.",
+  "source_bytes_caveat": "Descriptive bytes only; never a substitute for actual author-model input/output usage."
+}

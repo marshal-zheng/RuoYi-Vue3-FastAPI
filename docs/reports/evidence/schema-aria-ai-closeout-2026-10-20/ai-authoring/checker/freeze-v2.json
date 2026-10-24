@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "frozen_at_utc": "2026-10-20T09:21:53.206429+00:00",
+  "reason": "Evaluator bug: Element Plus ElCol responsive md classes apply at all widths >=992px; missing lg does not revert to base span. Only breakpoint accumulation in the evaluator changes. Original generated source, protocol, checks and first quality.json are retained.",
+  "discovery": "After scoring and reading run01, before reading or scoring run02. No model rerun.",
+  "scope": "Same correction applied to all four samples; all other scoring rules unchanged.",
+  "implementation_evidence": {
+    "path": "/Users/hqz/Downloads/element-plus/node_modules/.pnpm/element-plus@2.13.0_patch_hash=ypgajf5do6kq4jwonfrdz5es4e_vue@3.5.40_typescript@5.5.4_/node_modules/element-plus/theme-chalk/el-col.css",
+    "sha256": "058db0faefce0915602dc429b19415ff05ebabedb07eb265822f9159a7c867f9",
+    "media_query": "@media only screen and (min-width:992px)",
+    "rule": ".el-col-md-12{display:block;flex:0 0 50%;max-width:50%}"
+  },
+  "files": {
+    "checker/check-v2.cjs": "e4dd58a0d70f0f8c767bcd2204167519751cd9de37467903253c6a469ce78f91",
+    "checker/check-v2.delta.patch": "a16ecdfecd589f71a7e986bbb70c9c1184aaf29316607d61d9c17208a7e4ae02",
+    "checker/oracle-min-width.json": "fe020d34e5d6ce968ea6283e71acb10ead4d3bee4be28f031a04f68dfb01bf22",
+    "checker/oracle-baseline-quality-v2.json": "2a60d8d89dc6240230583561b3b7d366b4bb1929957b4a4d789ac9b722a39a75",
+    "checker/oracle-current-quality-v2.json": "2ea8d8f9a9ee757f1cd73b40c44f52d95831858dbc0fc0b68755fa6ec3598e1d",
+    "checker/oracle-invalid-quality-v2.json": "414bc787fd258c3845eaed22327fff48218599295a9636e9f21e6402cae2658d",
+    "checker/oracle-min-width-quality-v2.json": "5685b6208e603f391398e5df75505aba4d814f4154ad44468e8e9429c887a4e7"
+  },
+  "oracle_status": "passed",
+  "valid_oracles": {
+    "baseline": "30/30",
+    "current": "30/30",
+    "min-width": "30/30"
+  },
+  "invalid_oracle_expected_failures": [
+    "public-types-and-field-keys",
+    "dto-whitelist-and-trusted-identity",
+    "server-issues-known-and-summary",
+    "save-signal-dto-success-and-failure"
+  ]
+}

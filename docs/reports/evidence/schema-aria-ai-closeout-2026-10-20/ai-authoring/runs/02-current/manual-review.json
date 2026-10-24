@@ -1,0 +1,17 @@
+{
+  "reviewed_at_utc": "2026-10-20T09:23:08.722763+00:00",
+  "passed": true,
+  "author_defects": [],
+  "reviewed_final_sha256": "2e4cffedcee00f65b0976d32e38e99f9d44b34fb0b0727b9188011cc99530710",
+  "checker": "checker/check-v2.cjs",
+  "automated_checks": "30/30",
+  "findings": [
+    "RuleFor<PostValues>[] 检查字段名；五个规则覆盖空白、长度、非负整数和状态枚举，排序 0 被保留。",
+    "columns=2 和 remark.fullWidth=true 使用当前公开布局契约，避免逐字段重复 col。",
+    "DTO 从 unknown 检查属性存在及业务合法性后显式构造五字段白名单；postId 只来自可信参数，0 被保留。",
+    "FieldIssue 使用明确的五种后端字段分支；未知/空字段返回仅 message，按当前契约进入摘要。",
+    "Save<PostValues> 与 SchemaFormInstance<PostValues> 正确使用公开泛型；props.initial 交给唯一编辑值 owner，未创建可写副本。",
+    "保存/恢复通过公开 submit/reset，pending 禁用按钮；setup 中仅创建一次 save，仅调用 api.write 并原样转发 signal。ZxSelect 的 options 是 ZXUI 已有公开能力，宿主主题由任务前置条件保证。"
+  ],
+  "scope": "Manual source review plus native rule validation and memory SFC wiring. No browser/full-engine integration claim; generated source has not been repaired."
+}

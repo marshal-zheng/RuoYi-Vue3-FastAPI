@@ -1,0 +1,32 @@
+{
+  "typecheck": {
+    "exit_code": 0,
+    "command": "node node_modules/typescript/lib/tsc.js --noEmit --skipLibCheck --strict --module ESNext --moduleResolution Bundler --target ES2022 artifact-types.mts",
+    "fixture_sha256": "ddf1c12921583b2621567c8267e4fb26c17e11b87dd877d41b6a53bc110691d8",
+    "checks": [
+      "public leaf exports resolve from extracted package declarations",
+      "nullable numeric model, supported step/precision/clear properties",
+      "instance focus/blur",
+      "private nativeAttrs absent from public props",
+      "string model and unpromised formatter rejected"
+    ]
+  },
+  "full_bundle_notices": {
+    "dist/index.full.js": {
+      "complete_notice_retained": true,
+      "sha256": "01664b182b7fa5f4f8ffc5380788985958b286ae6115853ac52a14cdc0caef19"
+    },
+    "dist/index.full.min.js": {
+      "complete_notice_retained": true,
+      "sha256": "2f112a79fa50b433d4df1636f71736cc5060a69e1c43f3ccd10fd9123a58af2c"
+    },
+    "dist/index.full.mjs": {
+      "complete_notice_retained": true,
+      "sha256": "c15c7fed6ecc278e401b53ff6dbe3b1978ffdfc2a75340c1397d22dcaaf906b3"
+    },
+    "dist/index.full.min.mjs": {
+      "complete_notice_retained": true,
+      "sha256": "cf1843f35470f7ec903ed0d70ecf942bdf382e9388887d21cc8a50c6486498cf"
+    }
+  }
+}

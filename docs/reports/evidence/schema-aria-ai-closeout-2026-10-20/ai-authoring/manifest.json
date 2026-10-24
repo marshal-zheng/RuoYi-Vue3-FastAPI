@@ -1,0 +1,111 @@
+{
+  "protocol_version": 1,
+  "frozen_at_utc": "2026-10-20T09:08:36.700555+00:00",
+  "scope": "One ordinary Post CRUD task, two independent repetitions per version; no general efficiency claim.",
+  "model": "gpt-6-astra",
+  "effort": "xhigh",
+  "cli": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "cli_version": "codex-cli 0.163.0-alpha.10.2",
+  "cli_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+  "timeout_seconds_per_run": 600,
+  "sequence": "ABBA",
+  "runs": [
+    {
+      "id": "01-baseline",
+      "variant": "baseline",
+      "pair": 1
+    },
+    {
+      "id": "02-current",
+      "variant": "current",
+      "pair": 1
+    },
+    {
+      "id": "03-current",
+      "variant": "current",
+      "pair": 2
+    },
+    {
+      "id": "04-baseline",
+      "variant": "baseline",
+      "pair": 2
+    }
+  ],
+  "common_hashes": {
+    "task.md": "6e4332cf4ce61a6861c5e66ae7480994560854f92713c61571df95114a7e7594",
+    "domain.ts": "e47ea3e51dbdff81b28693b605ac771af0d5f59c690f68cdbf0d394a77976f77",
+    "output-schema.json": "37a897a61f6661a04d8ccc2e3d550293aabd3d4c632ee1d541f1743d826039f3"
+  },
+  "versions": {
+    "baseline": {
+      "source": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-enterprise-baseline-zlt9l0jh/0/packages/schema-form",
+      "public_type_files": [
+        "src/index.ts",
+        "src/types.ts",
+        "src/form-create/index.ts",
+        "src/form-create/types.ts",
+        "src/fields/types.ts"
+      ],
+      "prompt_bytes": 14240,
+      "prompt_sha256": "1daa2f2a9b4464429264e3b7f6b2a29e843a5a2a495eeb932169f21da708b6f7",
+      "readme_sha256": "94097e1594a22ba3c49aa10e23c744861903853cd0aaec3a9804bfe8504b3539",
+      "types_sha256": "7cf43b483157b2e780a24557548eda3acbb39a8f3e327e2520d7244fd6e279ec",
+      "source_hashes": {
+        "README.md": "94097e1594a22ba3c49aa10e23c744861903853cd0aaec3a9804bfe8504b3539",
+        "src/index.ts": "715a0aaff4a3a7c3b607781c341b954a141705cd1d922db771a3c58fd45929f2",
+        "src/types.ts": "9c20ffd6feec9fb74a50b0d8470d4765fa0df88b558292cdc5feefb1ce67b495",
+        "src/form-create/index.ts": "ae8d2029cc9252a9a910765131ca34adb02d520714adc70d8b5555d0b930ce0c",
+        "src/form-create/types.ts": "efd6416c0415d517e422330a89bafbf451d6e60255bdda22594dcd47e64371e9",
+        "src/fields/types.ts": "989a8a042c934f95f260c00bfc8e2b3bb708c6510facd77770df50f9b23269b7"
+      }
+    },
+    "current": {
+      "source": "/Users/hqz/Downloads/element-plus/packages/schema-form",
+      "public_type_files": [
+        "src/index.ts",
+        "src/types.ts",
+        "src/form-create/index.ts",
+        "src/form-create/types.ts",
+        "src/fields/types.ts"
+      ],
+      "prompt_bytes": 22798,
+      "prompt_sha256": "3a4933d77ad253878f68fb50a0e8ec06b18ce029ef9256c399c7bde5cfce7851",
+      "readme_sha256": "9a8d5c58966f990cc8e0f62229d5a81b4c8c97db6be24805fbb856b3234aa7d4",
+      "types_sha256": "b624ad8177b75f00f0e539a0a48667b1da4c027ce5255f7b66ace06f797fe2e7",
+      "source_hashes": {
+        "README.md": "9a8d5c58966f990cc8e0f62229d5a81b4c8c97db6be24805fbb856b3234aa7d4",
+        "src/index.ts": "4feaecfce2c8f116a005ce6ba1dc73243cad592633528dd7e78082fabe6b5dcc",
+        "src/types.ts": "ff5e5041abd2a1069e0e32632549b0018aef3c18de5ec63fbdb07b27fd4be1f2",
+        "src/form-create/index.ts": "dcd68755a896d0a9ff5c8a8daa06ef60fdbcb4d61c42d19fb6a36e0a025f5c81",
+        "src/form-create/types.ts": "3eaa1bfc3d2656cbbb6c5d7e11c83ee7b29be1ab3dcd16802d511d531ddb5c20",
+        "src/fields/types.ts": "c33ff14204e68c12bcf797a9d41a6f90c345f4e62ee4a2ae8ba41fbb09b4239d"
+      }
+    }
+  },
+  "disabled_features": [
+    "shell_tool",
+    "multi_agent",
+    "apps",
+    "plugins",
+    "hooks",
+    "memories",
+    "browser_use",
+    "computer_use",
+    "image_generation",
+    "view_image",
+    "skill_search",
+    "goals",
+    "sleep_tool"
+  ],
+  "enabled_features": [
+    "skip_host_skill_discovery"
+  ],
+  "config_overrides": {
+    "approval_policy": "never",
+    "model_reasoning_effort": "xhigh",
+    "web_search": "disabled",
+    "project_doc_max_bytes": 0
+  },
+  "tool_policy": "No tools. Feature gates reduce available tools; any non-message item invalidates the no-tool protocol.",
+  "failure_policy": "Keep every attempt; no retries, replacement samples, human code edits, or hidden repairs."
+}

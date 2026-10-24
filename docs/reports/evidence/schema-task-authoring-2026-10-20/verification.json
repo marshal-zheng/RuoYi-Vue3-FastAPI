@@ -1,0 +1,74 @@
+{
+  "verified_at": "2026-10-20T13:17:01.719255+00:00",
+  "status": "passed",
+  "changed_source_hashes_verified": 8,
+  "runtime_source_hashes_unchanged": 22,
+  "frozen_inputs_verified": true,
+  "runs": [
+    {
+      "id": "01-baseline",
+      "protocol": true,
+      "quality": "30/30",
+      "manual_review": true,
+      "source_unchanged": true
+    },
+    {
+      "id": "02-current",
+      "protocol": true,
+      "quality": "30/30",
+      "manual_review": true,
+      "source_unchanged": true
+    },
+    {
+      "id": "03-current",
+      "protocol": true,
+      "quality": "30/30",
+      "manual_review": true,
+      "source_unchanged": true
+    },
+    {
+      "id": "04-baseline",
+      "protocol": true,
+      "quality": "30/30",
+      "manual_review": true,
+      "source_unchanged": true
+    }
+  ],
+  "commands": {
+    "schema-types.log": {
+      "command": "pnpm -C packages/schema-form typecheck",
+      "exit_code": 0,
+      "sha256": "eb46a18056cc531019ef856f1716c558661c8273e7c70611274d172b1b55049a"
+    },
+    "schema-build.log": {
+      "command": "pnpm -C packages/schema-form build",
+      "exit_code": 0,
+      "sha256": "a6b440d00ed43d3275b7a83eef676a067c7afb327bed4db8d69cadc8446c3e26"
+    },
+    "pilot.log": {
+      "command": "node docs/research/schema-form-pilot/pilot/run.mjs test",
+      "exit_code": 0,
+      "sha256": "4d5cc51c304353b67855623e4d2a78d275d28d4e357b7537f0bef5ea7e27659f"
+    },
+    "docs-script-lint.log": {
+      "command": "node_modules/.bin/eslint packages/schema-form/scripts/copy-examples.mjs",
+      "exit_code": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "docs-format.log": {
+      "command": "node_modules/.bin/prettier --check packages/schema-form/README.md packages/schema-form/docs/authoring/*.md packages/schema-form/scripts/copy-examples.mjs",
+      "exit_code": 0,
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  },
+  "tarball_sha256": "25ea9886e966d3fe8b036421073f344d72ca65949c93cbc590ca47053905319b",
+  "business_source_changes": [],
+  "model_retries": 0,
+  "human_source_repairs": 0,
+  "limitations": [
+    "No browser/screen-reader validation",
+    "One CRUD task, two repeats per documentation group",
+    "Functional acceptance does not imply identical widget/interaction design",
+    "Task routing/retrieval costs excluded"
+  ]
+}

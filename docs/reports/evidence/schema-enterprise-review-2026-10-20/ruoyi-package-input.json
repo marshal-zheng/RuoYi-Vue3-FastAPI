@@ -1,0 +1,14 @@
+{
+  "source": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-enterprise-review-iyea0rog/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+  "vendor": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+  "sha256": "231de85743ef36ee5aaf664d434b2b5d1c1c8cf9cde7bfa59f16feedc7257a58",
+  "before_sha256": {
+    "package.json": "fbec044eed2031a60c23111c85306b86a2e4d8b60d29422b3cd8ac4a15733802",
+    "yarn.lock": "0656088c39ea137707c29fb78c2662ed1d1008168bccc2ba6908b1a8ba2c0a28"
+  },
+  "before_snapshot": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/ruoyi-schema-review-install-e2121mgw",
+  "manifest_change": {
+    "from": "\"@zxio/schema-form\": \"file:./vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz\"",
+    "to": "\"@zxio/schema-form\": \"file:./vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz\""
+  }
+}

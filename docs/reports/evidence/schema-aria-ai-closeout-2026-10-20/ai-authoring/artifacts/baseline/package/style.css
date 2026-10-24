@@ -1,0 +1,34 @@
+.zx-schema-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: var(--el-text-color-primary);
+}
+.zx-schema-field__label {
+  font-size: var(--el-font-size-base);
+  line-height: 1.5;
+}
+.zx-schema-field__required,
+.zx-schema-field__messages [data-severity='error'] {
+  color: var(--el-color-danger);
+}
+.zx-schema-field__help {
+  color: var(--el-text-color-secondary);
+}
+.zx-schema-field__messages {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--el-font-size-extra-small);
+}
+.zx-schema-field__messages [data-severity='warning'] {
+  color: var(--el-color-warning);
+}
+.zx-schema-field__messages [data-severity='info'] {
+  color: var(--el-text-color-secondary);
+}
+
+.schema-form__errors {
+  color: var(--el-color-danger);
+  margin: 8px 0;
+}

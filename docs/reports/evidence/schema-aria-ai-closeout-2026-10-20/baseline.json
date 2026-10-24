@@ -1,0 +1,46 @@
+{
+  "backup": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-aria-ai-baseline-a0fuk9g1",
+  "files": [
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/index.ts",
+      "sha256": "e393e073015f1a57cf81cc681288007c72652cc96989687cab77c9df27ef7ae5"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/style/css.ts",
+      "sha256": "a51b1ea5db2f41b42bb8b6677d545afc5b59db2a1a3b761d23aadf8a44cd0201"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/style/index.ts",
+      "sha256": "a51b1ea5db2f41b42bb8b6677d545afc5b59db2a1a3b761d23aadf8a44cd0201"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/__tests__/input-number.test.tsx",
+      "sha256": "8fdaefda6b67ee6bfa61c4d733239c2431d0e4ac4dbec3a12799083c02386788"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/src/props.ts",
+      "sha256": "75057c1b9214197636e9720db5785e9cf100798842f2b04f471a3490013c82ec"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/src/input-number-core.vue",
+      "sha256": "51e8dca056c2f31f3f55bcbe2c83f9fc262d425d7965c94c850c2a5883fad4ec"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/src/input-number.vue",
+      "sha256": "7f4cab606e879e2db6b7a5db8ed26b1565547fd9108acdf432f91decbdf55a07"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/src/instance.ts",
+      "sha256": "dd237a34a83f4facf81ea5d595f04f26f9422c21284cb676a9631bd2c3964bd3"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/docs/zh-CN/component/input-number.md",
+      "sha256": "e46bd61dfc51c7faf521859e3e61724c941dfd583489437a101d5a278f95ee2e"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/pilot.test.ts",
+      "sha256": "17789f542896a9cceb37fb5e0227f26b666a267c73a0b39c173f2b1b0208de36"
+    }
+  ],
+  "git_head": "df2e0124c3af98a1fc9c972c39e113de7e317899"
+}

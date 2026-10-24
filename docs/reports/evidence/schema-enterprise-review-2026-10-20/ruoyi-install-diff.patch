@@ -1,0 +1,43 @@
+--- before/package.json
++++ after/package.json
+@@ -76,7 +76,7 @@
+     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz",
+     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz",
+     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz",
+-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz",
++    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz",
+     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz",
+     "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz",
+--- before/yarn.lock
++++ after/yarn.lock
+@@ -4349,9 +4349,9 @@
+   languageName: node
+   linkType: hard
+ 
+-"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz::locator=vfadmin%40workspace%3A.":
++"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz::locator=vfadmin%40workspace%3A.":
+   version: 0.1.0
+-  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz#./vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz::hash=3a46d3&locator=vfadmin%40workspace%3A."
++  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz#./vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz::hash=7c697b&locator=vfadmin%40workspace%3A."
+   peerDependencies:
+     "@form-create/element-ui": 3.3.5
+     "@zxio/zxui": ^3.0.0-next.0
+@@ -4360,7 +4360,7 @@
+   peerDependenciesMeta:
+     "@form-create/element-ui":
+       optional: true
+-  checksum: 10c0/1a6722dec8e70409b2aeb241cab8627942142a42237d5bc8df8c13b6af308139f8685283d9956f12cae147b556be602ddd20c3f5bbf329f02b3c4ce3bea1592b
++  checksum: 10c0/43d612a61f5779514fa3e53440a33a430ecc2c29f693815b28b637e797b360c10a61566e4c09ac2ce47c4c0a17502590d316a6dceada2cf1705902c3f732d5e6
+   languageName: node
+   linkType: hard
+ 
+@@ -13999,7 +13999,7 @@
+     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz"
+     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
+     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
+-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz"
++    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz"
+     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
+     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
+     "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz"

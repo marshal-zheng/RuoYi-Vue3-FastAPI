@@ -1,0 +1,22 @@
+{
+  "reviewed_at_utc": "2026-10-20T13:10:55.076250+00:00",
+  "document_arm": "current",
+  "api_contract": "current",
+  "passed": true,
+  "author_defects": [],
+  "non_gating_observations": [
+    "status使用ZxInput+enum校验，而非选择控件。固定任务没有指定状态控件种类，因此不计失败；这说明本次功能通过不代表两组交互方案完全相同。"
+  ],
+  "reviewed_final_sha256": "aaff88d5d7bb47a8e5eb305a77cf078332e09b73e5e017d21f45fbea39f90e56",
+  "checker": "checker/check.cjs",
+  "automated_checks": "30/30",
+  "findings": [
+    "当前RuleFor<PostValues>、Save<PostValues>与SchemaFormInstance<PostValues>均正确，公开声明通过。",
+    "名称/编码空白和长度、非负整数排序、状态枚举均有原生校验；备注textarea，columns=2/fullWidth符合布局要求。",
+    "DTO逐项运行时校验并显式构造五字段白名单，只从参数接受postId，0被保留；无输入额外字段泄漏。",
+    "后端错误Map定义在模块作用域，已知五字段映射path，未知及空字段保留message进入摘要，原型键安全。",
+    "initial只是props.initial的会话别名，save仅setup创建一次；未维护第二份可编辑值或绑定v-model。",
+    "服务仅api.write且原样传signal；按钮调用公开submit/reset，pending禁用，无额外GET和私有API。"
+  ],
+  "scope": "Manual source review, real current declarations, native validation and memory SFC wiring; no browser/full engine or identical interaction design claim; no source repairs."
+}

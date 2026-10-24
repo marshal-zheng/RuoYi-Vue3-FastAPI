@@ -1,0 +1,113 @@
+{
+  "completed_at_utc": "2026-10-20T09:26:38.612941+00:00",
+  "scope": "One fixed ordinary Post CRUD task, two paired repeats (ABBA), unmodified first answers; public types and memory behavior, not browser/full engine or general enterprise success claims.",
+  "first_attempt_quality": {
+    "baseline": {
+      "passed": 2,
+      "total": 2
+    },
+    "current": {
+      "passed": 2,
+      "total": 2
+    }
+  },
+  "runs": [
+    {
+      "id": "01-baseline",
+      "variant": "baseline",
+      "original_automated": {
+        "passed": false,
+        "count": "29/30",
+        "failures": [
+          "editor-one-session-actions-pending-and-layout"
+        ]
+      },
+      "corrected_automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "manual_passed": true,
+      "author_defects": [],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4506,
+      "first_attempt_quality_passed": true,
+      "raw_final_sha256": "a27cb32675d0267f4a1fb6279a2d3ad0f340288a3184302a3cfd0176f4a6909e"
+    },
+    {
+      "id": "02-current",
+      "variant": "current",
+      "original_automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "corrected_automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "manual_passed": true,
+      "author_defects": [],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4559,
+      "first_attempt_quality_passed": true,
+      "raw_final_sha256": "2e4cffedcee00f65b0976d32e38e99f9d44b34fb0b0727b9188011cc99530710"
+    },
+    {
+      "id": "03-current",
+      "variant": "current",
+      "original_automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "corrected_automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "manual_passed": true,
+      "author_defects": [],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4655,
+      "first_attempt_quality_passed": true,
+      "raw_final_sha256": "b6206b9c5b1b3cf8e03f1205d7e0f0c2fd325bb166818387e71f1bf37d5c2625"
+    },
+    {
+      "id": "04-baseline",
+      "variant": "baseline",
+      "original_automated": {
+        "passed": false,
+        "count": "29/30",
+        "failures": [
+          "editor-one-session-actions-pending-and-layout"
+        ]
+      },
+      "corrected_automated": {
+        "passed": true,
+        "count": "30/30",
+        "failures": []
+      },
+      "manual_passed": true,
+      "author_defects": [],
+      "source_unchanged": true,
+      "source_utf8_bytes": 4600,
+      "first_attempt_quality_passed": true,
+      "raw_final_sha256": "105c58279354c70f67f44b2355b5df56d7534abee91d41de924dc0f646d88af0"
+    }
+  ],
+  "checker_correction": {
+    "original_kept": true,
+    "version_2_only_change": "ElCol min-width breakpoint accumulation instead of reverting at unspecified lg/xl.",
+    "evidence": "checker/freeze-v2.json",
+    "original_false_failures": [
+      "01-baseline",
+      "04-baseline"
+    ],
+    "generator_repairs": 0,
+    "model_retries": 0
+  },
+  "protocol_warning_note": "Original runner classified identical pre-turn experimental-feature client warning as a tool; runtime protocol amendment/audit owns correction, separate from source quality.",
+  "source_bytes_caveat": "Generated UTF-8 bytes are descriptive only, never a replacement for actual model token usage."
+}

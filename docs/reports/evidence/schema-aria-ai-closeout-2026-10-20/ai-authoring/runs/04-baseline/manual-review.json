@@ -1,0 +1,17 @@
+{
+  "reviewed_at_utc": "2026-10-20T09:26:38.609536+00:00",
+  "passed": true,
+  "author_defects": [],
+  "reviewed_final_sha256": "105c58279354c70f67f44b2355b5df56d7534abee91d41de924dc0f646d88af0",
+  "checker": "checker/check-v2.cjs",
+  "automated_checks": "30/30",
+  "findings": [
+    "使用旧版支持的非泛型 Save/SchemaFormInstance，以及 RuleFor<PostValues>[]；公开声明检查通过，没有类型抑制。",
+    "col={span:24,md:12} 在 md 及更宽屏幕为两列，备注 span24 整行；原 checker 对 lg 的误报由统一 v2 正确处理。",
+    "DTO 逐项收窄 Values | PostValues，拒绝空白、长度超限、非整数或负数、非法状态和非字符串备注；白名单和可信 postId 参数保持隔离。",
+    "错误映射采用 Map 的五个明确键，未知及空字段统一为旧契约的 field 空字符串，原消息保留。",
+    "initial 只在 setup 中作为初始快照创建，没有后续编辑写入或 v-model；save 同样只创建一次。表单编辑值、校验和提交状态属于 SchemaForm。",
+    "保存/恢复使用公开 submit/reset，pending 禁用按钮；服务仅调用 api.write 并原样转发 signal，无额外 GET、HTTP 实现或私有 API。"
+  ],
+  "scope": "Manual source review plus native rule validation and memory SFC wiring. No browser/full-engine integration claim; generated source has not been repaired."
+}

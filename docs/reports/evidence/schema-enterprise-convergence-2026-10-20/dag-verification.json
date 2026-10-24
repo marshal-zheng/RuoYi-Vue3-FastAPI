@@ -1,0 +1,30 @@
+{
+  "cwd": "/Users/hqz/dev/ai/vue-flow",
+  "artifact": "vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz",
+  "sha256": "2cf43a479c4236618eb5523e1c2cd15ca0327dc936bf99c09d775f38889869dc",
+  "commands": [
+    {
+      "command": "pnpm install --filter @zxio/x6-devkit-dag --offline --ignore-scripts --no-frozen-lockfile",
+      "exitCode": 0,
+      "log": "dag-final-install.log",
+      "lockfileScope": "only schema-form tarball reference, integrity, dependency key",
+      "lockfileDiff": "dag-final-lock.diff"
+    },
+    {
+      "command": "pnpm -C packages/dag build",
+      "exitCode": 0,
+      "log": "dag-final-build.log",
+      "notes": "Fresh verification against enterprise-final artifact: vue-tsc declarations, both Vite facets and public contract parity"
+    }
+  ],
+  "boundaries": [
+    "No graph tests added or run under repository policy",
+    "No browser, headless or computer use",
+    "No commit, push or npm publish"
+  ],
+  "priorArtifactVerification": "dag-verification-before-final.json",
+  "priorSourceChecks": {
+    "reference": "dag-verification-before-final.json",
+    "reason": "DAG and example source unchanged for final artifact; prior scoped lint and i18n results are retained as source checks, not relabeled as final-artifact executions"
+  }
+}

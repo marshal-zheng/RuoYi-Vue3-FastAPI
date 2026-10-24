@@ -1,0 +1,5 @@
+initial {"read":{"name":"initial"},"wrap":{"labelWidth":"200px","class":"business-wrap"},"rulesWrap":{"labelWidth":"200px","class":"business-wrap"}}
+server error {"wrap":{"error":"duplicate"},"rulesWrap":{"error":"duplicate"},"issues":[{"field":"name","message":"duplicate"}]}
+after reset {"wrap":{"error":"duplicate"},"rulesWrap":{"error":"duplicate"},"issues":[],"dirty":false}
+edited after reset {"wrap":{"error":"duplicate"},"issues":[],"read":{"name":"edited after reset"}}
+saved after reset {"result":true,"wrap":{"error":"duplicate"},"issues":[],"status":"已保存","dirty":false}

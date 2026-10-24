@@ -1,0 +1,56 @@
+{
+  "node": "v22.22.1",
+  "scope": "Real FormCreate 3.3.5 native group + Vue memory renderer + current schema session; ElForm/controls are stubs. validate measures native traversal/dispatch to successful stub validators, NOT real Element Plus validators. No browser DOM, layout, paint, network or user latency.",
+  "warmup": 3,
+  "samples": 10,
+  "results": [
+    {
+      "rows": 50,
+      "fieldsPerRow": 6,
+      "bytes": 8897,
+      "mountMs": 115.102,
+      "editIncludingVueFlushAndSessionObservation": {
+        "samples": 10,
+        "p50ms": 6.055,
+        "p95ms": 6.538
+      },
+      "fullFormData": {
+        "samples": 10,
+        "p50ms": 0.129,
+        "p95ms": 0.202
+      },
+      "validateDispatchToStub": {
+        "samples": 10,
+        "p50ms": 0.152,
+        "p95ms": 0.236
+      },
+      "submitWithNestedServerIssueMs": 1.584,
+      "targetRowCorrect": true,
+      "untargetedFirstRowClean": true
+    },
+    {
+      "rows": 200,
+      "fieldsPerRow": 6,
+      "bytes": 35797,
+      "mountMs": 329.99,
+      "editIncludingVueFlushAndSessionObservation": {
+        "samples": 10,
+        "p50ms": 21.463,
+        "p95ms": 22.886
+      },
+      "fullFormData": {
+        "samples": 10,
+        "p50ms": 0.536,
+        "p95ms": 1.13
+      },
+      "validateDispatchToStub": {
+        "samples": 10,
+        "p50ms": 0.96,
+        "p95ms": 2.048
+      },
+      "submitWithNestedServerIssueMs": 1.68,
+      "targetRowCorrect": true,
+      "untargetedFirstRowClean": true
+    }
+  ]
+}

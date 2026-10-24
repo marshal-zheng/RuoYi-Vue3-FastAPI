@@ -1,0 +1,62 @@
+{
+  "capturedAt": "2026-10-20T09:20:38.396Z",
+  "scope": "Packed public leaf against copied stock npm EP 2.13; happy-dom and SSR",
+  "environment": {
+    "workspace": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-aria-artifact-u9h3n1l6",
+    "peer_source": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-inspection-pilot-g5uTq1/node_modules/element-plus",
+    "other_dependency_source": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules",
+    "method": "tarball unpack into isolated temporary workspace; stock npm-installed EP 2.13 copied locally; other already-installed dependencies reused through symlinks; no consumer files modified",
+    "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-aria-artifact-u9h3n1l6/zxio-zxui-3.0.0-next.0.tgz",
+    "tarball_sha256": "a6481059e23e4f9661e70a1dadecfbb2eb1d28e967c94de7aaabf8a398950664",
+    "package": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-aria-artifact-u9h3n1l6/node_modules/@zxio/zxui",
+    "element_plus_version": "2.13.0",
+    "peer_module_sha256": "94b415061dff3b7d54b81226010d92da1be706447a61e7f5d269ad9ce4f2c3c6"
+  },
+  "versions": {
+    "vue": "3.5.43",
+    "elementPlus": "2.13.0",
+    "esbuild": "0.21.5"
+  },
+  "esmMethod": "ES leaf from extracted tarball bundled for Node SSR with existing esbuild; public dependencies external",
+  "nativeNodeEsmLimitation": "Direct upstream EP ESM import fails on @popperjs/core placements CommonJS named-export interop; no package source is patched",
+  "license": {
+    "ES": {
+      "completeNoticeRetained": true,
+      "file": "es/components/input-number/src/number-control.vue.mjs",
+      "sha256": "be7c14435db4a50ce2b6dd88e8381d48938a230f727f4d4f2137da79d02cdbf4"
+    },
+    "CJS": {
+      "completeNoticeRetained": true,
+      "file": "lib/components/input-number/src/number-control.vue.js",
+      "sha256": "7667bd9bf616f2f8f5a70635db41807a8d8b3beb5fa704f449d2d6bb51f6a1b0"
+    }
+  },
+  "formats": {
+    "CJS": {
+      "passed": true,
+      "checks": [
+        "native ARIA on actual input; layout attrs on root",
+        "dynamic native attrs update and removal",
+        "keyboard stepping retains numeric semantics",
+        "reactive min/max/disabled ARIA and disabled stepping",
+        "SSR spinbutton ARIA, name and error-description relation"
+      ],
+      "ssrInputHtml": "<input class=\"el-input__inner\" aria-invalid=\"true\" aria-describedby=\"quantity-error\" step=\"1\" max=\"5\" min=\"-2\" aria-valuemin=\"-2\" aria-valuemax=\"5\" aria-valuenow=\"0\" aria-disabled=\"false\" name=\"quantity\" type=\"number\" autocomplete=\"off\" tabindex=\"0\" style=\"\" role=\"spinbutton\">"
+    },
+    "ES": {
+      "passed": true,
+      "checks": [
+        "native ARIA on actual input; layout attrs on root",
+        "dynamic native attrs update and removal",
+        "keyboard stepping retains numeric semantics",
+        "reactive min/max/disabled ARIA and disabled stepping",
+        "SSR spinbutton ARIA, name and error-description relation"
+      ],
+      "ssrInputHtml": "<input class=\"el-input__inner\" aria-invalid=\"true\" aria-describedby=\"quantity-error\" step=\"1\" max=\"5\" min=\"-2\" aria-valuemin=\"-2\" aria-valuemax=\"5\" aria-valuenow=\"0\" aria-disabled=\"false\" name=\"quantity\" type=\"number\" autocomplete=\"off\" tabindex=\"0\" style=\"\" role=\"spinbutton\">"
+    }
+  },
+  "stockPeerControl": {
+    "reproducedOriginalMissingAria": true,
+    "inputHtml": "<input class=\"el-input__inner\" step=\"1\" max=\"9007199254740991\" min=\"-9007199254740991\" type=\"number\" autocomplete=\"off\" tabindex=\"0\" style=\"\">"
+  }
+}

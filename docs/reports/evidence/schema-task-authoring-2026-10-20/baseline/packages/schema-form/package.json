@@ -1,0 +1,72 @@
+{
+  "name": "@zxio/schema-form",
+  "version": "0.1.0",
+  "description": "Controlled ZXUI fields with an optional FormCreate editing session",
+  "license": "GPL-3.0",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json",
+    "./fields": {
+      "source": "./src/fields/index.ts",
+      "types": "./dist/fields/index.d.ts",
+      "import": "./dist/fields/index.mjs",
+      "require": "./dist/fields/index.cjs"
+    },
+    "./form-create": {
+      "source": "./src/form-create/index.ts",
+      "types": "./dist/form-create/index.d.ts",
+      "import": "./dist/form-create/index.mjs",
+      "require": "./dist/form-create/index.cjs"
+    },
+    "./style.css": {
+      "source": "./src/style.css",
+      "default": "./dist/style.css"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "build": "vite build && node ../../scripts/release/write-dist-package.mjs packages/schema-form --copy LICENSE && node scripts/copy-examples.mjs",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --config vitest.config.mts"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "element-plus": "^2.13.0",
+    "@zxio/zxui": "^3.0.0-next.0",
+    "@form-create/element-ui": "3.3.5"
+  },
+  "devDependencies": {
+    "vue": "catalog:",
+    "element-plus": "^2.13.0",
+    "@zxio/zxui": "workspace:*",
+    "vite": "^6.3.5",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "vite-plugin-dts": "^4.5.4",
+    "vue-tsc": "^2.0.28",
+    "vitest": "^2.0.5",
+    "@form-create/element-ui": "3.3.5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "publishable": true
+  },
+  "peerDependenciesMeta": {
+    "@form-create/element-ui": {
+      "optional": true
+    }
+  }
+}

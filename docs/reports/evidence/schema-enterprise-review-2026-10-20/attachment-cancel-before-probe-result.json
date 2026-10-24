@@ -1,0 +1,8 @@
+{
+  "provenance": "Captured actual pre-fix probe output on 2026-10-20; this historical probe was not rerun against the fixed file.",
+  "scope": "Actual AttachmentField SFC compiled; Vue memory renderer; ZxUpload stub; upload promise ignores AbortSignal and remains pending",
+  "evidence": [
+    {"action":"remove","aborted":true,"stateAfterCancel":{"pending":true,"blocking":[{"severity":"error","message":"请等待附件上传完成"}]}},
+    {"action":"replace","aborted":true,"stateAfterCancel":{"pending":true,"blocking":[{"severity":"error","message":"请等待附件上传完成"}]}}
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "assessment_date": "2026-10-20",
+  "scope": "read-only product review; only report and evidence added",
+  "repositories": {
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI": "068b47bf9f89270b632b68281698a57d79689bde",
+    "/Users/hqz/Downloads/element-plus": "0b16b2a47730781036317c8fa38322158d904c92",
+    "/Users/hqz/dev/ai/vue-flow": "87827c0059a2c65f96a0a73d768f8399f10785e4"
+  },
+  "schema_source_sha256": {
+    "packages/schema-form/src/SchemaForm.vue": "1fbb08f05bb97d24c697d336e07742933a012b3a422ef0f4997807337da88d05",
+    "packages/schema-form/src/definition.ts": "1db2a27bb177176055c01ef14cc6d3a558af16360d0f569d3288651c24e045bb",
+    "packages/schema-form/src/fields/Field.vue": "6cdd5a0c64c79b150dbcdffae3e902708f5ac8db2abd72ca666abaaf4c9dc9fb",
+    "packages/schema-form/src/fields/NumberTextInput.vue": "96ce6947c66315cfd79af54741423a94df19ea8b51a43cc01c7f943949398612",
+    "packages/schema-form/src/fields/index.ts": "bcd84ccde1f478606dcc5ea60517785719b7dc845a67601e30bec2b86e9769b5",
+    "packages/schema-form/src/fields/number-text.ts": "4037bd3b2501d5530c7b1ba91a9e04d3e8ada6b70aa6b5d4b5a22d522df25b24",
+    "packages/schema-form/src/fields/types.ts": "989a8a042c934f95f260c00bfc8e2b3bb708c6510facd77770df50f9b23269b7",
+    "packages/schema-form/src/form-create/index.ts": "ae8d2029cc9252a9a910765131ca34adb02d520714adc70d8b5555d0b930ce0c",
+    "packages/schema-form/src/form-create/types.ts": "efd6416c0415d517e422330a89bafbf451d6e60255bdda22594dcd47e64371e9",
+    "packages/schema-form/src/index.ts": "715a0aaff4a3a7c3b607781c341b954a141705cd1d922db771a3c58fd45929f2",
+    "packages/schema-form/src/json.ts": "9aa9e4d5410800e20405065cddfcfccb4f74435183ae90272e2bd62679b2f094",
+    "packages/schema-form/src/session.ts": "b4d42d339df150b4c5dfdfe9ce583bcdf47ce2d47d84a58bbb4e3677c7e47f5e",
+    "packages/schema-form/src/style.css": "c96320ec73b74cb8ceb85d56f590e02d145bc8df7efda1816b97460a4ef212a8",
+    "packages/schema-form/src/types.ts": "9c20ffd6feec9fb74a50b0d8470d4765fa0df88b558292cdc5feefb1ce67b495",
+    "packages/schema-form/src/zxui/RadioOptions.vue": "124754dbb86114ad6f615351a3253a759a3586979c50eeffa73a5b8ed208055f",
+    "packages/schema-form/src/zxui/index.ts": "1ca03c0d8e192a85f79f9efa4e3891d5c791e5403609a3ca0a84455d42caed07"
+  },
+  "known_vendor_sha256": "97b2f642657d4cd6cd3a59138beaa3fcce006199fa3b7412c1df9db2a6a3f98c",
+  "new_verification": [
+    {
+      "command": "pnpm -C packages/schema-form test",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "result": "passed: 2 files, 4 tests; node environment; Api stubs",
+      "executor": "schema_quality subagent"
+    },
+    {
+      "command": "pnpm -C packages/schema-form typecheck",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "result": "exit 0",
+      "executor": "schema_quality subagent"
+    },
+    {
+      "command": "node docs/research/schema-form-pilot/pilot/run.mjs test",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "result": "exit 0: 1 file, 7 tests; real FormCreate and fields, simulated DOM and service doubles; expected async-validator stderr",
+      "executor": "primary agent"
+    },
+    {
+      "command": "./node_modules/.bin/vitest run src/views/system/post/components/post-form.test.ts tests/unit/components/PostSaveFeedback.test.ts tests/unit/components/dashboard-chart-settings.test.ts --reporter=verbose",
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "result": "exit 0: 3 files, 21 tests; business tests include component/API mocks; Browserslist warning",
+      "executor": "ruoyi_consumer subagent"
+    }
+  ],
+  "not_run": [
+    "browser/computer use",
+    "real API writes",
+    "graph test suites",
+    "new production builds",
+    "full monorepo tests"
+  ]
+}

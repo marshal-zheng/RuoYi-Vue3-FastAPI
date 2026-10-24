@@ -1,0 +1,13 @@
+{
+  "command": [
+    "yarn",
+    "type-check"
+  ],
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+  "started_at": "2026-10-20T08:52:35.793170+00:00",
+  "elapsed_seconds": 24.969,
+  "exit_code": 0,
+  "log": "ruoyi-typecheck.log",
+  "log_bytes": 0,
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

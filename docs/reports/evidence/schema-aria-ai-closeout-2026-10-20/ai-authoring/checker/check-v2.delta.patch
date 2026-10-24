@@ -1,0 +1,21 @@
+--- checker/check.cjs
++++ checker/check-v2.cjs
+@@ -280,8 +280,16 @@
+       assert(observed.every((entry) => !Object.hasOwn(entry.attrs, 'modelValue') && !Object.hasOwn(entry.attrs, 'onUpdate:modelValue')), 'Second writable form model')
+       const cols = observed[0].columns
+       const span = (col, size) => {
+-        const value = col?.[size] ?? col?.span
+-        return typeof value === 'object' ? value.span : value
++        // ElCol responsive classes use min-width media queries: a md span
++        // remains active at lg/xl unless a later breakpoint overrides it.
++        let active = col?.span
++        for (const breakpoint of ['xs', 'sm', 'md', 'lg', 'xl']) {
++          const value = col?.[breakpoint]
++          const next = typeof value === 'object' ? value?.span : value
++          if (next !== undefined) active = next
++          if (breakpoint === size) break
++        }
++        return active
+       }
+       for (const rule of rules) {
+         if (rule.field === 'remark')

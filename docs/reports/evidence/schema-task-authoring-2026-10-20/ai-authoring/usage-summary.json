@@ -1,0 +1,189 @@
+{
+  "scope": "One ordinary Post CRUD authoring task with preselected materials, two repetitions per group; same current schema API/artifact. Compare full documentation with task documentation content and organization, not retrieval costs or the complete AI development workflow.",
+  "cost_scope": "Usage covers only the four controlled single-turn code-authoring model calls (input + output). It excludes engineering/documentation work, independent quality-check and human-review agent tokens, previous experiments, smoke runs, and retrieval/routing. It is not complete development-workflow consumption.",
+  "interpretation": "Compare the supplied documentation combinations/content for one preselected ordinary CRUD task. Do not separate content/organization/length effects or generalize to retrieval, full AI development, or stable reasoning/latency improvements. Read independent quality outcomes before treating a generation as successful. Reasoning is already included in output.",
+  "samples": [
+    {
+      "id": "01-baseline",
+      "variant": "baseline",
+      "pair": 1,
+      "label": "full docs",
+      "protocol_valid": true,
+      "tool_item_count": 0,
+      "allowed_preflight_warning_count": 1,
+      "completed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "tokens": {
+        "input_tokens": 17327,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3849,
+        "reasoning_output_tokens": 2442
+      },
+      "total_tokens": 21176,
+      "uncached_input_tokens": 17327,
+      "elapsed_seconds": 119.586,
+      "quality_file": "runs/01-baseline/quality.json",
+      "manual_review_file": "runs/01-baseline/manual-review.md"
+    },
+    {
+      "id": "02-current",
+      "variant": "current",
+      "pair": 1,
+      "label": "task docs",
+      "protocol_valid": true,
+      "tool_item_count": 0,
+      "allowed_preflight_warning_count": 1,
+      "completed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "tokens": {
+        "input_tokens": 16545,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4241,
+        "reasoning_output_tokens": 2899
+      },
+      "total_tokens": 20786,
+      "uncached_input_tokens": 16545,
+      "elapsed_seconds": 129.541,
+      "quality_file": "runs/02-current/quality.json",
+      "manual_review_file": "runs/02-current/manual-review.md"
+    },
+    {
+      "id": "03-current",
+      "variant": "current",
+      "pair": 2,
+      "label": "task docs",
+      "protocol_valid": true,
+      "tool_item_count": 0,
+      "allowed_preflight_warning_count": 1,
+      "completed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "tokens": {
+        "input_tokens": 16545,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4616,
+        "reasoning_output_tokens": 3106
+      },
+      "total_tokens": 21161,
+      "uncached_input_tokens": 16545,
+      "elapsed_seconds": 139.35,
+      "quality_file": "runs/03-current/quality.json",
+      "manual_review_file": "runs/03-current/manual-review.md"
+    },
+    {
+      "id": "04-baseline",
+      "variant": "baseline",
+      "pair": 2,
+      "label": "full docs",
+      "protocol_valid": true,
+      "tool_item_count": 0,
+      "allowed_preflight_warning_count": 1,
+      "completed": true,
+      "exit_code": 0,
+      "timed_out": false,
+      "tokens": {
+        "input_tokens": 17327,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3744,
+        "reasoning_output_tokens": 2254
+      },
+      "total_tokens": 21071,
+      "uncached_input_tokens": 17327,
+      "elapsed_seconds": 110.648,
+      "quality_file": "runs/04-baseline/quality.json",
+      "manual_review_file": "runs/04-baseline/manual-review.md"
+    }
+  ],
+  "variants": {
+    "baseline": {
+      "label": "full docs",
+      "attempts_recorded": 2,
+      "completed_count": 2,
+      "protocol_valid_count": 2,
+      "all_attempts_retained": true,
+      "mean_tokens": {
+        "input_tokens": 17327,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3796.5,
+        "reasoning_output_tokens": 2348
+      },
+      "mean_total_tokens": 21123.5,
+      "mean_uncached_input_tokens": 17327,
+      "mean_elapsed_seconds": 115.11699999999999
+    },
+    "current": {
+      "label": "task docs",
+      "attempts_recorded": 2,
+      "completed_count": 2,
+      "protocol_valid_count": 2,
+      "all_attempts_retained": true,
+      "mean_tokens": {
+        "input_tokens": 16545,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4428.5,
+        "reasoning_output_tokens": 3002.5
+      },
+      "mean_total_tokens": 20973.5,
+      "mean_uncached_input_tokens": 16545,
+      "mean_elapsed_seconds": 134.44549999999998
+    }
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "baseline": "01-baseline",
+      "current": "02-current",
+      "delta_tokens_current_minus_baseline": {
+        "input_tokens": -782,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 392,
+        "reasoning_output_tokens": 457
+      },
+      "delta_total_tokens_current_minus_baseline": -390,
+      "delta_uncached_input_tokens_current_minus_baseline": -782,
+      "delta_elapsed_seconds_current_minus_baseline": 9.955
+    },
+    {
+      "pair": 2,
+      "baseline": "04-baseline",
+      "current": "03-current",
+      "delta_tokens_current_minus_baseline": {
+        "input_tokens": -782,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 872,
+        "reasoning_output_tokens": 852
+      },
+      "delta_total_tokens_current_minus_baseline": 90,
+      "delta_uncached_input_tokens_current_minus_baseline": -782,
+      "delta_elapsed_seconds_current_minus_baseline": 28.702
+    }
+  ],
+  "experiment_totals": {
+    "attempts": 4,
+    "completed_count": 4,
+    "protocol_valid_count": 4,
+    "tool_item_count": 0,
+    "allowed_preflight_warning_count": 4,
+    "tokens": {
+      "input_tokens": 67744,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 16450,
+      "reasoning_output_tokens": 10701
+    },
+    "total_tokens": 84194,
+    "uncached_input_tokens": 67744,
+    "elapsed_seconds": 499.125,
+    "includes_prior_experiments_or_smoke": false
+  }
+}

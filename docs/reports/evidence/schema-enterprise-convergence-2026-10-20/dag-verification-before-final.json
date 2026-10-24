@@ -1,0 +1,34 @@
+{
+  "cwd": "/Users/hqz/dev/ai/vue-flow",
+  "artifact": "vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz",
+  "sha256": "4a4859fadfe0e47d1f405a3335c57d672bce26ca60ee57e7facf54729f35db7e",
+  "commands": [
+    {
+      "command": "pnpm install --filter @zxio/x6-devkit-dag --offline --ignore-scripts --no-frozen-lockfile",
+      "exitCode": 0,
+      "log": "dag-install.log",
+      "lockfileScope": "only schema-form local tarball reference, integrity, dependency key"
+    },
+    {
+      "command": "targeted ESLint for changed DAG and example sources, plus --no-ignore editors.ts",
+      "exitCode": 0,
+      "log": "dag-lint.log"
+    },
+    {
+      "command": "pnpm -C packages/dag build",
+      "exitCode": 0,
+      "log": "dag-build.log",
+      "notes": "vue-tsc declarations, both Vite facets and public contract parity passed; generated declaration lint has 140 warnings and no errors"
+    },
+    {
+      "command": "pnpm --dir docs check:examples-i18n",
+      "exitCode": 0,
+      "log": "dag-examples-i18n.log"
+    }
+  ],
+  "boundaries": [
+    "No graph tests added or run under repository policy",
+    "No browser, headless or computer use",
+    "No commit, push or npm publish"
+  ]
+}

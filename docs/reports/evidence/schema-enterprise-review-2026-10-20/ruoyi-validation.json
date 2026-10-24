@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-20",
+  "package": {
+    "tarball": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+    "sha256": "231de85743ef36ee5aaf664d434b2b5d1c1c8cf9cde7bfa59f16feedc7257a58",
+    "dependency": "file:./vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+    "installed_version": "0.1.0"
+  },
+  "checks": {
+    "install": {
+      "command": [
+        "yarn",
+        "install",
+        "--mode=skip-build"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "started_at": "2026-10-20T08:52:15.617388+00:00",
+      "elapsed_seconds": 2.051,
+      "exit_code": 0,
+      "log": "ruoyi-install.log",
+      "log_bytes": 1660,
+      "log_sha256": "39ec2fd279ddd828a06fe92fe3638bc7f5e3259a5e5a8c4a61c39df4521cc42d"
+    },
+    "regressions": {
+      "command": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "src/views/system/post/components/post-form.test.ts",
+        "tests/unit/components/PostSaveFeedback.test.ts",
+        "src/components/ui/FormDialog/index.test.ts",
+        "tests/unit/components/RemainingEditorReadLifecycle.test.ts",
+        "tests/ui-standards.test.ts",
+        "tests/unit/components/dashboard-chart-settings.test.ts",
+        "--reporter=verbose"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "started_at": "2026-10-20T08:52:35.793159+00:00",
+      "elapsed_seconds": 7.979,
+      "exit_code": 0,
+      "log": "ruoyi-regressions.log",
+      "log_bytes": 16298,
+      "log_sha256": "992f4c3a1bfa2cd58ef35e6ffb36971b8f07ea5f45ac5d0694b32d87dbaf4a34",
+      "test_files_passed": 6,
+      "tests_passed": 98
+    },
+    "typecheck": {
+      "command": [
+        "yarn",
+        "type-check"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "started_at": "2026-10-20T08:52:35.793170+00:00",
+      "elapsed_seconds": 24.969,
+      "exit_code": 0,
+      "log": "ruoyi-typecheck.log",
+      "log_bytes": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": 0
+    },
+    "source-build": {
+      "command": [
+        "/usr/bin/env",
+        "VITE_ZXUI_LOCAL=true",
+        "VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus",
+        "yarn",
+        "build:prod"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "started_at": "2026-10-20T08:52:35.793333+00:00",
+      "elapsed_seconds": 44.112,
+      "exit_code": 0,
+      "log": "ruoyi-source-build.log",
+      "log_bytes": 417167,
+      "log_sha256": "d0e9bd07aa928e05e6a9c86afd7d4bcb7083d6aef859e5a2f5893095d2b4818f"
+    }
+  },
+  "scope_verification": {
+    "manifest_and_lock_changes": "Only schema-form descriptor/resolution/checksum and workspace reference changed against captured pre-install files.",
+    "diff": "ruoyi-install-diff.patch",
+    "previous_tarballs_preserved": true
+  },
+  "limits": [
+    "Vitest and static/build checks; no browser or live API writes performed.",
+    "This is the existing six-file, 98-case focused suite, not the full frontend suite.",
+    "Install reports pre-existing Vitest/coverage and testing-library peer warnings."
+  ],
+  "file_sha256": {
+    "package.json": "dfb62bf81b494d6afcc2fd14198100a22b36da15f8dd1988b27c96e4e58a1e63",
+    "yarn.lock": "b3ae8f11b8e750301ce251dba2549a1f9ffc97e553131e0219905be7254692d1"
+  }
+}

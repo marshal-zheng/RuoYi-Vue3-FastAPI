@@ -1,0 +1,14 @@
+{
+  "source_files": {
+    "packages/schema-form/README.md": "312529e34e74808681da6bdbfd6ac23e7a7e57371332b14b1a2da7f4f82f1bea",
+    "packages/schema-form/scripts/copy-examples.mjs": "f803895eb5fd4f859cc5695b4cd8e8534dfa51175f7cd04178b56046b114460f",
+    "packages/schema-form/docs/authoring/composite-fields.md": "ca2c66bb7783545fd3d195be55f254f0d7ec7051cfec69ceefd2cac4d12db329",
+    "packages/schema-form/docs/authoring/controlled-fields.md": "1164ff9f9a374788ba2924ed4647974a24237fa0fc49e5a8b45b795c71cab48f",
+    "packages/schema-form/docs/authoring/crud.md": "87da60754fa7700748bfe3f5e0a9ec41ae738472f911da29a2dd2fbd69ae3413",
+    "packages/schema-form/docs/authoring/json-import.md": "5b7d0b06449b7c992a28248988767040583fc17c81a3cc976254e95a5d875a2d",
+    "packages/schema-form/docs/authoring/nested-errors.md": "910500b1432ef825df495bd978006b020070da21704805e805bdf79012104301",
+    "packages/schema-form/docs/authoring/reference.md": "e57c2065da50b3fef54d503657fc162be39adf39473e36149a6039e22940bcee"
+  },
+  "runtime_changes": [],
+  "business_changes": []
+}

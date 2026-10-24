@@ -1,0 +1,44 @@
+{
+  "conclusion": "No token or quality measurement obtained. Null does not mean zero; no savings conclusion is supported.",
+  "cli_version": "codex-cli 0.142.4",
+  "configuration": "Existing user CLI configuration unchanged; requested xhigh; no model override; configured model observed from error as gpt-6-astra. No configuration or credential file read.",
+  "runs": [
+    {
+      "variant": "baseline",
+      "exit_code": 1,
+      "timed_out": false,
+      "elapsed_seconds": 8.496,
+      "observed_configured_model_from_error": "gpt-6-astra",
+      "measurement_status": "blocked_before_generation",
+      "tokens": {
+        "input_tokens": null,
+        "cached_input_tokens": null,
+        "output_tokens": null,
+        "reasoning_output_tokens": null
+      },
+      "quality_check": {
+        "status": "not_run",
+        "reason": "No generated code; request rejected before generation."
+      }
+    },
+    {
+      "variant": "current",
+      "exit_code": 1,
+      "timed_out": false,
+      "elapsed_seconds": 6.523,
+      "observed_configured_model_from_error": "gpt-6-astra",
+      "measurement_status": "blocked_before_generation",
+      "tokens": {
+        "input_tokens": null,
+        "cached_input_tokens": null,
+        "output_tokens": null,
+        "reasoning_output_tokens": null
+      },
+      "quality_check": {
+        "status": "not_run",
+        "reason": "No generated code; request rejected before generation."
+      }
+    }
+  ],
+  "retry_policy": "One attempt per variant, max 300 seconds each, sequential. No fallback model, upgrade, resume or second model attempt."
+}

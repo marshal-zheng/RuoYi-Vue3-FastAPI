@@ -1,0 +1,157 @@
+{
+  "artifact": "/Users/hqz/dev/ai/vue-flow/vendor/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+  "sha256": "231de85743ef36ee5aaf664d434b2b5d1c1c8cf9cde7bfa59f16feedc7257a58",
+  "installedRoot": "/Users/hqz/dev/ai/vue-flow/node_modules/.pnpm/@zxio+schema-form@file+vendor+zxio-schema-form-0.1.0-enterprise-review.20261020.tgz_@zxio+zxu_wn72i53kbjpopeo3ig6rtrgyry/node_modules/@zxio/schema-form",
+  "fileCount": 37,
+  "allFilesIdentical": true,
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "602c46d4641618216485b8af333a30c877e05ee643e046f7852b4b50e2e7933d"
+    },
+    {
+      "path": "fields/index.cjs",
+      "sha256": "adc3d222d39f033bd022baedc78282a4896c64a64de5fc3d4826cc002ac33695"
+    },
+    {
+      "path": "form-create/index.cjs",
+      "sha256": "1bc8b6e391c541513eed2ba9c8865881a489e85cee5a0c71a52b819bbef023db"
+    },
+    {
+      "path": "index.cjs",
+      "sha256": "040ca1fcf3bc739f94d3891bcc4d22e867d6355417f606f70f2e8dffe0336082"
+    },
+    {
+      "path": "style.css",
+      "sha256": "5b963b7f561dfa145ca9398d0d032906bf3d8ce3bb930482fadf7d6da4c34167"
+    },
+    {
+      "path": "index-BupWnDag.js",
+      "sha256": "48fbb7b1046f761d2b0f07256a2c38d0d666b00ad0897ce512266bccb56773cc"
+    },
+    {
+      "path": "package.json",
+      "sha256": "8432f5952f3fcac5b9708c7a6063221e021646015b80c3523bc8e50900bb52cd"
+    },
+    {
+      "path": "README.md",
+      "sha256": "f9e06fa3f5b42524f52b8a55570214dc9de78fbef1a5ca396a5c21b6d61b46c7"
+    },
+    {
+      "path": "index-BiqhT_5-.mjs",
+      "sha256": "432ff17f6fc7469584356658e3fcf3eadfbdb9cd39617be9326f74cee74f4704"
+    },
+    {
+      "path": "fields/index.mjs",
+      "sha256": "42d57b85991a06eb2d0cca2bef67f52f8dd78f1c5597426336e74c3a9ea39bfe"
+    },
+    {
+      "path": "form-create/index.mjs",
+      "sha256": "a6f78a246bbd50000c4775cfcc4c8e226bbfc295dd1c6dcd4a46b377c25e49de"
+    },
+    {
+      "path": "index.mjs",
+      "sha256": "94164540d568dcf66dc348f6cfb8c81066fd16f900032570b9fddb342239a86a"
+    },
+    {
+      "path": "form-create/composite.d.ts",
+      "sha256": "7481d1f3037d5910d49f8b3bfee35486a9c2f474f8f037126c510b357348c28c"
+    },
+    {
+      "path": "definition.d.ts",
+      "sha256": "cc29b335ac652a0d73148e59d7ce814483b4e31806df6107140399bafb0ebb47"
+    },
+    {
+      "path": "form-create/errors.d.ts",
+      "sha256": "5c5d545758e4f8b15236d2e859d540f0a6f40066220dd581997ec2deca1b1b99"
+    },
+    {
+      "path": "fields/Field.vue.d.ts",
+      "sha256": "c0250ac0989524af9bc995993687d3d1716c6d8ac4600ea47ab895aa496c4ccf"
+    },
+    {
+      "path": "fields/index.d.ts",
+      "sha256": "0af1dadec98903668de75c6f364793a6be108b80a4758b2a92427434ad9a4afa"
+    },
+    {
+      "path": "form-create/index.d.ts",
+      "sha256": "59b403fbdd70ce63fff0facd6183c5c732b3ed6b7b2086c069846cfc8a24b75a"
+    },
+    {
+      "path": "index.d.ts",
+      "sha256": "28e7acbca646eb729357966a7503a165c0aed99bf3b7f8bfb8dc4f3400694887"
+    },
+    {
+      "path": "zxui/index.d.ts",
+      "sha256": "1f14f2d141974ac6d13eab60a0e2fcdcf132927392440905a1791e1dacf75c74"
+    },
+    {
+      "path": "fields/json-text.d.ts",
+      "sha256": "16f0c37ec8464f980ac494ebd3ae8c4cb84d406d7b604cd6f1e83872b813ee91"
+    },
+    {
+      "path": "json.d.ts",
+      "sha256": "883e509ed1071dcf5b4565229ed93cacac7de616be0306717f54d5656fb2ca08"
+    },
+    {
+      "path": "fields/JsonTextInput.vue.d.ts",
+      "sha256": "302f8e315a012d100fef1ee10e0bf39685bfd360de7ded8bba4f98f2e0831d86"
+    },
+    {
+      "path": "examples/inspection/model.ts",
+      "sha256": "35c770a5bd8fe327602042582ae4bf63b754f121a48185f40490782342aaa402"
+    },
+    {
+      "path": "fields/number-text.d.ts",
+      "sha256": "270d9089b6c8fd2fa599a0e78d63bc9aa8d1d75762b5e8e7cf1ab69e4e76e5bc"
+    },
+    {
+      "path": "fields/NumberTextInput.vue.d.ts",
+      "sha256": "edf478b4a0d54b1f90199f0e763371f63124f44491ded04eabca19a903bbc5f0"
+    },
+    {
+      "path": "form-create/paths.d.ts",
+      "sha256": "d125bca98356f294bd064fa35aa0afb4bde05df7a370b6270b2904c87d550494"
+    },
+    {
+      "path": "zxui/RadioOptions.vue.d.ts",
+      "sha256": "5b20cbbe9ae82da7607b81a8ebae081ae3c4659200c623645c9115030ba9458c"
+    },
+    {
+      "path": "form-create/rules.d.ts",
+      "sha256": "6ef8f362719515e211b8050c2a008eb78a1c91c2562462f772c125dba06b68dc"
+    },
+    {
+      "path": "SchemaForm.vue.d.ts",
+      "sha256": "f120f369305babcdd00cca8e660a7a50307956f899e6bcf33807e6f093c27576"
+    },
+    {
+      "path": "session.d.ts",
+      "sha256": "896289d554ec1256916dd15183e022d58b11c8ffb49acf5d6c295bf00163518d"
+    },
+    {
+      "path": "fields/types.d.ts",
+      "sha256": "8a533dbe6435d1fdf465d30473d7622747094265be62c159776a60864b76cf6f"
+    },
+    {
+      "path": "form-create/types.d.ts",
+      "sha256": "0f523031dd38e509fd135282433ff41e4427fabc79a5f3c622fe0670feb8f8ab"
+    },
+    {
+      "path": "types.d.ts",
+      "sha256": "b3bae2fdf7b1d3eeaad41b3ad1977543202192ba5ec26634f547bf6448cc1097"
+    },
+    {
+      "path": "examples/recipes/JsonSettingsField.vue",
+      "sha256": "32a8ac7ec608db9a5d01b8bf8bf72d81ef63848f70b4a180e0b02531ccb5b3fb"
+    },
+    {
+      "path": "examples/inspection/MeasurementRows.vue",
+      "sha256": "79bb63f87ba7eb4fb9b1a35c444bc6a4fefb3dd46c8afc5632fa9b6efeecb80f"
+    },
+    {
+      "path": "examples/protocol/ProtocolConfig.vue",
+      "sha256": "603cce24ce73f19e28606aeef3dc4876c66d5e73654e5e44e16b47cfc54684a8"
+    }
+  ]
+}

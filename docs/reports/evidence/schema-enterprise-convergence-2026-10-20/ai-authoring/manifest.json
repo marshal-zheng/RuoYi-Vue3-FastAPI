@@ -1,0 +1,27 @@
+{
+  "task_sha256": "6e4332cf4ce61a6861c5e66ae7480994560854f92713c61571df95114a7e7594",
+  "effort": "xhigh",
+  "model": "unchanged configured CLI default; identity not separately verified",
+  "timeout_seconds_per_run": 300,
+  "runs": [
+    {
+      "variant": "baseline",
+      "directory": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-author-baseline-28h6ukjl",
+      "source": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-enterprise-baseline-zlt9l0jh/0/packages/schema-form",
+      "prompt_bytes": 13790,
+      "prompt_sha256": "8c6725473e2e646e6888babfb68a6b94b60f090a88af6fc991dc5fcb7fb55410",
+      "readme_sha256": "94097e1594a22ba3c49aa10e23c744861903853cd0aaec3a9804bfe8504b3539",
+      "types_sha256": "463e6b28c3821fe070d5e542c3b70e3239d49f94d93d35170f64f3ee817564cb"
+    },
+    {
+      "variant": "current",
+      "directory": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-author-current-5fcfvacc",
+      "source": "/Users/hqz/Downloads/element-plus/packages/schema-form",
+      "prompt_bytes": 19096,
+      "prompt_sha256": "1ad047f85ebb8b5bcc6885ac500fd65487ef62f3111e6fac50226cb10db4f780",
+      "readme_sha256": "3d32342f55ac48bf41cb01f5811024ac54816f99df69169f7d4d40e45e46c127",
+      "types_sha256": "40bb0356ed38a3cb385593bc1f46caab1ac739bc9d7b16d26c9d2007bfcba31f"
+    }
+  ],
+  "scope": "One ordinary Post CRUD task; no tool calls requested; no general efficiency claim."
+}

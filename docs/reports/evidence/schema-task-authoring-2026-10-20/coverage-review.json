@@ -1,0 +1,23 @@
+{
+  "checked_at_utc": "2026-10-20T13:03:06.248950+00:00",
+  "passed": true,
+  "documents": {
+    "README.md": "312529e34e74808681da6bdbfd6ac23e7a7e57371332b14b1a2da7f4f82f1bea",
+    "docs/authoring/composite-fields.md": "ca2c66bb7783545fd3d195be55f254f0d7ec7051cfec69ceefd2cac4d12db329",
+    "docs/authoring/controlled-fields.md": "1164ff9f9a374788ba2924ed4647974a24237fa0fc49e5a8b45b795c71cab48f",
+    "docs/authoring/crud.md": "87da60754fa7700748bfe3f5e0a9ec41ae738472f911da29a2dd2fbd69ae3413",
+    "docs/authoring/json-import.md": "5b7d0b06449b7c992a28248988767040583fc17c81a3cc976254e95a5d875a2d",
+    "docs/authoring/nested-errors.md": "910500b1432ef825df495bd978006b020070da21704805e805bdf79012104301",
+    "docs/authoring/reference.md": "e57c2065da50b3fef54d503657fc162be39adf39473e36149a6039e22940bcee"
+  },
+  "behavior_body_retained_ignoring_whitespace": true,
+  "behavior_body_sha256": "254b6704a91af19a3313a4cf35eb60dcca5c8a4a9b98705d6fdc867693331178",
+  "relative_links_checked": 56,
+  "broken_relative_links": [],
+  "resolved_findings": [
+    "Do not generalize the X6 DAG adapter to all Vue Flow hosts.",
+    "Distinguish submit pending from fieldPending; blocked is not the only condition checked by submit."
+  ],
+  "open_findings": [],
+  "scope": "Static contract review; distribution link checks and runtime/declaration parity recorded separately."
+}

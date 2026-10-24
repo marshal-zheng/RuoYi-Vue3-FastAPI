@@ -1,0 +1,215 @@
+{
+  "filename": "zxio-schema-form-0.1.0-enterprise.20261020.tgz",
+  "sha256": "4a4859fadfe0e47d1f405a3335c57d672bce26ca60ee57e7facf54729f35db7e",
+  "artifact": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-enterprise-pack-eizjwj7b/artifact/package",
+  "files": [
+    {
+      "path": "LICENSE",
+      "size": 35807,
+      "mode": 420
+    },
+    {
+      "path": "README.md",
+      "size": 12357,
+      "mode": 420
+    },
+    {
+      "path": "SchemaForm.vue.d.ts",
+      "size": 2474,
+      "mode": 420
+    },
+    {
+      "path": "definition.d.ts",
+      "size": 199,
+      "mode": 420
+    },
+    {
+      "path": "fields/Field.vue.d.ts",
+      "size": 1213,
+      "mode": 420
+    },
+    {
+      "path": "fields/index.cjs",
+      "size": 6058,
+      "mode": 420
+    },
+    {
+      "path": "fields/index.d.ts",
+      "size": 450,
+      "mode": 420
+    },
+    {
+      "path": "fields/index.mjs",
+      "size": 5960,
+      "mode": 420
+    },
+    {
+      "path": "fields/json-text.d.ts",
+      "size": 199,
+      "mode": 420
+    },
+    {
+      "path": "fields/JsonTextInput.vue.d.ts",
+      "size": 342103,
+      "mode": 420
+    },
+    {
+      "path": "fields/number-text.d.ts",
+      "size": 198,
+      "mode": 420
+    },
+    {
+      "path": "fields/NumberTextInput.vue.d.ts",
+      "size": 577,
+      "mode": 420
+    },
+    {
+      "path": "fields/types.d.ts",
+      "size": 1472,
+      "mode": 420
+    },
+    {
+      "path": "form-create/composite.d.ts",
+      "size": 1188,
+      "mode": 420
+    },
+    {
+      "path": "form-create/errors.d.ts",
+      "size": 782,
+      "mode": 420
+    },
+    {
+      "path": "form-create/index.cjs",
+      "size": 28727,
+      "mode": 420
+    },
+    {
+      "path": "form-create/index.d.ts",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "form-create/index.mjs",
+      "size": 28227,
+      "mode": 420
+    },
+    {
+      "path": "form-create/paths.d.ts",
+      "size": 958,
+      "mode": 420
+    },
+    {
+      "path": "form-create/types.d.ts",
+      "size": 2083,
+      "mode": 420
+    },
+    {
+      "path": "index-BiqhT_5-.mjs",
+      "size": 1794,
+      "mode": 420
+    },
+    {
+      "path": "index-BupWnDag.js",
+      "size": 1836,
+      "mode": 420
+    },
+    {
+      "path": "index.cjs",
+      "size": 189,
+      "mode": 420
+    },
+    {
+      "path": "index.d.ts",
+      "size": 120,
+      "mode": 420
+    },
+    {
+      "path": "index.mjs",
+      "size": 83,
+      "mode": 420
+    },
+    {
+      "path": "json.d.ts",
+      "size": 357,
+      "mode": 420
+    },
+    {
+      "path": "package.json",
+      "size": 1130,
+      "mode": 420
+    },
+    {
+      "path": "session.d.ts",
+      "size": 1355,
+      "mode": 420
+    },
+    {
+      "path": "style.css",
+      "size": 853,
+      "mode": 420
+    },
+    {
+      "path": "types.d.ts",
+      "size": 442,
+      "mode": 420
+    },
+    {
+      "path": "zxui/index.d.ts",
+      "size": 303,
+      "mode": 420
+    },
+    {
+      "path": "zxui/RadioOptions.vue.d.ts",
+      "size": 720,
+      "mode": 420
+    }
+  ],
+  "package": {
+    "name": "@zxio/schema-form",
+    "version": "0.1.0",
+    "description": "Controlled ZXUI fields with an optional FormCreate editing session",
+    "license": "GPL-3.0",
+    "main": "index.cjs",
+    "module": "index.mjs",
+    "types": "index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./index.d.ts",
+        "import": "./index.mjs",
+        "require": "./index.cjs"
+      },
+      "./package.json": "./package.json",
+      "./fields": {
+        "types": "./fields/index.d.ts",
+        "import": "./fields/index.mjs",
+        "require": "./fields/index.cjs"
+      },
+      "./form-create": {
+        "types": "./form-create/index.d.ts",
+        "import": "./form-create/index.mjs",
+        "require": "./form-create/index.cjs"
+      },
+      "./style.css": {
+        "default": "./style.css"
+      }
+    },
+    "sideEffects": [
+      "**/*.css"
+    ],
+    "peerDependencies": {
+      "vue": "^3.5.0",
+      "element-plus": "^2.13.0",
+      "@zxio/zxui": "^3.0.0-next.0",
+      "@form-create/element-ui": "3.3.5"
+    },
+    "publishConfig": {
+      "access": "public",
+      "publishable": true
+    },
+    "peerDependenciesMeta": {
+      "@form-create/element-ui": {
+        "optional": true
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "field": "JsonTextInput",
+  "beforeBytes": 342103,
+  "afterBytes": 607,
+  "cause": "static template ref exposed internal ZxInput types; callback ref limits surface",
+  "note": "bytes are not model token savings"
+}

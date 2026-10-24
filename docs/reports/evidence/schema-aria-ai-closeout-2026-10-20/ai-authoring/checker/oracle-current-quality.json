@@ -1,0 +1,135 @@
+{
+  "variant": "current",
+  "artifact": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-aria-ai-closeout-2026-10-20/ai-authoring/artifacts/current/package",
+  "output": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-aria-ai-closeout-2026-10-20/ai-authoring/checker/oracle-current.json",
+  "sourceSha256": "ad46dceac7dccf4d6a0bf3e8a8bb94c6f82eb952c2edcd29b75fcef8535045b1",
+  "editorSha256": "f132f7727d5f4037ab9f238761f2b860ba5748ef97c5ef863395b5e2b51f1882",
+  "passed": true,
+  "checksPassed": 30,
+  "checksTotal": 30,
+  "failures": [],
+  "checks": [
+    {
+      "name": "structured-output",
+      "passed": true
+    },
+    {
+      "name": "no-type-escape",
+      "passed": true
+    },
+    {
+      "name": "public-types-and-field-keys",
+      "passed": true
+    },
+    {
+      "name": "load-unaltered-domain-module",
+      "passed": true
+    },
+    {
+      "name": "dto-whitelist-and-trusted-identity",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-name-whitespace",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-name-too-long",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-code-whitespace",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-code-too-long",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-negative",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-fractional",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-nan",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-infinite",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-string",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-status-unknown",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-remark-not-string",
+      "passed": true
+    },
+    {
+      "name": "server-issues-known-and-summary",
+      "passed": true
+    },
+    {
+      "name": "save-signal-dto-success-and-failure",
+      "passed": true
+    },
+    {
+      "name": "rules-own-exact-five-fields-no-initial-values",
+      "passed": true
+    },
+    {
+      "name": "rules-accept-valid-zero",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-name-whitespace",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-name-too-long",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-code-whitespace",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-code-too-long",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-sort-negative",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-sort-fractional",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-sort-string",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-status-unknown",
+      "passed": true
+    },
+    {
+      "name": "editor-public-contract-and-style",
+      "passed": true
+    },
+    {
+      "name": "editor-one-session-actions-pending-and-layout",
+      "passed": true
+    }
+  ],
+  "workDirectory": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-author-quality-geDLG5",
+  "scope": "Unmodified emitted source: real per-variant public declarations; pure DTO/native validation; Happy DOM authored SFC wiring with public schema API stub. Not browser or full engine integration."
+}

@@ -1,0 +1,32 @@
+Captured actual pre-fix tool output, 2026-10-20 09:40:40, exit code 1.
+This is the historical red run, not a newly executed failing run.
+
+Command (cwd /Users/hqz/Downloads/element-plus):
+ZX_SCHEMA_FORM_DEPS=/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-inspection-pilot-0ib4sQ ./node_modules/.bin/vitest run --config /Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/vite.config.mts --workspace /Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/vitest.workspace.mts -t 'retires cancelled attachment requests'
+
+FAIL pilot.test.ts > retires cancelled attachment requests even when the service ignores abort
+AssertionError: expected { pending: true, …(1) } to deeply equal { pending: false, blocking: [] }
+
+- Expected
++ Received
+  Object {
+-   "blocking": Array [],
+-   "pending": false,
++   "blocking": Array [
++     Object {
++       "message": "请等待附件上传完成",
++       "severity": "error",
++     },
++   ],
++   "pending": true,
+  }
+
+At pilot.test.ts:73:
+  transport.props('beforeRemove')({ uid: 7 })
+  expect(upload.mock.calls[0][1].aborted).toBe(true)
+  expect(state()).toEqual({ pending: false, blocking: [] })
+
+Test Files  1 failed | 1 skipped (2)
+Tests       1 failed | 12 skipped (13)
+Start at    09:40:40
+Duration    5.25s

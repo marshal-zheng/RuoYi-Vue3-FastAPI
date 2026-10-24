@@ -1,0 +1,237 @@
+{
+  "scope": "One ordinary Post CRUD task, two independent repetitions per version; no general efficiency claim.",
+  "interpretation": "Usage describes all attempts. Read independent quality reports before treating any attempt as successful. Reasoning is included in output; do not add it again. Four samples cannot establish general or statistically stable savings.",
+  "amendment_sha256": "378f63334ed8f808a6ac662477c89f7835f7303bb9ad4dcd2127c24da14fee17",
+  "samples": [
+    {
+      "id": "01-baseline",
+      "variant": "baseline",
+      "pair": 1,
+      "original_protocol_valid": false,
+      "original_tool_item_count": 1,
+      "audited_protocol_valid": true,
+      "amendment_sha256": "378f63334ed8f808a6ac662477c89f7835f7303bb9ad4dcd2127c24da14fee17",
+      "preflight_warning_exemptions": [
+        {
+          "line": 2,
+          "event": {
+            "type": "item.completed",
+            "item": {
+              "id": "item_0",
+              "type": "error",
+              "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+            }
+          }
+        }
+      ],
+      "actual_tool_items": [],
+      "invalid_events": [],
+      "tokens": {
+        "input_tokens": 15571,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 5611,
+        "reasoning_output_tokens": 4142
+      },
+      "total_tokens": 21182,
+      "uncached_input_tokens": 15571,
+      "elapsed_seconds": 171.176,
+      "original_quality_file": "runs/01-baseline/quality.json",
+      "amended_quality_file": "runs/01-baseline/quality-v2.json",
+      "manual_review_file": "runs/01-baseline/manual-review.md"
+    },
+    {
+      "id": "02-current",
+      "variant": "current",
+      "pair": 1,
+      "original_protocol_valid": false,
+      "original_tool_item_count": 1,
+      "audited_protocol_valid": true,
+      "amendment_sha256": "378f63334ed8f808a6ac662477c89f7835f7303bb9ad4dcd2127c24da14fee17",
+      "preflight_warning_exemptions": [
+        {
+          "line": 2,
+          "event": {
+            "type": "item.completed",
+            "item": {
+              "id": "item_0",
+              "type": "error",
+              "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+            }
+          }
+        }
+      ],
+      "actual_tool_items": [],
+      "invalid_events": [],
+      "tokens": {
+        "input_tokens": 17320,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3706,
+        "reasoning_output_tokens": 2225
+      },
+      "total_tokens": 21026,
+      "uncached_input_tokens": 17320,
+      "elapsed_seconds": 113.874,
+      "original_quality_file": "runs/02-current/quality.json",
+      "amended_quality_file": "runs/02-current/quality-v2.json",
+      "manual_review_file": "runs/02-current/manual-review.md"
+    },
+    {
+      "id": "03-current",
+      "variant": "current",
+      "pair": 2,
+      "original_protocol_valid": false,
+      "original_tool_item_count": 1,
+      "audited_protocol_valid": true,
+      "amendment_sha256": "378f63334ed8f808a6ac662477c89f7835f7303bb9ad4dcd2127c24da14fee17",
+      "preflight_warning_exemptions": [
+        {
+          "line": 2,
+          "event": {
+            "type": "item.completed",
+            "item": {
+              "id": "item_0",
+              "type": "error",
+              "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+            }
+          }
+        }
+      ],
+      "actual_tool_items": [],
+      "invalid_events": [],
+      "tokens": {
+        "input_tokens": 17318,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4957,
+        "reasoning_output_tokens": 3462
+      },
+      "total_tokens": 22275,
+      "uncached_input_tokens": 17318,
+      "elapsed_seconds": 148.996,
+      "original_quality_file": "runs/03-current/quality.json",
+      "amended_quality_file": "runs/03-current/quality-v2.json",
+      "manual_review_file": "runs/03-current/manual-review.md"
+    },
+    {
+      "id": "04-baseline",
+      "variant": "baseline",
+      "pair": 2,
+      "original_protocol_valid": false,
+      "original_tool_item_count": 1,
+      "audited_protocol_valid": true,
+      "amendment_sha256": "378f63334ed8f808a6ac662477c89f7835f7303bb9ad4dcd2127c24da14fee17",
+      "preflight_warning_exemptions": [
+        {
+          "line": 2,
+          "event": {
+            "type": "item.completed",
+            "item": {
+              "id": "item_0",
+              "type": "error",
+              "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+            }
+          }
+        }
+      ],
+      "actual_tool_items": [],
+      "invalid_events": [],
+      "tokens": {
+        "input_tokens": 15569,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4400,
+        "reasoning_output_tokens": 2900
+      },
+      "total_tokens": 19969,
+      "uncached_input_tokens": 15569,
+      "elapsed_seconds": 139.743,
+      "original_quality_file": "runs/04-baseline/quality.json",
+      "amended_quality_file": "runs/04-baseline/quality-v2.json",
+      "manual_review_file": "runs/04-baseline/manual-review.md"
+    }
+  ],
+  "variants": {
+    "baseline": {
+      "samples_completed": 2,
+      "audited_protocol_valid_count": 2,
+      "all_samples_retained_in_totals": true,
+      "mean_tokens": {
+        "input_tokens": 15570,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 5005.5,
+        "reasoning_output_tokens": 3521
+      },
+      "mean_total_tokens": 20575.5,
+      "mean_uncached_input_tokens": 15570,
+      "mean_elapsed_seconds": 155.4595
+    },
+    "current": {
+      "samples_completed": 2,
+      "audited_protocol_valid_count": 2,
+      "all_samples_retained_in_totals": true,
+      "mean_tokens": {
+        "input_tokens": 17319,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4331.5,
+        "reasoning_output_tokens": 2843.5
+      },
+      "mean_total_tokens": 21650.5,
+      "mean_uncached_input_tokens": 17319,
+      "mean_elapsed_seconds": 131.435
+    }
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "baseline": "01-baseline",
+      "current": "02-current",
+      "delta_total_tokens_current_minus_baseline": -156,
+      "delta_tokens_current_minus_baseline": {
+        "input_tokens": 1749,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": -1905,
+        "reasoning_output_tokens": -1917
+      },
+      "delta_uncached_input_tokens_current_minus_baseline": 1749,
+      "delta_elapsed_seconds_current_minus_baseline": -57.302
+    },
+    {
+      "pair": 2,
+      "baseline": "04-baseline",
+      "current": "03-current",
+      "delta_total_tokens_current_minus_baseline": 2306,
+      "delta_tokens_current_minus_baseline": {
+        "input_tokens": 1749,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 557,
+        "reasoning_output_tokens": 562
+      },
+      "delta_uncached_input_tokens_current_minus_baseline": 1749,
+      "delta_elapsed_seconds_current_minus_baseline": 9.253
+    }
+  ],
+  "experiment_totals": {
+    "attempts": 4,
+    "original_protocol_valid_count": 0,
+    "audited_protocol_valid_count": 4,
+    "actual_tool_item_count": 0,
+    "preflight_warning_exemption_count": 4,
+    "tokens": {
+      "input_tokens": 65778,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 18674,
+      "reasoning_output_tokens": 12729
+    },
+    "total_tokens": 84452,
+    "uncached_input_tokens": 65778,
+    "elapsed_seconds": 573.789,
+    "includes_smoke_test": false
+  }
+}

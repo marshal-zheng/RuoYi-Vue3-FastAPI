@@ -1,0 +1,261 @@
+[
+  {
+    "root": "/Users/hqz/Downloads/element-plus",
+    "initialHead": "aeef5d1e1e2132fbdbb5231fe3f9f2ff50faa1c4",
+    "currentHead": "df2e0124c3af98a1fc9c972c39e113de7e317899",
+    "baselineFilesChanged": [
+      {
+        "path": "packages/schema-form/README.md",
+        "before": "94097e1594a22ba3c49aa10e23c744861903853cd0aaec3a9804bfe8504b3539",
+        "after": "888e3bd88e869c27a7fe965569d3865b92df4632b6d790daa2a6f1e0ca28f1d7"
+      },
+      {
+        "path": "packages/schema-form/tsconfig.json",
+        "before": "79135879c9f2b8507fc7974b71c0ec2241e04aeee46eef975b19cc585622454a",
+        "after": "7928a20340a04e1dfc1b5f69528ddca93be522cd8c297da44af4f3fe03ec7229"
+      },
+      {
+        "path": "packages/schema-form/__tests__/session.test.ts",
+        "before": "20104d05a6b56dd520cf02a2076859f0a689b396db24ef72923ac613bb5f4ea0",
+        "after": "45694ee12376f5072323d28e28b1f5a952097e895a0a33284605485355345b81"
+      },
+      {
+        "path": "packages/schema-form/src/SchemaForm.vue",
+        "before": "1fbb08f05bb97d24c697d336e07742933a012b3a422ef0f4997807337da88d05",
+        "after": "9a45b498e9fc5e2b0b7218c22aad7e086e60e1dc481e3787a54de524713a102c"
+      },
+      {
+        "path": "packages/schema-form/src/definition.ts",
+        "before": "1db2a27bb177176055c01ef14cc6d3a558af16360d0f569d3288651c24e045bb",
+        "after": "b65485ecac90b18e8a240fa45711617df290e6c150721c284e98ab61a5202fff"
+      },
+      {
+        "path": "packages/schema-form/src/types.ts",
+        "before": "9c20ffd6feec9fb74a50b0d8470d4765fa0df88b558292cdc5feefb1ce67b495",
+        "after": "ff5e5041abd2a1069e0e32632549b0018aef3c18de5ec63fbdb07b27fd4be1f2"
+      },
+      {
+        "path": "packages/schema-form/src/session.ts",
+        "before": "b4d42d339df150b4c5dfdfe9ce583bcdf47ce2d47d84a58bbb4e3677c7e47f5e",
+        "after": "1d2d40de31fe27dce2076ddb3ae3545244b778a095881208612d31fb2f093c48"
+      },
+      {
+        "path": "packages/schema-form/src/style.css",
+        "before": "c96320ec73b74cb8ceb85d56f590e02d145bc8df7efda1816b97460a4ef212a8",
+        "after": "5b963b7f561dfa145ca9398d0d032906bf3d8ce3bb930482fadf7d6da4c34167"
+      },
+      {
+        "path": "packages/schema-form/src/index.ts",
+        "before": "715a0aaff4a3a7c3b607781c341b954a141705cd1d922db771a3c58fd45929f2",
+        "after": "4feaecfce2c8f116a005ce6ba1dc73243cad592633528dd7e78082fabe6b5dcc"
+      },
+      {
+        "path": "packages/schema-form/src/zxui/index.ts",
+        "before": "1ca03c0d8e192a85f79f9efa4e3891d5c791e5403609a3ca0a84455d42caed07",
+        "after": "1d6286f78111acf779eee8b8ea70d62f154349d0652e401fa9c8bbd001244eec"
+      },
+      {
+        "path": "packages/schema-form/src/fields/Field.vue",
+        "before": "6cdd5a0c64c79b150dbcdffae3e902708f5ac8db2abd72ca666abaaf4c9dc9fb",
+        "after": "dc404cfa38e4940d09deb57550f3af47ca85845ef6b864a8944d401523ee1060"
+      },
+      {
+        "path": "packages/schema-form/src/fields/types.ts",
+        "before": "989a8a042c934f95f260c00bfc8e2b3bb708c6510facd77770df50f9b23269b7",
+        "after": "c33ff14204e68c12bcf797a9d41a6f90c345f4e62ee4a2ae8ba41fbb09b4239d"
+      },
+      {
+        "path": "packages/schema-form/src/fields/NumberTextInput.vue",
+        "before": "96ce6947c66315cfd79af54741423a94df19ea8b51a43cc01c7f943949398612",
+        "after": "b97be554d9eb273cdb8e70049cd079f27406c3a206cfdcc9327403f400130f10"
+      },
+      {
+        "path": "packages/schema-form/src/fields/index.ts",
+        "before": "bcd84ccde1f478606dcc5ea60517785719b7dc845a67601e30bec2b86e9769b5",
+        "after": "a0e5605b731b64709a71c801a7d38026a1618c1aaf54c68fa48b041915505795"
+      },
+      {
+        "path": "packages/schema-form/src/form-create/types.ts",
+        "before": "efd6416c0415d517e422330a89bafbf451d6e60255bdda22594dcd47e64371e9",
+        "after": "3eaa1bfc3d2656cbbb6c5d7e11c83ee7b29be1ab3dcd16802d511d531ddb5c20"
+      },
+      {
+        "path": "packages/schema-form/src/form-create/index.ts",
+        "before": "ae8d2029cc9252a9a910765131ca34adb02d520714adc70d8b5555d0b930ce0c",
+        "after": "dcd68755a896d0a9ff5c8a8daa06ef60fdbcb4d61c42d19fb6a36e0a025f5c81"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/pilot.test.ts",
+        "before": "936739e86d6d1215a178e76960b0b73b4fbce3269103dae81fe420e9ad614b06",
+        "after": "d63dc58adf37d390a99f8f7ef3155d64310732fed9f5dcc757ef698b2e7cdc19"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/App.vue",
+        "before": "739635ff7dc0f530e96d237bb210557cfe4948364e094d62321a0531a5cdcb7b",
+        "after": "213918852dad9ea1984c7f121fd3932d5b8bfa5929b66049120508140f3374ef"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/run.mjs",
+        "before": "c99c877db80f356927690ad383ca6456723bcea1c462dfcd0b6523a3d6a04437",
+        "after": "939e14a4ada0a48662e9136a3d09d16b6d31ffa6a88fb84792c338c807fbe55d"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/README.md",
+        "before": "b1450d2095735d5c59e0bf9e97ec9aeb5af34eb83721c8cc5be39ed17ee3bda1",
+        "after": "4454603a3948eef3eca864e2e15a3594b36eb6cdff322a55a0be68e4e1b6c65b"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/vite.config.mts",
+        "before": "f41193ceec14b06b52368a794dbf9af4fb2380f70be33c3d7c0cb802ff4e4242",
+        "after": "10e4855e05dffd1bcae500f28a88a827bd417f23996fff38198bd64bb7541e07"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/protocol/definition.ts",
+        "before": "b1ed8ce6c56b714cc7ce3bc15943eb2b1da39bd41acef36c65a0e2fdbc1ccd03",
+        "after": "9b883f0fc69b051ad9b27f19786c49d886b37e27f578b46d4c3c222a41266973"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/protocol/ProtocolConfig.vue",
+        "before": "f044522af518f999f15da51079b3fae421b1dcd19cb5a0f6962d541042d8242d",
+        "after": "603cce24ce73f19e28606aeef3dc4876c66d5e73654e5e44e16b47cfc54684a8"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/protocol/ProtocolApp.vue",
+        "before": "8225a4075fa39424858490e48826a94327a9a2feee997903e9e2204b47596141",
+        "after": "357e311c345ad9030b3450ac4838cf71c13a81fbe9bcb19d441ea7384415e43d"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/inspection/definition.ts",
+        "before": "96c0f5263a52cd14a0773105d75528ee950e2245032557e1c9b9d4aa544e85a1",
+        "after": "aef1af6a46c2d0ff4da7ef95bc7d2a3e46e59c4dcb6261b12db8975c34cff94f"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/inspection/MeasurementRows.vue",
+        "before": "41942446e5944598f5f09653ee04707f25e6f4c6dcbe77872b74dc4976544e6d",
+        "after": "79bb63f87ba7eb4fb9b1a35c444bc6a4fefb3dd46c8afc5632fa9b6efeecb80f"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/inspection/AttachmentField.vue",
+        "before": "521b4abdc081b91a448fb8488a5d50cd39aa718021fceb9557a0670026a8e43a",
+        "after": "5495898b76c5d523a27efb9e59b5b974c339b879751ea6f0da8f1caa783ad5f1"
+      },
+      {
+        "path": "docs/research/schema-form-pilot/pilot/inspection/services.ts",
+        "before": "4605e19af1e0b4bd35b7fe27c25ffaf2291b45b3346f601c984acc38fe130e9d",
+        "after": "f68a940d1291f69fc3744c69b583dd4d0228afd5097c52346def93256ed74633"
+      }
+    ],
+    "baselineFilesUnchanged": 16
+  },
+  {
+    "root": "/Users/hqz/dev/RuoYi-Vue3-FastAPI",
+    "initialHead": "068b47bf9f89270b632b68281698a57d79689bde",
+    "currentHead": "068b47bf9f89270b632b68281698a57d79689bde",
+    "baselineFilesChanged": [
+      {
+        "path": "ruoyi-fastapi-frontend/src/views/system/post/components/post-form.test.ts",
+        "before": "eab3366a690a5d68ba8591a3689f3d3e8531541dca099b92bb1d99deb610b02f",
+        "after": "1a37abebb70f280a08f8e1bd289dc723feebfe7d78aff57a0434e624dd4d263e"
+      },
+      {
+        "path": "ruoyi-fastapi-frontend/src/views/system/post/components/post-form.ts",
+        "before": "424bea0c241af5fc938e43954f6d8cdf6e52f086408582f7838b0cff621429cc",
+        "after": "40e380fd4bbe1e42f8cc013716a9159133ebfd532380da09ec2a0cab97c1c9c9"
+      },
+      {
+        "path": "ruoyi-fastapi-frontend/src/views/system/post/components/PostDlg.vue",
+        "before": "7ca5c37bdb71d107cd9031bf65498116d552241aaf9288aa84071657a32efa5e",
+        "after": "bba68c178d2f769581577a117d84018d55e216a865b3aa33a316c600421ec189"
+      },
+      {
+        "path": "ruoyi-fastapi-frontend/src/components/ui/FormDialog/index.test.ts",
+        "before": "b9d356cecbfb2b0a1aca9009a09223204fb95e41141ac58566d360db7ef0d694",
+        "after": "1339a8fb0a18ed85bcd724971d84d65c26f920c16a6f3b664a54fbdd2d8e8280"
+      },
+      {
+        "path": "ruoyi-fastapi-frontend/src/components/ui/FormDialog/index.ts",
+        "before": "c420291235ffb6835a8696eedd6ed95219d9248bc0072979d3b89d5403fc8b43",
+        "after": "8f73abe46482c2e63be876b6d0037c7b8d1e296b9a3f0f77065fd41f9d01b70d"
+      },
+      {
+        "path": "ruoyi-fastapi-frontend/tests/unit/components/PostSaveFeedback.test.ts",
+        "before": "075ea825547db1a998b56d47053b7c01c6998890518f46c491314f7d3f0d49d5",
+        "after": "abfdf6466afcef89462398a1d14a680c703ed246348fb6c0e9ab2158bf8b9984"
+      },
+      {
+        "path": "ruoyi-fastapi-frontend/package.json",
+        "before": "2efa92000593e80b7e5ee136706666c1cdaacdcf9251423f72e8600fc8e08cb5",
+        "after": "fbec044eed2031a60c23111c85306b86a2e4d8b60d29422b3cd8ac4a15733802"
+      },
+      {
+        "path": "ruoyi-fastapi-frontend/yarn.lock",
+        "before": "230cfdc17f2803bc13dbf4cd741e8cfb4b721cc0ee4646d5471234a259452fb4",
+        "after": "0656088c39ea137707c29fb78c2662ed1d1008168bccc2ba6908b1a8ba2c0a28"
+      }
+    ],
+    "baselineFilesUnchanged": 49
+  },
+  {
+    "root": "/Users/hqz/dev/ai/vue-flow",
+    "initialHead": "87827c0059a2c65f96a0a73d768f8399f10785e4",
+    "currentHead": "87827c0059a2c65f96a0a73d768f8399f10785e4",
+    "baselineFilesChanged": [
+      {
+        "path": "packages/dag/src/zxui/DagSchemaField.vue",
+        "before": "d53f204bed25ae90e5241cad022a427bf1cb95769f8efe03a7ccb36e8a14c3b9",
+        "after": "7cbbf40da16cc9640d62f52eacf186f6ecd89de714b71e3f394fd46031f8927d"
+      },
+      {
+        "path": "packages/dag/src/zxui/contract.ts",
+        "before": "5c202a2bed87cd2db29ff9d7ab0c56a826aac3ab0d1881c11820936b7a459b3d",
+        "after": "6a9d8f49f062a8eb5d5632a5948641ef364c63de9073665763f566ec1d43f515"
+      },
+      {
+        "path": "packages/dag/src/zxui/DagSchemaFields.vue",
+        "before": "fca9eead36da7e7fc093b7eab4560af4c8e5dbdbab2e420084595bae2cb7d3d3",
+        "after": "c1dfa0ec18033ad5ad4378bbf39fdd6dfd2030136429461a81e64d3336c6904a"
+      },
+      {
+        "path": "packages/dag/src/zxui/index.ts",
+        "before": "e0cad00c804694a8937babb46a451a7ba9c38dec87851dbd8f3e938e437343fd",
+        "after": "7a5860bd5f8272732d2af3da63cfde357e9be0d697e340c2dfaace5efaf8a840"
+      },
+      {
+        "path": "packages/dag/src/zxui/useFieldEditor.ts",
+        "before": "d2d7fc0dfe082e4736e425791b1f02077f2cbdc3f103f6be9c7930878d69cb3f",
+        "after": "af8e54489bae198e39f38b60887215d63f47476ce12d62f4dc1cdbc7bc46a99c"
+      },
+      {
+        "path": "packages/dag/src/contracts/capabilities/authoring/contract.ts",
+        "before": "97b9162af012b5e26a530a39b96b15a44aae009f91adff4456289d7500493992",
+        "after": "1887ab5d9565fa15b1f73e9c6400ca7faf0c2c4580567195119be3cf8e364c4f"
+      },
+      {
+        "path": "packages/dag/src/contracts/capabilities/authoring/inspector/activation.ts",
+        "before": "2502311239f686db631aca691875971226c6c978f6f05bb2f4d734f456e13244",
+        "after": "b81bfd1cb9730885b10430546fff136953a88873912c8134accdba043ad01404"
+      },
+      {
+        "path": "packages/dag/src/composables/inspector-runtime/inspector-session/editors.ts",
+        "before": "dfea446afc68c39b67651685c745d1c799cb2e74fc6345a3edb9b36151513623",
+        "after": "d144b9f6c31d593e9749e55c66176f3d4a3eab07274c8df394fb79058442121c"
+      },
+      {
+        "path": "docs/examples/x6-dag-inspector-drawer/InspectorContent.vue",
+        "before": "d81a7d03014b05c0a5b7bec4a8336c33f8d45d367ddcb4aeaee2de115828b884",
+        "after": "d56707b08fdec6af26a9253fbf71bedd60e607eb5785c9c343d7f144496956b9"
+      },
+      {
+        "path": "packages/dag/package.json",
+        "before": "af83b3102af66b9135a221cc29d66c2d59bd6efd9697d12a8a0809aa7cf9b66c",
+        "after": "1b22e2c788a9e17cb1a14a3481466391877b34f35d03dd4cd67f4ca4be2a9d27"
+      },
+      {
+        "path": "pnpm-lock.yaml",
+        "before": "0af562d076c458b5214488e1d08875049dcc2357d44e389ce88214c70a6e7610",
+        "after": "ad94ba6ea44c01829f6ddb85f288510838d1d5e3ad15e151573d7802fb3ad470"
+      }
+    ],
+    "baselineFilesUnchanged": 54
+  }
+]

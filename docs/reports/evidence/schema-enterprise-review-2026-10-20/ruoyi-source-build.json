@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/usr/bin/env",
+    "VITE_ZXUI_LOCAL=true",
+    "VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus",
+    "yarn",
+    "build:prod"
+  ],
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+  "started_at": "2026-10-20T08:52:35.793333+00:00",
+  "elapsed_seconds": 44.112,
+  "exit_code": 0,
+  "log": "ruoyi-source-build.log",
+  "log_bytes": 417167,
+  "log_sha256": "d0e9bd07aa928e05e6a9c86afd7d4bcb7083d6aef859e5a2f5893095d2b4818f"
+}

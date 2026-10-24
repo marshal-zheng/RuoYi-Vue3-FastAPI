@@ -1,0 +1,142 @@
+{
+  "checks": [
+    {
+      "name": "aria-regression",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm exec vitest run packages/components/input-number/__tests__/input-number.test.tsx",
+      "exit_code": 0,
+      "log": "aria-green.log",
+      "log_sha256": "e25689faa02bc761882c23e81961dac07e16574d41b377cb079450ec5682f092",
+      "tests": 10
+    },
+    {
+      "name": "pilot-source",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "ZX_SCHEMA_FORM_DEPS=<isolated> node_modules/.bin/vitest run --config <pilot>/vite.config.mts --workspace <pilot>/vitest.workspace.mts",
+      "exit_code": 0,
+      "log": "pilot-source.log",
+      "log_sha256": "0f572912aaaea9305d5792127c214495e9871d6b507354d8b240071ecf460eb8",
+      "tests": 14
+    },
+    {
+      "name": "pilot-types",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "node_modules/.bin/vue-tsc -p <isolated-pilot>/tsconfig.json --noEmit",
+      "exit_code": 0,
+      "log": "pilot-types.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "modules-build",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C internal/build start buildModules",
+      "exit_code": 0,
+      "log": "zxui-modules-build.log",
+      "log_sha256": "68bf220f44e7f35018143ee71250a726500ed6906bdbf80efeb46f49b1f4bf79"
+    },
+    {
+      "name": "declarations",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C internal/build start generateTypesDefinitions",
+      "exit_code": 0,
+      "log": "zxui-declarations.log",
+      "log_sha256": "5ea6da57cdd9a1dad1385fd40b4bf78eea2e21bca071ce9c74543f467eb6a4fc"
+    },
+    {
+      "name": "copy-build",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C internal/build start --series copyTypesDefinitions copyFiles",
+      "exit_code": 0,
+      "log": "zxui-copy-build.log",
+      "log_sha256": "2101fe5acc115ec98f6cc79d68deb38d7dab091e14417b2081270b3bede1731e"
+    },
+    {
+      "name": "normalize-declarations",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "node scripts/release/normalize-dist-declarations.mjs dist/@zxio/zxui",
+      "exit_code": 0,
+      "log": "zxui-normalize-declarations.log",
+      "log_sha256": "dfb1f88bd5bd526ca3b018cac10f452ecd8fc438e4782ea59b9def7eab0e6d64"
+    },
+    {
+      "name": "full-build",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C internal/build start buildFullBundle",
+      "exit_code": 0,
+      "log": "zxui-full-build.log",
+      "log_sha256": "ef8556524135679eba885c4943629f64e5d36b4b881600537b13378e2942e871"
+    },
+    {
+      "name": "lint",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm exec eslint packages/components/input-number/src packages/components/input-number/__tests__ docs/research/schema-form-pilot/pilot/pilot.test.ts",
+      "exit_code": 0,
+      "log": "lint.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm exec prettier --check <changed-component-docs-and-tests>",
+      "exit_code": 0,
+      "log": "format.log",
+      "log_sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "ruoyi-source-build",
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "command": "VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus yarn build:prod",
+      "exit_code": 0,
+      "log": "ruoyi-source-build.log",
+      "log_sha256": "603efe57747738f3f74822d745ea640069084094a38079d740e5ffa8bffe7c50"
+    },
+    {
+      "name": "ruoyi-post-tests",
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "command": "yarn test:run tests/unit/components/PostSaveFeedback.test.ts",
+      "exit_code": 0,
+      "log": "ruoyi-post-tests.log",
+      "log_sha256": "6a0af8c685d83a70a6439f0f7b1aff8bf4221e87d19c0309f2ad54682bc1c897",
+      "tests": 5
+    }
+  ],
+  "expected_red": {
+    "log": "aria-red.log",
+    "exit_code": 1,
+    "failed": 6,
+    "passed": 4
+  },
+  "limitations": [
+    "No browser/computer use or screen-reader verification",
+    "Element Plus 2.13 input id is established on mounted; SSR id association is outside this fix (see native probes)"
+  ],
+  "artifact_verification": "artifact-validation.json",
+  "license_verification": "license-check.json",
+  "ai": {
+    "status": "completed",
+    "runs": 4,
+    "source_edits_to_model_outputs": 0,
+    "model_retries": 0,
+    "quality_first_pass": {
+      "baseline": "2/2",
+      "current": "2/2"
+    },
+    "mean_total_tokens": {
+      "baseline": 20575.5,
+      "current": 21650.5
+    },
+    "mean_delta_percent": 5.22466039707419,
+    "usage": "ai-authoring/usage-summary.json",
+    "quality": "ai-authoring/quality-summary.json",
+    "protocol_audit": "ai-authoring/protocol-amendment-1.json",
+    "evaluator_correction": "ai-authoring/checker/freeze-v2.json"
+  },
+  "not_performed": [
+    "computer use",
+    "browser or screen reader verification",
+    "npm publish",
+    "git commit or push",
+    "business source patches",
+    "graph tests"
+  ]
+}

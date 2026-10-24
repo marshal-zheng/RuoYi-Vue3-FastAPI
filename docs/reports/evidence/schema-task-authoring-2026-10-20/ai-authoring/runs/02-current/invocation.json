@@ -1,0 +1,14 @@
+{
+  "id": "02-current",
+  "variant": "current",
+  "pair": 1,
+  "workspace": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-wkjkxyua",
+  "workspace_initial_contents": [],
+  "started_at_utc": "2026-10-20T13:06:33.510588+00:00",
+  "prompt_sha256": "9156a822313af0fae790598ba197c8b25580f3ac1a0220844effafc3205fc49e",
+  "cli_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+  "manifest_sha256": "3f49d0d4b28181e04bd74121d237f84665cdfb63e209491b9944ea685971947e",
+  "protocol_sha256": "73ef14e3da410222bce66145f731cdadd0c829bb93ca37ec717049a373f7d8c7",
+  "runner_sha256": "cf987dd2bd73158f9418f2e54146e607f552e05431c3066c77e136386c1db0fc",
+  "checker_freeze_sha256": "cc51b27d75c515cfd646f45947cfa69db31e0ff8131d8438cc3d9556e96a95cb"
+}

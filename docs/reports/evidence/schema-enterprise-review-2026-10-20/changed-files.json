@@ -1,0 +1,67 @@
+[
+  {
+    "path": "packages/schema-form/README.md",
+    "before": "888e3bd88e869c27a7fe965569d3865b92df4632b6d790daa2a6f1e0ca28f1d7",
+    "after": "9a8d5c58966f990cc8e0f62229d5a81b4c8c97db6be24805fbb856b3234aa7d4"
+  },
+  {
+    "path": "packages/schema-form/package.json",
+    "before": "322941e64bd2c021b80595f1e30ef21da7395cfd5423b3a496a2b4d0b58f971e",
+    "after": "4370fb06e57c8f4020efb27a9f2acafa7e207d699fd3509b577099fb7045997a"
+  },
+  {
+    "path": "packages/schema-form/vite.config.ts",
+    "before": "82e57cefbb80a5fb6ff7ed12a7f08ef9ba8d29ea153a24bdab5c8bba831b2e4c",
+    "after": "88b745ec8c2bac019c36e0f52f7e75e2f8a02cfa14ab53f178436024b96454b5"
+  },
+  {
+    "path": "packages/schema-form/__tests__/engine-session.test.ts",
+    "before": "8399c1b5db1284420f4bf46b2731a899865bced450f84a3e738a594caf9f3223",
+    "after": "34d4a17add4acf474812ad6dd5d2bc71e5339681b929bf650d2a02521140099e"
+  },
+  {
+    "path": "packages/schema-form/__tests__/session.test.ts",
+    "before": "45694ee12376f5072323d28e28b1f5a952097e895a0a33284605485355345b81",
+    "after": "ef262ab85edd476551b72f54681911d273d013eb45c173ea31ab1700af26633c"
+  },
+  {
+    "path": "packages/schema-form/scripts/copy-examples.mjs",
+    "before": null,
+    "after": "0dc77c2a9970567d69256ef478c218641e3ba818d7222be02809f7d96aff4fb7"
+  },
+  {
+    "path": "packages/schema-form/src/SchemaForm.vue",
+    "before": "9a45b498e9fc5e2b0b7218c22aad7e086e60e1dc481e3787a54de524713a102c",
+    "after": "3fd8db8699a43b637a0f0383bddaf60fe7059a4d9829beb39af3a65405600946"
+  },
+  {
+    "path": "packages/schema-form/src/definition.ts",
+    "before": "b65485ecac90b18e8a240fa45711617df290e6c150721c284e98ab61a5202fff",
+    "after": "720d4936bb871930a607197212ea65984097c00c25cf88931ed1d9db020b9e90"
+  },
+  {
+    "path": "packages/schema-form/src/session.ts",
+    "before": "1d2d40de31fe27dce2076ddb3ae3545244b778a095881208612d31fb2f093c48",
+    "after": "31ef43f12f56837b9b61ac3bce4ce78c35f776791b8d5b8aee9e987c1c647ec8"
+  },
+  {
+    "path": "packages/schema-form/src/form-create/errors.ts",
+    "before": "3dd90b8db4152eea8628000f636ba5f5307ca85f7f7a370ece9ae5f0711e3839",
+    "after": "d5f64c2a4583a2f1fd2ffc8db457bc88d9f1e208f67b7ad8f383cfb59ee3bcd6"
+  },
+  {
+    "path": "packages/schema-form/src/form-create/rules.ts",
+    "before": null,
+    "after": "95eb0e367e2154ebc6fc489481624aa97b8882f6392e3285231a936a475c2716"
+  },
+  {
+    "path": "docs/research/schema-form-pilot/pilot/pilot.test.ts",
+    "before": "d63dc58adf37d390a99f8f7ef3155d64310732fed9f5dcc757ef698b2e7cdc19",
+    "after": "17789f542896a9cceb37fb5e0227f26b666a267c73a0b39c173f2b1b0208de36"
+  },
+  {
+    "path": "docs/research/schema-form-pilot/pilot/inspection/AttachmentField.vue",
+    "before": "5495898b76c5d523a27efb9e59b5b974c339b879751ea6f0da8f1caa783ad5f1",
+    "after": "69f1b9fa0ef2fdf72f6784680e24abc1f4b7662a16c99951f9bbae4288232be4"
+  }
+]

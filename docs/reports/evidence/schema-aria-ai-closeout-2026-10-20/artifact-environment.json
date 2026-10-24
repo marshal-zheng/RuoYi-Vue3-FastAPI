@@ -1,0 +1,11 @@
+{
+  "workspace": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-aria-artifact-u9h3n1l6",
+  "peer_source": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-inspection-pilot-g5uTq1/node_modules/element-plus",
+  "other_dependency_source": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules",
+  "method": "tarball unpack into isolated temporary workspace; stock npm-installed EP 2.13 copied locally; other already-installed dependencies reused through symlinks; no consumer files modified",
+  "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-aria-artifact-u9h3n1l6/zxio-zxui-3.0.0-next.0.tgz",
+  "tarball_sha256": "a6481059e23e4f9661e70a1dadecfbb2eb1d28e967c94de7aaabf8a398950664",
+  "package": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-aria-artifact-u9h3n1l6/node_modules/@zxio/zxui",
+  "element_plus_version": "2.13.0",
+  "peer_module_sha256": "94b415061dff3b7d54b81226010d92da1be706447a61e7f5d269ad9ce4f2c3c6"
+}

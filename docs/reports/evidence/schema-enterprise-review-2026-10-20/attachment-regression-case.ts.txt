@@ -1,0 +1,75 @@
+// Snapshot of the actual focused case in pilot/pilot.test.ts; surrounding helper/imports remain in that test file.
+it('retires cancelled attachment requests even when the service ignores abort', async () => {
+  // Only the upload transport boundary is stubbed. Exercise the actual recipe
+  // and the same Promise callback handoff used by Element Plus Upload.
+  const UploadProbe = defineComponent({
+    props: {
+      modelValue: { type: Array as PropType<UploadFiles>, required: true },
+      httpRequest: {
+        type: Function as PropType<
+          (options: UploadRequestOptions) => Promise<unknown>
+        >,
+        required: true,
+      },
+      beforeRemove: {
+        type: Function as PropType<(file: { uid: number }) => boolean>,
+        required: true,
+      },
+    },
+    setup: () => () => h('div'),
+  })
+  for (const outcome of ['success', 'failure']) {
+    const old = deferred<{ id: string; name: string; url: string }>()
+    const current = deferred<{ id: string; name: string; url: string }>()
+    const upload = vi
+      .fn<Services['upload']>()
+      .mockReturnValueOnce(old.promise)
+      .mockReturnValueOnce(current.promise)
+    const wrapper = mount(AttachmentField, {
+      props: { modelValue: [], upload },
+      global: { stubs: { ZxUpload: UploadProbe } },
+    })
+    try {
+      const transport = wrapper.getComponent(UploadProbe)
+      const state = () => wrapper.emitted('edit-state')!.at(-1)![0]
+      const begin = () => {
+        const success = vi.fn()
+        const error = vi.fn()
+        const options = {
+          file: { uid: 7 },
+          onSuccess: success,
+          onError: error,
+        } as unknown as UploadRequestOptions
+        const request = transport.props('httpRequest')(options)
+        request.then(options.onSuccess, options.onError)
+        return { success, error }
+      }
+      const oldCallbacks = begin()
+      transport.props('beforeRemove')({ uid: 7 })
+      expect(upload.mock.calls[0][1].aborted).toBe(true)
+      expect(state()).toEqual({ pending: false, blocking: [] })
+
+      const currentCallbacks = begin() // the same UID now belongs to a new request
+      if (outcome === 'success')
+        old.resolve({ id: 'old', name: 'old.txt', url: '' })
+      else old.reject(new Error('late failure'))
+      await flushPromises()
+      expect(oldCallbacks.success).not.toHaveBeenCalled()
+      expect(oldCallbacks.error).not.toHaveBeenCalled()
+      expect(state()).toMatchObject({ pending: true })
+
+      const accepted = [{ id: 'accepted', name: 'accepted.txt', url: '' }]
+      await wrapper.setProps({ modelValue: accepted })
+      expect(upload.mock.calls[1][1].aborted).toBe(true)
+      expect(state()).toEqual({ pending: false, blocking: [] })
+      current.resolve({ id: 'late', name: 'late.txt', url: '' })
+      await flushPromises()
+      expect(currentCallbacks.success).not.toHaveBeenCalled()
+      expect(currentCallbacks.error).not.toHaveBeenCalled()
+      expect(transport.props('modelValue')[0].response).toEqual(accepted[0])
+    } finally {
+      wrapper.unmount()
+    }
+  }
+})
+

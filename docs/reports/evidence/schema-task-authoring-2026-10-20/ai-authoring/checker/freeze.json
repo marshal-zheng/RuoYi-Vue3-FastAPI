@@ -1,0 +1,28 @@
+{
+  "frozen_at_utc": "2026-10-20T12:59:26.407404+00:00",
+  "files": {
+    "checker/check.cjs": "1ccdc900f22c56947836ed9f0293386462b09b34ed2db019a2efbd860e550eeb",
+    "checker/README.md": "70000bf52ddbb8df10e6fc55f529fb96b02cc55ce59829ef327c926041795e84",
+    "checker/origin.delta.patch": "941a805a7817683dd23dfbcef6dd4eb00a07e4e209c15f598d080d2c8abcce35",
+    "checker/oracle-current.json": "25b40a55f25d1374700c39b83a2d182641432ddc069b87a9a540903143448bfa",
+    "checker/oracle-invalid.json": "446acac1a92f31a6e8527d700bda0321d687d6c513bf0d70e4aecd722a3c71c8",
+    "checker/oracle-min-width.json": "4d65af4239b17f7eb3c6fc425150815e99c56d4ade996711f58cde48e90a5708",
+    "checker/oracle-current-quality.json": "6c4c4a2841efe8f1738eedcecabc2af789508ef909697dc81230b8291b8d3f38",
+    "checker/oracle-invalid-quality.json": "8714c17309627477c67616730bc0d4cdf4473a74b021a0b30dcae6ee8afa253a",
+    "checker/oracle-min-width-quality.json": "1b8831014578576e2afe9bef55c3c20ae9f61f7b92b1657aaaff090e2fb3f91d"
+  },
+  "oracle_status": "passed",
+  "origin_sha256": "e4dd58a0d70f0f8c767bcd2204167519751cd9de37467903253c6a469ce78f91",
+  "change_from_previous": "Require current API for both documentation arms and remove unreachable old FieldIssue.field check; all 30 requirements and min-width layout logic unchanged.",
+  "valid_oracles": {
+    "current": "30/30",
+    "min-width": "30/30"
+  },
+  "invalid_oracle_expected_failures": [
+    "public-types-and-field-keys",
+    "dto-whitelist-and-trusted-identity",
+    "server-issues-known-and-summary",
+    "save-signal-dto-success-and-failure"
+  ],
+  "formal_admission": "Same final artifact for both arms; compare all declaration files to oracle current artifact before formal scoring. Model calls additionally require parent approval after documentation freeze."
+}

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-20",
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+  "package": {
+    "tarball": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz",
+    "sha256": "4a4859fadfe0e47d1f405a3335c57d672bce26ca60ee57e7facf54729f35db7e",
+    "dependency": "file:./vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz",
+    "installed_version": "0.1.0"
+  },
+  "checks": [
+    {
+      "id": "focused-regressions",
+      "command": "./node_modules/.bin/vitest run src/views/system/post/components/post-form.test.ts tests/unit/components/PostSaveFeedback.test.ts src/components/ui/FormDialog/index.test.ts tests/unit/components/RemainingEditorReadLifecycle.test.ts tests/ui-standards.test.ts tests/unit/components/dashboard-chart-settings.test.ts --reporter=verbose",
+      "exit_code": 0,
+      "test_files_passed": 6,
+      "tests_passed": 98,
+      "duration_seconds": 6.56,
+      "log": "ruoyi-focused-regressions.log",
+      "log_sha256": "3a1921174e08f25ba3edf195421b332959a92eb0dba14b0cbb10d6c49d8ad243",
+      "log_bytes": 16298
+    },
+    {
+      "id": "ui-standards",
+      "command": "yarn ui:standards",
+      "exit_code": 0,
+      "source_files_checked": 528,
+      "source_violations": 0,
+      "test_files_passed": 2,
+      "tests_passed": 25,
+      "vitest_duration_seconds": 4.03,
+      "log": "ruoyi-ui-standards.log",
+      "log_sha256": "384e19e177c683d5577057b16938bf77c06dcd5a59ad672167f930a180faa26a",
+      "log_bytes": 4408
+    },
+    {
+      "id": "typecheck",
+      "command": "yarn type-check",
+      "exit_code": 0,
+      "diagnostics": 0,
+      "log": "ruoyi-typecheck-current.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_bytes": 0
+    }
+  ],
+  "baseline_typecheck_comparison": {
+    "performed": false,
+    "reason": "Current full typecheck exited 0 without diagnostics; no failure to attribute."
+  },
+  "limitations": [
+    "Vitest/jsdom and static validation only; no browser or live API acceptance performed.",
+    "The two test commands overlap tests/ui-standards.test.ts; counts must not be summed as distinct tests.",
+    "Dashboard suite is four existing unit tests, not a real-page browser validation.",
+    "Source-mode build was performed by parent agent separately; this validation did not repeat it."
+  ],
+  "product_files_modified_by_validation": []
+}

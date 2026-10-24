@@ -1,0 +1,110 @@
+{
+  "created": "2026-10-20T08:57:42.651793+00:00",
+  "checks": [
+    {
+      "name": "package-tests",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C packages/schema-form test",
+      "exitCode": 0,
+      "log": "package-tests.log",
+      "logSha256": "955ac2e9274b00db8fa8ad846185ca24c1fff2443a2620c63f80ab73f092023f",
+      "tests": 19
+    },
+    {
+      "name": "package-types",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C packages/schema-form typecheck",
+      "exitCode": 0,
+      "log": "package-types.log",
+      "logSha256": "eb46a18056cc531019ef856f1716c558661c8273e7c70611274d172b1b55049a"
+    },
+    {
+      "name": "pilot-types",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "node_modules/.bin/vue-tsc -p /var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-inspection-pilot-IU9aWW/tsconfig.json --noEmit",
+      "exitCode": 0,
+      "log": "pilot-types.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "typescriptDiagnostics": 0
+    },
+    {
+      "name": "pilot-source",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "ZX_SCHEMA_FORM_DEPS=/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-inspection-pilot-MXbwuC node_modules/.bin/vitest run --config /Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/vite.config.mts --workspace /Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/vitest.workspace.mts",
+      "exitCode": 0,
+      "log": "pilot-source.log",
+      "logSha256": "4a6a8dc021f6c36826cc561297b243f5d170e9dde3d2dbae06ad9bec47585e5e",
+      "tests": 13
+    },
+    {
+      "name": "pilot-artifact",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "ZX_SCHEMA_FORM_DEPS=/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-inspection-pilot-MXbwuC ZX_SCHEMA_FORM_ARTIFACT=/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-enterprise-review-iyea0rog/package node_modules/.bin/vitest run --config /Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/vite.config.mts --workspace /Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/vitest.workspace.mts",
+      "exitCode": 0,
+      "log": "pilot-artifact.log",
+      "logSha256": "9f2fe5292e09db0206798b656e16e0d56ba82cc6d9dded873222a499fe1f49da",
+      "tests": 13
+    },
+    {
+      "name": "build",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C packages/schema-form build",
+      "exitCode": 0,
+      "log": "package-build.log",
+      "logSha256": "3b30a0418e182b24eb1cb21232908e8be6d4dc35031bcd7d415c670afd1ac8d1",
+      "typescriptDiagnostics": 0
+    },
+    {
+      "name": "declaration-guard",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm -C packages/schema-form build (temporary intentional type error; source restored in finally)",
+      "exitCode": 1,
+      "log": "declaration-guard-negative.log",
+      "logSha256": "c87fddc948ec2fa5ce98389a2f3d363bcbf36cc05f87fb94eaddb5b7c956c6e6",
+      "expectedFailure": true
+    },
+    {
+      "name": "lint",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm exec eslint packages/schema-form/src packages/schema-form/__tests__ packages/schema-form/vite.config.ts packages/schema-form/scripts/copy-examples.mjs docs/research/schema-form-pilot/pilot/inspection/AttachmentField.vue docs/research/schema-form-pilot/pilot/pilot.test.ts",
+      "exitCode": 0,
+      "log": "lint.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": "/Users/hqz/Downloads/element-plus",
+      "command": "pnpm exec prettier --check packages/schema-form/src/session.ts packages/schema-form/src/form-create/rules.ts packages/schema-form/src/form-create/errors.ts packages/schema-form/src/definition.ts packages/schema-form/src/SchemaForm.vue packages/schema-form/__tests__/session.test.ts packages/schema-form/__tests__/engine-session.test.ts packages/schema-form/vite.config.ts packages/schema-form/scripts/copy-examples.mjs packages/schema-form/README.md packages/schema-form/package.json docs/research/schema-form-pilot/pilot/inspection/AttachmentField.vue docs/research/schema-form-pilot/pilot/pilot.test.ts",
+      "exitCode": 0,
+      "log": "format.log",
+      "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "artifact": {
+    "filename": "zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+    "sha256": "231de85743ef36ee5aaf664d434b2b5d1c1c8cf9cde7bfa59f16feedc7257a58",
+    "files": 37,
+    "recipeLinks": [
+      "./examples/recipes/JsonSettingsField.vue",
+      "./examples/inspection/MeasurementRows.vue",
+      "./examples/protocol/ProtocolConfig.vue"
+    ],
+    "recipeSourceMatches": true
+  },
+  "artifactVerification": "artifact-verification.json",
+  "ruoyi": "ruoyi-validation.json",
+  "dag": "dag-verification.json",
+  "baseline": "baseline.json",
+  "changedFiles": "changed-files.json",
+  "unresolved": [
+    "InputNumber real input ARIA attributes not forwarded by Element Plus 2.13.0; see input-number-aria-ssr-result.json",
+    "Valid AI/token comparison unavailable; prior CLI failed before model response",
+    "No computer use, browser or screen-reader verification"
+  ],
+  "notDone": [
+    "npm publish",
+    "git commit/push",
+    "live business API writes",
+    "graph test suite"
+  ]
+}

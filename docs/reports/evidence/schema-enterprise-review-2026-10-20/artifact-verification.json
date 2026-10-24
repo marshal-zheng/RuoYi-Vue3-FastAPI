@@ -1,0 +1,36 @@
+{
+  "tarballSha256": "231de85743ef36ee5aaf664d434b2b5d1c1c8cf9cde7bfa59f16feedc7257a58",
+  "filesComparedPerCopy": 37,
+  "differences": {
+    "/Users/hqz/Downloads/element-plus/packages/schema-form/dist": [],
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/schema-form": [],
+    "/Users/hqz/dev/ai/vue-flow/packages/dag/node_modules/@zxio/schema-form": []
+  },
+  "rootAndFieldsNoFormCreate": {
+    "index.mjs": {
+      "reachableFiles": 2,
+      "externalImports": []
+    },
+    "fields/index.mjs": {
+      "reachableFiles": 2,
+      "externalImports": [
+        "@zxio/zxui/input",
+        "vue"
+      ]
+    },
+    "index.d.ts": {
+      "reachableFiles": 3,
+      "externalImports": [
+        "vue"
+      ]
+    },
+    "fields/index.d.ts": {
+      "reachableFiles": 8,
+      "externalImports": [
+        "vue"
+      ]
+    }
+  },
+  "sourceExportRemoved": true,
+  "optionalFormCreatePeer": true
+}

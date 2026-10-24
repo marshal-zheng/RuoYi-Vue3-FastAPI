@@ -1,0 +1,33 @@
+{
+  "files": [
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/src/input-number-core.vue",
+      "sha256": "d1843438102d3b5ef7c13badf2a6db1d4457760c65a320183989b5f5ae21c350"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/src/number-control.vue",
+      "sha256": "7363d892004eeeb33f480592724d7e27b348e0a2ae62206e88aa07d292925e79"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/src/props.ts",
+      "sha256": "12bfa3bb7aa92cbf39fe1c2feb0b9a316f1a225ab8a7d7bb7d9c876ab02b887d"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/packages/components/input-number/__tests__/input-number.test.tsx",
+      "sha256": "cf7a7b223c2bd331b074b7c8fe77a264b500c214845b505d65fb1610dfb9fc7d"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/docs/zh-CN/component/input-number.md",
+      "sha256": "207394c3305af4fd2edcf7316799f7e47a6fba6f89c94c4be4a118548a85143c"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/docs/en-US/component/input-number.md",
+      "sha256": "6468e1b420bd3f0bc5e6349bb4f5a92def2c71743e16ee14b51b2405aabef1d3"
+    },
+    {
+      "path": "/Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot/pilot.test.ts",
+      "sha256": "a25d162d5eb338b8876e3cea0975e51083cf7972a7b60d2dfdebb96662b3e060"
+    }
+  ],
+  "business_runtime_files_changed": []
+}

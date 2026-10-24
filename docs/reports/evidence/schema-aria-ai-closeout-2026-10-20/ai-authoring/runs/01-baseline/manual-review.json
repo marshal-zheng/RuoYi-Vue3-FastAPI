@@ -1,0 +1,17 @@
+{
+  "reviewed_at_utc": "2026-10-20T09:23:08.722087+00:00",
+  "passed": true,
+  "author_defects": [],
+  "reviewed_final_sha256": "a27cb32675d0267f4a1fb6279a2d3ad0f340288a3184302a3cfd0176f4a6909e",
+  "checker": "checker/check-v2.cjs",
+  "automated_checks": "30/30",
+  "findings": [
+    "RuleFor<PostValues>[] 检查字段名；五个规则包含空白、长度、非负整数和状态枚举校验，排序 0 被保留。",
+    "原生 col={span:24,md:12} 在 md 及以上为半宽；remark col={span:24} 为整行。初始 checker 的 lg 回退是评估器错误，已由保留原结果的 v2 累积断点校验修正。",
+    "DTO 逐项收窄 Values | PostValues 并显式构造五字段白名单；postId 只来自 createPostSave 参数，0 不会丢失。",
+    "服务端 snake_case 映射及未知/空字段消息按旧 FieldIssue.field 契约处理；使用 switch，不存在对象原型属性误取。",
+    "组件 setup 中只创建一次 save；initial 是冻结输入快照，未维护第二份可编辑值。SchemaForm 通过公开 ref.submit/reset 操作，pending 禁用两个按钮。",
+    "仅一次 api.write(dto,原signal)，无额外 GET、私有 API、类型抑制或业务页面壳。"
+  ],
+  "scope": "Manual source review plus native rule validation and memory SFC wiring. No browser/full-engine integration claim; generated source has not been repaired."
+}

@@ -1,0 +1,37 @@
+{
+  "verified_at_utc": "2026-10-20T13:14:27.748101+00:00",
+  "model_called": false,
+  "cli_hash_matches": true,
+  "frozen_inputs_and_checker_verified": true,
+  "common_artifact_files_verified": true,
+  "runs": [
+    {
+      "id": "01-baseline",
+      "all_raw_hashes_match": true,
+      "frozen_invocation_hashes_match": true,
+      "workspace_initially_empty": true,
+      "usage_matches_raw_turn_completed": true
+    },
+    {
+      "id": "02-current",
+      "all_raw_hashes_match": true,
+      "frozen_invocation_hashes_match": true,
+      "workspace_initially_empty": true,
+      "usage_matches_raw_turn_completed": true
+    },
+    {
+      "id": "03-current",
+      "all_raw_hashes_match": true,
+      "frozen_invocation_hashes_match": true,
+      "workspace_initially_empty": true,
+      "usage_matches_raw_turn_completed": true
+    },
+    {
+      "id": "04-baseline",
+      "all_raw_hashes_match": true,
+      "frozen_invocation_hashes_match": true,
+      "workspace_initially_empty": true,
+      "usage_matches_raw_turn_completed": true
+    }
+  ]
+}

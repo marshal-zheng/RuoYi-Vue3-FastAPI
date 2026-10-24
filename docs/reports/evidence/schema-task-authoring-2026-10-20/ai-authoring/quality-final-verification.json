@@ -1,0 +1,16 @@
+{
+  "checked_at_utc": "2026-10-20T13:17:09.520584+00:00",
+  "passed": true,
+  "frozen_checker_unchanged": true,
+  "reviewed_documents_unchanged": true,
+  "all_four_protocol_and_quality_passed": true,
+  "unchanged_first_answers": 4,
+  "automated_checks_each": "30/30",
+  "artifacts": {
+    "quality-summary.json": "a79b9430ba7f6351c57968561e281579bd850d3c273c21279e342942fc2a58a0",
+    "quality-analysis.md": "653178a374db6e2227a73d270d19750a897edbafa5289f1faa12502a6ab19e94",
+    "checker-artifact-admission.json": "6e6aef97199bc18bc8652a5ede8328b9ea9a5da6702d38a1cb8a0225e3504daf",
+    "checker/freeze.json": "cc51b27d75c515cfd646f45947cfa69db31e0ff8131d8438cc3d9556e96a95cb"
+  },
+  "scope": "Integrity/consistency verification only; no new model calls, no repeated behavioral tests and no source repairs."
+}

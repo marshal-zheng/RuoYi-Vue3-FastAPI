@@ -1,0 +1,21 @@
+{
+  "frozen_at_utc": "2026-10-20T12:55:54.856193+00:00",
+  "source": "/Users/hqz/Downloads/element-plus/packages/schema-form",
+  "cli": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "cli_version": "codex-cli 0.163.0-alpha.10.2",
+  "cli_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+  "files": {
+    "inputs/baseline/README.md": "9a8d5c58966f990cc8e0f62229d5a81b4c8c97db6be24805fbb856b3234aa7d4",
+    "inputs/baseline/src/fields/types.ts": "c33ff14204e68c12bcf797a9d41a6f90c345f4e62ee4a2ae8ba41fbb09b4239d",
+    "inputs/baseline/src/form-create/index.ts": "dcd68755a896d0a9ff5c8a8daa06ef60fdbcb4d61c42d19fb6a36e0a025f5c81",
+    "inputs/baseline/src/form-create/types.ts": "3eaa1bfc3d2656cbbb6c5d7e11c83ee7b29be1ab3dcd16802d511d531ddb5c20",
+    "inputs/baseline/src/index.ts": "4feaecfce2c8f116a005ce6ba1dc73243cad592633528dd7e78082fabe6b5dcc",
+    "inputs/baseline/src/types.ts": "ff5e5041abd2a1069e0e32632549b0018aef3c18de5ec63fbdb07b27fd4be1f2"
+  },
+  "common_files": {
+    "task.md": "6e4332cf4ce61a6861c5e66ae7480994560854f92713c61571df95114a7e7594",
+    "domain.ts": "e47ea3e51dbdff81b28693b605ac771af0d5f59c690f68cdbf0d394a77976f77",
+    "output-schema.json": "37a897a61f6661a04d8ccc2e3d550293aabd3d4c632ee1d541f1743d826039f3"
+  },
+  "comparison": "Same schema API/artifact, authoring documentation context only; B material pending confirmation; no model calls."
+}

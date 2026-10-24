@@ -1,0 +1,13 @@
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus/docs/research/schema-form-pilot/pilot
+
+ ✓ |schema-form-pilot| pilot.test.ts (10 tests | 7 skipped) 3351ms
+   ✓ public ZXUI + FormCreate inspection pilot > edits the whole form with real fields, repeated rows, attachment upload and saved baseline 1910ms
+   ✓ public ZXUI + FormCreate inspection pilot > resets an in-flight attachment without leaving the next form permanently pending 1424ms
+ ↓ |schema-form-pilot| composite.test.ts (3 tests | 3 skipped)
+
+ Test Files  1 passed | 1 skipped (2)
+      Tests  3 passed | 10 skipped (13)
+   Start at  09:55:33
+   Duration  16.95s (transform 7.98s, setup 208ms, collect 12.62s, tests 3.35s, environment 400ms, prepare 73ms)
+

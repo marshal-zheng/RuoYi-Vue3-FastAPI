@@ -1,0 +1,23 @@
+{
+  "reviewed_at_utc": "2026-10-20T13:15:14.963099+00:00",
+  "document_arm": "current",
+  "api_contract": "current",
+  "passed": true,
+  "author_defects": [],
+  "non_gating_observations": [
+    "与02同样使用文本框+enum校验表达status；固定任务未规定必须选择控件，因此不计失败。两组交互方案并非完全同质。",
+    "选择任务允许的原生Rule.col布局，而没有使用当前columns/fullWidth快捷能力；不能把功能通过解释为所有生成代码都采用最简公共写法。"
+  ],
+  "reviewed_final_sha256": "d385857cc1fe68000a5c0ee50aa6ddf0dc9354272201b2aeb755a6d04e0238f3",
+  "checker": "checker/check.cjs",
+  "automated_checks": "30/30",
+  "findings": [
+    "RuleFor<PostValues>、Save<PostValues>与SchemaFormInstance<PostValues>均正确，所有当前公开声明通过。",
+    "五个规则覆盖所需业务校验；状态为ZxInput但有enum校验。使用原生col，xs/sm单列、md及以上两列、备注整行，满足预先允许的布局分支。",
+    "DTO以unknown和isRecord收窄，逐项拒绝非法业务值，白名单与可信postId分离且保留0。",
+    "后端字段Map只含明确的五个映射，未知/空字段仅保留message，无原型属性误用。",
+    "setup只构造一次静态rules与save，createRules返回该规则模板；SchemaForm负责独立实例规则和编辑值，没有第二份可写表单模型。",
+    "shallowRef正确持有公共实例，按钮由pending禁用并调用submit/reset；唯一API请求为write，signal原样传递。"
+  ],
+  "scope": "Manual source review, real current declarations, native validation and memory SFC wiring; no browser/full engine or identical interaction design claim; no source repairs."
+}

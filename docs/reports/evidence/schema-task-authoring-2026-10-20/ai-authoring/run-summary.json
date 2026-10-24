@@ -1,0 +1,514 @@
+[
+  {
+    "id": "01-baseline",
+    "variant": "baseline",
+    "pair": 1,
+    "command": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "exec",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--model",
+      "gpt-6-astra",
+      "--json",
+      "--color",
+      "never",
+      "--cd",
+      "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-2ujbbilm",
+      "--output-schema",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/output-schema.json",
+      "--output-last-message",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/runs/01-baseline/final.json",
+      "--config",
+      "approval_policy=\"never\"",
+      "--config",
+      "model_reasoning_effort=\"xhigh\"",
+      "--config",
+      "web_search=\"disabled\"",
+      "--config",
+      "project_doc_max_bytes=0",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "hooks",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "goals",
+      "--disable",
+      "sleep_tool",
+      "--enable",
+      "skip_host_skill_discovery",
+      "-"
+    ],
+    "workspace": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-2ujbbilm",
+    "started_at_utc": "2026-10-20T13:04:33.919021+00:00",
+    "finished_at_utc": "2026-10-20T13:06:33.505946+00:00",
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_seconds": 119.586,
+    "usage_events": [
+      {
+        "input_tokens": 17327,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3849,
+        "reasoning_output_tokens": 2442
+      }
+    ],
+    "single_turn_usage": {
+      "input_tokens": 17327,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3849,
+      "reasoning_output_tokens": 2442
+    },
+    "tokens": {
+      "input_tokens": 17327,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3849,
+      "reasoning_output_tokens": 2442
+    },
+    "event_types": [
+      "item.completed",
+      "thread.started",
+      "turn.completed",
+      "turn.started"
+    ],
+    "item_types": [
+      "agent_message",
+      "error"
+    ],
+    "tool_item_count": 0,
+    "preflight_warnings": [
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+        }
+      }
+    ],
+    "invalid_events": [],
+    "malformed_jsonl_lines": [],
+    "final_schema_valid": true,
+    "completed": true,
+    "protocol_valid": true,
+    "model": "gpt-6-astra",
+    "effort": "xhigh",
+    "quality_check": {
+      "status": "pending_independent_validation"
+    },
+    "raw_sha256": {
+      "events.jsonl": "ad909105b74a5aa64e26e074876433100fba64a4d3fd8d5bf04651eccbbfda3b",
+      "stderr.log": "999f78c813d2ac33d0943d5a02687e55ae9f6be8a80ce6453ea64d9300832371",
+      "final.json": "4e08960b57ba1839f5874f6fa0d55e852b074f2b70eca3ccbf3e3f594345f293"
+    }
+  },
+  {
+    "id": "02-current",
+    "variant": "current",
+    "pair": 1,
+    "command": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "exec",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--model",
+      "gpt-6-astra",
+      "--json",
+      "--color",
+      "never",
+      "--cd",
+      "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-wkjkxyua",
+      "--output-schema",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/output-schema.json",
+      "--output-last-message",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/runs/02-current/final.json",
+      "--config",
+      "approval_policy=\"never\"",
+      "--config",
+      "model_reasoning_effort=\"xhigh\"",
+      "--config",
+      "web_search=\"disabled\"",
+      "--config",
+      "project_doc_max_bytes=0",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "hooks",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "goals",
+      "--disable",
+      "sleep_tool",
+      "--enable",
+      "skip_host_skill_discovery",
+      "-"
+    ],
+    "workspace": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-wkjkxyua",
+    "started_at_utc": "2026-10-20T13:06:33.510588+00:00",
+    "finished_at_utc": "2026-10-20T13:08:43.052073+00:00",
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_seconds": 129.541,
+    "usage_events": [
+      {
+        "input_tokens": 16545,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4241,
+        "reasoning_output_tokens": 2899
+      }
+    ],
+    "single_turn_usage": {
+      "input_tokens": 16545,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4241,
+      "reasoning_output_tokens": 2899
+    },
+    "tokens": {
+      "input_tokens": 16545,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4241,
+      "reasoning_output_tokens": 2899
+    },
+    "event_types": [
+      "item.completed",
+      "thread.started",
+      "turn.completed",
+      "turn.started"
+    ],
+    "item_types": [
+      "agent_message",
+      "error"
+    ],
+    "tool_item_count": 0,
+    "preflight_warnings": [
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+        }
+      }
+    ],
+    "invalid_events": [],
+    "malformed_jsonl_lines": [],
+    "final_schema_valid": true,
+    "completed": true,
+    "protocol_valid": true,
+    "model": "gpt-6-astra",
+    "effort": "xhigh",
+    "quality_check": {
+      "status": "pending_independent_validation"
+    },
+    "raw_sha256": {
+      "events.jsonl": "c9de120c93520cca805c06bddea8b1ed92922453bb9d7723b4df9ecd178f78c7",
+      "stderr.log": "db2397f95548e9de0fa71ad4ce3abd609c99ea0e02864934b464a212054dd9a0",
+      "final.json": "aaff88d5d7bb47a8e5eb305a77cf078332e09b73e5e017d21f45fbea39f90e56"
+    }
+  },
+  {
+    "id": "03-current",
+    "variant": "current",
+    "pair": 2,
+    "command": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "exec",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--model",
+      "gpt-6-astra",
+      "--json",
+      "--color",
+      "never",
+      "--cd",
+      "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-svqobht6",
+      "--output-schema",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/output-schema.json",
+      "--output-last-message",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/runs/03-current/final.json",
+      "--config",
+      "approval_policy=\"never\"",
+      "--config",
+      "model_reasoning_effort=\"xhigh\"",
+      "--config",
+      "web_search=\"disabled\"",
+      "--config",
+      "project_doc_max_bytes=0",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "hooks",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "goals",
+      "--disable",
+      "sleep_tool",
+      "--enable",
+      "skip_host_skill_discovery",
+      "-"
+    ],
+    "workspace": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-svqobht6",
+    "started_at_utc": "2026-10-20T13:08:43.056292+00:00",
+    "finished_at_utc": "2026-10-20T13:11:02.406937+00:00",
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_seconds": 139.35,
+    "usage_events": [
+      {
+        "input_tokens": 16545,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 4616,
+        "reasoning_output_tokens": 3106
+      }
+    ],
+    "single_turn_usage": {
+      "input_tokens": 16545,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4616,
+      "reasoning_output_tokens": 3106
+    },
+    "tokens": {
+      "input_tokens": 16545,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 4616,
+      "reasoning_output_tokens": 3106
+    },
+    "event_types": [
+      "item.completed",
+      "thread.started",
+      "turn.completed",
+      "turn.started"
+    ],
+    "item_types": [
+      "agent_message",
+      "error"
+    ],
+    "tool_item_count": 0,
+    "preflight_warnings": [
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+        }
+      }
+    ],
+    "invalid_events": [],
+    "malformed_jsonl_lines": [],
+    "final_schema_valid": true,
+    "completed": true,
+    "protocol_valid": true,
+    "model": "gpt-6-astra",
+    "effort": "xhigh",
+    "quality_check": {
+      "status": "pending_independent_validation"
+    },
+    "raw_sha256": {
+      "events.jsonl": "a575f6f8ed67b820f7c8b035e5de9892f717a5b2dc4413fa666c602f44d833b4",
+      "stderr.log": "93efb1ebf41ef11c294eed9188f700181a46e978a2ba0df0405228c116cd60cf",
+      "final.json": "d385857cc1fe68000a5c0ee50aa6ddf0dc9354272201b2aeb755a6d04e0238f3"
+    }
+  },
+  {
+    "id": "04-baseline",
+    "variant": "baseline",
+    "pair": 2,
+    "command": [
+      "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+      "exec",
+      "--ignore-user-config",
+      "--ignore-rules",
+      "--ephemeral",
+      "--skip-git-repo-check",
+      "--sandbox",
+      "read-only",
+      "--model",
+      "gpt-6-astra",
+      "--json",
+      "--color",
+      "never",
+      "--cd",
+      "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-haj0eqpr",
+      "--output-schema",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/output-schema.json",
+      "--output-last-message",
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/runs/04-baseline/final.json",
+      "--config",
+      "approval_policy=\"never\"",
+      "--config",
+      "model_reasoning_effort=\"xhigh\"",
+      "--config",
+      "web_search=\"disabled\"",
+      "--config",
+      "project_doc_max_bytes=0",
+      "--disable",
+      "shell_tool",
+      "--disable",
+      "multi_agent",
+      "--disable",
+      "apps",
+      "--disable",
+      "plugins",
+      "--disable",
+      "hooks",
+      "--disable",
+      "memories",
+      "--disable",
+      "browser_use",
+      "--disable",
+      "computer_use",
+      "--disable",
+      "image_generation",
+      "--disable",
+      "view_image",
+      "--disable",
+      "skill_search",
+      "--disable",
+      "goals",
+      "--disable",
+      "sleep_tool",
+      "--enable",
+      "skip_host_skill_discovery",
+      "-"
+    ],
+    "workspace": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-ai-authoring-haj0eqpr",
+    "started_at_utc": "2026-10-20T13:11:02.422184+00:00",
+    "finished_at_utc": "2026-10-20T13:12:53.071300+00:00",
+    "exit_code": 0,
+    "timed_out": false,
+    "elapsed_seconds": 110.648,
+    "usage_events": [
+      {
+        "input_tokens": 17327,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 3744,
+        "reasoning_output_tokens": 2254
+      }
+    ],
+    "single_turn_usage": {
+      "input_tokens": 17327,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3744,
+      "reasoning_output_tokens": 2254
+    },
+    "tokens": {
+      "input_tokens": 17327,
+      "cached_input_tokens": 0,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 3744,
+      "reasoning_output_tokens": 2254
+    },
+    "event_types": [
+      "item.completed",
+      "thread.started",
+      "turn.completed",
+      "turn.started"
+    ],
+    "item_types": [
+      "agent_message",
+      "error"
+    ],
+    "tool_item_count": 0,
+    "preflight_warnings": [
+      {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+        }
+      }
+    ],
+    "invalid_events": [],
+    "malformed_jsonl_lines": [],
+    "final_schema_valid": true,
+    "completed": true,
+    "protocol_valid": true,
+    "model": "gpt-6-astra",
+    "effort": "xhigh",
+    "quality_check": {
+      "status": "pending_independent_validation"
+    },
+    "raw_sha256": {
+      "events.jsonl": "0ed8c335a0366f2c290ae6a4baefed0ee91e60139778111fdae9eef4a8c406bf",
+      "stderr.log": "5efb816e8fec93cb1bbc5277dc47a38db918478aedf0efb8c565c1c3849cd6db",
+      "final.json": "696cdba14b78bd511164551b78335733dc978915317b89d20ed5add9d267dd12"
+    }
+  }
+]

@@ -1,0 +1,144 @@
+{
+  "variant": "current",
+  "artifact": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-aria-ai-closeout-2026-10-20/ai-authoring/artifacts/current/package",
+  "output": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/ai-authoring/checker/oracle-invalid.json",
+  "sourceSha256": "628ca4ed5c90430257f561e5c4386b412c3a514c4f697bea89110347a49f1ad9",
+  "editorSha256": "c7dd9d8a33bbd2068bea735d6cc809f584593a51b8a19abb732503821f22dd43",
+  "passed": false,
+  "checksPassed": 26,
+  "checksTotal": 30,
+  "failures": [
+    "public-types-and-field-keys",
+    "dto-whitelist-and-trusted-identity",
+    "server-issues-known-and-summary",
+    "save-signal-dto-success-and-failure"
+  ],
+  "checks": [
+    {
+      "name": "structured-output",
+      "passed": true
+    },
+    {
+      "name": "no-type-escape",
+      "passed": true
+    },
+    {
+      "name": "public-types-and-field-keys",
+      "passed": false,
+      "error": "../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-author-quality-1piaYM/PostEditor.vue(10,35): error TS2304: Cannot find name 'DoesNotExist'.\n\n2 !== 0\n"
+    },
+    {
+      "name": "load-unaltered-domain-module",
+      "passed": true
+    },
+    {
+      "name": "dto-whitelist-and-trusted-identity",
+      "passed": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    postCode: 'role_a',\n+   postId: 999,\n-   postId: 0,\n    postName: '岗位 A',\n    postSort: 0,\n    remark: '备注',\n    status: '0'\n  }\n"
+    },
+    {
+      "name": "dto-rejects-name-whitespace",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-name-too-long",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-code-whitespace",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-code-too-long",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-negative",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-fractional",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-nan",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-infinite",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-sort-string",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-status-unknown",
+      "passed": true
+    },
+    {
+      "name": "dto-rejects-remark-not-string",
+      "passed": true
+    },
+    {
+      "name": "server-issues-known-and-summary",
+      "passed": false,
+      "error": "Unknown server issue points to a known field"
+    },
+    {
+      "name": "save-signal-dto-success-and-failure",
+      "passed": false,
+      "error": "Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    postCode: 'role_a',\n+   postId: 999,\n-   postId: 71,\n    postName: '岗位 A',\n    postSort: 0,\n    remark: '备注',\n    status: '0'\n  }\n"
+    },
+    {
+      "name": "rules-own-exact-five-fields-no-initial-values",
+      "passed": true
+    },
+    {
+      "name": "rules-accept-valid-zero",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-name-whitespace",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-name-too-long",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-code-whitespace",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-code-too-long",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-sort-negative",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-sort-fractional",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-sort-string",
+      "passed": true
+    },
+    {
+      "name": "rules-reject-status-unknown",
+      "passed": true
+    },
+    {
+      "name": "editor-public-contract-and-style",
+      "passed": true
+    },
+    {
+      "name": "editor-one-session-actions-pending-and-layout",
+      "passed": true
+    }
+  ],
+  "workDirectory": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-author-quality-1piaYM",
+  "scope": "Unmodified emitted source: real per-variant public declarations; pure DTO/native validation; Happy DOM authored SFC wiring with public schema API stub. Not browser or full engine integration."
+}

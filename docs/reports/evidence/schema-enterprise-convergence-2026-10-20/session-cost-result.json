@@ -1,0 +1,27 @@
+{
+  "kind": "session.observe plus dirty only; no FormCreate, Vue DOM, browser or network",
+  "node": "v22.22.1",
+  "results": [
+    {
+      "rows": 50,
+      "bytes": 8913,
+      "samples": 50,
+      "p50ms": 0.135,
+      "p95ms": 0.244
+    },
+    {
+      "rows": 200,
+      "bytes": 35813,
+      "samples": 50,
+      "p50ms": 0.302,
+      "p95ms": 0.489
+    },
+    {
+      "rows": 1000,
+      "bytes": 179813,
+      "samples": 50,
+      "p50ms": 1.677,
+      "p95ms": 2.234
+    }
+  ]
+}

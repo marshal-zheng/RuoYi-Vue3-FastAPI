@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-20",
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+  "package": {
+    "tarball": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz",
+    "sha256": "2cf43a479c4236618eb5523e1c2cd15ca0327dc936bf99c09d775f38889869dc",
+    "dependency": "file:./vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz",
+    "installed_version": "0.1.0"
+  },
+  "command": "yarn type-check",
+  "exit_code": 0,
+  "diagnostics": 0,
+  "log": "ruoyi-typecheck-final.log",
+  "log_bytes": 0,
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "scope": "Final artifact declaration check after input components narrowed exposed types. Earlier 98-test regression and ui:standards results retained in ruoyi-validation.json; intentionally not repeated.",
+  "product_files_modified_by_validation": []
+}

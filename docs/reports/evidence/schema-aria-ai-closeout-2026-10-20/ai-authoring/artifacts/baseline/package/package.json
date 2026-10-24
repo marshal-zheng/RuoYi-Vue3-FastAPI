@@ -1,0 +1,48 @@
+{
+  "name": "@zxio/schema-form",
+  "version": "0.1.0",
+  "description": "Controlled ZXUI fields with an optional FormCreate editing session",
+  "license": "GPL-3.0",
+  "main": "index.cjs",
+  "module": "index.mjs",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.cjs"
+    },
+    "./package.json": "./package.json",
+    "./fields": {
+      "types": "./fields/index.d.ts",
+      "import": "./fields/index.mjs",
+      "require": "./fields/index.cjs"
+    },
+    "./form-create": {
+      "types": "./form-create/index.d.ts",
+      "import": "./form-create/index.mjs",
+      "require": "./form-create/index.cjs"
+    },
+    "./style.css": {
+      "default": "./style.css"
+    }
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "vue": "^3.5.0",
+    "element-plus": "^2.13.0",
+    "@zxio/zxui": "^3.0.0-next.0",
+    "@form-create/element-ui": "3.3.5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "publishable": true
+  },
+  "peerDependenciesMeta": {
+    "@form-create/element-ui": {
+      "optional": true
+    }
+  }
+}

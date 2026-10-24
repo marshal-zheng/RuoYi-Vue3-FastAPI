@@ -1,0 +1,7 @@
+{
+  "command": "pnpm install --filter @zxio/x6-devkit-dag --offline --ignore-scripts --no-frozen-lockfile",
+  "cwd": "/Users/hqz/dev/ai/vue-flow",
+  "exitCode": 0,
+  "durationSeconds": 2.31,
+  "log": "dag-install.log"
+}

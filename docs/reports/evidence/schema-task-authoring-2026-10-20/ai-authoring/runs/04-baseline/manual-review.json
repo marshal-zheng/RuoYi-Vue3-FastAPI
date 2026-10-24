@@ -1,0 +1,20 @@
+{
+  "reviewed_at_utc": "2026-10-20T13:15:14.963937+00:00",
+  "document_arm": "baseline",
+  "api_contract": "current",
+  "passed": true,
+  "author_defects": [],
+  "non_gating_observations": [],
+  "reviewed_final_sha256": "696cdba14b78bd511164551b78335733dc978915317b89d20ed5add9d267dd12",
+  "checker": "checker/check.cjs",
+  "automated_checks": "30/30",
+  "findings": [
+    "使用当前公开RuleFor/PostValues泛型save/ref，字段名和SFC类型检查通过。",
+    "名称/编码空白和长度、排序非负整数、状态enum均有原生校验；ZxSelect options为实际公开能力，textarea与columns/fullWidth布局正确。",
+    "DTO从unknown检查对象、属性存在与所有业务值，再显式构造五字段白名单；postId仅来自可信参数，0保留。",
+    "服务端错误以switch明确映射path，未知/空字段进入摘要，原消息保留。",
+    "initial为props会话别名，save仅setup创建一次，未添加可写副本、v-model、私有API或页面壳。",
+    "按钮调用公开submit/reset，pending禁用；save仅api.write且原样传signal，无额外GET。"
+  ],
+  "scope": "Manual source review, real current declarations, native validation and memory SFC wiring; no browser/full engine or identical interaction design claim; no source repairs."
+}

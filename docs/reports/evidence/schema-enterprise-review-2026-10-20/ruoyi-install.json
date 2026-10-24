@@ -1,0 +1,14 @@
+{
+  "command": [
+    "yarn",
+    "install",
+    "--mode=skip-build"
+  ],
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+  "started_at": "2026-10-20T08:52:15.617388+00:00",
+  "elapsed_seconds": 2.051,
+  "exit_code": 0,
+  "log": "ruoyi-install.log",
+  "log_bytes": 1660,
+  "log_sha256": "39ec2fd279ddd828a06fe92fe3638bc7f5e3259a5e5a8c4a61c39df4521cc42d"
+}

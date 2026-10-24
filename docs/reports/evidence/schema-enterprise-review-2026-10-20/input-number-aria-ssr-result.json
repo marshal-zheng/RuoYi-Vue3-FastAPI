@@ -1,0 +1,7 @@
+{
+  "scope": "Real installed Element Plus 2.13.0 SSR. Actual attribute placement is verified; browser/screen-reader behavior is not tested.",
+  "elementPlus": "2.13.0",
+  "node": "v22.22.1",
+  "root": "<div class=\"el-input-number is-center\" aria-invalid=\"true\" aria-describedby=\"reading-error\">",
+  "input": "<input class=\"el-input__inner\" step=\"1\" max=\"9007199254740991\" min=\"-9007199254740991\" type=\"number\" autocomplete=\"off\" tabindex=\"0\" aria-label=\"Reading\" style=\"\">"
+}

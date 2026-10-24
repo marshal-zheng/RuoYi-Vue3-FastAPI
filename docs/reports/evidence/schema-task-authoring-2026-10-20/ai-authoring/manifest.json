@@ -1,0 +1,151 @@
+{
+  "protocol_version": 1,
+  "frozen_at_utc": "2026-10-20T13:03:27.587210+00:00",
+  "scope": "One ordinary Post CRUD authoring task with preselected materials, two repetitions per group; same current schema API/artifact. Compare full documentation with task documentation content and organization, not retrieval costs or the complete AI development workflow.",
+  "model": "gpt-6-astra",
+  "effort": "xhigh",
+  "cli": "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
+  "cli_version": "codex-cli 0.163.0-alpha.10.2",
+  "cli_sha256": "50ab38ba21d0d9f8346f32f41848382f15b556190f3c7a07e885a4fb73e379c8",
+  "timeout_seconds_per_run": 600,
+  "disabled_features": [
+    "shell_tool",
+    "multi_agent",
+    "apps",
+    "plugins",
+    "hooks",
+    "memories",
+    "browser_use",
+    "computer_use",
+    "image_generation",
+    "view_image",
+    "skill_search",
+    "goals",
+    "sleep_tool"
+  ],
+  "enabled_features": [
+    "skip_host_skill_discovery"
+  ],
+  "config_overrides": {
+    "approval_policy": "never",
+    "model_reasoning_effort": "xhigh",
+    "web_search": "disabled",
+    "project_doc_max_bytes": 0
+  },
+  "allowed_preflight_warning": {
+    "type": "item.completed",
+    "item": {
+      "id": "item_0",
+      "type": "error",
+      "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+    }
+  },
+  "sequence": "ABBA",
+  "runs": [
+    {
+      "id": "01-baseline",
+      "variant": "baseline",
+      "pair": 1
+    },
+    {
+      "id": "02-current",
+      "variant": "current",
+      "pair": 1
+    },
+    {
+      "id": "03-current",
+      "variant": "current",
+      "pair": 2
+    },
+    {
+      "id": "04-baseline",
+      "variant": "baseline",
+      "pair": 2
+    }
+  ],
+  "versions": {
+    "baseline": {
+      "label": "full docs",
+      "source_documents": [
+        "README.md"
+      ],
+      "public_type_files": [
+        "src/index.ts",
+        "src/types.ts",
+        "src/form-create/index.ts",
+        "src/form-create/types.ts",
+        "src/fields/types.ts"
+      ],
+      "prompt_bytes": 22828,
+      "prompt_sha256": "6e8d8cb793645b3bca510eef4fc384bc6e24bf10ecca35b0e5e8f1c9128a3ccf",
+      "types_sha256": "b624ad8177b75f00f0e539a0a48667b1da4c027ce5255f7b66ace06f797fe2e7",
+      "document_sha256": {
+        "README.md": "9a8d5c58966f990cc8e0f62229d5a81b4c8c97db6be24805fbb856b3234aa7d4"
+      }
+    },
+    "current": {
+      "label": "task docs",
+      "source_documents": [
+        "README.md",
+        "docs/authoring/crud.md"
+      ],
+      "public_type_files": [
+        "src/index.ts",
+        "src/types.ts",
+        "src/form-create/index.ts",
+        "src/form-create/types.ts",
+        "src/fields/types.ts"
+      ],
+      "prompt_bytes": 19176,
+      "prompt_sha256": "9156a822313af0fae790598ba197c8b25580f3ac1a0220844effafc3205fc49e",
+      "types_sha256": "b624ad8177b75f00f0e539a0a48667b1da4c027ce5255f7b66ace06f797fe2e7",
+      "document_sha256": {
+        "README.md": "312529e34e74808681da6bdbfd6ac23e7a7e57371332b14b1a2da7f4f82f1bea",
+        "docs/authoring/crud.md": "87da60754fa7700748bfe3f5e0a9ec41ae738472f911da29a2dd2fbd69ae3413"
+      }
+    }
+  },
+  "frozen_files": {
+    "baseline-freeze.json": "e543930e2626fd06df55eb73484ae4b23e5df924ac776ea53d44cdf4e2ac1240",
+    "runtime-settings.json": "42d442442556c6b80dcf14e9eb8e997360a6255e34f01a0c067831adf53119bc",
+    "task.md": "6e4332cf4ce61a6861c5e66ae7480994560854f92713c61571df95114a7e7594",
+    "domain.ts": "e47ea3e51dbdff81b28693b605ac771af0d5f59c690f68cdbf0d394a77976f77",
+    "output-schema.json": "37a897a61f6661a04d8ccc2e3d550293aabd3d4c632ee1d541f1743d826039f3",
+    "artifacts.json": "b24661f1a17da3a146d5b2de657a25af4ab5bd71de09ad009eefd46e036d5b04",
+    "protocol.md": "73ef14e3da410222bce66145f731cdadd0c829bb93ca37ec717049a373f7d8c7",
+    "prepare.py": "588e2d68b4426e8326ebaff069698fa6735e17c30b4dfdcda60fd8f1016d9718",
+    "run.py": "cf987dd2bd73158f9418f2e54146e607f552e05431c3066c77e136386c1db0fc",
+    "checker/freeze.json": "cc51b27d75c515cfd646f45947cfa69db31e0ff8131d8438cc3d9556e96a95cb",
+    "checker/check.cjs": "1ccdc900f22c56947836ed9f0293386462b09b34ed2db019a2efbd860e550eeb",
+    "checker/README.md": "70000bf52ddbb8df10e6fc55f529fb96b02cc55ce59829ef327c926041795e84",
+    "checker/origin.delta.patch": "941a805a7817683dd23dfbcef6dd4eb00a07e4e209c15f598d080d2c8abcce35",
+    "checker/oracle-current.json": "25b40a55f25d1374700c39b83a2d182641432ddc069b87a9a540903143448bfa",
+    "checker/oracle-invalid.json": "446acac1a92f31a6e8527d700bda0321d687d6c513bf0d70e4aecd722a3c71c8",
+    "checker/oracle-min-width.json": "4d65af4239b17f7eb3c6fc425150815e99c56d4ade996711f58cde48e90a5708",
+    "checker/oracle-current-quality.json": "6c4c4a2841efe8f1738eedcecabc2af789508ef909697dc81230b8291b8d3f38",
+    "checker/oracle-invalid-quality.json": "8714c17309627477c67616730bc0d4cdf4473a74b021a0b30dcae6ee8afa253a",
+    "checker/oracle-min-width-quality.json": "1b8831014578576e2afe9bef55c3c20ae9f61f7b92b1657aaaff090e2fb3f91d",
+    "inputs/baseline/README.md": "9a8d5c58966f990cc8e0f62229d5a81b4c8c97db6be24805fbb856b3234aa7d4",
+    "inputs/baseline/prompt.md": "6e8d8cb793645b3bca510eef4fc384bc6e24bf10ecca35b0e5e8f1c9128a3ccf",
+    "inputs/baseline/public-types.md": "b624ad8177b75f00f0e539a0a48667b1da4c027ce5255f7b66ace06f797fe2e7",
+    "inputs/baseline/src/fields/types.ts": "c33ff14204e68c12bcf797a9d41a6f90c345f4e62ee4a2ae8ba41fbb09b4239d",
+    "inputs/baseline/src/form-create/index.ts": "dcd68755a896d0a9ff5c8a8daa06ef60fdbcb4d61c42d19fb6a36e0a025f5c81",
+    "inputs/baseline/src/form-create/types.ts": "3eaa1bfc3d2656cbbb6c5d7e11c83ee7b29be1ab3dcd16802d511d531ddb5c20",
+    "inputs/baseline/src/index.ts": "4feaecfce2c8f116a005ce6ba1dc73243cad592633528dd7e78082fabe6b5dcc",
+    "inputs/baseline/src/types.ts": "ff5e5041abd2a1069e0e32632549b0018aef3c18de5ec63fbdb07b27fd4be1f2",
+    "inputs/current/README.md": "312529e34e74808681da6bdbfd6ac23e7a7e57371332b14b1a2da7f4f82f1bea",
+    "inputs/current/docs/authoring/crud.md": "87da60754fa7700748bfe3f5e0a9ec41ae738472f911da29a2dd2fbd69ae3413",
+    "inputs/current/prompt.md": "9156a822313af0fae790598ba197c8b25580f3ac1a0220844effafc3205fc49e",
+    "inputs/current/public-types.md": "b624ad8177b75f00f0e539a0a48667b1da4c027ce5255f7b66ace06f797fe2e7",
+    "inputs/current/src/fields/types.ts": "c33ff14204e68c12bcf797a9d41a6f90c345f4e62ee4a2ae8ba41fbb09b4239d",
+    "inputs/current/src/form-create/index.ts": "dcd68755a896d0a9ff5c8a8daa06ef60fdbcb4d61c42d19fb6a36e0a025f5c81",
+    "inputs/current/src/form-create/types.ts": "3eaa1bfc3d2656cbbb6c5d7e11c83ee7b29be1ab3dcd16802d511d531ddb5c20",
+    "inputs/current/src/index.ts": "4feaecfce2c8f116a005ce6ba1dc73243cad592633528dd7e78082fabe6b5dcc",
+    "inputs/current/src/types.ts": "ff5e5041abd2a1069e0e32632549b0018aef3c18de5ec63fbdb07b27fd4be1f2"
+  },
+  "same_public_types": true,
+  "shared_artifact_archive_sha256": "25ea9886e966d3fe8b036421073f344d72ca65949c93cbc590ca47053905319b",
+  "quality_rule": "Use the current API checker for BOTH groups; baseline means full documentation, never the historical schema API.",
+  "warning_rule": "Only a complete event exactly equal to allowed_preflight_warning before the first turn.started is a client warning, not a tool call. Every other error/tool item invalidates the run.",
+  "failure_policy": "Keep every attempt; no model retries, replacement samples, human code edits, or hidden repairs."
+}

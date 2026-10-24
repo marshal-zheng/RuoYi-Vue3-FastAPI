@@ -1,0 +1,32 @@
+{
+  "captured_at": "2026-10-20T12:55:32.261063+00:00",
+  "runtime_source_sha256": {
+    "packages/schema-form/src/SchemaForm.vue": "3fd8db8699a43b637a0f0383bddaf60fe7059a4d9829beb39af3a65405600946",
+    "packages/schema-form/src/definition.ts": "720d4936bb871930a607197212ea65984097c00c25cf88931ed1d9db020b9e90",
+    "packages/schema-form/src/fields/Field.vue": "dc404cfa38e4940d09deb57550f3af47ca85845ef6b864a8944d401523ee1060",
+    "packages/schema-form/src/fields/JsonTextInput.vue": "36b1f8eb1a6d1ecc0a566580b4755c6755949c83f108632b4e0f59873086a774",
+    "packages/schema-form/src/fields/NumberTextInput.vue": "b97be554d9eb273cdb8e70049cd079f27406c3a206cfdcc9327403f400130f10",
+    "packages/schema-form/src/fields/index.ts": "a0e5605b731b64709a71c801a7d38026a1618c1aaf54c68fa48b041915505795",
+    "packages/schema-form/src/fields/json-text.ts": "deee9f8d4eb024259617a2fb938fbedbd45963b204e9223ea5cb9fe9f3793540",
+    "packages/schema-form/src/fields/number-text.ts": "4037bd3b2501d5530c7b1ba91a9e04d3e8ada6b70aa6b5d4b5a22d522df25b24",
+    "packages/schema-form/src/fields/types.ts": "c33ff14204e68c12bcf797a9d41a6f90c345f4e62ee4a2ae8ba41fbb09b4239d",
+    "packages/schema-form/src/form-create/composite.ts": "ed7d77f78ab2a9b69ed74ae1adec9f291905b0240681525842309e8156f7b655",
+    "packages/schema-form/src/form-create/errors.ts": "d5f64c2a4583a2f1fd2ffc8db457bc88d9f1e208f67b7ad8f383cfb59ee3bcd6",
+    "packages/schema-form/src/form-create/index.ts": "dcd68755a896d0a9ff5c8a8daa06ef60fdbcb4d61c42d19fb6a36e0a025f5c81",
+    "packages/schema-form/src/form-create/paths.ts": "634dbba28507e27b79fed256a1064d310839f0f6375adf80322cbd404cad4fab",
+    "packages/schema-form/src/form-create/rules.ts": "95eb0e367e2154ebc6fc489481624aa97b8882f6392e3285231a936a475c2716",
+    "packages/schema-form/src/form-create/types.ts": "3eaa1bfc3d2656cbbb6c5d7e11c83ee7b29be1ab3dcd16802d511d531ddb5c20",
+    "packages/schema-form/src/index.ts": "4feaecfce2c8f116a005ce6ba1dc73243cad592633528dd7e78082fabe6b5dcc",
+    "packages/schema-form/src/json.ts": "9aa9e4d5410800e20405065cddfcfccb4f74435183ae90272e2bd62679b2f094",
+    "packages/schema-form/src/session.ts": "31ef43f12f56837b9b61ac3bce4ce78c35f776791b8d5b8aee9e987c1c647ec8",
+    "packages/schema-form/src/style.css": "5b963b7f561dfa145ca9398d0d032906bf3d8ce3bb930482fadf7d6da4c34167",
+    "packages/schema-form/src/types.ts": "ff5e5041abd2a1069e0e32632549b0018aef3c18de5ec63fbdb07b27fd4be1f2",
+    "packages/schema-form/src/zxui/RadioOptions.vue": "124754dbb86114ad6f615351a3253a759a3586979c50eeffa73a5b8ed208055f",
+    "packages/schema-form/src/zxui/index.ts": "1d6286f78111acf779eee8b8ea70d62f154349d0652e401fa9c8bbd001244eec"
+  },
+  "preserved_files": [
+    "packages/schema-form/README.md",
+    "packages/schema-form/package.json",
+    "packages/schema-form/scripts/copy-examples.mjs"
+  ]
+}

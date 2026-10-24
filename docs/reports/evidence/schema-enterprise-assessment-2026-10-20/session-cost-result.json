@@ -1,0 +1,26 @@
+{
+  "node": "v22.22.1",
+  "scope": "in-memory session.observe plus dirty evaluation; excludes FormCreate, Vue DOM, browser and network",
+  "warmup": 10,
+  "samples": 50,
+  "results": [
+    {
+      "rows": 50,
+      "bytes": 8913,
+      "p50ms": 0.136,
+      "p95ms": 0.34
+    },
+    {
+      "rows": 200,
+      "bytes": 35813,
+      "p50ms": 0.428,
+      "p95ms": 0.561
+    },
+    {
+      "rows": 1000,
+      "bytes": 179813,
+      "p50ms": 2.249,
+      "p95ms": 2.749
+    }
+  ]
+}

@@ -1,0 +1,355 @@
+{
+  "status": "passed",
+  "tarball": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/schema-task-authoring-2026-10-20/artifact/zxio-schema-form-0.1.0.tgz",
+  "tarball_sha256": "25ea9886e966d3fe8b036421073f344d72ca65949c93cbc590ca47053905319b",
+  "documents": [
+    "README.md",
+    "docs/authoring/composite-fields.md",
+    "docs/authoring/controlled-fields.md",
+    "docs/authoring/crud.md",
+    "docs/authoring/json-import.md",
+    "docs/authoring/nested-errors.md",
+    "docs/authoring/reference.md"
+  ],
+  "local_links": [
+    {
+      "document": "README.md",
+      "href": "docs/authoring/reference.md",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "README.md",
+      "href": "docs/authoring/crud.md",
+      "target": "docs/authoring/crud.md"
+    },
+    {
+      "document": "README.md",
+      "href": "docs/authoring/composite-fields.md",
+      "target": "docs/authoring/composite-fields.md"
+    },
+    {
+      "document": "README.md",
+      "href": "docs/authoring/nested-errors.md",
+      "target": "docs/authoring/nested-errors.md"
+    },
+    {
+      "document": "README.md",
+      "href": "docs/authoring/controlled-fields.md",
+      "target": "docs/authoring/controlled-fields.md"
+    },
+    {
+      "document": "README.md",
+      "href": "docs/authoring/json-import.md",
+      "target": "docs/authoring/json-import.md"
+    },
+    {
+      "document": "README.md",
+      "href": "docs/authoring/reference.md",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "README.md",
+      "href": "types.d.ts",
+      "target": "types.d.ts"
+    },
+    {
+      "document": "README.md",
+      "href": "fields/types.d.ts",
+      "target": "fields/types.d.ts"
+    },
+    {
+      "document": "README.md",
+      "href": "form-create/types.d.ts",
+      "target": "form-create/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "crud.md",
+      "target": "docs/authoring/crud.md"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "controlled-fields.md",
+      "target": "docs/authoring/controlled-fields.md"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "../../fields/types.d.ts",
+      "target": "fields/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "nested-errors.md",
+      "target": "docs/authoring/nested-errors.md"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "../../examples/recipes/JsonSettingsField.vue",
+      "target": "examples/recipes/JsonSettingsField.vue"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "../../examples/inspection/AttachmentField.vue",
+      "target": "examples/inspection/AttachmentField.vue"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "../../examples/inspection/model.ts",
+      "target": "examples/inspection/model.ts"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "../../examples/inspection/MeasurementRows.vue",
+      "target": "examples/inspection/MeasurementRows.vue"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "../../examples/protocol/ProtocolConfig.vue",
+      "target": "examples/protocol/ProtocolConfig.vue"
+    },
+    {
+      "document": "docs/authoring/composite-fields.md",
+      "href": "reference.md#复合字段契约",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "docs/authoring/controlled-fields.md",
+      "href": "crud.md",
+      "target": "docs/authoring/crud.md"
+    },
+    {
+      "document": "docs/authoring/controlled-fields.md",
+      "href": "../../fields/types.d.ts",
+      "target": "fields/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/controlled-fields.md",
+      "href": "../../types.d.ts",
+      "target": "types.d.ts"
+    },
+    {
+      "document": "docs/authoring/controlled-fields.md",
+      "href": "composite-fields.md",
+      "target": "docs/authoring/composite-fields.md"
+    },
+    {
+      "document": "docs/authoring/controlled-fields.md",
+      "href": "../../examples/inspection/MeasurementRows.vue",
+      "target": "examples/inspection/MeasurementRows.vue"
+    },
+    {
+      "document": "docs/authoring/controlled-fields.md",
+      "href": "../../examples/protocol/ProtocolConfig.vue",
+      "target": "examples/protocol/ProtocolConfig.vue"
+    },
+    {
+      "document": "docs/authoring/controlled-fields.md",
+      "href": "reference.md#依赖与-json-导入",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "docs/authoring/crud.md",
+      "href": "../../form-create/types.d.ts",
+      "target": "form-create/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/crud.md",
+      "href": "reference.md#值生命周期和提交",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "docs/authoring/crud.md",
+      "href": "composite-fields.md",
+      "target": "docs/authoring/composite-fields.md"
+    },
+    {
+      "document": "docs/authoring/crud.md",
+      "href": "nested-errors.md",
+      "target": "docs/authoring/nested-errors.md"
+    },
+    {
+      "document": "docs/authoring/crud.md",
+      "href": "controlled-fields.md",
+      "target": "docs/authoring/controlled-fields.md"
+    },
+    {
+      "document": "docs/authoring/crud.md",
+      "href": "json-import.md",
+      "target": "docs/authoring/json-import.md"
+    },
+    {
+      "document": "docs/authoring/crud.md",
+      "href": "reference.md#本地验证与升级",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "docs/authoring/json-import.md",
+      "href": "crud.md",
+      "target": "docs/authoring/crud.md"
+    },
+    {
+      "document": "docs/authoring/json-import.md",
+      "href": "../../form-create/types.d.ts",
+      "target": "form-create/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/json-import.md",
+      "href": "crud.md",
+      "target": "docs/authoring/crud.md"
+    },
+    {
+      "document": "docs/authoring/json-import.md",
+      "href": "composite-fields.md",
+      "target": "docs/authoring/composite-fields.md"
+    },
+    {
+      "document": "docs/authoring/json-import.md",
+      "href": "reference.md#依赖与-json-导入",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "docs/authoring/nested-errors.md",
+      "href": "crud.md",
+      "target": "docs/authoring/crud.md"
+    },
+    {
+      "document": "docs/authoring/nested-errors.md",
+      "href": "composite-fields.md",
+      "target": "docs/authoring/composite-fields.md"
+    },
+    {
+      "document": "docs/authoring/nested-errors.md",
+      "href": "../../examples/inspection/MeasurementRows.vue",
+      "target": "examples/inspection/MeasurementRows.vue"
+    },
+    {
+      "document": "docs/authoring/nested-errors.md",
+      "href": "../../examples/inspection/model.ts",
+      "target": "examples/inspection/model.ts"
+    },
+    {
+      "document": "docs/authoring/nested-errors.md",
+      "href": "../../examples/protocol/ProtocolConfig.vue",
+      "target": "examples/protocol/ProtocolConfig.vue"
+    },
+    {
+      "document": "docs/authoring/nested-errors.md",
+      "href": "../../form-create/types.d.ts",
+      "target": "form-create/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/nested-errors.md",
+      "href": "reference.md#嵌套路径与明细身份",
+      "target": "docs/authoring/reference.md"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "../../README.md",
+      "target": "README.md"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "../../types.d.ts",
+      "target": "types.d.ts"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "../../form-create/types.d.ts",
+      "target": "form-create/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "../../fields/types.d.ts",
+      "target": "fields/types.d.ts"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "crud.md",
+      "target": "docs/authoring/crud.md"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "composite-fields.md",
+      "target": "docs/authoring/composite-fields.md"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "nested-errors.md",
+      "target": "docs/authoring/nested-errors.md"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "controlled-fields.md",
+      "target": "docs/authoring/controlled-fields.md"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "json-import.md",
+      "target": "docs/authoring/json-import.md"
+    },
+    {
+      "document": "docs/authoring/reference.md",
+      "href": "../../README.md",
+      "target": "README.md"
+    }
+  ],
+  "example_sha256": {
+    "examples/inspection/model.ts": "35c770a5bd8fe327602042582ae4bf63b754f121a48185f40490782342aaa402",
+    "examples/inspection/AttachmentField.vue": "69f1b9fa0ef2fdf72f6784680e24abc1f4b7662a16c99951f9bbae4288232be4",
+    "examples/recipes/JsonSettingsField.vue": "32a8ac7ec608db9a5d01b8bf8bf72d81ef63848f70b4a180e0b02531ccb5b3fb",
+    "examples/inspection/MeasurementRows.vue": "79bb63f87ba7eb4fb9b1a35c444bc6a4fefb3dd46c8afc5632fa9b6efeecb80f",
+    "examples/protocol/ProtocolConfig.vue": "603cce24ce73f19e28606aeef3dc4876c66d5e73654e5e44e16b47cfc54684a8"
+  },
+  "unchanged_runtime_source_count": 22,
+  "published_manifest": {
+    "name": "@zxio/schema-form",
+    "version": "0.1.0",
+    "description": "Controlled ZXUI fields with an optional FormCreate editing session",
+    "license": "GPL-3.0",
+    "main": "index.cjs",
+    "module": "index.mjs",
+    "types": "index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./index.d.ts",
+        "import": "./index.mjs",
+        "require": "./index.cjs"
+      },
+      "./package.json": "./package.json",
+      "./fields": {
+        "types": "./fields/index.d.ts",
+        "import": "./fields/index.mjs",
+        "require": "./fields/index.cjs"
+      },
+      "./form-create": {
+        "types": "./form-create/index.d.ts",
+        "import": "./form-create/index.mjs",
+        "require": "./form-create/index.cjs"
+      },
+      "./style.css": {
+        "default": "./style.css"
+      }
+    },
+    "sideEffects": [
+      "**/*.css"
+    ],
+    "peerDependencies": {
+      "vue": "^3.5.0",
+      "element-plus": "^2.13.0",
+      "@zxio/zxui": "^3.0.0-next.0",
+      "@form-create/element-ui": "3.3.5"
+    },
+    "publishConfig": {
+      "access": "public",
+      "publishable": true
+    },
+    "peerDependenciesMeta": {
+      "@form-create/element-ui": {
+        "optional": true
+      }
+    }
+  },
+  "limits": [
+    "Checks local link targets, not browser rendering or external URLs."
+  ]
+}

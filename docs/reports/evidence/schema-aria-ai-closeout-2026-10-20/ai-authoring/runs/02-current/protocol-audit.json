@@ -1,0 +1,37 @@
+{
+  "id": "02-current",
+  "variant": "current",
+  "pair": 1,
+  "original_protocol_valid": false,
+  "original_tool_item_count": 1,
+  "audited_protocol_valid": true,
+  "amendment_sha256": "378f63334ed8f808a6ac662477c89f7835f7303bb9ad4dcd2127c24da14fee17",
+  "preflight_warning_exemptions": [
+    {
+      "line": 2,
+      "event": {
+        "type": "item.completed",
+        "item": {
+          "id": "item_0",
+          "type": "error",
+          "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+        }
+      }
+    }
+  ],
+  "actual_tool_items": [],
+  "invalid_events": [],
+  "tokens": {
+    "input_tokens": 17320,
+    "cached_input_tokens": 0,
+    "cache_write_input_tokens": 0,
+    "output_tokens": 3706,
+    "reasoning_output_tokens": 2225
+  },
+  "total_tokens": 21026,
+  "uncached_input_tokens": 17320,
+  "elapsed_seconds": 113.874,
+  "original_quality_file": "runs/02-current/quality.json",
+  "amended_quality_file": "runs/02-current/quality-v2.json",
+  "manual_review_file": "runs/02-current/manual-review.md"
+}

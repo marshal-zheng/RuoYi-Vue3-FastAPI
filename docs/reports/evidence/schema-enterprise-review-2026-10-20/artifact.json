@@ -1,0 +1,208 @@
+{
+  "id": "@zxio/schema-form@0.1.0",
+  "name": "@zxio/schema-form",
+  "version": "0.1.0",
+  "size": 47576,
+  "unpackedSize": 162384,
+  "shasum": "6353fdbf23b031429b2991387509519b7bec3bea",
+  "integrity": "sha512-fGl7BnDtATnAYXlaaRHI1f8vkmW7eDuE49ndEJzOXlyc1C9ZfWfKiZvNWBX0Dv0VCHEOGq/aIkR+xxVrZm8YSQ==",
+  "filename": "zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+  "files": [
+    {
+      "path": "LICENSE",
+      "size": 35807,
+      "mode": 420
+    },
+    {
+      "path": "README.md",
+      "size": 13787,
+      "mode": 420
+    },
+    {
+      "path": "SchemaForm.vue.d.ts",
+      "size": 2474,
+      "mode": 420
+    },
+    {
+      "path": "definition.d.ts",
+      "size": 199,
+      "mode": 420
+    },
+    {
+      "path": "examples/inspection/MeasurementRows.vue",
+      "size": 5618,
+      "mode": 420
+    },
+    {
+      "path": "examples/inspection/model.ts",
+      "size": 3039,
+      "mode": 420
+    },
+    {
+      "path": "examples/protocol/ProtocolConfig.vue",
+      "size": 4583,
+      "mode": 420
+    },
+    {
+      "path": "examples/recipes/JsonSettingsField.vue",
+      "size": 3028,
+      "mode": 420
+    },
+    {
+      "path": "fields/Field.vue.d.ts",
+      "size": 1213,
+      "mode": 420
+    },
+    {
+      "path": "fields/index.cjs",
+      "size": 6334,
+      "mode": 420
+    },
+    {
+      "path": "fields/index.d.ts",
+      "size": 450,
+      "mode": 420
+    },
+    {
+      "path": "fields/index.mjs",
+      "size": 6222,
+      "mode": 420
+    },
+    {
+      "path": "fields/json-text.d.ts",
+      "size": 199,
+      "mode": 420
+    },
+    {
+      "path": "fields/JsonTextInput.vue.d.ts",
+      "size": 607,
+      "mode": 420
+    },
+    {
+      "path": "fields/number-text.d.ts",
+      "size": 198,
+      "mode": 420
+    },
+    {
+      "path": "fields/NumberTextInput.vue.d.ts",
+      "size": 613,
+      "mode": 420
+    },
+    {
+      "path": "fields/types.d.ts",
+      "size": 1472,
+      "mode": 420
+    },
+    {
+      "path": "form-create/composite.d.ts",
+      "size": 1188,
+      "mode": 420
+    },
+    {
+      "path": "form-create/errors.d.ts",
+      "size": 782,
+      "mode": 420
+    },
+    {
+      "path": "form-create/index.cjs",
+      "size": 31088,
+      "mode": 420
+    },
+    {
+      "path": "form-create/index.d.ts",
+      "size": 462,
+      "mode": 420
+    },
+    {
+      "path": "form-create/index.mjs",
+      "size": 30574,
+      "mode": 420
+    },
+    {
+      "path": "form-create/paths.d.ts",
+      "size": 958,
+      "mode": 420
+    },
+    {
+      "path": "form-create/rules.d.ts",
+      "size": 197,
+      "mode": 420
+    },
+    {
+      "path": "form-create/types.d.ts",
+      "size": 2083,
+      "mode": 420
+    },
+    {
+      "path": "index-BiqhT_5-.mjs",
+      "size": 1794,
+      "mode": 420
+    },
+    {
+      "path": "index-BupWnDag.js",
+      "size": 1836,
+      "mode": 420
+    },
+    {
+      "path": "index.cjs",
+      "size": 189,
+      "mode": 420
+    },
+    {
+      "path": "index.d.ts",
+      "size": 120,
+      "mode": 420
+    },
+    {
+      "path": "index.mjs",
+      "size": 83,
+      "mode": 420
+    },
+    {
+      "path": "json.d.ts",
+      "size": 357,
+      "mode": 420
+    },
+    {
+      "path": "package.json",
+      "size": 1130,
+      "mode": 420
+    },
+    {
+      "path": "session.d.ts",
+      "size": 1382,
+      "mode": 420
+    },
+    {
+      "path": "style.css",
+      "size": 853,
+      "mode": 420
+    },
+    {
+      "path": "types.d.ts",
+      "size": 442,
+      "mode": 420
+    },
+    {
+      "path": "zxui/index.d.ts",
+      "size": 303,
+      "mode": 420
+    },
+    {
+      "path": "zxui/RadioOptions.vue.d.ts",
+      "size": 720,
+      "mode": 420
+    }
+  ],
+  "entryCount": 37,
+  "bundled": [],
+  "path": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-enterprise-review-iyea0rog/zxio-schema-form-0.1.0-enterprise-review.20261020.tgz",
+  "unpacked": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/schema-enterprise-review-iyea0rog/package",
+  "sha256": "231de85743ef36ee5aaf664d434b2b5d1c1c8cf9cde7bfa59f16feedc7257a58",
+  "recipeLinks": [
+    "./examples/recipes/JsonSettingsField.vue",
+    "./examples/inspection/MeasurementRows.vue",
+    "./examples/protocol/ProtocolConfig.vue"
+  ],
+  "recipeSourceMatches": true
+}

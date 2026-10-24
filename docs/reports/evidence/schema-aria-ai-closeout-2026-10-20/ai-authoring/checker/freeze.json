@@ -1,0 +1,25 @@
+{
+  "frozen_at_utc": "2026-10-20T09:10:35.971773+00:00",
+  "files": {
+    "checker/check.cjs": "7bdc1cb58f34181d2445206370684f333a9995087561457db45104ab59d093e0",
+    "checker/README.md": "7ab7eb293f8e083e8320b24ebefe6b1da0e259d4cbcf6b933659b62841e0f274",
+    "checker/oracle-baseline.json": "140d3aacc8ef838202094a97319214146f9ff52ed49c3fdf25a50883a6d95ed6",
+    "checker/oracle-current.json": "25b40a55f25d1374700c39b83a2d182641432ddc069b87a9a540903143448bfa",
+    "checker/oracle-invalid.json": "446acac1a92f31a6e8527d700bda0321d687d6c513bf0d70e4aecd722a3c71c8",
+    "checker/oracle-baseline-quality.json": "d72f98044d1330bd9650042abb62be4159c62696081c63de50ac96e265e42523",
+    "checker/oracle-current-quality.json": "a77d6540a89128719398cd6b8a9aaf946a283ff3c6aeed75279f1af2f4976c28",
+    "checker/oracle-invalid-quality.json": "c7980ea8eb9473e67dafa5b2fc38e6f698860f64989042b855965976be82996c"
+  },
+  "oracle_status": "passed",
+  "oracle_valid_checks": {
+    "baseline": "30/30",
+    "current": "30/30"
+  },
+  "oracle_invalid_expected_failures": [
+    "public-types-and-field-keys",
+    "dto-whitelist-and-trusted-identity",
+    "server-issues-known-and-summary",
+    "save-signal-dto-success-and-failure"
+  ],
+  "checker_scope": "Real variant-specific public declaration types; pure domain behavior; native async-validator validation; Vue Happy DOM host wiring with public API stub. No browser/full engine claim."
+}

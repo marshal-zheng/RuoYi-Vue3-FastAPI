@@ -1,0 +1,43 @@
+{
+  "amendment": 1,
+  "frozen_at_utc": "2026-10-20T09:19:15.951559+00:00",
+  "timing": "after execution started; before quality scoring",
+  "final_outputs_present_at_freeze": [
+    "runs/01-baseline/final.json"
+  ],
+  "reason": "The frozen runner classifies all non-message items as tools. This exact CLI startup feature warning occurs before turn.started and is not a model tool call. Correct the event classifier without changing quality criteria, samples, prompts, or raw evidence.",
+  "exempt_event": {
+    "type": "item.completed",
+    "item": {
+      "id": "item_0",
+      "type": "error",
+      "message": "Under-development features enabled: skip_host_skill_discovery. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/hqz/.codex/config.toml."
+    }
+  },
+  "event_canonical_sha256": "e0669ec64b87edf4af5c17fcb31bcb6eff51aa7bcfff15e6c2ac3986008a21cd",
+  "event_raw_line_sha256": "3feb090f9743bb4462ec40c1c5f6f8ca04f398ac0164d6925cdbd26c29d0d02e",
+  "scope": [
+    "01-baseline",
+    "02-current",
+    "03-current",
+    "04-baseline"
+  ],
+  "matching_rule": "The complete parsed event must equal exempt_event and occur before the first turn.started. Only this exact warning is exempt. Preserve every original result; audit every other non-message/non-reasoning item as invalid. Never exempt any other error or a real tool call.",
+  "preserved_fields": [
+    "protocol_valid",
+    "tool_item_count",
+    "events.jsonl",
+    "stderr.log",
+    "final.json",
+    "run-result.json"
+  ],
+  "additional_fields": [
+    "audited_protocol_valid",
+    "preflight_warning_exemptions",
+    "actual_tool_items"
+  ],
+  "quality_criteria_changed": false,
+  "reruns_allowed": false,
+  "original_protocol_sha256": "62963f2ce5b93ce8ece8b19136ef3205ef32a65a7cf515f63ba16fe6fa775cd7",
+  "original_runner_sha256": "5ad45691ccd14d3e1bb557d22e7a89c85695c685f2818d3be78800202ca670ee"
+}

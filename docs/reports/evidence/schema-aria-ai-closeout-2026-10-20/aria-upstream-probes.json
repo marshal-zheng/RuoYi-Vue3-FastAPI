@@ -1,0 +1,85 @@
+{
+  "capturedAt": "2026-10-20T09:14:16.285Z",
+  "scope": "Node + happy-dom in-memory probes; no browser or ZXUI component",
+  "versions": {
+    "node": "v22.22.1",
+    "vue": "3.5.40",
+    "elementPlus": "2.13.0"
+  },
+  "unmount": [
+    {
+      "component": "ElInputNumber",
+      "fixture": "ConfigProvider > Form > FormItem > control",
+      "flushedPromisesBeforeUnmount": true,
+      "labelMatchesInput": true,
+      "inheritedDisabled": true,
+      "unmountPassed": false,
+      "error": "Cannot read properties of null (reading 'nextSibling')",
+      "stack": [
+        "TypeError: Cannot read properties of null (reading 'nextSibling')",
+        "    at nextSibling (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-dom@3.5.40/node_modules/@vue/runtime-dom/dist/runtime-dom.cjs.js:55:31)",
+        "    at removeFragment (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6762:14)",
+        "    at remove (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6733:9)",
+        "    at unmount (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6707:9)",
+        "    at unmountComponent (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6781:7)",
+        "    at unmount (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6672:7)"
+      ]
+    },
+    {
+      "component": "ElInputNumber",
+      "fixture": "ConfigProvider > div > Form > FormItem > control",
+      "flushedPromisesBeforeUnmount": true,
+      "labelMatchesInput": true,
+      "inheritedDisabled": true,
+      "unmountPassed": true
+    },
+    {
+      "component": "ElInput",
+      "fixture": "ConfigProvider > Form > FormItem > control",
+      "flushedPromisesBeforeUnmount": true,
+      "labelMatchesInput": true,
+      "inheritedDisabled": true,
+      "unmountPassed": false,
+      "error": "Cannot read properties of null (reading 'nextSibling')",
+      "stack": [
+        "TypeError: Cannot read properties of null (reading 'nextSibling')",
+        "    at nextSibling (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-dom@3.5.40/node_modules/@vue/runtime-dom/dist/runtime-dom.cjs.js:55:31)",
+        "    at removeFragment (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6762:14)",
+        "    at remove (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6733:9)",
+        "    at unmount (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6707:9)",
+        "    at unmountComponent (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6781:7)",
+        "    at unmount (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:6672:7)"
+      ]
+    },
+    {
+      "component": "ElInput",
+      "fixture": "ConfigProvider > div > Form > FormItem > control",
+      "flushedPromisesBeforeUnmount": true,
+      "labelMatchesInput": true,
+      "inheritedDisabled": true,
+      "unmountPassed": true
+    }
+  ],
+  "ssr": [
+    {
+      "component": "ElInputNumber",
+      "requestedId": "quantity",
+      "actualInputId": null,
+      "actualInputName": "quantity",
+      "inputHtml": "<input class=\"el-input__inner\" step=\"1\" max=\"9007199254740991\" min=\"-9007199254740991\" name=\"quantity\" type=\"number\" autocomplete=\"off\" tabindex=\"0\" aria-label=\"Quantity\" style=\"\">"
+    },
+    {
+      "component": "ElInput",
+      "requestedId": "quantity",
+      "actualInputId": null,
+      "actualInputName": "quantity",
+      "inputHtml": "<input class=\"el-input__inner\" aria-describedby=\"quantity-error\" name=\"quantity\" type=\"text\" autocomplete=\"off\" tabindex=\"0\" aria-label=\"Quantity\" style=\"\">"
+    }
+  ],
+  "interpretation": [
+    "Both direct upstream controls reproduce the adjacent Provider/Form unmount error.",
+    "An ordinary layout div retains provider/form inheritance and permits unmount.",
+    "Explicit ElInput/ElInputNumber ids are absent in upstream SSR; their input-id hook initializes onMounted.",
+    "These are upstream/test-fixture observations, not evidence of a browser failure."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "postFormTs": {
+      "type": "string"
+    },
+    "postEditorVue": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "postFormTs",
+    "postEditorVue"
+  ],
+  "additionalProperties": false
+}

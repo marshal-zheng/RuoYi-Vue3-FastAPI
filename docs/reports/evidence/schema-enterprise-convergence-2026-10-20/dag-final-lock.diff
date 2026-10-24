@@ -1,0 +1,32 @@
+--- pre-final-install
+
++++ post-final-install
+
+@@ -289,6 +289,6 @@
+
+         version: 2.4.6
+       '@zxio/schema-form':
+-        specifier: file:../../vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz
+-        version: file:vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz(@zxio/zxui@file:vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5)))(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5))
++        specifier: file:../../vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz
++        version: file:vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz(@zxio/zxui@file:vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5)))(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5))
+       '@zxio/x6-devkit':
+         specifier: workspace:*
+@@ -2270,6 +2270,6 @@
+
+     resolution: {integrity: sha512-u+u13mkLx1jfNfCkAcEP5Ar3ChTL7Z8wZmFo+Cf6+cPYzFLWs/lGt5cCpPNwRxhOV8mXi/jU6DQZli15y2J0eg==}
+ 
+-  '@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz':
+-    resolution: {integrity: sha512-Jts4bBElg96PsLZZLpAXPizOjqI1Kwrk99rvnHcP7XtFvH53l7yqHvO8gzVXCFf5ymHQ2ICI/8kSbAVO0EQf3Q==, tarball: file:vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz}
++  '@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz':
++    resolution: {integrity: sha512-OkbTXcG/Pf3IPe0OCYb8+yZ2zQZb0yxTAOsHY/6t8lwZxdpfEA0ChH85i/OpdkUOQJHzuE6cvOn5eC+ziTs8Sw==, tarball: file:vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz}
+     version: 0.1.0
+     peerDependencies:
+@@ -7569,5 +7569,5 @@
+
+   '@zxio/mcp-core@1.0.0': {}
+ 
+-  '@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-enterprise.20261020.tgz(@zxio/zxui@file:vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5)))(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5))':
++  '@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-enterprise-final.20261020.tgz(@zxio/zxui@file:vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5)))(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5))':
+     dependencies:
+       '@zxio/zxui': file:vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz(element-plus@2.13.7(typescript@5.4.5)(vue@3.5.12(typescript@5.4.5)))(vue@3.5.12(typescript@5.4.5))

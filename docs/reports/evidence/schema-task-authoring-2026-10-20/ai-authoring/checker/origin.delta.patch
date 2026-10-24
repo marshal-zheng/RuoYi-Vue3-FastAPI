@@ -1,0 +1,24 @@
+--- previous/check-v2.cjs
++++ checker/check.cjs
+@@ -15,7 +15,7 @@
+ }))
+ for (const key of ['output', 'artifact', 'variant', 'domain', 'zxui', 'formcreate', 'result'])
+   if (!args[key]) throw new Error(`Missing --${key}=...`)
+-if (!['baseline', 'current'].includes(args.variant)) throw new Error('Invalid variant')
++if (args.variant !== 'current') throw new Error('Both documentation arms use the identical current API/artifact; --variant=current is required')
+ const zxui = path.resolve(args.zxui)
+ const requireZx = createRequire(path.join(zxui, 'package.json'))
+ const ts = requireZx('typescript')
+@@ -162,11 +162,7 @@
+       assert.equal(mapped.length, errors.length)
+       mapped.forEach((issue, index) => {
+         assert.equal(issue.message, errors[index].message)
+-        if (args.variant === 'baseline') {
+-          assert.equal(typeof issue.field, 'string')
+-          if (index < 5) assert.equal(issue.field, knownFields[index])
+-          else assert(!knownFields.includes(issue.field), 'Unknown server issue points to a known field')
+-        } else if (index < 5) assert.deepEqual(issue.path, [knownFields[index]])
++        if (index < 5) assert.deepEqual(issue.path, [knownFields[index]])
+         else {
+           assert(!issue.path?.length || !knownFields.includes(issue.path[0]), 'Unknown server issue points to a known field')
+           assert(!issue.path || (Array.isArray(issue.path) && issue.path.every((part) => typeof part === 'string' || typeof part === 'number')), 'Unknown server issue has an invalid field path')
