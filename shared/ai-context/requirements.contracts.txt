@@ -1,0 +1,2 @@
+# Development-only schema checks; not a backend runtime requirement.
+jsonschema==4.26.0

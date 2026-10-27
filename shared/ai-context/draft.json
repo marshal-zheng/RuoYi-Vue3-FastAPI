@@ -1,0 +1,22 @@
+{
+  "version": "ai-context/v1",
+  "status": "draft",
+  "frozen": false,
+  "documentCodec": "remark-a-v1",
+  "limits": {
+    "maxItems": 16,
+    "maxChars": 6000,
+    "maxValueChars": 300,
+    "maxArrayItems": 50
+  },
+  "semanticChecks": [
+    "unique item ids",
+    "purpose references non-secret items",
+    "purpose lists disjoint",
+    "context subset, metadata and declaration order",
+    "policy and permission enforcement",
+    "document codec and token positions",
+    "stream terminal, identity and normal end"
+  ],
+  "realProviderCalls": 0
+}

@@ -1,0 +1,34 @@
+{
+  "cases": [
+    {
+      "value": "{{PHONE_1}}",
+      "valid": true,
+      "kind": "phone"
+    },
+    {
+      "value": "{{PERSONAL_999}}",
+      "valid": true,
+      "kind": "other"
+    },
+    {
+      "value": "{{PHONE_0}}",
+      "valid": false
+    },
+    {
+      "value": "{{PHONE_01}}",
+      "valid": false
+    },
+    {
+      "value": "{{EMAIL_1000}}",
+      "valid": false
+    },
+    {
+      "value": "{{UNKNOWN_1}}",
+      "valid": false
+    },
+    {
+      "value": "prefix{{PHONE_1}}",
+      "valid": false
+    }
+  ]
+}
