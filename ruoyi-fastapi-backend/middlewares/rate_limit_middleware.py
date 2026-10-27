@@ -10,7 +10,8 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 from fastapi import FastAPI
 from starlette.types import ASGIApp, Message, Scope, Send
 
-from config.env import RateLimitConfig
+from config.env import RateLimitConfig, TextFieldAIConfig
+from middlewares.text_field_ai_middleware import AI_GENERATE_PATH, ai_route_path
 from middlewares.trace_middleware import get_request_id, get_trace_id
 from utils.log_util import logger
 
@@ -34,6 +35,8 @@ class RateLimitASGIMiddleware:
         trusted_proxies: Optional[Sequence[str]] = None,
         auth_ip_limit: int = 20,
         auth_user_limit: int = 40,
+        ai_ip_limit: int = 60,
+        ai_user_limit: int = 20,
         write_ip_limit: int = 120,
         write_user_limit: int = 240,
         read_ip_limit: int = 600,
@@ -71,6 +74,8 @@ class RateLimitASGIMiddleware:
 
         self.auth_ip_limit = max(1, int(auth_ip_limit))
         self.auth_user_limit = max(1, int(auth_user_limit))
+        self.ai_ip_limit = max(1, int(ai_ip_limit))
+        self.ai_user_limit = max(1, int(ai_user_limit))
         self.write_ip_limit = max(1, int(write_ip_limit))
         self.write_user_limit = max(1, int(write_user_limit))
         self.read_ip_limit = max(1, int(read_ip_limit))
@@ -84,7 +89,7 @@ class RateLimitASGIMiddleware:
             await self.app(scope, receive, send)
             return
 
-        path = str(scope.get('path', ''))
+        path = ai_route_path(scope)
         method = str(scope.get('method', '')).upper()
         if self._is_excluded(path):
             await self.app(scope, receive, send)
@@ -164,6 +169,8 @@ class RateLimitASGIMiddleware:
         return False
 
     def _resolve_tier(self, path: str, method: str) -> str:
+        if path == AI_GENERATE_PATH and method == 'POST':
+            return 'ai'
         for prefix in self.auth_paths:
             if path.startswith(prefix):
                 return 'auth'
@@ -172,6 +179,8 @@ class RateLimitASGIMiddleware:
         return 'read'
 
     def _limits_for_tier(self, tier: str) -> Tuple[int, int]:
+        if tier == 'ai':
+            return self.ai_ip_limit, self.ai_user_limit
         if tier == 'auth':
             return self.auth_ip_limit, self.auth_user_limit
         if tier == 'write':
@@ -249,8 +258,8 @@ class RateLimitASGIMiddleware:
                 return None
             user_id = user_ctx.get('userId')
             return str(user_id) if user_id else None
-        except Exception as exc:
-            logger.warning(f'rate limit decode token failed: {exc}')
+        except Exception:
+            logger.warning('rate limit token validation failed')
             return None
 
     @staticmethod
@@ -298,8 +307,8 @@ class RateLimitASGIMiddleware:
                 else:
                     await redis_client.set(key, str(count), ex=ttl)
                 return count
-            except Exception as exc:
-                logger.warning(f'rate limit redis counter failed, fallback local: key={key}, error={exc}')
+            except Exception:
+                logger.warning('rate limit counter unavailable; using local window')
         return await self._increment_counter_local(key=key, ttl=ttl)
 
     async def _increment_counter_local(self, key: str, ttl: int) -> int:
@@ -346,6 +355,8 @@ class RateLimitASGIMiddleware:
             'errorCode': 42901,
             'requestId': request_id,
         }
+        if tier == 'ai':
+            payload['aiCode'] = 'quota-exceeded'
         trace_id = get_trace_id()
         if trace_id:
             payload['traceId'] = trace_id
@@ -381,6 +392,8 @@ def add_rate_limit_middleware(app: FastAPI) -> None:
         trusted_proxies=_parse_csv(RateLimitConfig.rate_limit_trusted_proxies),
         auth_ip_limit=RateLimitConfig.rate_limit_auth_ip,
         auth_user_limit=RateLimitConfig.rate_limit_auth_user,
+        ai_ip_limit=TextFieldAIConfig.ai_text_field_ip_per_minute,
+        ai_user_limit=TextFieldAIConfig.ai_text_field_user_per_minute,
         write_ip_limit=RateLimitConfig.rate_limit_write_ip,
         write_user_limit=RateLimitConfig.rate_limit_write_user,
         read_ip_limit=RateLimitConfig.rate_limit_read_ip,

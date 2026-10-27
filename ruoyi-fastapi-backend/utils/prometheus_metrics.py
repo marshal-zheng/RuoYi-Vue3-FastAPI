@@ -6,8 +6,7 @@ Prometheus-compatible exposition text without extra dependencies.
 """
 import threading
 from collections import defaultdict
-from typing import Dict, Iterable, List, Optional, Tuple
-
+from typing import Dict, Iterable, List, Optional
 
 _DEFAULT_BUCKETS = (
     0.005,
@@ -40,6 +39,12 @@ class PrometheusMetricsRegistry:
         bucket_values = tuple(sorted(float(item) for item in (buckets or _DEFAULT_BUCKETS)))
         self._buckets = bucket_values
         self._lock = threading.Lock()
+
+        self._ai_outcomes = defaultdict(int)
+        self._ai_provider_errors = defaultdict(int)
+        self._ai_latency_sum = 0.0
+        self._ai_latency_count = 0
+        self._ai_audit_failures = 0
 
         self._http_requests_total = defaultdict(int)  # (method, path, status_code) -> count
         self._http_errors_total = defaultdict(int)  # (method, path, status_code) -> count
@@ -159,5 +164,28 @@ class PrometheusMetricsRegistry:
                 )
             )
 
-        return "\n".join(lines) + "\n"
+        return "\n".join(lines) + "\n" + self.render_text_field_ai_metrics()
 
+
+    def observe_text_field_ai(self, outcome: str, seconds: float) -> None:
+        with self._lock:
+            self._ai_outcomes[outcome] += 1
+            self._ai_latency_sum += max(0.0, seconds)
+            self._ai_latency_count += 1
+            if outcome in {'provider-unavailable', 'timeout', 'invalid-output', 'output-limit', 'incomplete-output'}:
+                self._ai_provider_errors[outcome] += 1
+
+    def observe_text_field_ai_audit_failure(self) -> None:
+        with self._lock:
+            self._ai_audit_failures += 1
+
+    def render_text_field_ai_metrics(self) -> str:
+        with self._lock:
+            lines = [format_metric_line('text_field_ai_requests_total', count, {'outcome': outcome})
+                     for outcome, count in sorted(self._ai_outcomes.items())]
+            lines += [format_metric_line('text_field_ai_provider_errors_total', count, {'code': code})
+                      for code, count in sorted(self._ai_provider_errors.items())]
+            lines += [format_metric_line('text_field_ai_latency_seconds_sum', self._ai_latency_sum),
+                      format_metric_line('text_field_ai_latency_seconds_count', self._ai_latency_count),
+                      format_metric_line('text_field_ai_audit_failures_total', self._ai_audit_failures)]
+        return '\n'.join(lines) + '\n'

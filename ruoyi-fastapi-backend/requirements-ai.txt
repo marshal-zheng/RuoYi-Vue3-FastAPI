@@ -1,0 +1,4 @@
+# Optional OpenAI-compatible transport, validated with the pinned main application requirements.
+openai==3.37.0
+httpx2==2.16.0
+sse-starlette==3.0.3

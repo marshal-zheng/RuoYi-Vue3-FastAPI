@@ -1,6 +1,1463 @@
 {
   "components": {
     "schemas": {
+      "AIEvent_BlockAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "blockId"
+        ],
+        "title": "BlockAttrs",
+        "type": "object"
+      },
+      "AIEvent_BoldMark": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "bold",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "BoldMark",
+        "type": "object"
+      },
+      "AIEvent_BulletListNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIEvent_BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/AIEvent_ListItemNode"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "bulletList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "BulletListNode",
+        "type": "object"
+      },
+      "AIEvent_DeltaEvent": {
+        "additionalProperties": false,
+        "properties": {
+          "captureId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Captureid",
+            "type": "string"
+          },
+          "requestId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Requestid",
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 5000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "delta",
+            "default": "delta",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requestId",
+          "captureId",
+          "text"
+        ],
+        "title": "DeltaEvent",
+        "type": "object"
+      },
+      "AIEvent_DocumentBody": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/AIEvent_DocumentRoot"
+          },
+          "format": {
+            "const": "json",
+            "title": "Format",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "content"
+        ],
+        "title": "DocumentBody",
+        "type": "object"
+      },
+      "AIEvent_DocumentMeta": {
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": "stable-block-identity/v2",
+            "title": "Schemaversion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ],
+        "title": "DocumentMeta",
+        "type": "object"
+      },
+      "AIEvent_DocumentRoot": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/AIEvent_BulletListNode",
+                  "orderedList": "#/components/schemas/AIEvent_OrderedListNode",
+                  "paragraph": "#/components/schemas/AIEvent_ParagraphNode"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AIEvent_ParagraphNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIEvent_BulletListNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIEvent_OrderedListNode"
+                }
+              ]
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "doc",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "DocumentRoot",
+        "type": "object"
+      },
+      "AIEvent_ErrorEvent": {
+        "additionalProperties": false,
+        "properties": {
+          "captureId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Captureid",
+            "type": "string"
+          },
+          "code": {
+            "enum": [
+              "context-rejected",
+              "policy-rejected",
+              "permission-denied",
+              "quota-exceeded",
+              "provider-unavailable",
+              "timeout",
+              "invalid-output",
+              "output-limit",
+              "incomplete-output"
+            ],
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Message",
+            "type": "string"
+          },
+          "requestId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Requestid",
+            "type": "string"
+          },
+          "type": {
+            "const": "error",
+            "default": "error",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requestId",
+          "captureId",
+          "code",
+          "message"
+        ],
+        "title": "ErrorEvent",
+        "type": "object"
+      },
+      "AIEvent_HardBreakNode": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/AIEvent_BoldMark",
+                      "italic": "#/components/schemas/AIEvent_ItalicMark",
+                      "link": "#/components/schemas/AIEvent_LinkMark",
+                      "textStyle": "#/components/schemas/AIEvent_TextStyleMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AIEvent_LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_TextStyleMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Marks"
+          },
+          "type": {
+            "const": "hardBreak",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "HardBreakNode",
+        "type": "object"
+      },
+      "AIEvent_ItalicMark": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "italic",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "ItalicMark",
+        "type": "object"
+      },
+      "AIEvent_LinkAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "class": {
+            "title": "Class",
+            "type": "null"
+          },
+          "href": {
+            "title": "Href",
+            "type": "string"
+          },
+          "rel": {
+            "const": "noopener noreferrer nofollow",
+            "title": "Rel",
+            "type": "string"
+          },
+          "target": {
+            "const": "_blank",
+            "title": "Target",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "null"
+          }
+        },
+        "required": [
+          "href",
+          "target",
+          "rel",
+          "class",
+          "title"
+        ],
+        "title": "LinkAttrs",
+        "type": "object"
+      },
+      "AIEvent_LinkMark": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIEvent_LinkAttrs"
+          },
+          "type": {
+            "const": "link",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "LinkMark",
+        "type": "object"
+      },
+      "AIEvent_ListItemNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIEvent_BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/AIEvent_BulletListNode",
+                  "orderedList": "#/components/schemas/AIEvent_OrderedListNode",
+                  "paragraph": "#/components/schemas/AIEvent_ParagraphNode"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AIEvent_ParagraphNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIEvent_BulletListNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIEvent_OrderedListNode"
+                }
+              ]
+            },
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "listItem",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "ListItemNode",
+        "type": "object"
+      },
+      "AIEvent_Notice": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "const": "information-unavailable",
+            "title": "Code",
+            "type": "string"
+          },
+          "contextIds": {
+            "items": {
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,63}$",
+              "type": "string"
+            },
+            "maxItems": 16,
+            "title": "Contextids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "code",
+          "contextIds"
+        ],
+        "title": "Notice",
+        "type": "object"
+      },
+      "AIEvent_OrderedAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          },
+          "start": {
+            "maximum": 1000000,
+            "minimum": 1,
+            "title": "Start",
+            "type": "integer"
+          },
+          "type": {
+            "title": "Type",
+            "type": "null"
+          }
+        },
+        "required": [
+          "blockId",
+          "start",
+          "type"
+        ],
+        "title": "OrderedAttrs",
+        "type": "object"
+      },
+      "AIEvent_OrderedListNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIEvent_OrderedAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/AIEvent_ListItemNode"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "orderedList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "OrderedListNode",
+        "type": "object"
+      },
+      "AIEvent_ParagraphAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          },
+          "textAlign": {
+            "title": "Textalign",
+            "type": "null"
+          }
+        },
+        "required": [
+          "blockId",
+          "textAlign"
+        ],
+        "title": "ParagraphAttrs",
+        "type": "object"
+      },
+      "AIEvent_ParagraphNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIEvent_ParagraphAttrs"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "hardBreak": "#/components/schemas/AIEvent_HardBreakNode",
+                      "text": "#/components/schemas/AIEvent_TextNode"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AIEvent_TextNode"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_HardBreakNode"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Content"
+          },
+          "type": {
+            "const": "paragraph",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "ParagraphNode",
+        "type": "object"
+      },
+      "AIEvent_RemarkDocument": {
+        "additionalProperties": false,
+        "properties": {
+          "annotations": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Annotations",
+            "type": "array"
+          },
+          "assets": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Assets",
+            "type": "array"
+          },
+          "body": {
+            "$ref": "#/components/schemas/AIEvent_DocumentBody"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AIEvent_DocumentMeta"
+          },
+          "version": {
+            "const": 2,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "body",
+          "annotations",
+          "assets",
+          "meta"
+        ],
+        "title": "RemarkDocument",
+        "type": "object"
+      },
+      "AIEvent_ResultEvent": {
+        "additionalProperties": false,
+        "properties": {
+          "captureId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Captureid",
+            "type": "string"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AIEvent_RemarkDocument"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AIEvent_ResultMeta"
+          },
+          "notices": {
+            "items": {
+              "$ref": "#/components/schemas/AIEvent_Notice"
+            },
+            "maxItems": 16,
+            "title": "Notices",
+            "type": "array"
+          },
+          "requestId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Requestid",
+            "type": "string"
+          },
+          "type": {
+            "const": "result",
+            "default": "result",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "requestId",
+          "captureId",
+          "document",
+          "notices",
+          "meta"
+        ],
+        "title": "ResultEvent",
+        "type": "object"
+      },
+      "AIEvent_ResultMeta": {
+        "additionalProperties": false,
+        "properties": {
+          "contextIds": {
+            "items": {
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,63}$",
+              "type": "string"
+            },
+            "maxItems": 16,
+            "title": "Contextids",
+            "type": "array"
+          },
+          "model": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Model",
+            "type": "string"
+          },
+          "promptVersion": {
+            "const": "text-field/v1",
+            "default": "text-field/v1",
+            "title": "Promptversion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "model",
+          "contextIds"
+        ],
+        "title": "ResultMeta",
+        "type": "object"
+      },
+      "AIEvent_TextNode": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/AIEvent_BoldMark",
+                      "italic": "#/components/schemas/AIEvent_ItalicMark",
+                      "link": "#/components/schemas/AIEvent_LinkMark",
+                      "textStyle": "#/components/schemas/AIEvent_TextStyleMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AIEvent_LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_TextStyleMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Marks"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "text",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text"
+        ],
+        "title": "TextNode",
+        "type": "object"
+      },
+      "AIEvent_TextStyleAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "color": {
+            "enum": [
+              "red",
+              "orange",
+              "green",
+              "blue",
+              "purple",
+              "gray"
+            ],
+            "title": "Color",
+            "type": "string"
+          },
+          "fontFamily": {
+            "title": "Fontfamily",
+            "type": "null"
+          },
+          "fontSize": {
+            "title": "Fontsize",
+            "type": "null"
+          }
+        },
+        "required": [
+          "fontFamily",
+          "fontSize",
+          "color"
+        ],
+        "title": "TextStyleAttrs",
+        "type": "object"
+      },
+      "AIEvent_TextStyleMark": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIEvent_TextStyleAttrs"
+          },
+          "type": {
+            "const": "textStyle",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "TextStyleMark",
+        "type": "object"
+      },
+      "AIRequest_BlockAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "blockId"
+        ],
+        "title": "BlockAttrs",
+        "type": "object"
+      },
+      "AIRequest_BoldMark": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "bold",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "BoldMark",
+        "type": "object"
+      },
+      "AIRequest_BulletListNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIRequest_BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/AIRequest_ListItemNode"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "bulletList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "BulletListNode",
+        "type": "object"
+      },
+      "AIRequest_DocumentBody": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/AIRequest_DocumentRoot"
+          },
+          "format": {
+            "const": "json",
+            "title": "Format",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "content"
+        ],
+        "title": "DocumentBody",
+        "type": "object"
+      },
+      "AIRequest_DocumentMeta": {
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": "stable-block-identity/v2",
+            "title": "Schemaversion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ],
+        "title": "DocumentMeta",
+        "type": "object"
+      },
+      "AIRequest_DocumentRoot": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/AIRequest_BulletListNode",
+                  "orderedList": "#/components/schemas/AIRequest_OrderedListNode",
+                  "paragraph": "#/components/schemas/AIRequest_ParagraphNode"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AIRequest_ParagraphNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIRequest_BulletListNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIRequest_OrderedListNode"
+                }
+              ]
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "doc",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "DocumentRoot",
+        "type": "object"
+      },
+      "AIRequest_HardBreakNode": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/AIRequest_BoldMark",
+                      "italic": "#/components/schemas/AIRequest_ItalicMark",
+                      "link": "#/components/schemas/AIRequest_LinkMark",
+                      "textStyle": "#/components/schemas/AIRequest_TextStyleMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AIRequest_LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIRequest_TextStyleMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIRequest_BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIRequest_ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Marks"
+          },
+          "text": {
+            "default": null,
+            "title": "Text",
+            "type": "null"
+          },
+          "type": {
+            "const": "hardBreak",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "HardBreakNode",
+        "type": "object"
+      },
+      "AIRequest_ItalicMark": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "italic",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "ItalicMark",
+        "type": "object"
+      },
+      "AIRequest_LinkAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "class": {
+            "title": "Class",
+            "type": "null"
+          },
+          "href": {
+            "title": "Href",
+            "type": "string"
+          },
+          "rel": {
+            "const": "noopener noreferrer nofollow",
+            "title": "Rel",
+            "type": "string"
+          },
+          "target": {
+            "const": "_blank",
+            "title": "Target",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "null"
+          }
+        },
+        "required": [
+          "href",
+          "target",
+          "rel",
+          "class",
+          "title"
+        ],
+        "title": "LinkAttrs",
+        "type": "object"
+      },
+      "AIRequest_LinkMark": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIRequest_LinkAttrs"
+          },
+          "type": {
+            "const": "link",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "LinkMark",
+        "type": "object"
+      },
+      "AIRequest_ListItemNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIRequest_BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/AIRequest_BulletListNode",
+                  "orderedList": "#/components/schemas/AIRequest_OrderedListNode",
+                  "paragraph": "#/components/schemas/AIRequest_ParagraphNode"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AIRequest_ParagraphNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIRequest_BulletListNode"
+                },
+                {
+                  "$ref": "#/components/schemas/AIRequest_OrderedListNode"
+                }
+              ]
+            },
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "listItem",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "ListItemNode",
+        "type": "object"
+      },
+      "AIRequest_OrderedAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          },
+          "start": {
+            "maximum": 1000000,
+            "minimum": 1,
+            "title": "Start",
+            "type": "integer"
+          },
+          "type": {
+            "title": "Type",
+            "type": "null"
+          }
+        },
+        "required": [
+          "blockId",
+          "start",
+          "type"
+        ],
+        "title": "OrderedAttrs",
+        "type": "object"
+      },
+      "AIRequest_OrderedListNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIRequest_OrderedAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/AIRequest_ListItemNode"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "orderedList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "OrderedListNode",
+        "type": "object"
+      },
+      "AIRequest_ParagraphAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          },
+          "textAlign": {
+            "title": "Textalign",
+            "type": "null"
+          }
+        },
+        "required": [
+          "blockId",
+          "textAlign"
+        ],
+        "title": "ParagraphAttrs",
+        "type": "object"
+      },
+      "AIRequest_ParagraphNode": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIRequest_ParagraphAttrs"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "hardBreak": "#/components/schemas/AIRequest_HardBreakNode",
+                      "text": "#/components/schemas/AIRequest_TextNode"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AIRequest_TextNode"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIRequest_HardBreakNode"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Content"
+          },
+          "type": {
+            "const": "paragraph",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "ParagraphNode",
+        "type": "object"
+      },
+      "AIRequest_PersonalItem": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,63}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "phone",
+              "email",
+              "id",
+              "address",
+              "other"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "sensitivity": {
+            "const": "personal",
+            "title": "Sensitivity",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "maxLength": 6000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "items": {
+                  "maxLength": 6000,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 50,
+                "minItems": 1,
+                "type": "array"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "sensitivity",
+          "value",
+          "kind"
+        ],
+        "title": "PersonalItem",
+        "type": "object"
+      },
+      "AIRequest_PublicItem": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,63}$",
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "sensitivity": {
+            "const": "public",
+            "title": "Sensitivity",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "maxLength": 6000,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "items": {
+                  "maxLength": 6000,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 50,
+                "minItems": 1,
+                "type": "array"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "sensitivity",
+          "value"
+        ],
+        "title": "PublicItem",
+        "type": "object"
+      },
+      "AIRequest_RemarkDocument": {
+        "additionalProperties": false,
+        "properties": {
+          "annotations": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Annotations",
+            "type": "array"
+          },
+          "assets": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Assets",
+            "type": "array"
+          },
+          "body": {
+            "$ref": "#/components/schemas/AIRequest_DocumentBody"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AIRequest_DocumentMeta"
+          },
+          "version": {
+            "const": 2,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "body",
+          "annotations",
+          "assets",
+          "meta"
+        ],
+        "title": "RemarkDocument",
+        "type": "object"
+      },
+      "AIRequest_TextNode": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/AIRequest_BoldMark",
+                      "italic": "#/components/schemas/AIRequest_ItalicMark",
+                      "link": "#/components/schemas/AIRequest_LinkMark",
+                      "textStyle": "#/components/schemas/AIRequest_TextStyleMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AIRequest_LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIRequest_TextStyleMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIRequest_BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIRequest_ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Marks"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "text",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text"
+        ],
+        "title": "TextNode",
+        "type": "object"
+      },
+      "AIRequest_TextStyleAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "color": {
+            "enum": [
+              "red",
+              "orange",
+              "green",
+              "blue",
+              "purple",
+              "gray"
+            ],
+            "title": "Color",
+            "type": "string"
+          },
+          "fontFamily": {
+            "title": "Fontfamily",
+            "type": "null"
+          },
+          "fontSize": {
+            "title": "Fontsize",
+            "type": "null"
+          }
+        },
+        "required": [
+          "fontFamily",
+          "fontSize",
+          "color"
+        ],
+        "title": "TextStyleAttrs",
+        "type": "object"
+      },
+      "AIRequest_TextStyleMark": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/AIRequest_TextStyleAttrs"
+          },
+          "type": {
+            "const": "textStyle",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "TextStyleMark",
+        "type": "object"
+      },
       "BatchDeviceIdsModel": {
         "description": "批量设备ID模型",
         "properties": {
@@ -11036,110 +12493,6 @@
         "title": "PyInfo",
         "type": "object"
       },
-      "RemarkAIRequest": {
-        "additionalProperties": false,
-        "properties": {
-          "candidate": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/RemarkDocument-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "context": {
-            "additionalProperties": {
-              "anyOf": [
-                {
-                  "maxLength": 300,
-                  "type": "string"
-                },
-                {
-                  "items": {
-                    "maxLength": 300,
-                    "type": "string"
-                  },
-                  "maxItems": 50,
-                  "type": "array"
-                }
-              ]
-            },
-            "maxProperties": 8,
-            "title": "Context",
-            "type": "object"
-          },
-          "document": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/RemarkDocument-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "instruction": {
-            "maxLength": 2000,
-            "minLength": 1,
-            "title": "Instruction",
-            "type": "string"
-          },
-          "scene": {
-            "enum": [
-              "user",
-              "role",
-              "post",
-              "dictType",
-              "dictData",
-              "config",
-              "genTable"
-            ],
-            "title": "Scene",
-            "type": "string"
-          },
-          "selection": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/RemarkDocument-Input"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "target": {
-            "enum": [
-              "document",
-              "selection"
-            ],
-            "title": "Target",
-            "type": "string"
-          }
-        },
-        "required": [
-          "scene",
-          "instruction",
-          "target",
-          "document"
-        ],
-        "title": "RemarkAIRequest",
-        "type": "object"
-      },
-      "RemarkAIStatus": {
-        "properties": {
-          "available": {
-            "title": "Available",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "available"
-        ],
-        "title": "RemarkAIStatus",
-        "type": "object"
-      },
       "RemarkDocument-Input": {
         "additionalProperties": false,
         "properties": {
@@ -12940,6 +14293,341 @@
           }
         },
         "title": "SysInfo",
+        "type": "object"
+      },
+      "TextFieldAIPolicy": {
+        "additionalProperties": false,
+        "properties": {
+          "maxChars": {
+            "const": 6000,
+            "default": 6000,
+            "title": "Maxchars",
+            "type": "integer"
+          },
+          "maxItems": {
+            "const": 16,
+            "default": 16,
+            "title": "Maxitems",
+            "type": "integer"
+          },
+          "personal": {
+            "enum": [
+              "mask",
+              "never",
+              "plain"
+            ],
+            "title": "Personal",
+            "type": "string"
+          }
+        },
+        "required": [
+          "personal"
+        ],
+        "title": "TextFieldAIPolicy",
+        "type": "object"
+      },
+      "TextFieldAIProblem": {
+        "additionalProperties": false,
+        "properties": {
+          "aiCode": {
+            "anyOf": [
+              {
+                "enum": [
+                  "context-rejected",
+                  "policy-rejected",
+                  "permission-denied",
+                  "quota-exceeded",
+                  "provider-unavailable",
+                  "timeout",
+                  "invalid-output",
+                  "output-limit",
+                  "incomplete-output"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aicode"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "errorCode": {
+            "title": "Errorcode",
+            "type": "integer"
+          },
+          "instance": {
+            "title": "Instance",
+            "type": "string"
+          },
+          "requestId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requestid"
+          },
+          "status": {
+            "title": "Status",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "traceId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Traceid"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "instance",
+          "errorCode"
+        ],
+        "title": "TextFieldAIProblem",
+        "type": "object"
+      },
+      "TextFieldAIRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "draft",
+              "rewrite",
+              "include-context"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "candidate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AIRequest_RemarkDocument"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "captureId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Captureid",
+            "type": "string"
+          },
+          "context": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "personal": "#/components/schemas/AIRequest_PersonalItem",
+                  "public": "#/components/schemas/AIRequest_PublicItem"
+                },
+                "propertyName": "sensitivity"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AIRequest_PublicItem"
+                },
+                {
+                  "$ref": "#/components/schemas/AIRequest_PersonalItem"
+                }
+              ]
+            },
+            "maxItems": 16,
+            "title": "Context",
+            "type": "array"
+          },
+          "document": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AIRequest_RemarkDocument"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "instruction": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Instruction",
+            "type": "string"
+          },
+          "manifestRevision": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Manifestrevision",
+            "type": "string"
+          },
+          "policyRevision": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Policyrevision",
+            "type": "string"
+          },
+          "profile": {
+            "const": "basic-rich-text",
+            "title": "Profile",
+            "type": "string"
+          },
+          "purpose": {
+            "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,63}$",
+            "title": "Purpose",
+            "type": "string"
+          },
+          "requestId": {
+            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+            "title": "Requestid",
+            "type": "string"
+          },
+          "scope": {
+            "maxLength": 96,
+            "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$",
+            "title": "Scope",
+            "type": "string"
+          },
+          "selectedContextIds": {
+            "items": {
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]{0,63}$",
+              "type": "string"
+            },
+            "maxItems": 16,
+            "title": "Selectedcontextids",
+            "type": "array"
+          },
+          "selection": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AIRequest_RemarkDocument"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "target": {
+            "enum": [
+              "document",
+              "selection"
+            ],
+            "title": "Target",
+            "type": "string"
+          },
+          "version": {
+            "const": "ai-context/v1",
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "requestId",
+          "captureId",
+          "manifestRevision",
+          "policyRevision",
+          "scope",
+          "purpose",
+          "action",
+          "selectedContextIds",
+          "profile",
+          "instruction",
+          "target",
+          "document",
+          "selection",
+          "candidate",
+          "context"
+        ],
+        "title": "TextFieldAIRequest",
+        "type": "object"
+      },
+      "TextFieldAIStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "contract": {
+            "const": "ai-context/v1",
+            "default": "ai-context/v1",
+            "title": "Contract",
+            "type": "string"
+          },
+          "manifestRevision": {
+            "anyOf": [
+              {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manifestrevision"
+          },
+          "policy": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TextFieldAIPolicy"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "policyRevision": {
+            "anyOf": [
+              {
+                "pattern": "^[a-f0-9]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Policyrevision"
+          },
+          "providerClass": {
+            "anyOf": [
+              {
+                "enum": [
+                  "first-party",
+                  "contract-bound",
+                  "third-party"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Providerclass"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "title": "TextFieldAIStatus",
         "type": "object"
       },
       "TextNode-Input": {
@@ -23336,6 +25024,136 @@
         ]
       }
     },
+    "/system/ai/text-field/generate": {
+      "post": {
+        "operationId": "generate_text_field_ai_system_ai_text_field_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TextFieldAIRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "discriminator": {
+                    "mapping": {
+                      "delta": "#/components/schemas/AIEvent_DeltaEvent",
+                      "error": "#/components/schemas/AIEvent_ErrorEvent",
+                      "result": "#/components/schemas/AIEvent_ResultEvent"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/AIEvent_DeltaEvent"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_ResultEvent"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AIEvent_ErrorEvent"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "SSE message frames (comments are heartbeats)"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextFieldAIProblem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextFieldAIProblem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextFieldAIProblem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextFieldAIProblem"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextFieldAIProblem"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Generate Text Field Ai",
+        "tags": [
+          "系统管理-AI文本字段"
+        ]
+      }
+    },
+    "/system/ai/text-field/status": {
+      "get": {
+        "operationId": "get_text_field_ai_status_system_ai_text_field_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TextFieldAIStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Text Field Ai Status",
+        "tags": [
+          "系统管理-AI文本字段"
+        ]
+      }
+    },
     "/system/config": {
       "delete": {
         "operationId": "delete_system_config_empty_system_config_delete",
@@ -28306,77 +30124,6 @@
         "tags": [
           "协议管理",
           "协议管理"
-        ]
-      }
-    },
-    "/system/remark/ai/generate": {
-      "post": {
-        "operationId": "generate_remark_ai_system_remark_ai_generate_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RemarkAIRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              },
-              "text/event-stream": {}
-            },
-            "description": "SSE delta / result / error events"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "summary": "Generate Remark Ai",
-        "tags": [
-          "系统管理-AI备注"
-        ]
-      }
-    },
-    "/system/remark/ai/status": {
-      "get": {
-        "operationId": "get_remark_ai_status_system_remark_ai_status_get",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RemarkAIStatus"
-                }
-              }
-            },
-            "description": "Successful Response"
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "summary": "Get Remark Ai Status",
-        "tags": [
-          "系统管理-AI备注"
         ]
       }
     },

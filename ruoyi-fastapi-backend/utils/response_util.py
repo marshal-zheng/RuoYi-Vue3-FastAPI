@@ -10,7 +10,12 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 from starlette.background import BackgroundTask
 
-from common.http_contracts import coerce_collection_result, coerce_cursor_result, coerce_page_result, sanitize_batch_results
+from common.http_contracts import (
+    coerce_collection_result,
+    coerce_cursor_result,
+    coerce_page_result,
+    sanitize_batch_results,
+)
 from config.env import ErrorHandlingConfig
 from middlewares.trace_middleware import get_request_id, get_trace_id
 from utils.response_serializer import serialize_for_response
@@ -228,6 +233,7 @@ class ResponseUtil:
         error_code: int | str | None = None,
         errors: Sequence[Mapping[str, Any]] | None = None,
         headers: Mapping[str, str] | None = None,
+        extensions: Mapping[str, Any] | None = None,
     ) -> JSONResponse:
         payload: dict[str, Any] = {
             'type': _problem_type_url(type_slug),
@@ -244,6 +250,8 @@ class ResponseUtil:
             payload['requestId'] = request_id
         if trace_id:
             payload['traceId'] = trace_id
+        if extensions:
+            payload.update({key: value for key, value in extensions.items() if key not in payload})
         if errors:
             payload['errors'] = serialize_for_response(list(errors))
         return JSONResponse(

@@ -20,6 +20,7 @@ from fastapi import FastAPI
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from config.env import ErrorHandlingConfig, IdempotencyConfig
+from middlewares.text_field_ai_middleware import AI_GENERATE_PATH, ai_route_path
 from middlewares.trace_middleware import get_request_id, get_trace_id
 from utils.log_util import logger
 
@@ -88,7 +89,7 @@ class IdempotencyASGIMiddleware:
 
         method = str(scope.get('method', '')).upper()
         path = str(scope.get('path', ''))
-        if not self._should_handle_path(method, path):
+        if ai_route_path(scope) == AI_GENERATE_PATH or not self._should_handle_path(method, path):
             await self.app(scope, receive, send)
             return
 

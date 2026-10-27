@@ -31,10 +31,10 @@ from modules.system.api.menu_controller import menuController
 from modules.system.api.notice_controller import noticeController
 from modules.system.api.online_controller import onlineController
 from modules.system.api.post_controller import postController
-from modules.system.api.remark_ai_controller import remark_ai_router
 from modules.system.api.resilience_controller import resilienceController
 from modules.system.api.role_controller import roleController
 from modules.system.api.server_controller import serverController
+from modules.system.api.text_field_ai_controller import text_field_ai_router
 from modules.system.api.user_controller import userController
 from modules.system.application.services.capability_gate_service import require_capability_enabled
 from modules.system.runtime import is_dev_managed_data_hot_reconcile_enabled
@@ -117,7 +117,7 @@ def _build_system_routers() -> tuple[RouterRegistration, ...]:
         RouterRegistration(router=menuController, tags=('系统管理-菜单管理',), capability_module_key='platform'),
         RouterRegistration(router=deptController, tags=('系统管理-部门管理',), capability_module_key='platform'),
         RouterRegistration(router=postController, tags=('系统管理-岗位管理',), capability_module_key='platform'),
-        RouterRegistration(router=remark_ai_router, tags=('系统管理-AI备注',), capability_module_key='platform'),
+        RouterRegistration(router=text_field_ai_router, tags=('系统管理-AI文本字段',), capability_module_key='platform'),
         RouterRegistration(router=dictController, tags=('系统管理-字典管理',), capability_module_key='platform'),
         RouterRegistration(router=configController, tags=('系统管理-参数管理',), capability_module_key='platform'),
         RouterRegistration(router=noticeController, tags=('系统管理-通知公告管理',), capability_module_key='platform'),
