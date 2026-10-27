@@ -28,14 +28,15 @@ from events.runtime_context import set_event_runtime
 from exceptions.handle import handle_exception
 from middlewares.handle import handle_middleware
 from module_admin.service.simulation_runtime_state import init_simulation_runtime_state_store
-from modules.system.application.services.capability_gate_service import invalidate_capability_gate_service
+from modules.identity.application.services.security_token_service import SecurityTokenService
 from modules.registry import (
     get_module_registry,
     initialize_module_extensions,
     log_loaded_modules,
     register_modules,
 )
-from modules.identity.application.services.security_token_service import SecurityTokenService
+from modules.system.api.text_field_ai_openapi import install_text_field_ai_openapi
+from modules.system.application.services.capability_gate_service import invalidate_capability_gate_service
 from modules.system.runtime import (
     DevManagedDataHotReconcileRuntime,
     DevMenuEventBroker,
@@ -340,6 +341,7 @@ handle_middleware(app)
 handle_exception(app)
 MODULE_REGISTRY = get_module_registry()
 LOADED_MODULES = register_modules(app, MODULE_REGISTRY)
+install_text_field_ai_openapi(app)
 
 
 # 健康检查

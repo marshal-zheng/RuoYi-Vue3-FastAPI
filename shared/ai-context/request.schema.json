@@ -1,0 +1,485 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zxio:ai-context:v1:request",
+  "title": "request",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "ai-context/v1"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "captureId": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    },
+    "manifestRevision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "policyRevision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 96,
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+    },
+    "action": {
+      "enum": [
+        "draft",
+        "rewrite",
+        "include-context"
+      ]
+    },
+    "selectedContextIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64,
+        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+      },
+      "maxItems": 16,
+      "uniqueItems": true
+    },
+    "profile": {
+      "const": "basic-rich-text"
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000,
+      "pattern": "\\S"
+    },
+    "target": {
+      "enum": [
+        "document",
+        "selection"
+      ]
+    },
+    "document": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "version": {
+              "const": 2
+            },
+            "body": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "format": {
+                  "const": "json"
+                },
+                "content": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "const": "doc"
+                    },
+                    "content": {
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "content"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "format",
+                "content"
+              ]
+            },
+            "annotations": {
+              "const": []
+            },
+            "assets": {
+              "const": []
+            },
+            "meta": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "version",
+            "body",
+            "annotations",
+            "assets",
+            "meta"
+          ],
+          "x-codec": "remark-a-v1"
+        }
+      ]
+    },
+    "selection": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "version": {
+              "const": 2
+            },
+            "body": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "format": {
+                  "const": "json"
+                },
+                "content": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "const": "doc"
+                    },
+                    "content": {
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "content"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "format",
+                "content"
+              ]
+            },
+            "annotations": {
+              "const": []
+            },
+            "assets": {
+              "const": []
+            },
+            "meta": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "version",
+            "body",
+            "annotations",
+            "assets",
+            "meta"
+          ],
+          "x-codec": "remark-a-v1"
+        }
+      ]
+    },
+    "candidate": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "version": {
+              "const": 2
+            },
+            "body": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "format": {
+                  "const": "json"
+                },
+                "content": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "const": "doc"
+                    },
+                    "content": {
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "content"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "format",
+                "content"
+              ]
+            },
+            "annotations": {
+              "const": []
+            },
+            "assets": {
+              "const": []
+            },
+            "meta": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "version",
+            "body",
+            "annotations",
+            "assets",
+            "meta"
+          ],
+          "x-codec": "remark-a-v1"
+        }
+      ]
+    },
+    "context": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 300
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "maxItems": 50,
+                    "minItems": 1
+                  }
+                ]
+              },
+              "sensitivity": {
+                "const": "public"
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "value",
+              "sensitivity"
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 300
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 300
+                    },
+                    "maxItems": 50,
+                    "minItems": 1
+                  }
+                ]
+              },
+              "sensitivity": {
+                "const": "personal"
+              },
+              "kind": {
+                "enum": [
+                  "phone",
+                  "email",
+                  "id",
+                  "address",
+                  "other"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "label",
+              "value",
+              "sensitivity",
+              "kind"
+            ]
+          }
+        ]
+      },
+      "maxItems": 16
+    }
+  },
+  "required": [
+    "version",
+    "requestId",
+    "captureId",
+    "manifestRevision",
+    "policyRevision",
+    "scope",
+    "purpose",
+    "action",
+    "selectedContextIds",
+    "profile",
+    "instruction",
+    "target",
+    "document",
+    "selection",
+    "candidate",
+    "context"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "target": {
+            "const": "document"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "selection": {
+            "type": "null"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "selection": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "version": {
+                "const": 2
+              },
+              "body": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "format": {
+                    "const": "json"
+                  },
+                  "content": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "doc"
+                      },
+                      "content": {
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "content"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "format",
+                  "content"
+                ]
+              },
+              "annotations": {
+                "const": []
+              },
+              "assets": {
+                "const": []
+              },
+              "meta": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "version",
+              "body",
+              "annotations",
+              "assets",
+              "meta"
+            ],
+            "x-codec": "remark-a-v1"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "include-context"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "selectedContextIds": {
+            "minItems": 1
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "selectedContextIds": {
+            "maxItems": 0
+          }
+        }
+      }
+    }
+  ]
+}

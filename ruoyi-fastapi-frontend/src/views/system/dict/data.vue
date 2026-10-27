@@ -209,21 +209,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item data-form-full label="备注" prop="remark">
-          <RemarkEditor
-            v-if="open"
-            ref="remarkRef"
-            :key="remarkSession"
-            v-model="form.remark"
-            scene="dictData"
-            :ai-context="
-              () => ({
-                dictType: form.dictType,
-                dictLabel: form.dictLabel,
-                dictValue: form.dictValue,
-                status: form.status === '0' ? '正常' : '停用',
-              })
-            "
-          />
+          <RemarkEditor v-if="open" ref="remarkRef" :key="remarkSession" v-model="form.remark" />
         </el-form-item> </FormGrid
     ></el-form>
     <template #footer>
@@ -242,6 +228,7 @@
 </template>
 
 <script setup name="Data">
+import { useAIContextHost } from '@/ai-context/host';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
 import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
@@ -450,7 +437,11 @@ async function openEditor(id) {
   requestedId = id;
   return runRead(async (read) => {
     reset();
-    form.value = { ...form.value, dictCode: id, dictType: defaultDictType.value };
+    form.value = {
+      ...form.value,
+      dictCode: id,
+      dictType: defaultDictType.value,
+    };
     title.value = id ? '修改字典数据' : '添加字典数据';
     open.value = true;
     dataDialog.setDisabled(true);
@@ -532,4 +523,16 @@ watch(
   },
   { flush: 'sync' }
 );
+
+useAIContextHost('dictData', {
+  instanceKey: () => remarkSession.value,
+  revisionSource: () => [form.value, typeQuery.data.value],
+  bindings: {
+    dictName: { value: () => typeQuery.data.value?.dictName },
+    dictType: { value: () => form.value.dictType },
+    dictLabel: { value: () => form.value.dictLabel },
+    dictValue: { value: () => form.value.dictValue },
+    status: { value: () => (form.value.status === '0' ? '正常' : '停用') },
+  },
+});
 </script>

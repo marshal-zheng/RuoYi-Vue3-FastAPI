@@ -131,19 +131,6 @@
             ref="remarkRef"
             :key="remarkSession"
             v-model="state.data.remark"
-            scene="user"
-            :ai-context="
-              () => ({
-                deptName: selectedDepartment?.label,
-                postNames: postOptions
-                  .filter((item) => state.data.postIds?.includes(item.postId))
-                  .map((item) => item.postName),
-                roleNames: roleOptions
-                  .filter((item) => state.data.roleIds?.includes(item.roleId))
-                  .map((item) => item.roleName),
-                status: state.data.status === '0' ? '正常' : '停用',
-              })
-            "
           />
         </el-form-item>
       </FormGrid>
@@ -152,6 +139,7 @@
 </template>
 
 <script setup>
+import { useAIContextHost } from '@/ai-context/host';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
 import { readRemark } from '@/components/ui/Remark/contract';
@@ -472,4 +460,34 @@ watch(
     if (visible) remarkSession.value++;
   }
 );
+
+useAIContextHost('user', {
+  instanceKey: () => remarkSession.value,
+  revisionSource: () => [
+    state.data,
+    selectedDepartment.value,
+    postOptions.value,
+    roleOptions.value,
+  ],
+  bindings: {
+    userName: { value: () => state.data.userName },
+    nickName: { value: () => state.data.nickName },
+    phonenumber: { value: () => state.data.phonenumber },
+    email: { value: () => state.data.email },
+    deptName: { value: () => selectedDepartment.value?.label },
+    postNames: {
+      value: () =>
+        postOptions.value
+          .filter((item) => state.data.postIds?.includes(item.postId))
+          .map((item) => item.postName),
+    },
+    roleNames: {
+      value: () =>
+        roleOptions.value
+          .filter((item) => state.data.roleIds?.includes(item.roleId))
+          .map((item) => item.roleName),
+    },
+    status: { value: () => (state.data.status === '0' ? '正常' : '停用') },
+  },
+});
 </script>

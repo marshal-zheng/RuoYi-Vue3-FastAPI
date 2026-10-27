@@ -34,14 +34,6 @@
             ref="remarkRef"
             :key="remarkSession"
             v-model="state.data.remark"
-            scene="config"
-            :ai-context="
-              () => ({
-                configName: state.data.configName,
-                configKey: state.data.configKey,
-                configType: state.data.configType === 'Y' ? '系统内置' : '自定义',
-              })
-            "
           />
         </el-form-item>
       </FormGrid>
@@ -50,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAIContextHost } from '@/ai-context/host';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
 import { readRemark, type RemarkValue } from '@/components/ui/Remark/contract';
@@ -188,4 +181,16 @@ watch(
     if (visible) remarkSession.value++;
   }
 );
+
+useAIContextHost('config', {
+  instanceKey: () => remarkSession.value,
+  revisionSource: () => state.data,
+  bindings: {
+    configName: { value: () => state.data.configName },
+    configKey: { value: () => state.data.configKey },
+    configType: {
+      value: () => (state.data.configType === 'Y' ? '系统内置' : '自定义'),
+    },
+  },
+});
 </script>

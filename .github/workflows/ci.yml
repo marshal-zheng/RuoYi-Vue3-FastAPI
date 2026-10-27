@@ -40,6 +40,9 @@ jobs:
       - name: Mock mainline scan
         run: bash ../scripts/check-mock-mainline.sh
 
+      - name: AI context manifest drift check
+        run: yarn ai-context:check
+
       - name: API generated client drift check
         run: |
           npm run api:generate
@@ -291,6 +294,9 @@ jobs:
         run: |
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
+
+      - name: AI context shared schema vectors
+        run: python ../scripts/check_ai_context_contract.py
 
       - name: Run tests
         run: pytest tests/ -v --tb=short

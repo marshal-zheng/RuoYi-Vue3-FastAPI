@@ -5,9 +5,10 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
-from pydantic import AliasChoices, Field, SecretStr, computed_field
+from pydantic import AliasChoices, Field, SecretStr, ValidationError, computed_field
 from pydantic_settings import BaseSettings
 
 
@@ -28,13 +29,44 @@ class AppSettings(BaseSettings):
     app_same_time_login: bool = True
 
 
-class RemarkAISettings(BaseSettings):
-    """Server-only DeepSeek configuration; never expose the credential in API responses."""
+class TextFieldAISettings(BaseSettings):
+    """Optional deployment-owned model endpoint; no generic OPENAI_* environment fallback."""
 
-    deepseek_api_key: SecretStr = Field(default=SecretStr(''), repr=False)
-    deepseek_base_url: str = 'https://api.deepseek.com/v1'
-    deepseek_model: str = 'deepseek-chat'
-    remark_ai_timeout_seconds: int = Field(default=90, ge=10, le=300)
+    ai_enabled: bool = False
+    ai_provider: Literal['openai-compatible'] = 'openai-compatible'
+    ai_provider_class: Literal['first-party', 'contract-bound', 'third-party'] = 'third-party'
+    ai_base_url: str = ''
+    ai_model: str = ''
+    ai_auth_mode: Literal['none', 'bearer'] = 'none'
+    ai_api_key: SecretStr = Field(default=SecretStr(''), repr=False)
+    ai_context_personal_policy: Literal['mask', 'never', 'plain'] = 'mask'
+    ai_context_manifest_path: str = ''
+    ai_text_field_max_tokens: int = Field(default=8192, ge=256, le=16384)
+    ai_text_field_timeout_seconds: float = Field(default=90, ge=0.1, le=300)
+    ai_text_field_user_per_minute: int = Field(default=20, ge=1)
+    ai_text_field_ip_per_minute: int = Field(default=60, ge=1)
+    ai_text_field_concurrency: int = Field(default=4, ge=1, le=64)
+    ai_text_field_wait_seconds: float = Field(default=0.2, ge=0.001, le=10)
+
+    @property
+    def is_configured(self) -> bool:
+        try:
+            base = urlsplit(self.ai_base_url)
+            _port = base.port
+        except ValueError:
+            return False
+        return bool(
+            self.ai_enabled
+            and base.scheme in {'http', 'https'} and base.hostname
+            and base.username is None
+            and base.password is None
+            and '?' not in self.ai_base_url
+            and '#' not in self.ai_base_url
+            and not any(char.isspace() or ord(char) < 32 for char in self.ai_base_url)
+            and self.ai_model.strip() and len(self.ai_model) <= 128
+            and (self.ai_auth_mode == 'none' or self.ai_api_key.get_secret_value().strip())
+            and (self.ai_context_personal_policy != 'plain' or self.ai_provider_class != 'third-party')
+        )
 
 
 class DevManagedDataHotReconcileSettings(BaseSettings):
@@ -514,8 +546,12 @@ class GetConfig:
         # 实例化应用配置模型
         return AppSettings()
 
-    def get_remark_ai_config(self):
-        return RemarkAISettings()
+    def get_text_field_ai_config(self):
+        # Invalid optional AI configuration must not prevent ordinary application startup.
+        try:
+            return TextFieldAISettings()
+        except ValidationError:
+            return TextFieldAISettings.model_construct(ai_enabled=False)
 
     @lru_cache
     def get_jwt_config(self):
@@ -684,8 +720,8 @@ class GetConfig:
 get_config = GetConfig()
 # 应用配置
 AppConfig = get_config.get_app_config()
-# AI credentials are read only by the server-side remark service.
-RemarkAIConfig = get_config.get_remark_ai_config()
+# Optional model configuration is never exposed in public status.
+TextFieldAIConfig = get_config.get_text_field_ai_config()
 # Jwt配置
 JwtConfig = get_config.get_jwt_config()
 # 敏感数据加密配置

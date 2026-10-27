@@ -53,8 +53,14 @@ export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
     return {
       type: 'object',
       properties: {
-        postName: text('岗位名称', limits.name),
-        postCode: text('岗位编码', limits.code),
+        postName: {
+          ...text('岗位名称', limits.name),
+          'x-ai-context': { itemId: 'postName' },
+        },
+        postCode: {
+          ...text('岗位编码', limits.code),
+          'x-ai-context': { itemId: 'postCode' },
+        },
         postSort: {
           type: 'number',
           title: '岗位顺序',
@@ -93,14 +99,6 @@ export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
           type: 'object',
           title: '备注',
           'x-component': 'RemarkEditor',
-          'x-component-props': {
-            scene: 'post',
-            aiContext: () => ({
-              postName: ctx.form.values.postName,
-              postCode: ctx.form.values.postCode,
-              status: ctx.form.values.status === '0' ? '正常' : '停用',
-            }),
-          },
         },
       },
     };

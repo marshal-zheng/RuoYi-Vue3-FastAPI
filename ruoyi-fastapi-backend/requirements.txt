@@ -20,7 +20,7 @@ python-docx==1.1.2
 docxtpl==0.16.6
 redis==5.2.1
 requests==2.32.3
-SQLAlchemy[asyncio]==2.0.38
+SQLAlchemy[asyncio]==2.0.48
 opentelemetry-api==1.39.1
 opentelemetry-sdk==1.39.1
 opentelemetry-exporter-otlp-proto-http==1.39.1

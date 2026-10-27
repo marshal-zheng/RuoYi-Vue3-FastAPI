@@ -5,6 +5,827 @@ export type ClientOptions = {
 };
 
 /**
+ * BlockAttrs
+ */
+export type AiEventBlockAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+};
+
+/**
+ * BoldMark
+ */
+export type AiEventBoldMark = {
+  /**
+   * Type
+   */
+  type: 'bold';
+};
+
+/**
+ * BulletListNode
+ */
+export type AiEventBulletListNode = {
+  attrs: AiEventBlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<AiEventListItemNode>;
+  /**
+   * Type
+   */
+  type: 'bulletList';
+};
+
+/**
+ * DeltaEvent
+ */
+export type AiEventDeltaEvent = {
+  /**
+   * Captureid
+   */
+  captureId: string;
+  /**
+   * Requestid
+   */
+  requestId: string;
+  /**
+   * Text
+   */
+  text: string;
+  /**
+   * Type
+   */
+  type?: 'delta';
+};
+
+/**
+ * DocumentBody
+ */
+export type AiEventDocumentBody = {
+  content: AiEventDocumentRoot;
+  /**
+   * Format
+   */
+  format: 'json';
+};
+
+/**
+ * DocumentMeta
+ */
+export type AiEventDocumentMeta = {
+  /**
+   * Schemaversion
+   */
+  schemaVersion: 'stable-block-identity/v2';
+};
+
+/**
+ * DocumentRoot
+ */
+export type AiEventDocumentRoot = {
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & AiEventParagraphNode)
+    | ({
+        type: 'bulletList';
+      } & AiEventBulletListNode)
+    | ({
+        type: 'orderedList';
+      } & AiEventOrderedListNode)
+  >;
+  /**
+   * Type
+   */
+  type: 'doc';
+};
+
+/**
+ * ErrorEvent
+ */
+export type AiEventErrorEvent = {
+  /**
+   * Captureid
+   */
+  captureId: string;
+  /**
+   * Code
+   */
+  code:
+    | 'context-rejected'
+    | 'policy-rejected'
+    | 'permission-denied'
+    | 'quota-exceeded'
+    | 'provider-unavailable'
+    | 'timeout'
+    | 'invalid-output'
+    | 'output-limit'
+    | 'incomplete-output';
+  /**
+   * Message
+   */
+  message: string;
+  /**
+   * Requestid
+   */
+  requestId: string;
+  /**
+   * Type
+   */
+  type?: 'error';
+};
+
+/**
+ * HardBreakNode
+ */
+export type AiEventHardBreakNode = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & AiEventLinkMark)
+    | ({
+        type: 'textStyle';
+      } & AiEventTextStyleMark)
+    | ({
+        type: 'bold';
+      } & AiEventBoldMark)
+    | ({
+        type: 'italic';
+      } & AiEventItalicMark)
+  > | null;
+  /**
+   * Type
+   */
+  type: 'hardBreak';
+};
+
+/**
+ * ItalicMark
+ */
+export type AiEventItalicMark = {
+  /**
+   * Type
+   */
+  type: 'italic';
+};
+
+/**
+ * LinkAttrs
+ */
+export type AiEventLinkAttrs = {
+  /**
+   * Class
+   */
+  class: null;
+  /**
+   * Href
+   */
+  href: string;
+  /**
+   * Rel
+   */
+  rel: 'noopener noreferrer nofollow';
+  /**
+   * Target
+   */
+  target: '_blank';
+  /**
+   * Title
+   */
+  title: null;
+};
+
+/**
+ * LinkMark
+ */
+export type AiEventLinkMark = {
+  attrs: AiEventLinkAttrs;
+  /**
+   * Type
+   */
+  type: 'link';
+};
+
+/**
+ * ListItemNode
+ */
+export type AiEventListItemNode = {
+  attrs: AiEventBlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & AiEventParagraphNode)
+    | ({
+        type: 'bulletList';
+      } & AiEventBulletListNode)
+    | ({
+        type: 'orderedList';
+      } & AiEventOrderedListNode)
+  >;
+  /**
+   * Type
+   */
+  type: 'listItem';
+};
+
+/**
+ * Notice
+ */
+export type AiEventNotice = {
+  /**
+   * Code
+   */
+  code: 'information-unavailable';
+  /**
+   * Contextids
+   */
+  contextIds: Array<string>;
+};
+
+/**
+ * OrderedAttrs
+ */
+export type AiEventOrderedAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+  /**
+   * Start
+   */
+  start: number;
+  /**
+   * Type
+   */
+  type: null;
+};
+
+/**
+ * OrderedListNode
+ */
+export type AiEventOrderedListNode = {
+  attrs: AiEventOrderedAttrs;
+  /**
+   * Content
+   */
+  content: Array<AiEventListItemNode>;
+  /**
+   * Type
+   */
+  type: 'orderedList';
+};
+
+/**
+ * ParagraphAttrs
+ */
+export type AiEventParagraphAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+  /**
+   * Textalign
+   */
+  textAlign: null;
+};
+
+/**
+ * ParagraphNode
+ */
+export type AiEventParagraphNode = {
+  attrs: AiEventParagraphAttrs;
+  /**
+   * Content
+   */
+  content?: Array<
+    | ({
+        type: 'text';
+      } & AiEventTextNode)
+    | ({
+        type: 'hardBreak';
+      } & AiEventHardBreakNode)
+  > | null;
+  /**
+   * Type
+   */
+  type: 'paragraph';
+};
+
+/**
+ * RemarkDocument
+ */
+export type AiEventRemarkDocument = {
+  /**
+   * Annotations
+   */
+  annotations: Array<unknown>;
+  /**
+   * Assets
+   */
+  assets: Array<unknown>;
+  body: AiEventDocumentBody;
+  meta: AiEventDocumentMeta;
+  /**
+   * Version
+   */
+  version: 2;
+};
+
+/**
+ * ResultEvent
+ */
+export type AiEventResultEvent = {
+  /**
+   * Captureid
+   */
+  captureId: string;
+  document: AiEventRemarkDocument | null;
+  meta: AiEventResultMeta;
+  /**
+   * Notices
+   */
+  notices: Array<AiEventNotice>;
+  /**
+   * Requestid
+   */
+  requestId: string;
+  /**
+   * Type
+   */
+  type?: 'result';
+};
+
+/**
+ * ResultMeta
+ */
+export type AiEventResultMeta = {
+  /**
+   * Contextids
+   */
+  contextIds: Array<string>;
+  /**
+   * Model
+   */
+  model: string;
+  /**
+   * Promptversion
+   */
+  promptVersion?: 'text-field/v1';
+};
+
+/**
+ * TextNode
+ */
+export type AiEventTextNode = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & AiEventLinkMark)
+    | ({
+        type: 'textStyle';
+      } & AiEventTextStyleMark)
+    | ({
+        type: 'bold';
+      } & AiEventBoldMark)
+    | ({
+        type: 'italic';
+      } & AiEventItalicMark)
+  > | null;
+  /**
+   * Text
+   */
+  text: string;
+  /**
+   * Type
+   */
+  type: 'text';
+};
+
+/**
+ * TextStyleAttrs
+ */
+export type AiEventTextStyleAttrs = {
+  /**
+   * Color
+   */
+  color: 'red' | 'orange' | 'green' | 'blue' | 'purple' | 'gray';
+  /**
+   * Fontfamily
+   */
+  fontFamily: null;
+  /**
+   * Fontsize
+   */
+  fontSize: null;
+};
+
+/**
+ * TextStyleMark
+ */
+export type AiEventTextStyleMark = {
+  attrs: AiEventTextStyleAttrs;
+  /**
+   * Type
+   */
+  type: 'textStyle';
+};
+
+/**
+ * BlockAttrs
+ */
+export type AiRequestBlockAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+};
+
+/**
+ * BoldMark
+ */
+export type AiRequestBoldMark = {
+  /**
+   * Type
+   */
+  type: 'bold';
+};
+
+/**
+ * BulletListNode
+ */
+export type AiRequestBulletListNode = {
+  attrs: AiRequestBlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<AiRequestListItemNode>;
+  /**
+   * Type
+   */
+  type: 'bulletList';
+};
+
+/**
+ * DocumentBody
+ */
+export type AiRequestDocumentBody = {
+  content: AiRequestDocumentRoot;
+  /**
+   * Format
+   */
+  format: 'json';
+};
+
+/**
+ * DocumentMeta
+ */
+export type AiRequestDocumentMeta = {
+  /**
+   * Schemaversion
+   */
+  schemaVersion: 'stable-block-identity/v2';
+};
+
+/**
+ * DocumentRoot
+ */
+export type AiRequestDocumentRoot = {
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & AiRequestParagraphNode)
+    | ({
+        type: 'bulletList';
+      } & AiRequestBulletListNode)
+    | ({
+        type: 'orderedList';
+      } & AiRequestOrderedListNode)
+  >;
+  /**
+   * Type
+   */
+  type: 'doc';
+};
+
+/**
+ * HardBreakNode
+ */
+export type AiRequestHardBreakNode = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & AiRequestLinkMark)
+    | ({
+        type: 'textStyle';
+      } & AiRequestTextStyleMark)
+    | ({
+        type: 'bold';
+      } & AiRequestBoldMark)
+    | ({
+        type: 'italic';
+      } & AiRequestItalicMark)
+  > | null;
+  /**
+   * Text
+   */
+  text?: null;
+  /**
+   * Type
+   */
+  type: 'hardBreak';
+};
+
+/**
+ * ItalicMark
+ */
+export type AiRequestItalicMark = {
+  /**
+   * Type
+   */
+  type: 'italic';
+};
+
+/**
+ * LinkAttrs
+ */
+export type AiRequestLinkAttrs = {
+  /**
+   * Class
+   */
+  class: null;
+  /**
+   * Href
+   */
+  href: string;
+  /**
+   * Rel
+   */
+  rel: 'noopener noreferrer nofollow';
+  /**
+   * Target
+   */
+  target: '_blank';
+  /**
+   * Title
+   */
+  title: null;
+};
+
+/**
+ * LinkMark
+ */
+export type AiRequestLinkMark = {
+  attrs: AiRequestLinkAttrs;
+  /**
+   * Type
+   */
+  type: 'link';
+};
+
+/**
+ * ListItemNode
+ */
+export type AiRequestListItemNode = {
+  attrs: AiRequestBlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & AiRequestParagraphNode)
+    | ({
+        type: 'bulletList';
+      } & AiRequestBulletListNode)
+    | ({
+        type: 'orderedList';
+      } & AiRequestOrderedListNode)
+  >;
+  /**
+   * Type
+   */
+  type: 'listItem';
+};
+
+/**
+ * OrderedAttrs
+ */
+export type AiRequestOrderedAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+  /**
+   * Start
+   */
+  start: number;
+  /**
+   * Type
+   */
+  type: null;
+};
+
+/**
+ * OrderedListNode
+ */
+export type AiRequestOrderedListNode = {
+  attrs: AiRequestOrderedAttrs;
+  /**
+   * Content
+   */
+  content: Array<AiRequestListItemNode>;
+  /**
+   * Type
+   */
+  type: 'orderedList';
+};
+
+/**
+ * ParagraphAttrs
+ */
+export type AiRequestParagraphAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+  /**
+   * Textalign
+   */
+  textAlign: null;
+};
+
+/**
+ * ParagraphNode
+ */
+export type AiRequestParagraphNode = {
+  attrs: AiRequestParagraphAttrs;
+  /**
+   * Content
+   */
+  content?: Array<
+    | ({
+        type: 'text';
+      } & AiRequestTextNode)
+    | ({
+        type: 'hardBreak';
+      } & AiRequestHardBreakNode)
+  > | null;
+  /**
+   * Type
+   */
+  type: 'paragraph';
+};
+
+/**
+ * PersonalItem
+ */
+export type AiRequestPersonalItem = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Kind
+   */
+  kind: 'phone' | 'email' | 'id' | 'address' | 'other';
+  /**
+   * Label
+   */
+  label: string;
+  /**
+   * Sensitivity
+   */
+  sensitivity: 'personal';
+  /**
+   * Value
+   */
+  value: string | Array<string>;
+};
+
+/**
+ * PublicItem
+ */
+export type AiRequestPublicItem = {
+  /**
+   * Id
+   */
+  id: string;
+  /**
+   * Label
+   */
+  label: string;
+  /**
+   * Sensitivity
+   */
+  sensitivity: 'public';
+  /**
+   * Value
+   */
+  value: string | Array<string>;
+};
+
+/**
+ * RemarkDocument
+ */
+export type AiRequestRemarkDocument = {
+  /**
+   * Annotations
+   */
+  annotations: Array<unknown>;
+  /**
+   * Assets
+   */
+  assets: Array<unknown>;
+  body: AiRequestDocumentBody;
+  meta: AiRequestDocumentMeta;
+  /**
+   * Version
+   */
+  version: 2;
+};
+
+/**
+ * TextNode
+ */
+export type AiRequestTextNode = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & AiRequestLinkMark)
+    | ({
+        type: 'textStyle';
+      } & AiRequestTextStyleMark)
+    | ({
+        type: 'bold';
+      } & AiRequestBoldMark)
+    | ({
+        type: 'italic';
+      } & AiRequestItalicMark)
+  > | null;
+  /**
+   * Text
+   */
+  text: string;
+  /**
+   * Type
+   */
+  type: 'text';
+};
+
+/**
+ * TextStyleAttrs
+ */
+export type AiRequestTextStyleAttrs = {
+  /**
+   * Color
+   */
+  color: 'red' | 'orange' | 'green' | 'blue' | 'purple' | 'gray';
+  /**
+   * Fontfamily
+   */
+  fontFamily: null;
+  /**
+   * Fontsize
+   */
+  fontSize: null;
+};
+
+/**
+ * TextStyleMark
+ */
+export type AiRequestTextStyleMark = {
+  attrs: AiRequestTextStyleAttrs;
+  /**
+   * Type
+   */
+  type: 'textStyle';
+};
+
+/**
  * BatchDeviceIdsModel
  *
  * 批量设备ID模型
@@ -5978,43 +6799,6 @@ export type PyInfo = {
 };
 
 /**
- * RemarkAIRequest
- */
-export type RemarkAiRequest = {
-  candidate?: RemarkDocumentInput | null;
-  /**
-   * Context
-   */
-  context?: {
-    [key: string]: string | Array<string>;
-  };
-  document: RemarkDocumentInput | null;
-  /**
-   * Instruction
-   */
-  instruction: string;
-  /**
-   * Scene
-   */
-  scene: 'user' | 'role' | 'post' | 'dictType' | 'dictData' | 'config' | 'genTable';
-  selection?: RemarkDocumentInput | null;
-  /**
-   * Target
-   */
-  target: 'document' | 'selection';
-};
-
-/**
- * RemarkAIStatus
- */
-export type RemarkAiStatus = {
-  /**
-   * Available
-   */
-  available: boolean;
-};
-
-/**
  * RemarkDocument
  */
 export type RemarkDocumentInput = {
@@ -6964,6 +7748,171 @@ export type SysInfo = {
    * 项目路径
    */
   userDir?: string | null;
+};
+
+/**
+ * TextFieldAIPolicy
+ */
+export type TextFieldAiPolicy = {
+  /**
+   * Maxchars
+   */
+  maxChars?: 6000;
+  /**
+   * Maxitems
+   */
+  maxItems?: 16;
+  /**
+   * Personal
+   */
+  personal: 'mask' | 'never' | 'plain';
+};
+
+/**
+ * TextFieldAIProblem
+ */
+export type TextFieldAiProblem = {
+  /**
+   * Aicode
+   */
+  aiCode?:
+    | 'context-rejected'
+    | 'policy-rejected'
+    | 'permission-denied'
+    | 'quota-exceeded'
+    | 'provider-unavailable'
+    | 'timeout'
+    | 'invalid-output'
+    | 'output-limit'
+    | 'incomplete-output'
+    | null;
+  /**
+   * Detail
+   */
+  detail: string;
+  /**
+   * Errorcode
+   */
+  errorCode: number;
+  /**
+   * Instance
+   */
+  instance: string;
+  /**
+   * Requestid
+   */
+  requestId?: string | null;
+  /**
+   * Status
+   */
+  status: number;
+  /**
+   * Title
+   */
+  title: string;
+  /**
+   * Traceid
+   */
+  traceId?: string | null;
+  /**
+   * Type
+   */
+  type: string;
+};
+
+/**
+ * TextFieldAIRequest
+ */
+export type TextFieldAiRequest = {
+  /**
+   * Action
+   */
+  action: 'draft' | 'rewrite' | 'include-context';
+  candidate: AiRequestRemarkDocument | null;
+  /**
+   * Captureid
+   */
+  captureId: string;
+  /**
+   * Context
+   */
+  context: Array<
+    | ({
+        sensitivity: 'public';
+      } & AiRequestPublicItem)
+    | ({
+        sensitivity: 'personal';
+      } & AiRequestPersonalItem)
+  >;
+  document: AiRequestRemarkDocument | null;
+  /**
+   * Instruction
+   */
+  instruction: string;
+  /**
+   * Manifestrevision
+   */
+  manifestRevision: string;
+  /**
+   * Policyrevision
+   */
+  policyRevision: string;
+  /**
+   * Profile
+   */
+  profile: 'basic-rich-text';
+  /**
+   * Purpose
+   */
+  purpose: string;
+  /**
+   * Requestid
+   */
+  requestId: string;
+  /**
+   * Scope
+   */
+  scope: string;
+  /**
+   * Selectedcontextids
+   */
+  selectedContextIds: Array<string>;
+  selection: AiRequestRemarkDocument | null;
+  /**
+   * Target
+   */
+  target: 'document' | 'selection';
+  /**
+   * Version
+   */
+  version: 'ai-context/v1';
+};
+
+/**
+ * TextFieldAIStatus
+ */
+export type TextFieldAiStatus = {
+  /**
+   * Available
+   */
+  available: boolean;
+  /**
+   * Contract
+   */
+  contract?: 'ai-context/v1';
+  /**
+   * Manifestrevision
+   */
+  manifestRevision?: string | null;
+  policy?: TextFieldAiPolicy | null;
+  /**
+   * Policyrevision
+   */
+  policyRevision?: string | null;
+  /**
+   * Providerclass
+   */
+  providerClass?: 'first-party' | 'contract-bound' | 'third-party' | null;
 };
 
 /**
@@ -14351,6 +15300,75 @@ export type ValidateTopologySimulationTopologyValidatePostResponses = {
   200: unknown;
 };
 
+export type GenerateTextFieldAiSystemAiTextFieldGeneratePostData = {
+  body: TextFieldAiRequest;
+  path?: never;
+  query?: never;
+  url: '/system/ai/text-field/generate';
+};
+
+export type GenerateTextFieldAiSystemAiTextFieldGeneratePostErrors = {
+  /**
+   * Unauthorized
+   */
+  401: TextFieldAiProblem;
+  /**
+   * Forbidden
+   */
+  403: TextFieldAiProblem;
+  /**
+   * Unprocessable Content
+   */
+  422: TextFieldAiProblem;
+  /**
+   * Too Many Requests
+   */
+  429: TextFieldAiProblem;
+  /**
+   * Service Unavailable
+   */
+  503: TextFieldAiProblem;
+};
+
+export type GenerateTextFieldAiSystemAiTextFieldGeneratePostError =
+  GenerateTextFieldAiSystemAiTextFieldGeneratePostErrors[keyof GenerateTextFieldAiSystemAiTextFieldGeneratePostErrors];
+
+export type GenerateTextFieldAiSystemAiTextFieldGeneratePostResponses = {
+  /**
+   * SSE message frames (comments are heartbeats)
+   */
+  200:
+    | ({
+        type: 'delta';
+      } & AiEventDeltaEvent)
+    | ({
+        type: 'result';
+      } & AiEventResultEvent)
+    | ({
+        type: 'error';
+      } & AiEventErrorEvent);
+};
+
+export type GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse =
+  GenerateTextFieldAiSystemAiTextFieldGeneratePostResponses[keyof GenerateTextFieldAiSystemAiTextFieldGeneratePostResponses];
+
+export type GetTextFieldAiStatusSystemAiTextFieldStatusGetData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/system/ai/text-field/status';
+};
+
+export type GetTextFieldAiStatusSystemAiTextFieldStatusGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: TextFieldAiStatus;
+};
+
+export type GetTextFieldAiStatusSystemAiTextFieldStatusGetResponse =
+  GetTextFieldAiStatusSystemAiTextFieldStatusGetResponses[keyof GetTextFieldAiStatusSystemAiTextFieldStatusGetResponses];
+
 export type DeleteSystemConfigEmptySystemConfigDeleteData = {
   body?: never;
   path?: never;
@@ -16768,47 +17786,6 @@ export type QueryProtocolDetailSystemProtocolProtocolIdGetResponses = {
    */
   200: unknown;
 };
-
-export type GenerateRemarkAiSystemRemarkAiGeneratePostData = {
-  body: RemarkAiRequest;
-  path?: never;
-  query?: never;
-  url: '/system/remark/ai/generate';
-};
-
-export type GenerateRemarkAiSystemRemarkAiGeneratePostErrors = {
-  /**
-   * Validation Error
-   */
-  422: HttpValidationError;
-};
-
-export type GenerateRemarkAiSystemRemarkAiGeneratePostError =
-  GenerateRemarkAiSystemRemarkAiGeneratePostErrors[keyof GenerateRemarkAiSystemRemarkAiGeneratePostErrors];
-
-export type GenerateRemarkAiSystemRemarkAiGeneratePostResponses = {
-  /**
-   * SSE delta / result / error events
-   */
-  200: unknown;
-};
-
-export type GetRemarkAiStatusSystemRemarkAiStatusGetData = {
-  body?: never;
-  path?: never;
-  query?: never;
-  url: '/system/remark/ai/status';
-};
-
-export type GetRemarkAiStatusSystemRemarkAiStatusGetResponses = {
-  /**
-   * Successful Response
-   */
-  200: RemarkAiStatus;
-};
-
-export type GetRemarkAiStatusSystemRemarkAiStatusGetResponse =
-  GetRemarkAiStatusSystemRemarkAiStatusGetResponses[keyof GetRemarkAiStatusSystemRemarkAiStatusGetResponses];
 
 export type AddSystemRoleSystemRolePostData = {
   body: RoleCreateModel;

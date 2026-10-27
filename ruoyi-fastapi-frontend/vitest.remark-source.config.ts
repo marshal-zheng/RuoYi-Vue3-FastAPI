@@ -41,5 +41,9 @@ config.test!.include = [
   'tests/unit/components/RemarkPackageRoundtrip.test.ts',
   'tests/unit/components/RemarkFormilyIntegration.test.ts',
   'tests/unit/components/RemarkAIIntegration.test.ts',
+  'src/ai-context/status.test.ts',
+  'src/api/system/textFieldAi.test.ts',
+  'tests/unit/ai-context-contract.test.ts',
+  'tests/unit/ai-context-manifest.test.ts',
 ];
 export default config;

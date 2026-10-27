@@ -31,14 +31,6 @@
             ref="remarkRef"
             :key="remarkSession"
             v-model="state.data.remark"
-            scene="dictType"
-            :ai-context="
-              () => ({
-                dictName: state.data.dictName,
-                dictType: state.data.dictType,
-                status: state.data.status === '0' ? '正常' : '停用',
-              })
-            "
           />
         </el-form-item>
       </FormGrid>
@@ -47,6 +39,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAIContextHost } from '@/ai-context/host';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
 import { readRemark, type RemarkValue } from '@/components/ui/Remark/contract';
@@ -73,8 +66,14 @@ interface DictForm {
   remark: RemarkValue;
 }
 
-const createMutation = useMutation({ mutationFn: dictCommands.createType, retry: false });
-const updateMutation = useMutation({ mutationFn: dictCommands.updateType, retry: false });
+const createMutation = useMutation({
+  mutationFn: dictCommands.createType,
+  retry: false,
+});
+const updateMutation = useMutation({
+  mutationFn: dictCommands.updateType,
+  retry: false,
+});
 const formRef = ref();
 const { remarkRef, remarkRule } = useRemarkField();
 const remarkSession = ref(0);
@@ -198,4 +197,14 @@ watch(
     if (visible) remarkSession.value++;
   }
 );
+
+useAIContextHost('dictType', {
+  instanceKey: () => remarkSession.value,
+  revisionSource: () => state.data,
+  bindings: {
+    dictName: { value: () => state.data.dictName },
+    dictType: { value: () => state.data.dictType },
+    status: { value: () => (state.data.status === '0' ? '正常' : '停用') },
+  },
+});
 </script>

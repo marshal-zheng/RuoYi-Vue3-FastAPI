@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/shims-vue.d.ts",
+    "src/theme/theme-deployment.d.ts",
+    "src/types/**/*.d.ts",
+    "src/App.tsx",
+    "src/ai-context/**/*.ts",
+    "src/api/system/textFieldAi*.ts",
+    "src/components/ui/Remark/RemarkEditor.vue",
+    "src/views/system/user/components/UserFormDialog.vue",
+    "src/views/system/role/components/RoleFormDrawer.vue",
+    "src/views/system/post/components/PostDlg.vue",
+    "src/views/system/post/components/post-form.ts",
+    "src/views/system/dict/components/DictDlg.vue",
+    "src/views/system/dict/data.vue",
+    "src/views/system/config/components/ConfigDlg.vue",
+    "src/views/tool/gen/basicInfoForm.vue",
+    "tests/unit/components/RemarkAIIntegration.test.ts",
+    "tests/unit/ai-context-contract.test.ts",
+    "tests/unit/ai-context-manifest.test.ts"
+  ]
+}

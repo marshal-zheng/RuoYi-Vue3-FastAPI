@@ -1,5 +1,7 @@
 # AI-first Remarks Implementation Plan
 
+> 历史记录：旧场景协议已由 AICONTEXT 替换，不作为当前部署说明。当前行为见 [实施记录](../reports/aicontext-implementation.md) 与 [部署说明](../../ruoyi-fastapi-backend/docs/text-field-ai-deployment.md)。本轮未执行浏览器或真实模型验收。
+
 WORK_ITEM: none
 
 **Goal:** Deliver AI drafting and whole-remark/selection rewriting through the actual business backend, with a persistent compact formatting toolbar and explicit candidate acceptance.

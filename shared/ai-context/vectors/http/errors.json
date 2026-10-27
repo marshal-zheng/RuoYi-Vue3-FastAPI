@@ -1,0 +1,37 @@
+{
+  "cases": [
+    {
+      "status": 401,
+      "errorCode": 20001,
+      "expected": "authentication"
+    },
+    {
+      "status": 403,
+      "errorCode": 20004,
+      "expected": "permission-denied"
+    },
+    {
+      "status": 422,
+      "errorCode": 10001,
+      "aiCode": "context-rejected",
+      "expected": "context-rejected"
+    },
+    {
+      "status": 403,
+      "errorCode": 20004,
+      "aiCode": "policy-rejected",
+      "expected": "policy-rejected"
+    },
+    {
+      "status": 429,
+      "errorCode": 42901,
+      "retryAfter": "60",
+      "expected": "quota-exceeded"
+    },
+    {
+      "status": 503,
+      "errorCode": 50002,
+      "expected": "provider-unavailable"
+    }
+  ]
+}

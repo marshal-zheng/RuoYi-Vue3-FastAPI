@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zxio:ai-context:v1:events",
+  "title": "events",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "captureId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "type": {
+          "const": "delta"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        }
+      },
+      "required": [
+        "requestId",
+        "captureId",
+        "type",
+        "text"
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "captureId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "type": {
+          "const": "result"
+        },
+        "document": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "version": {
+                  "const": 2
+                },
+                "body": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "format": {
+                      "const": "json"
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "const": "doc"
+                        },
+                        "content": {
+                          "type": "array"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "content"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "format",
+                    "content"
+                  ]
+                },
+                "annotations": {
+                  "const": []
+                },
+                "assets": {
+                  "const": []
+                },
+                "meta": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "version",
+                "body",
+                "annotations",
+                "assets",
+                "meta"
+              ],
+              "x-codec": "remark-a-v1"
+            }
+          ]
+        },
+        "notices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "const": "information-unavailable"
+              },
+              "contextIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64,
+                  "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                },
+                "maxItems": 16,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "code",
+              "contextIds"
+            ]
+          },
+          "maxItems": 16
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "promptVersion": {
+              "const": "text-field/v1"
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "contextIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+              },
+              "maxItems": 16,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "promptVersion",
+            "model",
+            "contextIds"
+          ]
+        }
+      },
+      "required": [
+        "requestId",
+        "captureId",
+        "type",
+        "document",
+        "notices",
+        "meta"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "document": {
+                "type": "null"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "notices": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "captureId": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+        },
+        "type": {
+          "const": "error"
+        },
+        "code": {
+          "enum": [
+            "context-rejected",
+            "policy-rejected",
+            "permission-denied",
+            "quota-exceeded",
+            "provider-unavailable",
+            "timeout",
+            "invalid-output",
+            "output-limit",
+            "incomplete-output"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "requestId",
+        "captureId",
+        "type",
+        "code",
+        "message"
+      ]
+    }
+  ]
+}

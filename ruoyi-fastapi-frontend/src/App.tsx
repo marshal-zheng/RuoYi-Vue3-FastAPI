@@ -1,3 +1,4 @@
+import { useAIContextStatusProvider } from '@/ai-context/status';
 import { defineComponent } from 'vue';
 import { RouterView } from 'vue-router';
 import { ElConfigProvider } from 'element-plus';
@@ -9,6 +10,7 @@ import ModalFeedbackProvider from '@/plugins/ModalFeedbackProvider';
 export default defineComponent({
   name: 'App',
   setup() {
+    useAIContextStatusProvider();
     const overlayDividers = { divider: true };
     return () => (
       <ElConfigProvider locale={zhCn}>

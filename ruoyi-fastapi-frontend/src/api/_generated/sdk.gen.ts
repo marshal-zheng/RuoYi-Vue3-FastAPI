@@ -332,9 +332,10 @@ import type {
   GenCodeLocalToolGenGenCodeTableNameGetData,
   GenCodeLocalToolGenGenCodeTableNameGetErrors,
   GenCodeLocalToolGenGenCodeTableNameGetResponses,
-  GenerateRemarkAiSystemRemarkAiGeneratePostData,
-  GenerateRemarkAiSystemRemarkAiGeneratePostErrors,
-  GenerateRemarkAiSystemRemarkAiGeneratePostResponses,
+  GenerateTextFieldAiSystemAiTextFieldGeneratePostData,
+  GenerateTextFieldAiSystemAiTextFieldGeneratePostErrors,
+  GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse,
+  GenerateTextFieldAiSystemAiTextFieldGeneratePostResponses,
   GetCaptchaImageCaptchaImageGetData,
   GetCaptchaImageCaptchaImageGetResponses,
   GetDeviceCategoryDetailDeviceCategoryCategoryIdGetData,
@@ -391,8 +392,6 @@ import type {
   GetProtocolListSystemProtocolListGetData,
   GetProtocolListSystemProtocolListGetErrors,
   GetProtocolListSystemProtocolListGetResponses,
-  GetRemarkAiStatusSystemRemarkAiStatusGetData,
-  GetRemarkAiStatusSystemRemarkAiStatusGetResponses,
   GetResilienceCircuitBreakersResilienceCircuitBreakersGetData,
   GetResilienceCircuitBreakersResilienceCircuitBreakersGetResponses,
   GetSagaInstancesSagaInstancesGetData,
@@ -483,6 +482,8 @@ import type {
   GetSystemUserListSystemUserListGetResponses,
   GetTableNamesCommonTablesGetData,
   GetTableNamesCommonTablesGetResponses,
+  GetTextFieldAiStatusSystemAiTextFieldStatusGetData,
+  GetTextFieldAiStatusSystemAiTextFieldStatusGetResponses,
   HealthCheckHealthGetData,
   HealthCheckHealthGetResponses,
   ImportDeviceBatchDeviceImportBatchPostData,
@@ -3418,6 +3419,50 @@ export const validateTopologySimulationTopologyValidatePost = <
   });
 
 /**
+ * Generate Text Field Ai
+ */
+export const generateTextFieldAiSystemAiTextFieldGeneratePost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    GenerateTextFieldAiSystemAiTextFieldGeneratePostData,
+    ThrowOnError,
+    GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse
+  >
+) =>
+  (options.client ?? client).sse.post<
+    GenerateTextFieldAiSystemAiTextFieldGeneratePostResponses,
+    GenerateTextFieldAiSystemAiTextFieldGeneratePostErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/system/ai/text-field/generate',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * Get Text Field Ai Status
+ */
+export const getTextFieldAiStatusSystemAiTextFieldStatusGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<GetTextFieldAiStatusSystemAiTextFieldStatusGetData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    GetTextFieldAiStatusSystemAiTextFieldStatusGetResponses,
+    unknown,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/system/ai/text-field/status',
+    ...options,
+  });
+
+/**
  * Delete System Config Empty
  */
 export const deleteSystemConfigEmptySystemConfigDelete = <ThrowOnError extends boolean = false>(
@@ -4633,42 +4678,6 @@ export const queryProtocolDetailSystemProtocolProtocolIdGet = <
   >({
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/system/protocol/{protocol_id}',
-    ...options,
-  });
-
-/**
- * Generate Remark Ai
- */
-export const generateRemarkAiSystemRemarkAiGeneratePost = <ThrowOnError extends boolean = false>(
-  options: Options<GenerateRemarkAiSystemRemarkAiGeneratePostData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    GenerateRemarkAiSystemRemarkAiGeneratePostResponses,
-    GenerateRemarkAiSystemRemarkAiGeneratePostErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/system/remark/ai/generate',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-
-/**
- * Get Remark Ai Status
- */
-export const getRemarkAiStatusSystemRemarkAiStatusGet = <ThrowOnError extends boolean = false>(
-  options?: Options<GetRemarkAiStatusSystemRemarkAiStatusGetData, ThrowOnError>
-) =>
-  (options?.client ?? client).get<
-    GetRemarkAiStatusSystemRemarkAiStatusGetResponses,
-    unknown,
-    ThrowOnError
-  >({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/system/remark/ai/status',
     ...options,
   });
 

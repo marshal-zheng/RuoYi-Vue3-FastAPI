@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:zxio:ai-context:v1:manifest",
+  "title": "manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "ai-context/v1"
+    },
+    "scopes": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 96,
+        "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "permissions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "mode": {
+                "const": "any"
+              },
+              "values": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "maxItems": 32,
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "mode",
+              "values"
+            ]
+          },
+          "purposes": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+            },
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "defaultContextIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  },
+                  "maxItems": 16,
+                  "uniqueItems": true
+                },
+                "selectableContextIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  },
+                  "maxItems": 16,
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "label",
+                "defaultContextIds",
+                "selectableContextIds"
+              ]
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "sensitivity": {
+                      "const": "public"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "sensitivity"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 64,
+                      "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 80
+                    },
+                    "sensitivity": {
+                      "const": "personal"
+                    },
+                    "kind": {
+                      "enum": [
+                        "phone",
+                        "email",
+                        "id",
+                        "address",
+                        "other"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "label",
+                    "sensitivity",
+                    "kind"
+                  ]
+                }
+              ]
+            },
+            "maxItems": 128
+          }
+        },
+        "required": [
+          "permissions",
+          "purposes",
+          "items"
+        ]
+      }
+    }
+  },
+  "required": [
+    "version",
+    "scopes"
+  ]
+}

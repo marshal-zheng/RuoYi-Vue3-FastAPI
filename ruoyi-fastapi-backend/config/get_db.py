@@ -38,6 +38,11 @@ def _get_test_engine():
     return _TEST_ENGINE
 
 
+def get_session_factory():
+    """Short dedicated sessions (e.g. file upload state) use the same engine as request sessions."""
+    return _get_test_sessionmaker() if _is_test_env() else AsyncSessionLocal
+
+
 async def get_db():
     """
     每一个请求处理完毕后会关闭当前连接，不同的请求使用不同的连接

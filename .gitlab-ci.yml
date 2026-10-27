@@ -136,6 +136,7 @@ frontend-quality-gates:
     - corepack enable
     - cd ruoyi-fastapi-frontend
     - yarn install --immutable
+    - yarn ai-context:check
     - yarn api:generate
     - git diff --exit-code -- src/api/_generated ../shared/openapi.json
     - |
@@ -199,7 +200,8 @@ architecture-regression-tests:
   script:
     - pip install -r ruoyi-fastapi-backend/requirements.txt -r ruoyi-fastapi-backend/requirements-dev.txt
     - cd ruoyi-fastapi-backend
-    - python -m pytest -q -n 0 --no-cov tests/unit/middlewares/test_idempotency_middleware.py tests/unit/middlewares/test_rate_limit_middleware.py tests/unit/middlewares/test_request_logging_middleware.py tests/unit/middlewares/test_prometheus_middleware.py tests/unit/utils/test_otel_tracing.py tests/unit/controllers/test_simulation_controller.py tests/unit/services/test_simulation_runtime_state.py tests/unit/services/test_simulation_multi_worker_smoke.py tests/unit/services/test_simulation_service.py tests/unit/services/test_project_service.py tests/unit/services/test_project_version_service.py tests/unit/services/test_protocol_service.py tests/unit/services/test_common_service.py tests/unit/services/test_device_service.py tests/unit/services/test_device_category_service.py tests/integration/test_core_modules.py tests/integration/test_error_handling_rfc7807.py tests/integration/test_otel_trace_correlation.py
+    - python ../scripts/check_ai_context_contract.py
+    - python -m pytest -q -n 0 --no-cov tests/unit/middlewares/test_idempotency_middleware.py tests/unit/middlewares/test_rate_limit_middleware.py tests/unit/middlewares/test_request_logging_middleware.py tests/unit/middlewares/test_prometheus_middleware.py tests/unit/utils/test_otel_tracing.py tests/unit/controllers/test_simulation_controller.py tests/unit/services/test_simulation_runtime_state.py tests/unit/services/test_simulation_multi_worker_smoke.py tests/unit/services/test_simulation_service.py tests/unit/services/test_project_service.py tests/unit/services/test_project_version_service.py tests/unit/services/test_protocol_service.py tests/unit/services/test_common_service.py tests/unit/services/test_device_service.py tests/unit/services/test_device_category_service.py tests/integration/test_core_modules.py tests/integration/test_error_handling_rfc7807.py tests/integration/test_otel_trace_correlation.py tests/unit/services/test_text_field_ai.py tests/unit/services/test_text_field_ai_http.py tests/unit/services/test_text_field_ai_document.py tests/unit/services/test_ai_context_contract.py
 
 security-regression-tests:
   stage: test

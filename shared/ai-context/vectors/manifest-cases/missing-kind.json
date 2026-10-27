@@ -1,0 +1,40 @@
+{
+  "valid": false,
+  "value": {
+    "version": "ai-context/v1",
+    "scopes": {
+      "system.synthetic": {
+        "permissions": {
+          "mode": "any",
+          "values": [
+            "system:synthetic:add",
+            "system:synthetic:edit"
+          ]
+        },
+        "purposes": {
+          "remark": {
+            "label": "合成备注",
+            "defaultContextIds": [
+              "name"
+            ],
+            "selectableContextIds": [
+              "phone"
+            ]
+          }
+        },
+        "items": [
+          {
+            "id": "name",
+            "label": "名称",
+            "sensitivity": "public"
+          },
+          {
+            "id": "phone",
+            "label": "电话",
+            "sensitivity": "personal"
+          }
+        ]
+      }
+    }
+  }
+}
