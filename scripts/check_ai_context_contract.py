@@ -22,7 +22,10 @@ def check():
         schema = read(ROOT / f"{name}.schema.json")
         Draft202012Validator.check_schema(schema)
         validators[name] = Draft202012Validator(schema)
-        for path in sorted((ROOT / "vectors" / name).glob("*.json")):
+        directory = "manifest-cases" if name == "manifest" else name
+        cases = sorted((ROOT / "vectors" / directory).glob("*.json"))
+        assert cases, f"missing fixture directory: {directory}"
+        for path in cases:
             case = read(path)
             assert validators[name].is_valid(case["value"]) == case["valid"], path.name
             checked += 1
