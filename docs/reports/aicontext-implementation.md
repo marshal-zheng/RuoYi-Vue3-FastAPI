@@ -1,6 +1,6 @@
 # AI 可关闭与局域网模型：实施记录
 
-2026-10-27，隔离工作分支 `codex/aicontext-implementation`。尚未交付回源分支，七宿主与冻结协议已接入，最终构建/独立审查仍在进行。规格锚点：ZXUI 仓 `docs/specs/AICONTEXT-text-field-ai-contract/`；本文件不另立要求。
+2026-10-27，隔离工作分支 `codex/aicontext-implementation`。尚未交付回源分支，七宿主与冻结协议已接入，必需实现验收已通过，独立审查准备中。规格锚点：ZXUI 仓 `docs/specs/AICONTEXT-text-field-ai-contract/`；本文件不另立要求。
 
 ## 后端阶段
 
@@ -11,7 +11,7 @@
 - sse-starlette 3.0.3 的发送时限只覆盖 data 帧，且 DEBUG 会打印原帧。局部 ASGI 包装把时限覆盖到心跳/start/end，并禁用库的内容日志；保留成熟 SSE 编码、心跳与任务管理。慢客户端和断连均关闭 SDK/释放整流许可，审计在 ASGI 终结且每次只尝试一次。
 - 公开 request/status、有限 HTTP ProblemDetails、delta/result/error union 已登记 OpenAPI，再用既有生成器输出 TypeScript，未手改 generated。扩展入口采用 [FastAPI 官方 OpenAPI 扩展机制](https://fastapi.tiangolo.com/how-to/extending-openapi/)，Pydantic 生成联合类型和引用。
 
-验证命令（业务 worktree 的 `ruoyi-fastapi-backend`）：隔离 `backend-env/bin/python -m pytest tests/unit/services/test_text_field_ai.py tests/unit/services/test_text_field_ai_http.py tests/unit/services/test_text_field_ai_document.py tests/unit/services/test_ai_context_contract.py -q -n 0 --no-cov`，104 项通过。新模块 Ruff check/format 通过；修改的共享旧文件存在原有 Ruff 债务，增量检查记录在 worktree Git metadata。覆盖无 stop、length、stop 后异常、JSON/codec/token 失败、notice-only、307/308/401/429 单次请求、无认证请求、权限/策略/VO、用户/IP 限流、两慢流/饱和、GZip 心跳、慢发送、取消/超时、审计失败，以及 HTTP/SSE/日志哨兵检查。
+验证命令（业务 worktree 的 `ruoyi-fastapi-backend`）：隔离 `backend-env/bin/python -m pytest tests/unit/services/test_text_field_ai.py tests/unit/services/test_text_field_ai_http.py tests/unit/services/test_text_field_ai_document.py tests/unit/services/test_ai_context_contract.py -q -n 0 --no-cov`，106 项通过。新模块 Ruff check/format 通过；修改的共享旧文件存在原有 Ruff 债务，增量检查记录在 worktree Git metadata。覆盖无 stop、length、stop 后异常、JSON/codec/token 失败、notice-only、307/308/401/429 单次请求、无认证请求、权限/策略/VO、用户/IP 限流、两慢流/饱和、GZip 心跳、慢发送、取消/超时、审计失败，以及 HTTP/SSE/日志哨兵检查。
 
 ## 前端阶段
 
@@ -28,3 +28,11 @@
 后端 token/有限错误定义位于 `common/ai_context.py`，DTO 不再反向依赖 application service。供应商数据省略传输 UUID/修订指纹，只保留用途和非敏感可提示 item id。真实回环验证发现 SDK/httpcore DEBUG 泄露响应头，已在 SDK 客户端/HTTP transport 完成导入后安装上下文过滤；AI 请求的 OTel 与 SDK/HTTP 内容日志被禁止，普通并发 HTTP 诊断保持可用。
 
 部署与离线可选依赖见 [部署指南](../../ruoyi-fastapi-backend/docs/text-field-ai-deployment.md)，公开内核/编辑器/Formily 接线见 ZXUI 文档。隐私保护针对实例已获准读取的已知个人值，不保证自动识别任意自然语言中未知个人信息。浏览器和真实模型未执行；尚未交付回源分支或切换开发服务。
+
+## 本地安装与构建验收
+
+ZXUI 聚合构建、owner editor/schema-form 构建与公开契约检查通过。业务使用本轮三个正常构建 tarball，package.json 和 Yarn 锁文件已更新，Element Plus 对齐库声明的 2.14.7；没有发布 npm。主工作区安装不动。隔离 worktree 在 APFS 写时复制的私有依赖上执行 `yarn install --immutable` 成功，原生安装脚本正常执行；其后实际包模式 7 组 110 项和 `yarn type-check:ai-context` 通过。此前只读链接投影出现两份 Vue，已通过真实安装解决，没有引入测试配置兼容补丁。
+
+源码生产构建、三个实际 tarball 的生产构建通过。ZXUI 文档站及 select/dialog/list-view 三路交付预算通过。这里是本 spec 的包消费验证，不宣称此前 29 包全量发布准入重新通过。
+
+D16 保证边界增加了未知历史号码仍可作为原文保留的回归，明确不做任意 PII 识别；三条合成指令使用固定 SDK 合成返回，验证 notice-only envelope 与正文分离，不宣称真实模型遵循指令或禁止编造的质量已证实。一次 CPU 竞争下 0.1 秒测试超时先于流就绪，串行重跑原命令 106 项通过；生产超时未放宽。
