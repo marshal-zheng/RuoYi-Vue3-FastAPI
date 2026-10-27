@@ -2,9 +2,22 @@
 import { defineConfig } from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
+import { zxuiSourceIntegrationPlugin } from './vite/zxui-theme-packages';
+
+const source = process.env.VITE_ZXUI_LOCAL === 'true';
 
 export default defineConfig({
-  plugins: [vue() as any],
+  plugins: [
+    vue() as any,
+    ...(source
+      ? [
+          zxuiSourceIntegrationPlugin(
+            __dirname,
+            process.env.VITE_ZXIO_REPO_ROOT || '/Users/hqz/Downloads/element-plus'
+          ),
+        ]
+      : []),
+  ],
   resolve: {
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     alias: {
@@ -24,7 +37,11 @@ export default defineConfig({
 
     // Transform EP's ESM imports so Node's async-validator CJS default is resolved correctly.
     server: {
-      deps: { inline: ['element-plus', '@zxio/schema-form', '@formily/vue'] },
+      deps: {
+        inline: source
+          ? [/element-plus/, /@zxio/, /@formily/, /async-validator/]
+          : ['element-plus', '@zxio/schema-form', '@formily/vue'],
+      },
     },
 
     // 测试文件匹配模式

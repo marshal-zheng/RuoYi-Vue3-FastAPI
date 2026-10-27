@@ -11,6 +11,7 @@ const api = vi.hoisted(() => ({
   recover: vi.fn(),
   discard: vi.fn(),
   fieldPending: false,
+  hasUncommittedInput: false,
 }));
 vi.mock('@/api/system/post', () => ({
   getPost: api.read,
@@ -32,7 +33,15 @@ vi.mock('@zxio/schema-form/formily', () => ({
     name: 'ZxSchemaForm',
     props: ['initial', 'createSchema', 'save'],
     setup(_: unknown, { expose }: { expose: (value: unknown) => void }) {
-      expose({ dirty: false, get fieldPending() { return api.fieldPending; } });
+      expose({
+        dirty: false,
+        get fieldPending() {
+          return api.fieldPending;
+        },
+        get hasUncommittedInput() {
+          return api.hasUncommittedInput;
+        },
+      });
     },
     template: '<div />',
   },
@@ -79,6 +88,7 @@ const failure = (status: number, errors?: { field: string; message: string }[]) 
 beforeEach(() => {
   vi.resetAllMocks();
   api.fieldPending = false;
+  api.hasUncommittedInput = false;
   api.read.mockResolvedValue({ ...values, postId: 31 });
   api.add.mockResolvedValue({ ...values, postId: 31 });
   api.update.mockResolvedValue({ ...values, postId: 31 });
@@ -86,14 +96,17 @@ beforeEach(() => {
 afterEach(() => wrapper?.unmount());
 
 describe('post save feedback ownership', () => {
-  it('asks before replacing an unfinished field edit even when canonical values are unchanged', async () => {
-    await opening(31);
-    api.fieldPending = true;
-    api.discard.mockRejectedValueOnce(new Error('继续编辑'));
-    await (wrapper.vm as unknown as { open: (id: number) => Promise<void> }).open(32);
-    expect(api.discard).toHaveBeenCalledTimes(1);
-    expect(api.read).toHaveBeenCalledTimes(1);
-  });
+  it.each(['fieldPending', 'hasUncommittedInput'] as const)(
+    'asks before replacing a form with %s even when canonical values are unchanged',
+    async (state) => {
+      await opening(31);
+      api[state] = true;
+      api.discard.mockRejectedValueOnce(new Error('继续编辑'));
+      await (wrapper.vm as unknown as { open: (id: number) => Promise<void> }).open(32);
+      expect(api.discard).toHaveBeenCalledTimes(1);
+      expect(api.read).toHaveBeenCalledTimes(1);
+    }
+  );
   it('lets the form own a conflict while requesting only silent HTTP errors', async () => {
     const save = await opening();
     const error = failure(409);

@@ -4967,16 +4967,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-remark-a.20261022.1.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-hardening.20261027.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0-remark-a.20261022.1
-  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-remark-a.20261022.1.tgz#./vendor/zxio-schema-form-0.1.0-remark-a.20261022.1.tgz::hash=3ace55&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-hardening.20261027.tgz#./vendor/zxio-schema-form-0.1.0-hardening.20261027.tgz::hash=53b362&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@formily/core": 2.3.7
     "@formily/reactive": 2.3.7
     "@formily/validator": 2.3.7
     "@formily/vue": 2.3.7
     "@zxio/zxui": ^3.0.0-next.0
-    element-plus: ^2.13.0
+    element-plus: 2.14.7
     vue: ^3.5.0
   peerDependenciesMeta:
     "@formily/core":
@@ -4987,7 +4987,7 @@ __metadata:
       optional: true
     "@formily/vue":
       optional: true
-  checksum: 10c0/f5a60e3a6dfd5abefba2b568199dab3d10c729832acfd439b2491b26df55741d62b1df154d264c44d63e2202a4bc89fed5b56ba6d8efed7ac45da4de3708d3ca
+  checksum: 10c0/5b46ee2507133bc4fb89fd0dd959e242362b6cd094a1a0ca97f86bf9e150b7758aeab2018a780946c523ae7cbd9de9a1b92164e4ad6dd4859467fad87db8f8cd
   languageName: node
   linkType: hard
 
@@ -15097,7 +15097,7 @@ __metadata:
     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-remark-a.20261022.1.tgz"
+    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-hardening.20261027.tgz"
     "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-remark-ai.20261023.2.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"

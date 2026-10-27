@@ -29,7 +29,6 @@ export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
         if (isField(field)) {
           ctx.configure(field, {
             dataSource: [...options],
-            componentProps: { options: [...options] },
           });
         }
       });
@@ -108,8 +107,7 @@ export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
   };
   const assertSettled: SettledCheck<PostValues> = (_values, states) => {
     const state = states.find((item) => item.path[0] === 'status');
-    return JSON.stringify(state?.dataSource) === JSON.stringify(latestOptions) &&
-      JSON.stringify(state?.componentProps.options) === JSON.stringify(latestOptions)
+    return JSON.stringify(state?.dataSource) === JSON.stringify(latestOptions)
       ? []
       : [{ message: '岗位状态字典尚未同步' }];
   };

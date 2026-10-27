@@ -100,7 +100,7 @@ cd ruoyi-fastapi-backend
 ## 非仿真表单、弹框与主题约定
 
 - 原生 ElForm 表单弹框使用 `@/components/ui/FormDialog` 的 `useFormDialog({ columns, formRef, ... })`，同一返回值的 `dialogProps/dialogEvents`、`formProps`、`layoutProps` 分别绑定 ZxDialog、原生 ElForm、FormGrid。保留真实 FormInstance；FormGrid 只布局，整行字段用 `data-form-full`。
-- Schema 表单弹框使用同模块的 `schemaFormDialog({ columns })`，同源 `dialogProps/schemaFormProps` 分别绑定 ZxDialog、`@zxio/schema-form/form-create` 的 ZxSchemaForm；该入口仅共享尺寸和标签策略。SchemaForm 独占编辑值和验证，业务壳负责读取、重试、身份、关闭保护和提交 DTO；不得把 SchemaForm ref 冒充 FormInstance，也不得在 useDialog/state 中维护另一份编辑值。
+- Schema 表单弹框使用同模块的 `schemaFormDialog({ columns })`，同源 `dialogProps/schemaFormProps` 分别绑定 ZxDialog、`@zxio/schema-form/formily` 的 ZxSchemaForm；该入口仅共享尺寸和标签策略。SchemaForm 独占编辑值和验证，业务壳负责读取、重试、身份、关闭保护和提交 DTO；不得把 SchemaForm ref 冒充 FormInstance，也不得在 useDialog/state 中维护另一份编辑值。
 - 列数只声明一次，标签宽度、横向间距、响应式降列由业务布局策略统一维护；控件高度和纵向节奏消费 ZXUI density。不要在调用点写字段 span、label-width、gutter 或叠加 row-gap。
 - 非表单弹框按内容选 `dialogSize` 预设；不用硬编码 width/height。必要限高使用 `dialogStyle.maxHeight`。只读详情使用描述列表，不为其包装表单。
 - 主题由 `src/theme/zx-theme-packages.ts` 单一登记，构建端公开 deployment API 交付资产，偏好经统一入口交 Host/Provider。业务不要写核心 `--el-*`/`--zx-*` 值、猜 generated 路径或补写库公开类型。
