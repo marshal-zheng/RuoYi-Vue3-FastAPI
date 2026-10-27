@@ -1,6 +1,8 @@
 # AI 可关闭与局域网模型：实施记录
 
-2026-10-27，隔离工作分支 `codex/aicontext-implementation`。尚未交付回源分支，七宿主与冻结协议已接入，必需实现验收、两轮独立审查及三仓完成证明已通过，待交付。规格锚点：ZXUI 仓 `docs/specs/AICONTEXT-text-field-ai-contract/`；本文件不另立要求。
+2026-10-27，七宿主与冻结协议已接入；必需实现验收、两轮独立审查、三仓回源和源目录基线验证均通过。业务已交付到 `std`，ZXUI及独立text-editor已交付到各自`main`；清理及最终提交号以本仓 `.git/codex-deliveries/docs-specs-aicontext-text-field-ai-contract.json` 为准。规格锚点：ZXUI 仓 `docs/specs/AICONTEXT-text-field-ai-contract/`；本文件不另立要求。
+
+交付阶段：源目录实际安装118项、源码直连110项、后端110项、上传root-path回归1项、UI规范25项及聚焦类型/生产构建通过；schema37项、manifest/OpenAPI反漂移及正常API生成通过。DB只读SELECT 1和Redis PING通过，应用端口无监听，未启停服务或运行迁移。MinIO的44处OpenAPI变更全部保留，17148个非重叠已记录文件指纹不变。14个重叠文件的原内容和最终组成回执保存在本仓`.git/codex-deliveries/aicontext-20261027/preservation/`，原有用户改动保持未提交。源前端正常安装锁文件，源后端安装可选AI/共享schema测试依赖；以下分阶段记录描述隔离实施时的环境状态。
 
 ## 后端阶段
 
@@ -27,7 +29,7 @@
 
 后端 token/有限错误定义位于 `common/ai_context.py`，DTO 不再反向依赖 application service。供应商数据省略传输 UUID/修订指纹，只保留用途和非敏感可提示 item id。真实回环验证发现 SDK/httpcore DEBUG 泄露响应头，已在 SDK 客户端/HTTP transport 完成导入后安装上下文过滤；AI 请求的 OTel 与 SDK/HTTP 内容日志被禁止，普通并发 HTTP 诊断保持可用。
 
-部署与离线可选依赖见 [部署指南](../../ruoyi-fastapi-backend/docs/text-field-ai-deployment.md)，公开内核/编辑器/Formily 接线见 ZXUI 文档。隐私保护针对实例已获准读取的已知个人值，不保证自动识别任意自然语言中未知个人信息。浏览器和真实模型未执行；尚未交付回源分支或切换开发服务。
+部署与离线可选依赖见 [部署指南](../../ruoyi-fastapi-backend/docs/text-field-ai-deployment.md)，公开内核/编辑器/Formily 接线见 ZXUI 文档。隐私保护针对实例已获准读取的已知个人值，不保证自动识别任意自然语言中未知个人信息。浏览器和真实模型未执行；未切换开发服务，未推送或发布。实施与交付验证日志已转存本仓`.git/codex-deliveries/aicontext-20261027/`，完整独立审查及最终状态由交付账本保存。
 
 ## 本地安装与构建验收
 
