@@ -36,3 +36,9 @@ ZXUI 聚合构建、owner editor/schema-form 构建与公开契约检查通过�
 源码生产构建、三个实际 tarball 的生产构建通过。ZXUI 文档站及 select/dialog/list-view 三路交付预算通过。这里是本 spec 的包消费验证，不宣称此前 29 包全量发布准入重新通过。
 
 D16 保证边界增加了未知历史号码仍可作为原文保留的回归，明确不做任意 PII 识别；三条合成指令使用固定 SDK 合成返回，验证 notice-only envelope 与正文分离，不宣称真实模型遵循指令或禁止编造的质量已证实。一次 CPU 竞争下 0.1 秒测试超时先于流就绪，串行重跑原命令 106 项通过；生产超时未放宽。
+
+## 独立审查修复
+
+Round 1 指出两项 P1：测试 SDK/CI 通道不闭合，以及公开编辑器在脱敏后遗漏文档 wire codec gate。F1 已将 `requirements-ai.txt` 和共享 schema checker 的开发依赖纳入 `requirements-dev.txt`，主 GitLab architecture-regression-tests 增加四个 AI/共享契约文件和 schema checker，GitHub 全测试亦运行共享 checker；生产基础 requirements 未加入可选 SDK。base+dev 依赖 dry-run 解析、CI YAML 解析通过；同一隔离 backend-env 已具有对应依赖，106 项收集/执行和 37 项 checker 通过。未触发远程 CI。
+
+F2 位于独立 editor 提交 `3289f83`：capture/mask 后对 document/selection/candidate 逐一复用 `validateBasicRichTextDocument(value, options.limits())`，在任何 adapter 之前拒绝扩张超限。默认5000字符、自定义800字符的两项零调用回归验证原文和表单未变；owner 4 文件共53项、types/build/实际非忽略 lint 通过。更新 editor tarball 为 `aicontext.20261027.2`，删除本轮被替换的旧候选，实际 immutable 安装、业务110项及聚焦类型检查再次通过。

@@ -295,6 +295,9 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
 
+      - name: AI context shared schema vectors
+        run: python ../scripts/check_ai_context_contract.py
+
       - name: Run tests
         run: pytest tests/ -v --tb=short
 
