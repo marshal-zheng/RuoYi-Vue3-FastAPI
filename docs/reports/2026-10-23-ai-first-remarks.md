@@ -1,5 +1,7 @@
 # AI-first remark verification
 
+> 历史记录：旧场景协议已由 AICONTEXT 替换，不作为当前部署说明。当前行为见 [实施记录](../reports/aicontext-implementation.md) 与 [部署说明](../../ruoyi-fastapi-backend/docs/text-field-ai-deployment.md)。本轮未执行浏览器或真实模型验收。
+
 ## Scope and evidence boundaries
 
 The approved change covers the seven existing management remark scenes, shared ZXUI field UI, authenticated business transport and the server-side DeepSeek service. No business records are created or saved during browser verification. Synthetic instructions are used for real provider requests.
@@ -55,4 +57,4 @@ The library build still prints five existing declaration diagnostics from the ro
 
 All seven callers (user, role, post, dictionary type/data, configuration and generator table) were inspected for adapter/context wiring and checked by TypeScript. Manual browser checks focused on the two distinct form owners: native user form and post SchemaForm. The other five were not each exercised against the model. Cancellation, authorization, missing credentials, incomplete provider output and invalid documents have automated coverage; no claim is made that every provider failure was manually reproduced.
 
-No create/update form was submitted. No production data migration, npm publishing, remote deployment or Git commit was performed. Server credentials are used from the process environment; deployment setup is documented in [AI service configuration](../../ruoyi-fastapi-backend/docs/remark-ai-deployment.md). Existing unrelated workspace changes were preserved.
+No create/update form was submitted. No production data migration, npm publishing, remote deployment or Git commit was performed. Server credentials are used from the process environment; deployment setup is documented in [AI service configuration](../../ruoyi-fastapi-backend/docs/text-field-ai-deployment.md). Existing unrelated workspace changes were preserved.

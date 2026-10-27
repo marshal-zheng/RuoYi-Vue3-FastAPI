@@ -40,6 +40,9 @@ jobs:
       - name: Mock mainline scan
         run: bash ../scripts/check-mock-mainline.sh
 
+      - name: AI context manifest drift check
+        run: yarn ai-context:check
+
       - name: API generated client drift check
         run: |
           npm run api:generate

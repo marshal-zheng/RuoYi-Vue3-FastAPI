@@ -4,8 +4,7 @@ import time
 
 import anyio
 
-from modules.system.application.services.ai_providers.base import MESSAGES, AIError
-from modules.system.application.services.text_field_ai_audit import write_ai_audit
+from common.ai_context import MESSAGES, AIError
 from utils.log_util import logger
 
 AI_GENERATE_PATH = '/system/ai/text-field/generate'
@@ -21,7 +20,7 @@ class TextFieldAIEntryMiddleware:
     def __init__(self, app):
         self.app = app
 
-    async def __call__(self, scope, receive, send):
+    async def __call__(self, scope, receive, send):  # noqa: PLR0915 -- Bounded receive and one shielded finalizer.
         if scope.get('type') != 'http' or scope.get('method') != 'POST' or ai_route_path(scope) != AI_GENERATE_PATH:
             await self.app(scope, receive, send)
             return
@@ -80,7 +79,12 @@ class TextFieldAIEntryMiddleware:
                 metrics = getattr(app_state, 'metrics_registry', None)
                 if metrics:
                     metrics.observe_text_field_ai(audit['outcome'], audit['latencyMs'] / 1000)
-                writer = getattr(app_state, 'text_field_ai_audit_writer', write_ai_audit)
+                writer = getattr(app_state, 'text_field_ai_audit_writer', None)
+                if writer is None:
+                    # Persistence is loaded only after a complete request attempt.
+                    from modules.system.application.services.text_field_ai_audit import write_ai_audit  # noqa: PLC0415
+
+                    writer = write_ai_audit
                 failed = False
                 with anyio.CancelScope(shield=True), anyio.move_on_after(2) as cleanup:
                     try:

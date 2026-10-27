@@ -16,31 +16,27 @@
       <el-form-item data-form-full label="备注" prop="remark"
         ><RemarkEditor
           ref="remarkRef"
-          :key="info.tableId ?? info.tableName"
+          :key="aiInstance"
           v-model="info.remark"
-          scene="genTable"
-          :ai-context="
-            () => ({
-              tableName: info.tableName,
-              tableComment: info.tableComment,
-              className: info.className,
-            })
-          "
           @edit-state="remarkEditState = $event"
       /></el-form-item>
     </FormGrid>
   </el-form>
 </template>
 <script setup>
-import { computed, ref } from 'vue';
+import { useAIContextHost } from '@/ai-context/host';
+import { computed, ref, watch } from 'vue';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
-defineProps({ info: { type: Object, required: true } });
+const props = defineProps({ info: { type: Object, required: true } });
 const basicInfoForm = ref();
 const remarkEditState = ref({ pending: false, blocking: [] });
 const { remarkRef, remarkRule } = useRemarkField();
-const { formProps, layoutProps } = useFormDialog({ columns: 2, formRef: basicInfoForm });
+const { formProps, layoutProps } = useFormDialog({
+  columns: 2,
+  formRef: basicInfoForm,
+});
 const rules = {
   remark: [remarkRule],
   tableName: [{ required: true, message: '请输入表名称', trigger: 'blur' }],
@@ -53,5 +49,24 @@ defineExpose({
   hasPendingEdit: computed(
     () => remarkEditState.value.pending || remarkEditState.value.blocking.length > 0
   ),
+});
+
+const aiInstance = ref(0);
+watch(
+  () => props.info,
+  () => {
+    aiInstance.value++;
+  },
+  { flush: 'sync' }
+);
+useAIContextHost('genTable', {
+  instanceKey: () => aiInstance.value,
+  revisionSource: () => props.info,
+  bindings: {
+    tableName: { value: () => props.info.tableName },
+    tableComment: { value: () => props.info.tableComment },
+    className: { value: () => props.info.className },
+    functionAuthor: { value: () => props.info.functionAuthor },
+  },
 });
 </script>

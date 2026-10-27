@@ -145,6 +145,7 @@ type MethodFn = <
 
 type SseFn = <
   TData = unknown,
+  TError = unknown,
   ThrowOnError extends boolean = false,
   TResponseStyle extends ResponseStyle = 'fields',
 >(

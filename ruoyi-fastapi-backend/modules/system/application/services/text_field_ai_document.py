@@ -5,8 +5,8 @@ from uuid import uuid4
 
 from pydantic_core import from_json
 
+from common.ai_context import AIError
 from common.remark_document_v1 import LIMITS, RemarkError, validate_remark
-from modules.system.application.services.ai_providers.base import AIError
 
 
 def _invalid_output():

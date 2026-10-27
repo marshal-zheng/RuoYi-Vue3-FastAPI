@@ -39,6 +39,8 @@
 </template>
 
 <script setup lang="ts">
+import { provideAIContextScope } from '@zxio/zxui/ai-context';
+import { aiContextDefinitions } from '@/ai-context/definitions';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import { computed, markRaw, ref, shallowRef, watch } from 'vue';
 import { ElMessageBox } from 'element-plus';
@@ -62,7 +64,11 @@ import {
 } from './post-form';
 
 const remarkBindings = {
-  RemarkEditor: { component: markRaw(RemarkEditor), composite: true, group: false },
+  RemarkEditor: {
+    component: markRaw(RemarkEditor),
+    composite: true,
+    group: false,
+  },
 };
 const emit = defineEmits<{ (e: 'confirm'): void }>();
 const visible = ref(false);
@@ -85,6 +91,20 @@ const authoring = createPostSchema(() =>
       : []
   )
 );
+provideAIContextScope(aiContextDefinitions.post, {
+  instanceKey: () => session.value?.key ?? 0,
+  // x-ai-context fields subscribe to the Formily runtime's monotonic clock.
+  revision: () => 0,
+  bindings: {
+    status: {
+      value: () => {
+        const value = formRef.value?.read().status;
+        return value === undefined ? undefined : value === '0' ? '正常' : '停用';
+      },
+      available: () => !!formRef.value?.ready,
+    },
+  },
+});
 const { error: loadError, run: runRead } = useEditorRead(() => visible.value, detailLoading);
 let generation = 0;
 let writeId: number | undefined;

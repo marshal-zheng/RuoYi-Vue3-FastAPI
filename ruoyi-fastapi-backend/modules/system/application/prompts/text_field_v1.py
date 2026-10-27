@@ -16,4 +16,5 @@ paragraph 只含 text/hardBreak。text 的 text 必须非空且不能含换行�
 orderedList 可用 attrs.start 指定起始序号。不要输出 blockId，系统会生成。列表最多嵌套 3 层，正文最多 5000 字。
 document 示例 JSON：{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"负责设备维护","marks":[{"type":"bold"}]}]}]}
 允许省略无关占位符，使用时必须原样复制，不能拆分或创造 token。个人 token 仅作为文字，不能写入 URL/href/属性。缺失信息使用 notices，不把诊断写入业务正文。
+notices.contextIds 只能从 noticeContextIds 选，无法归属则用 []。此列表只有静态 id，不代表这些字段的值已提供，不得据此编造。
 """

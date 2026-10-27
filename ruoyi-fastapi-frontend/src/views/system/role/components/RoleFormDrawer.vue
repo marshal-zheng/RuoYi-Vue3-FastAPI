@@ -78,6 +78,7 @@
           :data="menuOptions"
           show-checkbox
           ref="menuRef"
+          @check-change="aiScope.invalidate"
           node-key="id"
           :check-strictly="!drawer.state.data.menuCheckStrictly"
           :empty-text="menuEmptyText"
@@ -90,14 +91,6 @@
           ref="remarkRef"
           :key="remarkSession"
           v-model="drawer.state.data.remark"
-          scene="role"
-          :ai-context="
-            () => ({
-              roleName: drawer.state.data.roleName,
-              roleKey: drawer.state.data.roleKey,
-              status: drawer.state.data.status === '0' ? '正常' : '停用',
-            })
-          "
         />
       </el-form-item>
     </el-form>
@@ -105,6 +98,7 @@
 </template>
 
 <script setup>
+import { useAIContextHost } from '@/ai-context/host';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
 import { readRemark } from '@/components/ui/Remark/contract';
@@ -376,6 +370,21 @@ watch(
     if (visible) remarkSession.value++;
   }
 );
+
+const aiScope = useAIContextHost('role', {
+  instanceKey: () => remarkSession.value,
+  revisionSource: () => [drawer.state.data, menuOptions.value],
+  bindings: {
+    roleName: { value: () => drawer.state.data.roleName },
+    roleKey: { value: () => drawer.state.data.roleKey },
+    menuNames: {
+      value: () => menuRef.value?.getCheckedNodes(false, false).map((item) => item.label) ?? [],
+    },
+    status: {
+      value: () => (drawer.state.data.status === '0' ? '正常' : '停用'),
+    },
+  },
+});
 </script>
 
 <style scoped lang="less">

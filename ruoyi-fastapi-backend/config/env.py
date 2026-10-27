@@ -58,7 +58,10 @@ class TextFieldAISettings(BaseSettings):
         return bool(
             self.ai_enabled
             and base.scheme in {'http', 'https'} and base.hostname
-            and not any((base.username, base.password, base.query, base.fragment))
+            and base.username is None
+            and base.password is None
+            and '?' not in self.ai_base_url
+            and '#' not in self.ai_base_url
             and not any(char.isspace() or ord(char) < 32 for char in self.ai_base_url)
             and self.ai_model.strip() and len(self.ai_model) <= 128
             and (self.ai_auth_mode == 'none' or self.ai_api_key.get_secret_value().strip())

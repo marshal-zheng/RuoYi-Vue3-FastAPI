@@ -1,10 +1,10 @@
-# ruff: noqa: PLC0415 -- Validate original token boundaries without an eager domain-package cycle.
 """Closed public field-AI contracts. Error messages never contain input values."""
 
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from common.ai_context import AIErrorCode, document_tokens
 from module_admin.entity.vo.remark_vo import RemarkValue
 
 Identifier = Annotated[str, Field(pattern=r'^[a-zA-Z][a-zA-Z0-9]{0,63}$')]
@@ -13,18 +13,8 @@ UUIDText = Annotated[
 ]
 Revision = Annotated[str, Field(pattern=r'^[a-f0-9]{64}$')]
 PersonalKind = Literal['phone', 'email', 'id', 'address', 'other']
-AIErrorCode = Literal[
-    'context-rejected',
-    'policy-rejected',
-    'permission-denied',
-    'quota-exceeded',
-    'provider-unavailable',
-    'timeout',
-    'invalid-output',
-    'output-limit',
-    'incomplete-output',
-]
-ValueText = Annotated[str, Field(min_length=1, max_length=6000)]
+
+ValueText = Annotated[str, Field(min_length=1, max_length=300)]
 
 
 class Exact(BaseModel):
@@ -68,8 +58,6 @@ class TextFieldAIRequest(Exact):
     @classmethod
     def original_document_tokens(cls, value):
         # Check original node boundaries before the codec can merge adjacent text nodes.
-        from modules.system.application.services.ai_context_tokens import document_tokens
-
         if isinstance(value, dict):
             for key in ('document', 'selection', 'candidate'):
                 document_tokens(value.get(key))

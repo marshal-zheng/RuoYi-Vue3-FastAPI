@@ -7,14 +7,13 @@ import importlib.util
 import json
 from contextlib import aclosing
 
+from common.ai_context import PREFIXES, TOKEN, AIError, document_tokens, text_tokens
 from common.remark_document_v1 import LIMITS
 from config.env import TextFieldAISettings
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.text_field_ai_vo import Notice, ResultMeta, TextFieldAIPolicy, TextFieldAIStatus
 from modules.system.application.prompts.text_field_v1 import PROMPT_VERSION, SYSTEM_PROMPT
 from modules.system.application.services.ai_context_manifest import load_manifest
-from modules.system.application.services.ai_context_tokens import PREFIXES, TOKEN, document_tokens, text_tokens
-from modules.system.application.services.ai_providers.base import AIError
 from modules.system.application.services.text_field_ai_document import normalize_output, preview_text
 
 
@@ -79,7 +78,7 @@ class TextFieldAIService:
                 raise AIError('context-rejected')
             values = item.value if isinstance(item.value, list) else [item.value]
             for value in values:
-                if not value.strip() or value != value.strip():
+                if not value.strip():
                     raise AIError('context-rejected')
                 chars += len(value)
                 tokens.update(text_tokens(value))
@@ -112,7 +111,13 @@ class TextFieldAIService:
 
     async def produce(self, payload, allowed_tokens, emit):
         content, preview, size, stopped = '', '', 0, False
-        data = payload.model_dump(mode='json')
+        scope = self.canonical_scope(payload)
+        data = payload.model_dump(
+            mode='json', exclude={'version', 'requestId', 'captureId', 'manifestRevision', 'policyRevision'}
+        )
+        data['purposeLabel'] = scope.purposes[payload.purpose].label
+        # Missing-information notices need canonical IDs, without reading or sending their values.
+        data['noticeContextIds'] = [item.id for item in scope.items]
         messages = [
             {'role': 'system', 'content': SYSTEM_PROMPT},
             {'role': 'user', 'content': json.dumps(data, ensure_ascii=False, separators=(',', ':'))},

@@ -11,14 +11,14 @@ from uuid import uuid4
 
 import httpx2
 import pytest
+from openai import AsyncOpenAI
 from opentelemetry.instrumentation.utils import is_instrumentation_enabled
 
+from common.ai_context import AIError, document_tokens
 from common.remark_document_v1 import plain_to_remark, remark_literal_text
 from config.env import TextFieldAISettings, get_config
 from exceptions.exception import PermissionException
 from module_admin.entity.vo.text_field_ai_vo import TextFieldAIRequest
-from modules.system.application.services.ai_context_tokens import document_tokens
-from modules.system.application.services.ai_providers.base import AIError
 from modules.system.application.services.ai_providers.openai_compatible import OpenAICompatibleProvider
 from modules.system.application.services.text_field_ai_service import TextFieldAIService
 
@@ -156,6 +156,9 @@ async def test_sdk_uses_only_explicit_lan_endpoint_and_model_without_openai_auth
     assert 'authorization' not in request.headers
     assert SENTINEL not in str(request.headers)
     assert json.loads(request.content)['model'] == 'deployment-custom-model'
+    data = json.loads(json.loads(request.content)['messages'][1]['content'])
+    assert data['purposeLabel'] == '岗位备注' and data['noticeContextIds'] == ['postName', 'postCode', 'status']
+    assert not {'version', 'requestId', 'captureId', 'manifestRevision', 'policyRevision'} & data.keys()
 
 
 @pytest.mark.parametrize(
@@ -167,6 +170,9 @@ async def test_sdk_uses_only_explicit_lan_endpoint_and_model_without_openai_auth
         settings(ai_model=''),
         settings(ai_auth_mode='bearer'),
         settings(ai_base_url='https://user:password@example.test/v1'),
+        settings(ai_base_url='http://@127.0.0.1/v1'),
+        settings(ai_base_url='http://127.0.0.1/v1?'),
+        settings(ai_base_url='http://127.0.0.1/v1#'),
         settings(ai_context_personal_policy='plain'),
     ],
 )
@@ -413,3 +419,83 @@ async def test_masked_personal_result_keeps_only_supplied_tokens_and_suppresses_
 
     await service.produce(payload, tokens, emit)
     assert remark_literal_text(events[-1]['document']) == '联系 {{PHONE_1}}' and stream.closed
+
+
+async def test_product_adapter_real_loopback_http_without_dns_or_any_public_connection(monkeypatch, caplog):
+    caplog.set_level('DEBUG')
+    received, connected, clients = [], [], []
+    finished = asyncio.Event()
+
+    async def handle(reader, writer):
+        try:
+            head = await reader.readuntil(b'\r\n\r\n')
+            length = next(
+                int(line.split(b':', 1)[1])
+                for line in head.split(b'\r\n')
+                if line.lower().startswith(b'content-length:')
+            )
+            payload = await reader.readexactly(length)
+            received.append((head, json.loads(payload)))
+            content = chunk(envelope(text_root())) + chunk(finish='stop') + b'data: [DONE]\n\n'
+            writer.write(
+                b'HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\nX-Request-Id: '
+                + SENTINEL.encode()
+                + b'\r\nConnection: close\r\nContent-Length: '
+                + str(len(content)).encode()
+                + b'\r\n\r\n'
+                + content
+            )
+            await writer.drain()
+        finally:
+            writer.close()
+            await writer.wait_closed()
+            finished.set()
+
+    server = await asyncio.start_server(handle, '127.0.0.1', 0)
+    port = server.sockets[0].getsockname()[1]
+    connect = socket.socket.connect
+
+    def only_loopback(sock, address):
+        assert address[0] == '127.0.0.1' and address[1] == port, 'unexpected provider destination'
+        connected.append(address)
+        return connect(sock, address)
+
+    def no_dns(*_args, **_kwargs):
+        pytest.fail('provider DNS was attempted')
+
+    monkeypatch.setattr(socket.socket, 'connect', only_loopback)
+    monkeypatch.setattr(socket, 'getaddrinfo', no_dns)
+    monkeypatch.setenv('OPENAI_API_KEY', SENTINEL)
+    monkeypatch.setenv('OPENAI_BASE_URL', 'https://forbidden.invalid/v1')
+
+    def client_factory(**kwargs):
+        client = AsyncOpenAI(**kwargs)
+        clients.append(client)
+        return client
+
+    config = settings(ai_base_url=f'http://127.0.0.1:{port}/v1')
+    service = TextFieldAIService(
+        config, provider_factory=lambda config: OpenAICompatibleProvider(config, client_factory=client_factory)
+    )
+    try:
+        events = await generate(service)
+        await asyncio.wait_for(finished.wait(), timeout=2)
+        assert events[-1]['type'] == 'result'
+        assert len(received) == len(connected) == len(clients) == 1
+        assert all(client.is_closed() for client in clients)
+        head, payload = received[0]
+        assert head.startswith(b'POST /v1/chat/completions HTTP/1.1')
+        assert b'authorization:' not in head.lower() and SENTINEL.encode() not in head
+        assert payload['model'] == 'deployment-custom-model'
+        assert SENTINEL not in caplog.text
+    finally:
+        server.close()
+        await server.wait_closed()
+
+
+async def test_context_values_preserve_surrounding_whitespace_at_the_provider_boundary():
+    service, _, requests, _ = provider_service()
+    value = ' 设备维护 \n'
+    await generate(service, context=[{'id': 'postName', 'label': '岗位名称', 'sensitivity': 'public', 'value': value}])
+    data = json.loads(json.loads(requests[0].content)['messages'][1]['content'])
+    assert data['context'][0]['value'] == value

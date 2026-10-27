@@ -1236,13 +1236,13 @@
           "value": {
             "anyOf": [
               {
-                "maxLength": 6000,
+                "maxLength": 300,
                 "minLength": 1,
                 "type": "string"
               },
               {
                 "items": {
-                  "maxLength": 6000,
+                  "maxLength": 300,
                   "minLength": 1,
                   "type": "string"
                 },
@@ -1286,13 +1286,13 @@
           "value": {
             "anyOf": [
               {
-                "maxLength": 6000,
+                "maxLength": 300,
                 "minLength": 1,
                 "type": "string"
               },
               {
                 "items": {
-                  "maxLength": 6000,
+                  "maxLength": 300,
                   "minLength": 1,
                   "type": "string"
                 },

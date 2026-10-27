@@ -1,13 +1,32 @@
 """Deployment-owned OpenAI-compatible protocol. This module is imported only after admission."""
 
+import logging
 from collections.abc import AsyncIterator
 
 import httpx2
 from openai import APIError, APITimeoutError, AsyncOpenAI, DefaultAsyncHttpxClient, omit
-from opentelemetry.instrumentation.utils import suppress_instrumentation
+from opentelemetry.instrumentation.utils import is_instrumentation_enabled, suppress_instrumentation
 
+from common.ai_context import AIError
 from config.env import TextFieldAISettings
-from modules.system.application.services.ai_providers.base import AIError, ProviderChunk
+from modules.system.application.services.ai_providers.base import ProviderChunk
+
+
+class _PrivateTransportLogs(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return is_instrumentation_enabled()
+
+
+_PRIVATE_LOG_FILTER = _PrivateTransportLogs()
+
+
+def _protect_transport_logs():
+    # Logger filters run before any handler (including application log bridges).
+    # SDK/HTTP transports are already imported; suppression is context-local, so
+    # concurrent ordinary HTTP requests keep their normal diagnostics.
+    for name in tuple(logging.Logger.manager.loggerDict):
+        if name.split('.')[0] in {'openai', 'httpx2', 'httpcore2'}:
+            logging.getLogger(name).addFilter(_PRIVATE_LOG_FILTER)
 
 
 class OpenAICompatibleProvider:
@@ -27,6 +46,7 @@ class OpenAICompatibleProvider:
             async with DefaultAsyncHttpxClient(
                 timeout=timeout, follow_redirects=False, trust_env=False, transport=self.transport
             ) as http:
+                _protect_transport_logs()
                 try:
                     async with self.client_factory(
                         api_key=settings.ai_api_key.get_secret_value()

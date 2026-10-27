@@ -5,6 +5,7 @@
     :model-value="editorValue"
     :disabled="disabled"
     :ai="ai"
+    ai-purpose="remark"
     :content-limits="REMARK_LIMITS"
     @update:model-value="update"
     @focus="emit('focus', $event)"
@@ -18,27 +19,25 @@ import { useFormDisabled, useFormItem } from 'element-plus';
 import { ZxTextEditorField, type ZxTextEditorDocument } from '@zxio/text-editor';
 import '@zxio/text-editor/style.css';
 import { REMARK_LIMITS, type RemarkValue } from './contract';
-import { createRemarkAIAdapter, type RemarkAIContextSource, type RemarkAIScene } from './ai';
+import { createRemarkAIAdapter } from './ai';
 defineOptions({ inheritAttrs: false });
 const props = withDefaults(
   defineProps<{
     modelValue: RemarkValue;
     disabled?: boolean;
-    scene?: RemarkAIScene;
-    aiContext?: RemarkAIContextSource;
   }>(),
   { disabled: undefined }
 );
 const disabled = useFormDisabled();
-// Read context when a request starts. Reactive SchemaForm values stay owned by its session.
-const ai = computed(() =>
-  props.scene ? createRemarkAIAdapter(props.scene, () => props.aiContext?.() ?? {}) : undefined
-);
+const ai = createRemarkAIAdapter();
 // The generated schema permits optional/null inline arrays; readRemark admits only canonical library documents.
 const editorValue = computed(() => props.modelValue as unknown as ZxTextEditorDocument | null);
 type RemarkEditState = {
   pending?: boolean;
-  blocking?: readonly { severity: 'error' | 'warning' | 'info'; message: string }[];
+  blocking?: readonly {
+    severity: 'error' | 'warning' | 'info';
+    message: string;
+  }[];
 };
 const emit = defineEmits<{
   'update:modelValue': [RemarkValue];

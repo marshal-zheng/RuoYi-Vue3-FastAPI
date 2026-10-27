@@ -4,8 +4,8 @@ import json
 
 import pytest
 
+from common.ai_context import AIError
 from common.remark_document_v1 import remark_literal_text, validate_remark
-from modules.system.application.services.ai_providers.base import AIError
 from modules.system.application.services.text_field_ai_document import normalize_output, preview_text
 from tests.unit.services.test_text_field_ai import text_root
 

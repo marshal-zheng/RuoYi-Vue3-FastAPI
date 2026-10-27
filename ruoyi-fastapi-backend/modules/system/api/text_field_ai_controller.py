@@ -11,6 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.routing import APIRoute
 from starlette.exceptions import HTTPException
 
+from common.ai_context import MESSAGES, TOKEN, AIError
 from config.env import TextFieldAIConfig
 from config.error_codes import ErrorCode
 from exceptions.exception import AppException, PermissionException
@@ -20,8 +21,6 @@ from module_admin.entity.vo.text_field_ai_vo import (
     TextFieldAIStatus,
 )
 from modules.identity.ports import get_current_user
-from modules.system.application.services.ai_context_tokens import TOKEN
-from modules.system.application.services.ai_providers.base import MESSAGES, AIError
 from modules.system.application.services.text_field_ai_service import TextFieldAIService
 from resilience.bulkhead import BulkheadRejectedError
 from resilience.models import BulkheadConfig

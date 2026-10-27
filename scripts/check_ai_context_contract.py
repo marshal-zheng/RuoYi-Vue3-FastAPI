@@ -1,4 +1,4 @@
-"""Validate the local draft schemas and shared synthetic fixtures without network access."""
+"""Validate the local frozen schemas and shared synthetic fixtures without network access."""
 
 import json
 import re
@@ -43,9 +43,9 @@ def check():
         for frame in case["events"]:
             validators["events"].validate(frame)
         checked += 1
-    # Sequence/HTTP expectations are consumed by the application adapters later;
+    # Sequence/HTTP expectations are consumed by the actual application adapters;
     # schema validity does not establish terminal or authentication semantics.
-    assert read(ROOT / "draft.json")["frozen"] is False
+    assert read(ROOT / "contract.json")["frozen"] is True
     print(
         json.dumps(
             {
