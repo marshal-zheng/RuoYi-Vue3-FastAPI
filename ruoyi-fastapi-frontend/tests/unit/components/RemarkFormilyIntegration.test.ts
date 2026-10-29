@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
-import { h, markRaw } from 'vue';
-import { ElForm } from 'element-plus';
+import { defineComponent, h, markRaw, reactive, ref } from 'vue';
+import { ElForm, ElFormItem, type FormInstance } from 'element-plus';
 import {
   ZxSchemaForm,
   type BusinessContext,
@@ -12,8 +12,10 @@ import { ZxTextEditor } from '@zxio/text-editor';
 import { createRemarkFieldTestHost } from '../../helpers/remark-field-public';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import { readRemark, type RemarkValue } from '@/components/ui/Remark/contract';
+import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
 
 type Values = { remark: RemarkValue };
+const OVER_LIMIT = '备注正文最多 5,000 个字符，当前输入已保留';
 let host: ReturnType<typeof createRemarkFieldTestHost>;
 beforeEach(() => {
   host = createRemarkFieldTestHost('remark-formily-probe');
@@ -125,6 +127,9 @@ describe('real Formily and RemarkEditor public integration', () => {
         .vm.$.exposed!.editor.value.commands.insertContent('输入法😀');
       await flushPromises();
       expect(form.fieldPending).toBe(true);
+      // The schema field presents the editor's reason in its one feedback row.
+      expect(wrapper.get('.zx-schema-field__messages').text()).toBe('请完成输入法输入后再提交');
+      expect(wrapper.find('.zx-text-editor-field__message').exists()).toBe(false);
       expect(await form.submit()).toBe(false);
       expect(save).not.toHaveBeenCalled();
       await field.trigger('compositionend');
@@ -177,6 +182,9 @@ describe('real Formily and RemarkEditor public integration', () => {
       expect(wrapper.findComponent(RemarkEditor).vm.$.exposed!.validate()).toBe(false);
       expect(await form.submit()).toBe(false);
       expect(save).not.toHaveBeenCalled();
+      // The echoed value keeps the reason that names the limit, shown once.
+      expect(wrapper.get('.zx-schema-field__messages').text()).toBe(OVER_LIMIT);
+      expect(wrapper.text().match(/备注正文最多/g)).toHaveLength(1);
       const field = context().form.query('remark').take()!;
       field.visible = false;
       await flushPromises();
@@ -188,6 +196,40 @@ describe('real Formily and RemarkEditor public integration', () => {
       expect(wrapper.findComponent(RemarkEditor).vm.$.exposed!.validate()).toBe(false);
       expect(await form.submit()).toBe(false);
       expect(save).not.toHaveBeenCalled();
+    } finally {
+      wrapper.unmount();
+    }
+  });
+  it('shows the editor reason once in a native form item', async () => {
+    const model = reactive<Values>({ remark: null });
+    const form = ref<FormInstance>();
+    const nativeForm = defineComponent({
+      setup() {
+        const { remarkRef, remarkRule } = useRemarkField();
+        return () =>
+          h(ElForm, { ref: form, model, rules: { remark: [remarkRule] } }, () =>
+            h(ElFormItem, { prop: 'remark' }, () =>
+              h(RemarkEditor, {
+                ref: remarkRef,
+                modelValue: model.remark,
+                'onUpdate:modelValue': (value: RemarkValue) => {
+                  model.remark = value;
+                },
+              })
+            )
+          );
+      },
+    });
+    const wrapper = mount(nativeForm, { attachTo: document.body, global: host.global });
+    try {
+      await flushPromises();
+      const editor = wrapper.findComponent(ZxTextEditor).vm.$.exposed!.editor.value;
+      editor.view.dispatch(editor.state.tr.insertText('文'.repeat(5001)));
+      await flushPromises();
+      await expect(form.value!.validate()).rejects.toBeDefined();
+      await vi.waitFor(() => expect(wrapper.find('.el-form-item__error').exists()).toBe(true));
+      expect(wrapper.get('.el-form-item__error').text()).toBe(OVER_LIMIT);
+      expect(wrapper.text().match(/备注正文最多/g)).toHaveLength(1);
     } finally {
       wrapper.unmount();
     }

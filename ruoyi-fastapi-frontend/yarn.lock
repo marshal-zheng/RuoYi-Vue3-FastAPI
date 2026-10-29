@@ -5173,9 +5173,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0-remark-a.20261022.1
-  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz#./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz::hash=74569d&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz#./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz::hash=c3aa76&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@formily/core": 2.3.7
     "@formily/reactive": 2.3.7
@@ -5193,7 +5193,7 @@ __metadata:
       optional: true
     "@formily/vue":
       optional: true
-  checksum: 10c0/e3b385506e428de86a7365cb728516d73ffcc7421e66ce94beb154efd3c0a5fefb7dc335c1213786705fe8c4bcad64500705d4dd9555da017a284939a96f9d86
+  checksum: 10c0/7b7ad64d80d6ea72d2e9847697f427fd001a7c1331ecdec7bb25be28b57ac5995389800347de7f08f882dc7c23e96147fc3de77ad6a0e7ee85c8bcd255bfc6c7
   languageName: node
   linkType: hard
 
@@ -5212,9 +5212,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-aicontext.20261027.2.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-feedback.20261029.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0-remark-ai.20261023.2
-  resolution: "@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-aicontext.20261027.2.tgz#./vendor/zxio-text-editor-1.0.0-aicontext.20261027.2.tgz::hash=419520&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-feedback.20261029.tgz#./vendor/zxio-text-editor-1.0.0-feedback.20261029.tgz::hash=99f457&locator=vfadmin%40workspace%3A."
   dependencies:
     "@floating-ui/dom": "npm:^1.7.6"
     "@floating-ui/vue": "npm:^1.1.11"
@@ -5270,7 +5270,7 @@ __metadata:
   peerDependencies:
     "@zxio/zxui": ^3.0.0-next.0
     vue: ^3.5.0
-  checksum: 10c0/2cc02d0fb595f63967bdcf88414fb5308c40355d5b8f567a940f92152eb8958d945ef7625b3b1d0fc53bc5d39e459b3f719902d62a72ad8bea316b7402a432b2
+  checksum: 10c0/49915e9a7ec82ea1da5070169b8a9c3a41c5570111fc323d645bf85ba0177d725b95907034fa57a60ee9c18b72bb7be77fdd5bacc29106832b030d52de86634d
   languageName: node
   linkType: hard
 
@@ -15411,8 +15411,8 @@ __metadata:
     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz"
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz"
-    "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-aicontext.20261027.2.tgz"
+    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz"
+    "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-feedback.20261029.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz"
     "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-dashboard-theme.20261026.tgz"

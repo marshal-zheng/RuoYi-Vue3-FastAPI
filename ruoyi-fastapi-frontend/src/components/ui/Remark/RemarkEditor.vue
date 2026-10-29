@@ -48,6 +48,8 @@ const emit = defineEmits<{
 const { formItem } = useFormItem();
 const field = ref<InstanceType<typeof ZxTextEditorField>>();
 const editPending = ref(false);
+// The editor reports why it refuses submission; its form item shows the reason.
+const blockingReason = ref<string>();
 function validateInteraction(trigger: 'change' | 'blur') {
   // Pending candidate review still blocks submit through validate(), but is not an invalid edit.
   if (!editPending.value) void formItem?.validate(trigger).catch(() => undefined);
@@ -55,6 +57,7 @@ function validateInteraction(trigger: 'change' | 'blur') {
 function editState(state: RemarkEditState) {
   const wasPending = editPending.value;
   editPending.value = !!state.pending;
+  blockingReason.value = state.blocking?.[0]?.message;
   emit('edit-state', state);
   // Discarding a candidate does not emit a new value. Revalidate the settled original to clear
   // any pending-state error raised by an explicit submit, after the parent v-model has updated.
@@ -72,6 +75,7 @@ function blur(event: FocusEvent) {
 defineExpose({
   focus: () => field.value?.focus(),
   validate: () => field.value?.validate() ?? false,
+  blockingReason: () => blockingReason.value,
   captureEdit: () => field.value?.captureEdit() ?? null,
 });
 </script>

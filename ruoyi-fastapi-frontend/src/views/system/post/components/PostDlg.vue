@@ -68,8 +68,6 @@ const remarkBindings = {
     component: markRaw(RemarkEditor),
     composite: true,
     group: false,
-    // ZxTextEditorField shows its own blocking in every form; the field shows the rest.
-    presentsBlocking: true,
   },
 };
 const emit = defineEmits<{ (e: 'confirm'): void }>();
