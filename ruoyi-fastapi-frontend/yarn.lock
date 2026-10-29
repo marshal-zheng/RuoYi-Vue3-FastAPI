@@ -5173,9 +5173,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-declarations.20261029.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0-remark-a.20261022.1
-  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-declarations.20261029.tgz#./vendor/zxio-schema-form-0.1.0-declarations.20261029.tgz::hash=9eb1ae&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz#./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz::hash=74569d&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@formily/core": 2.3.7
     "@formily/reactive": 2.3.7
@@ -5193,7 +5193,7 @@ __metadata:
       optional: true
     "@formily/vue":
       optional: true
-  checksum: 10c0/217f6f0f74068a0dd4c44dda49d14df4991691d579da0d57fa5aea074ec580adc7416746a3691bea2e67ec8adadbf79667cfd2b672adb36ed03534fb19b3dc47
+  checksum: 10c0/e3b385506e428de86a7365cb728516d73ffcc7421e66ce94beb154efd3c0a5fefb7dc335c1213786705fe8c4bcad64500705d4dd9555da017a284939a96f9d86
   languageName: node
   linkType: hard
 
@@ -15411,7 +15411,7 @@ __metadata:
     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz"
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-declarations.20261029.tgz"
+    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.tgz"
     "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-aicontext.20261027.2.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz"

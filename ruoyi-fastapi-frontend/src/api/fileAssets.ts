@@ -27,7 +27,7 @@ export const assetIdOfContentUrl = (url: string | null | undefined): string | un
 export const assetDownloadUrl = (assetId: string): string =>
   `${assetContentUrl(assetId)}?download=true`;
 
-type UploadConfig = Pick<ExtendedAxiosRequestConfig, 'signal' | 'onUploadProgress'>;
+type UploadConfig = Pick<ExtendedAxiosRequestConfig, 'signal' | 'onUploadProgress' | 'feedback'>;
 
 /** Upload one file as a READY draft; saving the business form binds it in the business transaction. */
 export function uploadFileAsset(form: FormData, config: UploadConfig, options?: RequestOptions) {
@@ -40,7 +40,8 @@ export function uploadFileAsset(form: FormData, config: UploadConfig, options?: 
       // Uploads are bounded by the server; no client-side request timeout.
       timeout: 0,
       silentSuccess: true,
-      feedback: { mode: 'auto' },
+      // A caller that presents the failure in place (a form field) passes silent.
+      feedback: config.feedback ?? { mode: 'auto' },
     },
     options
   );

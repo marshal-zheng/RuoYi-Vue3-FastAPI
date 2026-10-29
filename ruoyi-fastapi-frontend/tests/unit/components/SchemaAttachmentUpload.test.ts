@@ -1,10 +1,15 @@
 import { effectScope, nextTick } from 'vue';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { FieldUploadError } from '@zxio/schema-form/fields';
 import { useSchemaAttachmentUpload } from '@/composables/useSchemaAttachmentUpload';
 import { setQuerySession } from '@/queries/context';
 
-const { uploadFileAsset } = vi.hoisted(() => ({ uploadFileAsset: vi.fn() }));
+const { uploadFileAsset, presentRequestError } = vi.hoisted(() => ({
+  uploadFileAsset: vi.fn(),
+  presentRequestError: vi.fn(),
+}));
 vi.mock('@/api/fileAssets', () => ({ uploadFileAsset }));
+vi.mock('@/utils/http', () => ({ presentRequestError }));
 
 const asset = {
   assetId: 'asset-1',
@@ -14,8 +19,21 @@ const asset = {
   size: 12,
 };
 
+const failure = (status: number, errorCode?: number) =>
+  Object.assign(new Error('请求失败'), {
+    problem: {
+      type: 'about:blank',
+      title: '请求失败',
+      status,
+      detail: '文件类型不支持：仅允许 PDF 与图片',
+      instance: '',
+      errorCode,
+    },
+  });
+
 beforeEach(() => {
   uploadFileAsset.mockReset();
+  presentRequestError.mockReset();
   setQuerySession('actor:1', [], ['system:notice:edit']);
 });
 
@@ -82,6 +100,42 @@ describe('schema attachment service adapter', () => {
       scope.stop();
     }
   );
+
+  it('shows a business rejection as the field reason without a global message', async () => {
+    const error = failure(415, 48004);
+    uploadFileAsset.mockRejectedValue(error);
+    const { scope, upload, file } = setup();
+    try {
+      const rejection = upload(file, { signal: new AbortController().signal });
+      await expect(rejection).rejects.toBeInstanceOf(FieldUploadError);
+      await expect(rejection).rejects.toMatchObject({
+        message: '文件类型不支持：仅允许 PDF 与图片',
+        cause: error,
+      });
+      expect(uploadFileAsset.mock.calls[0][1].feedback).toEqual({ mode: 'silent' });
+      expect(presentRequestError).not.toHaveBeenCalled();
+    } finally {
+      scope.stop();
+    }
+  });
+
+  it.each([
+    ['a server failure', failure(503, 50006)],
+    ['a rejection without a business code', failure(422)],
+    ['a transport failure', new TypeError('Failed to fetch')],
+  ])('keeps %s generic in the field and presents it globally', async (_, error) => {
+    uploadFileAsset.mockRejectedValue(error);
+    const { scope, upload, file } = setup();
+    try {
+      await expect(upload(file, { signal: new AbortController().signal })).rejects.toBe(error);
+      expect(presentRequestError).toHaveBeenCalledWith(error, {
+        silentError: false,
+        feedback: { mode: 'auto' },
+      });
+    } finally {
+      scope.stop();
+    }
+  });
 
   it('does not dispatch an already cancelled selection', async () => {
     const { scope, upload, file } = setup();

@@ -3,12 +3,15 @@ import type { UploadFile, UploadProgressEvent, UploadRequestOptions } from 'elem
 import { AbortError } from '@zxio/http';
 import { uploadFileAsset, type AssetDescriptor } from '@/api/fileAssets';
 import { queryScope, requireQueryScope, scopeRequestOptions } from '@/queries/context';
+import type { FeedbackOptions } from '@/utils/feedback/types';
 
 export interface UploadContext {
   /** Server-registered upload purpose, e.g. `notice.image`. */
   purpose: () => string;
   /** Business id when editing an existing owner; omitted while creating it. */
   ownerId?: () => string | number | null | undefined;
+  /** Failure presentation; defaults to the global automatic feedback. */
+  feedback?: FeedbackOptions;
 }
 
 /**
@@ -50,6 +53,7 @@ export function useAuthenticatedUpload(context: UploadContext) {
         data,
         {
           signal: controller.signal,
+          feedback: context.feedback,
           onUploadProgress(event) {
             if (!onProgress || !isCurrent() || controller.signal.aborted) return;
             const total = event.total || 0;
