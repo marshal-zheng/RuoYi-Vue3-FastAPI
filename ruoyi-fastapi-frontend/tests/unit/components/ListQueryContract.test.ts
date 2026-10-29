@@ -63,7 +63,7 @@ describe('GridList public query contract', () => {
     'updates query.$field before refreshing a filter',
     async ({ component, field, value }) => {
       const updateState = vi.fn<ZxGridListInstance['updateState']>();
-      const refresh = vi.fn<ZxGridListInstance['refresh']>().mockResolvedValue();
+      const refresh = vi.fn<ZxGridListInstance['refresh']>();
       const wrapper = mount(component, {
         global: globalOptions(updateState, refresh),
       });

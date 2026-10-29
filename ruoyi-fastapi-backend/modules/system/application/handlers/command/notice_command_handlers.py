@@ -29,7 +29,7 @@ class AddNoticeCommandHandler(ICommandHandler[AddNoticeCommand, dict[str, str]])
 
     async def handle(self, request: AddNoticeCommand) -> CommandResult[dict[str, str]]:
         request.notice.validate_fields()
-        create_result = await self._notice_service.add_notice_services(request.notice)
+        create_result = await self._notice_service.add_notice_services(request.notice, actor=request.actor)
         event = build_system_event(
             event_type='system.notice.created',
             aggregate_type='notice',
@@ -57,7 +57,7 @@ class EditNoticeCommandHandler(ICommandHandler[EditNoticeCommand, dict[str, str]
 
     async def handle(self, request: EditNoticeCommand) -> CommandResult[dict[str, str]]:
         request.notice.validate_fields()
-        update_result = await self._notice_service.edit_notice_services(request.notice)
+        update_result = await self._notice_service.edit_notice_services(request.notice, actor=request.actor)
         event = build_system_event(
             event_type='system.notice.updated',
             aggregate_type='notice',

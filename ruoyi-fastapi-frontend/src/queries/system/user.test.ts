@@ -139,11 +139,13 @@ describe('public user resource', () => {
           fail = reject;
         })
     );
-    vi.mocked(api.updateUser).mockResolvedValue(page('saved').items[0]);
+    vi.mocked(api.updateUser).mockResolvedValue({
+      data: page('saved').items[0],
+    });
     const result = await user.userCommands.updateUser(
       user.captureUserCommand({ userId: 7, nickName: 'saved' })
     );
-    expect(result.userName).toBe('saved');
+    expect(result.data?.userName).toBe('saved');
     await flushPromises();
     expect(query.isFetching.value).toBe(true);
     expect(query.data.value?.items[0].userName).toBe('before');

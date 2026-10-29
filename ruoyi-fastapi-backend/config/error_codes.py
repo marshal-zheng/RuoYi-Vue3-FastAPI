@@ -75,6 +75,15 @@ class ErrorCode(IntEnum):
     DATA_NOT_FOUND = 47003        # 数据不存在
     DATA_ALREADY_EXISTS = 47004   # 数据已存在
     OPERATION_NOT_ALLOWED = 47005  # 操作不允许
+
+    # ==================== 业务错误 - 文件资产模块 (48xxx) ====================
+    FILE_ASSET_NOT_FOUND = 48001  # 资产不存在或不可见
+    FILE_ASSET_CONFLICT = 48002  # 已绑定、归属冲突、状态竞争或已过期
+    FILE_ASSET_TOO_LARGE = 48003  # 字节或解压资源超限
+    FILE_ASSET_UNSUPPORTED_TYPE = 48004  # 类型不允许或内容类型冲突
+    FILE_ASSET_INVALID = 48005  # 文件内容、名称或用途上下文非法
+    FILE_ASSET_QUOTA_EXCEEDED = 48006  # 未绑定草稿数量或字节超出配额
+    FILE_ASSET_RECEIVE_TIMEOUT = 48007  # 上传请求接收超时
     
     # ==================== 系统错误 (5xxxx) ====================
     SYSTEM_ERROR = 50000          # 系统未知错误
@@ -83,6 +92,7 @@ class ErrorCode(IntEnum):
     FILE_UPLOAD_ERROR = 50003     # 文件上传失败
     FILE_DOWNLOAD_ERROR = 50004   # 文件下载失败
     CACHE_ERROR = 50005           # 缓存异常
+    FILE_ASSETS_UNAVAILABLE = 50006  # 文件能力不可用（存储、归属核对或容量）
 
 
 class ErrorType(str):
@@ -530,6 +540,70 @@ ERROR_CODE_MAP: Dict[int, ErrorCodeInfo] = {
         http_status=500,
         error_type=ErrorType.SYSTEM,
         error_code_name="CACHE_ERROR"
+    ),
+    ErrorCode.FILE_ASSET_NOT_FOUND: ErrorCodeInfo(
+        code=48001,
+        title="文件不存在",
+        detail="文件不存在或无权访问",
+        http_status=404,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="FILE_ASSET_NOT_FOUND"
+    ),
+    ErrorCode.FILE_ASSET_CONFLICT: ErrorCodeInfo(
+        code=48002,
+        title="文件状态冲突",
+        detail="文件已被使用、已过期或状态已变化",
+        http_status=409,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="FILE_ASSET_CONFLICT"
+    ),
+    ErrorCode.FILE_ASSET_TOO_LARGE: ErrorCodeInfo(
+        code=48003,
+        title="文件过大",
+        detail="文件大小超出允许范围",
+        http_status=413,
+        error_type=ErrorType.VALIDATION,
+        error_code_name="FILE_ASSET_TOO_LARGE"
+    ),
+    ErrorCode.FILE_ASSET_UNSUPPORTED_TYPE: ErrorCodeInfo(
+        code=48004,
+        title="文件类型不支持",
+        detail="文件类型不在允许范围内",
+        http_status=415,
+        error_type=ErrorType.VALIDATION,
+        error_code_name="FILE_ASSET_UNSUPPORTED_TYPE"
+    ),
+    ErrorCode.FILE_ASSET_INVALID: ErrorCodeInfo(
+        code=48005,
+        title="文件内容不合法",
+        detail="文件内容或上传参数不合法",
+        http_status=422,
+        error_type=ErrorType.VALIDATION,
+        error_code_name="FILE_ASSET_INVALID"
+    ),
+    ErrorCode.FILE_ASSET_QUOTA_EXCEEDED: ErrorCodeInfo(
+        code=48006,
+        title="待保存文件过多",
+        detail="未保存的上传文件超出配额，请先保存或删除",
+        http_status=429,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="FILE_ASSET_QUOTA_EXCEEDED"
+    ),
+    ErrorCode.FILE_ASSET_RECEIVE_TIMEOUT: ErrorCodeInfo(
+        code=48007,
+        title="上传超时",
+        detail="上传接收超时，请重试",
+        http_status=408,
+        error_type=ErrorType.VALIDATION,
+        error_code_name="FILE_ASSET_RECEIVE_TIMEOUT"
+    ),
+    ErrorCode.FILE_ASSETS_UNAVAILABLE: ErrorCodeInfo(
+        code=50006,
+        title="文件服务暂不可用",
+        detail="文件服务暂不可用，请稍后重试",
+        http_status=503,
+        error_type=ErrorType.SYSTEM,
+        error_code_name="FILE_ASSETS_UNAVAILABLE"
     ),
 }
 

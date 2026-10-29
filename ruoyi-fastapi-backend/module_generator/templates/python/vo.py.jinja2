@@ -33,7 +33,7 @@ from pydantic.alias_generators import to_camel
 {% if vo_field_required.has_required or sub_vo_field_required.has_required %}
 from pydantic_validation_decorator import NotBlank
 {% endif %}
-{% if table.sub %}
+{% if table.sub or hasAssets %}
 from typing import List, Optional
 {% else %}
 from typing import Optional
@@ -47,7 +47,7 @@ class {{ BusinessName }}BaseModel(BaseModel):
     {{ functionName }}表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasRemarks %}, populate_by_name=True, extra='forbid'{% endif %})
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasReadModel %}, populate_by_name=True, extra='forbid'{% endif %})
 
     {% for column in columns %}
     {{ column.column_name }}: {% if column.html_type == 'remark' %}RemarkValue{% else %}Optional[{{ column.python_type }}]{% endif %} = Field(default=None, description='{{ column.column_comment }}')
@@ -80,7 +80,7 @@ class {{ BusinessName }}Model({% if table.sub %}{{ BusinessName }}BaseModel{% el
     {{ functionName }}表对应pydantic模型
     """
     {% if not table.sub %}
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasRemarks %}, populate_by_name=True, extra='forbid'{% endif %})
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasReadModel %}, populate_by_name=True, extra='forbid'{% endif %})
 
     {% for column in columns %}
     {{ column.column_name }}: {% if column.html_type == 'remark' %}RemarkValue{% else %}Optional[{{ column.python_type }}]{% endif %} = Field(default=None, description='{{ column.column_comment }}')
@@ -89,6 +89,9 @@ class {{ BusinessName }}Model({% if table.sub %}{{ BusinessName }}BaseModel{% el
     {% if table.sub %}
     {{ subclassName }}_list: Optional[List['{{ subTable.business_name | capitalize }}Model']] = Field(default=None, description='子表列信息')
     {% endif %}
+    {% for field in assetFields %}
+    {{ field.attr }}: Optional[List[str]] = Field(default=None, description='{{ field.label }}（文件资产ID数组；未提供表示不修改，[] 表示清空）')
+    {% endfor %}
 
     {% if not table.sub %}
     {% for column in columns %}
@@ -119,7 +122,7 @@ class {{ subTable.business_name | capitalize }}Model(BaseModel):
     {{ subTable.function_name }}表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasRemarks %}, populate_by_name=True, extra='forbid'{% endif %})
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasReadModel %}, populate_by_name=True, extra='forbid'{% endif %})
 
     {% for sub_column in subTable.columns %}
     {{ sub_column.column_name }}: {% if sub_column.html_type == 'remark' %}RemarkValue{% else %}Optional[{{ sub_column.python_type }}]{% endif %} = Field(default=None, description='{{ sub_column.column_comment}}')
@@ -188,7 +191,7 @@ class Delete{{ BusinessName }}Model(BaseModel):
 
     {{ pk_field }}s: str = Field(description='需要删除的{{ pk_field_comment }}')
 
-{% if hasRemarks %}
+{% if hasReadModel %}
 {% if table.sub %}
 class {{ subTable.business_name | capitalize }}ReadModel({{ subTable.business_name | capitalize }}Model):
     model_config = ConfigDict(extra='ignore')
@@ -207,6 +210,9 @@ class {{ BusinessName }}ReadModel({{ BusinessName }}Model):
     {% if table.sub %}
     {{ subclassName }}_list: Optional[List[{{ subTable.business_name | capitalize }}ReadModel]] = None
     {% endif %}
+    {% for field in assetFields %}
+    {{ field.attr }}: List[str] = Field(default_factory=list, description='{{ field.label }}（绑定的文件资产ID，按保存顺序）')
+    {% endfor %}
     {% for column in remarkColumns %}
     @computed_field(alias='{{ column.python_field }}Text', return_type=str)
     @property

@@ -1,3 +1,4 @@
+{% import 'vue/asset_fields.jinja2' as assets %}
 {% set editor_component = namespace(used=false) %}
 <template>
   <ZxPageLayout class="app-container">
@@ -116,12 +117,6 @@
           <span>{% raw %}{{{% endraw %} parseTime(scope.row.{{ pythonField }}, '{y}-{m}-{d}') {% raw %}}}{% endraw %}</span>
         </template>
       </el-table-column>
-      {% elif column.list and column.html_type == "imageUpload" %}
-      <el-table-column label="{{ comment }}" align="center" prop="{{ pythonField }}" width="100">
-        <template #default="scope">
-          <image-preview :src="scope.row.{{ pythonField }}" :width="50" :height="50"/>
-        </template>
-      </el-table-column>
       {% elif column.list and column.dict_type %}
       <el-table-column label="{{ comment }}" align="center" prop="{{ pythonField }}">
         <template #default="scope">
@@ -136,6 +131,9 @@
       <el-table-column label="{{ comment }}" align="center" prop="{{ pythonField }}" />
       {% endif %}
       {% endfor %}
+{% if hasAssets %}
+{{ assets.list_columns(assetFields, '#default') -}}
+{% endif %}
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['{{ moduleName }}:{{ businessName }}:edit']">修改</el-button>
@@ -168,14 +166,6 @@
       {% if column.html_type == "input" %}
       <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
         <el-input v-model="form.{{ field }}" placeholder="请输入{{ comment }}" />
-      </el-form-item>
-      {% elif column.html_type == "imageUpload" %}
-      <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
-        <image-upload v-model="form.{{ field }}"/>
-      </el-form-item>
-      {% elif column.html_type == "fileUpload" %}
-      <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
-        <file-upload v-model="form.{{ field }}"/>
       </el-form-item>
       {% elif column.html_type == "remark" %}
       <el-form-item data-form-full v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
@@ -252,6 +242,9 @@
       {% endif %}
       {% endfor %}
 
+{% if hasAssets %}
+{{ assets.form_items(assetFields, pkColumn.python_field) -}}
+{% endif %}
       {% if table.sub %}
       <el-divider content-position="center">{{ subTable.functionName }}信息</el-divider>
       <el-row :gutter="10" class="mb8">
@@ -395,6 +388,9 @@ const data = reactive({
     {% endfor %}
   },
   rules: {
+{% if hasAssets %}
+{{ assets.rules(assetFields, '    ') -}}
+{% endif %}
     {% for column in remarkColumns %}
     {{ column.python_field }}: [{validator: (_rule, value, done) => { try { readRemark(value); done(); } catch (error) { done(error); } }, trigger: 'change'}],
     {% endfor %}
@@ -459,6 +455,9 @@ function reset() {
     {{ column.python_field }}: null,
     {% endif %}
     {% endfor %}
+{% if hasAssets %}
+{{ assets.reset_values(assetFields, '    ') -}}
+{% endif %}
   };
   {% if table.sub %}
   {{ subclassName }}List.value = [];
@@ -519,6 +518,9 @@ function handleUpdate(row) {
 
 /** 提交按钮 */
 const { run: submitForm, pending: submitting } = useOperation(async () => {
+  {% if hasAssets %}
+{{ assets.pending_guard(assetFields, 'proxy.$refs', 'proxy.$modal', '  ') -}}
+  {% endif %}
   {% if hasRemarks %}
   if (!validateRemarkEditors()) return;
   {% for column in remarkColumns %}

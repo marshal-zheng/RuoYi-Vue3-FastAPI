@@ -22,7 +22,7 @@ RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua
 COPY . .
 
 # 创建必要的目录
-RUN mkdir -p vf_admin/upload_path vf_admin/download_path vf_admin/gen_path logs
+RUN mkdir -p vf_admin/gen_path logs
 
 # 确保脚本有执行权限
 RUN chmod +x docker-entrypoint.sh

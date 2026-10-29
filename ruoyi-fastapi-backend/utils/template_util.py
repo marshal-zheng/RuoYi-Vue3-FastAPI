@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 from config.constant import GenConstant
 from config.env import DataBaseConfig
 from exceptions.exception import ServiceWarning
+from module_generator.asset_fields import asset_template_context
 from module_generator.entity.vo.gen_vo import GenTableColumnModel, GenTableModel
 from utils.common_util import CamelCaseUtil, SnakeCaseUtil
 from utils.string_util import StringUtil
@@ -104,6 +105,9 @@ class TemplateUtils:
             'column_not_add_show': GenConstant.COLUMNNAME_NOT_ADD_SHOW,
             'column_not_edit_show': GenConstant.COLUMNNAME_NOT_EDIT_SHOW,
         }
+        context.update(asset_template_context(gen_table, context['permissionPrefix']))
+        # Remark text and asset ids are both server read projections published through one read DTO.
+        context['hasReadModel'] = context['hasRemarks'] or context['hasAssets']
 
         # 设置菜单、树形结构、子表的上下文
         cls.set_menu_context(context, gen_table)
@@ -166,12 +170,13 @@ class TemplateUtils:
         context['subclassName'] = sub_class_name.lower()
 
     @classmethod
-    def get_template_list(cls, tpl_category: str, tpl_web_type: str):
+    def get_template_list(cls, tpl_category: str, tpl_web_type: str, has_assets: bool = False):
         """
         获取模板列表
 
         :param tpl_category: 生成模板类型
         :param tpl_web_type: 前端类型
+        :param has_assets: 是否声明了逻辑文件字段（生成归属策略与接入说明）
         :return: 模板列表
         """
         use_web_type = 'vue'
@@ -193,6 +198,8 @@ class TemplateUtils:
         elif tpl_category == GenConstant.TPL_SUB:
             templates.append(f'{use_web_type}/index.vue.jinja2')
             # templates.append('python/sub-domain.python.jinja2')
+        if has_assets:
+            templates += ['python/file_asset_policy.py.jinja2', 'md/file_assets.md.jinja2']
         return templates
 
     @classmethod
@@ -211,7 +218,11 @@ class TemplateUtils:
         vue_path = cls.FRONTEND_PROJECT_PATH
         python_path = f'{cls.BACKEND_PROJECT_PATH}/{package_name.replace(".", "/")}'
 
-        if 'controller.py.jinja2' in template:
+        if 'file_asset_policy.py.jinja2' in template:
+            return f'{python_path}/policy/{business_name}_file_asset_policy.py'
+        elif 'file_assets.md.jinja2' in template:
+            return f'{cls.BACKEND_PROJECT_PATH}/docs/{business_name}_file_assets.md'
+        elif 'controller.py.jinja2' in template:
             return f'{python_path}/controller/{business_name}_controller.py'
         elif 'repository.py.jinja2' in template:
             return f'{python_path}/repository/{business_name}_repository.py'

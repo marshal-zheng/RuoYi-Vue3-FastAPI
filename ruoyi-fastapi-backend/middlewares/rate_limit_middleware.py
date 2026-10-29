@@ -11,7 +11,8 @@ from fastapi import FastAPI
 from starlette.types import ASGIApp, Message, Scope, Send
 
 from config.env import RateLimitConfig, TextFieldAIConfig
-from middlewares.text_field_ai_middleware import AI_GENERATE_PATH, ai_route_path
+from middlewares.text_field_ai_middleware import AI_GENERATE_PATH
+from middlewares.route_path import route_path
 from middlewares.trace_middleware import get_request_id, get_trace_id
 from utils.log_util import logger
 
@@ -31,12 +32,15 @@ class RateLimitASGIMiddleware:
         window_seconds: int = 60,
         exclude_paths: Optional[Sequence[str]] = None,
         auth_paths: Optional[Sequence[str]] = None,
+        upload_paths: Optional[Sequence[str]] = None,
         write_methods: Optional[Sequence[str]] = None,
         trusted_proxies: Optional[Sequence[str]] = None,
         auth_ip_limit: int = 20,
         auth_user_limit: int = 40,
         ai_ip_limit: int = 60,
         ai_user_limit: int = 20,
+        upload_ip_limit: int = 60,
+        upload_user_limit: int = 30,
         write_ip_limit: int = 120,
         write_user_limit: int = 240,
         read_ip_limit: int = 600,
@@ -48,6 +52,7 @@ class RateLimitASGIMiddleware:
         self.window_seconds = max(1, int(window_seconds))
         self.exclude_paths = list(exclude_paths or [])
         self.auth_paths = list(auth_paths or ['/login', '/captchaImage'])
+        self.upload_paths = [item.rstrip('/') for item in (upload_paths or []) if item]
         self.write_methods = {item.upper() for item in (write_methods or ['POST', 'PUT', 'PATCH', 'DELETE']) if item}
         self._trust_all_proxies = False
         self._trusted_proxy_ips: set[str] = set()
@@ -76,6 +81,8 @@ class RateLimitASGIMiddleware:
         self.auth_user_limit = max(1, int(auth_user_limit))
         self.ai_ip_limit = max(1, int(ai_ip_limit))
         self.ai_user_limit = max(1, int(ai_user_limit))
+        self.upload_ip_limit = max(1, int(upload_ip_limit))
+        self.upload_user_limit = max(1, int(upload_user_limit))
         self.write_ip_limit = max(1, int(write_ip_limit))
         self.write_user_limit = max(1, int(write_user_limit))
         self.read_ip_limit = max(1, int(read_ip_limit))
@@ -89,7 +96,7 @@ class RateLimitASGIMiddleware:
             await self.app(scope, receive, send)
             return
 
-        path = ai_route_path(scope)
+        path = route_path(scope)
         method = str(scope.get('method', '')).upper()
         if self._is_excluded(path):
             await self.app(scope, receive, send)
@@ -174,6 +181,9 @@ class RateLimitASGIMiddleware:
         for prefix in self.auth_paths:
             if path.startswith(prefix):
                 return 'auth'
+        if method in self.write_methods and path.rstrip('/') in self.upload_paths:
+            # Uploads have their own, stricter tier; draft quota is enforced separately (also 429).
+            return 'upload'
         if method in self.write_methods:
             return 'write'
         return 'read'
@@ -183,6 +193,8 @@ class RateLimitASGIMiddleware:
             return self.ai_ip_limit, self.ai_user_limit
         if tier == 'auth':
             return self.auth_ip_limit, self.auth_user_limit
+        if tier == 'upload':
+            return self.upload_ip_limit, self.upload_user_limit
         if tier == 'write':
             return self.write_ip_limit, self.write_user_limit
         return self.read_ip_limit, self.read_user_limit
@@ -349,6 +361,7 @@ class RateLimitASGIMiddleware:
         payload = {
             'type': 'about:blank',
             'title': '请求过于频繁',
+            'tier': tier,
             'status': 429,
             'detail': f'请求已触发限流，请在 {retry_after} 秒后重试',
             'instance': str(scope.get('path', '')),
@@ -388,12 +401,15 @@ def add_rate_limit_middleware(app: FastAPI) -> None:
         window_seconds=RateLimitConfig.rate_limit_window_seconds,
         exclude_paths=_parse_csv(RateLimitConfig.rate_limit_exclude_paths),
         auth_paths=_parse_csv(RateLimitConfig.rate_limit_auth_paths),
+        upload_paths=_parse_csv(RateLimitConfig.rate_limit_upload_paths),
         write_methods=_parse_csv(RateLimitConfig.rate_limit_write_methods),
         trusted_proxies=_parse_csv(RateLimitConfig.rate_limit_trusted_proxies),
         auth_ip_limit=RateLimitConfig.rate_limit_auth_ip,
         auth_user_limit=RateLimitConfig.rate_limit_auth_user,
         ai_ip_limit=TextFieldAIConfig.ai_text_field_ip_per_minute,
         ai_user_limit=TextFieldAIConfig.ai_text_field_user_per_minute,
+        upload_ip_limit=RateLimitConfig.rate_limit_upload_ip,
+        upload_user_limit=RateLimitConfig.rate_limit_upload_user,
         write_ip_limit=RateLimitConfig.rate_limit_write_ip,
         write_user_limit=RateLimitConfig.rate_limit_write_user,
         read_ip_limit=RateLimitConfig.rate_limit_read_ip,

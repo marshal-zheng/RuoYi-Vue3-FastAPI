@@ -25,13 +25,16 @@ class _NoticeServiceStub:
         self.add_called_with = None
         self.edit_called_with = None
         self.delete_called_with = None
+        self.actors: list[object] = []
 
-    async def add_notice_services(self, payload):
+    async def add_notice_services(self, payload, *, actor):
         self.add_called_with = payload
+        self.actors.append(actor)
         return _CrudResponse(is_success=True, message='新增成功')
 
-    async def edit_notice_services(self, payload):
+    async def edit_notice_services(self, payload, *, actor):
         self.edit_called_with = payload
+        self.actors.append(actor)
         return _CrudResponse(is_success=True, message='更新成功')
 
     async def delete_notice_services(self, payload):
@@ -46,19 +49,24 @@ async def test_notice_command_handlers_success() -> None:
     edit_handler = EditNoticeCommandHandler(notice_service)
     delete_handler = DeleteNoticeCommandHandler(notice_service)
     redis_client = object()
+    actor = object()
 
     add_result = await add_handler.handle(
         AddNoticeCommand(
-            notice=NoticeModel(noticeTitle='系统通知', noticeType='1', noticeContent=b'hello', status='0'),
+            notice=NoticeModel(noticeTitle='系统通知', noticeType='1', noticeContent='<p>hello</p>', status='0'),
             redis_client=redis_client,
             operator='admin',
+            actor=actor,
         )
     )
     edit_result = await edit_handler.handle(
         EditNoticeCommand(
-            notice=NoticeModel(noticeId=1, noticeTitle='系统通知', noticeType='1', noticeContent=b'world', status='0'),
+            notice=NoticeModel(
+                noticeId=1, noticeTitle='系统通知', noticeType='1', noticeContent='<p>world</p>', status='0'
+            ),
             redis_client=redis_client,
             operator='admin',
+            actor=actor,
         )
     )
     delete_result = await delete_handler.handle(
@@ -75,6 +83,8 @@ async def test_notice_command_handlers_success() -> None:
     assert notice_service.add_called_with is not None
     assert notice_service.edit_called_with is not None
     assert notice_service.delete_called_with is not None
+    # The authorization snapshot reaches the service, which binds uploaded image drafts in its transaction.
+    assert notice_service.actors == [actor, actor]
 
 
 @pytest.mark.asyncio
@@ -85,7 +95,7 @@ async def test_system_mediator_dispatches_notice_write_commands() -> None:
 
     add_result = await mediator.send(
         AddNoticeCommand(
-            notice=NoticeModel(noticeTitle='系统通知', noticeType='1', noticeContent=b'hello', status='0'),
+            notice=NoticeModel(noticeTitle='系统通知', noticeType='1', noticeContent='<p>hello</p>', status='0'),
             redis_client=redis_client,
         )
     )

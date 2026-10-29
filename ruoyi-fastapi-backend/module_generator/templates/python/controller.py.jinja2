@@ -6,7 +6,7 @@ from datetime import datetime
 {% endif %}
 {% endfor %}
 from fastapi import APIRouter, Depends, Form, Request
-{% if hasRemarks %}
+{% if hasReadModel %}
 from common.http_contracts import {% if table.tree %}CollectionResult{% else %}PagedResult{% endif %}{{ '\n' }}
 from {{ packageName }}.entity.vo.{{ businessName }}_vo import {{ BusinessName }}ReadModel
 {% endif %}
@@ -17,6 +17,9 @@ from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.user_vo import CurrentUserModel
+{% if hasAssets %}
+from modules.file_assets.ports import Actor
+{% endif %}
 from modules.identity.application.services.login_service import LoginService
 from {{ packageName }}.service.{{ businessName }}_service import {{ BusinessName }}Service
 from {{ packageName }}.entity.vo.{{ businessName }}_vo import Delete{{ BusinessName }}Model, {{ BusinessName }}Model, {{ BusinessName }}PageQueryModel
@@ -25,7 +28,7 @@ from utils.log_util import logger
 from utils.response_util import ResponseUtil
 
 
-{% if hasRemarks and (table.crud or table.sub) %}
+{% if hasReadModel and (table.crud or table.sub) %}
 class {{ BusinessName }}PageReadModel(PagedResult):
     items: list[{{ BusinessName }}ReadModel]
 
@@ -35,7 +38,7 @@ class {{ BusinessName }}PageReadModel(PagedResult):
 
 
 @{{ businessName }}Controller.get(
-    '/list', {% if hasRemarks %}response_model={% if table.tree %}CollectionResult[{{ BusinessName }}ReadModel]{% else %}{{ BusinessName }}PageReadModel{% endif %}, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:list'))]
+    '/list', {% if hasReadModel %}response_model={% if table.tree %}CollectionResult[{{ BusinessName }}ReadModel]{% else %}{{ BusinessName }}PageReadModel{% endif %}, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:list'))]
 )
 async def get_{{ moduleName }}_{{ businessName }}_list(
     request: Request,
@@ -61,7 +64,7 @@ async def get_{{ moduleName }}_{{ businessName }}_list(
     {% endif %}
 
 
-@{{ businessName }}Controller.post('', {% if hasRemarks %}response_model={{ BusinessName }}ReadModel, status_code=201, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:add'))])
+@{{ businessName }}Controller.post('', {% if hasReadModel %}response_model={{ BusinessName }}ReadModel, status_code=201, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:add'))])
 @ValidateFields(validate_model='add_{{ businessName }}')
 @Log(title='{{ functionName }}', business_type=BusinessType.INSERT)
 async def add_{{ moduleName }}_{{ businessName }}(
@@ -81,7 +84,7 @@ async def add_{{ moduleName }}_{{ businessName }}(
     add_{{ businessName }}.update_time = datetime.now()
     {% endif %}
     {% endfor %}
-    add_{{ businessName }}_result = await {{ BusinessName }}Service.add_{{ businessName }}_services(query_db, add_{{ businessName }})
+    add_{{ businessName }}_result = await {{ BusinessName }}Service.add_{{ businessName }}_services(query_db, add_{{ businessName }}{% if hasAssets %}, Actor.from_current_user(current_user){% endif %})
     logger.info('新增成功')
 
     return ResponseUtil.created_resource(
@@ -95,7 +98,7 @@ async def add_{{ moduleName }}_{{ businessName }}(
     )
 
 
-@{{ businessName }}Controller.put('', {% if hasRemarks %}response_model={{ BusinessName }}ReadModel, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:edit'))])
+@{{ businessName }}Controller.put('', {% if hasReadModel %}response_model={{ BusinessName }}ReadModel, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:edit'))])
 @ValidateFields(validate_model='edit_{{ businessName }}')
 @Log(title='{{ functionName }}', business_type=BusinessType.UPDATE)
 async def edit_{{ moduleName }}_{{ businessName }}(
@@ -106,7 +109,7 @@ async def edit_{{ moduleName }}_{{ businessName }}(
 ):
     edit_{{ businessName }}.update_by = current_user.user.user_name
     edit_{{ businessName }}.update_time = datetime.now()
-    edit_{{ businessName }}_result = await {{ BusinessName }}Service.edit_{{ businessName }}_services(query_db, edit_{{ businessName }})
+    edit_{{ businessName }}_result = await {{ BusinessName }}Service.edit_{{ businessName }}_services(query_db, edit_{{ businessName }}{% if hasAssets %}, Actor.from_current_user(current_user){% endif %})
     logger.info('更新成功')
 
     return ResponseUtil.ok_resource(edit_{{ businessName }}_result)
@@ -123,7 +126,7 @@ async def delete_{{ moduleName }}_{{ businessName }}(request: Request, {{ pk_fie
 
 
 @{{ businessName }}Controller.get(
-    '/{% raw %}{{% endraw %}{{ pk_field }}{% raw %}}{% endraw %}', response_model={{ BusinessName }}{% if hasRemarks %}Read{% endif %}Model, dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:query'))]
+    '/{% raw %}{{% endraw %}{{ pk_field }}{% raw %}}{% endraw %}', response_model={{ BusinessName }}{% if hasReadModel %}Read{% endif %}Model, dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:query'))]
 )
 async def query_detail_{{ moduleName }}_{{ businessName }}(request: Request, {{ pk_field }}: int, query_db: AsyncSession = Depends(get_db)):
     {{ businessName }}_detail_result = await {{ BusinessName }}Service.{{ businessName }}_detail_services(query_db, {{ pk_field }})

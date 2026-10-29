@@ -64,15 +64,6 @@ class ICaptchaService(IBaseService, Protocol):
 class ICommonService(IBaseService, Protocol):
     """Protocol contract for `CommonService`."""
 
-    async def upload_service(self, request: Any, file: Any) -> Any:
-        """Contract for `CommonService.upload_service`."""
-
-    async def download_services(self, background_tasks: Any, file_name: Any, delete: bool) -> Any:
-        """Contract for `CommonService.download_services`."""
-
-    async def download_resource_services(self, resource: str) -> Any:
-        """Contract for `CommonService.download_resource_services`."""
-
     async def get_table_names_services(self) -> list[dict[str, str]]:
         """Contract for `CommonService.get_table_names_services`."""
 

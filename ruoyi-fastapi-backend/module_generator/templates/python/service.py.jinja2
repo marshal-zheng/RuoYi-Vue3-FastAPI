@@ -1,6 +1,12 @@
 {% if hasRemarks %}
 from common.remark_document_v1 import remark_display_text
+{% endif %}
+{% if hasReadModel %}
 from {{ packageName }}.entity.vo.{{ businessName }}_vo import {{ BusinessName }}ReadModel
+{% endif %}
+{% if hasAssets %}
+from modules.file_assets.ports import Actor, OwnerRef, get_binding_service
+from {{ packageName }}.policy.{{ businessName }}_file_asset_policy import ASSET_FIELDS, OWNER_TYPE
 {% endif %}
 {% set pkField = pkColumn.python_field %}
 {% set pk_field = pkColumn.python_field | camel_to_snake %}
@@ -42,11 +48,17 @@ class {{ BusinessName }}Service:
         {{ businessName }}_repo = {{ BusinessName }}Repository(query_db)
         {{ businessName }}_list_result = await {{ businessName }}_repo.get_{{ businessName }}_list(query_object, is_page)
 
-        {% if hasRemarks %}
+        {% if hasReadModel %}
+        rows = {{ businessName }}_list_result.items if is_page else {{ businessName }}_list_result
+        models = [{{ BusinessName }}ReadModel.model_validate(row) for row in rows]
+        {% if hasAssets %}
+        await cls._attach_assets(query_db, models)
+        {% endif %}
+        items = [model.model_dump(by_alias=True) for model in models]
         if is_page:
-            {{ businessName }}_list_result.items = [{{ BusinessName }}ReadModel.model_validate(row).model_dump(by_alias=True) for row in {{ businessName }}_list_result.items]
+            {{ businessName }}_list_result.items = items
         else:
-            {{ businessName }}_list_result = [{{ BusinessName }}ReadModel.model_validate(row).model_dump(by_alias=True) for row in {{ businessName }}_list_result]
+            {{ businessName }}_list_result = items
         {% endif %}
         return {{ businessName }}_list_result
 
@@ -76,7 +88,7 @@ class {{ BusinessName }}Service:
     {% endfor %}
 
     @classmethod
-    async def add_{{ businessName }}_services(cls, query_db: AsyncSession, page_object: {{ BusinessName }}Model):
+    async def add_{{ businessName }}_services(cls, query_db: AsyncSession, page_object: {{ BusinessName }}Model{% if hasAssets %}, actor: Actor{% endif %}):
         """
         新增{{ functionName }}信息service
 
@@ -105,6 +117,9 @@ class {{ BusinessName }}Service:
             add_{{ businessName }} = await {{ businessName }}_repo.add_{{ businessName }}(page_object)
             created_{{ pk_field }} = add_{{ businessName }}.{{ pk_field }}
             {% endif %}
+            {% if hasAssets %}
+            await cls._save_assets(query_db, actor, page_object, created_{{ pk_field }}, creating=True)
+            {% endif %}
             await query_db.commit()
             return await cls.{{ businessName }}_detail_services(query_db, created_{{ pk_field }})
         except Exception as e:
@@ -112,7 +127,7 @@ class {{ BusinessName }}Service:
             raise e
 
     @classmethod
-    async def edit_{{ businessName }}_services(cls, query_db: AsyncSession, page_object: {{ BusinessName }}Model):
+    async def edit_{{ businessName }}_services(cls, query_db: AsyncSession, page_object: {{ BusinessName }}Model{% if hasAssets %}, actor: Actor{% endif %}):
         """
         编辑{{ functionName }}信息service
 
@@ -120,7 +135,7 @@ class {{ BusinessName }}Service:
         :param page_object: 编辑{{ functionName }}对象
         :return: 编辑{{ functionName }}校验结果
         """
-        edit_{{ businessName }} = page_object.model_dump(exclude_unset=True, exclude={% raw %}{{% endraw %}{% if table.sub %}'{{ subclassName }}_list', {% endif %}{% for column in columns %}{% if not column.edit and not column.pk and column.column_name not in column_not_edit_show %}'{{ column.python_field | camel_to_snake  }}'{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}{% raw %}}{% endraw %})
+        edit_{{ businessName }} = page_object.model_dump(exclude_unset=True, exclude={% raw %}{{% endraw %}{% if table.sub %}'{{ subclassName }}_list', {% endif %}{% for field in assetFields %}'{{ field.attr }}', {% endfor %}{% for column in columns %}{% if not column.edit and not column.pk and column.column_name not in column_not_edit_show %}'{{ column.python_field | camel_to_snake  }}'{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}{% raw %}}{% endraw %})
         {{ businessName }}_info = await cls.{{ businessName }}_detail_services(query_db, page_object.{{ pk_field }})
         if {{ businessName }}_info.{{ pk_field }}:
             {% for column in columns %}
@@ -133,6 +148,11 @@ class {{ BusinessName }}Service:
             {% endfor %}
             {{ businessName }}_repo = {{ BusinessName }}Repository(query_db)
             try:
+                {% if hasAssets %}
+                # A concurrent delete may have committed after the read above; never bind files to a missing owner.
+                if await {{ businessName }}_repo.lock_{{ businessName }}(page_object.{{ pk_field }}) is None:
+                    raise ServiceException(message='{{ functionName }}不存在')
+                {% endif %}
                 await {{ businessName }}_repo.edit_{{ businessName }}(edit_{{ businessName }})
                 {% if table.sub %}
                 for sub_table in {{ businessName }}_info.{{ subclassName }}_list:
@@ -140,6 +160,9 @@ class {{ BusinessName }}Service:
                 for sub_table in page_object.{{ subclassName }}_list:
                     sub_table.{{ subTableFkName }} = page_object.{{ pk_field }}
                     await {{ businessName }}_repo.add_{{ subTable.business_name }}(sub_table)
+                {% endif %}
+                {% if hasAssets %}
+                await cls._save_assets(query_db, actor, page_object, page_object.{{ pk_field }}, creating=False)
                 {% endif %}
                 await query_db.commit()
                 return await cls.{{ businessName }}_detail_services(query_db, page_object.{{ pk_field }})
@@ -163,6 +186,11 @@ class {{ BusinessName }}Service:
             {{ businessName }}_repo = {{ BusinessName }}Repository(query_db)
             try:
                 for {{ pk_field }} in {{ pk_field }}_list:
+                    {% if hasAssets %}
+                    # Deleting the owner releases its file bindings in the same transaction (lock owner first).
+                    await {{ businessName }}_repo.lock_{{ businessName }}(int({{ pk_field }}))
+                    await get_binding_service().release_owner(query_db, OwnerRef.of(OWNER_TYPE, int({{ pk_field }})))
+                    {% endif %}
                     {% if table.sub %}
                     {{ businessName }} = await cls.{{ businessName }}_detail_services(query_db, int({{ pk_field }}))
                     for sub_table in {{ businessName }}.{{ subclassName }}_list:
@@ -191,12 +219,65 @@ class {{ BusinessName }}Service:
         {{ businessName }}_repo = {{ BusinessName }}Repository(query_db)
         {{ businessName }} = await {{ businessName }}_repo.get_{{ businessName }}_detail_by_id({{ pk_field }})
         if {{ businessName }}:
-            result = {% if hasRemarks %}{{ BusinessName }}ReadModel.model_validate({{ businessName }}){% else %}{{ BusinessName }}Model(**CamelCaseUtil.transform_result({{ businessName }})){% endif %}{{ '\n' }}
+            result = {% if hasReadModel %}{{ BusinessName }}ReadModel.model_validate({{ businessName }}){% else %}{{ BusinessName }}Model(**CamelCaseUtil.transform_result({{ businessName }})){% endif %}{{ '\n' }}
+            {% if hasAssets %}
+            await cls._attach_assets(query_db, [result])
+            {% endif %}
         else:
             result = {{ BusinessName }}Model(**dict())
 
         return result
 
+{% if hasAssets %}
+    @classmethod
+    async def _attach_assets(cls, query_db: AsyncSession, models: List[{{ BusinessName }}ReadModel]):
+        """
+        批量读投影：文件ID来自绑定关系（每个字段一次查询），不读取业务列
+
+        :param query_db: orm对象
+        :param models: {{ functionName }}读模型列表
+        """
+        owner_ids = [model.{{ pk_field }} for model in models if model.{{ pk_field }} is not None]
+        if not owner_ids:
+            return
+        bindings = get_binding_service()
+        {% for field in assetFields %}
+        {{ field.attr }} = await bindings.project(query_db, OWNER_TYPE, owner_ids, '{{ field.name }}')
+        {% endfor %}
+        for model in models:
+            owner_id = str(model.{{ pk_field }})
+            {% for field in assetFields %}
+            model.{{ field.attr }} = [asset.asset_id for asset in {{ field.attr }}.get(owner_id, [])]
+            {% endfor %}
+
+    @classmethod
+    async def _save_assets(
+        cls, query_db: AsyncSession, actor: Actor, page_object: {{ BusinessName }}Model, {{ pk_field }}: int, *, creating: bool
+    ):
+        """
+        在当前业务事务内替换文件字段：未提供表示不修改，[] 表示清空；由调用方统一提交或回滚
+
+        :param query_db: orm对象
+        :param actor: 当前用户授权快照
+        :param page_object: {{ functionName }}对象
+        :param {{ pk_field }}: {{ pk_field_comment }}
+        :param creating: 是否为新建
+        """
+        owner = OwnerRef.of(OWNER_TYPE, {{ pk_field }})
+        bindings = get_binding_service()
+        provided = page_object.model_fields_set
+        {% for field in assetFields %}
+        {% if field.required %}
+        if (creating or '{{ field.attr }}' in provided) and not page_object.{{ field.attr }}:
+            raise ServiceException(message='{{ field.label }}不能为空')
+        {% endif %}
+        if '{{ field.attr }}' in provided and page_object.{{ field.attr }} is not None:
+            await bindings.replace_field_assets(
+                query_db, actor, owner, '{{ field.name }}', page_object.{{ field.attr }}, creating=creating
+            )
+        {% endfor %}
+
+{% endif %}
     @staticmethod
     async def export_{{ businessName }}_list_services({% if dicts %}request: Request, {% endif %}{{ businessName }}_list: List):
         """
@@ -234,6 +315,12 @@ class {{ BusinessName }}Service:
         for item in {{ businessName }}_list:
             item['{{ column.python_field }}'] = remark_display_text(item.get('{{ column.python_field }}'))
         {% endfor %}
+        {% if hasAssets %}
+        # File fields are relations, not exported cells.
+        for item in {{ businessName }}_list:
+            for key in ASSET_FIELDS:
+                item.pop(key, None)
+        {% endif %}
         binary_data = ExcelUtil.export_list2excel({{ businessName }}_list, mapping_dict{% if remarkColumns %}, text_columns={% raw %}{{% endraw %}{% for column in remarkColumns %}'{{ column.python_field }}',{% endfor %}{% raw %}}{% endraw %}{% endif %})
 
         return binary_data

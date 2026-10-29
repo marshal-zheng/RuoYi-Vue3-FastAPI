@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import { resolve } from 'path';
 import { zxuiSourceIntegrationPlugin } from './vite/zxui-theme-packages';
 
@@ -9,6 +10,7 @@ const source = process.env.VITE_ZXUI_LOCAL === 'true';
 export default defineConfig({
   plugins: [
     vue() as any,
+    vueJsx(),
     ...(source
       ? [
           zxuiSourceIntegrationPlugin(

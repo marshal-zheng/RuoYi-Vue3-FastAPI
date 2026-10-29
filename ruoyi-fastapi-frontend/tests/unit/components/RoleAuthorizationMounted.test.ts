@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import * as vue from 'vue';
-import ElementPlus, { ElTable } from 'element-plus';
+import ElementPlus from 'element-plus';
 import { VueQueryPlugin, onlineManager } from '@tanstack/vue-query';
 import { useRoute } from 'vue-router';
 import { ZxGridList } from '@zxio/zxui';
@@ -153,7 +153,7 @@ it('mounts a real GridList and table with only one initial user-role request', a
   const wrapper = page(AuthRole);
   await flushPromises();
   expect(wrapper.findComponent(ZxGridList).exists()).toBe(true);
-  expect(wrapper.findComponent(ElTable).exists()).toBe(true);
+  expect(wrapper.findComponent({ name: 'ElTable' }).exists()).toBe(true);
   expect(getAuthRole).toHaveBeenCalledTimes(1);
 });
 it('allocated page 2 sends the actual pager and exposes the total', async () => {
@@ -166,7 +166,7 @@ it('allocated page 2 sends the actual pager and exposes the total', async () => 
     page: 2,
     pageSize: 10,
   });
-  expect(wrapper.findComponent(ElTable).props('data')?.[0]?.userId).toBe(11);
+  expect(wrapper.findComponent({ name: 'ElTable' }).props('data')?.[0]?.userId).toBe(11);
   expect(wrapper.findComponent(ZxGridList).props('pagination')).toMatchObject({
     total: 23,
   });
@@ -174,7 +174,7 @@ it('allocated page 2 sends the actual pager and exposes the total', async () => 
 it('initializes all assigned roles and preserves a deselection when returning to page 1', async () => {
   const wrapper = page(AuthRole);
   await flushPromises();
-  const table = wrapper.findComponent(ElTable);
+  const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[0]!.setValue(false);
   await flushPromises();
   wrapper.findComponent(ZxGridList).vm.$emit('page-change', { page: 2, size: 10 });
@@ -182,7 +182,9 @@ it('initializes all assigned roles and preserves a deselection when returning to
   expect(table.props('data')?.[0]?.roleId).toBe(12);
   wrapper.findComponent(ZxGridList).vm.$emit('page-change', { page: 1, size: 10 });
   await flushPromises();
-  expect(table.vm.getSelectionRows().map((row: { roleId: number }) => row.roleId)).not.toContain(2);
+  expect((table.find('tbody input[type=checkbox]').element as HTMLInputElement).checked).toBe(
+    false
+  );
   await state(wrapper).handleSave();
   expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({
     userId: 42,
@@ -193,7 +195,7 @@ it('selector keeps selections across pages and sends one incremental relation ar
   const wrapper = page(SelectUser, { roleId: '20' });
   state(wrapper).show();
   await flushPromises();
-  const table = wrapper.findComponent(ElTable);
+  const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[1]!.setValue(true);
   await flushPromises();
   const grid = wrapper.findComponent(ZxGridList);
@@ -224,7 +226,7 @@ it('selector shows the newest search and never lets an older response replace it
   await flushPromises();
   old.resolve(users(1));
   await flushPromises();
-  expect(wrapper.findComponent(ElTable).props('data')?.[0]?.userId).toBe(20);
+  expect(wrapper.findComponent({ name: 'ElTable' }).props('data')?.[0]?.userId).toBe(20);
 });
 
 it('keeps draft filter edits local and resets an allocated search to page 1', async () => {
@@ -256,7 +258,7 @@ it('recovers a failed first role read and keeps edited selection through backgro
   expect(api.assign).not.toHaveBeenCalled();
   grid.vm.$emit('refresh');
   await flushPromises();
-  const table = wrapper.findComponent(ElTable);
+  const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[0]!.setValue(false);
   await flushPromises();
   vi.mocked(getAuthRole).mockResolvedValueOnce({
@@ -278,7 +280,7 @@ it('keeps allocated rows and shows refresh failure, then exposes paused reads se
   const grid = wrapper.findComponent(ZxGridList);
   grid.vm.$emit('refresh');
   await flushPromises();
-  expect(wrapper.findComponent(ElTable).props('data')).toHaveLength(10);
+  expect(wrapper.findComponent({ name: 'ElTable' }).props('data')).toHaveLength(10);
   expect(grid.props('status')).toMatchObject({
     error: expect.objectContaining({ message: 'refresh failed' }),
     loading: false,
@@ -298,7 +300,7 @@ it('selector retries a failed read and keeps selection when a later page fails',
   expect(grid.props('status')).toMatchObject({ error: expect.any(Error) });
   grid.vm.$emit('refresh');
   await flushPromises();
-  const table = wrapper.findComponent(ElTable);
+  const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[1]!.setValue(true);
   await flushPromises();
   vi.mocked(unallocatedUserList).mockRejectedValueOnce(new Error('page failed'));
@@ -329,7 +331,7 @@ it('resets selection and filters on reopen and ignores a previous opening respon
   await flushPromises();
   expect(state(wrapper).queryParams.userName).toBe('');
   expect(state(wrapper).userIds).toEqual([]);
-  expect(wrapper.findComponent(ElTable).props('data')?.[0]?.userId).toBe(20);
+  expect(wrapper.findComponent({ name: 'ElTable' }).props('data')?.[0]?.userId).toBe(20);
 });
 it('does not close a reopened selector when a previous opening write completes', async () => {
   const write = deferred<null>();
@@ -337,7 +339,7 @@ it('does not close a reopened selector when a previous opening write completes',
   const wrapper = page(SelectUser, { roleId: '20' });
   state(wrapper).show();
   await flushPromises();
-  const table = wrapper.findComponent(ElTable);
+  const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[1]!.setValue(true);
   await flushPromises();
   const task = state(wrapper).handleSelectUser();
@@ -369,7 +371,7 @@ it('preserves role selection on write failure and retries the explicit empty rep
   } as never);
   const wrapper = page(AuthRole);
   await flushPromises();
-  const table = wrapper.findComponent(ElTable);
+  const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[0]!.setValue(false);
   await flushPromises();
   api.assign.mockRejectedValueOnce(new Error('write failed'));
@@ -441,7 +443,7 @@ it('clears role draft and suppresses writes when the session changes', async () 
   await flushPromises();
   setQuerySession(2, ['admin'], ['*:*:*']);
   await flushPromises();
-  expect(wrapper.findComponent(ElTable).props('data')).toEqual([]);
+  expect(wrapper.findComponent({ name: 'ElTable' }).props('data')).toEqual([]);
   await state(wrapper).handleSave();
   expect(api.assign).not.toHaveBeenCalled();
 });
@@ -460,13 +462,16 @@ it('isolates role editor reads when the target route changes during a request', 
   old.resolve({ user: { userId: 42 }, roles });
   await flushPromises();
   await state(wrapper).handleSave();
-  expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({ userId: 43, roleIds: [30] });
+  expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({
+    userId: 43,
+    roleIds: [30],
+  });
 });
 it('retains selected users through a different search and closes on role identity change', async () => {
   const wrapper = page(SelectUser, { roleId: '20' });
   state(wrapper).show();
   await flushPromises();
-  const table = wrapper.findComponent(ElTable);
+  const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[1]!.setValue(true);
   await flushPromises();
   vi.mocked(unallocatedUserList).mockResolvedValueOnce(users(20));
@@ -493,7 +498,7 @@ it('does not let a non-root account with the admin role revoke administrator-rol
   expect(api.revoke).not.toHaveBeenCalled();
   expect(
     (
-      wrapper.findComponent(ElTable).findAll('tbody input[type=checkbox]')[1]!
+      wrapper.findComponent({ name: 'ElTable' }).findAll('tbody input[type=checkbox]')[1]!
         .element as HTMLInputElement
     ).disabled
   ).toBe(true);
@@ -508,7 +513,7 @@ it('does not let a non-root account with the admin role grant administrator-role
   expect(api.grant).not.toHaveBeenCalled();
   expect(
     (
-      wrapper.findComponent(ElTable).findAll('tbody input[type=checkbox]')[1]!
+      wrapper.findComponent({ name: 'ElTable' }).findAll('tbody input[type=checkbox]')[1]!
         .element as HTMLInputElement
     ).disabled
   ).toBe(true);

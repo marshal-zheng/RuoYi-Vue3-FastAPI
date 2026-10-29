@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Any
 from fastapi import Depends
 
 from module_generator.controller.gen_controller import genController
+from modules.file_assets.api.file_asset_controller import fileAssetController
 from modules.identity.api.captcha_controller import captchaController
 from modules.identity.api.login_controller import loginController
 from modules.identity.api.security_controller import securityController
@@ -151,6 +152,11 @@ _module_registry: list[ModuleRegistration] = [
         name='system',
         version='v1',
         routers=_build_system_routers(),
+    ),
+    ModuleRegistration(
+        name='file_assets',
+        version='v1',
+        routers=(RouterRegistration(router=fileAssetController, tags=('文件资产',), capability_module_key='platform'),),
     ),
     ModuleRegistration(
         name='project',

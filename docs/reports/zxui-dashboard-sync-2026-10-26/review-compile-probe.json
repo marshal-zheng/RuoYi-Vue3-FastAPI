@@ -1,0 +1,28 @@
+[
+  {
+    "comments": "default",
+    "errors": [],
+    "fragmentCount": 8,
+    "devRootFragment": true,
+    "props": {
+      "class": "zx-icon",
+      "size": 16,
+      "style": {}
+    }
+  },
+  {
+    "comments": false,
+    "errors": [],
+    "fragmentCount": 0,
+    "devRootFragment": false,
+    "props": {
+      "class": "zx-icon consumer-class",
+      "size": 16,
+      "style": {
+        "display": "none"
+      },
+      "data-review": "kept",
+      "aria-label": "icon probe"
+    }
+  }
+]

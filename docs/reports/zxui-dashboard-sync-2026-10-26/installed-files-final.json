@@ -1,0 +1,91 @@
+{
+  "artifacts": [
+    {
+      "name": "@zxio/zxui",
+      "sha256": "451333dc1248cc68cf391a2e6395e24ddd443a9afc76d994d2463530b0f1bbfb",
+      "files": 2134
+    },
+    {
+      "name": "@zxio/dashboard",
+      "sha256": "f3f5bfdafdef0ed10741a0d1d0842da1b44768893e2ffd5ce2155d9224115abb",
+      "files": 107
+    },
+    {
+      "name": "@zxio/tokens",
+      "sha256": "361e5d7f869026b57ba0f098959c653981093d2bcfdd37500b6db41dceeec736",
+      "files": 49
+    },
+    {
+      "name": "@zxio/theme-compiler",
+      "sha256": "437a5ee3e96229ca86b11fd053ba7b6d86788e56e79d8e71eae190283e819a33",
+      "files": 91
+    },
+    {
+      "name": "@zxio/theme-css-codec",
+      "sha256": "4750030cd6ba5bee4ca1ca06c571b8df04b46d0b82fb72e4a2a72ecc28ac4a20",
+      "files": 6
+    },
+    {
+      "name": "@zxio/theme-consumer",
+      "sha256": "2ee9e710d1e14e1b7880d87f4c77828afae9b0b8402d78d281c8681b7c876a70",
+      "files": 24
+    },
+    {
+      "name": "@zxio/theme-default",
+      "sha256": "b1d6918ab4151d6031a5869f1a4f184983b07f8a988049d7eeca9b79874a6c1d",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-defense-green",
+      "sha256": "30e8f4ea5a309baa8be3b3425a9dd154cd908255a61fbf931d7ce38f5bdbc087",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-army-pine",
+      "sha256": "752b0c2e20380552929fa63e1edaf84189f7af4acb670e68ababb4ddf914c1c3",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-air-gray",
+      "sha256": "3adcd61ad2a64d16ff55266441311351be31ba0cd9d624ac85c366ef4a23cd34",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-pap-olive",
+      "sha256": "e54e58dcb4ea186f0aba0f4e7fe3549b241ffc2038e7655237ab9ea72175688a",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-rocket-moss",
+      "sha256": "602af1323a9f97e4530d1b8075a32bfaf0cf9d53f61c7b7eb08140b04ac918dd",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-factory-blue",
+      "sha256": "0ad0a5070f249d63691936c37eb62ff273383249c586c95d5b24a10f772ffa5b",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-tech-blue",
+      "sha256": "f03ca522eb09223bf78b2d07b56ef85b12b9a628e9382c11f0ad16870da02bd6",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-industrial-blue",
+      "sha256": "dd5b09d96056652b570042ab6f155d715c617b78c6b9496758143b866b342b54",
+      "files": 497
+    },
+    {
+      "name": "@zxio/theme-tailwind",
+      "sha256": "d33bebb3ad06a5b24ef68b92cb3a9276987b3263700aacf20f053646c7db2031",
+      "files": 6
+    },
+    {
+      "name": "@zxio/vue-grid-layout",
+      "sha256": "265198c9231d7b6f1001130df11b212f99e892d0e0ffa36dd461b72a5cbbb46d",
+      "files": 254
+    }
+  ],
+  "files": 7144,
+  "mismatches": 0
+}

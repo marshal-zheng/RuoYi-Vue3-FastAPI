@@ -61,6 +61,7 @@ def _import_orm_models() -> None:
         for model_file in sorted(model_dir.glob('*_do.py')):
             import_module(f'{package_prefix}.{model_file.stem}')
     import_module('events.models')
+    import_module('modules.file_assets.infrastructure.models')
 
 
 @pytest.fixture

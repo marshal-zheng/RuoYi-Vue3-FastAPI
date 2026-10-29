@@ -84,7 +84,8 @@ class TestErrorCodeMapping:
     
     def test_http_status_codes_valid(self):
         """测试 HTTP 状态码有效性"""
-        valid_statuses = {400, 401, 403, 404, 409, 422, 500}
+        # 408/413/415/429/503 are the file-asset upload and storage-availability failures.
+        valid_statuses = {400, 401, 403, 404, 408, 409, 413, 415, 422, 429, 500, 503}
         for info in ERROR_CODE_MAP.values():
             assert info.http_status in valid_statuses, \
                 f"错误码 {info.code} 的 HTTP 状态码 {info.http_status} 无效"

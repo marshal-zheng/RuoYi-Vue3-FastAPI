@@ -112,6 +112,15 @@ class ResponseUtil:
         )
 
     @classmethod
+    def ok_document(cls, resource: Any, *, headers: Mapping[str, str] | None = None) -> JSONResponse:
+        """A single resource whose own fields (e.g. `items`) must not be reshaped into an envelope."""
+        return JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content=jsonable_encoder(serialize_for_response(resource)),
+            headers=_normalize_headers(headers),
+        )
+
+    @classmethod
     def ok_collection(
         cls,
         *,
@@ -254,6 +263,9 @@ class ResponseUtil:
             payload.update({key: value for key, value in extensions.items() if key not in payload})
         if errors:
             payload['errors'] = serialize_for_response(list(errors))
+        for key, value in (extensions or {}).items():
+            # RFC 9457 extension members never replace the standard members.
+            payload.setdefault(str(key), value)
         return JSONResponse(
             status_code=int(http_status),
             content=jsonable_encoder(payload),

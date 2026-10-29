@@ -35,7 +35,13 @@
         </el-form-item>
 
         <el-form-item data-form-full label="内容">
-          <editor v-model="state.data.noticeContent" :min-height="192" />
+          <editor
+            ref="editorRef"
+            v-model="state.data.noticeContent"
+            purpose="notice.image"
+            :owner-id="state.data.noticeId"
+            :min-height="192"
+          />
         </el-form-item>
       </FormGrid>
     </el-form>
@@ -43,8 +49,9 @@
 </template>
 
 <script setup lang="ts" name="NoticeDlg">
-import type { FormInstance } from 'element-plus';
+import { ElMessage, type FormInstance } from 'element-plus';
 const formRef = ref<FormInstance>();
+const editorRef = ref<{ validate: () => string }>();
 
 import { getNotice, addNotice, updateNotice } from '@/api/system/notice';
 import { useEditorRead } from '@/utils/editor-read';
@@ -90,6 +97,12 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
     }),
     onConfirm: async (data: NoticeForm) => {
       if (detailLoading.value || loadError.value || data.noticeId !== requestedId) return false;
+      // Uploads still running or unsupported images must not be saved as if they were content.
+      const contentError = editorRef.value?.validate();
+      if (contentError) {
+        ElMessage.warning(contentError);
+        return false;
+      }
       if (data.noticeId !== undefined) {
         await updateNotice(data);
       } else {
@@ -115,7 +128,10 @@ function openDialog(id?: number) {
       setDisabled(false);
       return;
     }
-    const data = await getNotice(id, { signal: read.signal, silentError: true });
+    const data = await getNotice(id, {
+      signal: read.signal,
+      silentError: true,
+    });
     if (!read.isCurrent()) return;
     open({
       noticeId: data.noticeId ?? undefined,

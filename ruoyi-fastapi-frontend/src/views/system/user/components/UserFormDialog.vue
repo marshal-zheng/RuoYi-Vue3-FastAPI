@@ -1,5 +1,16 @@
 <template>
-  <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+  <ZxDialog
+    ref="dialogRef"
+    v-model="visible"
+    v-bind="dialogProps"
+    :title="requestedId === undefined ? '添加用户' : '修改用户'"
+    :ok-text="requestedId === undefined ? '创建' : '保存'"
+    :loading="detailLoading"
+    :ok-loading="!!formRef?.pending"
+    :ok-disabled="detailLoading || !!loadError || !session"
+    :confirm="submit"
+    :handle-before-cancel="canDiscard"
+  >
     <span v-if="editorQuery.isPaused.value" aria-live="polite">用户详情等待网络连接</span>
     <el-alert
       v-else-if="editorQuery.error.value && !loadError"
@@ -12,354 +23,196 @@
     <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
       <el-button link type="primary" @click="handleRetry">重试</el-button>
     </el-alert>
-    <el-form
-      v-show="!loadError"
-      ref="formRef"
-      :model="state.data"
-      :rules="formRules"
-      :disabled="detailLoading || state.disabled || state.loading || !!loadError"
-      v-bind="formProps"
-    >
-      <FormGrid v-bind="layoutProps">
-        <el-form-item label="用户昵称" prop="nickName">
-          <zx-input v-model="state.data.nickName" placeholder="请输入用户昵称" maxlength="30" />
-        </el-form-item>
-
-        <el-form-item label="归属部门" prop="deptId">
-          <el-tree-select
-            v-model="state.data.deptId"
-            :data="deptOptions"
-            :cache-data="selectedDeptCache"
-            :loading="departmentQuery.isLoading.value"
-            :props="{ value: 'id', label: 'label', children: 'children' }"
-            value-key="id"
-            placeholder="请选择归属部门"
-            check-strictly
-            style="width: 100%"
-          >
-            <template #label="{ value, label }">
-              {{
-                selectedDepartment && selectedDepartment.id === value
-                  ? selectedDepartment.label
-                  : label
-              }}
-            </template>
-          </el-tree-select>
-          <span v-if="departmentQuery.isPaused.value" role="status">部门列表等待网络连接</span>
-          <el-alert
-            v-else-if="departmentQuery.error.value"
-            :title="
-              departmentQuery.data.value ? '部门列表刷新失败，保留当前选择' : '部门列表读取失败'
-            "
-            type="error"
-            :closable="false"
-          >
-            <el-button link type="primary" @click="retryDepartments">重试</el-button>
-          </el-alert>
-        </el-form-item>
-
-        <el-form-item label="手机号码" prop="phonenumber">
-          <zx-input v-model="state.data.phonenumber" placeholder="请输入手机号码" maxlength="11" />
-        </el-form-item>
-
-        <el-form-item label="邮箱" prop="email">
-          <zx-input v-model="state.data.email" placeholder="请输入邮箱" maxlength="50" />
-        </el-form-item>
-
-        <template v-if="!isEdit">
-          <el-form-item label="用户名称" prop="userName">
-            <zx-input v-model="state.data.userName" placeholder="请输入用户名称" maxlength="30" />
-          </el-form-item>
-
-          <el-form-item label="用户密码" prop="password">
-            <zx-input
-              v-model="state.data.password"
-              placeholder="请输入用户密码"
-              type="password"
-              maxlength="20"
-              show-password
-            />
-          </el-form-item>
-        </template>
-
-        <el-form-item label="用户性别">
-          <DictSelect
-            dict-type="sys_user_sex"
-            :active="state.visible"
-            v-model="state.data.sex"
-            placeholder="请选择"
-            style="width: 100%"
-          />
-        </el-form-item>
-
-        <el-form-item label="状态">
-          <DictStatus :types="['sys_normal_disable']" />
-          <el-radio-group v-model="state.data.status">
-            <el-radio v-for="dict in statusOptions" :key="dict.value" :value="dict.value">
-              {{ dict.label }}
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
-
-        <el-form-item label="岗位">
-          <el-select v-model="state.data.postIds" multiple placeholder="请选择" style="width: 100%">
-            <el-option
-              v-for="item in postOptions"
-              :key="item.postId"
-              :label="item.postName"
-              :value="item.postId"
-              :disabled="item.status == 1"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="角色">
-          <el-select v-model="state.data.roleIds" multiple placeholder="请选择" style="width: 100%">
-            <el-option
-              v-for="item in roleOptions"
-              :key="item.roleId"
-              :label="item.roleName"
-              :value="item.roleId"
-              :disabled="item.status == 1"
-            />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item data-form-full label="备注" prop="remark">
-          <RemarkEditor
-            v-if="state.visible"
-            ref="remarkRef"
-            :key="remarkSession"
-            v-model="state.data.remark"
-          />
-        </el-form-item>
-      </FormGrid>
-    </el-form>
+    <template v-if="session">
+      <span v-if="departmentQuery.isPaused.value" role="status">部门列表等待网络连接</span>
+      <el-alert
+        v-else-if="departmentQuery.error.value"
+        :title="departmentQuery.data.value ? '部门列表刷新失败，保留当前选择' : '部门列表读取失败'"
+        type="error"
+        :closable="false"
+      >
+        <el-button link type="primary" @click="retryDepartments">重试</el-button>
+      </el-alert>
+      <el-alert
+        v-if="formRef?.reconciliationRequired"
+        title="保存结果未知，请先读取服务端记录核对"
+        type="warning"
+        :closable="false"
+      >
+        <el-button :loading="detailLoading" @click="reconcileUser">读取并核对用户</el-button>
+      </el-alert>
+      <DictStatus :types="['sys_normal_disable']" />
+      <ZxSchemaForm
+        :key="session.key"
+        ref="formRef"
+        v-bind="schemaFormProps"
+        :initial="session.initial"
+        :create-schema="session.createSchema"
+        :save="session.save"
+        :bindings="bindings"
+        :disabled="detailLoading || !!loadError"
+        @saved="handleSaved(session.key)"
+      />
+    </template>
   </ZxDialog>
 </template>
 
-<script setup>
-import { useAIContextHost } from '@/ai-context/host';
-import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
-import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
-import { readRemark } from '@/components/ui/Remark/contract';
-import { ref, computed, shallowRef, watch } from 'vue';
+<script setup lang="ts">
+import { computed, markRaw, nextTick, ref, shallowRef, watch } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { useQuery } from '@tanstack/vue-query';
+import { queryRequest, type HttpError } from '@zxio/http';
+import { ZxSchemaForm, type Save, type SchemaFormInstance } from '@zxio/schema-form/formily';
+import '@zxio/schema-form/style.css';
+import type { ZxDialogExpose } from '@zxio/zxui/dialog';
+import type {
+  UserCreateModel,
+  UserDetailReadModel,
+  UserUpdateModel,
+} from '@/api/_generated/types.gen';
+import { useAIContextHost } from '@/ai-context/host';
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import DictSelect from '@/components/business/DictSelect/index.vue';
+import DictStatus from '@/components/business/DictStatus/index.vue';
+import { schemaFormDialog } from '@/components/ui/FormDialog';
 import { useEditorRead } from '@/utils/editor-read';
 import { useDict } from '@/utils/dict';
-import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+import { presentRequestError } from '@/utils/http';
+import { isRecord } from '@/types/http-contract';
+import { getUser, listUser } from '@/api/system/user';
 import {
   captureUserCommand,
+  invalidateUserQueries,
   userCommands,
   readUserEditor,
   userDetailOptions,
   userCreateOptions,
 } from '@/queries/system/user';
-import { queryScope, requireQueryScope } from '@/queries/context';
+import {
+  queryScope,
+  requireQueryScope,
+  scopeRequestOptions,
+  type QueryScope,
+} from '@/queries/context';
 import { copyUserDeptTree, userDeptTreeOptions } from '@/queries/system/dept';
+import {
+  createUserSchema,
+  initialUser,
+  toUserDto,
+  userFieldIssues,
+  type UserValues,
+} from './user-form';
 
-const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
-
-const emit = defineEmits(['success']);
-
-const formRef = ref();
-const { remarkRef, remarkRule } = useRemarkField();
-const remarkSession = ref(0);
-const postOptions = ref([]);
-const roleOptions = ref([]);
-const detailLoading = ref(false);
-const requestedId = ref();
-const editorScope = shallowRef(null);
-const selectedDepartment = shallowRef(null);
-
-const formRules = computed(() => ({
-  remark: [remarkRule],
-  userName: [
-    { required: true, message: '用户名称不能为空', trigger: 'blur' },
-    {
-      min: 2,
-      max: 20,
-      message: '用户名称长度必须介于 2 和 20 之间',
-      trigger: 'blur',
-    },
-  ],
-  nickName: [{ required: true, message: '用户昵称不能为空', trigger: 'blur' }],
-  password: isEdit.value
-    ? []
-    : [
-        { required: true, message: '用户密码不能为空', trigger: 'blur' },
-        {
-          min: 5,
-          max: 20,
-          message: '用户密码长度必须介于 5 和 20 之间',
-          trigger: 'blur',
-        },
-        {
-          pattern: /^[^<>"'|\\]+$/,
-          message: '不能包含非法字符：< > " \' \\ |',
-          trigger: 'blur',
-        },
-      ],
-  email: [
-    {
-      type: 'email',
-      message: '请输入正确的邮箱地址',
-      trigger: ['blur', 'change'],
-    },
-  ],
-  phonenumber: [
-    {
-      pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-      message: '请输入正确的手机号码',
-      trigger: 'blur',
-    },
-  ],
-}));
-
-const {
-  formProps,
-  layoutProps,
-  state,
-  dialogProps,
-  dialogEvents,
-  open,
-  close,
-  setDisabled,
-  isDirty,
-} = useFormDialog({
-  columns: 2,
-  title: (data) => (data?.userId ? '修改用户' : '添加用户'),
-
-  okText: computed(() => (state.data.userId ? '保存' : '创建')),
-  formRef,
-  preValidate: true,
-  autoScrollToError: true,
-  autoResetForm: true,
-  onBeforeClose: canDiscard,
-  loading: detailLoading,
-  defaultData: () => ({
-    userId: undefined,
-    deptId: undefined,
-    userName: '',
-    nickName: '',
-    password: '',
-    phonenumber: '',
-    email: '',
-    sex: undefined,
-    status: '0',
-    remark: null,
-    postIds: [],
-    roleIds: [],
-  }),
-  onConfirm: async (data) => {
-    const scope = editorScope.value;
-    if (
-      !state.visible ||
-      !scope ||
-      scope !== queryScope.value ||
-      detailLoading.value ||
-      loadError.value
-    )
-      return false;
-    const payload = {
-      deptId: data.deptId,
-      userName: data.userName,
-      nickName: data.nickName,
-      phonenumber: data.phonenumber,
-      email: data.email,
-      sex: data.sex,
-      status: data.status,
-      remark: data.remark,
-      postIds: data.postIds,
-      roleIds: data.roleIds,
-    };
-    if (data.userId) {
-      await userCommands.updateUser(captureUserCommand({ ...payload, userId: data.userId }, scope));
-    } else {
-      await userCommands.createUser(
-        captureUserCommand({ ...payload, password: data.password }, scope)
-      );
-    }
-    if (scope !== queryScope.value || state.data !== data) return false;
-    emit('success');
+const emit = defineEmits<{ success: [] }>();
+const { dialogProps, schemaFormProps } = schemaFormDialog({ columns: 2 });
+const bindings = {
+  RemarkEditor: {
+    component: markRaw(RemarkEditor),
+    composite: true,
+    group: false,
   },
-  // 错误消息已在 http 层统一处理，无需重复显示
-});
-
-const isEdit = computed(() => !!state.data.userId);
-
+  UserDictSelect: { component: markRaw(DictSelect) },
+};
+const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
+const visible = ref(false);
+const requestedId = ref<number>();
+const dialogRef = ref<ZxDialogExpose>();
+const formRef = ref<SchemaFormInstance<UserValues>>();
+const detailLoading = ref(false);
+const editorScope = shallowRef<QueryScope | null>(null);
+const postOptions = ref<NonNullable<UserDetailReadModel['posts']>>([]);
+const roleOptions = ref<NonNullable<UserDetailReadModel['roles']>>([]);
+const selectedDepartment = shallowRef<{ id: number; label: string } | null>(null);
+const session = shallowRef<{
+  key: number;
+  initial: UserValues;
+  createSchema: ReturnType<typeof createUserSchema>;
+  save: Save<UserValues>;
+}>();
+const values = computed(() => formRef.value?.read());
 const {
   error: loadError,
   run: runRead,
   cancel: cancelRead,
-} = useEditorRead(() => state.visible, detailLoading);
-const editorQuery = useQuery(
-  computed(() => {
-    const scope = state.visible ? editorScope.value : null;
-    return requestedId.value === undefined
-      ? userCreateOptions(scope)
-      : userDetailOptions(scope, requestedId.value);
-  })
+} = useEditorRead(() => visible.value, detailLoading);
+const createQuery = useQuery(() =>
+  userCreateOptions(visible.value && requestedId.value === undefined ? editorScope.value : null)
 );
+const detailQuery = useQuery(() =>
+  userDetailOptions(
+    visible.value && requestedId.value !== undefined ? editorScope.value : null,
+    requestedId.value
+  )
+);
+const editorQuery = computed(() => (requestedId.value === undefined ? createQuery : detailQuery));
 const departmentQuery = useQuery(() =>
   userDeptTreeOptions(
-    state.visible && editorScope.value === queryScope.value ? editorScope.value : null
+    visible.value && editorScope.value === queryScope.value ? editorScope.value : null
   )
 );
 const deptOptions = computed(() => copyUserDeptTree(departmentQuery.data.value ?? []));
 const selectedDeptCache = computed(() =>
-  selectedDepartment.value && selectedDepartment.value.id === state.data.deptId
+  selectedDepartment.value && selectedDepartment.value.id === values.value?.deptId
     ? [selectedDepartment.value]
     : []
 );
-function findDepartment(nodes, id) {
+function findDepartment(
+  nodes: typeof deptOptions.value,
+  id: number | null | undefined
+): (typeof nodes)[number] | undefined {
   for (const node of nodes) {
     if (String(node.id) === String(id)) return node;
     const found = node.children && findDepartment(node.children, id);
     if (found) return found;
   }
+  return undefined;
 }
 watch(
-  [() => state.data.deptId, deptOptions],
+  [() => values.value?.deptId, deptOptions],
   ([id, options]) => {
-    if (!state.visible) return;
+    if (!visible.value || id === undefined) return;
     const current = findDepartment(options, id);
-    if (current) selectedDepartment.value = { id, label: current.label };
+    if (current && id !== null) selectedDepartment.value = { id, label: current.label };
     else if (selectedDepartment.value?.id !== id) selectedDepartment.value = null;
   },
   { flush: 'sync' }
 );
+let generation = 0;
+let openingIntent = 0;
+let discardPending: Promise<boolean> | undefined;
+let writeId: number | undefined;
+let dispatchedName = '';
 watch(
   queryScope,
   () => {
+    ++openingIntent;
+    ++generation;
     cancelRead();
-    selectedDepartment.value = null;
+    visible.value = false;
+    session.value = undefined;
     editorScope.value = null;
-    state.visible = false;
+    selectedDepartment.value = null;
   },
   { flush: 'sync' }
 );
-
-/** 打开对话框；新增也需要本次打开的岗位和角色选项。 */
-let openingIntent = 0;
-let approvedClose = false;
-let discardPending;
-function canDiscard() {
-  if (approvedClose || !state.visible) return Promise.resolve(true);
-  if (state.loading) return Promise.resolve(false);
-  if (detailLoading.value || loadError.value) return Promise.resolve(true);
-  if (!isDirty.value && remarkRef.value?.validate?.() !== false) return Promise.resolve(true);
+const edited = () =>
+  !!(formRef.value?.dirty || formRef.value?.hasUncommittedInput || formRef.value?.fieldPending);
+function canDiscard(): Promise<boolean> {
+  if (!visible.value) return Promise.resolve(true);
+  if (formRef.value?.pending || formRef.value?.reconciliationRequired)
+    return Promise.resolve(false);
+  if (detailLoading.value || loadError.value || !edited()) return Promise.resolve(true);
   if (discardPending) return discardPending;
-  const data = state.data;
-  const scope = editorScope.value;
+  const key = generation,
+    scope = editorScope.value;
   const decision = ElMessageBox.confirm('用户信息尚未保存，是否放弃本次修改？', '未保存的修改', {
     confirmButtonText: '放弃修改',
     cancelButtonText: '继续编辑',
     type: 'warning',
   })
     .then(
-      () => state.visible && state.data === data && scope === queryScope.value && !state.loading
+      () =>
+        visible.value && key === generation && scope === queryScope.value && !formRef.value?.pending
     )
     .catch(() => false)
     .finally(() => {
@@ -368,126 +221,265 @@ function canDiscard() {
   discardPending = decision;
   return decision;
 }
-async function openDialog(userId) {
+function acceptCatalogs(response: UserDetailReadModel) {
+  postOptions.value = [...(response.posts ?? [])];
+  roleOptions.value = [...(response.roles ?? [])];
+  const user = response.data;
+  selectedDepartment.value =
+    user?.deptId && typeof user.dept?.deptName === 'string'
+      ? { id: user.deptId, label: user.dept.deptName }
+      : null;
+}
+function saveFor(key: number, scope: QueryScope): Save<UserValues> {
+  return async (snapshot, signal) => {
+    const current = () =>
+      !signal.aborted && visible.value && key === generation && scope === queryScope.value;
+    if (!current())
+      return {
+        ok: false,
+        outcome: 'rejected',
+        issues: [{ message: '用户编辑会话已结束' }],
+      };
+    let dto: UserCreateModel | UserUpdateModel;
+    try {
+      dto = toUserDto(snapshot, writeId);
+    } catch (error) {
+      return {
+        ok: false,
+        outcome: 'rejected',
+        issues: [
+          {
+            message: error instanceof Error ? error.message : '用户数据格式不正确',
+          },
+        ],
+      };
+    }
+    dispatchedName = snapshot.userName;
+    try {
+      const response =
+        writeId === undefined
+          ? await userCommands.createUser(
+              captureUserCommand(dto as UserCreateModel, scope, {
+                silentError: true,
+              })
+            )
+          : await userCommands.updateUser(
+              captureUserCommand(dto as UserUpdateModel, scope, {
+                silentError: true,
+              })
+            );
+      if (!current()) return { ok: false, outcome: 'unknown', issues: [] };
+      const id = response?.data?.userId;
+      if (
+        !Number.isSafeInteger(id) ||
+        !id ||
+        id <= 0 ||
+        (writeId !== undefined && id !== writeId) ||
+        (writeId === undefined && response.data?.userName !== dispatchedName)
+      )
+        throw new Error('保存返回的用户身份无法确认');
+      writeId = id;
+      return { ok: true, values: initialUser(response) };
+    } catch (error) {
+      if (!current()) return { ok: false, outcome: 'unknown', issues: [] };
+      const problem = isRecord(error) && isRecord(error.problem) ? error.problem : undefined;
+      const status = Number(problem?.status);
+      if (status === 401 || [20001, 20002].includes(Number(problem?.errorCode)))
+        presentRequestError(error as HttpError, {
+          silentError: false,
+          feedback: { mode: 'auto' },
+        });
+      const issues = userFieldIssues(error);
+      return {
+        ok: false,
+        outcome: status >= 400 && status < 500 ? 'rejected' : 'unknown',
+        issues: issues.length
+          ? issues
+          : [
+              {
+                message:
+                  status >= 400 && status < 500
+                    ? error instanceof Error
+                      ? error.message
+                      : '用户保存被拒绝'
+                    : '保存结果未知，请读取核对',
+              },
+            ],
+      };
+    }
+  };
+}
+function createSession(
+  key: number,
+  userId: number | undefined,
+  response: UserDetailReadModel,
+  scope: QueryScope
+) {
+  return {
+    key,
+    initial: initialUser(response),
+    createSchema: createUserSchema({
+      creating: userId === undefined,
+      departments: () => deptOptions.value,
+      departmentCache: () => selectedDeptCache.value,
+      departmentLoading: () => departmentQuery.isLoading.value,
+      posts: () => postOptions.value,
+      roles: () => roleOptions.value,
+      statuses: () => statusOptions.value,
+      active: () => visible.value,
+    }),
+    save: saveFor(key, scope),
+  };
+}
+async function openDialog(userId?: number) {
   const intent = ++openingIntent;
-  if (state.visible && state.loading) return;
-  if (
-    state.visible &&
-    !detailLoading.value &&
-    !loadError.value &&
-    (isDirty.value || remarkRef.value?.validate?.() === false) &&
-    !(await canDiscard())
-  )
-    return;
+  if (visible.value && !(await canDiscard())) return;
   if (intent !== openingIntent) return;
-  const scope = requireQueryScope();
+  const scope = requireQueryScope(),
+    key = ++generation;
   editorScope.value = scope;
   requestedId.value = userId;
+  writeId = userId;
+  dispatchedName = '';
+  session.value = undefined;
+  selectedDepartment.value = null;
+  postOptions.value = [];
+  roleOptions.value = [];
+  visible.value = true;
   return runRead(async (read) => {
-    open(userId ? { userId } : undefined);
-    postOptions.value = [];
-    roleOptions.value = [];
-    setDisabled(true);
-    remarkSession.value++;
     const response = await readUserEditor(scope, userId, read.signal);
     if (!read.isCurrent() || intent !== openingIntent || scope !== queryScope.value) return;
-    postOptions.value = response.posts || [];
-    roleOptions.value = response.roles || [];
-    if (userId) {
-      const userData = response.data;
-      if (userData.dept?.deptName) {
-        selectedDepartment.value = {
-          id: userData.deptId,
-          label: userData.dept.deptName,
-        };
-      }
-      open({
-        userId: userData.userId,
-        deptId: userData.deptId,
-        userName: userData.userName,
-        nickName: userData.nickName,
-        phonenumber: userData.phonenumber,
-        email: userData.email,
-        sex: userData.sex,
-        status: userData.status,
-        remark: readRemark(userData.remark),
-        postIds: [...(response.postIds || [])],
-        roleIds: [...(response.roleIds || [])],
-      });
-    } else {
-      open();
-    }
-    setDisabled(false);
+    acceptCatalogs(response);
+    session.value = createSession(key, userId, response, scope);
+    await nextTick();
   });
 }
-
 async function closeDialog() {
   if (!(await canDiscard())) return;
   ++openingIntent;
   cancelRead();
-  approvedClose = true;
-  try {
-    await close();
-  } finally {
-    approvedClose = false;
-  }
+  visible.value = false;
 }
-
+watch(
+  visible,
+  (value) => {
+    if (!value) {
+      ++openingIntent;
+      ++generation;
+      session.value = undefined;
+    }
+  },
+  { flush: 'sync' }
+);
+async function reconcileUser() {
+  const scope = editorScope.value,
+    key = generation;
+  if (!scope || scope !== queryScope.value || !formRef.value?.reconciliationRequired) return;
+  return runRead(async (read) => {
+    let id = writeId;
+    if (id === undefined) {
+      const response = await listUser(
+        { userName: dispatchedName, page: 1, pageSize: 100 },
+        queryRequest(read.signal, scopeRequestOptions(scope))
+      );
+      const matches = response.items.filter((user) => user.userName === dispatchedName);
+      if (
+        matches.length !== 1 ||
+        !Number.isSafeInteger(matches[0].userId) ||
+        !matches[0].userId ||
+        matches[0].userId <= 0
+      )
+        throw new Error('尚未找到唯一的已保存用户，请稍后再次核对');
+      id = matches[0].userId;
+    }
+    // Reconciliation must begin a new read after the write; an opening query may still hold a pre-write request.
+    const response = await getUser(id, {
+      signal: read.signal,
+      requestOptions: scopeRequestOptions(scope),
+      silentError: true,
+    });
+    if (
+      response.data?.userId !== id ||
+      (writeId === undefined && response.data?.userName !== dispatchedName)
+    ) {
+      throw new Error('读取的用户身份与本次保存不符，请再次核对');
+    }
+    if (!read.isCurrent() || scope !== queryScope.value || key !== generation || !visible.value)
+      return;
+    if (
+      (await formRef.value?.reconcile(initialUser(response))) &&
+      read.isCurrent() &&
+      scope === queryScope.value &&
+      key === generation
+    ) {
+      const wasCreating = writeId === undefined;
+      writeId = id;
+      requestedId.value = id;
+      acceptCatalogs(response);
+      invalidateUserQueries(scope);
+      if (wasCreating) session.value = createSession(++generation, id, response, scope);
+    }
+  }).catch(() => {
+    /* Current read owns inline failure and retry. */
+  });
+}
 function handleRetry() {
+  if (formRef.value?.reconciliationRequired) return reconcileUser();
   return openDialog(requestedId.value).catch(() => {
-    // 当前读取已负责反馈；重试点击只承接拒绝。
+    /* Current read owns feedback. */
   });
 }
 function retryResource() {
-  if (editorQuery.isEnabled.value) {
-    void editorQuery.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {
-      // The observer retains the read failure without replacing the draft.
-    });
-  }
+  if (editorQuery.value.isEnabled.value)
+    void editorQuery.value.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {});
 }
 function retryDepartments() {
-  if (departmentQuery.isEnabled.value) {
-    void departmentQuery.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {
-      // The local observer owns the department read failure; the user draft remains editable.
-    });
-  }
+  if (departmentQuery.isEnabled.value)
+    void departmentQuery.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {});
 }
-
+function submit() {
+  if (
+    !visible.value ||
+    editorScope.value !== queryScope.value ||
+    detailLoading.value ||
+    loadError.value
+  )
+    return Promise.resolve(false);
+  return formRef.value?.submit() ?? Promise.resolve(false);
+}
+function handleSaved(key: number) {
+  if (!visible.value || key !== generation || editorScope.value !== queryScope.value) return;
+  emit('success');
+  visible.value = false;
+}
 defineExpose({ open: openDialog, close: closeDialog });
-watch(
-  () => state.visible,
-  (visible) => {
-    if (visible) remarkSession.value++;
-  }
-);
-
 useAIContextHost('user', {
-  instanceKey: () => remarkSession.value,
+  instanceKey: () => session.value?.key ?? generation,
   revisionSource: () => [
-    state.data,
+    values.value,
     selectedDepartment.value,
     postOptions.value,
     roleOptions.value,
   ],
   bindings: {
-    userName: { value: () => state.data.userName },
-    nickName: { value: () => state.data.nickName },
-    phonenumber: { value: () => state.data.phonenumber },
-    email: { value: () => state.data.email },
+    userName: {
+      value: () => values.value?.userName,
+      available: () => !!formRef.value?.ready,
+    },
     deptName: { value: () => selectedDepartment.value?.label },
     postNames: {
       value: () =>
         postOptions.value
-          .filter((item) => state.data.postIds?.includes(item.postId))
+          .filter((item) => values.value?.postIds.includes(item.postId!))
           .map((item) => item.postName),
     },
     roleNames: {
       value: () =>
         roleOptions.value
-          .filter((item) => state.data.roleIds?.includes(item.roleId))
+          .filter((item) => values.value?.roleIds.includes(item.roleId!))
           .map((item) => item.roleName),
     },
-    status: { value: () => (state.data.status === '0' ? '正常' : '停用') },
+    status: { value: () => (values.value?.status === '0' ? '正常' : '停用') },
   },
 });
 </script>

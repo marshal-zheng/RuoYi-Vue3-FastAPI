@@ -40,6 +40,7 @@ from module_admin.entity.vo.user_vo import (
     UserRoleQueryModel,
     UserRoleResponseModel,
 )
+from modules.system.application.user_avatars import release_user_assets
 from modules.system.infrastructure.role_repository import RoleRepository
 from modules.system.infrastructure.user_post_repository import UserPostRepository
 from modules.system.infrastructure.user_repository import UserRepository
@@ -406,7 +407,7 @@ class UserService:
         :return: 编辑用户校验结果
         关联字段未提供时保留, 提供空数组或 None 时清空。
         """
-        is_general_edit = page_object.type not in {'status', 'avatar', 'pwd', 'login'}
+        is_general_edit = page_object.type not in {'status', 'pwd', 'login'}
         edit_fields = {
             'dept_id',
             'user_name',
@@ -421,7 +422,6 @@ class UserService:
         operation_fields = {
             'profile': {'nick_name', 'email', 'phonenumber', 'sex'},
             'status': {'status'},
-            'avatar': {'avatar'},
             'pwd': {'password'},
             'login': {'login_date', 'login_ip'},
         }
@@ -471,6 +471,8 @@ class UserService:
             await user_role_repo.delete_by_user_id(int(user_id))
             await user_post_repo.delete_by_user_id(int(user_id))
             await user_repo.soft_delete(int(user_id), page_object.update_by)
+            # Soft delete is deletion: avatar bindings are released in this same transaction.
+            await release_user_assets(query_db, int(user_id))
         return CrudResponseModel(is_success=True, message='删除成功')
 
     async def user_detail_services(

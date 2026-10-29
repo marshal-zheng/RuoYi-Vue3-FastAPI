@@ -1,0 +1,73 @@
+--- /dev/null
++++ after/internal/build/src/plugins/production-vue.test.ts
+@@ -0,0 +1,70 @@
++// @vitest-environment node
++import { execFileSync } from 'node:child_process'
++import { mkdtemp, rm, writeFile } from 'node:fs/promises'
++import { tmpdir } from 'node:os'
++import path from 'node:path'
++import { rollup } from 'rollup'
++import { expect, it } from 'vitest'
++import { productionVuePlugin } from './production-vue'
++
++it.each(['svg', 'font'])(
++  'preserves consumer attrs on the %s branch in a production runtime',
++  async (icon) => {
++    const directory = await mkdtemp(path.join(tmpdir(), 'zxui-production-vue-'))
++    const input = path.join(directory, 'icon.vue')
++    const output = path.join(directory, 'icon.cjs')
++    try {
++      // Same commented conditional-root pattern as ZxIcon. Source dev mode finds
++      // its single root, but a production runtime cannot unwrap DEV_ROOT_FRAGMENT.
++      await writeFile(
++        input,
++        `<script>export default { props: { icon: String } }</script>
++<template>
++  <!-- Local SVG -->
++  <i v-if="icon === 'svg'"><svg /></i>
++  <!-- Icon font -->
++  <i v-else>Icon</i>
++</template>`
++      )
++      const bundle = await rollup({
++        input,
++        external: ['vue'],
++        plugins: [productionVuePlugin()],
++      })
++      try {
++        await bundle.write({ file: output, format: 'cjs' })
++      } finally {
++        await bundle.close()
++      }
++      const html = execFileSync(
++        process.execPath,
++        [
++          '-e',
++          `
++      const { createSSRApp, h } = require('vue');
++      const { renderToString } = require('@vue/server-renderer');
++      const Icon = require(${JSON.stringify(output)});
++      renderToString(createSSRApp({ render: () => h(Icon, {
++        icon: ${JSON.stringify(icon)}, class: 'consumer-icon',
++        'aria-label': 'consumer-label', style: { color: 'red' }
++      }) })).then(html => process.stdout.write(html));
++    `,
++        ],
++        {
++          cwd: process.cwd(),
++          env: {
++            ...process.env,
++            NODE_ENV: 'production',
++            NODE_PATH: path.resolve('node_modules'),
++          },
++          encoding: 'utf8',
++        }
++      )
++      expect(html).toContain('class="consumer-icon"')
++      expect(html).toContain('aria-label="consumer-label"')
++      expect(html).toContain('style="color:red;"')
++    } finally {
++      await rm(directory, { recursive: true, force: true })
++    }
++  }
++)

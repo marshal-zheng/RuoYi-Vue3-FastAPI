@@ -1458,6 +1458,108 @@
         "title": "TextStyleMark",
         "type": "object"
       },
+      "AssetDescriptorModel": {
+        "properties": {
+          "assetId": {
+            "description": "资产ID（UUID）",
+            "title": "Assetid",
+            "type": "string"
+          },
+          "contentUrl": {
+            "description": "稳定同源内容地址，每次使用都鉴权",
+            "title": "Contenturl",
+            "type": "string"
+          },
+          "mediaType": {
+            "description": "登记的规范媒体类型",
+            "title": "Mediatype",
+            "type": "string"
+          },
+          "name": {
+            "description": "安全显示名",
+            "title": "Name",
+            "type": "string"
+          },
+          "size": {
+            "description": "存储字节数",
+            "title": "Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "assetId",
+          "name",
+          "mediaType",
+          "size",
+          "contentUrl"
+        ],
+        "title": "AssetDescriptorModel",
+        "type": "object"
+      },
+      "AssetMetadataBatchRequest": {
+        "properties": {
+          "assetIds": {
+            "description": "资产ID列表，最多 100 个",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100,
+            "title": "Assetids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "assetIds"
+        ],
+        "title": "AssetMetadataBatchRequest",
+        "type": "object"
+      },
+      "AssetMetadataBatchResponse": {
+        "properties": {
+          "items": {
+            "description": "按输入顺序返回当前可见的资产",
+            "items": {
+              "$ref": "#/components/schemas/AssetDescriptorModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "unavailableIds": {
+            "description": "不存在或不可见的资产ID（不区分原因）",
+            "items": {
+              "type": "string"
+            },
+            "title": "Unavailableids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items",
+          "unavailableIds"
+        ],
+        "title": "AssetMetadataBatchResponse",
+        "type": "object"
+      },
+      "AvatarUploadResponse": {
+        "properties": {
+          "avatarAssetId": {
+            "description": "头像资产ID",
+            "title": "Avatarassetid",
+            "type": "string"
+          },
+          "avatarUrl": {
+            "description": "头像稳定内容地址",
+            "title": "Avatarurl",
+            "type": "string"
+          }
+        },
+        "required": [
+          "avatarAssetId",
+          "avatarUrl"
+        ],
+        "title": "AvatarUploadResponse",
+        "type": "object"
+      },
       "BatchDeviceIdsModel": {
         "description": "批量设备ID模型",
         "properties": {
@@ -1520,34 +1622,6 @@
           "file"
         ],
         "title": "Body_batch_import_system_user_system_user_importData_post",
-        "type": "object"
-      },
-      "Body_change_system_user_profile_avatar_system_user_profile_avatar_post": {
-        "properties": {
-          "avatarfile": {
-            "format": "binary",
-            "title": "Avatarfile",
-            "type": "string"
-          }
-        },
-        "required": [
-          "avatarfile"
-        ],
-        "title": "Body_change_system_user_profile_avatar_system_user_profile_avatar_post",
-        "type": "object"
-      },
-      "Body_common_upload_common_upload_post": {
-        "properties": {
-          "file": {
-            "format": "binary",
-            "title": "File",
-            "type": "string"
-          }
-        },
-        "required": [
-          "file"
-        ],
-        "title": "Body_common_upload_common_upload_post",
         "type": "object"
       },
       "Body_delete_protocol_batch_system_protocol_deleteBatch_post": {
@@ -5512,6 +5586,21 @@
       "EditGenTableModel": {
         "description": "修改代码生成业务表模型",
         "properties": {
+          "assetFields": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/GenAssetFieldModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逻辑文件字段声明",
+            "title": "Assetfields"
+          },
           "businessName": {
             "anyOf": [
               {
@@ -5932,18 +6021,6 @@
             "default": false,
             "description": "是否为admin",
             "title": "Admin"
-          },
-          "avatar": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "头像地址",
-            "title": "Avatar"
           },
           "createBy": {
             "anyOf": [
@@ -6761,6 +6838,70 @@
         "title": "ExportVersionModel",
         "type": "object"
       },
+      "GenAssetFieldModel": {
+        "additionalProperties": false,
+        "description": "逻辑文件字段声明（经文件资产模块绑定，不是业务表物理列）\n\n语义只来自本声明，不按列名猜测；前端 accept/提示与服务端策略由同一声明生成。",
+        "properties": {
+          "allowedTypeIds": {
+            "description": "允许的已登记文件类型ID（至少一项）",
+            "items": {
+              "type": "string"
+            },
+            "title": "Allowedtypeids",
+            "type": "array"
+          },
+          "assetKind": {
+            "description": "资产种类（image 图片 file 文件）",
+            "enum": [
+              "image",
+              "file"
+            ],
+            "title": "Assetkind",
+            "type": "string"
+          },
+          "fieldName": {
+            "description": "字段名（camelCase；同时作为绑定字段键与上传用途后缀）",
+            "title": "Fieldname",
+            "type": "string"
+          },
+          "label": {
+            "description": "表单标签",
+            "title": "Label",
+            "type": "string"
+          },
+          "maxBytes": {
+            "description": "单个文件大小上限（字节）",
+            "title": "Maxbytes",
+            "type": "integer"
+          },
+          "maxCount": {
+            "description": "最大文件数量",
+            "title": "Maxcount",
+            "type": "integer"
+          },
+          "required": {
+            "default": false,
+            "description": "是否必填",
+            "title": "Required",
+            "type": "boolean"
+          },
+          "showInList": {
+            "default": false,
+            "description": "是否在列表展示",
+            "title": "Showinlist",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "fieldName",
+          "label",
+          "assetKind",
+          "maxBytes",
+          "maxCount"
+        ],
+        "title": "GenAssetFieldModel",
+        "type": "object"
+      },
       "GenTableColumnModel": {
         "description": "代码生成业务表字段模型",
         "properties": {
@@ -7209,6 +7350,21 @@
       "GenTableModel-Input": {
         "description": "代码生成业务表模型",
         "properties": {
+          "assetFields": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/GenAssetFieldModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逻辑文件字段声明",
+            "title": "Assetfields"
+          },
           "businessName": {
             "anyOf": [
               {
@@ -7606,6 +7762,21 @@
       "GenTableModel-Output": {
         "description": "代码生成业务表模型",
         "properties": {
+          "assetFields": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/GenAssetFieldModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逻辑文件字段声明",
+            "title": "Assetfields"
+          },
           "businessName": {
             "anyOf": [
               {
@@ -8101,6 +8272,21 @@
       "GenTableReadModel": {
         "description": "Public table configuration response.",
         "properties": {
+          "assetFields": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/GenAssetFieldModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逻辑文件字段声明",
+            "title": "Assetfields"
+          },
           "businessName": {
             "anyOf": [
               {
@@ -10392,14 +10578,13 @@
           "noticeContent": {
             "anyOf": [
               {
-                "format": "binary",
                 "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "公告内容",
+            "description": "公告内容（UTF-8 HTML，服务端净化，图片仅允许 /file-assets/{assetId}/content）",
             "title": "Noticecontent"
           },
           "noticeId": {
@@ -15052,7 +15237,7 @@
             "description": "是否为admin",
             "title": "Admin"
           },
-          "avatar": {
+          "avatarAssetId": {
             "anyOf": [
               {
                 "type": "string"
@@ -15061,8 +15246,20 @@
                 "type": "null"
               }
             ],
-            "description": "头像地址",
-            "title": "Avatar"
+            "description": "头像资产ID（来自绑定投影）",
+            "title": "Avatarassetid"
+          },
+          "avatarUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "头像稳定内容地址；为空时前端使用默认头像",
+            "title": "Avatarurl"
           },
           "createBy": {
             "anyOf": [
@@ -15380,7 +15577,7 @@
       "UserInfoReadModel": {
         "description": "Read model for user info payload.",
         "properties": {
-          "avatar": {
+          "avatarAssetId": {
             "anyOf": [
               {
                 "type": "string"
@@ -15389,8 +15586,20 @@
                 "type": "null"
               }
             ],
-            "description": "Avatar URL",
-            "title": "Avatar"
+            "description": "Avatar asset id (binding projection)",
+            "title": "Avatarassetid"
+          },
+          "avatarUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Stable same-origin avatar content URL",
+            "title": "Avatarurl"
           },
           "createBy": {
             "anyOf": [
@@ -15683,7 +15892,7 @@
       "UserListItemReadModel": {
         "description": "Read model for user list item.",
         "properties": {
-          "avatar": {
+          "avatarAssetId": {
             "anyOf": [
               {
                 "type": "string"
@@ -15692,8 +15901,20 @@
                 "type": "null"
               }
             ],
-            "description": "Avatar URL",
-            "title": "Avatar"
+            "description": "Avatar asset id (binding projection)",
+            "title": "Avatarassetid"
+          },
+          "avatarUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Stable same-origin avatar content URL",
+            "title": "Avatarurl"
           },
           "createBy": {
             "anyOf": [
@@ -15985,18 +16206,6 @@
       },
       "UserPageQueryModel": {
         "properties": {
-          "avatar": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "头像地址",
-            "title": "Avatar"
-          },
           "beginTime": {
             "anyOf": [
               {
@@ -17270,105 +17479,6 @@
         ]
       }
     },
-    "/common/download": {
-      "get": {
-        "operationId": "common_download_common_download_get",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "fileName",
-            "required": true,
-            "schema": {
-              "title": "Filename",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "delete",
-            "required": true,
-            "schema": {
-              "title": "Delete",
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "summary": "Common Download",
-        "tags": [
-          "通用模块"
-        ]
-      }
-    },
-    "/common/download/resource": {
-      "get": {
-        "operationId": "common_download_resource_common_download_resource_get",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "resource",
-            "required": true,
-            "schema": {
-              "title": "Resource",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "summary": "Common Download Resource",
-        "tags": [
-          "通用模块"
-        ]
-      }
-    },
     "/common/tables": {
       "get": {
         "description": "获取数据库表名列表",
@@ -17389,50 +17499,6 @@
           }
         ],
         "summary": "Get Table Names",
-        "tags": [
-          "通用模块"
-        ]
-      }
-    },
-    "/common/upload": {
-      "post": {
-        "operationId": "common_upload_common_upload_post",
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_common_upload_common_upload_post"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "summary": "Common Upload",
         "tags": [
           "通用模块"
         ]
@@ -18401,6 +18467,258 @@
         ]
       }
     },
+    "/file-assets/metadata:batch": {
+      "post": {
+        "operationId": "batch_file_asset_metadata_file_assets_metadata_batch_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssetMetadataBatchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetMetadataBatchResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "批量读取当前可见资产的元数据",
+        "tags": [
+          "文件资产"
+        ]
+      }
+    },
+    "/file-assets/uploads": {
+      "post": {
+        "operationId": "upload_file_asset_file_assets_uploads_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "file": {
+                    "description": "单个文件",
+                    "format": "binary",
+                    "type": "string"
+                  },
+                  "ownerId": {
+                    "description": "编辑已有业务对象时的业务ID，新建时省略",
+                    "maxLength": 128,
+                    "type": "string"
+                  },
+                  "purpose": {
+                    "description": "服务端登记的上传用途",
+                    "maxLength": 64,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "file",
+                  "purpose"
+                ],
+                "title": "FileAssetUploadForm",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetDescriptorModel"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "上传文件并创建 READY 草稿资产",
+        "tags": [
+          "文件资产"
+        ]
+      }
+    },
+    "/file-assets/{asset_id}": {
+      "delete": {
+        "operationId": "discard_file_asset_file_assets__asset_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "title": "Asset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "丢弃本人尚未绑定的草稿（可重复执行）",
+        "tags": [
+          "文件资产"
+        ]
+      },
+      "get": {
+        "operationId": "get_file_asset_file_assets__asset_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "title": "Asset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetDescriptorModel"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "读取单个资产元数据",
+        "tags": [
+          "文件资产"
+        ]
+      }
+    },
+    "/file-assets/{asset_id}/content": {
+      "get": {
+        "operationId": "get_file_asset_content_file_assets__asset_id__content_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "title": "Asset Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "true 时强制 attachment（只能收紧）",
+            "in": "query",
+            "name": "download",
+            "required": false,
+            "schema": {
+              "default": false,
+              "description": "true 时强制 attachment（只能收紧）",
+              "title": "Download",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "format": "binary",
+                  "type": "string"
+                }
+              }
+            },
+            "description": "文件内容（图片用途 inline，其余 attachment）"
+          },
+          "304": {
+            "description": "If-None-Match 命中（已鉴权，不访问存储）"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "鉴权后从私有存储流式读取内容",
+        "tags": [
+          "文件资产"
+        ]
+      }
+    },
     "/getInfo": {
       "get": {
         "operationId": "get_login_user_info_getInfo_get",
@@ -18523,6 +18841,25 @@
           }
         },
         "summary": "Event Health Check",
+        "tags": [
+          "健康检查"
+        ]
+      }
+    },
+    "/health/file-assets": {
+      "get": {
+        "operationId": "file_asset_health_check_health_file_assets_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "File Asset Health Check",
         "tags": [
           "健康检查"
         ]
@@ -28560,21 +28897,20 @@
             }
           },
           {
-            "description": "公告内容",
+            "description": "公告内容（UTF-8 HTML，服务端净化，图片仅允许 /file-assets/{assetId}/content）",
             "in": "query",
             "name": "noticeContent",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "format": "binary",
                   "type": "string"
                 },
                 {
                   "type": "null"
                 }
               ],
-              "description": "公告内容",
+              "description": "公告内容（UTF-8 HTML，服务端净化，图片仅允许 /file-assets/{assetId}/content）",
               "title": "Noticecontent"
             }
           },
@@ -30389,24 +30725,6 @@
             }
           },
           {
-            "description": "头像地址",
-            "in": "query",
-            "name": "avatar",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "头像地址",
-              "title": "Avatar"
-            }
-          },
-          {
             "description": "密码",
             "in": "query",
             "name": "password",
@@ -30941,24 +31259,6 @@
               ],
               "description": "用户性别（0男 1女 2未知）",
               "title": "Sex"
-            }
-          },
-          {
-            "description": "头像地址",
-            "in": "query",
-            "name": "avatar",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "头像地址",
-              "title": "Avatar"
             }
           },
           {
@@ -32425,24 +32725,6 @@
             }
           },
           {
-            "description": "头像地址",
-            "in": "query",
-            "name": "avatar",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "头像地址",
-              "title": "Avatar"
-            }
-          },
-          {
             "description": "密码",
             "in": "query",
             "name": "password",
@@ -32779,12 +33061,24 @@
     },
     "/system/user/profile/avatar": {
       "post": {
+        "description": "One request, two commits: the avatar draft (READY) first, then the user's avatar binding.\n\nA failure before the binding commit keeps the old avatar; once it commits, a lost response or a\nclient cancel does not undo it (the client re-reads the profile to confirm).",
         "operationId": "change_system_user_profile_avatar_system_user_profile_avatar_post",
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/Body_change_system_user_profile_avatar_system_user_profile_avatar_post"
+                "properties": {
+                  "avatarfile": {
+                    "description": "头像图片",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "avatarfile"
+                ],
+                "title": "AvatarUploadForm",
+                "type": "object"
               }
             }
           },
@@ -32794,20 +33088,12 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
-              }
-            },
-            "description": "Successful Response"
-          },
-          "422": {
-            "content": {
-              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/AvatarUploadResponse"
                 }
               }
             },
-            "description": "Validation Error"
+            "description": "Successful Response"
           }
         },
         "security": [

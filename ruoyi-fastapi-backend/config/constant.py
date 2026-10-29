@@ -183,8 +183,6 @@ class GenConstant:
     HTML_RADIO: 单选框
     HTML_CHECKBOX: 复选框
     HTML_DATETIME: 日期控件
-    HTML_IMAGE_UPLOAD: 图片上传控件
-    HTML_FILE_UPLOAD: 文件上传控件
     HTML_EDITOR: 富文本控件
     TYPE_DECIMAL: 高精度计算类型
     TYPE_DATE: 时间类型
@@ -265,8 +263,6 @@ class GenConstant:
     HTML_RADIO = 'radio'
     HTML_CHECKBOX = 'checkbox'
     HTML_DATETIME = 'datetime'
-    HTML_IMAGE_UPLOAD = 'imageUpload'
-    HTML_FILE_UPLOAD = 'fileUpload'
     HTML_EDITOR = 'editor'
     TYPE_DECIMAL = 'Decimal'
     TYPE_DATE = ['date', 'time', 'datetime']

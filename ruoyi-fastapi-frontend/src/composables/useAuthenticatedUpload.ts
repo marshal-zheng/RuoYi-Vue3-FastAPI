@@ -1,17 +1,22 @@
 import { onScopeDispose, ref, watch } from 'vue';
 import type { UploadFile, UploadProgressEvent, UploadRequestOptions } from 'element-plus';
 import { AbortError } from '@zxio/http';
-import request from '@/utils/request';
+import { uploadFileAsset, type AssetDescriptor } from '@/api/fileAssets';
 import { queryScope, requireQueryScope, scopeRequestOptions } from '@/queries/context';
 
-export interface UploadedResource {
-  fileName: string;
-  originalFilename?: string;
-  url?: string;
+export interface UploadContext {
+  /** Server-registered upload purpose, e.g. `notice.image`. */
+  purpose: () => string;
+  /** Business id when editing an existing owner; omitted while creating it. */
+  ownerId?: () => string | number | null | undefined;
 }
 
-/** Element Plus owns success/error callbacks; this composable owns transport and cancellation. */
-export function useAuthenticatedUpload() {
+/**
+ * Element Plus owns success/error callbacks; this composable owns transport and cancellation.
+ * The session transport retries only an explicit pre-write 401 once; network errors, timeouts,
+ * 5xx and lost responses are never resent automatically.
+ */
+export function useAuthenticatedUpload(context: UploadContext) {
   const requests = new Map<number, AbortController>();
   const pending = ref(0);
 
@@ -24,27 +29,29 @@ export function useAuthenticatedUpload() {
     pending.value = requests.size;
   };
 
-  const httpRequest = async (options: UploadRequestOptions): Promise<UploadedResource> => {
+  const upload = async (
+    file: File,
+    uid: number,
+    onProgress?: (event: UploadProgressEvent) => void
+  ): Promise<AssetDescriptor> => {
     const scope = requireQueryScope();
     const controller = new AbortController();
-    const uid = options.file.uid;
     requests.set(uid, controller);
     pending.value = requests.size;
     const isCurrent = () => requests.get(uid) === controller && queryScope.value === scope;
     const data = new FormData();
-    data.append(options.filename, options.file, options.file.name);
+    data.append('purpose', context.purpose());
+    const ownerId = context.ownerId?.();
+    if (ownerId !== undefined && ownerId !== null && ownerId !== '')
+      data.append('ownerId', String(ownerId));
+    data.append('file', file, file.name);
     try {
-      const result = await request<UploadedResource>(
+      const result = await uploadFileAsset(
+        data,
         {
-          url: '/common/upload',
-          method: 'post',
-          data,
           signal: controller.signal,
-          timeout: 0,
-          silentSuccess: true,
-          feedback: { mode: 'auto' },
           onUploadProgress(event) {
-            if (!isCurrent() || controller.signal.aborted) return;
+            if (!onProgress || !isCurrent() || controller.signal.aborted) return;
             const total = event.total || 0;
             const progress = new ProgressEvent('progress', {
               loaded: event.loaded,
@@ -52,11 +59,12 @@ export function useAuthenticatedUpload() {
               lengthComputable: total > 0,
             }) as UploadProgressEvent;
             progress.percent = total > 0 ? (event.loaded / total) * 100 : 0;
-            options.onProgress(progress);
+            onProgress(progress);
           },
         },
         scopeRequestOptions(scope)
       );
+      // A response for another session or a cancelled row is never written back.
       if (!isCurrent() || controller.signal.aborted)
         throw new AbortError({ message: 'Upload cancelled' });
       return result;
@@ -66,7 +74,10 @@ export function useAuthenticatedUpload() {
     }
   };
 
+  const httpRequest = (options: UploadRequestOptions): Promise<AssetDescriptor> =>
+    upload(options.file, options.file.uid, options.onProgress);
+
   watch(queryScope, () => abort(), { flush: 'sync' });
   onScopeDispose(() => abort());
-  return { httpRequest, abort, pending };
+  return { httpRequest, upload, abort, pending };
 }

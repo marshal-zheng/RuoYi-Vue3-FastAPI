@@ -12,6 +12,25 @@ from module_admin.entity.vo.remark_vo import RemarkReadProjection, RemarkValue, 
 from utils.string_util import StringUtil
 
 
+class GenAssetFieldModel(BaseModel):
+    """
+    逻辑文件字段声明（经文件资产模块绑定，不是业务表物理列）
+
+    语义只来自本声明，不按列名猜测；前端 accept/提示与服务端策略由同一声明生成。
+    """
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, extra='forbid')
+
+    field_name: str = Field(description='字段名（camelCase；同时作为绑定字段键与上传用途后缀）')
+    label: str = Field(description='表单标签')
+    asset_kind: Literal['image', 'file'] = Field(description='资产种类（image 图片 file 文件）')
+    allowed_type_ids: list[str] = Field(default_factory=list, description='允许的已登记文件类型ID（至少一项）')
+    max_bytes: int = Field(description='单个文件大小上限（字节）')
+    max_count: int = Field(description='最大文件数量')
+    required: bool = Field(default=False, description='是否必填')
+    show_in_list: bool = Field(default=False, description='是否在列表展示')
+
+
 class GenTableBaseModel(RemarkWriteGuard, BaseModel):
     """
     代码生成业务表对应pydantic模型
@@ -40,6 +59,7 @@ class GenTableBaseModel(RemarkWriteGuard, BaseModel):
     update_by: str | None = Field(default=None, description='更新者')
     update_time: datetime | None = Field(default=None, description='更新时间')
     remark: RemarkValue = Field(default=None, description='备注')
+    asset_fields: list[GenAssetFieldModel] | None = Field(default=None, description='逻辑文件字段声明')
 
     @NotBlank(field_name='table_name', message='表名称不能为空')
     def get_table_name(self):

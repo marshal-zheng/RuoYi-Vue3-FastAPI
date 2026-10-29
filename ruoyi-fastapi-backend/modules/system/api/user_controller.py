@@ -1,17 +1,14 @@
-from contextlib import suppress
 from datetime import datetime
-from pathlib import Path
 from typing import Literal
 
 from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.enums import BusinessType
-from config.env import UploadConfig
 from config.error_codes import ErrorCode
 from config.get_db import get_db
 from container.dependencies import service_provider
-from exceptions.exception import BusinessException, SystemException
+from exceptions.exception import BusinessException
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
@@ -32,6 +29,9 @@ from module_admin.entity.vo.user_write_vo import (
     UserStatusUpdateModel,
     UserUpdateModel,
 )
+from modules.file_assets.api.http import read_upload_form, release_request_transaction
+from modules.file_assets.api.schemas import AVATAR_REQUEST_BODY, AvatarUploadResponse
+from modules.file_assets.ports import Actor, AssetInvalidError, UploadEntry, get_file_asset_services
 from modules.identity.ports import get_current_user
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import (
@@ -42,6 +42,7 @@ from modules.system.application.commands import (
     ImportUsersCommand,
     ResetUserPasswordCommand,
 )
+from modules.system.application.file_asset_policies import USER_AVATAR_PURPOSE
 from modules.system.application.mediator import Mediator
 from modules.system.application.queries import (
     GetUserAuthRoleQuery,
@@ -56,12 +57,12 @@ from modules.system.application.read_models.user_read_models import (
     UserProfileReadModel,
 )
 from modules.system.application.services.user_service import UserService
+from modules.system.application.user_avatars import replace_user_avatar
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import ok_page_result, require_int_value
 from utils.log_util import logger
 from utils.pwd_util import PwdUtil
 from utils.response_util import ResponseUtil
-from utils.upload_util import UploadUtil
 from utils.validation_util import ValidateFields
 
 userController = APIRouter(prefix='/system/user', dependencies=[Depends(get_current_user)])  # noqa: N816
@@ -386,51 +387,50 @@ async def query_detail_system_user(
     return ResponseUtil.ok_resource(detail_user_result)
 
 
-@userController.post('/profile/avatar')
-@Log(title='个人信息', business_type=BusinessType.UPDATE)
+@userController.post(
+    '/profile/avatar',
+    response_model=AvatarUploadResponse,
+    openapi_extra=AVATAR_REQUEST_BODY,
+)
+@Log(title='个人信息', business_type=BusinessType.UPDATE, capture_form=False)
 async def change_system_user_profile_avatar(
     request: Request,
-    avatarfile: bytes = File(),
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
-    mediator: Mediator = Depends(provide_system_mediator),
 ):
-    if avatarfile:
-        relative_path = (
-            f'avatar/{datetime.now().strftime("%Y")}/{datetime.now().strftime("%m")}/{datetime.now().strftime("%d")}'
-        )
-        dir_path = Path(UploadConfig.UPLOAD_PATH) / relative_path
-        with suppress(FileExistsError):
-            dir_path.mkdir(parents=True)
-        avatar_name = (
-            f'avatar_{datetime.now().strftime("%Y%m%d%H%M%S")}'
-            f'{UploadConfig.UPLOAD_MACHINE}{UploadUtil.generate_random_number()}.png'
-        )
-        avatar_path = dir_path / avatar_name
-        with avatar_path.open('wb') as f:
-            f.write(avatarfile)
-        edit_user = EditUserModel(
-            userId=current_user.user.user_id,
-            avatar=f'{UploadConfig.UPLOAD_PREFIX}/{relative_path}/{avatar_name}',
-            updateBy=current_user.user.user_name,
-            updateTime=datetime.now(),
-            type='avatar',
-        )
-        edit_command = EditUserCommand(
-            query_db=query_db,
-            user=edit_user,
-            operator=current_user.user.user_name,
-            trace_id=request.headers.get('x-trace-id'),
-            request_id=request.headers.get('x-request-id'),
-        )
-        edit_result = await mediator.send(edit_command)
-        message = edit_result.data.get('message') if edit_result.data else '更新成功'
-        logger.info(message)
+    """One request, two commits: the avatar draft (READY) first, then the user's avatar binding.
 
-        return ResponseUtil.ok_resource({'imgUrl': edit_user.avatar})
-
-    raise SystemException(
-        user_message='上传图片失败, 请重试', developer_message='Avatar upload failed: file is None or empty'
+    A failure before the binding commit keeps the old avatar; once it commits, a lost response or a
+    client cancel does not undo it (the client re-reads the profile to confirm).
+    """
+    # Every 401 happens above, before any asset row or object exists.
+    await release_request_transaction(query_db)
+    services = get_file_asset_services()
+    services.runtime.require_available()
+    actor = Actor.from_current_user(current_user)
+    slot = await services.runtime.upload_slots.acquire()
+    handed_over = False
+    try:
+        parsed = await read_upload_form(request, 'avatarfile')
+        if parsed.fields:
+            await parsed.incoming.close()
+            raise AssetInvalidError('UNKNOWN_FIELD', '上传参数不受支持', field=sorted(parsed.fields)[0])
+        handed_over = True
+        descriptor = await services.assets.upload(
+            actor=actor,
+            spec=services.assets.resolve_purpose(USER_AVATAR_PURPOSE, entry=UploadEntry.DEDICATED),
+            owner_id=str(actor.user_id),
+            incoming=parsed.incoming,
+            slot=slot,
+        )
+    finally:
+        if not handed_over:
+            slot.release()
+    await replace_user_avatar(query_db, actor, actor.user_id, descriptor.asset_id)
+    await query_db.commit()
+    logger.info('头像更新成功 asset={}', descriptor.asset_id)
+    return ResponseUtil.ok_resource(
+        AvatarUploadResponse(avatar_asset_id=descriptor.asset_id, avatar_url=descriptor.content_url)
     )
 
 

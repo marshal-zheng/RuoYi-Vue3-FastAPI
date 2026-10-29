@@ -83,6 +83,7 @@ class Log:
         title: str,
         business_type: BusinessType,
         log_type: Optional[Literal['login', 'operation']] = 'operation',
+        capture_form: bool = True,
     ):
         """
         日志装饰器
@@ -90,11 +91,14 @@ class Log:
         :param title: 当前日志装饰器装饰的模块标题
         :param business_type: 业务类型（OTHER其它 INSERT新增 UPDATE修改 DELETE删除 GRANT授权 EXPORT导出 IMPORT导入 FORCE强退 GENCODE生成代码 CLEAN清空数据）
         :param log_type: 日志类型（login表示登录日志，operation表示为操作日志）
+        :param capture_form: 是否在调用前解析表单记录参数。自行受控解析 multipart 的上传接口传 False，
+            避免在鉴权与上传槽位之前按默认限制解析整个请求体
         :return:
         """
         self.title = title
         self.business_type = business_type.value
         self.log_type = log_type
+        self.capture_form = capture_form
 
     def __call__(self, func):
         @wraps(func)
@@ -141,7 +145,11 @@ class Log:
                 oper_location = get_ip_location(oper_ip)
             # 根据不同的请求类型使用不同的方法获取请求参数
             content_type = request.headers.get('Content-Type')
-            if content_type and (
+            if content_type and 'multipart/form-data' in content_type and not self.capture_form:
+                oper_param = json.dumps(
+                    dict(request.query_params) or {'body': 'multipart（上传内容不记录）'}, ensure_ascii=False
+                )
+            elif content_type and (
                 'multipart/form-data' in content_type or 'application/x-www-form-urlencoded' in content_type
             ):
                 payload = dict(request.query_params)
@@ -283,7 +291,10 @@ class Log:
 
                     if query_db:
                         await _record_log(
-                            request, query_db, 'login_log_service', LogininforModel(**login_log),
+                            request,
+                            query_db,
+                            'login_log_service',
+                            LogininforModel(**login_log),
                             failed=captured_exception is not None,
                         )
                     else:
@@ -326,7 +337,10 @@ class Log:
                     costTime=int(cost_time),
                 )
                 await _record_log(
-                    request, query_db, 'operation_log_service', operation_log,
+                    request,
+                    query_db,
+                    'operation_log_service',
+                    operation_log,
                     failed=captured_exception is not None,
                 )
 

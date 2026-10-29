@@ -51,7 +51,7 @@ describe('multipart upload contract', () => {
       adapter: async (config) => {
         transmittedData = config.data;
         return {
-          data: { fileName: '/profile/axios-upgrade.txt' },
+          data: { assetId: 'a18c9be8-4317-4e10-a17d-b2caf86c63cf' },
           status: 200,
           statusText: 'OK',
           headers: {},
@@ -59,7 +59,7 @@ describe('multipart upload contract', () => {
         };
       },
     };
-    await uploadFormData('/common/upload', form, options);
+    await uploadFormData('/file-assets/uploads', form, options);
 
     expect(transmittedData).toBe(form);
   });

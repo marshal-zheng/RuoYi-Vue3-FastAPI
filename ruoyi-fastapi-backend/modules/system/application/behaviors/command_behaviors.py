@@ -49,7 +49,7 @@ class CommandValidationBehavior(IPipelineBehavior[Any, CommandResult[Any]]):
             if payload is None or field_name.startswith('_'):
                 continue
 
-            if field_name == 'user' and getattr(payload, 'type', None) in {'status', 'avatar', 'pwd'}:
+            if field_name == 'user' and getattr(payload, 'type', None) in {'status', 'pwd'}:
                 continue
 
             validator = getattr(payload, 'validate_fields', None)

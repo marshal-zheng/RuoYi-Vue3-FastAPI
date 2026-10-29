@@ -1,0 +1,54 @@
+"""
+{{ functionName }}文件字段归属策略（代码生成器按逻辑文件字段声明生成）
+
+接入：在 container/file_asset_policies.py 的 build_file_asset_policies() 中登记
+`{{ BusinessName }}AssetPolicy()`。未登记时上传用途与绑定都会被文件资产模块拒绝，不会退化为开放权限。
+"""
+
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from modules.file_assets.ports import Actor, AssetKind, ImageProfile, PermissionOwnerPolicy, PurposeSpec
+from {{ packageName }}.entity.do.{{ businessName }}_do import {{ ClassName }}
+
+OWNER_TYPE = '{{ assetOwnerType }}'
+{% for field in assetFields %}
+{{ field.const }} = PurposeSpec(
+    purpose='{{ field.purpose }}',
+    owner_type=OWNER_TYPE,
+    field_key='{{ field.name }}',
+    kind=AssetKind.{{ field.kind | upper }},
+    allowed_type_ids=({% for type_id in field.typeIds %}'{{ type_id }}', {% endfor %}),
+    max_bytes={{ field.maxBytes }},
+    max_count={{ field.maxCount }},
+    {% if field.kind == 'image' %}
+    image_profile=ImageProfile.STANDARD,
+    {% endif %}
+    create_permission='{{ assetCreatePermission }}',
+    edit_permission='{{ assetEditPermission }}',
+)
+{% endfor %}
+ASSET_FIELDS = ({% for field in assetFields %}'{{ field.name }}', {% endfor %})
+
+
+class {{ BusinessName }}AssetPolicy(PermissionOwnerPolicy):
+    """
+    {{ functionName }}：上传/保存沿用新增与修改菜单权限，读取需要列表或查询权限且记录存在
+    """
+
+    owner_type = OWNER_TYPE
+    purposes = ({% for field in assetFields %}{{ field.const }}, {% endfor %})
+
+    async def existing_owner_ids(self, session: AsyncSession, owner_ids: set[str]) -> set[str]:
+        ids = [int(owner_id) for owner_id in owner_ids if owner_id.isdigit()]
+        if not ids:
+            return set()
+        rows = await session.scalars(select({{ ClassName }}.{{ pkColumn.column_name }}).where({{ ClassName }}.{{ pkColumn.column_name }}.in_(ids)))
+        return {str(owner_id) for owner_id in rows.all()}
+
+    async def readable_owner_ids(
+        self, session: AsyncSession, actor: Actor, owner_ids: set[str], field_key: str
+    ) -> set[str]:
+        if not any(actor.has_permission(permission) for permission in ({% for permission in assetReadPermissions %}'{{ permission }}', {% endfor %})):
+            return set()
+        return await self.existing_owner_ids(session, owner_ids)

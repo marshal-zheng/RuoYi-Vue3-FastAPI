@@ -1,0 +1,16 @@
+{
+  "root": "/Users/hqz/Downloads/element-plus",
+  "head": "8facb3de459b48e8b53a25679e99081e0ab469b9",
+  "files": {
+    "packages/zxui/theme-runtime/runtime-core.ts": "64d5e29c7754c3972e0d764f23174a9101fce84138125773d1396b3591302a8b",
+    "packages/dashboard/src/theme/index.ts": "e9dfe3171ae090d9d2360aa2c5dfef66635ecdecad6f26147ad1a4b7e013c2d7",
+    "packages/dashboard/package.json": "b171d0d35969173e3c6eaa7e8cb5fa47af28063bbdda4361ff4642f9644261a4",
+    "internal/build/src/tasks/modules.ts": "c5b68d56804b146225fb9878c5c075659ff1516898c424afcbd0276b3ce01ed6",
+    "internal/build/src/tasks/full-bundle.ts": "5572ff5fbe891a02480e96f95780882944b373829b75f1dc09aaad05ba772b3b",
+    "packages/theme-compiler/src/adapters/element-plus/mapping.ts": "00e5c97f3222d34878148af217ab1a70deb8a3cc7a69041c7f6f633d420d33a8",
+    "packages/theme-default/generated/theme.manifest.json": "b74368ac77bd1e9489d36dbf46b8b7264200336a2c863ab3378864a4a72b1f40",
+    "internal/build/src/plugins/production-vue.ts": "da83de196bedda373767593a44e087d8af0aafe59fce23b23761f567431575fd",
+    "internal/build/src/plugins/production-vue.test.ts": "d24d9ea1bf7f9ee46175eb74d6039be5eafdbde9947e9e4ade166fce2c9d3f14"
+  },
+  "capture": "final, after production-template fix"
+}

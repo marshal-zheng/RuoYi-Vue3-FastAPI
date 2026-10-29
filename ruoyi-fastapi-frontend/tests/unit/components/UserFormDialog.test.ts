@@ -5,15 +5,27 @@ import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import { onlineManager, useQuery, VueQueryPlugin } from '@tanstack/vue-query';
 import { isAbortError } from '@zxio/http';
+import type { SchemaFormInstance } from '@zxio/schema-form/formily';
+import { ZxSelect } from '@zxio/zxui/select';
+import { useAIContextScope, type AIContextScopeRuntime } from '@zxio/zxui/ai-context';
+import { createFieldThemeTestHost } from '../../helpers/theme-field-public';
+import type { UserValues } from '@/views/system/user/components/user-form';
 import { ElOption, ElSelect, ElTreeSelect, ElMessageBox } from 'element-plus';
-import { defineComponent, h, nextTick, ref } from 'vue';
-import { addUser, deptTreeSelect, getUser, updateUser } from '@/api/system/user';
+import { defineComponent, h, nextTick, ref, proxyRefs } from 'vue';
+import { addUser, deptTreeSelect, getUser, updateUser, listUser } from '@/api/system/user';
 import { updateDept } from '@/api/system/dept';
 import UserFormDialog from '@/views/system/user/components/UserFormDialog.vue';
 import { mockRemark } from '@/mocks/data/remark';
+import { readRemark } from '@/components/ui/Remark/contract';
+import { createRemarkFieldTestHost } from '../../helpers/remark-field-public';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
-import { captureUserCommand, userCommands, userDetailOptions } from '@/queries/system/user';
+import {
+  captureUserCommand,
+  userCommands,
+  userDetailOptions,
+  userListOptions,
+} from '@/queries/system/user';
 import {
   captureDeptCommand,
   deptCommands,
@@ -26,6 +38,7 @@ vi.mock('@/api/system/user', () => ({
   addUser: vi.fn(),
   updateUser: vi.fn(),
   deptTreeSelect: vi.fn(),
+  listUser: vi.fn(),
 }));
 vi.mock('@/api/system/dept', () => ({
   listDept: vi.fn(),
@@ -57,7 +70,7 @@ vi.mock('@/utils/feedback/presenter', () => ({
 const dialogStub = defineComponent({
   name: 'ZxDialog',
   inheritAttrs: false,
-  props: ['confirm', 'formModel', 'okLoading', 'okDisabled', 'loading', 'modelValue'],
+  props: ['confirm', 'okLoading', 'okDisabled', 'loading', 'modelValue', 'handleBeforeCancel'],
   emits: ['update:modelValue', 'close'],
   setup(_, { slots, emit, expose }) {
     expose({
@@ -103,7 +116,32 @@ const outcome = <T>(promise: Promise<T>) =>
     (value) => ({ value }),
     (error) => ({ error })
   );
+function contextValue(scope: AIContextScopeRuntime, id: string) {
+  const value = scope.binding(id)?.value;
+  return typeof value === 'function' ? value() : value;
+}
+function formOf(wrapper: ReturnType<typeof mount>) {
+  return proxyRefs(
+    wrapper.getComponent({ name: 'ZxSchemaForm' }).vm.$.exposed!
+  ) as unknown as SchemaFormInstance<UserValues>;
+}
+/** Test conveniences only; every edit passes through the owner's public setValues. */
+function draftOf(wrapper: ReturnType<typeof mount>): UserValues {
+  const form = formOf(wrapper);
+  return new Proxy({} as UserValues, {
+    get: (_, key) => Reflect.get(form.read(), key),
+    set: (_, key, value) => {
+      form.setValues({ ...form.read(), [key]: value });
+      return true;
+    },
+    ownKeys: () => Reflect.ownKeys(form.read()),
+    getOwnPropertyDescriptor: () => ({ configurable: true, enumerable: true }),
+  });
+}
+let fieldTheme: Awaited<ReturnType<typeof createFieldThemeTestHost>>;
+const aiScopes: AIContextScopeRuntime[] = [];
 const mounted: ReturnType<typeof mount>[] = [];
+const editorHosts: ReturnType<typeof createRemarkFieldTestHost>[] = [];
 
 const renderSlotStub = {
   inheritAttrs: false,
@@ -117,20 +155,30 @@ const formStub = {
 };
 
 function mountDialog(nativeTree = false) {
+  const editorHost = createRemarkFieldTestHost('user-form-dialog-test');
+  editorHost.attach();
+  editorHosts.push(editorHost);
+  const editorGlobal = editorHost.global;
   const wrapper = mount(UserFormDialog, {
-    attachTo: nativeTree ? document.body : undefined,
+    attachTo: fieldTheme.root,
     global: {
-      plugins: [[VueQueryPlugin, { queryClient }]],
-      components: { ElTreeSelect, ElSelect, ElOption },
+      ...editorGlobal,
+      provide: { ...editorGlobal.provide, ...fieldTheme.provide },
+      plugins: [...editorGlobal.plugins, [VueQueryPlugin, { queryClient }]],
+      components: { ElTreeSelect, ElSelect, ElOption, ZxSelect },
       stubs: {
-        DictStatus: true,
+        DictStatus: defineComponent({
+          setup() {
+            aiScopes.push(useAIContextScope()!);
+            return () => h('div');
+          },
+        }),
         DictSelect: true,
         ZxDialog: dialogStub,
         ElForm: formStub,
         ElFormItem: renderSlotStub,
         ElRow: renderSlotStub,
         ElCol: renderSlotStub,
-        ZxInput: { inheritAttrs: false, template: '<input />' },
         ElTreeSelect: nativeTree
           ? false
           : {
@@ -155,20 +203,55 @@ function mountDialog(nativeTree = false) {
   return wrapper;
 }
 
-beforeEach(() => {
+beforeEach(async () => {
+  fieldTheme = await createFieldThemeTestHost();
+  aiScopes.length = 0;
   queryClient.clear();
   setQuerySession(1, [], []);
   onlineManager.setOnline(true);
+  vi.mocked(getUser)
+    .mockReset()
+    .mockImplementation(async (id) =>
+      id === undefined ? { posts: [], roles: [] } : detail(Number(id))
+    );
+  vi.mocked(listUser)
+    .mockReset()
+    .mockResolvedValue({ items: [], total: 0, page: 1, pageSize: 100 });
+  vi.mocked(updateUser)
+    .mockReset()
+    .mockImplementation(async (input) => ({
+      ...detail(input.userId!),
+      data: {
+        ...detail(input.userId!).data,
+        nickName: input.nickName ?? '',
+        status: input.status ?? '0',
+        remark: input.remark ?? null,
+      },
+    }));
+  vi.mocked(addUser)
+    .mockReset()
+    .mockImplementation(async (input) => ({
+      ...detail(99),
+      data: {
+        ...detail(99).data,
+        nickName: input.nickName,
+        userName: input.userName,
+        status: input.status ?? '0',
+        remark: input.remark ?? null,
+      },
+    }));
   vi.mocked(deptTreeSelect).mockResolvedValue({
     items: [{ id: 1, label: '研发部' }],
   });
 });
-afterEach(() => {
+afterEach(async () => {
   mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  editorHosts.splice(0).forEach((host) => host.dispose());
   endQuerySession();
   queryClient.clear();
   onlineManager.setOnline(true);
   vi.clearAllMocks();
+  await fieldTheme.dispose();
 });
 
 describe('UserFormDialog', () => {
@@ -186,9 +269,7 @@ describe('UserFormDialog', () => {
     const wrapper = mountDialog(true);
     const opening = (wrapper.vm as unknown as DialogApi).open(42);
     await flushPromises();
-    const tree = wrapper.getComponent(ElTreeSelect);
-    const element = tree.element;
-    expect(tree.props('modelValue')).toBeUndefined();
+    expect(wrapper.findComponent({ name: 'ZxSchemaForm' }).exists()).toBe(false);
     expect(document.querySelector('.el-tree-node[data-key="9"]')).toBeNull();
     response.resolve({
       ...detail(42),
@@ -200,9 +281,11 @@ describe('UserFormDialog', () => {
     });
     await opening;
     await flushPromises();
+    const tree = wrapper.getComponent(ElTreeSelect);
+    const element = tree.element;
     const selectedLabel = () => tree.get('.el-select__selected-item.el-select__placeholder').text();
     expect(selectedLabel()).toBe('原部门');
-    const model = wrapper.findComponent(dialogStub).props('formModel');
+    const model = draftOf(wrapper);
     model.nickName = '尚未保存的输入';
     vi.mocked(deptTreeSelect).mockResolvedValueOnce({
       items: [{ id: 1, label: 'Root', children: [{ id: 9, label: '新部门' }] }],
@@ -269,17 +352,16 @@ describe('UserFormDialog', () => {
     const api = wrapper.vm as unknown as DialogApi;
     await api.open(42);
     await flushPromises();
-    const tree = wrapper.getComponent(ElTreeSelect);
-    const element = tree.element;
+    let tree = wrapper.getComponent(ElTreeSelect);
     const selectedLabel = () => tree.get('.el-select__selected-item.el-select__placeholder').text();
     expect(selectedLabel()).toBe('停用部门旧名');
     await api.close();
     await api.open(43);
     await flushPromises();
+    tree = wrapper.getComponent(ElTreeSelect);
     expect(tree.props('data')).toEqual([]);
     expect(tree.props('modelValue')).toBe(9);
     expect(tree.props('cacheData')).toEqual([{ id: 9, label: '停用部门新名' }]);
-    expect(tree.element).toBe(element);
     expect(selectedLabel()).toBe('停用部门新名');
   });
 
@@ -312,7 +394,7 @@ describe('UserFormDialog', () => {
     const tree = wrapper.findComponent({ name: 'ElTreeSelect' });
     expect(deptTreeSelect).toHaveBeenCalledTimes(1);
     expect(tree.props('data')).toEqual([{ id: 9, label: '原部门' }]);
-    const model = wrapper.findComponent(dialogStub).props('formModel');
+    const model = draftOf(wrapper);
     model.nickName = '尚未保存的输入';
     vi.mocked(updateDept).mockResolvedValue({ deptId: 9, deptName: '新部门' });
     vi.mocked(deptTreeSelect).mockResolvedValue({
@@ -386,7 +468,7 @@ describe('UserFormDialog', () => {
     const first = deferred(),
       replacement = deferred();
     vi.mocked(getUser).mockReturnValueOnce(first.promise).mockReturnValueOnce(replacement.promise);
-    vi.mocked(updateUser).mockResolvedValueOnce({ userId: 43, remarkText: '' });
+    vi.mocked(updateUser).mockResolvedValueOnce(detail(43));
     const wrapper = mountDialog();
     const opening = outcome((wrapper.vm as unknown as DialogApi).open(42));
     await nextTick();
@@ -400,7 +482,7 @@ describe('UserFormDialog', () => {
     });
     expect(await opening).toEqual({ value: undefined });
     const dialog = wrapper.findComponent(dialogStub);
-    expect(dialog.props('formModel').nickName).toBe('Replacement');
+    expect(draftOf(wrapper).nickName).toBe('Replacement');
     expect(dialog.props('loading')).toBe(false);
     expect(dialog.props('okDisabled')).toBe(false);
     first.resolve(detail(42));
@@ -423,10 +505,10 @@ describe('UserFormDialog', () => {
     vi.mocked(getUser).mockResolvedValue(detail(42));
     const wrapper = mountDialog();
     await (wrapper.vm as unknown as DialogApi).open(42);
-    const model = wrapper.findComponent(dialogStub).props('formModel');
+    const model = draftOf(wrapper);
     const cached = queryClient.getQueryData(userDetailOptions(scope, 42).queryKey);
     expect(cached?.roleIds).toEqual([42]);
-    model.roleIds.push(9);
+    model.roleIds = [...model.roleIds, 9];
     model.nickName = 'typing';
     expect(cached?.roleIds).toEqual([42]);
     queryClient.setQueryData(userDetailOptions(scope, 42).queryKey, {
@@ -451,8 +533,12 @@ describe('UserFormDialog', () => {
     expect(getUser).toHaveBeenCalledTimes(1);
   });
 
-  it('should render the user form inside the dialog shell', () => {
+  it('renders the schema owner only after its opening authority is available', async () => {
+    vi.mocked(getUser).mockResolvedValue({ posts: [], roles: [] });
     const wrapper = mountDialog();
+    expect(wrapper.findComponent({ name: 'ZxSchemaForm' }).exists()).toBe(false);
+    await (wrapper.vm as unknown as DialogApi).open();
+    await flushPromises();
     expect(wrapper.find('form').exists()).toBe(true);
     expect(wrapper.findAll('input').length).toBeGreaterThan(0);
     expect(wrapper.find('select').exists()).toBe(true);
@@ -479,7 +565,7 @@ describe('UserFormDialog', () => {
       await (wrapper.vm as unknown as { open: (id: number) => Promise<void> }).open(42);
       await nextTick();
       const dialog = wrapper.findComponent({ name: 'ZxDialog' });
-      const model = dialog.props('formModel');
+      const model = draftOf(wrapper);
       expect(model.password).toBe('');
       await dialog.props('confirm')({});
 
@@ -491,7 +577,6 @@ describe('UserFormDialog', () => {
         roleIds: [2],
         postIds: [3],
       });
-      expect(model.password).toBe('');
       expect(wrapper.emitted('success')).toHaveLength(1);
       expect(dialog.props('okLoading')).toBe(false);
       wrapper.unmount();
@@ -504,15 +589,17 @@ describe('UserFormDialog', () => {
     await (wrapper.vm as unknown as { open: () => Promise<void> }).open();
     await nextTick();
     const dialog = wrapper.findComponent({ name: 'ZxDialog' });
-    Object.assign(dialog.props('formModel'), {
+    Object.assign(draftOf(wrapper), {
       userName: 'created_user',
+      nickName: 'Created User',
       password: 'Create123',
     });
     await dialog.props('confirm')({});
 
     expect(addUser).toHaveBeenCalledWith(
       expect.objectContaining({ password: 'Create123' }),
-      expect.objectContaining({ context: expect.any(Object) })
+      expect.objectContaining({ context: expect.any(Object) }),
+      { silentError: true }
     );
     expect(updateUser).not.toHaveBeenCalled();
     wrapper.unmount();
@@ -538,8 +625,8 @@ describe('UserFormDialog', () => {
     a.resolve(detail(11));
     await first;
     await nextTick();
-    expect(dialog.props('formModel')).toMatchObject({
-      userId: 12,
+    expect(draftOf(wrapper)).toMatchObject({
+      userName: 'user_12',
       roleIds: [12],
       postIds: [12],
     });
@@ -567,7 +654,7 @@ describe('UserFormDialog', () => {
     b.resolve(detail(12));
     await current;
     await nextTick();
-    expect(dialog.props('formModel').userId).toBe(12);
+    expect(draftOf(wrapper).userName).toBe('user_12');
     expect(dialog.props('loading')).toBe(false);
   });
 
@@ -590,14 +677,14 @@ describe('UserFormDialog', () => {
     await first;
     await nextTick();
     expect(dialog.props('loading')).toBe(true);
-    expect(dialog.props('formModel').nickName).toBe('');
+    expect(wrapper.findComponent({ name: 'ZxSchemaForm' }).exists()).toBe(false);
     current.resolve({
       ...detail(11),
       data: { ...detail(11).data, nickName: 'Reopened' },
     });
     await next;
     await nextTick();
-    expect(dialog.props('formModel').nickName).toBe('Reopened');
+    expect(draftOf(wrapper).nickName).toBe('Reopened');
     expect(dialog.props('loading')).toBe(false);
   });
 
@@ -613,8 +700,8 @@ describe('UserFormDialog', () => {
     edit.resolve(detail(11));
     await old;
     await nextTick();
-    const model = wrapper.findComponent(dialogStub).props('formModel');
-    expect(model.userId).toBeUndefined();
+    const model = draftOf(wrapper);
+    expect(formOf(wrapper).read()).not.toHaveProperty('userId');
     expect(model.userName).toBe('');
     expect(model.password).toBe('');
   });
@@ -640,7 +727,7 @@ describe('UserFormDialog', () => {
       12,
       expect.objectContaining({ signal: expect.any(AbortSignal) })
     );
-    expect(dialog.props('formModel').userId).toBe(12);
+    expect(draftOf(wrapper).userName).toBe('user_12');
     expect(dialog.props('okDisabled')).toBe(false);
   });
 
@@ -693,7 +780,7 @@ it('submits only editable user fields when the draft contains response metadata'
   const wrapper = mountDialog();
   await (wrapper.vm as unknown as DialogApi).open(42);
   const dialog = wrapper.findComponent(dialogStub);
-  const model = dialog.props('formModel');
+  const model = draftOf(wrapper);
   Object.assign(model, {
     password: 'must-not-write',
     loginIp: 'response-only',
@@ -716,7 +803,7 @@ it('submits only editable user fields when the draft contains response metadata'
 it('protects a format-only remark draft on close and replacement, while clean authority closes directly', async () => {
   const confirm = vi.spyOn(ElMessageBox, 'confirm').mockRejectedValue(new Error('继续编辑'));
   try {
-    const original = mockRemark('same text', 'userguard')!;
+    const original = readRemark(mockRemark('same text', 'userguard'))!;
     vi.mocked(getUser).mockResolvedValue({
       ...detail(42),
       data: { ...detail(42).data, remark: original },
@@ -725,7 +812,7 @@ it('protects a format-only remark draft on close and replacement, while clean au
     const api = wrapper.vm as unknown as DialogApi;
     await api.open(42);
     const shell = wrapper.findComponent(dialogStub);
-    const model = shell.props('formModel') as Record<string, any>;
+    const model = draftOf(wrapper);
     const formatted = structuredClone(original);
     const text = formatted.body.content.content[0].content![0];
     if (text.type !== 'text') throw new Error('Expected text fixture');
@@ -735,11 +822,14 @@ it('protects a format-only remark draft on close and replacement, while clean au
     await api.close();
     expect(shell.props('modelValue')).toBe(true);
     await api.open(43);
-    expect(model.userId).toBe(42);
+    expect(model.userName).toBe('user_42');
     expect(vi.mocked(getUser)).toHaveBeenCalledTimes(1);
     expect(model.remark).toEqual(formatted);
     confirm.mockResolvedValue(
-      Object.assign('confirm' as const, { value: '', action: 'confirm' as const })
+      Object.assign('confirm' as const, {
+        value: '',
+        action: 'confirm' as const,
+      })
     );
     await api.close();
     expect(shell.props('modelValue')).toBe(false);
@@ -750,4 +840,368 @@ it('protects a format-only remark draft on close and replacement, while clean au
   } finally {
     confirm.mockRestore();
   }
+});
+
+it('blocks invalid creation with field feedback and retries a corrected draft', async () => {
+  vi.mocked(getUser).mockResolvedValue({ posts: [], roles: [] });
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open();
+  const form = formOf(wrapper);
+  const dialog = wrapper.getComponent(dialogStub);
+  expect(await dialog.props('confirm')()).toBe(false);
+  expect(addUser).not.toHaveBeenCalled();
+  expect(wrapper.text()).toContain('用户昵称不能为空');
+  expect(wrapper.text()).toContain('用户密码需为');
+  await form.setValues({
+    ...form.read(),
+    nickName: 'Created',
+    userName: 'created_user',
+    password: 'Secret123',
+  });
+  await dialog.props('confirm')();
+  expect(addUser).toHaveBeenCalledTimes(1);
+  expect(wrapper.emitted('success')).toHaveLength(1);
+});
+
+it('routes known server conflicts into the owner while permitting a corrected retry', async () => {
+  vi.mocked(getUser).mockResolvedValue(detail(42));
+  vi.mocked(updateUser).mockRejectedValueOnce(
+    Object.assign(new Error('邮箱已存在'), {
+      problem: { status: 409, errorCode: 30008, detail: '邮箱已存在' },
+    })
+  );
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open(42);
+  const form = formOf(wrapper),
+    shell = wrapper.getComponent(dialogStub);
+  await shell.props('confirm')();
+  expect(form.reconciliationRequired).toBe(false);
+  expect(wrapper.text()).toContain('邮箱已存在');
+  expect(feedback.problem).not.toHaveBeenCalled();
+  await form.setValues({ ...form.read(), email: 'new@example.com' });
+  await shell.props('confirm')();
+  expect(updateUser).toHaveBeenCalledTimes(2);
+  expect(wrapper.emitted('success')).toHaveLength(1);
+});
+
+it('locks an uncertain creation, reconciles its captured username, then edits by the new id', async () => {
+  vi.mocked(getUser).mockImplementation(async (id) =>
+    id === undefined
+      ? { posts: [], roles: [] }
+      : {
+          ...detail(99),
+          data: { ...detail(99).data, userName: 'created_user', nickName: 'Created' },
+        }
+  );
+  vi.mocked(addUser).mockRejectedValueOnce(new Error('response lost'));
+  vi.mocked(listUser).mockResolvedValue({
+    items: [{ ...detail(99).data, userName: 'created_user' }],
+    total: 1,
+    page: 1,
+    pageSize: 100,
+  });
+  const wrapper = mountDialog(),
+    api = wrapper.vm as unknown as DialogApi;
+  await api.open();
+  let form = formOf(wrapper);
+  await form.setValues({
+    ...form.read(),
+    nickName: 'Created',
+    userName: 'created_user',
+    password: 'Secret123',
+  });
+  const shell = wrapper.getComponent(dialogStub);
+  await shell.props('confirm')();
+  expect(form.reconciliationRequired).toBe(true);
+  await shell.props('confirm')();
+  await api.close();
+  expect(addUser).toHaveBeenCalledTimes(1);
+  expect(shell.props('modelValue')).toBe(true);
+  await wrapper
+    .findAll('button')
+    .find((button) => button.text() === '读取并核对用户')!
+    .trigger('click');
+  await flushPromises();
+  expect(listUser).toHaveBeenCalledWith(
+    expect.objectContaining({ userName: 'created_user' }),
+    expect.anything()
+  );
+  form = formOf(wrapper);
+  expect(form.reconciliationRequired).toBe(false);
+  expect(form.dirty).toBe(false);
+  expect(form.read().password).toBe('');
+  await form.setValues({ ...form.read(), nickName: 'After reconcile' });
+  await shell.props('confirm')();
+  expect(addUser).toHaveBeenCalledTimes(1);
+  expect(updateUser).toHaveBeenCalledWith(
+    expect.objectContaining({ userId: 99, nickName: 'After reconcile' }),
+    expect.anything(),
+    { silentError: true }
+  );
+  expect(vi.mocked(updateUser).mock.calls[0][0]).not.toHaveProperty('password');
+});
+
+it('keeps uncertainty after ambiguous lookup or mismatched authority until an exact match', async () => {
+  vi.mocked(getUser).mockResolvedValueOnce({ posts: [], roles: [] });
+  vi.mocked(addUser).mockRejectedValueOnce(new Error('response lost'));
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open();
+  const form = formOf(wrapper),
+    shell = wrapper.getComponent(dialogStub);
+  await form.setValues({
+    ...form.read(),
+    nickName: 'Created',
+    userName: 'created_user',
+    password: 'Secret123',
+  });
+  await shell.props('confirm')();
+  vi.mocked(listUser).mockResolvedValueOnce({ items: [], total: 0, page: 1, pageSize: 100 });
+  const reconcile = () =>
+    wrapper
+      .findAll('button')
+      .find((button) => button.text() === '读取并核对用户')!
+      .trigger('click');
+  await reconcile();
+  await flushPromises();
+  expect(formOf(wrapper).reconciliationRequired).toBe(true);
+  vi.mocked(listUser).mockResolvedValue({
+    items: [{ ...detail(99).data, userName: 'created_user' }],
+    total: 1,
+    page: 1,
+    pageSize: 100,
+  });
+  vi.mocked(getUser).mockResolvedValueOnce({
+    ...detail(99),
+    data: { ...detail(99).data, userName: 'someone_else' },
+  });
+  await reconcile();
+  await flushPromises();
+  expect(formOf(wrapper).reconciliationRequired).toBe(true);
+  expect(wrapper.text()).toContain('读取的用户身份与本次保存不符');
+  await shell.props('confirm')();
+  expect(addUser).toHaveBeenCalledTimes(1);
+});
+
+it('reconciles an uncertain edit only with the captured user id', async () => {
+  vi.mocked(getUser).mockResolvedValueOnce(detail(42));
+  vi.mocked(updateUser).mockRejectedValueOnce(new Error('response lost'));
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open(42);
+  const shell = wrapper.getComponent(dialogStub);
+  await shell.props('confirm')();
+  vi.mocked(getUser).mockResolvedValueOnce(detail(43));
+  await wrapper
+    .findAll('button')
+    .find((button) => button.text() === '读取并核对用户')!
+    .trigger('click');
+  await flushPromises();
+  expect(formOf(wrapper).reconciliationRequired).toBe(true);
+  expect(listUser).not.toHaveBeenCalled();
+  vi.mocked(getUser).mockResolvedValueOnce({
+    ...detail(42),
+    data: { ...detail(42).data, nickName: 'Server authority' },
+  });
+  await wrapper
+    .findAll('button')
+    .find((button) => button.text() === '读取并核对用户')!
+    .trigger('click');
+  await flushPromises();
+  expect(formOf(wrapper).reconciliationRequired).toBe(false);
+  expect(formOf(wrapper).read().nickName).toBe('Server authority');
+  expect(updateUser).toHaveBeenCalledTimes(1);
+});
+
+it('rejects malformed save authority and never retries an uncertain write automatically', async () => {
+  vi.mocked(getUser).mockResolvedValue(detail(42));
+  vi.mocked(updateUser).mockResolvedValueOnce(detail(43));
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open(42);
+  const shell = wrapper.getComponent(dialogStub);
+  await shell.props('confirm')();
+  expect(formOf(wrapper).reconciliationRequired).toBe(true);
+  expect(wrapper.emitted('success')).toBeUndefined();
+  await shell.props('confirm')();
+  expect(updateUser).toHaveBeenCalledTimes(1);
+});
+
+it('blocks duplicate writes and old-scope completion while a save is in flight', async () => {
+  vi.mocked(getUser).mockResolvedValue(detail(42));
+  const save = deferred();
+  vi.mocked(updateUser).mockReturnValueOnce(save.promise);
+  const wrapper = mountDialog(),
+    api = wrapper.vm as unknown as DialogApi;
+  await api.open(42);
+  const shell = wrapper.getComponent(dialogStub);
+  const saving = shell.props('confirm')();
+  await flushPromises();
+  expect(formOf(wrapper).pending).toBe(true);
+  await shell.props('confirm')();
+  await api.open(43);
+  expect(updateUser).toHaveBeenCalledTimes(1);
+  expect(formOf(wrapper).read().userName).toBe('user_42');
+  setQuerySession(2, [], []);
+  await nextTick();
+  save.resolve(detail(42));
+  await saving;
+  expect(shell.props('modelValue')).toBe(false);
+  expect(wrapper.emitted('success')).toBeUndefined();
+});
+
+it('honors the rich remark validation port and keeps AI bindings inside the field owner', async () => {
+  vi.mocked(getUser).mockResolvedValue(detail(42));
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open(42);
+  const form = formOf(wrapper),
+    scope = aiScopes.at(-1)!;
+  await form.setValues({
+    ...form.read(),
+    nickName: 'Current Nick',
+    phonenumber: '13912345678',
+    email: 'user@example.com',
+  });
+  expect(contextValue(scope, 'nickName')).toBe('Current Nick');
+  expect(contextValue(scope, 'phonenumber')).toBe('13912345678');
+  expect(contextValue(scope, 'email')).toBe('user@example.com');
+  expect(contextValue(scope, 'userName')).toBe('user_42');
+  expect(scope.binding('password')).toBeUndefined();
+  const remark = wrapper.getComponent({ name: 'RemarkEditor' });
+  const validate = vi
+    .spyOn(remark.vm.$.exposed! as { validate(): boolean }, 'validate')
+    .mockReturnValue(false);
+  remark.vm.$emit('edit-state', { pending: true });
+  await nextTick();
+  expect(form.fieldPending).toBe(true);
+  await wrapper.getComponent(dialogStub).props('confirm')();
+  expect(updateUser).not.toHaveBeenCalled();
+  validate.mockRestore();
+  remark.vm.$emit('edit-state', { pending: false });
+  await nextTick();
+  expect(form.fieldPending).toBe(false);
+  await wrapper.getComponent(dialogStub).props('confirm')();
+  expect(updateUser).toHaveBeenCalledTimes(1);
+  await nextTick();
+  expect(scope.binding('nickName')).toBeUndefined();
+});
+
+it('reconciles from a new request after an uncertain write and invalidates list cache', async () => {
+  const scope = setQuerySession(1, [], []);
+  const list = userListOptions(scope, { page: 1, pageSize: 10 });
+  queryClient.setQueryData(list.queryKey, {
+    items: [detail(42).data],
+    total: 1,
+    page: 1,
+    pageSize: 10,
+  });
+  vi.mocked(getUser).mockResolvedValueOnce(detail(42));
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open(42);
+  const old = deferred(),
+    fresh = deferred();
+  vi.mocked(getUser).mockReturnValueOnce(old.promise);
+  const background = queryClient.refetchQueries(
+    { queryKey: userDetailOptions(scope, 42).queryKey, exact: true },
+    { cancelRefetch: false }
+  );
+  await flushPromises();
+  vi.mocked(updateUser).mockRejectedValueOnce(new Error('response lost'));
+  await wrapper.getComponent(dialogStub).props('confirm')();
+  vi.mocked(getUser).mockReturnValueOnce(fresh.promise);
+  await wrapper
+    .findAll('button')
+    .find((button) => button.text() === '读取并核对用户')!
+    .trigger('click');
+  await flushPromises();
+  expect(getUser).toHaveBeenCalledTimes(3);
+  expect(vi.mocked(getUser).mock.calls[2][1]).toMatchObject({
+    silentError: true,
+    signal: expect.any(AbortSignal),
+  });
+  old.resolve({ ...detail(42), data: { ...detail(42).data, nickName: 'Before write' } });
+  await background;
+  await flushPromises();
+  expect(formOf(wrapper).reconciliationRequired).toBe(true);
+  fresh.resolve({ ...detail(42), data: { ...detail(42).data, nickName: 'After write' } });
+  await flushPromises();
+  expect(formOf(wrapper).reconciliationRequired).toBe(false);
+  expect(formOf(wrapper).read().nickName).toBe('After write');
+  expect(queryClient.getQueryState(list.queryKey)?.isInvalidated).toBe(true);
+  expect(updateUser).toHaveBeenCalledTimes(1);
+});
+
+it('submits native inputs and multiple choice controls through their actual field events', async () => {
+  vi.mocked(getUser).mockResolvedValue({
+    posts: [{ postId: 3, postName: '工程师', status: '0', remarkText: '' }],
+    roles: [{ roleId: 2, roleName: '操作员', status: '0', remarkText: '' }],
+  });
+  const wrapper = mountDialog(true);
+  await (wrapper.vm as unknown as DialogApi).open();
+  await flushPromises();
+  await wrapper.get('input[placeholder="请输入用户昵称"]').setValue('Native User');
+  await wrapper.get('input[placeholder="请输入用户名称"]').setValue('native_user');
+  await wrapper.get('input[placeholder="请输入用户密码"]').setValue('Secret123');
+  const multiple = wrapper.findAllComponents(ElSelect).filter((select) => select.props('multiple'));
+  expect(multiple).toHaveLength(2);
+  for (const [index, label] of ['工程师', '操作员'].entries()) {
+    await multiple[index].get('.el-select__wrapper').trigger('click');
+    await flushPromises();
+    const popupId = multiple[index].get('input').attributes('aria-controls');
+    const option = [...document.getElementById(popupId!)!.querySelectorAll('[role="option"]')].find(
+      (item) => item.textContent?.trim() === label
+    );
+    expect(option).toBeDefined();
+    option!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await flushPromises();
+  }
+  expect(formOf(wrapper).read()).toMatchObject({
+    nickName: 'Native User',
+    userName: 'native_user',
+    postIds: [3],
+    roleIds: [2],
+  });
+  await wrapper.getComponent(dialogStub).props('confirm')();
+  expect(addUser).toHaveBeenCalledWith(
+    expect.objectContaining({
+      nickName: 'Native User',
+      userName: 'native_user',
+      postIds: [3],
+      roleIds: [2],
+    }),
+    expect.anything(),
+    { silentError: true }
+  );
+});
+
+it('does not accept a nonpositive identity from a successful create response', async () => {
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open();
+  const form = formOf(wrapper);
+  await form.setValues({
+    ...form.read(),
+    nickName: 'Created',
+    userName: 'created_user',
+    password: 'Secret123',
+  });
+  vi.mocked(addUser).mockResolvedValueOnce({
+    ...detail(-1),
+    data: { ...detail(-1).data, userName: 'created_user' },
+  });
+  await wrapper.getComponent(dialogStub).props('confirm')();
+  expect(form.reconciliationRequired).toBe(true);
+  expect(wrapper.emitted('success')).toBeUndefined();
+});
+
+it('restores current authentication recovery once for an owner-managed save rejection', async () => {
+  const wrapper = mountDialog();
+  await (wrapper.vm as unknown as DialogApi).open(42);
+  const failure = Object.assign(new Error('expired'), {
+    problem: { status: 401, errorCode: 20001 },
+  });
+  vi.mocked(updateUser).mockRejectedValueOnce(failure);
+  await wrapper.getComponent(dialogStub).props('confirm')();
+  expect(feedback.recovery).toHaveBeenCalledExactlyOnceWith(
+    failure,
+    expect.objectContaining({ silentError: false, feedback: { mode: 'auto' } })
+  );
+  expect(formOf(wrapper).reconciliationRequired).toBe(false);
+  expect(wrapper.emitted('success')).toBeUndefined();
 });

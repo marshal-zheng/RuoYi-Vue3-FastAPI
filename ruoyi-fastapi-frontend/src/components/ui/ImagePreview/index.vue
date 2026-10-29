@@ -1,10 +1,12 @@
 <template>
   <el-image
-    :src="`${realSrc}`"
+    v-if="realSrc"
+    :src="realSrc"
     fit="cover"
     :style="`width:${realWidth};height:${realHeight};`"
     :preview-src-list="realSrcList"
     preview-teleported
+    @error="onError"
   >
     <template #error>
       <div class="image-slot">
@@ -15,11 +17,14 @@
 </template>
 
 <script setup>
-import { isExternal } from '@/utils/validate';
+import { computed, ref } from 'vue';
+import { assetContentUrl, assetIdOfContentUrl } from '@/api/fileAssets';
+import { recoverAsset } from '@/utils/file-assets/image-recovery';
 
 const props = defineProps({
+  /** 资产描述（含 contentUrl）、资产ID或稳定内容地址，单个或数组 */
   src: {
-    type: String,
+    type: [String, Object, Array],
     default: '',
   },
   width: {
@@ -32,31 +37,31 @@ const props = defineProps({
   },
 });
 
-const realSrc = computed(() => {
-  if (!props.src) {
-    return;
-  }
-  let real_src = props.src.split(',')[0];
-  if (isExternal(real_src)) {
-    return real_src;
-  }
-  return import.meta.env.VITE_APP_BASE_API + real_src;
-});
+const toUrl = (item) => {
+  if (!item) return '';
+  if (typeof item === 'object')
+    return item.contentUrl || (item.assetId ? assetContentUrl(item.assetId) : '');
+  return item.startsWith('/file-assets/') ? item : assetContentUrl(item);
+};
 
-const realSrcList = computed(() => {
-  if (!props.src) {
-    return;
-  }
-  let real_src_list = props.src.split(',');
-  let srcList = [];
-  real_src_list.forEach((item) => {
-    if (isExternal(item)) {
-      return srcList.push(item);
-    }
-    return srcList.push(import.meta.env.VITE_APP_BASE_API + item);
-  });
-  return srcList;
-});
+const reloadKey = ref(0);
+const urls = computed(() =>
+  (Array.isArray(props.src) ? props.src : [props.src]).map(toUrl).filter(Boolean)
+);
+// The same URL with a changed fragment forces el-image to reload after a session refresh.
+const realSrc = computed(() =>
+  urls.value[0] ? `${urls.value[0]}${reloadKey.value ? `#r${reloadKey.value}` : ''}` : undefined
+);
+const realSrcList = computed(() => (urls.value.length ? urls.value : undefined));
+let retried = false;
+
+async function onError() {
+  const first = props.src && (Array.isArray(props.src) ? props.src[0] : props.src);
+  const assetId = typeof first === 'object' ? first?.assetId : assetIdOfContentUrl(urls.value[0]);
+  if (retried || !assetId) return;
+  retried = true;
+  if (await recoverAsset(assetId)) reloadKey.value += 1;
+}
 
 const realWidth = computed(() =>
   typeof props.width == 'string' ? props.width : `${props.width}px`

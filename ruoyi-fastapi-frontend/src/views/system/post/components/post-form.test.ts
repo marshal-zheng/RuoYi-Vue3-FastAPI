@@ -31,7 +31,7 @@ describe('post write boundary', () => {
     ).toEqual([
       { path: ['postName'], message: '名称不能为空' },
       { path: ['postCode'], message: '编码不能为空' },
-      { path: ['unknown'], message: '其他问题' },
+      { message: '其他问题' },
       { message: '表单无法保存' },
     ]);
   });

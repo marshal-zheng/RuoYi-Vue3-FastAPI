@@ -2,6 +2,15 @@
 
 import type { Config } from './types.gen';
 
+// The generated SDK passes a numeric HTTP-status map, while public Options
+// and direct callers pass the payload itself. Unwrap only the status map:
+// ordinary object aliases (including discriminated AI events) are payloads.
+export type SseData<TData> = [keyof TData] extends [never]
+  ? TData
+  : keyof TData extends number
+    ? TData[keyof TData]
+    : TData;
+
 export type ServerSentEventsOptions<TData = unknown> = Omit<RequestInit, 'method'> &
   Pick<Config, 'method' | 'responseTransformer' | 'responseValidator'> & {
     /**
@@ -31,9 +40,7 @@ export type ServerSentEventsOptions<TData = unknown> = Omit<RequestInit, 'method
      * @param event Event streamed from the server.
      * @returns Nothing (void).
      */
-    onSseEvent?: (
-      event: StreamEvent<TData extends Record<string, unknown> ? TData[keyof TData] : TData>
-    ) => void;
+    onSseEvent?: (event: StreamEvent<SseData<TData>>) => void;
     serializedBody?: RequestInit['body'];
     /**
      * Default retry delay in milliseconds.
@@ -74,11 +81,7 @@ export interface StreamEvent<TData = unknown> {
 }
 
 export type ServerSentEventsResult<TData = unknown, TReturn = void, TNext = unknown> = {
-  stream: AsyncGenerator<
-    TData extends Record<string, unknown> ? TData[keyof TData] : TData,
-    TReturn,
-    TNext
-  >;
+  stream: AsyncGenerator<SseData<TData>, TReturn, TNext>;
 };
 
 export function createSseClient<TData = unknown>({
@@ -208,9 +211,7 @@ export function createSseClient<TData = unknown>({
               }
 
               // The transport payload is validated/transformed before adopting the caller's event type.
-              const eventData = data as TData extends Record<string, unknown>
-                ? TData[keyof TData]
-                : TData;
+              const eventData = data as SseData<TData>;
               onSseEvent?.({
                 data: eventData,
                 event: eventName,

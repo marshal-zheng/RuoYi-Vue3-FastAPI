@@ -14,7 +14,7 @@ from config.env import (
     DataBaseWorkflowConfig,
     DevManagedDataHotReconcileConfig,
 )
-from config.get_db import init_create_table
+from config.get_db import get_session_factory, init_create_table
 from container import (
     AppContainer,
     attach_container,
@@ -29,6 +29,11 @@ from exceptions.handle import handle_exception
 from middlewares.handle import handle_middleware
 from module_admin.service.simulation_runtime_state import init_simulation_runtime_state_store
 from modules.identity.application.services.security_token_service import SecurityTokenService
+from modules.file_assets.application.composition import (
+    configure_file_assets,
+    peek_file_asset_services,
+    shutdown_file_assets,
+)
 from modules.registry import (
     get_module_registry,
     initialize_module_extensions,
@@ -45,7 +50,6 @@ from modules.system.runtime import (
 )
 from resilience.runtime import build_resilience_runtime
 from scripts.internal.db_workflow.managed_data_fast_reconcile_service import ManagedDataFastReconcileService
-from sub_applications.handle import handle_sub_applications
 from utils.audit_logger import init_audit_logger
 from utils.common_util import worship
 from utils.log_util import logger
@@ -63,24 +67,18 @@ from utils.response_util import ResponseUtil
 query_monitor = EnhancedQueryPerformanceMonitor(
     threshold_ms=200,
     log_all=False,
-    n_plus_one_threshold=5  # P1-010: N+1 检测阈值
+    n_plus_one_threshold=5,  # P1-010: N+1 检测阈值
 )
 pool_monitor = ConnectionPoolMonitor()
-pool_health_checker = ConnectionPoolHealthChecker(
-    warning_threshold=0.8,
-    critical_threshold=0.95
-)
+pool_health_checker = ConnectionPoolHealthChecker(warning_threshold=0.8, critical_threshold=0.95)
+
 
 def _is_test_env() -> bool:
     return 'pytest' in sys.modules or os.getenv('PYTEST_CURRENT_TEST') is not None
 
 
 def _managed_data_hot_reconcile_change_count(report) -> int:
-    return int(
-        report.applied_operations
-        + report.metadata_updated_objects
-        + report.metadata_deactivated_objects
-    )
+    return int(report.applied_operations + report.metadata_updated_objects + report.metadata_deactivated_objects)
 
 
 def _log_managed_data_hot_reconcile_summary(report) -> None:
@@ -197,18 +195,23 @@ async def lifespan(app: FastAPI):
     validate_container_bindings(container)
     attach_container(app, container)
     await initialize_module_extensions(container, MODULE_REGISTRY)
-    
+
     # 初始化查询性能监控
     query_monitor.setup(async_engine)
     pool_monitor.setup(async_engine)
     logger.info('查询性能监控已启用')
-    
+
     app.state.redis = await initialize_container_runtime(
         container,
         test_mode=_is_test_env(),
         test_redis_client=DummyRedis() if _is_test_env() else None,
     )
     app.state.security_token_service = SecurityTokenService(app.state.redis)
+
+    # 文件资产：存储归属核对在开始服务前执行（最多 3 次），未确认时文件能力返回 503
+    file_assets = configure_file_assets(get_session_factory(), redis_client=app.state.redis)
+    await file_assets.runtime.start()
+    app.state.file_assets = file_assets
 
     app.state.sim_runtime_state = init_simulation_runtime_state_store(redis_client=app.state.redis)
 
@@ -292,24 +295,24 @@ async def lifespan(app: FastAPI):
         logger.info('审计日志已启用')
     elif AuditConfig.audit_enabled and _is_test_env():
         logger.info('测试环境已禁用审计日志')
-    
+
     # 将监控器挂载到 app.state 以便在其他地方访问
     app.state.query_monitor = query_monitor
     app.state.pool_monitor = pool_monitor
     app.state.pool_health_checker = pool_health_checker
     app.state.metrics_registry = PrometheusMetricsRegistry()
-    
+
     log_loaded_modules(LOADED_MODULES)
     logger.info(f'{AppConfig.app_name}启动成功')
     yield
-    
+
     # 打印查询统计信息（可选）
     logger.info('查询性能统计:')
     stats = query_monitor.get_stats()
     logger.info(f'  总查询数: {stats["total_queries"]}')
     logger.info(f'  慢查询数: {stats["slow_queries"]}')
     logger.info(f'  慢查询占比: {stats["slow_query_rate"]:.2f}%')
-    
+
     app_container = getattr(app.state, 'container', None)
     event_runtime = getattr(app.state, 'event_runtime', None)
     hot_reconcile_runtime = getattr(app.state, 'dev_managed_data_hot_reconcile_runtime', None)
@@ -321,6 +324,7 @@ async def lifespan(app: FastAPI):
     if event_runtime is not None:
         await event_runtime.stop()
         set_event_runtime(None)
+    await shutdown_file_assets()
     if isinstance(app_container, AppContainer):
         await shutdown_container_runtime(app_container)
 
@@ -333,8 +337,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# 挂载子应用
-handle_sub_applications(app)
 # 加载中间件处理方法
 handle_middleware(app)
 # 加载全局异常处理方法
@@ -351,14 +353,28 @@ async def health_check():
     provider_summary = {}
     if isinstance(app_container, AppContainer):
         provider_summary = app_container.provider_health_summary()
+    file_assets = peek_file_asset_services()
     return ResponseUtil.ok_resource(
         {
             'status': 'ok',
             'app': AppConfig.app_name,
             'version': AppConfig.app_version,
             'providers': provider_summary,
+            # A storage outage degrades only the file capability; business APIs keep serving.
+            'fileAssets': (await file_assets.runtime.health_probe())['status'] if file_assets else 'not_initialized',
         }
     )
+
+
+@app.get('/health/file-assets', tags=['健康检查'])
+async def file_asset_health_check():
+    file_assets = peek_file_asset_services()
+    if file_assets is None:
+        return JSONResponse(status_code=503, content={'status': 'unavailable', 'detail': 'not_initialized'})
+    payload = await file_assets.runtime.health_probe()
+    response = ResponseUtil.ok_resource(payload)
+    response.status_code = 200 if payload['status'] == 'available' else 503
+    return response
 
 
 @app.get('/ready', tags=['健康检查'])
@@ -382,15 +398,15 @@ async def readiness_check():
 async def database_health_check():
     """
     P1-011: 数据库健康检查端点
-    
+
     检查数据库连接池状态
     """
     health_checker = getattr(app.state, 'pool_health_checker', None)
     if not health_checker:
         return JSONResponse(status_code=503, content={'status': 'unhealthy', 'message': '健康检查器未初始化'})
-    
+
     health = health_checker.check_health(async_engine)
-    
+
     response = ResponseUtil.ok_resource(health)
     response.status_code = 503 if health['status'] == 'critical' else 200
     return response
@@ -428,24 +444,26 @@ async def event_health_check():
 async def query_stats():
     """
     P1-008~010: 查询性能统计端点
-    
+
     返回查询性能统计、慢查询和 N+1 检测结果
     """
     monitor = getattr(app.state, 'query_monitor', None)
     if not monitor:
         return JSONResponse(status_code=503, content={'status': 'unhealthy', 'message': '性能监控器未初始化'})
-    
+
     stats = monitor.get_stats()
-    return ResponseUtil.ok_resource({
-        'total_queries': stats['total_queries'],
-        'slow_queries': stats['slow_queries'],
-        'slow_query_rate': f"{stats['slow_query_rate']:.2f}%",
-        'avg_time_ms': f"{stats['avg_time']:.2f}",
-        'max_time_ms': f"{stats['max_time']:.2f}",
-        'n_plus_one_detected': stats.get('n_plus_one_detected', 0),
-        'n_plus_one_patterns': stats.get('n_plus_one_patterns', []),
-        'recent_slow_queries': stats.get('recent_slow_queries', [])
-    })
+    return ResponseUtil.ok_resource(
+        {
+            'total_queries': stats['total_queries'],
+            'slow_queries': stats['slow_queries'],
+            'slow_query_rate': f'{stats["slow_query_rate"]:.2f}%',
+            'avg_time_ms': f'{stats["avg_time"]:.2f}',
+            'max_time_ms': f'{stats["max_time"]:.2f}',
+            'n_plus_one_detected': stats.get('n_plus_one_detected', 0),
+            'n_plus_one_patterns': stats.get('n_plus_one_patterns', []),
+            'recent_slow_queries': stats.get('recent_slow_queries', []),
+        }
+    )
 
 
 @app.get('/metrics', tags=['健康检查'], include_in_schema=False)
@@ -557,9 +575,7 @@ async def prometheus_metrics():
         bulkhead_rejected_total = int(resilience_counters.get('bulkhead_rejected_total', 0))
         saga_instances = await runtime.saga_engine.list_instances(limit=500)
         saga_failed_total = sum(
-            1
-            for item in saga_instances
-            if str(item.get('status')) in ('FAILED', 'FAILED_NEEDS_MANUAL_INTERVENTION')
+            1 for item in saga_instances if str(item.get('status')) in ('FAILED', 'FAILED_NEEDS_MANUAL_INTERVENTION')
         )
         circuit_states = await runtime.circuit_registry.list_snapshots()
         for item in circuit_states:
@@ -584,6 +600,10 @@ async def prometheus_metrics():
     if event_runtime is not None:
         event_metrics_text = await event_runtime.render_metrics()
         lines.append(event_metrics_text.rstrip('\n'))
+
+    file_assets = peek_file_asset_services()
+    if file_assets is not None:
+        lines.append(file_assets.runtime.metrics.render().rstrip('\n'))
 
     body = '\n'.join(item for item in lines if item != '') + '\n'
     return Response(

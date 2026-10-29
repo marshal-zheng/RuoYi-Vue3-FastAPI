@@ -1,0 +1,16 @@
+{
+  "sourceSnapshots": 8,
+  "finalPackedSnapshots": 7,
+  "finalCoreSha256": "451333dc1248cc68cf391a2e6395e24ddd443a9afc76d994d2463530b0f1bbfb",
+  "coreContract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37",
+  "finalErrors": 0,
+  "finalWarnings": 0,
+  "dashboardWrites": 0,
+  "layoutRevision": 11,
+  "browserClosed": true,
+  "temporaryPortsStopped": [
+    3310,
+    3311
+  ],
+  "checks": "snapshot values, actual CSS, source/build module origins, package bytes, focused tests and independent review"
+}

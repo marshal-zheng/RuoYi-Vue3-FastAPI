@@ -1,0 +1,810 @@
+--- before/yarn.lock
++++ after/yarn.lock
+@@ -1929,6 +1929,13 @@
+     outvariant: "npm:^1.4.3"
+     strict-event-emitter: "npm:^0.5.1"
+   checksum: 10c0/5d36e97fde87440657d27a76f5b663e2ff1c9a3f5fc99e5ff411ecb24e1bfb40d40c676d756be3901a9a2631b4f7d4e72a2e8ffaa4882df68f5faeceb190a271
++  languageName: node
++  linkType: hard
++
++"@napi-rs/lzma-linux-x64-gnu@npm:1.5.1":
++  version: 1.5.1
++  resolution: "@napi-rs/lzma-linux-x64-gnu@npm:1.5.1"
++  conditions: os=linux & cpu=x64 & libc=glibc
+   languageName: node
+   linkType: hard
+ 
+@@ -2324,6 +2331,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-android-arm-eabi@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-android-arm-eabi@npm:4.65.1"
++  conditions: os=android & cpu=arm
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-android-arm64@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-android-arm64@npm:4.49.0"
+@@ -2331,6 +2345,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-android-arm64@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-android-arm64@npm:4.65.1"
++  conditions: os=android & cpu=arm64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-darwin-arm64@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-darwin-arm64@npm:4.49.0"
+@@ -2338,6 +2359,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-darwin-arm64@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-darwin-arm64@npm:4.65.1"
++  conditions: os=darwin & cpu=arm64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-darwin-x64@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-darwin-x64@npm:4.49.0"
+@@ -2345,6 +2373,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-darwin-x64@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-darwin-x64@npm:4.65.1"
++  conditions: os=darwin & cpu=x64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-freebsd-arm64@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-freebsd-arm64@npm:4.49.0"
+@@ -2352,6 +2387,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-freebsd-arm64@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-freebsd-arm64@npm:4.65.1"
++  conditions: os=freebsd & cpu=arm64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-freebsd-x64@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-freebsd-x64@npm:4.49.0"
+@@ -2359,6 +2401,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-freebsd-x64@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-freebsd-x64@npm:4.65.1"
++  conditions: os=freebsd & cpu=x64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-arm-gnueabihf@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-arm-gnueabihf@npm:4.49.0"
+@@ -2366,6 +2415,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-arm-gnueabihf@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-arm-gnueabihf@npm:4.65.1"
++  conditions: os=linux & cpu=arm & libc=glibc
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-arm-musleabihf@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-arm-musleabihf@npm:4.49.0"
+@@ -2373,6 +2429,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-arm-musleabihf@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-arm-musleabihf@npm:4.65.1"
++  conditions: os=linux & cpu=arm & libc=musl
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-arm64-gnu@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-arm64-gnu@npm:4.49.0"
+@@ -2380,6 +2443,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-arm64-gnu@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-arm64-gnu@npm:4.65.1"
++  conditions: os=linux & cpu=arm64 & libc=glibc
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-arm64-musl@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-arm64-musl@npm:4.49.0"
+@@ -2387,6 +2457,27 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-arm64-musl@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-arm64-musl@npm:4.65.1"
++  conditions: os=linux & cpu=arm64 & libc=musl
++  languageName: node
++  linkType: hard
++
++"@rollup/rollup-linux-loong64-gnu@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-loong64-gnu@npm:4.65.1"
++  conditions: os=linux & cpu=loong64 & libc=glibc
++  languageName: node
++  linkType: hard
++
++"@rollup/rollup-linux-loong64-musl@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-loong64-musl@npm:4.65.1"
++  conditions: os=linux & cpu=loong64 & libc=musl
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-loongarch64-gnu@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-loongarch64-gnu@npm:4.49.0"
+@@ -2401,6 +2492,20 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-ppc64-gnu@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-ppc64-gnu@npm:4.65.1"
++  conditions: os=linux & cpu=ppc64 & libc=glibc
++  languageName: node
++  linkType: hard
++
++"@rollup/rollup-linux-ppc64-musl@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-ppc64-musl@npm:4.65.1"
++  conditions: os=linux & cpu=ppc64 & libc=musl
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-riscv64-gnu@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-riscv64-gnu@npm:4.49.0"
+@@ -2408,6 +2513,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-riscv64-gnu@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-riscv64-gnu@npm:4.65.1"
++  conditions: os=linux & cpu=riscv64 & libc=glibc
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-riscv64-musl@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-riscv64-musl@npm:4.49.0"
+@@ -2415,6 +2527,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-riscv64-musl@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-riscv64-musl@npm:4.65.1"
++  conditions: os=linux & cpu=riscv64 & libc=musl
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-s390x-gnu@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-s390x-gnu@npm:4.49.0"
+@@ -2422,6 +2541,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-s390x-gnu@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-s390x-gnu@npm:4.65.1"
++  conditions: os=linux & cpu=s390x & libc=glibc
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-x64-gnu@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.49.0"
+@@ -2429,6 +2555,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-x64-gnu@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.65.1"
++  conditions: os=linux & cpu=x64 & libc=glibc
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-linux-x64-musl@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-linux-x64-musl@npm:4.49.0"
+@@ -2436,6 +2569,27 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-linux-x64-musl@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-linux-x64-musl@npm:4.65.1"
++  conditions: os=linux & cpu=x64 & libc=musl
++  languageName: node
++  linkType: hard
++
++"@rollup/rollup-openbsd-x64@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-openbsd-x64@npm:4.65.1"
++  conditions: os=openbsd & cpu=x64
++  languageName: node
++  linkType: hard
++
++"@rollup/rollup-openharmony-arm64@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-openharmony-arm64@npm:4.65.1"
++  conditions: os=openharmony & cpu=arm64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-win32-arm64-msvc@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-win32-arm64-msvc@npm:4.49.0"
+@@ -2443,6 +2597,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-win32-arm64-msvc@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-win32-arm64-msvc@npm:4.65.1"
++  conditions: os=win32 & cpu=arm64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-win32-ia32-msvc@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-win32-ia32-msvc@npm:4.49.0"
+@@ -2450,9 +2611,30 @@
+   languageName: node
+   linkType: hard
+ 
++"@rollup/rollup-win32-ia32-msvc@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-win32-ia32-msvc@npm:4.65.1"
++  conditions: os=win32 & cpu=ia32
++  languageName: node
++  linkType: hard
++
++"@rollup/rollup-win32-x64-gnu@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-win32-x64-gnu@npm:4.65.1"
++  conditions: os=win32 & cpu=x64
++  languageName: node
++  linkType: hard
++
+ "@rollup/rollup-win32-x64-msvc@npm:4.49.0":
+   version: 4.49.0
+   resolution: "@rollup/rollup-win32-x64-msvc@npm:4.49.0"
++  conditions: os=win32 & cpu=x64
++  languageName: node
++  linkType: hard
++
++"@rollup/rollup-win32-x64-msvc@npm:4.65.1":
++  version: 4.65.1
++  resolution: "@rollup/rollup-win32-x64-msvc@npm:4.65.1"
+   conditions: os=win32 & cpu=x64
+   languageName: node
+   linkType: hard
+@@ -3565,6 +3747,13 @@
+   languageName: node
+   linkType: hard
+ 
++"@types/estree@npm:1.0.9":
++  version: 1.0.9
++  resolution: "@types/estree@npm:1.0.9"
++  checksum: 10c0/3ad3286ca2988cd550dafb8f2ad599c8474868e954fa601a36655bdfefd8039f7c714b8c1c7f2ae219ffbd58bd4660e66fa7479a0120fc02d4777057d4865387
++  languageName: node
++  linkType: hard
++
+ "@types/event-emitter@npm:^0.3.3":
+   version: 0.3.5
+   resolution: "@types/event-emitter@npm:0.3.5"
+@@ -4930,16 +5119,16 @@
+   languageName: node
+   linkType: hard
+ 
+-"@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz::locator=vfadmin%40workspace%3A.":
++"@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 0.1.0
+-  resolution: "@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz#./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz::hash=ca5c86&locator=vfadmin%40workspace%3A."
++  resolution: "@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz#./vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz::hash=189d34&locator=vfadmin%40workspace%3A."
+   peerDependencies:
+     "@zxio/vue-grid-layout": ^1.0.6
+     vue: ^3.5.0
+   peerDependenciesMeta:
+     "@zxio/vue-grid-layout":
+       optional: true
+-  checksum: 10c0/1d936b625011d5d844b3954e49c6e0ee09cf464bf8064945de687651ff8c120085a263e49d01610592b8a52ebf4feb78f5370ad19237c6f37348ef9d9eca4c0c
++  checksum: 10c0/a4cb5b4fe56d7c111211264c06b128fa58e8bc35b97e1e4cf43c1446c0c1c5685ba90990ea110078cc060e3def265e6e4a1119ad7e534ae87b72a7a8a7b6c3af
+   languageName: node
+   linkType: hard
+ 
+@@ -5085,23 +5274,23 @@
+   languageName: node
+   linkType: hard
+ 
+-"@zxio/theme-air-gray@file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++"@zxio/theme-air-gray@file:./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-air-gray@file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz::hash=bcd808&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/03442ee3ad930b8134d09a2946e0f8ae52fa53e6e59a7901d985782de694c566900a0dc14771ee0460f73ea30cb5cb60bad4b58767b447847a6cf591e3219d6d
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-army-pine@file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-air-gray@file:./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz::hash=30ee04&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/5dccbafae53363fdd4ceebccc1c4759cd09db666ebd3cd2d2e462f24f2f5223193bf84485c11573d6916e6f80009686d0aa269cc3b31eb520ed7d9593667ed1c
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-army-pine@file:./vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-army-pine@file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz::hash=8618de&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/8ca354f3eb6d995c2521f0da2c362e1f1270e9cbe09db72ad7d73e0b345e3ea3d74a839355cc76e42772e6bec70a3e741371381a4ac3911e7a145575de9e82fd
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-army-pine@file:./vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz::hash=9a32ad&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/5286e9fd4d9afb59e9835e1caf911377a999c9fd8c3fd24e478f31625096e2c0d5bafd27a9e547a7dcbbb393a4423f676aae32493df5aaf554b1bb5fec797d18
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz#./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz::hash=c8b053&locator=vfadmin%40workspace%3A."
++  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-compiler-1.0.0-dashboard-theme.20261026.tgz::hash=66eb2c&locator=vfadmin%40workspace%3A."
+   dependencies:
+     "@zxio/theme-css-codec": "npm:1.0.0"
+     "@zxio/tokens": "npm:2.0.0"
+@@ -5113,96 +5302,96 @@
+   peerDependenciesMeta:
+     vite:
+       optional: true
+-  checksum: 10c0/b942f1b2864f5069403a95a74f5c6b0b7920b795a2f27e0b0de02e92392e65c2c57cb1ec324ac3679cdc440b27818aaaa7fa705f2058480a6a7ee4632cf5f844
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-consumer@npm:1.0.0, @zxio/theme-consumer@npm:^1.0.0":
++  checksum: 10c0/dc0ff66423b4f6226291ea4d730fbcb1de228349210122864c926b45f59099f540ecda26754cae454c86732f0e96205132d2f13ad59af80a0e9fcfd625712f35
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-consumer@file:./vendor/zxio-theme-consumer-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-consumer@npm:1.0.0"
++  resolution: "@zxio/theme-consumer@file:./vendor/zxio-theme-consumer-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-consumer-1.0.0-dashboard-theme.20261026.tgz::hash=7891c3&locator=vfadmin%40workspace%3A."
+   peerDependencies:
+     vue: ^3.5.0
+   peerDependenciesMeta:
+     vue:
+       optional: true
+-  checksum: 10c0/e513dccc83f758eb2db4517f912fea59cf9b672143b727ab88b6335ba66c58c29651bacd8f0665d46f3510fe126ede2fbe5ccf55799eca3f1f46ee790b6223ec
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-css-codec@npm:1.0.0, @zxio/theme-css-codec@npm:^1.0.0":
++  checksum: 10c0/d14af01e2dae627c2370520f598c541770ccb6cba7481e96ca420dabcde5cc0f35db3cb6c42c683315614fe198633e1c9597c00e3e4570f75f7ae1ab3a6f5d41
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-css-codec@file:./vendor/zxio-theme-css-codec-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-css-codec@npm:1.0.0"
++  resolution: "@zxio/theme-css-codec@file:./vendor/zxio-theme-css-codec-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-css-codec-1.0.0-dashboard-theme.20261026.tgz::hash=331494&locator=vfadmin%40workspace%3A."
+   dependencies:
+     "@zxio/tokens": "npm:2.0.0"
+-  checksum: 10c0/7b6b53d6e999ee880cf8957e0cf8041f84a748df0f1539198cdde6cbd8cc9dfe7609992b9aa0bceebb3d7d637605aaa3e842acac6cd066ad3b87adbaa631a9fc
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-default@file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  checksum: 10c0/0536c1760cbd5d01851bc5fd7a39d523957b66fbf3ec8bf22cd7dc85e4bec92df70de9cede643e3d4223091451bbd72dd42f0ede04e40611f37778e6e42ee8c7
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-default@file:./vendor/zxio-theme-default-2.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 2.0.0
+-  resolution: "@zxio/theme-default@file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz::hash=48987c&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/a08d9ee0ae9bd1d07019f3cd52173b27ac6a5815bb225e67eb0cf8ab5a6e2080e4f7b2aa5b91f9d2599bf0b2fc3ef85c0c2cc7637f5045fd050bfe7c5cee19a9
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-defense-green@file:./vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-default@file:./vendor/zxio-theme-default-2.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-default-2.0.0-dashboard-theme.20261026.tgz::hash=7ca5cf&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/84064bad8ddcb66a150f3862cd188f4a5196c1622d06b6a3ce4edadbe6b688653d9487dd2ec245fef4f1a76ea024e4ea99d1c00daf0416b36a37ee4ac1b8ad97
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-defense-green@file:./vendor/zxio-theme-defense-green-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-defense-green@file:./vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz::hash=538d61&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/2e38152c2884a6349fd4bc3c170981934432635719d12d97e56ec368f91f09d4430663c9c2e8ca8a50bc8343de6de90d71a38c81fd33a5dbb07d2f7a45358f10
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-factory-blue@file:./vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-defense-green@file:./vendor/zxio-theme-defense-green-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-defense-green-1.0.0-dashboard-theme.20261026.tgz::hash=7acfe5&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/0f35664c580170557e81eb134c43809482f20975855d877a15baf41b89df775f74c19e6c44bf0d2df36ee0aca95bf83bc471efd12c823942489ab337b86c7d55
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-factory-blue@file:./vendor/zxio-theme-factory-blue-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-factory-blue@file:./vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz::hash=9ebd66&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/554aa00dff34a362416e0f846b249c272c951297c41bb1e173b418b28ccc876a48decb4f8dac494a88f168eceefbdbcef6c66561f7ae5e49ac292e84270043f8
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-industrial-blue@file:./vendor/zxio-theme-industrial-blue-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-factory-blue@file:./vendor/zxio-theme-factory-blue-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-factory-blue-1.0.0-dashboard-theme.20261026.tgz::hash=5fc99f&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/34eeba050b9731a2775f5a5e9f162ad930aa402047d4941084824bac75ccbefb8caf7b609aa834362ed39f55197d9b0a58ed32b10f0bf6f438da895ce9c3513b
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-industrial-blue@file:./vendor/zxio-theme-industrial-blue-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-industrial-blue@file:./vendor/zxio-theme-industrial-blue-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-industrial-blue-1.0.0-overlay-validation.20261013.tgz::hash=22913d&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/2e2fb689de74d9d3a484fd7f1107a9f213db7acbaa707448c11a4206191565e0303688029bfd7c01792c93ac4fd57e8c4b40966987dcdfcda7b9b2510d1dc3b3
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-pap-olive@file:./vendor/zxio-theme-pap-olive-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-industrial-blue@file:./vendor/zxio-theme-industrial-blue-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-industrial-blue-1.0.0-dashboard-theme.20261026.tgz::hash=cb35cd&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/c575666ada3d9f8023400f4ead8cc888d0920cdf8943f4a5cdb6d97519534dbc1337502b20a58f84468b25bb05ebef7387295d1ee351edee9975062d132e6a98
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-pap-olive@file:./vendor/zxio-theme-pap-olive-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-pap-olive@file:./vendor/zxio-theme-pap-olive-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-pap-olive-1.0.0-overlay-validation.20261013.tgz::hash=0545f1&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/ced6477c0b2ea284f4a3903c76c4b1de9c6874f7020a3e78a2f5568f1b8fef0c309b34008e0645a6872afab479be176d3d039141243205b1eb1902b3f97c4802
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-rocket-moss@file:./vendor/zxio-theme-rocket-moss-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-pap-olive@file:./vendor/zxio-theme-pap-olive-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-pap-olive-1.0.0-dashboard-theme.20261026.tgz::hash=3c8081&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/d7fffa322160da94882f7f68388bbb09900c97690574d21ae1423e2d7563689069cecd7510144e56f2c80fc33a24a4d0a595069965e5283ae9d4a9d6de5639e0
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-rocket-moss@file:./vendor/zxio-theme-rocket-moss-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-rocket-moss@file:./vendor/zxio-theme-rocket-moss-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-rocket-moss-1.0.0-overlay-validation.20261013.tgz::hash=f9f9c0&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/af718b085a3b5e6a194b1e8178b17c7b7a60365a0eab9e4f60d95ac7a583f024769a5929d0140547c37071e8b995199a4a1047cc76c5218c1fa4fd62ce844ffd
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-tailwind@file:./vendor/zxio-theme-tailwind-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-rocket-moss@file:./vendor/zxio-theme-rocket-moss-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-rocket-moss-1.0.0-dashboard-theme.20261026.tgz::hash=15eb3a&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/5fc9a07f04c807d11c731e2b66fcf34233ebe60956879cf93a8f699ad04685b05fe7a5bfde0ac25fe38f59b028d7d991b4f2602cab2508f742bbcbfa9978cbe9
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-tailwind@file:./vendor/zxio-theme-tailwind-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-tailwind@file:./vendor/zxio-theme-tailwind-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-tailwind-1.0.0-overlay-validation.20261013.tgz::hash=109091&locator=vfadmin%40workspace%3A."
++  resolution: "@zxio/theme-tailwind@file:./vendor/zxio-theme-tailwind-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-tailwind-1.0.0-dashboard-theme.20261026.tgz::hash=445b2c&locator=vfadmin%40workspace%3A."
+   peerDependencies:
+     tailwindcss: ^3.4.0 || ^4.0.0
+   peerDependenciesMeta:
+     tailwindcss:
+       optional: true
+-  checksum: 10c0/9d563f55a5f8c7a13decd7cd9531e6e066c75d91146d1a2a274d8d7ba480af0356f1c0b5053427ca414b207ba8cb5709aa2ec1ea39a642d8d83bb2f8f82314fc
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/theme-tech-blue@file:./vendor/zxio-theme-tech-blue-1.0.0-overlay-validation.20261013.tgz::locator=vfadmin%40workspace%3A.":
++  checksum: 10c0/d04a16d4581840b486e4d1ca808f0206d8b6bdef9c0c7eece9a8cf2db05c02855a4cdf735189207e5c4b392f0f8e46d5f8de728225c833f46cf7ead7da6864ad
++  languageName: node
++  linkType: hard
++
++"@zxio/theme-tech-blue@file:./vendor/zxio-theme-tech-blue-1.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.0
+-  resolution: "@zxio/theme-tech-blue@file:./vendor/zxio-theme-tech-blue-1.0.0-overlay-validation.20261013.tgz#./vendor/zxio-theme-tech-blue-1.0.0-overlay-validation.20261013.tgz::hash=2e62cc&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/60b99fdf5e53147fd84ec0b1e8aa652723da9fbb635d7e3b79c1ba07044879fb54afab99fb7961e78f78a9c29e220a609377d10b238256a135110fcc65d3d903
+-  languageName: node
+-  linkType: hard
+-
+-"@zxio/tokens@file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz::locator=vfadmin%40workspace%3A.":
++  resolution: "@zxio/theme-tech-blue@file:./vendor/zxio-theme-tech-blue-1.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-theme-tech-blue-1.0.0-dashboard-theme.20261026.tgz::hash=021ebd&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/75c1b0ca395cb013b613cb5364a89ea359e90b55f0143bf0ed209d485082f76603b8f7d29347ff0326db685286ed9ec97fd7b0ef9a4262449bb3b482a7ca34e9
++  languageName: node
++  linkType: hard
++
++"@zxio/tokens@file:./vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 2.0.0
+-  resolution: "@zxio/tokens@file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz#./vendor/zxio-tokens-2.0.0-display.20260928.tgz::hash=35154a&locator=vfadmin%40workspace%3A."
+-  checksum: 10c0/0f08a83259992cf8a73f663384ad4e51775f961783e9ecd1b1c2cde745cc48a907761e90d16921a1f9d5c559cf425e9ae7e83b45c91689c07f0891aa86e086f4
++  resolution: "@zxio/tokens@file:./vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz#./vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz::hash=4f7d0c&locator=vfadmin%40workspace%3A."
++  checksum: 10c0/a9a032216aa837ad5c73870d0be7630dc0f69b4ccf9b6bde4b723896ec147fe15d44d120713365bcb7c0a12b7362f5be9afb3f9b99255e972d85464e5bfc96df
+   languageName: node
+   linkType: hard
+ 
+@@ -5226,9 +5415,9 @@
+   languageName: node
+   linkType: hard
+ 
+-"@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz::locator=vfadmin%40workspace%3A.":
++"@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz::locator=vfadmin%40workspace%3A.":
+   version: 1.0.6
+-  resolution: "@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz#./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz::hash=b506e6&locator=vfadmin%40workspace%3A."
++  resolution: "@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz#./vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz::hash=cf7b13&locator=vfadmin%40workspace%3A."
+   dependencies:
+     "@emotion/css": "npm:^11.11.2"
+     "@zxio/theme-consumer": "npm:1.0.0"
+@@ -5237,7 +5426,7 @@
+     resize-observer-polyfill: "npm:^1.5.1"
+   peerDependencies:
+     vue: ^3.5.0
+-  checksum: 10c0/ab717fedb1bbb89347517a4579a7ee59bc409aad5b5f0231a147c213906b5b624b0d824bdc08400c5060109ebf806957c7b8c36318db10718e3bbb98014d537f
++  checksum: 10c0/ab52395152ea3cd1d3cdf4ad3f74f8884c4956070ff6fb7169e65f85d4611b0fb1fc91734c87f53282871705e2b5a30593a7a5cdb511156ad9d0fb6384883c84
+   languageName: node
+   linkType: hard
+ 
+@@ -5255,9 +5444,9 @@
+   languageName: node
+   linkType: hard
+ 
+-"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-element-plus.20261026.tgz::locator=vfadmin%40workspace%3A.":
++"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-dashboard-theme.20261026.1.tgz::locator=vfadmin%40workspace%3A.":
+   version: 3.0.0-next.0
+-  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-element-plus.20261026.tgz#./vendor/zxio-zxui-3.0.0-next.0-element-plus.20261026.tgz::hash=a9589f&locator=vfadmin%40workspace%3A."
++  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-dashboard-theme.20261026.1.tgz#./vendor/zxio-zxui-3.0.0-next.0-dashboard-theme.20261026.1.tgz::hash=ed5d4f&locator=vfadmin%40workspace%3A."
+   dependencies:
+     "@element-plus/icons-vue": "npm:^2.3.1"
+     "@floating-ui/dom": "npm:^1.6.0"
+@@ -5278,7 +5467,7 @@
+   peerDependencies:
+     element-plus: 2.14.7
+     vue: ^3.5.0
+-  checksum: 10c0/5e104534cb3890bb831d8a4308be1dbe100d65f60925559b5df34e0a2437b3846fa1cfb3b2ee5585700939f9d468e51a02d0e8c405cff451d488f11347e3ede8
++  checksum: 10c0/bb1f471879517d55250ed66562e45d313a52d608e056f7c48dd6ed5de9c196d22fb6e062360120ea79b01987a9eef329fe52fb1df25328451e292822979607b3
+   languageName: node
+   linkType: hard
+ 
+@@ -12344,7 +12533,7 @@
+   languageName: node
+   linkType: hard
+ 
+-"postcss@npm:^8.5.29":
++"postcss@npm:^8.4.43, postcss@npm:^8.5.29":
+   version: 8.5.31
+   resolution: "postcss@npm:8.5.31"
+   dependencies:
+@@ -13244,6 +13433,99 @@
+   bin:
+     rollup: dist/bin/rollup
+   checksum: 10c0/ca950eb0fb550c40e0a06e9bb4f17c3b7097a3684152327569d9b20891e704ea8b20764b26d54442fc1eb00615923a191bb928087a7e23e5fa8c3c00e06680e4
++  languageName: node
++  linkType: hard
++
++"rollup@npm:^4.20.0":
++  version: 4.65.1
++  resolution: "rollup@npm:4.65.1"
++  dependencies:
++    "@napi-rs/lzma-linux-x64-gnu": "npm:1.5.1"
++    "@rollup/rollup-android-arm-eabi": "npm:4.65.1"
++    "@rollup/rollup-android-arm64": "npm:4.65.1"
++    "@rollup/rollup-darwin-arm64": "npm:4.65.1"
++    "@rollup/rollup-darwin-x64": "npm:4.65.1"
++    "@rollup/rollup-freebsd-arm64": "npm:4.65.1"
++    "@rollup/rollup-freebsd-x64": "npm:4.65.1"
++    "@rollup/rollup-linux-arm-gnueabihf": "npm:4.65.1"
++    "@rollup/rollup-linux-arm-musleabihf": "npm:4.65.1"
++    "@rollup/rollup-linux-arm64-gnu": "npm:4.65.1"
++    "@rollup/rollup-linux-arm64-musl": "npm:4.65.1"
++    "@rollup/rollup-linux-loong64-gnu": "npm:4.65.1"
++    "@rollup/rollup-linux-loong64-musl": "npm:4.65.1"
++    "@rollup/rollup-linux-ppc64-gnu": "npm:4.65.1"
++    "@rollup/rollup-linux-ppc64-musl": "npm:4.65.1"
++    "@rollup/rollup-linux-riscv64-gnu": "npm:4.65.1"
++    "@rollup/rollup-linux-riscv64-musl": "npm:4.65.1"
++    "@rollup/rollup-linux-s390x-gnu": "npm:4.65.1"
++    "@rollup/rollup-linux-x64-gnu": "npm:4.65.1"
++    "@rollup/rollup-linux-x64-musl": "npm:4.65.1"
++    "@rollup/rollup-openbsd-x64": "npm:4.65.1"
++    "@rollup/rollup-openharmony-arm64": "npm:4.65.1"
++    "@rollup/rollup-win32-arm64-msvc": "npm:4.65.1"
++    "@rollup/rollup-win32-ia32-msvc": "npm:4.65.1"
++    "@rollup/rollup-win32-x64-gnu": "npm:4.65.1"
++    "@rollup/rollup-win32-x64-msvc": "npm:4.65.1"
++    "@types/estree": "npm:1.0.9"
++    fsevents: "npm:~2.3.2"
++  dependenciesMeta:
++    "@napi-rs/lzma-linux-x64-gnu":
++      optional: true
++    "@rollup/rollup-android-arm-eabi":
++      optional: true
++    "@rollup/rollup-android-arm64":
++      optional: true
++    "@rollup/rollup-darwin-arm64":
++      optional: true
++    "@rollup/rollup-darwin-x64":
++      optional: true
++    "@rollup/rollup-freebsd-arm64":
++      optional: true
++    "@rollup/rollup-freebsd-x64":
++      optional: true
++    "@rollup/rollup-linux-arm-gnueabihf":
++      optional: true
++    "@rollup/rollup-linux-arm-musleabihf":
++      optional: true
++    "@rollup/rollup-linux-arm64-gnu":
++      optional: true
++    "@rollup/rollup-linux-arm64-musl":
++      optional: true
++    "@rollup/rollup-linux-loong64-gnu":
++      optional: true
++    "@rollup/rollup-linux-loong64-musl":
++      optional: true
++    "@rollup/rollup-linux-ppc64-gnu":
++      optional: true
++    "@rollup/rollup-linux-ppc64-musl":
++      optional: true
++    "@rollup/rollup-linux-riscv64-gnu":
++      optional: true
++    "@rollup/rollup-linux-riscv64-musl":
++      optional: true
++    "@rollup/rollup-linux-s390x-gnu":
++      optional: true
++    "@rollup/rollup-linux-x64-gnu":
++      optional: true
++    "@rollup/rollup-linux-x64-musl":
++      optional: true
++    "@rollup/rollup-openbsd-x64":
++      optional: true
++    "@rollup/rollup-openharmony-arm64":
++      optional: true
++    "@rollup/rollup-win32-arm64-msvc":
++      optional: true
++    "@rollup/rollup-win32-ia32-msvc":
++      optional: true
++    "@rollup/rollup-win32-x64-gnu":
++      optional: true
++    "@rollup/rollup-win32-x64-msvc":
++      optional: true
++    fsevents:
++      optional: true
++  bin:
++    rollup: dist/bin/rollup
++  checksum: 10c0/2761920a320b3d454ee87992f974454abe8475d54f42bc4bedb27f6908d77409031935b4931d9f4a29eb6d337c8fbbfc33b7af94b382f5610ddfd8dfb25debbd
+   languageName: node
+   linkType: hard
+ 
+@@ -15126,26 +15408,26 @@
+     "@wangeditor/editor": "npm:^5.1.23"
+     "@wangeditor/editor-for-vue": "npm:^5.1.10"
+     "@zxio/chart": "file:./vendor/zxio-chart-2.0.0-dashboard-committed.20261019.tgz"
+-    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz"
++    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz"
+     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
+     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
+     "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-remark-a.20261022.1.tgz"
+     "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-remark-ai.20261023.2.tgz"
+-    "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz"
+-    "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-defense-green": "file:./vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-factory-blue": "file:./vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-industrial-blue": "file:./vendor/zxio-theme-industrial-blue-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-pap-olive": "file:./vendor/zxio-theme-pap-olive-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-rocket-moss": "file:./vendor/zxio-theme-rocket-moss-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-tailwind": "file:./vendor/zxio-theme-tailwind-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/theme-tech-blue": "file:./vendor/zxio-theme-tech-blue-1.0.0-overlay-validation.20261013.tgz"
+-    "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz"
+-    "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz"
++    "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-defense-green": "file:./vendor/zxio-theme-defense-green-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-factory-blue": "file:./vendor/zxio-theme-factory-blue-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-industrial-blue": "file:./vendor/zxio-theme-industrial-blue-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-pap-olive": "file:./vendor/zxio-theme-pap-olive-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-rocket-moss": "file:./vendor/zxio-theme-rocket-moss-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-tailwind": "file:./vendor/zxio-theme-tailwind-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/theme-tech-blue": "file:./vendor/zxio-theme-tech-blue-1.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz"
++    "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz"
+     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
+-    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-element-plus.20261026.tgz"
++    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-dashboard-theme.20261026.1.tgz"
+     ajv: "npm:^8.20.0"
+     ant-design-vue: "npm:^4.1.1"
+     autoprefixer: "npm:^10.4.21"
+@@ -15186,7 +15468,7 @@
+     unplugin-auto-import: "npm:0.17.6"
+     unplugin-vue-components: "npm:0.27.5"
+     unplugin-vue-setup-extend-plus: "npm:1.0.1"
+-    vite: "npm:5.3.2"
++    vite: "npm:5.4.21"
+     vite-plugin-compression: "npm:0.5.1"
+     vite-plugin-svg-icons: "npm:2.0.1"
+     vitest: "npm:^3.2.4"
+@@ -15253,7 +15535,50 @@
+   languageName: node
+   linkType: hard
+ 
+-"vite@npm:5.3.2, vite@npm:^5.0.0 || ^6.0.0 || ^7.0.0-0":
++"vite@npm:5.4.21":
++  version: 5.4.21
++  resolution: "vite@npm:5.4.21"
++  dependencies:
++    esbuild: "npm:^0.21.3"
++    fsevents: "npm:~2.3.3"
++    postcss: "npm:^8.4.43"
++    rollup: "npm:^4.20.0"
++  peerDependencies:
++    "@types/node": ^18.0.0 || >=20.0.0
++    less: "*"
++    lightningcss: ^1.21.0
++    sass: "*"
++    sass-embedded: "*"
++    stylus: "*"
++    sugarss: "*"
++    terser: ^5.4.0
++  dependenciesMeta:
++    fsevents:
++      optional: true
++  peerDependenciesMeta:
++    "@types/node":
++      optional: true
++    less:
++      optional: true
++    lightningcss:
++      optional: true
++    sass:
++      optional: true
++    sass-embedded:
++      optional: true
++    stylus:
++      optional: true
++    sugarss:
++      optional: true
++    terser:
++      optional: true
++  bin:
++    vite: bin/vite.js
++  checksum: 10c0/468336a1409f728b464160cbf02672e72271fb688d0e605e776b74a89d27e1029509eef3a3a6c755928d8011e474dbf234824d054d07960be5f23cd176bc72de
++  languageName: node
++  linkType: hard
++
++"vite@npm:^5.0.0 || ^6.0.0 || ^7.0.0-0":
+   version: 5.3.2
+   resolution: "vite@npm:5.3.2"
+   dependencies:

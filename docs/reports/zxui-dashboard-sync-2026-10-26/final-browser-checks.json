@@ -1,0 +1,420 @@
+{
+  "snapshots": [
+    {
+      "label": "light",
+      "url": "http://127.0.0.1:3311/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "count": 1,
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "height": "252px",
+        "padding": "0px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "height": "36px",
+        "padding": "8px 15px"
+      },
+      "sidebarIcon": {
+        "classes": "el-icon zx-icon navigation-menu-icon",
+        "display": "none"
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "label": "dark",
+      "url": "http://127.0.0.1:3311/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "theme": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "count": 1,
+      "grid": {
+        "surface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+        "foreground": "color(srgb 0.93 0.95 0.98 / 1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.10644 0.120704 0.14922)",
+        "color": "color(srgb 0.93 0.95 0.98)",
+        "border": "color(srgb 0.320894 0.331735 0.353407 / 0.976)",
+        "height": "252px",
+        "padding": "0px"
+      },
+      "button": {
+        "background": "color(srgb 0.096 0.1101 0.1383)",
+        "color": "color(srgb 0.93 0.95 0.98)",
+        "border": "color(srgb 0.93 0.95 0.98 / 0.42)",
+        "height": "36px",
+        "padding": "8px 15px"
+      },
+      "sidebarIcon": {
+        "classes": "el-icon zx-icon navigation-menu-icon",
+        "display": "none"
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "label": "factory-compact",
+      "url": "http://127.0.0.1:3311/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "theme": "factory-blue",
+      "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+      "count": 1,
+      "grid": {
+        "surface": "color(srgb 0.1301 0.17830000000000001 0.2415 / 1)",
+        "foreground": "color(srgb 0.9152 0.9517 1 / 1)",
+        "toolbarPadding": "6px"
+      },
+      "panel": {
+        "background": "color(srgb 0.131304 0.187032 0.25206)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.142991 0.300544 0.397966 / 0.892)",
+        "height": "252px",
+        "padding": "0px"
+      },
+      "button": {
+        "background": "color(srgb 0.1301 0.1783 0.2415)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.12 0.31 0.55 / 0.5)",
+        "height": "32px",
+        "padding": "8px 15px"
+      },
+      "sidebarIcon": {
+        "classes": "el-icon zx-icon navigation-menu-icon",
+        "display": "none"
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "label": "comfortable",
+      "url": "http://127.0.0.1:3311/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "theme": "default",
+      "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+      "count": 1,
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "toolbarPadding": "10px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "height": "252px",
+        "padding": "0px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "height": "40px",
+        "padding": "8px 15px"
+      },
+      "sidebarIcon": {
+        "classes": "el-icon zx-icon navigation-menu-icon",
+        "display": "none"
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "label": "navigation-return",
+      "url": "http://127.0.0.1:3311/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "count": 1,
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "height": "252px",
+        "padding": "0px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "height": "36px",
+        "padding": "8px 15px"
+      },
+      "sidebarIcon": {
+        "classes": "el-icon zx-icon navigation-menu-icon",
+        "display": "none"
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    },
+    {
+      "label": "1280",
+      "url": "http://127.0.0.1:3311/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "count": 1,
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "height": "252px",
+        "padding": "0px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "height": "36px",
+        "padding": "8px 15px"
+      },
+      "sidebarIcon": {
+        "classes": "el-icon zx-icon navigation-menu-icon",
+        "display": "none"
+      },
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "scrollWidth": 1280
+      }
+    },
+    {
+      "label": "restored",
+      "url": "http://127.0.0.1:3311/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "count": 1,
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "height": "252px",
+        "padding": "0px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "height": "36px",
+        "padding": "8px 15px"
+      },
+      "sidebarIcon": {
+        "classes": "el-icon zx-icon navigation-menu-icon",
+        "display": "none"
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 1000,
+        "scrollWidth": 1440
+      }
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "writes": [],
+  "reads": [
+    {
+      "url": "http://127.0.0.1:3311/api/monitor/server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/system/dashboard/account/monitor-server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/monitor/server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/system/dashboard/account/monitor-server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/monitor/server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/system/dashboard/account/monitor-server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/monitor/server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/system/dashboard/account/monitor-server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/monitor/server",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3311/api/system/dashboard/account/monitor-server",
+      "status": 200
+    }
+  ],
+  "panelMenu": {
+    "text": "锁定\n隐藏",
+    "scope": "scope:vfadmin:root",
+    "background": "color(srgb 0.132508 0.195764 0.26262)",
+    "color": "color(srgb 0.9152 0.9517 1)",
+    "rect": {
+      "x": 371,
+      "y": 251,
+      "width": 160,
+      "height": 72,
+      "top": 251,
+      "right": 531,
+      "bottom": 323,
+      "left": 371
+    }
+  },
+  "layoutBefore": "top: 0px; left: 0px; width: 250px; height: 252px; position: absolute; transform: translate3d(0px, 0px, 0px);",
+  "layoutDraft": "top: 0px; left: 0px; width: 250px; height: 252px; position: absolute; transform: translate3d(0px, 528px, 0px);",
+  "layoutRestored": "top: 0px; left: 0px; width: 362px; height: 252px; position: absolute; transform: translate3d(0px, 0px, 0px);",
+  "settingsCancelled": true,
+  "maximizedAndRestored": true,
+  "themeMenu": {
+    "container": "BODY",
+    "theme": "factory-blue",
+    "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+    "menuBackground": "color(srgb 0.132508 0.195764 0.26262)",
+    "itemColor": "color(srgb 0.9152 0.9517 1)",
+    "rect": {
+      "x": 1020,
+      "y": 67,
+      "width": 196,
+      "height": 512,
+      "top": 67,
+      "right": 1216,
+      "bottom": 579,
+      "left": 1020
+    }
+  },
+  "themeCycles": 3,
+  "keyboardRight": "memory",
+  "keyboardHome": "cpu",
+  "fit": [
+    {
+      "selector": ".navbar",
+      "rect": {
+        "x": 250,
+        "y": 0,
+        "width": 1030,
+        "height": 55,
+        "top": 0,
+        "right": 1280,
+        "bottom": 55,
+        "left": 250
+      },
+      "fits": true
+    },
+    {
+      "selector": ".sidebar-container",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 250,
+        "height": 800,
+        "top": 0,
+        "right": 250,
+        "bottom": 800,
+        "left": 0
+      },
+      "fits": true
+    },
+    {
+      "selector": ".persistent-dashboard__bar",
+      "rect": {
+        "x": 290,
+        "y": 96,
+        "width": 950,
+        "height": 88,
+        "top": 96,
+        "right": 1240,
+        "bottom": 184,
+        "left": 290
+      },
+      "fits": true
+    },
+    {
+      "selector": ".zx-dashboard-designer-toolbar",
+      "rect": {
+        "x": 290,
+        "y": 184,
+        "width": 950,
+        "height": 48,
+        "top": 184,
+        "right": 1240,
+        "bottom": 232,
+        "left": 290
+      },
+      "fits": true
+    }
+  ],
+  "restoredPreference": null,
+  "setupErrors": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "artifact": "zxio-zxui-3.0.0-next.0-dashboard-theme.20261026.1.tgz",
+  "endedAt": "2026-10-26T13:00:52.652Z"
+}

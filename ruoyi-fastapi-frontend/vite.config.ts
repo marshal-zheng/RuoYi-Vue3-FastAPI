@@ -108,6 +108,12 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
           // 将统一的 API 前缀重写为空，由后端直接处理真实路由
           rewrite: (p) => p.replace(new RegExp(`^${escapeRegExp(apiPrefix)}`), '') || '/',
         },
+        // Stable file content addresses are same-origin and authorized by the backend on every use.
+        // The reserved prefix is forwarded unchanged (no API prefix in persisted URLs).
+        '/file-assets/': {
+          target: baseUrl,
+          changeOrigin: false,
+        },
       }
     },
     optimizeDeps: {

@@ -131,32 +131,6 @@
   },
   {
     "method": "GET",
-    "openapiPath": "/common/download",
-    "owner": "common",
-    "status": "real-only",
-    "critical": false,
-    "schemaStatus": "binary-response",
-    "tests": [],
-    "persistence": "real-only",
-    "reason": "File transfer endpoint is outside demo-offline critical flow and remains real backend only.",
-    "impact": "Not exercised by demo-offline P0 pages; fallback/real modes use the backend contract.",
-    "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
-  },
-  {
-    "method": "GET",
-    "openapiPath": "/common/download/resource",
-    "owner": "common",
-    "status": "real-only",
-    "critical": false,
-    "schemaStatus": "binary-response",
-    "tests": [],
-    "persistence": "real-only",
-    "reason": "File transfer endpoint is outside demo-offline critical flow and remains real backend only.",
-    "impact": "Not exercised by demo-offline P0 pages; fallback/real modes use the backend contract.",
-    "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
-  },
-  {
-    "method": "GET",
     "openapiPath": "/common/tables",
     "owner": "common",
     "status": "real-only",
@@ -165,19 +139,6 @@
     "tests": [],
     "persistence": "real-only",
     "reason": "Endpoint is outside the demo-offline critical flow and remains real backend only.",
-    "impact": "Not exercised by demo-offline P0 pages; fallback/real modes use the backend contract.",
-    "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
-  },
-  {
-    "method": "POST",
-    "openapiPath": "/common/upload",
-    "owner": "common",
-    "status": "real-only",
-    "critical": false,
-    "schemaStatus": "binary-response",
-    "tests": [],
-    "persistence": "real-only",
-    "reason": "File transfer endpoint is outside demo-offline critical flow and remains real backend only.",
     "impact": "Not exercised by demo-offline P0 pages; fallback/real modes use the backend contract.",
     "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
   },
@@ -260,6 +221,71 @@
     "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
   },
   {
+    "method": "POST",
+    "openapiPath": "/file-assets/metadata:batch",
+    "owner": "file-assets",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "File assets require the real backend, MySQL and private object storage; MSW cannot stand in for upload validation, authorization or streaming.",
+    "impact": "Demo-offline pages cannot upload or preview assets; fallback/real modes use the backend contract.",
+    "migrationTarget": "Keep real-only; offline demos show the bundled default avatar and no attachments."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/file-assets/uploads",
+    "owner": "file-assets",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "File assets require the real backend, MySQL and private object storage; MSW cannot stand in for upload validation, authorization or streaming.",
+    "impact": "Demo-offline pages cannot upload or preview assets; fallback/real modes use the backend contract.",
+    "migrationTarget": "Keep real-only; offline demos show the bundled default avatar and no attachments."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/file-assets/{asset_id}",
+    "owner": "file-assets",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "File assets require the real backend, MySQL and private object storage; MSW cannot stand in for upload validation, authorization or streaming.",
+    "impact": "Demo-offline pages cannot upload or preview assets; fallback/real modes use the backend contract.",
+    "migrationTarget": "Keep real-only; offline demos show the bundled default avatar and no attachments."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/file-assets/{asset_id}",
+    "owner": "file-assets",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "File assets require the real backend, MySQL and private object storage; MSW cannot stand in for upload validation, authorization or streaming.",
+    "impact": "Demo-offline pages cannot upload or preview assets; fallback/real modes use the backend contract.",
+    "migrationTarget": "Keep real-only; offline demos show the bundled default avatar and no attachments."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/file-assets/{asset_id}/content",
+    "owner": "file-assets",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "binary-response",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "File assets require the real backend, MySQL and private object storage; MSW cannot stand in for upload validation, authorization or streaming.",
+    "impact": "Demo-offline pages cannot upload or preview assets; fallback/real modes use the backend contract.",
+    "migrationTarget": "Keep real-only; offline demos show the bundled default avatar and no attachments."
+  },
+  {
     "method": "GET",
     "openapiPath": "/health",
     "owner": "platform-health",
@@ -313,6 +339,19 @@
   },
   {
     "method": "GET",
+    "openapiPath": "/health/file-assets",
+    "owner": "platform-health",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "Endpoint is outside the demo-offline critical flow and remains real backend only.",
+    "impact": "Not exercised by demo-offline P0 pages; fallback/real modes use the backend contract.",
+    "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
+  },
+  {
+    "method": "GET",
     "openapiPath": "/health/query-stats",
     "owner": "platform-health",
     "status": "real-only",
@@ -351,6 +390,19 @@
     "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
   },
   {
+    "method": "GET",
+    "openapiPath": "/saga/instances",
+    "owner": "resilience",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "Endpoint is outside the demo-offline critical flow and remains real backend only.",
+    "impact": "Not exercised by demo-offline P0 pages; fallback/real modes use the backend contract.",
+    "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
+  },
+  {
     "method": "POST",
     "openapiPath": "/saga/{saga_id}/compensate",
     "owner": "resilience",
@@ -364,16 +416,29 @@
     "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
   },
   {
-    "method": "GET",
-    "openapiPath": "/saga/instances",
-    "owner": "resilience",
+    "method": "POST",
+    "openapiPath": "/system/ai/text-field/generate",
+    "owner": "system-text-field-ai",
     "status": "real-only",
     "critical": false,
     "schemaStatus": "not-applicable",
     "tests": [],
     "persistence": "real-only",
-    "reason": "Endpoint is outside the demo-offline critical flow and remains real backend only.",
-    "impact": "Not exercised by demo-offline P0 pages; fallback/real modes use the backend contract.",
-    "migrationTarget": "Add explicit MSW metadata if this endpoint becomes part of the offline demo flow."
+    "reason": "AI text-field generation depends on the configured model backend and stays real backend only.",
+    "impact": "Demo-offline pages show the AI writing action as unavailable; fallback/real modes use the backend contract.",
+    "migrationTarget": "Add explicit MSW metadata if AI text-field writing joins the offline demo flow."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/ai/text-field/status",
+    "owner": "system-text-field-ai",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "real-only",
+    "reason": "AI text-field generation depends on the configured model backend and stays real backend only.",
+    "impact": "Demo-offline pages show the AI writing action as unavailable; fallback/real modes use the backend contract.",
+    "migrationTarget": "Add explicit MSW metadata if AI text-field writing joins the offline demo flow."
   }
 ]

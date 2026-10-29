@@ -180,6 +180,30 @@ describe('browser session renewal', () => {
     expect(business).toHaveLength(1);
   });
 
+  it.each([500, 503, 429, 413])(
+    'never resends an upload body after an unknown or non-auth outcome (%s)',
+    async (status) => {
+      const data = new FormData();
+      data.set('file', new File(['qa'], 'qa.png'));
+      attempt = async (config) => {
+        throw rejected(config, status);
+      };
+      await expect(client().post({ url: '/file-assets/uploads', data })).rejects.toThrow();
+      expect(refreshes).toBe(0);
+      expect(business).toHaveLength(1);
+    }
+  );
+
+  it('does not resend an upload when the response is lost (timeout)', async () => {
+    attempt = async (config) => {
+      throw new AxiosError('timeout', 'ECONNABORTED', config);
+    };
+    await expect(
+      client().post({ url: '/file-assets/uploads', data: new FormData() })
+    ).rejects.toThrow();
+    expect(business).toHaveLength(1);
+  });
+
   it('does not renew explicitly anonymous or auth endpoint requests', async () => {
     setToken(jwt(-5));
     await client().get({ url: '/public' }, { withToken: false });

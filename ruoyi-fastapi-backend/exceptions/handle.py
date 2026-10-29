@@ -92,6 +92,7 @@ def handle_exception(app: FastAPI):
         if exc.http_status == 422 and field:
             errors = [{'field': field, 'message': exc.user_message, 'code': 'value_error'}]
 
+        extra = exc.extra if hasattr(exc, 'extra') else {}
         return ResponseUtil.problem_details(
             request=request,
             http_status=exc.http_status,
@@ -100,6 +101,8 @@ def handle_exception(app: FastAPI):
             type_slug=_resolve_problem_type_slug(exc.error_code, exc.error_code_name),
             error_code=exc.error_code,
             errors=errors,
+            headers=extra.get('headers'),
+            extensions=extra.get('problem_extensions'),
         )
     
     # Pydantic 校验错误处理器

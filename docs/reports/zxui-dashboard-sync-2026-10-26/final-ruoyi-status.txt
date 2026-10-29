@@ -1,0 +1,150 @@
+ M .gitignore
+ M docs/specs/file-assets-minio/design.md
+ M ruoyi-fastapi-backend/Dockerfile
+ M ruoyi-fastapi-backend/Dockerfile.dev
+ M ruoyi-fastapi-backend/alembic/env.py
+ M ruoyi-fastapi-backend/config/constant.py
+ M ruoyi-fastapi-backend/config/env.py
+ M ruoyi-fastapi-backend/config/error_codes.py
+ M ruoyi-fastapi-backend/config/get_db.py
+ M ruoyi-fastapi-backend/container/__init__.py
+ M ruoyi-fastapi-backend/exceptions/handle.py
+ M ruoyi-fastapi-backend/middlewares/csrf_guard_middleware.py
+ M ruoyi-fastapi-backend/middlewares/gzip_middleware.py
+ M ruoyi-fastapi-backend/middlewares/handle.py
+ M ruoyi-fastapi-backend/middlewares/rate_limit_middleware.py
+ M ruoyi-fastapi-backend/middlewares/security_headers_middleware.py
+ M ruoyi-fastapi-backend/module_admin/entity/do/notice_do.py
+ M ruoyi-fastapi-backend/module_admin/entity/do/user_do.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/common_vo.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/notice_vo.py
+ M ruoyi-fastapi-backend/module_admin/entity/vo/user_vo.py
+ M ruoyi-fastapi-backend/module_generator/entity/do/gen_do.py
+ M ruoyi-fastapi-backend/module_generator/entity/vo/gen_vo.py
+ M ruoyi-fastapi-backend/module_generator/service/gen_service.py
+ M ruoyi-fastapi-backend/module_generator/templates/python/controller.py.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/python/repository.py.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/python/service.py.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/python/vo.py.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/vue/index-tree.vue.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/vue/index.vue.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/vue/v3/index-tree.vue.jinja2
+ M ruoyi-fastapi-backend/module_generator/templates/vue/v3/index.vue.jinja2
+ M ruoyi-fastapi-backend/module_task/__init__.py
+ M ruoyi-fastapi-backend/modules/identity/api/login_controller.py
+ M ruoyi-fastapi-backend/modules/registry.py
+ M ruoyi-fastapi-backend/modules/system/api/common_controller.py
+ M ruoyi-fastapi-backend/modules/system/api/notice_controller.py
+ M ruoyi-fastapi-backend/modules/system/api/user_controller.py
+ M ruoyi-fastapi-backend/modules/system/application/behaviors/command_behaviors.py
+ M ruoyi-fastapi-backend/modules/system/application/commands/notice_commands.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/command/notice_command_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/command/user_command_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/handlers/query/user_query_handlers.py
+ M ruoyi-fastapi-backend/modules/system/application/read_models/notice_read_models.py
+ M ruoyi-fastapi-backend/modules/system/application/read_models/user_read_models.py
+ M ruoyi-fastapi-backend/modules/system/application/services/common_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/notice_service.py
+ M ruoyi-fastapi-backend/modules/system/application/services/user_service.py
+ M ruoyi-fastapi-backend/modules/system/tests/test_notice_write_commands.py
+ M ruoyi-fastapi-backend/modules/system/tests/test_user_read_queries.py
+ M ruoyi-fastapi-backend/ports/services.py
+ M ruoyi-fastapi-backend/requirements-pg.txt
+ M ruoyi-fastapi-backend/requirements.txt
+ M ruoyi-fastapi-backend/scripts/internal/db_workflow/dev_sync_service.py
+ M ruoyi-fastapi-backend/scripts/internal/db_workflow/schema_apply_atlas.py
+ M ruoyi-fastapi-backend/scripts/seed_data/overlays/dev.yaml
+ M ruoyi-fastapi-backend/scripts/seed_data/overlays/prod.yaml
+ M ruoyi-fastapi-backend/server.py
+ D ruoyi-fastapi-backend/sub_applications/handle.py
+ D ruoyi-fastapi-backend/sub_applications/staticfiles.py
+ M ruoyi-fastapi-backend/tests/conftest.py
+ M ruoyi-fastapi-backend/tests/integration/test_utils_coverage.py
+ M ruoyi-fastapi-backend/tests/unit/services/test_user_service.py
+ M ruoyi-fastapi-backend/tests/unit/test_error_codes.py
+ M ruoyi-fastapi-backend/utils/gen_util.py
+ M ruoyi-fastapi-backend/utils/response_util.py
+ M ruoyi-fastapi-backend/utils/template_util.py
+ D ruoyi-fastapi-backend/utils/upload_util.py
+ M ruoyi-fastapi-frontend/nginx.conf
+ M ruoyi-fastapi-frontend/package.json
+ M ruoyi-fastapi-frontend/src/api/_generated/index.ts
+ M ruoyi-fastapi-frontend/src/api/_generated/sdk.gen.ts
+ M ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts
+ M ruoyi-fastapi-frontend/src/api/system/notice.ts
+ M ruoyi-fastapi-frontend/src/api/system/user.ts
+ M ruoyi-fastapi-frontend/src/components/ui/Editor/index.vue
+ M ruoyi-fastapi-frontend/src/components/ui/FileUpload/index.vue
+ M ruoyi-fastapi-frontend/src/components/ui/ImagePreview/index.vue
+ M ruoyi-fastapi-frontend/src/components/ui/ImageUpload/index.vue
+ M ruoyi-fastapi-frontend/src/composables/useAuthenticatedUpload.ts
+ M ruoyi-fastapi-frontend/src/composables/useUploadModel.ts
+ M ruoyi-fastapi-frontend/src/mocks/contracts/coverage/registry/real-only.json
+ M ruoyi-fastapi-frontend/src/mocks/data/auth/accounts.ts
+ M ruoyi-fastapi-frontend/src/mocks/data/types.ts
+ M ruoyi-fastapi-frontend/src/mocks/factories/user.ts
+ M ruoyi-fastapi-frontend/src/mocks/handlers/user.ts
+ M ruoyi-fastapi-frontend/src/store/modules/user.ts
+ M ruoyi-fastapi-frontend/src/theme/zx-theme-host.test.ts
+ M ruoyi-fastapi-frontend/src/theme/zx-theme-host.ts
+ M ruoyi-fastapi-frontend/src/utils/session.test.ts
+ M ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeDlg.vue
+ M ruoyi-fastapi-frontend/src/views/system/user/profile/userAvatar.vue
+ M ruoyi-fastapi-frontend/src/views/tool/gen/editTable.vue
+ M ruoyi-fastapi-frontend/tests/unit/components/AuthenticatedUpload.test.ts
+ M ruoyi-fastapi-frontend/tests/unit/components/ListQueryContract.test.ts
+ M ruoyi-fastapi-frontend/tests/unit/components/RoleAuthorizationMounted.test.ts
+ M ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts
+ M ruoyi-fastapi-frontend/tests/unit/components/UserSecondaryWrites.test.ts
+ M ruoyi-fastapi-frontend/tests/unit/stores/user.test.ts
+ M ruoyi-fastapi-frontend/vite.config.ts
+ M ruoyi-fastapi-frontend/yarn.lock
+ M shared/openapi.json
+?? .cursor/handoffs/
+?? .tmp/
+?? docs/reports/file-assets-minio/
+?? docs/reports/zxui-dashboard-sync-2026-10-26/
+?? ruoyi-fastapi-backend/alembic/versions/20261024_file_assets_contract.py
+?? ruoyi-fastapi-backend/alembic/versions/20261024_file_assets_expand.py
+?? ruoyi-fastapi-backend/container/file_asset_policies.py
+?? ruoyi-fastapi-backend/middlewares/route_path.py
+?? ruoyi-fastapi-backend/middlewares/upload_limit_middleware.py
+?? ruoyi-fastapi-backend/module_generator/asset_fields.py
+?? ruoyi-fastapi-backend/module_generator/templates/md/
+?? ruoyi-fastapi-backend/module_generator/templates/python/file_asset_policy.py.jinja2
+?? ruoyi-fastapi-backend/module_generator/templates/vue/asset_fields.jinja2
+?? ruoyi-fastapi-backend/modules/file_assets/
+?? ruoyi-fastapi-backend/modules/system/application/file_asset_policies.py
+?? ruoyi-fastapi-backend/modules/system/application/notice_content.py
+?? ruoyi-fastapi-backend/modules/system/application/user_avatars.py
+?? ruoyi-fastapi-backend/scripts/data_migrations/file_assets_v1.py
+?? ruoyi-fastapi-backend/scripts/export_file_asset_types.py
+?? ruoyi-fastapi-backend/scripts/file_assets.py
+?? ruoyi-fastapi-backend/tests/unit/module_generator/test_asset_field_generation.py
+?? ruoyi-fastapi-frontend/.yarn/
+?? ruoyi-fastapi-frontend/dist-element-plus-2147/
+?? ruoyi-fastapi-frontend/src/api/fileAssets.ts
+?? ruoyi-fastapi-frontend/src/utils/file-assets/
+?? ruoyi-fastapi-frontend/src/views/tool/gen/assetFieldsForm.vue
+?? ruoyi-fastapi-frontend/tests/unit/components/FileAssetEditor.test.ts
+?? ruoyi-fastapi-frontend/vendor/README.dashboard-theme.md
+?? ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-consumer-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-css-codec-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-default-2.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-defense-green-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-factory-blue-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-industrial-blue-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-pap-olive-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-rocket-moss-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-tailwind-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-theme-tech-blue-1.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-dashboard-theme.20261026.1.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-element-plus.20261026.tgz
+?? ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-icons-review.20261022.tgz
+?? scripts/minio-local.sh

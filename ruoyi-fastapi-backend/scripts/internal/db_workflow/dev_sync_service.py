@@ -8,6 +8,7 @@ from time import perf_counter
 from typing import TYPE_CHECKING, Literal
 
 from config.database import AsyncSessionLocal
+from scripts.data_migrations import file_assets_v1
 from scripts.data_migrations.remark_document_v2 import prepare_configured_database, verify_configured_database
 
 from .managed_data_fast_reconcile_service import (
@@ -91,6 +92,7 @@ def execute_dev_sync(  # noqa: PLR0915
     remark_writers_stopped=False,
     remark_prepare_runner=None,
     remark_verify_runner=None,
+    file_assets_postcondition_runner=None,
 ) -> DevSyncReport:
     """Run declaration validation, schema sync, and managed data apply."""
 
@@ -162,6 +164,13 @@ def execute_dev_sync(  # noqa: PLR0915
         )
         active_step = 'remark-postcondition'
         (remark_verify_runner or verify_configured_database)()
+        # File asset tables come from the registered ORM models (hard cut-over: no history to migrate);
+        # only the maintenance jobs are data that Atlas does not own.
+        active_step = 'file-assets-postcondition'
+        (
+            file_assets_postcondition_runner
+            or (lambda: file_assets_v1.run_configured(file_assets_v1.ensure_maintenance_jobs))
+        )()
         postcondition_verify = DevSyncStepReport(
             step='postcondition-verify',
             status='success',
@@ -262,7 +271,7 @@ def execute_dev_sync(  # noqa: PLR0915
             )
             failed_step = 'postcondition-verify'
 
-        if active_step.startswith('remark-'):
+        if active_step.startswith(('remark-', 'file-assets-')):
             failed_step = active_step
         if not affected_objects:
             affected_objects = (

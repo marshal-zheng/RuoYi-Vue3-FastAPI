@@ -1,4 +1,4 @@
-<!-- Updated: 2026-02-11 -->
+<!-- Updated: 2026-10-27 -->
 # 前端架构 Codemap
 
 > 前端基于 Vue3 + Vite + Pinia，采用“路由权限驱动 + 业务域视图拆分 + 统一 HTTP 客户端”的结构。
@@ -67,6 +67,9 @@
 - `ruoyi-fastapi-frontend/src/views/project/` — 工程管理、拓扑编辑、仿真监控页面。
 - `ruoyi-fastapi-frontend/src/views/device/` — 设备与分类页面。
 - `ruoyi-fastapi-frontend/src/components/business/` — 业务组件（如 DAG、字典输入组件）。
+- `ruoyi-fastapi-frontend/src/components/ui/FileUpload`、`ImageUpload`、`ImagePreview`、`Editor` — 文件资产组件：表单值为资产 ID 数组，上传走 `src/api/fileAssets.ts` 与 `src/composables/useAuthenticatedUpload.ts`（仅写入前明确 401 单次重发）；Editor 只插入同源 `/file-assets/<id>/content`，未完成或外部图片阻止保存。
+- `ruoyi-fastapi-frontend/src/utils/file-assets/` — 与后端同源生成的类型登记（`types.generated.json`）及图片会话过期后的一次性恢复。
+- `ruoyi-fastapi-frontend/src/views/tool/gen/assetFieldsForm.vue` — 生成器逻辑文件字段声明（类型、数量、大小与草稿配额校验）。
 - `ruoyi-fastapi-frontend/src/layout/` — 布局框架与壳层组件。
 
 **依赖关系：** `views/*` 调用 `api/*`，复用 `components/business/*` 与 `components/ui/*`；`layout/*` 承载路由页面容器和全局导航。

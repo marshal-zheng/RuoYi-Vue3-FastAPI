@@ -1,5 +1,6 @@
 """Container package exports."""
 
+import container.file_asset_policies
 from container.app_container import (
     AppContainer,
     ContainerBindingError,
@@ -19,12 +20,12 @@ from container.wiring import (
 )
 
 __all__ = [
+    'SERVICE_FACTORY_REGISTRY',
     'AppContainer',
     'ContainerBindingError',
     'ContainerError',
     'ContainerInitializationError',
     'ProviderResolutionError',
-    'SERVICE_FACTORY_REGISTRY',
     'attach_container',
     'build_container',
     'create_app_container',

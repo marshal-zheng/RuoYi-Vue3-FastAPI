@@ -1,4 +1,4 @@
-<!-- Updated: 2026-10-17 -->
+<!-- Updated: 2026-10-27 -->
 # 数据与迁移 Codemap
 
 > 数据层由 SQLAlchemy DO/VO、Repository 抽象、Alembic 迁移与 YAML 种子数据共同组成，覆盖从模型定义到环境初始化的全链路。
@@ -13,7 +13,8 @@
 - `ruoyi-fastapi-backend/module_admin/entity/vo/*.py` — 业务返回模型与请求/响应对象。
 - `ruoyi-fastapi-backend/module_admin/entity/do/dashboard_do.py` — Dashboard 当前布局与版本；scope/key/account 和 dashboard/revision 分别唯一。
 - `ruoyi-fastapi-backend/module_admin/entity/vo/dashboard_vo.py` — 有界布局 JSON 与预期修订号请求。
-- `ruoyi-fastapi-backend/module_generator/entity/do/gen_do.py` — 代码生成域模型。
+- `ruoyi-fastapi-backend/modules/file_assets/infrastructure/models.py` — `sys_file_asset`（5 个状态、删除租约/退避字段）与 `sys_file_binding`（单资产单归属、字段内排序）。
+- `ruoyi-fastapi-backend/module_generator/entity/do/gen_do.py` — 代码生成域模型；`gen_table.asset_fields` 保存逻辑文件字段声明。
 - `ruoyi-fastapi-backend/module_generator/entity/vo/gen_vo.py` — 代码生成域 VO。
 
 **依赖关系：** Repository 依赖 DO 进行查询/写入；Controller/Service 依赖 VO 组织输入输出；Alembic 通过导入 DO 聚合 `Base.metadata`。
@@ -57,7 +58,8 @@
 - `ruoyi-fastapi-backend/alembic/env.py` — 迁移环境配置、模型导入与在线/离线迁移。
 - `ruoyi-fastapi-backend/alembic/versions/*.py` — 版本化迁移脚本。
 - `ruoyi-fastapi-backend/alembic/versions/20261017_add_dashboard.py` — 创建 sys_dashboard、sys_dashboard_version 及唯一约束和外键。
-- `ruoyi-fastapi-backend/scripts/internal/db_workflow/schema_apply_atlas.py` — 开发 Atlas 模型注册，与 Alembic 环境共同包含 Dashboard。
+- `ruoyi-fastapi-backend/alembic/versions/20261024_file_assets.py` + `scripts/data_migrations/file_assets_v1.py` — 文件资产硬切换：建资产与绑定表、加 `gen_table.asset_fields`、公告内容就地转 UTF-8（无效字节在破坏性变更前失败）、删除 `sys_user.avatar`、登记维护任务；不迁移历史数据，downgrade 拒绝。
+- `ruoyi-fastapi-backend/scripts/internal/db_workflow/schema_apply_atlas.py` — 开发 Atlas 模型注册，与 Alembic 环境共同包含 Dashboard 与文件资产；dev-sync 后置步骤登记文件资产维护任务。
 - `ruoyi-fastapi-backend/alembic.ini` — Alembic 主配置。
 - `ruoyi-fastapi-backend/scripts/db.py` — 统一数据库工作流入口。
 

@@ -8,7 +8,6 @@ import {
   setCsrfToken,
   setToken,
 } from '@/utils/auth';
-import { isHttp, isEmpty } from '@/utils/validate';
 import { clampBcryptPassword } from '@/utils/password';
 import defAva from '@/assets/images/profile.jpg';
 import request from '@/utils/request';
@@ -117,10 +116,8 @@ const useUserStore = defineStore('user', {
         throw new AbortError({ message: '会话已切换，忽略旧的用户信息' });
       }
       const user = res.user;
-      let avatar = user.avatar || '';
-      if (!isHttp(avatar)) {
-        avatar = isEmpty(avatar) ? defAva : import.meta.env.VITE_APP_BASE_API + avatar;
-      }
+      // Stable same-origin content URL from the avatar binding; the bundled default otherwise.
+      const avatar = user.avatarUrl || defAva;
       this.roles = res.roles?.length ? res.roles : ['ROLE_DEFAULT'];
       this.permissions = res.roles?.length ? res.permissions : [];
       this.id = user.userId;

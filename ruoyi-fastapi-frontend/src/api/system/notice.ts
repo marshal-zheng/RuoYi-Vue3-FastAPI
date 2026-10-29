@@ -1,7 +1,7 @@
 import { requestDetail } from '@/api/detail';
 import type { NoticeModel } from '@/api/_generated/types.gen';
-// JSON represents the backend bytes field as UTF-8 text, rather than multipart File.
-export type NoticePayload = Omit<NoticeModel, 'noticeContent'> & { noticeContent?: string | null };
+// noticeContent is sanitized UTF-8 HTML whose images are stable /file-assets/{assetId}/content URLs.
+export type NoticePayload = NoticeModel;
 export type NoticeRecord = Omit<NoticePayload, 'noticeId'> & { noticeId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type { GetSystemNoticeListSystemNoticeListGetData } from '@/api/_generated/types.gen';

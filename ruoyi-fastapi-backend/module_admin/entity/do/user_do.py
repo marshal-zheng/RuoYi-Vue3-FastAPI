@@ -21,7 +21,6 @@ class UserDO(LegacyBaseModel):
     phonenumber, phonenumber_hash = sensitive_string_with_hash('phonenumber', default='', comment='手机号码')
     id_card, id_card_hash = sensitive_string_with_hash('id_card', default='', comment='身份证号')
     sex = Column(String(1), default=GenderEnum.MALE.value, comment='用户性别（0男 1女 2未知）')
-    avatar = Column(String(100), default='', comment='头像地址')
     password = Column(String(100), default='', comment='密码')
     status = Column(String(1), default=StatusEnum.NORMAL.value, comment='帐号状态（0正常 1停用）')
     del_flag = Column(String(1), default=DelFlagEnum.EXIST.value, comment='删除标志（0代表存在 2代表删除）')

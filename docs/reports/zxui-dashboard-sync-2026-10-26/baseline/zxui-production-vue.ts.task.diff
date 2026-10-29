@@ -1,0 +1,20 @@
+--- /dev/null
++++ after/internal/build/src/plugins/production-vue.ts
+@@ -0,0 +1,17 @@
++import vue from '@vitejs/plugin-vue'
++
++/** Keep aggregate ESM/CJS and full bundles on the same Vue compilation policy. */
++export function productionVuePlugin() {
++  return vue({
++    isProduction: true,
++    template: {
++      compilerOptions: {
++        // The parser AST is reused by compiler-sfc. Keep dev-only root comment
++        // fragments out of packages consumed by Vue's production runtime.
++        comments: false,
++        hoistStatic: false,
++        cacheHandlers: false,
++      },
++    },
++  })
++}

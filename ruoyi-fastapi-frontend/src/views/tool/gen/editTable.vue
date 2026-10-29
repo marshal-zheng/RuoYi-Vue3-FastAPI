@@ -115,9 +115,7 @@
                 <el-option label="单选框" value="radio" />
                 <el-option label="复选框" value="checkbox" />
                 <el-option label="日期控件" value="datetime" />
-                <el-option label="图片上传" value="imageUpload" />
-                <el-option label="文件上传" value="fileUpload" />
-                <el-option label="富文本控件" value="editor" />
+                <el-option label="富文本控件（不含图片）" value="editor" />
                 <el-option label="基础富文本备注" value="remark" />
               </el-select>
             </template>
@@ -134,6 +132,9 @@
             </template>
           </el-table-column>
         </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="文件字段" name="assetFields">
+        <asset-fields-form v-if="loaded" :key="tableSession" :info="info" />
       </el-tab-pane>
       <el-tab-pane label="生成信息" name="genInfo">
         <gen-info-form ref="genInfo" :info="info" :tables="tables" />
@@ -163,6 +164,7 @@ import { useEditorRead } from '@/utils/editor-read';
 import { useOperation } from '@/utils/operation';
 import { getGenTable, updateGenTable } from '@/api/tool/gen';
 import DictTypeSelect from '@/components/business/DictTypeSelect/index.vue';
+import assetFieldsForm from './assetFieldsForm.vue';
 import basicInfoForm from './basicInfoForm';
 import genInfoForm from './genInfoForm';
 import { buildGenTablePayload, genTableDraftSnapshot } from './gen-config-policy';
@@ -194,6 +196,7 @@ function acceptAuthority(detail, expectedId) {
     throw new Error('表配置详情与当前记录不一致，请重新读取核对');
   info.value = {
     ...detail.info,
+    assetFields: detail.info.assetFields ?? [],
     tplWebType: detail.info.tplWebType || 'element-plus',
     remark: readRemark(detail.info.remark),
     columns: detail.columns,

@@ -396,3 +396,40 @@ PHASE: execution_ready
 EVIDENCE_BOUNDARY: 最近一次独立评审 PASS 覆盖到 requirements 62df6b10 / design 5c2d18d9 / tasks f54c9afa；其后对 design 与 tasks 的 P3 收敛经用户豁免未复审
 PENDING_REVIEW: none
 NEXT_ACTION: 收到实施指令后从任务 1 开始
+
+## 实施、硬切换与实现评审（2026-10-27）
+
+### 授权与范围
+
+- 2026-10-24 另一会话以 `/goal 请高质量完成这个spec所有任务知道交付` 在 `std` 当前分支实施；10-25 被用户中断。
+- 2026-10-27 用户在本会话说“请继续”；在迁移演练前又说“你可以选择硬切”。据此：不迁移历史数据，删除迁移专用代码，修订 R13 等规格并完成剩余任务。
+- 未提交、未推送、未部署；工作区内其他在研改动（AI 上下文、dashboard 主题包等）未触碰。
+
+### 规格修订（硬切换）
+
+- requirements：R13 改写为硬切换（AC ID 不变）；R3.AC6、R6.AC4、R7.AC5、R9.AC4、R10.AC7、R15.AC5、R16.AC2 去掉迁移相关表述；新增 Session 2026-10-27 用户决策（取代 R13 原迁移要求与 CL-13 迁移主体部分）。
+- design：决策表“切换”、“其他变更与切换入口”、“硬切换步骤”；dev-sync 不再有迁移前置。
+- tasks：任务 14、16、19 改写；79/79 AC 追溯与 19 任务依赖校验通过。
+- 澄清来源为用户直接决策（accepted-prior-answer），未另跑 clarify 子代理；规格修订后未单独发起规格评审，而由实现评审对照新规格逐条核验。
+
+### 实现评审
+
+独立只读子代理对照 79 条 AC 核对实现，结论：无 P0/P1，5 个 P2、若干 P3，任务 15/17 产物缺失。主代理逐条核实后修复并补回归测试，详见 `docs/reports/file-assets-minio/acceptance.md` §3。修复后未再发起第二轮实现评审；修复由新增回归测试、全量测试与真实链路冒烟验证。
+
+### 验证
+
+- 后端：文件资产 163 通过（13 个真实集成按开关跳过）；生成器 111 通过；全量 2146 通过、4 失败（HEAD 上同样失败）；真实 MySQL/MinIO 13 通过；文件资产相关路径 ruff check/format 通过。
+- 前端：`yarn test:run` 1514 通过、33 失败（与 HEAD 逐项一致）；`mock:contracts`、`ui:standards`、`build:prod` 通过；`type-check` 仅余 AI 生成 SDK 的已有错误；`lint:check` 仅余生成客户端的已有警告。
+- 真实链路：开发后端 + MinIO 上的上传、头像、公告冒烟全部符合预期。
+- 报告：`inventory.md`、`cutover.md`、`integration.md`、`acceptance.md`；运维手册 `runbook.md`。
+
+### 当前停止点
+
+STATUS: PHASE_READY
+ROUTE: spec
+PHASE: status_or_delivery
+ARTIFACT: docs/specs/file-assets-minio/
+NEXT_ACTION: 用户验收后决定是否提交（Conventional Commits，中文描述）；生产需先决定 TBD-PROD-01
+EVIDENCE_BOUNDARY: 开发范围（任务 1–17）完成并经独立实现评审与修复验证；未提交、未交付、未部署；任务 18/19 未开始
+PENDING_REVIEW: none
+BLOCK_REASON: none；TBD-PROD-01 仅阻塞生产部署与生产验收

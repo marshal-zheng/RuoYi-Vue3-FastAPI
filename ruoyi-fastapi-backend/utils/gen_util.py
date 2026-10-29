@@ -89,12 +89,7 @@ class GenUtils:
         # 类型&性别字段设置下拉框
         elif column_name.lower().endswith('type') or column_name.lower().endswith('sex'):
             column.html_type = GenConstant.HTML_SELECT
-        # 图片字段设置图片上传控件
-        elif column_name.lower().endswith('image'):
-            column.html_type = GenConstant.HTML_IMAGE_UPLOAD
-        # 文件字段设置文件上传控件
-        elif column_name.lower().endswith('file'):
-            column.html_type = GenConstant.HTML_FILE_UPLOAD
+        # 文件/图片不按列名猜测：它们是显式声明的逻辑文件字段（gen_table.asset_fields），不是物理列
         # 内容字段设置富文本控件
         elif column_name.lower().endswith('content'):
             column.html_type = GenConstant.HTML_EDITOR

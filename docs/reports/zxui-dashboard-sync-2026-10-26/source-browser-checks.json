@@ -1,0 +1,356 @@
+{
+  "snapshots": [
+    {
+      "label": "source-light",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "theme": "default",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "outline": "color(srgb 0.12 0.14 0.18 / 0.1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18 / 0.1)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "padding": "8px 15px",
+        "height": "36px"
+      },
+      "viewport": {
+        "w": 1440,
+        "h": 1000,
+        "scrollWidth": 1440
+      },
+      "count": 1
+    },
+    {
+      "label": "source-dark",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "theme": "default",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+        "foreground": "color(srgb 0.93 0.95 0.98 / 1)",
+        "outline": "color(srgb 0.93 0.95 0.98 / 0.22)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.10644 0.120704 0.14922)",
+        "color": "color(srgb 0.93 0.95 0.98)",
+        "border": "color(srgb 0.320894 0.331735 0.353407 / 0.976)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.10644 0.120704 0.14922)",
+        "color": "color(srgb 0.93 0.95 0.98)",
+        "border": "color(srgb 0.93 0.95 0.98) color(srgb 0.93 0.95 0.98) color(srgb 0.93 0.95 0.98 / 0.22)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.096 0.1101 0.1383)",
+        "color": "color(srgb 0.93 0.95 0.98)",
+        "border": "color(srgb 0.93 0.95 0.98 / 0.42)",
+        "padding": "8px 15px",
+        "height": "36px"
+      },
+      "viewport": {
+        "w": 1440,
+        "h": 1000,
+        "scrollWidth": 1440
+      },
+      "count": 1
+    },
+    {
+      "label": "source-restored",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "theme": "default",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "outline": "color(srgb 0.12 0.14 0.18 / 0.1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18 / 0.1)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "padding": "8px 15px",
+        "height": "36px"
+      },
+      "viewport": {
+        "w": 1440,
+        "h": 1000,
+        "scrollWidth": 1440
+      },
+      "count": 1
+    },
+    {
+      "label": "source-1280",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "theme": "default",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "outline": "color(srgb 0.12 0.14 0.18 / 0.1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18 / 0.1)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "padding": "8px 15px",
+        "height": "36px"
+      },
+      "viewport": {
+        "w": 1280,
+        "h": 800,
+        "scrollWidth": 1280
+      },
+      "count": 1
+    },
+    {
+      "label": "source-factory-dark",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "theme": "factory-blue",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.1301 0.17830000000000001 0.2415 / 1)",
+        "foreground": "color(srgb 0.9152 0.9517 1 / 1)",
+        "outline": "color(srgb 0.12 0.31 0.55 / 0.28)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.131304 0.187032 0.25206)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.142991 0.300544 0.397966 / 0.892)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.131304 0.187032 0.25206)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.9152 0.9517 1) color(srgb 0.9152 0.9517 1) color(srgb 0.12 0.31 0.55 / 0.28)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.1301 0.1783 0.2415)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.12 0.31 0.55 / 0.5)",
+        "padding": "8px 15px",
+        "height": "36px"
+      },
+      "viewport": {
+        "w": 1440,
+        "h": 1000,
+        "scrollWidth": 1440
+      },
+      "count": 1
+    },
+    {
+      "label": "source-factory-compact",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+      "theme": "factory-blue",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.1301 0.17830000000000001 0.2415 / 1)",
+        "foreground": "color(srgb 0.9152 0.9517 1 / 1)",
+        "outline": "color(srgb 0.12 0.31 0.55 / 0.28)",
+        "toolbarPadding": "6px"
+      },
+      "panel": {
+        "background": "color(srgb 0.131304 0.187032 0.25206)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.142991 0.300544 0.397966 / 0.892)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.131304 0.187032 0.25206)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.9152 0.9517 1) color(srgb 0.9152 0.9517 1) color(srgb 0.12 0.31 0.55 / 0.28)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.1301 0.1783 0.2415)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.12 0.31 0.55 / 0.5)",
+        "padding": "8px 15px",
+        "height": "32px"
+      },
+      "viewport": {
+        "w": 1440,
+        "h": 1000,
+        "scrollWidth": 1440
+      },
+      "count": 1
+    },
+    {
+      "label": "source-navigation-return",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+      "theme": "factory-blue",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.1301 0.17830000000000001 0.2415 / 1)",
+        "foreground": "color(srgb 0.9152 0.9517 1 / 1)",
+        "outline": "color(srgb 0.12 0.31 0.55 / 0.28)",
+        "toolbarPadding": "6px"
+      },
+      "panel": {
+        "background": "color(srgb 0.131304 0.187032 0.25206)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.142991 0.300544 0.397966 / 0.892)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.131304 0.187032 0.25206)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.9152 0.9517 1) color(srgb 0.9152 0.9517 1) color(srgb 0.12 0.31 0.55 / 0.28)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.1301 0.1783 0.2415)",
+        "color": "color(srgb 0.9152 0.9517 1)",
+        "border": "color(srgb 0.12 0.31 0.55 / 0.5)",
+        "padding": "8px 15px",
+        "height": "32px"
+      },
+      "viewport": {
+        "w": 1440,
+        "h": 1000,
+        "scrollWidth": 1440
+      },
+      "count": 1
+    },
+    {
+      "label": "source-final",
+      "url": "http://127.0.0.1:3310/monitor/server",
+      "state": "ready",
+      "scope": "scope:vfadmin:root",
+      "providerScope": "scope:vfadmin:root",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "theme": "default",
+      "adapter": "a-cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e-zxio-vue-grid-layout-css",
+      "grid": {
+        "surface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+        "foreground": "color(srgb 0.12 0.14 0.18 / 1)",
+        "outline": "color(srgb 0.12 0.14 0.18 / 0.1)",
+        "toolbarPadding": "8px"
+      },
+      "panel": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.851065 0.852582 0.855616 / 0.972)",
+        "padding": "0px",
+        "height": "252px"
+      },
+      "header": {
+        "background": "color(srgb 0.98961 0.991374 0.994902)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18) color(srgb 0.12 0.14 0.18 / 0.1)",
+        "padding": "0px 8px 0px 12px",
+        "height": "44px"
+      },
+      "button": {
+        "background": "color(srgb 0.991 0.9928 0.9964)",
+        "color": "color(srgb 0.12 0.14 0.18)",
+        "border": "color(srgb 0.12 0.14 0.18 / 0.2)",
+        "padding": "8px 15px",
+        "height": "36px"
+      },
+      "viewport": {
+        "w": 1440,
+        "h": 1000,
+        "scrollWidth": 1440
+      },
+      "count": 1
+    }
+  ],
+  "final": {
+    "logs": {
+      "errors": [],
+      "warnings": []
+    },
+    "restoredPreference": null,
+    "layoutStatus": "\u5e03\u5c40\u5df2\u540c\u6b65 \u00b7 \u7248\u672c 11"
+  }
+}

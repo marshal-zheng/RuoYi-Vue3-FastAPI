@@ -157,7 +157,7 @@ export function toPostDto(values: Record<string, unknown>, postId?: number): Pos
 }
 
 /** Server field identities are explicit; error messages are never parsed for routing. */
-export function postFieldIssues(error: unknown): FieldIssue[] {
+export function postFieldIssues(error: unknown): FieldIssue<PostValues>[] {
   if (
     !isRecord(error) ||
     !isProblemDetails(error.problem) ||
@@ -170,14 +170,11 @@ export function postFieldIssues(error: unknown): FieldIssue[] {
     post_code: 'postCode',
     post_sort: 'postSort',
   };
-  return error.problem.errors.flatMap((issue) =>
-    isRecord(issue) && typeof issue.field === 'string' && typeof issue.message === 'string'
-      ? [
-          {
-            ...(issue.field ? { path: [aliases[issue.field] ?? issue.field] } : {}),
-            message: issue.message,
-          },
-        ]
-      : []
-  );
+  const known: (keyof PostValues)[] = ['postName', 'postCode', 'postSort', 'status', 'remark'];
+  return error.problem.errors.flatMap<FieldIssue<PostValues>>((issue) => {
+    if (!isRecord(issue) || typeof issue.field !== 'string' || typeof issue.message !== 'string')
+      return [];
+    const path = known.find((field) => field === (aliases[issue.field] ?? issue.field));
+    return [{ ...(path ? { path: [path] } : {}), message: issue.message }];
+  });
 }

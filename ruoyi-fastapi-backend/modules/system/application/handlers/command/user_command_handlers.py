@@ -94,7 +94,7 @@ class EditUserCommandHandler(ICommandHandler[EditUserCommand, dict[str, str]]):
 
     async def handle(self, request: EditUserCommand) -> CommandResult[dict[str, str]]:
         edit_type = request.user.type or ''
-        if edit_type not in {'status', 'avatar', 'pwd'}:
+        if edit_type not in {'status', 'pwd'}:
             request.user.validate_fields()
         # Profile identity is supplied by the authenticated controller, including admin self-service.
         if edit_type != 'profile':
@@ -106,17 +106,14 @@ class EditUserCommandHandler(ICommandHandler[EditUserCommand, dict[str, str]]):
                 request.user_data_scope_sql,
             )
             if (
-                edit_type not in {'status', 'avatar', 'pwd'}
+                edit_type not in {'status', 'pwd'}
                 and 'dept_id' in request.user.model_fields_set
                 and request.user.dept_id is not None
             ):
                 await self._dept_service.check_dept_data_scope_services(
                     request.user.dept_id, request.dept_data_scope_sql
                 )
-        if (
-            edit_type not in {'profile', 'status', 'avatar', 'pwd', 'login'}
-            and 'role_ids' in request.user.model_fields_set
-        ):
+        if edit_type not in {'profile', 'status', 'pwd', 'login'} and 'role_ids' in request.user.model_fields_set:
             await UserRoleService(self._user_service, self._role_service).check_user_roles(
                 request.query_db,
                 request.user.user_id,

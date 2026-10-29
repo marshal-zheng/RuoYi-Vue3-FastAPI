@@ -1,0 +1,18 @@
+--- before/zx-theme-host.test.ts
++++ after/zx-theme-host.test.ts
+@@ -72,6 +72,15 @@
+       baseURL: new URL('/admin/', document.baseURI).href,
+     });
+     expect(api.createHost.mock.calls[0][0].themes).toBe(deployment.registrations);
++    expect(api.createHost.mock.calls[0][0].extensions).toEqual([
++      expect.objectContaining({
++        manifest: expect.objectContaining({
++          identity: expect.objectContaining({ packageName: '@zxio/vue-grid-layout' }),
++        }),
++      }),
++    ]);
++    // Registered modules use the Host default; an explicit subset would disable Grid.
++    expect(api.createHost.mock.calls[0][0].composition?.modules).toBeUndefined();
+     expect(api.createHost.mock.calls[0][0]).not.toHaveProperty('seedPolicy');
+     expect(api.createHost.mock.calls[0][0]).not.toHaveProperty('composition.seeds');
+     rootScope.value = {

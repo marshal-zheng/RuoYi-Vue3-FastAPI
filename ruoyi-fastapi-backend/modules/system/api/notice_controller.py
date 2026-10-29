@@ -9,6 +9,7 @@ from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.notice_vo import DeleteNoticeModel, NoticeModel, NoticePageQueryModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
+from modules.file_assets.ports import Actor
 from modules.identity.ports import get_current_user
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import AddNoticeCommand, DeleteNoticeCommand, EditNoticeCommand
@@ -72,6 +73,7 @@ async def add_system_notice(
         notice=add_notice,
         redis_client=getattr(request.app.state, 'redis', None),
         operator=current_user.user.user_name,
+        actor=Actor.from_current_user(current_user),
         trace_id=request.headers.get('x-trace-id'),
         request_id=request.headers.get('x-request-id'),
     )
@@ -103,6 +105,7 @@ async def edit_system_notice(
         notice=edit_notice,
         redis_client=getattr(request.app.state, 'redis', None),
         operator=current_user.user.user_name,
+        actor=Actor.from_current_user(current_user),
         trace_id=request.headers.get('x-trace-id'),
         request_id=request.headers.get('x-request-id'),
     )

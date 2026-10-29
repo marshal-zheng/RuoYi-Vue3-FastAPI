@@ -16,7 +16,7 @@ class NoticeItemReadModel(CamelModelBase):
     notice_id: int | None = Field(default=None, description='Notice id')
     notice_title: str | None = Field(default=None, description='Notice title')
     notice_type: Literal['1', '2'] | None = Field(default=None, description='Notice type')
-    notice_content: bytes | None = Field(default=None, description='Notice content')
+    notice_content: str | None = Field(default=None, description='Notice content (sanitized HTML)')
     status: Literal['0', '1'] | None = Field(default=None, description='Notice status')
     create_by: str | None = Field(default=None, description='Creator')
     create_time: datetime | None = Field(default=None, description='Create time')

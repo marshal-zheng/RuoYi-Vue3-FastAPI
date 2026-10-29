@@ -1,0 +1,92 @@
+ M docs/.vitepress/config/index.mts
+ M docs/.vitepress/theme/theme-runtime.ts
+ M docs/.vitepress/vitepress/components/theme-lab/sections/theme-lab-element-plus.vue
+ M docs/.vitepress/vitepress/components/theme-lab/theme-lab-viewport.vue
+ M docs/.vitepress/vitepress/composables/theme-lab-panzoom.ts
+ M docs/package.json
+ M docs/work-items/README.md
+ M docs/zh-CN/component/dashboard.md
+ M docs/zh-CN/component/text-editor.md
+ M docs/zh-CN/guide/bundle-performance.md
+ M docs/zh-CN/guide/installation.md
+ M docs/zh-CN/guide/theme-operations.md
+ M docs/zh-CN/guide/theme-tools.md
+ M internal/build/src/tasks/full-bundle.ts
+ M internal/build/src/tasks/modules.ts
+ M package.json
+ D packages/components/__tests__/element-plus-cascader-ssr.test.ts
+ M packages/components/input-number/src/props.ts
+ M packages/components/input/src/input-core.vue
+ M packages/components/input/src/props.ts
+ M packages/components/package.json
+ M packages/components/select/__tests__/select.test.tsx
+ M packages/components/tooltip-or-popover/__tests__/tooltip-or-popover.test.tsx
+ M packages/components/tooltip-or-popover/src/tooltip-or-popover.vue
+ M packages/constants/package.json
+ M packages/dashboard/README.md
+ M packages/dashboard/__tests__/package-boundary.test.ts
+ M packages/dashboard/package.json
+ M packages/schema-form/package.json
+ M packages/theme-air-gray/generated/element-plus/aliases.css
+ M packages/theme-air-gray/generated/theme.manifest.json
+ M packages/theme-army-pine/generated/element-plus/aliases.css
+ M packages/theme-army-pine/generated/theme.manifest.json
+ M packages/theme-compiler/__tests__/element-plus-adapter.test.ts
+ M packages/theme-compiler/__tests__/element-plus-display-defaults.test.ts
+ M packages/theme-compiler/__tests__/extensions/compiler.test.ts
+ M packages/theme-compiler/__tests__/source-vite.test.ts
+ D packages/theme-compiler/src/adapters/element-plus/baselines/element-plus-2.13.0.targets.json
+ M packages/theme-compiler/src/adapters/element-plus/display-defaults.ts
+ M packages/theme-compiler/src/adapters/element-plus/index.ts
+ M packages/theme-compiler/src/adapters/element-plus/mapping.ts
+ M packages/theme-compiler/src/adapters/element-plus/passthrough.ts
+ M packages/theme-default/generated/element-plus/aliases.css
+ M packages/theme-default/generated/theme.manifest.json
+ M packages/theme-defense-green/generated/element-plus/aliases.css
+ M packages/theme-defense-green/generated/theme.manifest.json
+ M packages/theme-factory-blue/generated/element-plus/aliases.css
+ M packages/theme-factory-blue/generated/theme.manifest.json
+ M packages/theme-industrial-blue/generated/element-plus/aliases.css
+ M packages/theme-industrial-blue/generated/theme.manifest.json
+ M packages/theme-pap-olive/generated/element-plus/aliases.css
+ M packages/theme-pap-olive/generated/theme.manifest.json
+ M packages/theme-rocket-moss/generated/element-plus/aliases.css
+ M packages/theme-rocket-moss/generated/theme.manifest.json
+ M packages/theme-tech-blue/generated/element-plus/aliases.css
+ M packages/theme-tech-blue/generated/theme.manifest.json
+ M packages/zxui/package.json
+ M packages/zxui/theme-host/server-core.ts
+ M packages/zxui/theme-runtime/__tests__/composition.test.ts
+ M packages/zxui/theme-runtime/__tests__/portal-registry.test.ts
+ M packages/zxui/theme-runtime/portal-registry.ts
+ M packages/zxui/theme-runtime/runtime-core.ts
+ D patches/@zxio__vue-grid-layout@1.0.6.patch
+ D patches/element-plus@2.13.0.patch
+ M play/package.json
+ M pnpm-lock.yaml
+ M scripts/theme-compiler/check-element-plus-inventory.test.ts
+ M scripts/theme-compiler/check-element-plus-inventory.ts
+ M scripts/theme-consumer/check-packed.test.ts
+ M scripts/theme-consumer/check-packed.ts
+ M tsconfig.base.json
+?? docs/examples/text-editor/field-ai.vue
+?? docs/initiatives/AGENTCAP-agent-capability-platform/briefs/AGENTCAP-dom-boundaries.md
+?? docs/initiatives/AGENTCAP-agent-capability-platform/briefs/AGENTCAP-page-agent-foundation.md
+?? docs/plans/2026-10-23-ai-context-policy.md
+?? docs/plans/2026-10-26-element-plus-2.14.7.md
+?? docs/plans/2026-10-26-packed-business-convergence.md
+?? docs/reports/element-plus-2.14.7-2026-10-26/
+?? docs/reports/packed-business-2026-10-26/
+?? docs/reports/packed-business-convergence-2026-10-26/
+?? docs/research/2026-10-22-agent-capability-platform.md
+?? docs/research/2026-10-22-page-agent-source-design.md
+?? docs/research/2026-10-23-form-ai-context-capture.md
+?? docs/specs/AICONTEXT-text-field-ai-contract/
+?? docs/specs/AIEDITOR-inline-diff-preview/artifacts/visual-matrix/failure.json
+?? docs/work-items/items/WI-0008.md
+?? internal/build/src/plugins/production-vue.test.ts
+?? internal/build/src/plugins/production-vue.ts
+?? packages/dashboard/__tests__/theme-host-integration.test.ts
+?? packages/dashboard/src/theme/
+?? packages/theme-compiler/src/adapters/element-plus/baselines/element-plus-2.14.7.targets.json
+?? vendor/

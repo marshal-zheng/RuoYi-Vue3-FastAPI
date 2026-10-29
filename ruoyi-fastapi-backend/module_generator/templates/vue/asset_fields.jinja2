@@ -1,0 +1,42 @@
+{#- Declared logical file fields, shared by the four page templates (one rendering of the same declaration). -#}
+{% macro list_columns(fields, scope_attr) %}
+{% for field in fields if field.list %}
+      <el-table-column label="{{ field.label }}" align="center" prop="{{ field.name }}"{% if field.kind == 'image' %} width="100"{% endif %}>
+        <template {{ scope_attr }}="scope">
+          {% if field.kind == 'image' %}
+          <image-preview :src="scope.row.{{ field.name }}" :width="50" :height="50"/>
+          {% else %}
+          <span>{% raw %}{{{% endraw %} (scope.row.{{ field.name }} || []).length {% raw %}}}{% endraw %} 个文件</span>
+          {% endif %}
+        </template>
+      </el-table-column>
+{% endfor %}
+{% endmacro %}
+
+{% macro form_items(fields, pk_field) %}
+{% for field in fields %}
+      <el-form-item label="{{ field.label }}" prop="{{ field.name }}">
+        <{{ 'image-upload' if field.kind == 'image' else 'file-upload' }} ref="assetField_{{ field.name }}" v-model="form.{{ field.name }}" purpose="{{ field.purpose }}" :owner-id="form.{{ pk_field }}" :type-ids="[{% for type_id in field.typeIds %}'{{ type_id }}'{% if not loop.last %}, {% endif %}{% endfor %}]" :limit="{{ field.maxCount }}" :file-size="{{ field.sizeMb }}"/>
+      </el-form-item>
+{% endfor %}
+{% endmacro %}
+
+{% macro reset_values(fields, indent) %}
+{% for field in fields %}
+{{ indent }}{{ field.name }}: [],
+{% endfor %}
+{% endmacro %}
+
+{% macro rules(fields, indent) %}
+{% for field in fields if field.required %}
+{{ indent }}{{ field.name }}: [{ type: "array", required: true, message: "{{ field.label }}不能为空", trigger: "change" }],
+{% endfor %}
+{% endmacro %}
+
+{#- Uploads still in flight are not assets yet: saving waits instead of submitting a partial id list. -#}
+{% macro pending_guard(fields, refs, modal, indent) %}
+{{ indent }}if ([{% for field in fields %}"assetField_{{ field.name }}"{% if not loop.last %}, {% endif %}{% endfor %}].some((name) => {{ refs }}[name]?.pending > 0)) {
+{{ indent }}  {{ modal }}.msgWarning("文件仍在上传，请稍候再保存");
+{{ indent }}  return;
+{{ indent }}}
+{% endmacro %}

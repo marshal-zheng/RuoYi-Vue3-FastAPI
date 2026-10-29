@@ -826,6 +826,90 @@ export type AiRequestTextStyleMark = {
 };
 
 /**
+ * AssetDescriptorModel
+ */
+export type AssetDescriptorModel = {
+  /**
+   * Assetid
+   *
+   * 资产ID（UUID）
+   */
+  assetId: string;
+  /**
+   * Contenturl
+   *
+   * 稳定同源内容地址，每次使用都鉴权
+   */
+  contentUrl: string;
+  /**
+   * Mediatype
+   *
+   * 登记的规范媒体类型
+   */
+  mediaType: string;
+  /**
+   * Name
+   *
+   * 安全显示名
+   */
+  name: string;
+  /**
+   * Size
+   *
+   * 存储字节数
+   */
+  size: number;
+};
+
+/**
+ * AssetMetadataBatchRequest
+ */
+export type AssetMetadataBatchRequest = {
+  /**
+   * Assetids
+   *
+   * 资产ID列表，最多 100 个
+   */
+  assetIds: Array<string>;
+};
+
+/**
+ * AssetMetadataBatchResponse
+ */
+export type AssetMetadataBatchResponse = {
+  /**
+   * Items
+   *
+   * 按输入顺序返回当前可见的资产
+   */
+  items: Array<AssetDescriptorModel>;
+  /**
+   * Unavailableids
+   *
+   * 不存在或不可见的资产ID（不区分原因）
+   */
+  unavailableIds: Array<string>;
+};
+
+/**
+ * AvatarUploadResponse
+ */
+export type AvatarUploadResponse = {
+  /**
+   * Avatarassetid
+   *
+   * 头像资产ID
+   */
+  avatarAssetId: string;
+  /**
+   * Avatarurl
+   *
+   * 头像稳定内容地址
+   */
+  avatarUrl: string;
+};
+
+/**
  * BatchDeviceIdsModel
  *
  * 批量设备ID模型
@@ -867,26 +951,6 @@ export type BlockAttrs = {
  * Body_batch_import_system_user_system_user_importData_post
  */
 export type BodyBatchImportSystemUserSystemUserImportDataPost = {
-  /**
-   * File
-   */
-  file: Blob | File;
-};
-
-/**
- * Body_change_system_user_profile_avatar_system_user_profile_avatar_post
- */
-export type BodyChangeSystemUserProfileAvatarSystemUserProfileAvatarPost = {
-  /**
-   * Avatarfile
-   */
-  avatarfile: Blob | File;
-};
-
-/**
- * Body_common_upload_common_upload_post
- */
-export type BodyCommonUploadCommonUploadPost = {
   /**
    * File
    */
@@ -3104,6 +3168,12 @@ export type DocumentRootOutput = {
  */
 export type EditGenTableModel = {
   /**
+   * Assetfields
+   *
+   * 逻辑文件字段声明
+   */
+  assetFields?: Array<GenAssetFieldModel> | null;
+  /**
    * Businessname
    *
    * 生成业务名
@@ -3307,12 +3377,6 @@ export type EditUserModel = {
    * 是否为admin
    */
   admin?: boolean | null;
-  /**
-   * Avatar
-   *
-   * 头像地址
-   */
-  avatar?: string | null;
   /**
    * Createby
    *
@@ -3760,6 +3824,64 @@ export type ExportVersionModel = {
 };
 
 /**
+ * GenAssetFieldModel
+ *
+ * 逻辑文件字段声明（经文件资产模块绑定，不是业务表物理列）
+ *
+ * 语义只来自本声明，不按列名猜测；前端 accept/提示与服务端策略由同一声明生成。
+ */
+export type GenAssetFieldModel = {
+  /**
+   * Allowedtypeids
+   *
+   * 允许的已登记文件类型ID（至少一项）
+   */
+  allowedTypeIds?: Array<string>;
+  /**
+   * Assetkind
+   *
+   * 资产种类（image 图片 file 文件）
+   */
+  assetKind: 'image' | 'file';
+  /**
+   * Fieldname
+   *
+   * 字段名（camelCase；同时作为绑定字段键与上传用途后缀）
+   */
+  fieldName: string;
+  /**
+   * Label
+   *
+   * 表单标签
+   */
+  label: string;
+  /**
+   * Maxbytes
+   *
+   * 单个文件大小上限（字节）
+   */
+  maxBytes: number;
+  /**
+   * Maxcount
+   *
+   * 最大文件数量
+   */
+  maxCount: number;
+  /**
+   * Required
+   *
+   * 是否必填
+   */
+  required?: boolean;
+  /**
+   * Showinlist
+   *
+   * 是否在列表展示
+   */
+  showInList?: boolean;
+};
+
+/**
  * GenTableColumnModel
  *
  * 代码生成业务表字段模型
@@ -3993,6 +4115,12 @@ export type GenTableDetailReadModel = {
  */
 export type GenTableModelInput = {
   /**
+   * Assetfields
+   *
+   * 逻辑文件字段声明
+   */
+  assetFields?: Array<GenAssetFieldModel> | null;
+  /**
    * Businessname
    *
    * 生成业务名
@@ -4186,6 +4314,12 @@ export type GenTableModelInput = {
  * 代码生成业务表模型
  */
 export type GenTableModelOutput = {
+  /**
+   * Assetfields
+   *
+   * 逻辑文件字段声明
+   */
+  assetFields?: Array<GenAssetFieldModel> | null;
   /**
    * Businessname
    *
@@ -4434,6 +4568,12 @@ export type GenTableParamsModel = {
  * Public table configuration response.
  */
 export type GenTableReadModel = {
+  /**
+   * Assetfields
+   *
+   * 逻辑文件字段声明
+   */
+  assetFields?: Array<GenAssetFieldModel> | null;
   /**
    * Businessname
    *
@@ -5676,9 +5816,9 @@ export type NoticeModel = {
   /**
    * Noticecontent
    *
-   * 公告内容
+   * 公告内容（UTF-8 HTML，服务端净化，图片仅允许 /file-assets/{assetId}/content）
    */
-  noticeContent?: Blob | File | null;
+  noticeContent?: string | null;
   /**
    * Noticeid
    *
@@ -8147,11 +8287,17 @@ export type UserInfoModel = {
    */
   admin?: boolean | null;
   /**
-   * Avatar
+   * Avatarassetid
    *
-   * 头像地址
+   * 头像资产ID（来自绑定投影）
    */
-  avatar?: string | null;
+  avatarAssetId?: string | null;
+  /**
+   * Avatarurl
+   *
+   * 头像稳定内容地址；为空时前端使用默认头像
+   */
+  avatarUrl?: string | null;
   /**
    * Createby
    *
@@ -8299,11 +8445,17 @@ export type UserInfoModel = {
  */
 export type UserInfoReadModel = {
   /**
-   * Avatar
+   * Avatarassetid
    *
-   * Avatar URL
+   * Avatar asset id (binding projection)
    */
-  avatar?: string | null;
+  avatarAssetId?: string | null;
+  /**
+   * Avatarurl
+   *
+   * Stable same-origin avatar content URL
+   */
+  avatarUrl?: string | null;
   /**
    * Createby
    *
@@ -8449,11 +8601,17 @@ export type UserInfoReadModel = {
  */
 export type UserListItemReadModel = {
   /**
-   * Avatar
+   * Avatarassetid
    *
-   * Avatar URL
+   * Avatar asset id (binding projection)
    */
-  avatar?: string | null;
+  avatarAssetId?: string | null;
+  /**
+   * Avatarurl
+   *
+   * Stable same-origin avatar content URL
+   */
+  avatarUrl?: string | null;
   /**
    * Createby
    *
@@ -8596,12 +8754,6 @@ export type UserListItemReadModel = {
  * UserPageQueryModel
  */
 export type UserPageQueryModel = {
-  /**
-   * Avatar
-   *
-   * 头像地址
-   */
-  avatar?: string | null;
   /**
    * Begintime
    *
@@ -9648,6 +9800,12 @@ export type GenTablePageReadModelWritable = {
  */
 export type GenTableReadModelWritable = {
   /**
+   * Assetfields
+   *
+   * 逻辑文件字段声明
+   */
+  assetFields?: Array<GenAssetFieldModel> | null;
+  /**
    * Businessname
    *
    * 生成业务名
@@ -10480,11 +10638,17 @@ export type UserInfoModelWritable = {
    */
   admin?: boolean | null;
   /**
-   * Avatar
+   * Avatarassetid
    *
-   * 头像地址
+   * 头像资产ID（来自绑定投影）
    */
-  avatar?: string | null;
+  avatarAssetId?: string | null;
+  /**
+   * Avatarurl
+   *
+   * 头像稳定内容地址；为空时前端使用默认头像
+   */
+  avatarUrl?: string | null;
   /**
    * Createby
    *
@@ -10628,11 +10792,17 @@ export type UserInfoModelWritable = {
  */
 export type UserInfoReadModelWritable = {
   /**
-   * Avatar
+   * Avatarassetid
    *
-   * Avatar URL
+   * Avatar asset id (binding projection)
    */
-  avatar?: string | null;
+  avatarAssetId?: string | null;
+  /**
+   * Avatarurl
+   *
+   * Stable same-origin avatar content URL
+   */
+  avatarUrl?: string | null;
   /**
    * Createby
    *
@@ -10774,11 +10944,17 @@ export type UserInfoReadModelWritable = {
  */
 export type UserListItemReadModelWritable = {
   /**
-   * Avatar
+   * Avatarassetid
    *
-   * Avatar URL
+   * Avatar asset id (binding projection)
    */
-  avatar?: string | null;
+  avatarAssetId?: string | null;
+  /**
+   * Avatarurl
+   *
+   * Stable same-origin avatar content URL
+   */
+  avatarUrl?: string | null;
   /**
    * Createby
    *
@@ -11283,68 +11459,6 @@ export type GetCaptchaImageCaptchaImageGetResponses = {
   200: unknown;
 };
 
-export type CommonDownloadCommonDownloadGetData = {
-  body?: never;
-  path?: never;
-  query: {
-    /**
-     * Filename
-     */
-    fileName: string;
-    /**
-     * Delete
-     */
-    delete: boolean;
-  };
-  url: '/common/download';
-};
-
-export type CommonDownloadCommonDownloadGetErrors = {
-  /**
-   * Validation Error
-   */
-  422: HttpValidationError;
-};
-
-export type CommonDownloadCommonDownloadGetError =
-  CommonDownloadCommonDownloadGetErrors[keyof CommonDownloadCommonDownloadGetErrors];
-
-export type CommonDownloadCommonDownloadGetResponses = {
-  /**
-   * Successful Response
-   */
-  200: unknown;
-};
-
-export type CommonDownloadResourceCommonDownloadResourceGetData = {
-  body?: never;
-  path?: never;
-  query: {
-    /**
-     * Resource
-     */
-    resource: string;
-  };
-  url: '/common/download/resource';
-};
-
-export type CommonDownloadResourceCommonDownloadResourceGetErrors = {
-  /**
-   * Validation Error
-   */
-  422: HttpValidationError;
-};
-
-export type CommonDownloadResourceCommonDownloadResourceGetError =
-  CommonDownloadResourceCommonDownloadResourceGetErrors[keyof CommonDownloadResourceCommonDownloadResourceGetErrors];
-
-export type CommonDownloadResourceCommonDownloadResourceGetResponses = {
-  /**
-   * Successful Response
-   */
-  200: unknown;
-};
-
 export type GetTableNamesCommonTablesGetData = {
   body?: never;
   path?: never;
@@ -11353,30 +11467,6 @@ export type GetTableNamesCommonTablesGetData = {
 };
 
 export type GetTableNamesCommonTablesGetResponses = {
-  /**
-   * Successful Response
-   */
-  200: unknown;
-};
-
-export type CommonUploadCommonUploadPostData = {
-  body: BodyCommonUploadCommonUploadPost;
-  path?: never;
-  query?: never;
-  url: '/common/upload';
-};
-
-export type CommonUploadCommonUploadPostErrors = {
-  /**
-   * Validation Error
-   */
-  422: HttpValidationError;
-};
-
-export type CommonUploadCommonUploadPostError =
-  CommonUploadCommonUploadPostErrors[keyof CommonUploadCommonUploadPostErrors];
-
-export type CommonUploadCommonUploadPostResponses = {
   /**
    * Successful Response
    */
@@ -11904,6 +11994,169 @@ export type ReplayEventsEventsReplayPostResponses = {
   200: unknown;
 };
 
+export type BatchFileAssetMetadataFileAssetsMetadataBatchPostData = {
+  body: AssetMetadataBatchRequest;
+  path?: never;
+  query?: never;
+  url: '/file-assets/metadata:batch';
+};
+
+export type BatchFileAssetMetadataFileAssetsMetadataBatchPostErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type BatchFileAssetMetadataFileAssetsMetadataBatchPostError =
+  BatchFileAssetMetadataFileAssetsMetadataBatchPostErrors[keyof BatchFileAssetMetadataFileAssetsMetadataBatchPostErrors];
+
+export type BatchFileAssetMetadataFileAssetsMetadataBatchPostResponses = {
+  /**
+   * Successful Response
+   */
+  200: AssetMetadataBatchResponse;
+};
+
+export type BatchFileAssetMetadataFileAssetsMetadataBatchPostResponse =
+  BatchFileAssetMetadataFileAssetsMetadataBatchPostResponses[keyof BatchFileAssetMetadataFileAssetsMetadataBatchPostResponses];
+
+export type UploadFileAssetFileAssetsUploadsPostData = {
+  /**
+   * FileAssetUploadForm
+   */
+  body: {
+    /**
+     * 单个文件
+     */
+    file: Blob | File;
+    /**
+     * 编辑已有业务对象时的业务ID，新建时省略
+     */
+    ownerId?: string;
+    /**
+     * 服务端登记的上传用途
+     */
+    purpose: string;
+  };
+  path?: never;
+  query?: never;
+  url: '/file-assets/uploads';
+};
+
+export type UploadFileAssetFileAssetsUploadsPostResponses = {
+  /**
+   * Successful Response
+   */
+  200: AssetDescriptorModel;
+};
+
+export type UploadFileAssetFileAssetsUploadsPostResponse =
+  UploadFileAssetFileAssetsUploadsPostResponses[keyof UploadFileAssetFileAssetsUploadsPostResponses];
+
+export type DiscardFileAssetFileAssetsAssetIdDeleteData = {
+  body?: never;
+  path: {
+    /**
+     * Asset Id
+     */
+    asset_id: string;
+  };
+  query?: never;
+  url: '/file-assets/{asset_id}';
+};
+
+export type DiscardFileAssetFileAssetsAssetIdDeleteErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type DiscardFileAssetFileAssetsAssetIdDeleteError =
+  DiscardFileAssetFileAssetsAssetIdDeleteErrors[keyof DiscardFileAssetFileAssetsAssetIdDeleteErrors];
+
+export type DiscardFileAssetFileAssetsAssetIdDeleteResponses = {
+  /**
+   * Successful Response
+   */
+  204: void;
+};
+
+export type DiscardFileAssetFileAssetsAssetIdDeleteResponse =
+  DiscardFileAssetFileAssetsAssetIdDeleteResponses[keyof DiscardFileAssetFileAssetsAssetIdDeleteResponses];
+
+export type GetFileAssetFileAssetsAssetIdGetData = {
+  body?: never;
+  path: {
+    /**
+     * Asset Id
+     */
+    asset_id: string;
+  };
+  query?: never;
+  url: '/file-assets/{asset_id}';
+};
+
+export type GetFileAssetFileAssetsAssetIdGetErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type GetFileAssetFileAssetsAssetIdGetError =
+  GetFileAssetFileAssetsAssetIdGetErrors[keyof GetFileAssetFileAssetsAssetIdGetErrors];
+
+export type GetFileAssetFileAssetsAssetIdGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: AssetDescriptorModel;
+};
+
+export type GetFileAssetFileAssetsAssetIdGetResponse =
+  GetFileAssetFileAssetsAssetIdGetResponses[keyof GetFileAssetFileAssetsAssetIdGetResponses];
+
+export type GetFileAssetContentFileAssetsAssetIdContentGetData = {
+  body?: never;
+  path: {
+    /**
+     * Asset Id
+     */
+    asset_id: string;
+  };
+  query?: {
+    /**
+     * Download
+     *
+     * true 时强制 attachment（只能收紧）
+     */
+    download?: boolean;
+  };
+  url: '/file-assets/{asset_id}/content';
+};
+
+export type GetFileAssetContentFileAssetsAssetIdContentGetErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type GetFileAssetContentFileAssetsAssetIdContentGetError =
+  GetFileAssetContentFileAssetsAssetIdContentGetErrors[keyof GetFileAssetContentFileAssetsAssetIdContentGetErrors];
+
+export type GetFileAssetContentFileAssetsAssetIdContentGetResponses = {
+  /**
+   * 文件内容（图片用途 inline，其余 attachment）
+   */
+  200: Blob | File;
+};
+
+export type GetFileAssetContentFileAssetsAssetIdContentGetResponse =
+  GetFileAssetContentFileAssetsAssetIdContentGetResponses[keyof GetFileAssetContentFileAssetsAssetIdContentGetResponses];
+
 export type GetLoginUserInfoGetInfoGetData = {
   body?: never;
   path?: never;
@@ -11985,6 +12238,20 @@ export type EventHealthCheckHealthEventsGetData = {
 };
 
 export type EventHealthCheckHealthEventsGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type FileAssetHealthCheckHealthFileAssetsGetData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: '/health/file-assets';
+};
+
+export type FileAssetHealthCheckHealthFileAssetsGetResponses = {
   /**
    * Successful Response
    */
@@ -17027,9 +17294,9 @@ export type GetSystemNoticeListSystemNoticeListGetData = {
     /**
      * Noticecontent
      *
-     * 公告内容
+     * 公告内容（UTF-8 HTML，服务端净化，图片仅允许 /file-assets/{assetId}/content）
      */
-    noticeContent?: Blob | File | null;
+    noticeContent?: string | null;
     /**
      * Status
      *
@@ -17900,12 +18167,6 @@ export type GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData = {
      */
     sex?: '0' | '1' | '2' | null;
     /**
-     * Avatar
-     *
-     * 头像地址
-     */
-    avatar?: string | null;
-    /**
      * Password
      *
      * 密码
@@ -18140,12 +18401,6 @@ export type GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData
      * 用户性别（0男 1女 2未知）
      */
     sex?: '0' | '1' | '2' | null;
-    /**
-     * Avatar
-     *
-     * 头像地址
-     */
-    avatar?: string | null;
     /**
      * Password
      *
@@ -18843,12 +19098,6 @@ export type GetSystemUserListSystemUserListGetData = {
      */
     sex?: '0' | '1' | '2' | null;
     /**
-     * Avatar
-     *
-     * 头像地址
-     */
-    avatar?: string | null;
-    /**
      * Password
      *
      * 密码
@@ -18992,28 +19241,29 @@ export type ChangeSystemUserProfileInfoSystemUserProfilePutResponses = {
 };
 
 export type ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostData = {
-  body: BodyChangeSystemUserProfileAvatarSystemUserProfileAvatarPost;
+  /**
+   * AvatarUploadForm
+   */
+  body: {
+    /**
+     * 头像图片
+     */
+    avatarfile: Blob | File;
+  };
   path?: never;
   query?: never;
   url: '/system/user/profile/avatar';
 };
 
-export type ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostErrors = {
-  /**
-   * Validation Error
-   */
-  422: HttpValidationError;
-};
-
-export type ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostError =
-  ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostErrors[keyof ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostErrors];
-
 export type ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  200: AvatarUploadResponse;
 };
+
+export type ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostResponse =
+  ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostResponses[keyof ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostResponses];
 
 export type ResetSystemUserPasswordSystemUserProfileUpdatePwdPutData = {
   body: ResetPasswordModel;

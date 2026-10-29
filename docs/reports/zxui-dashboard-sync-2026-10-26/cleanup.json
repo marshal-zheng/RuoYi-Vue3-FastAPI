@@ -1,0 +1,16 @@
+{
+  "browserClosed": true,
+  "temporaryDirectoryRemoved": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.tmp/zxui-dashboard-sync",
+  "temporaryPortsStopped": [
+    3310,
+    3311
+  ],
+  "preservedPorts": [
+    80,
+    8088,
+    5173
+  ],
+  "preferencesRestored": true,
+  "dashboardWrites": 0,
+  "layoutRevision": 11
+}

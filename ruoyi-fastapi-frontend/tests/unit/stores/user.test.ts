@@ -20,6 +20,9 @@ vi.mock('@/utils/auth', () => ({
   clearSecurityTokens: vi.fn(),
   getCsrfToken: vi.fn(() => ''),
   getToken: vi.fn(() => ''),
+  getSecuritySessionVersion: vi.fn(() => 0),
+  getSecurityTokenVersion: vi.fn(() => 0),
+  getSecuritySessionSignal: vi.fn(() => new AbortController().signal),
   setCsrfToken: vi.fn(),
   setToken: vi.fn(),
 }));
@@ -139,7 +142,8 @@ describe('User Store', () => {
           userId: 1,
           userName: 'admin',
           nickName: '管理员',
-          avatar: '',
+          avatarAssetId: '00000000-0000-4000-8000-000000000001',
+          avatarUrl: '/file-assets/00000000-0000-4000-8000-000000000001/content',
         },
         roles: ['admin'],
         permissions: ['*:*:*'],
@@ -147,12 +151,13 @@ describe('User Store', () => {
 
       await store.getInfo();
 
+      // The stable same-origin URL is used as-is: no API prefix, no storage host.
+      expect(store.avatar).toBe('/file-assets/00000000-0000-4000-8000-000000000001/content');
       expect(store.id).toBe(1);
       expect(store.name).toBe('admin');
       expect(store.nickName).toBe('管理员');
       expect(store.roles).toEqual(['admin']);
       expect(store.permissions).toEqual(['*:*:*']);
-      expect(store.avatar).toBeTruthy();
     });
 
     it('should fall back to default role when roles are empty', async () => {
@@ -162,7 +167,8 @@ describe('User Store', () => {
           userId: 2,
           userName: 'guest',
           nickName: '访客',
-          avatar: '',
+          avatarAssetId: null,
+          avatarUrl: null,
         },
         roles: [],
         permissions: [],
@@ -171,6 +177,7 @@ describe('User Store', () => {
       await store.getInfo();
 
       expect(store.roles).toEqual(['ROLE_DEFAULT']);
+      expect(store.avatar).toMatch(/profile/); // bundled default avatar when no binding exists
     });
 
     it('should handle getInfo failure', async () => {

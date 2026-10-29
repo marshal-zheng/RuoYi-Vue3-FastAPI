@@ -18,7 +18,11 @@ import { parseStrEmpty } from '@/utils/ruoyi';
 import { clampBcryptPassword } from '@/utils/password';
 
 function sanitizePasswordField<
-  T extends { password?: string | null; oldPassword?: string | null; newPassword?: string | null },
+  T extends {
+    password?: string | null;
+    oldPassword?: string | null;
+    newPassword?: string | null;
+  },
 >(payload: T, fields: ('password' | 'oldPassword' | 'newPassword')[] = []): T {
   const target = { ...payload };
   fields.forEach((field) => {
@@ -82,10 +86,15 @@ export function importUserExcel(
 }
 
 // 新增用户
-export function addUser(data: UserCreateModel, options?: RequestOptions) {
+export function addUser(
+  data: UserCreateModel,
+  options?: RequestOptions,
+  feedback?: Pick<ExtendedAxiosRequestConfig, 'silentError'>
+) {
   const payload = sanitizePasswordField(data, ['password']);
-  return request<UserInfoModel>(
+  return request<UserDetailReadModel>(
     {
+      ...feedback,
       url: '/system/user',
       method: 'post',
       data: payload,
@@ -96,9 +105,14 @@ export function addUser(data: UserCreateModel, options?: RequestOptions) {
 }
 
 // 修改用户
-export function updateUser(data: UserUpdateModel, options?: RequestOptions) {
-  return request<UserInfoModel>(
+export function updateUser(
+  data: UserUpdateModel,
+  options?: RequestOptions,
+  feedback?: Pick<ExtendedAxiosRequestConfig, 'silentError'>
+) {
+  return request<UserDetailReadModel>(
     {
+      ...feedback,
       url: '/system/user',
       method: 'put',
       data,
@@ -204,12 +218,12 @@ export function updateUserPwd(oldPassword: string, newPassword: string, options?
 
 // 用户头像上传
 export function uploadAvatar(data: FormData, options?: RequestOptions) {
-  return request<{ imgUrl: string }>(
+  return request<{ avatarAssetId: string; avatarUrl: string }>(
     {
       url: '/system/user/profile/avatar',
       method: 'post',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       data: data,
+      timeout: 0,
       feedback: { mode: 'auto', key: 'system.user.upload-avatar' },
     },
     options

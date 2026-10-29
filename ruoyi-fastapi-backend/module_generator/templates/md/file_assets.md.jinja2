@@ -1,0 +1,28 @@
+# {{ functionName }}文件字段接入说明
+
+由代码生成器按逻辑文件字段声明生成。文件字段不是 `{{ tableName }}` 的物理列：关系保存在文件资产绑定表，
+业务保存、修改与删除在同一事务内绑定或释放，读取时批量投影为资产 ID 数组。
+
+## 1. 登记归属策略（必需）
+
+在 `container/file_asset_policies.py` 的 `build_file_asset_policies()` 中加入：
+
+```python
+from {{ packageName }}.policy.{{ businessName }}_file_asset_policy import {{ BusinessName }}AssetPolicy
+
+{{ BusinessName }}AssetPolicy(),
+```
+
+未登记时上传返回“不支持的上传用途”，保存绑定失败并整体回滚，不会退化为开放权限。
+
+## 2. 字段与权限
+
+| 字段 | 用途 | 种类 | 允许类型 | 单个上限 | 数量 |
+| --- | --- | --- | --- | --- | --- |
+{% for field in assetFields %}
+| {{ field.label }}（`{{ field.name }}`） | `{{ field.purpose }}` | {{ field.kind }} | {{ field.typeIds | join(', ') }} | {{ field.sizeMb }} MiB | {{ field.maxCount }} |
+{% endfor %}
+
+- 新建时上传与保存需要 `{{ assetCreatePermission }}`；修改已有记录需要 `{{ assetEditPermission }}` 且记录存在。
+- 读取已绑定文件需要 {% for permission in assetReadPermissions %}`{{ permission }}`{% if not loop.last %} 或 {% endif %}{% endfor %}。
+- 接口提交资产 ID 数组：字段未提供表示不修改，`[]` 表示清空；删除记录同事务释放其全部文件。

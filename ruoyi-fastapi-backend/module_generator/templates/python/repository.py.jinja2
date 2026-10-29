@@ -144,12 +144,27 @@ class {{ BusinessName }}Repository:
         :param {{ businessName }}: {{ functionName }}对象
         :return:
         """
-        db_{{ businessName }} = {{ ClassName }}(**{{ businessName }}.model_dump(exclude={% raw %}{{% endraw %}{% if table.sub %}'{{ subclassName }}_list', {% endif %}{% for column in columns %}{% if not column.insert and column.column_name not in column_not_add_show + column_not_edit_show %}'{{ column.python_field | camel_to_snake  }}'{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}{% raw %}}{% endraw %}))
+        db_{{ businessName }} = {{ ClassName }}(**{{ businessName }}.model_dump(exclude={% raw %}{{% endraw %}{% if table.sub %}'{{ subclassName }}_list', {% endif %}{% for field in assetFields %}'{{ field.attr }}', {% endfor %}{% for column in columns %}{% if not column.insert and column.column_name not in column_not_add_show + column_not_edit_show %}'{{ column.python_field | camel_to_snake  }}'{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}{% raw %}}{% endraw %}))
         self.db.add(db_{{ businessName }})
         await self.db.flush()
 
         return db_{{ businessName }}
 
+{% if hasAssets %}
+    async def lock_{{ businessName }}(self, {{ pk_field }}: int):
+        """
+        锁定{{ functionName }}记录：同一记录的并发修改在锁定文件绑定前串行
+
+        :param {{ pk_field }}: {{ pk_field_comment }}
+        :return: 存在时返回{{ pk_field_comment }}
+        """
+        return (
+            await self.db.execute(
+                select({{ ClassName }}.{{ pk_field }}).where({{ ClassName }}.{{ pk_field }} == {{ pk_field }}).with_for_update()
+            )
+        ).scalar()
+
+{% endif %}
     async def edit_{{ businessName }}(self, {{ businessName }}: dict):
         """
         编辑{{ functionName }}数据库操作

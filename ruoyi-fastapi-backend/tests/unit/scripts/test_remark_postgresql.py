@@ -13,6 +13,7 @@ from sqlalchemy.schema import CreateTable
 
 from common.remark_document_v1 import plain_to_remark
 from module_generator.entity.do.gen_do import GenTableColumnDO, GenTableDO
+from scripts.data_migrations import file_assets_v1
 from scripts.data_migrations.remark_document_v2 import OLD, TEMP, _switch_columns
 
 
@@ -88,6 +89,8 @@ def test_missing_generator_table_shape_is_frozen_and_matches_public_orm(monkeypa
         monkeypatch.setattr(revision, 'migrate', lambda *_args, **_kwargs: None)
         monkeypatch.setattr(revision.op, 'create_table', lambda name, *columns: Table(name, tables, *columns))
         revision.upgrade()
+    # Later revisions extend the frozen shape; replay their additions before comparing with the current ORM.
+    tables.tables['gen_table'].append_column(file_assets_v1.gen_asset_fields_column())
     for expected in [GenTableDO.__table__, GenTableColumnDO.__table__]:
         actual = tables.tables[expected.name]
         assert set(actual.c.keys()) == set(expected.c.keys())

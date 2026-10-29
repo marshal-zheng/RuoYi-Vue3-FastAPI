@@ -1,8 +1,8 @@
 {
   "feature": "file-assets-minio",
   "autonomy": "auto-spec",
-  "phase": "execution_ready",
-  "updated_at": "2026-10-24T15:16:13.801444+00:00",
+  "phase": "status_or_delivery",
+  "updated_at": "2026-10-27T12:38:15.059021+00:00",
   "gates": [
     {
       "gate": "requirements",
@@ -81,6 +81,24 @@
       "decision": "pre-approved",
       "evidence": "79/79 AC追溯、19未勾选任务、74依赖校验通过；评审确认",
       "at": "2026-10-24T15:12:29.645091+00:00"
+    },
+    {
+      "gate": "requirements",
+      "decision": "user-approved",
+      "evidence": "用户 2026-10-27 选择硬切换；R13 等改写，79/79 AC 追溯通过",
+      "at": "2026-10-27T12:38:15.059021+00:00"
+    },
+    {
+      "gate": "execution",
+      "decision": "user-approved",
+      "evidence": "2026-10-24 /goal 要求完成全部任务；2026-10-27 用户“请继续”",
+      "at": "2026-10-27T12:38:15.059021+00:00"
+    },
+    {
+      "gate": "review",
+      "decision": "user-approved",
+      "evidence": "独立只读实现评审：无 P0/P1，5 个 P2 与若干 P3 已修复并补回归；修复后经全量测试、真实 MySQL/MinIO 与链路冒烟验证，未发起第二轮实现评审",
+      "at": "2026-10-27T12:38:15.059021+00:00"
     }
   ],
   "clarify": {
@@ -241,7 +259,17 @@
       }
     ],
     "revision_mode": "accepted-prior-answer",
-    "revision_note": "本轮决策由用户在对话中直接作出，未另行运行clarify子代理；独立evaluator评审时同时检查需求是否仍有高影响歧义"
+    "revision_note": "本轮决策由用户在对话中直接作出，未另行运行clarify子代理；独立evaluator评审时同时检查需求是否仍有高影响歧义",
+    "user_decisions_2026_10_27": [
+      {
+        "id": "CL-16",
+        "question": "历史头像、公告图片与生成器文件列是否迁移？",
+        "decision": "不迁移，硬切换；单一冻结版本建表/加列/公告就地转 UTF-8/删 sys_user.avatar；删除迁移工具与台账；生产切换另行授权",
+        "source": "user decision 2026-10-27（“你可以选择硬切”）",
+        "status": "user-confirmed",
+        "at": "2026-10-27T12:38:15.059021+00:00"
+      }
+    ]
   },
   "evaluator": [
     {
@@ -479,6 +507,21 @@
       "phase": "execution_ready",
       "at": "2026-10-24T15:16:13.801444+00:00",
       "evidence": "PASS后按用户指示收敛4项P3，用户豁免复审；结构追溯复核通过"
+    },
+    {
+      "phase": "implementation",
+      "at": "2026-10-27T12:38:15.059021+00:00",
+      "evidence": "任务 1–17 完成；硬切换收敛"
+    },
+    {
+      "phase": "alignment_review",
+      "at": "2026-10-27T12:38:15.059021+00:00",
+      "evidence": "独立只读实现评审 + 修复与回归验证"
+    },
+    {
+      "phase": "status_or_delivery",
+      "at": "2026-10-27T12:38:15.059021+00:00",
+      "evidence": "等待用户验收与提交决定；未提交未部署"
     }
   ],
   "stale_downstream": [],
@@ -495,17 +538,25 @@
     "git_diff_check": "pass; no-index against revision baseline",
     "links_and_whitespace": "pass",
     "stable_original_ac_ids": 76,
-    "runtime_tests": "not run; specification-only scope",
+    "runtime_tests": "live smoke on dev backend + MinIO passed",
     "evaluator_hash_match": "requirements matches last PASS; design/tasks changed after PASS with user-waived review",
-    "evidence": "ssd-review.md#用户确认与-p3-收敛2026-10-24"
+    "evidence": "ssd-review.md#用户确认与-p3-收敛2026-10-24",
+    "backend_full": "2146 passed, 4 pre-existing failures",
+    "backend_file_assets": "163 passed, 13 opt-in skipped",
+    "real_mysql_minio": "13 passed",
+    "frontend_vitest": "1514 passed, 33 pre-existing failures (identical to HEAD)",
+    "frontend_build": "pass",
+    "mock_contracts": "pass",
+    "ui_standards": "pass"
   },
   "final_spec_sha256": {
-    "requirements.md": "62df6b103780bb2045be4b303d12b67a7b49cde11791d0b4214b0ac6f4b63795",
-    "design.md": "8a0857ce1d603bc1b3c97164b21a85c6f33c2c83f94472c7c58ff9589be192d0",
-    "tasks.md": "33ed68e7e656f8fc6b1fde838fbf9c7c609b08ca552e05cf6dcb36a86e73e46e",
-    "ssd-review.md": "2d5fc417d9895d19f9ad111f639a6644b63a15425f3f286ac04d9d3003535c8c"
+    "requirements.md": "6c253576a6332c794cc1d7858742dffdc423357c6e083e270bf7c1afa2085f56",
+    "design.md": "5b481d5860afaf4baf7c741125c5e98fb583096f9ad71764d90bfa9ea98aa641",
+    "tasks.md": "54110946cd3dd771bcab640fc719f3c346d0011e1988dc13b57d70a0c9f674d3",
+    "runbook.md": "00ca420934ea54ac3ed039d2d84e780d195dc797898dc70f667a0c05f8526eda",
+    "ssd-review.md": "c40d8d37c1245a09a7ce50301133961596d1150d062067f9713dc2485429b963"
   },
-  "execution_authorized": false,
+  "execution_authorized": true,
   "production_distribution": "TBD-PROD-01; blocks production only",
   "revision": {
     "id": "p3-convergence",
@@ -644,5 +695,43 @@
       "tasks.md": "f54c9afad2c8e249a368e564d96ce5897b356d323ec457cdd913aad87882a379"
     },
     "independent_review": "waived-by-user"
+  },
+  "implementation": {
+    "mode": "current-branch (std)",
+    "implemented_by": [
+      "session 022d5b3e (2026-10-24)",
+      "session 67e74a4e (2026-10-27)"
+    ],
+    "tasks_done": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "tasks_open": [
+      18,
+      19
+    ],
+    "committed": false,
+    "delivered": false,
+    "reports": [
+      "docs/reports/file-assets-minio/inventory.md",
+      "docs/reports/file-assets-minio/cutover.md",
+      "docs/reports/file-assets-minio/integration.md",
+      "docs/reports/file-assets-minio/acceptance.md"
+    ]
   }
 }

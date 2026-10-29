@@ -1,0 +1,101 @@
+{
+  "source": {
+    "maximizedAndRestored": true,
+    "panelMenuTheme": "factory-blue/dark/compact",
+    "navigationReturn": true
+  },
+  "packed": {
+    "menu": {
+      "scope": "scope:vfadmin:root",
+      "background": "color(srgb 0.987525 0.989235 0.992655)",
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "rect": {
+        "x": 371,
+        "y": 255,
+        "width": 160,
+        "height": 72,
+        "top": 255,
+        "right": 531,
+        "bottom": 327,
+        "left": 371
+      },
+      "text": "锁定\n隐藏"
+    },
+    "layoutDraft": {
+      "style": "top: 0px; left: 0px; width: 250px; height: 252px; position: absolute; transform: translate3d(0px, 528px, 0px);",
+      "label": "CPU 使用率"
+    },
+    "layoutRestored": {
+      "style": "top: 0px; left: 0px; width: 362px; height: 252px; position: absolute; transform: translate3d(0px, 0px, 0px);",
+      "label": "CPU 使用率"
+    },
+    "chartSettingsOpenedAndCancelled": true,
+    "defaultLayoutRevision": 11,
+    "cpuTrendDraftDiscarded": true,
+    "repeatThemeCycles": 3,
+    "keyboardRight": {
+      "panel": "memory",
+      "label": "内存使用率"
+    },
+    "keyboardHome": {
+      "panel": "cpu",
+      "label": "CPU 使用率"
+    },
+    "fit": [
+      {
+        "selector": ".navbar",
+        "rect": {
+          "x": 250,
+          "y": 0,
+          "width": 1030,
+          "height": 55,
+          "top": 0,
+          "right": 1280,
+          "bottom": 55,
+          "left": 250
+        },
+        "fits": true
+      },
+      {
+        "selector": ".sidebar-container",
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 250,
+          "height": 800,
+          "top": 0,
+          "right": 250,
+          "bottom": 800,
+          "left": 0
+        },
+        "fits": true
+      },
+      {
+        "selector": ".persistent-dashboard__bar",
+        "rect": {
+          "x": 290,
+          "y": 96,
+          "width": 950,
+          "height": 88,
+          "top": 96,
+          "right": 1240,
+          "bottom": 184,
+          "left": 290
+        },
+        "fits": true
+      },
+      {
+        "selector": ".zx-dashboard-designer__toolbar",
+        "fits": null
+      }
+    ],
+    "dashboardWrites": []
+  },
+  "authSetupErrors": [
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ],
+  "sourceErrors": [],
+  "sourceWarnings": [],
+  "packedErrors": [],
+  "packedWarnings": []
+}

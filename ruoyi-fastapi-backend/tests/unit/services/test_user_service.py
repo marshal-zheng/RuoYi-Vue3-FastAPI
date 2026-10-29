@@ -178,7 +178,6 @@ async def test_general_user_edit_optional_relations(db_session, status, updates,
     ('edit_type', 'updates', 'field', 'expected'),
     [
         ('status', {'status': '1'}, 'status', '1'),
-        ('avatar', {'avatar': '/new-avatar.png'}, 'avatar', '/new-avatar.png'),
         ('pwd', {'password': 'new-password-hash'}, 'password', 'new-password-hash'),
     ],
 )
@@ -199,3 +198,21 @@ async def test_special_user_edits_preserve_relations(db_session, edit_type, upda
     assert user.nick_name == 'Unchanged'
     assert [row.role_id for row in await UserRoleRepository(db_session).find_by_user_id(user.user_id)] == [20]
     assert [row.post_id for row in await UserPostRepository(db_session).find_by_user_id(user.user_id)] == [30]
+
+
+@pytest.mark.asyncio
+async def test_user_edit_cannot_write_avatar_urls(db_session):
+    """Avatars are asset bindings written only by the avatar upload endpoint; URL payloads are ignored."""
+    user = UserDO(user_name='avatar_edit', nick_name='Unchanged', status='0')
+    db_session.add(user)
+    await db_session.flush()
+
+    await UserService().edit_user_services(
+        db_session,
+        EditUserModel(userId=user.user_id, type='avatar', avatar='/profile/avatar.png', roleIds=[], postIds=[]),
+    )
+
+    await db_session.refresh(user)
+    assert not hasattr(user, 'avatar')
+    assert 'avatar' not in EditUserModel.model_fields
+    assert user.nick_name == 'Unchanged'

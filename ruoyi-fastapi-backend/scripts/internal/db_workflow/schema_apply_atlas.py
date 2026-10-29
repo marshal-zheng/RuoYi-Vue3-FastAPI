@@ -45,6 +45,7 @@ MODEL_MODULES = (
     'module_admin.entity.do.protocol_do',
     'module_admin.entity.do.simulation_do',
     'events.models',
+    'modules.file_assets.infrastructure.models',
 )
 
 

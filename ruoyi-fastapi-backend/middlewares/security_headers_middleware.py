@@ -20,7 +20,9 @@ class SecurityHeadersASGIMiddleware:
         async def send_wrapper(message: Message) -> None:
             if message.get('type') == 'http.response.start':
                 headers = list(message.get('headers', []))
-                headers.extend(self._build_security_headers())
+                present = {key.lower() for key, _ in headers}
+                # Endpoint-specific policies (e.g. sandboxed file content) take precedence over defaults.
+                headers.extend(item for item in self._build_security_headers() if item[0] not in present)
                 message['headers'] = headers
             await send(message)
 

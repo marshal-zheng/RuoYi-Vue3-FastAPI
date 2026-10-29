@@ -26,6 +26,7 @@ from modules.system.application.read_models.user_read_models import (
     UserProfileReadModel,
     UserRoleResponseReadModel,
 )
+from modules.system.application.user_avatars import attach_user_avatars
 
 if TYPE_CHECKING:
     from modules.system.application.services.dept_service import DeptService
@@ -96,6 +97,7 @@ class GetUserListQueryHandler(IQueryHandler[GetUserListQuery, UserPageReadModel]
 
         if request.is_page:
             items = [_to_user_list_item(row) for row in list_result.items]
+            await attach_user_avatars(request.query_db, items)
             return UserPageReadModel(
                 items=items,
                 page=list_result.page,
@@ -105,6 +107,7 @@ class GetUserListQueryHandler(IQueryHandler[GetUserListQuery, UserPageReadModel]
             )
 
         items = [_to_user_list_item(row) for row in list_result]
+        await attach_user_avatars(request.query_db, items)
         return UserPageReadModel(
             items=items,
             page=1,
@@ -125,6 +128,7 @@ class GetUserProfileQueryHandler(IQueryHandler[GetUserProfileQuery, UserProfileR
         payload = _extract_payload(profile_result)
         data_payload = payload.get('data')
         payload['data'] = _to_user_info(data_payload) if data_payload else None
+        await attach_user_avatars(request.query_db, [payload['data']])
         return UserProfileReadModel.model_validate(payload)
 
 
@@ -172,6 +176,7 @@ class GetUserDetailQueryHandler(IQueryHandler[GetUserDetailQuery, UserDetailRead
 
         data_payload = payload.get('data')
         payload['data'] = _to_user_info(data_payload) if data_payload else None
+        await attach_user_avatars(request.query_db, [payload['data']])
         payload['posts'] = _normalize_option_list(payload.get('posts'))
         payload['roles'] = _normalize_option_list(payload.get('roles'))
 
@@ -212,7 +217,6 @@ class GetUserAuthRoleQueryHandler(IQueryHandler[GetUserAuthRoleQuery, UserRoleRe
         roles = [_to_allocated_role(row) for row in (payload.get('roles') or [])]
         user_payload = payload.get('user')
 
-        return UserRoleResponseReadModel(
-            roles=roles,
-            user=_to_user_info(user_payload) if user_payload else None,
-        )
+        user = _to_user_info(user_payload) if user_payload else None
+        await attach_user_avatars(request.query_db, [user])
+        return UserRoleResponseReadModel(roles=roles, user=user)

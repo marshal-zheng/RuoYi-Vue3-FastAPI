@@ -20,6 +20,7 @@ from modules.identity.application.services.login_service import (
     LoginService,
     oauth2_scheme,
 )
+from modules.system.application.user_avatars import attach_user_avatars
 from ports import IUserService
 from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
@@ -294,10 +295,15 @@ async def refresh_session(request: Request):
 
 @loginController.get('/getInfo', response_model=CurrentUserModel)
 async def get_login_user_info(
-    request: Request, current_user: CurrentUserModel = Depends(LoginService.get_current_user)
+    request: Request,
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+    query_db: AsyncSession = Depends(get_db),
 ):
+    # Authentication never reads file assets; the avatar is projected here from its binding.
+    payload = current_user.model_copy(deep=True)
+    await attach_user_avatars(query_db, [payload.user])
     logger.info('获取成功')
-    return ResponseUtil.ok_resource(current_user)
+    return ResponseUtil.ok_resource(payload)
 
 
 @loginController.get('/getRouters')

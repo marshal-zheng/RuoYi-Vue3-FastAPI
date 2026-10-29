@@ -1,0 +1,543 @@
+{
+  "installedFileMismatches": [],
+  "resolutions": [
+    {
+      "importer": "vfadmin",
+      "name": "vue",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "importer": "vfadmin",
+      "name": "@vue/runtime-core",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/package.json"
+    },
+    {
+      "importer": "vfadmin",
+      "name": "@zxio/tokens",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/tokens/package.json"
+    },
+    {
+      "importer": "vfadmin",
+      "name": "@zxio/theme-css-codec",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-css-codec/package.json"
+    },
+    {
+      "importer": "vfadmin",
+      "name": "@zxio/theme-consumer",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-consumer/package.json"
+    },
+    {
+      "importer": "vfadmin",
+      "name": "@zxio/vue-grid-layout",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/vue-grid-layout/package.json"
+    },
+    {
+      "importer": "@zxio/zxui",
+      "name": "vue",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "importer": "@zxio/zxui",
+      "name": "@vue/runtime-core",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/package.json"
+    },
+    {
+      "importer": "@zxio/zxui",
+      "name": "@zxio/tokens",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/tokens/package.json"
+    },
+    {
+      "importer": "@zxio/zxui",
+      "name": "@zxio/theme-css-codec",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-css-codec/package.json"
+    },
+    {
+      "importer": "@zxio/zxui",
+      "name": "@zxio/theme-consumer",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-consumer/package.json"
+    },
+    {
+      "importer": "@zxio/zxui",
+      "name": "@zxio/vue-grid-layout",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/vue-grid-layout/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard",
+      "name": "vue",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard",
+      "name": "@vue/runtime-core",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard",
+      "name": "@zxio/tokens",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/tokens/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard",
+      "name": "@zxio/theme-css-codec",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-css-codec/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard",
+      "name": "@zxio/theme-consumer",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-consumer/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard",
+      "name": "@zxio/vue-grid-layout",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/vue-grid-layout/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard-widgets",
+      "name": "vue",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard-widgets",
+      "name": "@vue/runtime-core",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard-widgets",
+      "name": "@zxio/tokens",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/tokens/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard-widgets",
+      "name": "@zxio/theme-css-codec",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-css-codec/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard-widgets",
+      "name": "@zxio/theme-consumer",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-consumer/package.json"
+    },
+    {
+      "importer": "@zxio/dashboard-widgets",
+      "name": "@zxio/vue-grid-layout",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/vue-grid-layout/package.json"
+    },
+    {
+      "importer": "@zxio/theme-compiler",
+      "name": "vue",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "importer": "@zxio/theme-compiler",
+      "name": "@vue/runtime-core",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/package.json"
+    },
+    {
+      "importer": "@zxio/theme-compiler",
+      "name": "@zxio/tokens",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/tokens/package.json"
+    },
+    {
+      "importer": "@zxio/theme-compiler",
+      "name": "@zxio/theme-css-codec",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-css-codec/package.json"
+    },
+    {
+      "importer": "@zxio/theme-compiler",
+      "name": "@zxio/theme-consumer",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-consumer/package.json"
+    },
+    {
+      "importer": "@zxio/theme-compiler",
+      "name": "@zxio/vue-grid-layout",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/vue-grid-layout/package.json"
+    },
+    {
+      "importer": "@zxio/theme-css-codec",
+      "name": "vue",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "importer": "@zxio/theme-css-codec",
+      "name": "@vue/runtime-core",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/package.json"
+    },
+    {
+      "importer": "@zxio/theme-css-codec",
+      "name": "@zxio/tokens",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/tokens/package.json"
+    },
+    {
+      "importer": "@zxio/theme-css-codec",
+      "name": "@zxio/theme-css-codec",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-css-codec/package.json"
+    },
+    {
+      "importer": "@zxio/theme-css-codec",
+      "name": "@zxio/theme-consumer",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-consumer/package.json"
+    },
+    {
+      "importer": "@zxio/theme-css-codec",
+      "name": "@zxio/vue-grid-layout",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/vue-grid-layout/package.json"
+    },
+    {
+      "importer": "@zxio/vue-grid-layout",
+      "name": "vue",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "importer": "@zxio/vue-grid-layout",
+      "name": "@vue/runtime-core",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/package.json"
+    },
+    {
+      "importer": "@zxio/vue-grid-layout",
+      "name": "@zxio/tokens",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/tokens/package.json"
+    },
+    {
+      "importer": "@zxio/vue-grid-layout",
+      "name": "@zxio/theme-css-codec",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-css-codec/package.json"
+    },
+    {
+      "importer": "@zxio/vue-grid-layout",
+      "name": "@zxio/theme-consumer",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-consumer/package.json"
+    },
+    {
+      "importer": "@zxio/vue-grid-layout",
+      "name": "@zxio/vue-grid-layout",
+      "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/vue-grid-layout/package.json"
+    }
+  ],
+  "themes": [
+    {
+      "name": "@zxio/theme-default",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-defense-green",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-army-pine",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-air-gray",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-pap-olive",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-rocket-moss",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-factory-blue",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-tech-blue",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    },
+    {
+      "name": "@zxio/theme-industrial-blue",
+      "contract": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37"
+    }
+  ],
+  "gridCoreRequirement": {
+    "contractVersion": "4.0.0",
+    "experimentalContractContentHash": "sha256:bb14425c9adb15ad223670c7b84c6ac93f035ec0ad21127a298fba59263b4c37",
+    "tokens": [
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-accent-base"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.accent.base",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-accent-subtle"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.accent.subtle",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-action-focus-ring"
+        },
+        "lifecycle": "stable",
+        "path": "semantic.action.focus-ring",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-border-strong"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.border.strong",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-border-subtle"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.border.subtle",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-fill-active"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.fill.active",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-fill-hover"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.fill.hover",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-fill-selected"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.fill.selected",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-motion-duration"
+        },
+        "lifecycle": "stable",
+        "path": "semantic.motion.duration",
+        "typeId": "duration"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-motion-duration-fast"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.motion.duration-fast",
+        "typeId": "duration"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-radius-control"
+        },
+        "lifecycle": "stable",
+        "path": "semantic.radius.control",
+        "typeId": "dimension"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-radius-surface"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.radius.surface",
+        "typeId": "dimension"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-spacing-control-y"
+        },
+        "lifecycle": "stable",
+        "path": "semantic.spacing.control-y",
+        "typeId": "dimension"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-danger"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.danger",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-danger-on-surface"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.danger-on-surface",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-danger-tint-5"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.danger-tint-5",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-danger-tint-9"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.danger-tint-9",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-info"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.info",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-info-tint-5"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.info-tint-5",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-info-tint-9"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.info-tint-9",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-success"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.success",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-warning"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.warning",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-warning-on-surface"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.warning-on-surface",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-warning-tint-5"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.warning-tint-5",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-status-warning-tint-9"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.status.warning-tint-9",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-surface-elevated"
+        },
+        "lifecycle": "stable",
+        "path": "semantic.surface.elevated",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-surface-overlay-fill"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.surface.overlay.fill",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-surface-overlay-on-text"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.surface.overlay.on-text",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-surface-overlay-on-text-secondary"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.surface.overlay.on-text-secondary",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-text-primary"
+        },
+        "lifecycle": "stable",
+        "path": "semantic.text.primary",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-text-secondary"
+        },
+        "lifecycle": "stable",
+        "path": "semantic.text.secondary",
+        "typeId": "color"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-typography-size-base"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.typography.size-base",
+        "typeId": "dimension"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-typography-size-extra-small"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.typography.size-extra-small",
+        "typeId": "dimension"
+      },
+      {
+        "css": {
+          "publicVariable": "--zx-semantic-typography-size-small"
+        },
+        "lifecycle": "experimental",
+        "path": "semantic.typography.size-small",
+        "typeId": "dimension"
+      }
+    ],
+    "typeRegistryContentHash": "sha256:b9cfadbcf00c84e4e42ef16d7353e962d8f98a2861b0ecb414811388939a8262"
+  },
+  "gridIdentity": {
+    "contentHash": "sha256:dbc9b5300f0885987e066bde66f1fd057dd3c8f74bfb40dbf7d045bf67cf3be6",
+    "packageName": "@zxio/vue-grid-layout",
+    "packageVersion": "1.0.6",
+    "planHash": "sha256:cede440b272d6d478a18b7047bd51291dd00c92bff194384dd1a413a239fc63e"
+  },
+  "versions": {
+    "vue": "3.5.44",
+    "vite": "5.4.21",
+    "element-plus": "2.14.7"
+  }
+}

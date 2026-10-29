@@ -1,0 +1,12 @@
+{
+  "label": "packed",
+  "modules": 8583,
+  "librarySourceModules": 0,
+  "installedZxuiModules": 330,
+  "runtimeCoreModules": [
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js"
+  ],
+  "vueRoots": [
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue"
+  ]
+}

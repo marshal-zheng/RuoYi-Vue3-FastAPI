@@ -13,7 +13,6 @@ users:
     email: admin@example.com
     phonenumber: "15888888888"
     sex: "1"
-    avatar: ""
     password: "admin123"  # 明文密码，加载时会哈希处理
     status: "0"
     del_flag: "0"
@@ -28,7 +27,6 @@ users:
     email: niangao@qq.com
     phonenumber: "15666666666"
     sex: "1"
-    avatar: ""
     password: "admin123"  # 明文密码，加载时会哈希处理
     status: "0"
     del_flag: "0"

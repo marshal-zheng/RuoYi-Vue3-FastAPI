@@ -9,7 +9,8 @@ export interface MockUser {
   email: string;
   phonenumber: string;
   sex: '0' | '1' | '2';
-  avatar: string;
+  /** Stable /file-assets/{assetId}/content URL; null uses the bundled default avatar. */
+  avatarUrl: string | null;
   status: '0' | '1';
   delFlag: '0';
   loginIp: string;
@@ -93,7 +94,7 @@ export function createUser(overrides: Partial<MockUser> = {}): MockUser {
     email: overrides.email ?? faker.internet.email({ firstName: nickName }),
     phonenumber: overrides.phonenumber ?? randomPhone(),
     sex: overrides.sex ?? faker.helpers.arrayElement(['0', '1', '2'] as const),
-    avatar: overrides.avatar ?? '',
+    avatarUrl: overrides.avatarUrl ?? null,
     status: overrides.status ?? faker.helpers.arrayElement(['0', '1'] as const),
     delFlag: '0',
     loginIp: overrides.loginIp ?? faker.internet.ipv4(),

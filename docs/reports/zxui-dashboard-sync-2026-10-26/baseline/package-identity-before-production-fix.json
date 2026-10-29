@@ -1,0 +1,121 @@
+[
+  {
+    "name": "@zxio/zxui",
+    "version": "3.0.0-next.0",
+    "source": "/Users/hqz/Downloads/element-plus/dist/@zxio/zxui",
+    "artifact": "vendor/zxio-zxui-3.0.0-next.0-dashboard-theme.20261026.tgz",
+    "sha256": "e89851e29d8d95b30a0a9cfc848c64660b55edbc2aefc84f1978eeb312ead757"
+  },
+  {
+    "name": "@zxio/dashboard",
+    "version": "0.1.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/dashboard",
+    "artifact": "vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz",
+    "sha256": "f3f5bfdafdef0ed10741a0d1d0842da1b44768893e2ffd5ce2155d9224115abb"
+  },
+  {
+    "name": "@zxio/tokens",
+    "version": "2.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/tokens/dist",
+    "artifact": "vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "361e5d7f869026b57ba0f098959c653981093d2bcfdd37500b6db41dceeec736"
+  },
+  {
+    "name": "@zxio/theme-compiler",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-compiler",
+    "artifact": "vendor/zxio-theme-compiler-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "437a5ee3e96229ca86b11fd053ba7b6d86788e56e79d8e71eae190283e819a33"
+  },
+  {
+    "name": "@zxio/theme-css-codec",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-css-codec",
+    "artifact": "vendor/zxio-theme-css-codec-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "4750030cd6ba5bee4ca1ca06c571b8df04b46d0b82fb72e4a2a72ecc28ac4a20"
+  },
+  {
+    "name": "@zxio/theme-consumer",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-consumer",
+    "artifact": "vendor/zxio-theme-consumer-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "2ee9e710d1e14e1b7880d87f4c77828afae9b0b8402d78d281c8681b7c876a70"
+  },
+  {
+    "name": "@zxio/theme-default",
+    "version": "2.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-default",
+    "artifact": "vendor/zxio-theme-default-2.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "b1d6918ab4151d6031a5869f1a4f184983b07f8a988049d7eeca9b79874a6c1d"
+  },
+  {
+    "name": "@zxio/theme-defense-green",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-defense-green",
+    "artifact": "vendor/zxio-theme-defense-green-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "30e8f4ea5a309baa8be3b3425a9dd154cd908255a61fbf931d7ce38f5bdbc087"
+  },
+  {
+    "name": "@zxio/theme-army-pine",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-army-pine",
+    "artifact": "vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "752b0c2e20380552929fa63e1edaf84189f7af4acb670e68ababb4ddf914c1c3"
+  },
+  {
+    "name": "@zxio/theme-air-gray",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-air-gray",
+    "artifact": "vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "3adcd61ad2a64d16ff55266441311351be31ba0cd9d624ac85c366ef4a23cd34"
+  },
+  {
+    "name": "@zxio/theme-pap-olive",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-pap-olive",
+    "artifact": "vendor/zxio-theme-pap-olive-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "e54e58dcb4ea186f0aba0f4e7fe3549b241ffc2038e7655237ab9ea72175688a"
+  },
+  {
+    "name": "@zxio/theme-rocket-moss",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-rocket-moss",
+    "artifact": "vendor/zxio-theme-rocket-moss-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "602af1323a9f97e4530d1b8075a32bfaf0cf9d53f61c7b7eb08140b04ac918dd"
+  },
+  {
+    "name": "@zxio/theme-factory-blue",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-factory-blue",
+    "artifact": "vendor/zxio-theme-factory-blue-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "0ad0a5070f249d63691936c37eb62ff273383249c586c95d5b24a10f772ffa5b"
+  },
+  {
+    "name": "@zxio/theme-tech-blue",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-tech-blue",
+    "artifact": "vendor/zxio-theme-tech-blue-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "f03ca522eb09223bf78b2d07b56ef85b12b9a628e9382c11f0ad16870da02bd6"
+  },
+  {
+    "name": "@zxio/theme-industrial-blue",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-industrial-blue",
+    "artifact": "vendor/zxio-theme-industrial-blue-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "dd5b09d96056652b570042ab6f155d715c617b78c6b9496758143b866b342b54"
+  },
+  {
+    "name": "@zxio/theme-tailwind",
+    "version": "1.0.0",
+    "source": "/Users/hqz/Downloads/element-plus/packages/theme-tailwind",
+    "artifact": "vendor/zxio-theme-tailwind-1.0.0-dashboard-theme.20261026.tgz",
+    "sha256": "d33bebb3ad06a5b24ef68b92cb3a9276987b3263700aacf20f053646c7db2031"
+  },
+  {
+    "name": "@zxio/vue-grid-layout",
+    "version": "1.0.6",
+    "source": "/Users/hqz/Downloads/element-plus/vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz",
+    "artifact": "vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz",
+    "sha256": "265198c9231d7b6f1001130df11b212f99e892d0e0ffa36dd461b72a5cbbb46d"
+  }
+]

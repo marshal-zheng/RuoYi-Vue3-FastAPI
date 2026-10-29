@@ -150,15 +150,6 @@ class TestResponseUtilCoverage:
         assert ResponseUtil is not None
 
 
-class TestUploadUtilCoverage:
-    """Coverage tests for UploadUtil"""
-    
-    def test_upload_util_exists(self):
-        """Test that UploadUtil can be imported"""
-        from utils.upload_util import UploadUtil
-        assert UploadUtil is not None
-
-
 class TestExcelUtilCoverage:
     """Coverage tests for ExcelUtil"""
     

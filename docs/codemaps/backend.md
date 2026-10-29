@@ -1,4 +1,4 @@
-<!-- Updated: 2026-10-17 -->
+<!-- Updated: 2026-10-27 -->
 # 后端架构 Codemap
 
 > 后端以 FastAPI 为核心，采用 Controller -> Service -> Repository 分层并内建缓存、审计、追踪、指标等横切能力。
@@ -9,8 +9,7 @@
 
 **关键文件：**
 - `ruoyi-fastapi-backend/app.py` — Uvicorn 启动入口。
-- `ruoyi-fastapi-backend/server.py` — FastAPI 实例、生命周期、健康检查、Prometheus 输出、路由注册。
-- `ruoyi-fastapi-backend/sub_applications/handle.py` — 子应用挂载入口（静态资源）。
+- `ruoyi-fastapi-backend/server.py` — FastAPI 实例、生命周期（含文件资产存储归属核对）、健康检查（`/health/file-assets`）、Prometheus 输出、路由注册。旧 `/profile` 静态挂载已随文件资产硬切换删除。
 
 **依赖关系：** `server.py` 依赖 `config/*` 初始化数据库/Redis/调度器；依赖 `middlewares/handle.py` 与 `exceptions/handle.py` 注入横切逻辑；通过 `modules/registry.py` 注册 API 并应用模块能力门禁。
 
@@ -62,6 +61,27 @@
 **依赖关系：** API 复用 identity、请求级数据库会话及容器 project 服务；模型接入 Alembic/Atlas。前端共享 `PersistentDashboard.vue` 负责布局冲突交互，server monitor 通过标准 widget 包提供真实数据。
 
 **架构模式：** 服务端派生身份；共享场景校验全局项目权限；文档与版本同事务提交；删除清空内容/历史并保留递增计数，防止旧版本覆盖重建文档。
+
+## 文件资产 `modules/file_assets`
+
+**用途：** 私有 S3 兼容桶上的文件资产：后端代理上传与校验、业务同事务绑定、同源流式读取、按状态回收与孤儿清扫。规格见 `docs/specs/file-assets-minio/`，运维见同目录 `runbook.md`。
+
+**关键文件：**
+- `ruoyi-fastapi-backend/modules/file_assets/api/file_asset_controller.py`、`api/http.py` — 上传、元数据、内容流（ETag/304、强制下载）与草稿丢弃。
+- `ruoyi-fastapi-backend/modules/file_assets/application/asset_service.py` — 上传提交点（UPLOADING → READY）、配额、读取授权。
+- `ruoyi-fastapi-backend/modules/file_assets/application/binding_service.py` — `replace_field_assets` / `release_owner`，只 flush 不提交。
+- `ruoyi-fastapi-backend/modules/file_assets/application/cleanup_service.py`、`jobs.py` — 草稿/上传回收、删除任务（租约与退避）、孤儿清扫、墓碑清除。
+- `ruoyi-fastapi-backend/modules/file_assets/application/runtime.py` — 槽位、存储归属三态、健康与指标。
+- `ruoyi-fastapi-backend/modules/file_assets/application/validation/` — 图片规范化、Office/PDF/文本受限校验。
+- `ruoyi-fastapi-backend/modules/file_assets/infrastructure/s3_storage.py`、`bootstrap.py` — 三套 Boto3 client、建桶与安装标识。
+- `ruoyi-fastapi-backend/modules/system/application/file_asset_policies.py`、`container/file_asset_policies.py` — 头像/公告归属策略与登记（生成业务的策略由生成器产出）。
+- `ruoyi-fastapi-backend/modules/system/application/notice_content.py`、`user_avatars.py` — 公告 HTML 净化与引用绑定、头像替换。
+- `ruoyi-fastapi-backend/middlewares/upload_limit_middleware.py`、`middlewares/route_path.py` — multipart 解析前的请求体上限；按去掉 root_path 的路径匹配 CSRF/限流。
+- `ruoyi-fastapi-backend/scripts/file_assets.py` — bootstrap-storage、check-storage、retry-deletes、check-consistency、sweep-orphans。
+
+**依赖关系：** 业务模块通过 `AssetOwnerPolicy` 提供权限与归属，文件模块不导入业务 controller；读写都在业务请求事务内调用绑定服务；维护任务经现有 sys_job 调度（禁止并发）。
+
+**架构模式：** 资产行是唯一真源；上传门禁 + 按状态删除 + 孤儿清扫代替逐次写入证据；对象键 `assets/YYYY/MM/<asset_id>` 不复用；存储仅后端可达，浏览器只访问同源 `/file-assets/`。
 
 ## 代码生成域 `module_generator`
 

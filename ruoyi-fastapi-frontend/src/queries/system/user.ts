@@ -99,7 +99,10 @@ export function userDetailOptions(scope: QueryScope | null, input: unknown) {
     queryFn: ready
       ? ({ signal }) => {
           const context = queryRequest(signal, scopeRequestOptions(scope));
-          return api.getUser(id, { signal: context.signal, requestOptions: context.options });
+          return api.getUser(id, {
+            signal: context.signal,
+            requestOptions: context.options,
+          });
         }
       : skipToken,
     enabled: ready,
@@ -217,11 +220,13 @@ export async function readUserEditor(
 export interface UserCommand<T> {
   readonly scope: QueryScope;
   readonly input: T;
+  readonly feedback?: { readonly silentError?: boolean };
 }
 /** Capture before confirmation/queued mutation; copy editable array fields, not immutable files. */
 export function captureUserCommand<T extends object | number | string>(
   input: T,
-  scope = requireQueryScope()
+  scope = requireQueryScope(),
+  feedback?: UserCommand<T>['feedback']
 ): UserCommand<T> {
   let snapshot: unknown = input;
   if (input instanceof FormData) {
@@ -235,7 +240,11 @@ export function captureUserCommand<T extends object | number | string>(
       Object.entries(input).map(([key, value]) => [key, Array.isArray(value) ? [...value] : value])
     );
   }
-  return { scope, input: snapshot as T };
+  return {
+    scope,
+    input: snapshot as T,
+    ...(feedback ? { feedback: { ...feedback } } : {}),
+  };
 }
 export const userEffects = (scope: QueryScope): readonly QueryGroupFilter[] => [
   { queryKey: userKeys.all(scope) },
@@ -247,21 +256,29 @@ async function write<T>(
   const options = scopeRequestOptions(scope);
   assertRequestScope(options);
   const result = await execute(options);
+  invalidateUserQueries(scope);
+  return result;
+}
+/** Reconcile is a confirmed write even when its original response was lost. */
+export function invalidateUserQueries(scope: QueryScope): void {
   try {
     void invalidateQueryGroups(queryClient, userEffects(scope)).catch(reportCoordinationError);
   } catch (error) {
     reportCoordinationError(error);
   }
-  return result;
 }
 function reportCoordinationError(error: unknown): void {
   window.dispatchEvent(new CustomEvent('ruoyi:query-coordination-error', { detail: error }));
 }
 export const userCommands = {
-  createUser: ({ scope, input }: UserCommand<UserCreateModel>) =>
-    write(scope, (options) => api.addUser(input, options)),
-  updateUser: ({ scope, input }: UserCommand<UserUpdateModel>) =>
-    write(scope, (options) => api.updateUser(input, options)),
+  createUser: ({ scope, input, feedback }: UserCommand<UserCreateModel>) =>
+    write(scope, (options) =>
+      feedback ? api.addUser(input, options, feedback) : api.addUser(input, options)
+    ),
+  updateUser: ({ scope, input, feedback }: UserCommand<UserUpdateModel>) =>
+    write(scope, (options) =>
+      feedback ? api.updateUser(input, options, feedback) : api.updateUser(input, options)
+    ),
   deleteUsers: ({ scope, input }: UserCommand<number | string | readonly (number | string)[]>) =>
     write(scope, (options) =>
       api.delUser(Array.isArray(input) ? input.join(',') : String(input), options)
@@ -289,6 +306,9 @@ export const userCommands = {
     config?: Pick<Parameters<typeof api.importUserExcel>[2] & {}, 'signal' | 'onUploadProgress'>
   ) =>
     write(scope, (options) =>
-      api.importUserExcel(input.file, input.updateSupport, { ...config, requestOptions: options })
+      api.importUserExcel(input.file, input.updateSupport, {
+        ...config,
+        requestOptions: options,
+      })
     ),
 };

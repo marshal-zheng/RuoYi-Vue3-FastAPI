@@ -15,7 +15,9 @@ vi.mock('@/api/system/user', () => ({
   updateUserPwd: vi.fn(),
   uploadAvatar: vi.fn(),
 }));
-vi.mock('vue-cropper', () => ({ VueCropper: { name: 'VueCropper', render: () => null } }));
+vi.mock('vue-cropper', () => ({
+  VueCropper: { name: 'VueCropper', render: () => null },
+}));
 const validate = vi.fn<() => Promise<boolean>>();
 let crop!: (blob: Blob) => void;
 const Slot = { template: '<div><slot /></div>' };
@@ -76,9 +78,16 @@ beforeEach(() => {
   setQuerySession(1, [], []);
   vi.clearAllMocks();
   validate.mockResolvedValue(true);
-  vi.mocked(updateUserProfile).mockResolvedValue({ data: null, postGroup: '', roleGroup: '' });
+  vi.mocked(updateUserProfile).mockResolvedValue({
+    data: null,
+    postGroup: '',
+    roleGroup: '',
+  });
   vi.mocked(updateUserPwd).mockResolvedValue(null);
-  vi.mocked(uploadAvatar).mockResolvedValue({ imgUrl: '/avatar.png' });
+  vi.mocked(uploadAvatar).mockResolvedValue({
+    avatarAssetId: '00000000-0000-4000-8000-000000000001',
+    avatarUrl: '/file-assets/00000000-0000-4000-8000-000000000001/content',
+  });
   store.avatar = 'initial-avatar';
   for (const key of ['ref', 'reactive', 'watch', 'getCurrentInstance', 'nextTick'])
     vi.stubGlobal(key, vue[key as keyof typeof vue]);
@@ -111,7 +120,12 @@ it.each([UserInfo, ResetPwd])(
 it('does not apply an old profile write result to a new scope', async () => {
   const response = deferred<Awaited<ReturnType<typeof updateUserProfile>>>();
   vi.mocked(updateUserProfile).mockReturnValueOnce(response.promise);
-  const user = { userId: 1, nickName: 'Alice', phonenumber: 'before', email: 'before' };
+  const user = {
+    userId: 1,
+    nickName: 'Alice',
+    phonenumber: 'before',
+    email: 'before',
+  };
   const { state } = component(UserInfo, { user });
   state.form.phonenumber = 'submitted';
   const pending = state.submit();
@@ -136,7 +150,7 @@ it('captures the avatar scope before asynchronous cropping', async () => {
 });
 
 it('does not update the current user store from an old avatar response', async () => {
-  const response = deferred<{ imgUrl: string }>();
+  const response = deferred<{ avatarAssetId: string; avatarUrl: string }>();
   vi.mocked(uploadAvatar).mockReturnValueOnce(response.promise);
   const { state } = component(UserAvatar);
   state.editCropper();
@@ -148,7 +162,43 @@ it('does not update the current user store from an old avatar response', async (
   await flushPromises();
   setQuerySession(2, [], []);
   store.avatar = 'new-session-avatar';
-  response.resolve({ imgUrl: '/old-avatar.png' });
+  response.resolve({
+    avatarAssetId: 'old',
+    avatarUrl: '/file-assets/old/content',
+  });
   await pending;
   expect(store.avatar).toBe('new-session-avatar');
+});
+
+it('follows a committed avatar replacement even when the dialog closed mid-upload', async () => {
+  const response = deferred<{ avatarAssetId: string; avatarUrl: string }>();
+  vi.mocked(uploadAvatar).mockReturnValueOnce(response.promise);
+  const { state } = component(UserAvatar);
+  state.editCropper();
+  state.modalOpened();
+  await vue.nextTick();
+  const pending = state.uploadImg();
+  await flushPromises();
+  crop(new Blob(['avatar'], { type: 'image/png' }));
+  await flushPromises();
+  state.closeDialog();
+  response.resolve({ avatarAssetId: 'new', avatarUrl: '/file-assets/new/content' });
+  await pending;
+  // The old asset is already released (404): the store and the header image must show the new one.
+  expect(store.avatar).toBe('/file-assets/new/content');
+  expect(state.options.img).toBe('/file-assets/new/content');
+});
+
+it('names the cropped PNG consistently and stores the stable avatar URL', async () => {
+  const { state } = component(UserAvatar);
+  state.editCropper();
+  state.modalOpened();
+  await vue.nextTick();
+  const pending = state.uploadImg();
+  await flushPromises();
+  crop(new Blob(['avatar'], { type: 'image/png' }));
+  await pending;
+  const form = vi.mocked(uploadAvatar).mock.calls.at(-1)?.[0] as FormData;
+  expect((form.get('avatarfile') as File).name).toBe('avatar.png');
+  expect(store.avatar).toBe('/file-assets/00000000-0000-4000-8000-000000000001/content');
 });

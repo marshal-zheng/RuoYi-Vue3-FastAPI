@@ -39,7 +39,6 @@ class UserModel(RemarkWriteGuard):
     phonenumber: str | None = Field(default=None, description='手机号码')
     id_card: str | None = Field(default=None, description='身份证号')
     sex: Literal['0', '1', '2'] | None = Field(default=None, description='用户性别（0男 1女 2未知）')
-    avatar: str | None = Field(default=None, description='头像地址')
     password: str | None = Field(default=None, description='密码')
     status: Literal['0', '1'] | None = Field(default=None, description='帐号状态（0正常 1停用）')
     del_flag: Literal['0', '2'] | None = Field(default=None, description='删除标志（0代表存在 2代表删除）')
@@ -112,6 +111,8 @@ class UserPostModel(CamelModelBase):
 
 
 class UserInfoModel(UserModel, RemarkReadProjection):
+    avatar_asset_id: str | None = Field(default=None, description='头像资产ID（来自绑定投影）')
+    avatar_url: str | None = Field(default=None, description='头像稳定内容地址；为空时前端使用默认头像')
     post_ids: str | None | None = Field(default=None, description='岗位ID信息')
     role_ids: str | None | None = Field(default=None, description='角色ID信息')
     dept: DeptModel | None | None = Field(default=None, description='部门信息')
@@ -162,7 +163,6 @@ class UserQueryModel(CamelModelBase):
     phonenumber: str | None = Field(default=None, description='手机号码')
     id_card: str | None = Field(default=None, description='身份证号')
     sex: Literal['0', '1', '2'] | None = Field(default=None, description='用户性别（0男 1女 2未知）')
-    avatar: str | None = Field(default=None, description='头像地址')
     password: str | None = Field(default=None, description='密码')
     status: Literal['0', '1'] | None = Field(default=None, description='帐号状态（0正常 1停用）')
     del_flag: Literal['0', '2'] | None = Field(default=None, description='删除标志（0代表存在 2代表删除）')
@@ -273,7 +273,6 @@ class UserRoleQueryModel(CamelModelBase):
     phonenumber: str | None = Field(default=None, description='手机号码')
     id_card: str | None = Field(default=None, description='身份证号')
     sex: Literal['0', '1', '2'] | None = Field(default=None, description='用户性别（0男 1女 2未知）')
-    avatar: str | None = Field(default=None, description='头像地址')
     password: str | None = Field(default=None, description='密码')
     status: Literal['0', '1'] | None = Field(default=None, description='帐号状态（0正常 1停用）')
     del_flag: Literal['0', '2'] | None = Field(default=None, description='删除标志（0代表存在 2代表删除）')

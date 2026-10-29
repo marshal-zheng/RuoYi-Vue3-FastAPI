@@ -53,7 +53,8 @@ export interface SimulationMockData {
   events: MockSimulationEvent[];
 }
 
-export interface MockAccount extends Pick<MockOpenApiAccountUser, 'userId' | 'avatar' | 'status'> {
+export interface MockAccount
+  extends Pick<MockOpenApiAccountUser, 'userId' | 'avatarUrl' | 'status'> {
   username: string;
   password: string;
   displayName: string;

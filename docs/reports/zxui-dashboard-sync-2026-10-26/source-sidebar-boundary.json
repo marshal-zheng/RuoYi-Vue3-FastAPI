@@ -1,0 +1,10 @@
+{
+  "url": "http://127.0.0.1:3310/monitor/server",
+  "iconHiddenRules": [
+    {
+      "selector": ".sidebar-menu:not(.el-menu--collapse) .is-nested .navigation-menu-icon",
+      "css": ".sidebar-menu:not(.el-menu--collapse) .is-nested .navigation-menu-icon { display: none; }",
+      "source": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/assets/styles/index.css"
+    }
+  ]
+}

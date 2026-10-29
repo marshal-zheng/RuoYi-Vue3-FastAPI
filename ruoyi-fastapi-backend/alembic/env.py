@@ -119,6 +119,7 @@ from module_admin.entity.do.user_do import (  # noqa: F401
 
 # 导入 Base 类（包含元数据）
 from module_generator.entity.do import gen_do  # noqa: F401
+from modules.file_assets.infrastructure import models as file_asset_models  # noqa: F401
 from scripts.internal.db_workflow.alembic_revision_ids import ensure_existing_revision_capacity
 
 # ============================================================================

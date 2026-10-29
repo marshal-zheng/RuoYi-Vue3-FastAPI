@@ -1,14 +1,12 @@
 <template>
-  <div>
+  <div v-if="imagesEnabled">
     <el-upload
-      action="/common/upload"
-      :http-request="httpRequest"
+      :http-request="uploadRequest"
       :before-upload="handleBeforeUpload"
       :on-success="handleUploadSuccess"
-      name="file"
+      :accept="accept"
       :show-file-list="false"
       class="editor-img-uploader"
-      v-if="type == 'url'"
     >
       <i ref="uploadRef" class="editor-img-uploader"></i>
     </el-upload>
@@ -26,20 +24,38 @@
 </template>
 
 <script setup>
+import { computed, onBeforeUnmount, onMounted, ref, toRaw, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import { assetIdOfContentUrl } from '@/api/fileAssets';
 import { useAuthenticatedUpload } from '@/composables/useAuthenticatedUpload';
-
-const { proxy } = getCurrentInstance();
+import { installAssetImageRecovery } from '@/utils/file-assets/image-recovery';
+import {
+  IMAGE_TYPE_IDS,
+  MAX_IMAGE_BYTES,
+  acceptFor,
+  describeTypes,
+  isAllowedFileName,
+} from '@/utils/file-assets/types';
 
 const quillEditorRef = ref();
-const { httpRequest } = useAuthenticatedUpload();
+const uploadRef = ref();
 
 const props = defineProps({
-  /* 编辑器的内容 */
+  /* 编辑器的内容（UTF-8 HTML；图片只能是 /file-assets/{assetId}/content） */
   modelValue: {
     type: String,
+  },
+  /* 图片上传用途（服务端登记），例如 notice.image；不传时该富文本不支持图片（如生成器富文本字段） */
+  purpose: {
+    type: String,
+    default: '',
+  },
+  /* 编辑已有业务对象时的业务ID；新建时不传 */
+  ownerId: {
+    type: [String, Number],
+    default: undefined,
   },
   /* 高度 */
   height: {
@@ -59,21 +75,25 @@ const props = defineProps({
   /* 上传文件大小限制(MB) */
   fileSize: {
     type: Number,
-    default: 5,
-  },
-  /* 类型（base64格式、url格式） */
-  type: {
-    type: String,
-    default: 'url',
+    default: MAX_IMAGE_BYTES / 1024 / 1024,
   },
 });
+
+const { upload, pending } = useAuthenticatedUpload({
+  purpose: () => props.purpose,
+  ownerId: () => props.ownerId,
+});
+const accept = acceptFor(IMAGE_TYPE_IDS);
+// Images exist only as assets of a registered purpose; without one the editor stays text-only.
+const imagesEnabled = Boolean(props.purpose);
+let uploadSeed = 0;
 
 const options = ref({
   theme: 'snow',
   bounds: document.body,
   debug: 'warn',
   modules: {
-    // 工具栏配置
+    // 工具栏配置（不提供服务端不支持的视频嵌入）
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'], // 加粗 斜体 下划线 删除线
       ['blockquote', 'code-block'], // 引用  代码块
@@ -84,7 +104,7 @@ const options = ref({
       [{ color: [] }, { background: [] }], // 字体颜色、字体背景颜色
       [{ align: [] }], // 对齐方式
       ['clean'], // 清除文本格式
-      ['link', 'image', 'video'], // 链接、图片、视频
+      imagesEnabled ? ['link', 'image'] : ['link'], // 链接、图片（需登记的上传用途）
     ],
   },
   placeholder: '请输入内容',
@@ -113,53 +133,170 @@ watch(
   { immediate: true }
 );
 
-// 如果设置了上传地址则自定义图片上传事件
-onMounted(() => {
-  if (props.type == 'url') {
-    let quill = quillEditorRef.value.getQuill();
-    let toolbar = quill.getModule('toolbar');
-    toolbar.addHandler('image', (value) => {
-      if (value) {
-        proxy.$refs.uploadRef.click();
-      } else {
-        quill.format('image', false);
-      }
-    });
-  }
-});
+const quill = () => toRaw(quillEditorRef.value)?.getQuill();
 
-// 上传前校检格式和大小
-function handleBeforeUpload(file) {
-  const type = ['image/jpeg', 'image/jpg', 'image/png', 'image/svg'];
-  const isJPG = type.includes(file.type);
-  //检验文件格式
-  if (!isJPG) {
-    ElMessage.error(`图片格式错误!`);
+function validImage(file) {
+  if (
+    !isAllowedFileName(file.name || 'pasted.png', IMAGE_TYPE_IDS) &&
+    !file.type?.startsWith('image/')
+  ) {
+    ElMessage.error(`图片格式错误，仅支持 ${describeTypes(IMAGE_TYPE_IDS)}`);
     return false;
   }
-  // 校检文件大小
-  if (props.fileSize) {
-    const isLt = file.size / 1024 / 1024 < props.fileSize;
-    if (!isLt) {
-      ElMessage.error(`上传文件大小不能超过 ${props.fileSize} MB!`);
-      return false;
-    }
+  if (props.fileSize && file.size / 1024 / 1024 > props.fileSize) {
+    ElMessage.error(`上传文件大小不能超过 ${props.fileSize} MB!`);
+    return false;
   }
   return true;
 }
 
-// 上传成功处理
-function handleUploadSuccess(res) {
-  // HTTP 2xx 已由拦截器判定，直接处理成功响应
-  // 获取富文本实例
-  let quill = toRaw(quillEditorRef.value).getQuill();
-  // 获取光标位置
-  let length = quill.getSelection()?.index ?? quill.getLength() - 1;
-  // 插入图片，res.url为服务器返回的图片链接地址
-  quill.insertEmbed(length, 'image', import.meta.env.VITE_APP_BASE_API + res.fileName);
-  // 调整光标到最后
-  quill.setSelection(length + 1);
+const IMAGE_EXTENSIONS = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
+
+function named(file) {
+  if (file.name && isAllowedFileName(file.name, IMAGE_TYPE_IDS)) return file;
+  return new File([file], `pasted-image.${IMAGE_EXTENSIONS[file.type] || 'png'}`, {
+    type: file.type || 'image/png',
+  });
 }
+
+/**
+ * Upload first, then insert the stable content URL at the remembered position.
+ * Returns the position after the inserted image so several images keep their order.
+ */
+async function insertUploaded(file, index) {
+  if (!file || !validImage(file)) return index;
+  try {
+    const descriptor = await upload(named(file), ++uploadSeed);
+    const editor = quill();
+    if (!editor) return index;
+    const at = Math.min(index ?? editor.getLength() - 1, editor.getLength() - 1);
+    editor.insertEmbed(at, 'image', descriptor.contentUrl, 'user');
+    editor.setSelection(at + 1, 0, 'silent');
+    return at + 1;
+  } catch {
+    // The request layer already reported the failure; nothing unsaved is inserted.
+    return index;
+  }
+}
+
+async function insertSequentially(files, index) {
+  let at = index;
+  for (const file of files) at = await insertUploaded(file, at);
+}
+
+/** Decodes base64 and URL-encoded data URLs; returns null (with a message) when unreadable. */
+function dataUrlToFile(dataUrl) {
+  try {
+    const comma = dataUrl.indexOf(',');
+    const header = dataUrl.slice(0, comma);
+    const body = dataUrl.slice(comma + 1);
+    const type = /^data:([^;,]+)/.exec(header)?.[1] || 'image/png';
+    const bytes = /;base64$/i.test(header)
+      ? Uint8Array.from(atob(body), (char) => char.charCodeAt(0))
+      : new TextEncoder().encode(decodeURIComponent(body));
+    return new File([bytes], `pasted-image.${IMAGE_EXTENSIONS[type] || 'png'}`, { type });
+  } catch {
+    ElMessage.error('无法读取粘贴的图片，请保存为文件后再上传');
+    return null;
+  }
+}
+
+/** Copying an image inside the editor yields an absolute same-origin URL; keep the stable path. */
+function sameOriginContentPath(src) {
+  try {
+    const url = new URL(src, window.location.href);
+    if (url.origin !== window.location.origin || url.search || url.hash) return null;
+    return assetIdOfContentUrl(url.pathname) ? url.pathname : null;
+  } catch {
+    return null;
+  }
+}
+
+let removeRecovery;
+const onFiles = (event, list) => {
+  const images = Array.from(list || []).filter((file) => file.type?.startsWith('image/'));
+  if (!images.length) return;
+  // Office/Excel put both the rich HTML and a rendered picture on the clipboard: keep the content.
+  if (event.type === 'paste' && event.clipboardData?.types?.includes('text/html')) return;
+  event.preventDefault();
+  // Quill's own clipboard handler lives on the same root element; it must not see these files.
+  event.stopImmediatePropagation();
+  if (!imagesEnabled) {
+    ElMessage.warning('此处不支持插入图片');
+    return;
+  }
+  void insertSequentially(images, quill()?.getSelection()?.index);
+};
+const onPaste = (event) => onFiles(event, event.clipboardData?.files);
+const onDrop = (event) => onFiles(event, event.dataTransfer?.files);
+
+onMounted(() => {
+  const editor = quill();
+  if (!editor) return;
+  if (imagesEnabled)
+    editor.getModule('toolbar').addHandler('image', () => uploadRef.value?.click());
+  // Pasted HTML may carry data: images: upload them instead of storing inline bytes.
+  editor.clipboard.addMatcher('IMG', (node, delta) => {
+    const src = node.getAttribute('src') || '';
+    if (!imagesEnabled) {
+      ElMessage.warning('此处不支持插入图片');
+      return new delta.constructor();
+    }
+    if (!src.startsWith('data:image/')) {
+      const path = sameOriginContentPath(src);
+      if (!path || path === src) return delta;
+      return new delta.constructor(
+        delta.ops.map((op) => (op.insert?.image ? { ...op, insert: { image: path } } : op))
+      );
+    }
+    void insertUploaded(dataUrlToFile(src), editor.getSelection()?.index);
+    return delta.compose ? new delta.constructor() : delta;
+  });
+  editor.root.addEventListener('paste', onPaste, true);
+  editor.root.addEventListener('drop', onDrop, true);
+  removeRecovery = installAssetImageRecovery(editor.root);
+});
+
+onBeforeUnmount(() => {
+  const editor = quill();
+  editor?.root.removeEventListener('paste', onPaste, true);
+  editor?.root.removeEventListener('drop', onDrop, true);
+  removeRecovery?.();
+});
+
+// 上传前校检格式和大小
+function handleBeforeUpload(file) {
+  return validImage(file);
+}
+
+function uploadRequest(options) {
+  return upload(options.file, options.file.uid, options.onProgress);
+}
+
+// 上传成功处理：插入稳定内容地址（不带环境前缀）
+function handleUploadSuccess(descriptor) {
+  const editor = quill();
+  const length = editor.getSelection()?.index ?? editor.getLength() - 1;
+  editor.insertEmbed(length, 'image', descriptor.contentUrl, 'user');
+  editor.setSelection(length + 1);
+}
+
+/**
+ * Blocks a save while uploads are running or when the content still holds images the server
+ * cannot accept (external URLs, inline data). Returns the user-facing reason, or '' when valid.
+ */
+function validate() {
+  if (pending.value > 0) return '图片仍在上传，请稍候再保存';
+  const root = quill()?.root;
+  const images = Array.from(root?.querySelectorAll('img') || []);
+  if (!imagesEnabled && images.length) return '此处不支持图片，请删除后再保存';
+  const invalid = images.filter((image) => !assetIdOfContentUrl(image.getAttribute('src')));
+  if (invalid.length)
+    return `内容中有 ${invalid.length} 张外部或未上传的图片，请删除后通过上传插入`;
+  return '';
+}
+
+defineExpose({ pending, validate });
 </script>
 
 <style>
@@ -293,9 +430,6 @@ function handleUploadSuccess(res) {
   border-right: 0px;
   content: '保存';
   padding-right: 0px;
-}
-.ql-snow .ql-tooltip[data-mode='video']::before {
-  content: '请输入视频地址:';
 }
 .ql-snow .ql-picker.ql-size .ql-picker-label::before,
 .ql-snow .ql-picker.ql-size .ql-picker-item::before {

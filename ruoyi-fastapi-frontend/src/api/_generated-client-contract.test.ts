@@ -1,5 +1,7 @@
 import { describe, expect, expectTypeOf, it, vi } from 'vitest';
 import { createClient } from './_generated/client/client.gen';
+import { generateTextFieldAiSystemAiTextFieldGeneratePost } from './_generated/sdk.gen';
+import type { GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse } from './_generated/types.gen';
 import { createSseClient, type StreamEvent } from './_generated/core/serverSentEvents.gen';
 
 interface Resource {
@@ -24,7 +26,10 @@ describe('generated Fetch SDK transport contract', () => {
     });
     expectTypeOf(result.data).toEqualTypeOf<Resource | undefined>();
     expectTypeOf(result.error).toEqualTypeOf<ApiError | undefined>();
-    expect(result).toMatchObject({ data: { id: 7, name: 'HTTP' }, error: undefined });
+    expect(result).toMatchObject({
+      data: { id: 7, name: 'HTTP' },
+      error: undefined,
+    });
     expect(result.request).toBeInstanceOf(Request);
     expect(result.response).toBeInstanceOf(Response);
     const request = fetch.mock.calls[0][0];
@@ -81,7 +86,11 @@ describe('generated Fetch SDK transport contract', () => {
         responseStyle,
       });
       if (responseStyle === 'data') expect(result).toBeUndefined();
-      else expect(result).toMatchObject({ data: undefined, error: { code: 'MISSING' } });
+      else
+        expect(result).toMatchObject({
+          data: undefined,
+          error: { code: 'MISSING' },
+        });
     }
   );
 
@@ -133,7 +142,10 @@ describe('generated Fetch SDK transport contract', () => {
       sseMaxRetryAttempts: 1,
     });
     const event = await stream.next();
-    expect(event).toMatchObject({ done: false, value: { id: 10, name: 'SSE' } });
+    expect(event).toMatchObject({
+      done: false,
+      value: { id: 10, name: 'SSE' },
+    });
     expectTypeOf(event.value).toEqualTypeOf<Resource | void>();
     expect(await stream.next()).toEqual({ done: true, value: undefined });
   });
@@ -185,6 +197,56 @@ describe('generated Fetch SDK transport contract', () => {
     expect(await stream.next()).toEqual({ done: true, value: undefined });
   });
 
+  it('preserves object alias SSE payloads through the generated AI operation', async () => {
+    const payload: GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse = {
+      type: 'delta',
+      text: 'hello',
+      captureId: 'capture-1',
+      requestId: 'request-1',
+    };
+    const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(
+      new Response(`data: ${JSON.stringify(payload)}\n\n`, {
+        headers: { 'content-type': 'text/event-stream' },
+      })
+    );
+    const events: GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse[] = [];
+    const { stream } = await generateTextFieldAiSystemAiTextFieldGeneratePost({
+      client: createClient({ baseUrl: 'https://sdk.test', fetch }),
+      body: {
+        version: 'ai-context/v1',
+        action: 'rewrite',
+        candidate: null,
+        document: null,
+        selection: null,
+        context: [],
+        selectedContextIds: [],
+        target: 'document',
+        captureId: 'capture-1',
+        requestId: 'request-1',
+        scope: 'test',
+        purpose: 'remark',
+        manifestRevision: '1',
+        policyRevision: '1',
+        profile: 'basic-rich-text',
+        instruction: 'Rewrite',
+      },
+      sseMaxRetryAttempts: 1,
+      onSseEvent(event) {
+        expectTypeOf(
+          event.data
+        ).toEqualTypeOf<GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse>();
+        events.push(event.data);
+      },
+    });
+    const event = await stream.next();
+    expectTypeOf(
+      event.value
+    ).toEqualTypeOf<GenerateTextFieldAiSystemAiTextFieldGeneratePostResponse | void>();
+    expect(event).toMatchObject({ done: false, value: payload });
+    expect(events).toEqual([payload]);
+    expect(await stream.next()).toEqual({ done: true, value: undefined });
+  });
+
   it('keeps control-only SSE frames out of data callbacks while retaining their metadata', async () => {
     const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(
       new Response('id: resume-7\nretry: 1500\n\ndata: {"id":13,"name":"Controlled SSE"}\n\n', {
@@ -213,11 +275,11 @@ describe('generated Fetch SDK transport contract', () => {
   });
 
   it('keeps SSE validator failures unknown and normal completion void', async () => {
-    const fetch = vi
-      .fn<typeof globalThis.fetch>()
-      .mockResolvedValue(
-        new Response('data: {}\n\n', { headers: { 'content-type': 'text/event-stream' } })
-      );
+    const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(
+      new Response('data: {}\n\n', {
+        headers: { 'content-type': 'text/event-stream' },
+      })
+    );
     const onSseError = vi.fn<(error: unknown) => void>();
     const client = createClient({ baseUrl: 'https://sdk.test', fetch });
     const { stream } = await client.sse.get<Resource>({
@@ -236,7 +298,12 @@ describe('generated Fetch SDK transport contract', () => {
       .fn<typeof globalThis.fetch>()
       .mockResolvedValueOnce(new Response(null, { status: 204 }))
       .mockResolvedValueOnce(
-        new Response('', { headers: { 'content-type': 'application/json', 'content-length': '0' } })
+        new Response('', {
+          headers: {
+            'content-type': 'application/json',
+            'content-length': '0',
+          },
+        })
       );
     const client = createClient({ baseUrl: 'https://sdk.test', fetch });
     await expect(
@@ -272,11 +339,12 @@ describe('generated Fetch SDK transport contract', () => {
   });
 
   it('preserves non-2xx HTTP transport errors in the unknown SSE error hook', async () => {
-    const fetch = vi
-      .fn<typeof globalThis.fetch>()
-      .mockResolvedValue(
-        new Response('unavailable', { status: 503, statusText: 'Service Unavailable' })
-      );
+    const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(
+      new Response('unavailable', {
+        status: 503,
+        statusText: 'Service Unavailable',
+      })
+    );
     const onSseError = vi.fn<(error: unknown) => void>();
     const client = createClient({ baseUrl: 'https://sdk.test', fetch });
     const { stream } = await client.sse.get<Resource>({

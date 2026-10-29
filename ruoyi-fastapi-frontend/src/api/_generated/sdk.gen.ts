@@ -63,6 +63,9 @@ import type {
   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData,
   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutErrors,
   BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses,
+  BatchFileAssetMetadataFileAssetsMetadataBatchPostData,
+  BatchFileAssetMetadataFileAssetsMetadataBatchPostErrors,
+  BatchFileAssetMetadataFileAssetsMetadataBatchPostResponses,
   BatchGenCodeToolGenBatchGenCodeGetData,
   BatchGenCodeToolGenBatchGenCodeGetErrors,
   BatchGenCodeToolGenBatchGenCodeGetResponses,
@@ -76,7 +79,6 @@ import type {
   ChangeSystemJobStatusMonitorJobChangeStatusPutErrors,
   ChangeSystemJobStatusMonitorJobChangeStatusPutResponses,
   ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostData,
-  ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostErrors,
   ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostResponses,
   ChangeSystemUserProfileInfoSystemUserProfilePutData,
   ChangeSystemUserProfileInfoSystemUserProfilePutErrors,
@@ -117,15 +119,6 @@ import type {
   CloneProjectVersionProjectVersionClonePostData,
   CloneProjectVersionProjectVersionClonePostErrors,
   CloneProjectVersionProjectVersionClonePostResponses,
-  CommonDownloadCommonDownloadGetData,
-  CommonDownloadCommonDownloadGetErrors,
-  CommonDownloadCommonDownloadGetResponses,
-  CommonDownloadResourceCommonDownloadResourceGetData,
-  CommonDownloadResourceCommonDownloadResourceGetErrors,
-  CommonDownloadResourceCommonDownloadResourceGetResponses,
-  CommonUploadCommonUploadPostData,
-  CommonUploadCommonUploadPostErrors,
-  CommonUploadCommonUploadPostResponses,
   CompensateSagaInstanceSagaSagaIdCompensatePostData,
   CompensateSagaInstanceSagaSagaIdCompensatePostErrors,
   CompensateSagaInstanceSagaSagaIdCompensatePostResponses,
@@ -212,6 +205,9 @@ import type {
   DeleteSystemUserSystemUserUserIdsDeleteData,
   DeleteSystemUserSystemUserUserIdsDeleteErrors,
   DeleteSystemUserSystemUserUserIdsDeleteResponses,
+  DiscardFileAssetFileAssetsAssetIdDeleteData,
+  DiscardFileAssetFileAssetsAssetIdDeleteErrors,
+  DiscardFileAssetFileAssetsAssetIdDeleteResponses,
   DownloadProtocolImportTemplateSystemProtocolImportTemplateGetData,
   DownloadProtocolImportTemplateSystemProtocolImportTemplateGetErrors,
   DownloadProtocolImportTemplateSystemProtocolImportTemplateGetResponses,
@@ -329,6 +325,8 @@ import type {
   ExportSystemUserListSystemUserExportPostResponses,
   ExportSystemUserTemplateSystemUserImportTemplatePostData,
   ExportSystemUserTemplateSystemUserImportTemplatePostResponses,
+  FileAssetHealthCheckHealthFileAssetsGetData,
+  FileAssetHealthCheckHealthFileAssetsGetResponses,
   GenCodeLocalToolGenGenCodeTableNameGetData,
   GenCodeLocalToolGenGenCodeTableNameGetErrors,
   GenCodeLocalToolGenGenCodeTableNameGetResponses,
@@ -356,6 +354,12 @@ import type {
   GetDevMenuSignatureDevMenuSignatureGetResponses,
   GetDevMenuStatusDevMenuStatusGetData,
   GetDevMenuStatusDevMenuStatusGetResponses,
+  GetFileAssetContentFileAssetsAssetIdContentGetData,
+  GetFileAssetContentFileAssetsAssetIdContentGetErrors,
+  GetFileAssetContentFileAssetsAssetIdContentGetResponses,
+  GetFileAssetFileAssetsAssetIdGetData,
+  GetFileAssetFileAssetsAssetIdGetErrors,
+  GetFileAssetFileAssetsAssetIdGetResponses,
   GetFillStrategiesSimulationStrategiesGetData,
   GetFillStrategiesSimulationStrategiesGetResponses,
   GetGenDbTableListToolGenDbListGetData,
@@ -703,6 +707,8 @@ import type {
   UpdateSystemRoleUserSystemUserAuthRolePutData,
   UpdateSystemRoleUserSystemUserAuthRolePutErrors,
   UpdateSystemRoleUserSystemUserAuthRolePutResponses,
+  UploadFileAssetFileAssetsUploadsPostData,
+  UploadFileAssetFileAssetsUploadsPostResponses,
   UpsertEmbedPolicyAuthEmbedPoliciesPostData,
   UpsertEmbedPolicyAuthEmbedPoliciesPostErrors,
   UpsertEmbedPolicyAuthEmbedPoliciesPostResponses,
@@ -978,40 +984,6 @@ export const getCaptchaImageCaptchaImageGet = <ThrowOnError extends boolean = fa
   });
 
 /**
- * Common Download
- */
-export const commonDownloadCommonDownloadGet = <ThrowOnError extends boolean = false>(
-  options: Options<CommonDownloadCommonDownloadGetData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    CommonDownloadCommonDownloadGetResponses,
-    CommonDownloadCommonDownloadGetErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/common/download',
-    ...options,
-  });
-
-/**
- * Common Download Resource
- */
-export const commonDownloadResourceCommonDownloadResourceGet = <
-  ThrowOnError extends boolean = false,
->(
-  options: Options<CommonDownloadResourceCommonDownloadResourceGetData, ThrowOnError>
-) =>
-  (options.client ?? client).get<
-    CommonDownloadResourceCommonDownloadResourceGetResponses,
-    CommonDownloadResourceCommonDownloadResourceGetErrors,
-    ThrowOnError
-  >({
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/common/download/resource',
-    ...options,
-  });
-
-/**
  * Get Table Names
  *
  * 获取数据库表名列表
@@ -1023,27 +995,6 @@ export const getTableNamesCommonTablesGet = <ThrowOnError extends boolean = fals
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/common/tables',
     ...options,
-  });
-
-/**
- * Common Upload
- */
-export const commonUploadCommonUploadPost = <ThrowOnError extends boolean = false>(
-  options: Options<CommonUploadCommonUploadPostData, ThrowOnError>
-) =>
-  (options.client ?? client).post<
-    CommonUploadCommonUploadPostResponses,
-    CommonUploadCommonUploadPostErrors,
-    ThrowOnError
-  >({
-    ...formDataBodySerializer,
-    security: [{ scheme: 'bearer', type: 'http' }],
-    url: '/common/upload',
-    ...options,
-    headers: {
-      'Content-Type': null,
-      ...options.headers,
-    },
   });
 
 /**
@@ -1468,6 +1419,99 @@ export const replayEventsEventsReplayPost = <ThrowOnError extends boolean = fals
   });
 
 /**
+ * 批量读取当前可见资产的元数据
+ */
+export const batchFileAssetMetadataFileAssetsMetadataBatchPost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<BatchFileAssetMetadataFileAssetsMetadataBatchPostData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    BatchFileAssetMetadataFileAssetsMetadataBatchPostResponses,
+    BatchFileAssetMetadataFileAssetsMetadataBatchPostErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/file-assets/metadata:batch',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+
+/**
+ * 上传文件并创建 READY 草稿资产
+ */
+export const uploadFileAssetFileAssetsUploadsPost = <ThrowOnError extends boolean = false>(
+  options: Options<UploadFileAssetFileAssetsUploadsPostData, ThrowOnError>
+) =>
+  (options.client ?? client).post<
+    UploadFileAssetFileAssetsUploadsPostResponses,
+    unknown,
+    ThrowOnError
+  >({
+    ...formDataBodySerializer,
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/file-assets/uploads',
+    ...options,
+    headers: {
+      'Content-Type': null,
+      ...options.headers,
+    },
+  });
+
+/**
+ * 丢弃本人尚未绑定的草稿（可重复执行）
+ */
+export const discardFileAssetFileAssetsAssetIdDelete = <ThrowOnError extends boolean = false>(
+  options: Options<DiscardFileAssetFileAssetsAssetIdDeleteData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    DiscardFileAssetFileAssetsAssetIdDeleteResponses,
+    DiscardFileAssetFileAssetsAssetIdDeleteErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/file-assets/{asset_id}',
+    ...options,
+  });
+
+/**
+ * 读取单个资产元数据
+ */
+export const getFileAssetFileAssetsAssetIdGet = <ThrowOnError extends boolean = false>(
+  options: Options<GetFileAssetFileAssetsAssetIdGetData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetFileAssetFileAssetsAssetIdGetResponses,
+    GetFileAssetFileAssetsAssetIdGetErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/file-assets/{asset_id}',
+    ...options,
+  });
+
+/**
+ * 鉴权后从私有存储流式读取内容
+ */
+export const getFileAssetContentFileAssetsAssetIdContentGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetFileAssetContentFileAssetsAssetIdContentGetData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    GetFileAssetContentFileAssetsAssetIdContentGetResponses,
+    GetFileAssetContentFileAssetsAssetIdContentGetErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/file-assets/{asset_id}/content',
+    ...options,
+  });
+
+/**
  * Get Login User Info
  */
 export const getLoginUserInfoGetInfoGet = <ThrowOnError extends boolean = false>(
@@ -1540,6 +1584,18 @@ export const eventHealthCheckHealthEventsGet = <ThrowOnError extends boolean = f
     url: '/health/events',
     ...options,
   });
+
+/**
+ * File Asset Health Check
+ */
+export const fileAssetHealthCheckHealthFileAssetsGet = <ThrowOnError extends boolean = false>(
+  options?: Options<FileAssetHealthCheckHealthFileAssetsGetData, ThrowOnError>
+) =>
+  (options?.client ?? client).get<
+    FileAssetHealthCheckHealthFileAssetsGetResponses,
+    unknown,
+    ThrowOnError
+  >({ url: '/health/file-assets', ...options });
 
 /**
  * Query Stats
@@ -5205,6 +5261,11 @@ export const changeSystemUserProfileInfoSystemUserProfilePut = <
 
 /**
  * Change System User Profile Avatar
+ *
+ * One request, two commits: the avatar draft (READY) first, then the user's avatar binding.
+ *
+ * A failure before the binding commit keeps the old avatar; once it commits, a lost response or a
+ * client cancel does not undo it (the client re-reads the profile to confirm).
  */
 export const changeSystemUserProfileAvatarSystemUserProfileAvatarPost = <
   ThrowOnError extends boolean = false,
@@ -5213,7 +5274,7 @@ export const changeSystemUserProfileAvatarSystemUserProfileAvatarPost = <
 ) =>
   (options.client ?? client).post<
     ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostResponses,
-    ChangeSystemUserProfileAvatarSystemUserProfileAvatarPostErrors,
+    unknown,
     ThrowOnError
   >({
     ...formDataBodySerializer,

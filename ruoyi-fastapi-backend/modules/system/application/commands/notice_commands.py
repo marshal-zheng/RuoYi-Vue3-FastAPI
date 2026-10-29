@@ -15,6 +15,7 @@ class _NoticeCommandContext(BaseModel):
     query_db: Any = Field(default=None, description='Request-scoped database session')
     redis_client: Any = Field(description='Redis client from application runtime context')
     operator: str | None = Field(default=None, description='Operator who triggers the command')
+    actor: Any = Field(default=None, description='Authorization snapshot used to bind uploaded image drafts')
     trace_id: str | None = Field(default=None, description='Trace id for correlation')
     request_id: str | None = Field(default=None, description='Request id for correlation')
 

@@ -13,7 +13,6 @@ users:
     email: admin@example.com
     phonenumber: "15888888888"
     sex: "1"
-    avatar: ""
     password: "admin123"  # 明文密码，加载时会哈希处理（生产环境应该修改此密码）
     status: "0"
     del_flag: "0"

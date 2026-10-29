@@ -1,0 +1,15 @@
+--- before/zx-theme-host.ts
++++ after/zx-theme-host.ts
+@@ -1,3 +1,4 @@
++import { dashboardThemeBundle } from '@zxio/dashboard/theme';
+ import type { ThemeRuntimeDeploymentOutput } from '@zxio/theme-compiler/deployment';
+ import { createBoundConfirmInputFactory } from '@zxio/zxui/core';
+ import {
+@@ -51,6 +52,7 @@
+     defaultThemeId: ZX_DEFAULT_THEME_ID,
+     maxRegisteredManifests: ZX_THEME_MANIFEST_LIMIT,
+     themes: themeDeployment.registrations,
++    extensions: [dashboardThemeBundle],
+     assetResolver: assetResolver.value,
+     stylesheetPolicy: 'on-demand',
+     portalTarget: () => document.body,

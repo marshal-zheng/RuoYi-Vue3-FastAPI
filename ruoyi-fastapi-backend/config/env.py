@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 import sys
 from dataclasses import dataclass
 from functools import lru_cache
@@ -8,7 +9,7 @@ from typing import Literal
 from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
-from pydantic import AliasChoices, Field, SecretStr, ValidationError, computed_field
+from pydantic import AliasChoices, Field, SecretStr, ValidationError, computed_field, field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -156,6 +157,8 @@ class SecuritySettings(BaseSettings):
 
     security_csrf_enabled: bool = True
     security_csrf_protected_paths: str = '/auth/refresh,/auth/logout,/auth/embed,/auth/ws-ticket'
+    # 仅保护非安全方法的路径前缀，GET 内容地址（如 <img>）不要求 Origin
+    security_csrf_protected_write_paths: str = '/file-assets,/system/user/profile/avatar,/system/notice'
     security_csrf_header_name: str = 'X-CSRF-Token'
     security_csrf_cookie_name: str = 'csrf_token'
     security_csrf_token_ttl_seconds: int = 604800
@@ -428,15 +431,104 @@ class RateLimitSettings(BaseSettings):
     # 逗号分隔：可信代理 IP/CIDR（仅命中后才解析 X-Forwarded-For）
     rate_limit_trusted_proxies: str = '127.0.0.1,::1'
 
+    # 逗号分隔：上传类接口 path（命中且为写方法时归类为 upload tier）
+    rate_limit_upload_paths: str = '/file-assets/uploads,/system/user/profile/avatar'
+
     # auth tier
     rate_limit_auth_ip: int = 20
     rate_limit_auth_user: int = 40
+    # upload tier
+    rate_limit_upload_ip: int = 60
+    rate_limit_upload_user: int = 30
     # write tier
     rate_limit_write_ip: int = 120
     rate_limit_write_user: int = 240
     # read tier
     rate_limit_read_ip: int = 600
     rate_limit_read_user: int = 1200
+
+
+MIB = 1024 * 1024
+
+
+class FileAssetSettings(BaseSettings):
+    """
+    文件资产与私有 S3 兼容对象存储配置
+
+    存储端点只需后端可达，凭据只由后端持有，不进入日志、OpenAPI 或前端。
+    """
+
+    file_asset_s3_endpoint: str = ''
+    file_asset_s3_bucket: str = ''
+    file_asset_s3_region: str = 'us-east-1'
+    file_asset_s3_addressing_style: Literal['path', 'virtual'] = 'path'
+    file_asset_s3_access_key: SecretStr = Field(default=SecretStr(''), repr=False)
+    file_asset_s3_secret_key: SecretStr = Field(default=SecretStr(''), repr=False)
+    # 每个部署环境唯一，与桶内 _meta/installation.json 不一致时文件能力不可用且拒绝一切对象删除
+    file_asset_installation_id: str = ''
+
+    file_asset_draft_ttl_hours: int = Field(default=24, ge=1)
+    file_asset_delete_grace_hours: int = Field(default=24, ge=0)
+    file_asset_upload_state_timeout_seconds: int = Field(default=180, ge=30)
+    file_asset_upload_recovery_margin_minutes: int = Field(default=60, ge=10)
+    file_asset_upload_receive_timeout_seconds: int = Field(default=60, ge=5)
+    file_asset_download_response_timeout_seconds: int = Field(default=120, ge=5)
+
+    file_asset_io_concurrency: int = Field(default=4, ge=1)
+    file_asset_download_concurrency: int = Field(default=8, ge=1)
+    file_asset_maintenance_concurrency: int = Field(default=2, ge=1)
+    file_asset_slot_wait_seconds: float = Field(default=5.0, ge=0)
+
+    file_asset_gc_batch_size: int = Field(default=100, ge=1, le=1000)
+    file_asset_orphan_sweep_enabled: bool = True
+    file_asset_orphan_grace_hours: int = Field(default=24, ge=1)
+    file_asset_orphan_sweep_max_deletes: int = Field(default=1000, ge=1)
+    file_asset_orphan_sweep_max_seconds: int = Field(default=600, ge=10)
+    file_asset_tombstone_retention_days: int = Field(default=30, ge=1)
+
+    file_asset_draft_quota_count: int = Field(default=50, ge=1)
+    file_asset_draft_quota_bytes: int = Field(default=200 * MIB, ge=MIB)
+    # 上传与规范化临时文件目录，留空使用系统临时目录
+    file_asset_temp_dir: str = ''
+
+    @field_validator('file_asset_s3_endpoint')
+    @classmethod
+    def _validate_endpoint(cls, value: str) -> str:
+        endpoint = value.strip()
+        if endpoint and not re.fullmatch(r'https?://[^/\s?#]+/?', endpoint):
+            raise ValueError('FILE_ASSET_S3_ENDPOINT must be an http(s) origin without path, query or fragment')
+        return endpoint.rstrip('/')
+
+    @field_validator('file_asset_s3_bucket')
+    @classmethod
+    def _validate_bucket(cls, value: str) -> str:
+        bucket = value.strip()
+        if bucket and not re.fullmatch(r'[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]', bucket):
+            raise ValueError('FILE_ASSET_S3_BUCKET must be a valid S3 bucket name')
+        return bucket
+
+    @field_validator('file_asset_installation_id')
+    @classmethod
+    def _validate_installation_id(cls, value: str) -> str:
+        installation_id = value.strip()
+        if installation_id and not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._:-]{2,127}', installation_id):
+            raise ValueError('FILE_ASSET_INSTALLATION_ID must be 3-128 safe ASCII characters')
+        return installation_id
+
+    @property
+    def missing_settings(self) -> tuple[str, ...]:
+        required = {
+            'FILE_ASSET_S3_ENDPOINT': self.file_asset_s3_endpoint,
+            'FILE_ASSET_S3_BUCKET': self.file_asset_s3_bucket,
+            'FILE_ASSET_S3_ACCESS_KEY': self.file_asset_s3_access_key.get_secret_value(),
+            'FILE_ASSET_S3_SECRET_KEY': self.file_asset_s3_secret_key.get_secret_value(),
+            'FILE_ASSET_INSTALLATION_ID': self.file_asset_installation_id,
+        }
+        return tuple(name for name, value in required.items() if not value)
+
+    @property
+    def is_configured(self) -> bool:
+        return not self.missing_settings
 
 
 class OTelSettings(BaseSettings):
@@ -473,52 +565,6 @@ class GenSettings:
     def __init__(self):
         if not os.path.exists(self.GEN_PATH):
             os.makedirs(self.GEN_PATH)
-
-
-class UploadSettings:
-    """
-    上传配置
-    """
-
-    UPLOAD_PREFIX = '/profile'
-    UPLOAD_PATH = 'vf_admin/upload_path'
-    UPLOAD_MACHINE = 'A'
-    DEFAULT_ALLOWED_EXTENSION = [
-        # 图片
-        'bmp',
-        'gif',
-        'jpg',
-        'jpeg',
-        'png',
-        # word excel powerpoint
-        'doc',
-        'docx',
-        'xls',
-        'xlsx',
-        'ppt',
-        'pptx',
-        'html',
-        'htm',
-        'txt',
-        # 压缩文件
-        'rar',
-        'zip',
-        'gz',
-        'bz2',
-        # 视频格式
-        'mp4',
-        'avi',
-        'rmvb',
-        # pdf
-        'pdf',
-    ]
-    DOWNLOAD_PATH = 'vf_admin/download_path'
-
-    def __init__(self):
-        if not os.path.exists(self.UPLOAD_PATH):
-            os.makedirs(self.UPLOAD_PATH)
-        if not os.path.exists(self.DOWNLOAD_PATH):
-            os.makedirs(self.DOWNLOAD_PATH)
 
 
 class CachePathConfig:
@@ -607,14 +653,6 @@ class GetConfig:
         return GenSettings()
 
     @lru_cache
-    def get_upload_config(self):
-        """
-        获取数据库配置
-        """
-        # 实例上传配置
-        return UploadSettings()
-
-    @lru_cache
     def get_query_cache_config(self):
         """
         获取查询缓存配置
@@ -671,6 +709,13 @@ class GetConfig:
         return self.get_dev_managed_data_hot_reconcile_config()
 
     @lru_cache
+    def get_file_asset_config(self):
+        """
+        获取文件资产与对象存储配置
+        """
+        return FileAssetSettings()
+
+    @lru_cache
     def get_otel_config(self):
         """
         获取 OpenTelemetry 配置
@@ -702,6 +747,8 @@ class GetConfig:
         if run_env != '':
             env_file = f'.env.{run_env}'
         # 加载配置
+        # 本机未入库的覆盖文件（如对象存储凭据）先加载，优先于入库的环境文件
+        load_dotenv(backend_root / f'{env_file}.local')
         load_dotenv(backend_root / env_file)
 
         # 统一数据库默认配置，避免被历史 .env 文件中空密码覆盖
@@ -736,8 +783,6 @@ DataBaseWorkflowConfig = get_config.get_database_workflow_config()
 RedisConfig = get_config.get_redis_config()
 # 代码生成配置
 GenConfig = get_config.get_gen_config()
-# 上传配置
-UploadConfig = get_config.get_upload_config()
 # 查询缓存配置
 CacheConfig = get_config.get_query_cache_config()
 # 审计日志配置
@@ -756,3 +801,5 @@ DevManagedDataHotReconcileConfig = get_config.get_dev_managed_data_hot_reconcile
 DevMenuSyncConfig = DevManagedDataHotReconcileConfig
 # OpenTelemetry 配置
 OTelConfig = get_config.get_otel_config()
+# 文件资产与对象存储配置
+FileAssetConfig = get_config.get_file_asset_config()

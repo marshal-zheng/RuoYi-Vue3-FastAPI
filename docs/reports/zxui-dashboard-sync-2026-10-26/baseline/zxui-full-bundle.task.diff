@@ -1,0 +1,35 @@
+--- before/internal/build/src/tasks/full-bundle.ts
++++ after/internal/build/src/tasks/full-bundle.ts
+@@ -4,7 +4,6 @@
+ import replace from '@rollup/plugin-replace'
+ import commonjs from '@rollup/plugin-commonjs'
+ import json from '@rollup/plugin-json'
+-import vue from '@vitejs/plugin-vue'
+ import VueMacros from 'unplugin-vue-macros/rollup'
+ import vueJsx from '@vitejs/plugin-vue-jsx'
+ import esbuild, { minify as minifyPlugin } from 'rollup-plugin-esbuild'
+@@ -19,6 +18,7 @@
+ import { epOutput, epRoot, localeRoot, pkgRoot } from '@zxio/build-utils'
+ import zxuiPackage from '../../../../packages/zxui/package.json'
+ import { ElementPlusAlias } from '../plugins/element-plus-alias'
++import { productionVuePlugin } from '../plugins/production-vue'
+ import {
+   formatBundleFilename,
+   generateExternal,
+@@ -61,15 +61,7 @@
+     // Match the module build's native Vue props compilation.
+     betterDefine: false,
+     plugins: {
+-      vue: vue({
+-        isProduction: true,
+-        template: {
+-          compilerOptions: {
+-            hoistStatic: false,
+-            cacheHandlers: false,
+-          },
+-        },
+-      }),
++      vue: productionVuePlugin(),
+       vueJsx: vueJsx(),
+     },
+   })

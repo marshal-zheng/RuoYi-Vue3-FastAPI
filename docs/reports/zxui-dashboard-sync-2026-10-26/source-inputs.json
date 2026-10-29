@@ -1,0 +1,13 @@
+{
+  "root": "/Users/hqz/Downloads/element-plus",
+  "head": "8facb3de459b48e8b53a25679e99081e0ab469b9",
+  "files": {
+    "packages/zxui/theme-runtime/runtime-core.ts": "64d5e29c7754c3972e0d764f23174a9101fce84138125773d1396b3591302a8b",
+    "packages/dashboard/src/theme/index.ts": "e9dfe3171ae090d9d2360aa2c5dfef66635ecdecad6f26147ad1a4b7e013c2d7",
+    "packages/dashboard/package.json": "b171d0d35969173e3c6eaa7e8cb5fa47af28063bbdda4361ff4642f9644261a4",
+    "internal/build/src/tasks/modules.ts": "10619549d310d6da6c4c26f64502e67254875d8f6c31eb67f96a67db839c9d58",
+    "internal/build/src/tasks/full-bundle.ts": "491a9a9545b38c75feccea94ae9e8cffb8ac5488eb913fb3ef48a20168b9b3ed",
+    "packages/theme-compiler/src/adapters/element-plus/mapping.ts": "00e5c97f3222d34878148af217ab1a70deb8a3cc7a69041c7f6f633d420d33a8",
+    "packages/theme-default/generated/theme.manifest.json": "b74368ac77bd1e9489d36dbf46b8b7264200336a2c863ab3378864a4a72b1f40"
+  }
+}

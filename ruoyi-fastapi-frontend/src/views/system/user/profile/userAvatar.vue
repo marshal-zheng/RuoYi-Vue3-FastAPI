@@ -1,6 +1,6 @@
 <template>
   <div class="user-info-head" @click="editCropper()">
-    <img :src="options.img" title="点击上传头像" class="user-info-avatar" />
+    <img :src="options.img" title="点击上传头像" class="user-info-avatar" @error="onAvatarError" />
     <ZxDialog
       dialog-size="lg"
       :draggable="false"
@@ -78,6 +78,7 @@ import { ElMessage } from 'element-plus';
 import { VueCropper } from 'vue-cropper';
 import { captureUserCommand, userCommands } from '@/queries/system/user';
 import { queryScope, requireQueryScope } from '@/queries/context';
+import { retryAssetImage } from '@/utils/file-assets/image-recovery';
 import useUserStore from '@/store/modules/user';
 
 const userStore = useUserStore();
@@ -97,8 +98,7 @@ const options = reactive({
   autoCropWidth: 200, // 默认生成截图框宽度
   autoCropHeight: 200, // 默认生成截图框高度
   fixedBox: true, // 固定截图框大小 不允许改变
-  outputType: 'png', // 默认生成截图为PNG格式
-  filename: 'avatar', // 文件名称
+  outputType: 'png', // 默认生成截图为PNG格式（服务端再规范化为 ≤512 像素 PNG）
   previews: {}, //预览数据
 });
 
@@ -139,7 +139,6 @@ function beforeUpload(file) {
     reader.onload = () => {
       if (scope !== queryScope.value || generation !== editorGeneration) return;
       options.img = reader.result;
-      options.filename = file.name;
     };
   }
 }
@@ -148,19 +147,45 @@ const { run: uploadImg, pending: uploadImgPending } = useOperation(async () => {
   const scope = editorScope;
   const generation = editorGeneration;
   if (!scope || scope !== queryScope.value) return;
-  const filename = options.filename;
   const data = await new Promise((resolve) => proxy.$refs.cropper.getCropBlob(resolve));
   if (scope !== queryScope.value || generation !== editorGeneration) return;
   let formData = new FormData();
-  formData.append('avatarfile', data, filename);
-  await userCommands.uploadAvatar(captureUserCommand(formData, scope)).then((response) => {
-    if (scope !== queryScope.value || generation !== editorGeneration) return;
-    open.value = false;
-    options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl;
-    userStore.avatar = options.img;
-    visible.value = false;
-  });
+  // The cropper always produces PNG; the name must match the content the server decodes.
+  formData.append('avatarfile', data, 'avatar.png');
+  try {
+    const response = await userCommands.uploadAvatar(captureUserCommand(formData, scope));
+    if (scope !== queryScope.value) return;
+    // The replacement is committed and the old asset is released: the store must follow it even when
+    // the dialog was closed or reopened while the request was in flight.
+    userStore.avatar = response.avatarUrl;
+    if (generation === editorGeneration) {
+      open.value = false;
+      visible.value = false;
+      options.img = response.avatarUrl;
+    } else if (!open.value) {
+      options.img = response.avatarUrl;
+    }
+  } catch (error) {
+    // A lost response may hide a committed replacement: re-read the profile to know the truth.
+    if (scope === queryScope.value && !isDefinitiveRejection(error)) {
+      await userStore.getInfo().catch(() => undefined);
+      if (scope === queryScope.value) options.img = userStore.avatar;
+    }
+    throw error;
+  }
 });
+/** 4xx answers prove the replacement did not commit; anything else may have. */
+function isDefinitiveRejection(error) {
+  const status = error?.status ?? error?.response?.status;
+  return typeof status === 'number' && status >= 400 && status < 500;
+}
+let avatarRetried = false;
+/** The stable avatar URL is authorized per request: recover once after a session refresh. */
+async function onAvatarError(event) {
+  if (avatarRetried || !String(options.img || '').startsWith('/file-assets/')) return;
+  avatarRetried = true;
+  await retryAssetImage(event.target);
+}
 /** 实时预览 */
 function realTime(data) {
   options.previews = data;

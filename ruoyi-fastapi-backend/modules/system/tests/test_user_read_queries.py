@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+from types import SimpleNamespace
 
 import pytest
 
@@ -8,6 +9,7 @@ from module_admin.entity.vo.post_vo import PostModel
 from module_admin.entity.vo.role_vo import RoleModel
 from module_admin.entity.vo.user_vo import UserDetailModel, UserPageQueryModel
 from modules.system.api.dependencies import provide_system_mediator
+from modules.system.application import user_avatars
 from modules.system.application.handlers.query.user_query_handlers import (
     GetUserAuthRoleQueryHandler,
     GetUserDeptTreeQueryHandler,
@@ -206,8 +208,30 @@ class _ModelBackedUserServiceStub(_UserServiceStub):
         )
 
 
+AVATAR_ID = '00000000-0000-4000-8000-000000000001'
+
+
+class _AvatarProjectionStub:
+    """Binding-service stand-in: every read path projects avatars in one batch from the binding table."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[object, str, list[int], str]] = []
+
+    async def project(self, session, owner_type, owner_ids, field_key):
+        self.calls.append((session, owner_type, list(owner_ids), field_key))
+        descriptor = SimpleNamespace(asset_id=AVATAR_ID, content_url=f'/file-assets/{AVATAR_ID}/content')
+        return {'1': [descriptor]}
+
+
+@pytest.fixture(autouse=True)
+def avatar_projection(monkeypatch):
+    stub = _AvatarProjectionStub()
+    monkeypatch.setattr(user_avatars, 'get_binding_service', lambda: stub)
+    return stub
+
+
 @pytest.mark.asyncio
-async def test_user_query_handlers_success() -> None:
+async def test_user_query_handlers_success(avatar_projection) -> None:
     dept_service = _DeptServiceStub()
     post_service = _PostServiceStub()
     role_service = _RoleServiceStub()
@@ -266,6 +290,14 @@ async def test_user_query_handlers_success() -> None:
     assert user_service.scope_check_called_with == (query_db, 1, ' AND user_id in (1)')
     assert role_service.options_call_count > 0
     assert post_service.list_called_with is not None
+    content_url = f'/file-assets/{AVATAR_ID}/content'
+    assert list_result.items[0].avatar_url == content_url
+    assert profile_result.data.avatar_url == content_url
+    assert detail_result.data.avatar_asset_id == AVATAR_ID
+    assert {(owner_type, tuple(ids), field) for _, owner_type, ids, field in avatar_projection.calls} == {
+        ('system.user', (1,), 'avatar')
+    }
+    assert all(call[0] is query_db for call in avatar_projection.calls)
 
 
 @pytest.mark.asyncio

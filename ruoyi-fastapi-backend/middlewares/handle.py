@@ -5,6 +5,7 @@ from middlewares.audit_context_middleware import AuditContextMiddleware
 from middlewares.cors_middleware import add_cors_middleware
 from middlewares.csrf_guard_middleware import add_csrf_guard_middleware
 from middlewares.gzip_middleware import add_gzip_middleware
+from middlewares.upload_limit_middleware import add_upload_limit_middleware
 from middlewares.idempotency_middleware import add_idempotency_middleware
 from middlewares.prometheus_middleware import add_prometheus_metrics_middleware
 from middlewares.rate_limit_middleware import add_rate_limit_middleware
@@ -20,7 +21,9 @@ def handle_middleware(app: FastAPI):
     """
     全局中间件处理
     """
-    # 加载限流中间件（最内层，避免高频请求穿透到业务层）
+    # 加载上传请求体与接收时限（multipart 解析前生效）
+    add_upload_limit_middleware(app)
+    # 加载限流中间件（避免高频请求穿透到业务层）
     add_rate_limit_middleware(app)
     # 加载幂等中间件（需在 CORS/Gzip 内侧，确保回放响应也经过外层通用中间件）
     add_idempotency_middleware(app)

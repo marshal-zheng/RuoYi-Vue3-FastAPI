@@ -34,6 +34,7 @@ from module_generator.entity.vo.gen_vo import (
     GenTablePageReadModel,
     GenTableReadModel,
 )
+from module_generator.asset_fields import validate_asset_fields
 from module_generator.remark_policy import validate_remark_generation
 from ports import IGenTableColumnRepository, IGenTableRepository
 from utils.common_util import CamelCaseUtil
@@ -300,11 +301,13 @@ class GenTableService:
 
         await self.set_sub_table(gen_table)
         await self.set_pk_column(gen_table)
-        await self._validate_remark_columns(gen_table)
+        await self._validate_generated_fields(gen_table)
 
         env = TemplateInitializer.init_jinja2()
         context = TemplateUtils.prepare_context(gen_table)
-        template_list = TemplateUtils.get_template_list(gen_table.tpl_category, gen_table.tpl_web_type)
+        template_list = TemplateUtils.get_template_list(
+            gen_table.tpl_category, gen_table.tpl_web_type, has_assets=bool(gen_table.asset_fields)
+        )
 
         preview_code_result = {}
         for template in template_list:
@@ -368,10 +371,12 @@ class GenTableService:
 
         await self.set_sub_table(gen_table)
         await self.set_pk_column(gen_table)
-        await self._validate_remark_columns(gen_table)
+        await self._validate_generated_fields(gen_table)
 
         context = TemplateUtils.prepare_context(gen_table)
-        template_list = TemplateUtils.get_template_list(gen_table.tpl_category, gen_table.tpl_web_type)
+        template_list = TemplateUtils.get_template_list(
+            gen_table.tpl_category, gen_table.tpl_web_type, has_assets=bool(gen_table.asset_fields)
+        )
         output_files = [TemplateUtils.get_file_name(template, gen_table) for template in template_list]
 
         return [template_list, output_files, context, gen_table]
@@ -498,9 +503,10 @@ class GenTableService:
 
         return gen_table
 
-    async def _validate_remark_columns(self, table):
+    async def _validate_generated_fields(self, table):
         await self.set_table_from_options(table)
         validate_remark_generation(table)
+        validate_asset_fields(table)
         actual = {}
         for current in [table] + ([table.sub_table] if table.sub_table else []):
             if any(c.html_type == 'remark' for c in (current.columns or [])):
@@ -521,7 +527,7 @@ class GenTableService:
         if edit_gen_table.params is not None:
             edit_gen_table.options = json.dumps(edit_gen_table.params.model_dump(by_alias=True))
         await self.set_table_from_options(edit_gen_table)
-        await self._validate_remark_columns(edit_gen_table)
+        await self._validate_generated_fields(edit_gen_table)
         if edit_gen_table.tpl_category == GenConstant.TPL_TREE:
             params_obj = edit_gen_table.params.model_dump(by_alias=True)
 

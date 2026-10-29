@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.constant import CommonConstant
@@ -6,6 +7,9 @@ from exceptions.exception import ResourceConflictException, ResourceNotFoundExce
 from module_admin.entity.do.notice_do import NoticeDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.notice_vo import DeleteNoticeModel, NoticeModel, NoticePageQueryModel
+from modules.file_assets.ports import OwnerRef, get_binding_service
+from modules.system.application.file_asset_policies import NOTICE_CONTENT_FIELD, NOTICE_OWNER_TYPE
+from modules.system.application.notice_content import sanitize_notice_html
 from ports import INoticeRepository
 from utils.common_util import CamelCaseUtil
 from utils.transaction_manager import transactional
@@ -69,14 +73,32 @@ class NoticeService:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
 
+    async def _bind_content_images(self, notice_id: int, asset_ids: list[str], actor, *, creating: bool) -> None:
+        """Content and its image bindings commit together; the HTML is the only list of references."""
+        if actor is None:
+            if asset_ids:
+                raise ValidationException(user_message='缺少保存图片所需的操作者', field='notice_content')
+            await get_binding_service().release_owner(self.query_db, OwnerRef.of(NOTICE_OWNER_TYPE, notice_id))
+            return
+        await get_binding_service().replace_field_assets(
+            self.query_db,
+            actor,
+            OwnerRef.of(NOTICE_OWNER_TYPE, notice_id),
+            NOTICE_CONTENT_FIELD,
+            asset_ids,
+            creating=creating,
+        )
+
     @transactional()
-    async def add_notice_services(self, page_object: NoticeModel):
+    async def add_notice_services(self, page_object: NoticeModel, actor=None):
         """
         新增通知公告信息service
 
         :param page_object: 新增通知公告对象
+        :param actor: 当前操作者授权快照（用于绑定本次上传的图片草稿）
         :return: 新增通知公告校验结果
         """
+        page_object.notice_content, asset_ids = sanitize_notice_html(page_object.notice_content)
         if not await self.check_notice_unique_services(page_object):
             raise ResourceConflictException(
                 error_code=ErrorCode.RESOURCE_CONFLICT,
@@ -85,18 +107,25 @@ class NoticeService:
 
         db_notice = NoticeDO(**page_object.model_dump())
         add_result = await self.notice_repo.add(db_notice)
+        await self._bind_content_images(add_result.notice_id, asset_ids, actor, creating=True)
         return CrudResponseModel(is_success=True, message='新增成功', result={'noticeId': add_result.notice_id})
 
     @transactional()
-    async def edit_notice_services(self, page_object: NoticeModel):
+    async def edit_notice_services(self, page_object: NoticeModel, actor=None):
         """
         编辑通知公告信息service
 
         :param page_object: 编辑通知公告对象
+        :param actor: 当前操作者授权快照（用于绑定本次上传的图片草稿）
         :return: 编辑通知公告校验结果
         """
+        content_provided = 'notice_content' in page_object.model_fields_set
+        asset_ids: list[str] = []
+        if content_provided:
+            page_object.notice_content, asset_ids = sanitize_notice_html(page_object.notice_content)
         edit_notice = page_object.model_dump(exclude_unset=True)
-        await self.notice_detail_services(page_object.notice_id)
+        # The owner row is locked before any asset row (lock order shared with cleanup).
+        await self._lock_notice(page_object.notice_id)
 
         if not await self.check_notice_unique_services(page_object):
             raise ResourceConflictException(
@@ -110,7 +139,20 @@ class NoticeService:
                 if hasattr(db_notice, key):
                     setattr(db_notice, key, value)
             await self.notice_repo.update(db_notice)
+            if content_provided:
+                await self._bind_content_images(db_notice.notice_id, asset_ids, actor, creating=False)
         return CrudResponseModel(is_success=True, message='更新成功')
+
+    async def _lock_notice(self, notice_id: int | None) -> None:
+        locked = await self.query_db.scalar(
+            select(NoticeDO.notice_id).where(NoticeDO.notice_id == notice_id).with_for_update()
+        )
+        if locked is None:
+            raise ResourceNotFoundException(
+                user_message='通知公告不存在',
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                developer_message=f'notice_id={notice_id} not found',
+            )
 
     @transactional()
     async def delete_notice_services(self, page_object: DeleteNoticeModel):
@@ -129,6 +171,9 @@ class NoticeService:
 
         notice_id_list = page_object.notice_ids.split(',')
         for notice_id in notice_id_list:
+            await self._lock_notice(int(notice_id))
+            # Released images stop serving immediately and are physically deleted after the grace period.
+            await get_binding_service().release_owner(self.query_db, OwnerRef.of(NOTICE_OWNER_TYPE, int(notice_id)))
             await self.notice_repo.delete_by_id(int(notice_id))
         return CrudResponseModel(is_success=True, message='删除成功')
 

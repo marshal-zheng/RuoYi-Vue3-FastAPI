@@ -113,6 +113,8 @@ celerybeat.pid
 
 # Environments
 .env
+# 本机覆盖（如对象存储凭据），不得入库
+.env.*.local
 .venv
 env/
 venv/
