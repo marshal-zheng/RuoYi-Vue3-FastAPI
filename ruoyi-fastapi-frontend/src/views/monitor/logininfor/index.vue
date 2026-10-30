@@ -89,7 +89,6 @@
 
       <template #table="{ grid }">
         <el-table
-          ref="logininforRef"
           v-loading="grid.loading"
           :data="grid.list || []"
           @selection-change="handleSelectionChange"

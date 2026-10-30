@@ -81,7 +81,6 @@
 
       <template #table="{ grid }">
         <el-table
-          ref="auditRef"
           v-loading="grid.loading"
           :data="grid.list || []"
           @selection-change="handleSelectionChange"
