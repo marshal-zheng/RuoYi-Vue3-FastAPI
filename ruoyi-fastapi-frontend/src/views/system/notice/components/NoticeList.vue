@@ -6,56 +6,56 @@
     :load-on-mounted="true"
     fill
   >
-    <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-      <DictStatus :types="['sys_notice_status', 'sys_notice_type']" />
-      <ZxListToolbar aria-label="列表操作与筛选">
-        <template #actions>
-          <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:notice:add']"
-            >新增</ZxButton
-          >
-          <ZxButton :disabled="single" @click="handleUpdate" v-hasPermi="['system:notice:edit']"
-            >修改</ZxButton
-          >
-          <ZxButton
-            plain
-            type="danger"
-            :disabled="multiple"
-            @click="handleDelete"
-            v-hasPermi="['system:notice:remove']"
-            :loading="handleDeletePending"
-            >删除</ZxButton
-          >
-        </template>
-        <template #filters>
-          <zx-input
-            v-model="query.createBy"
-            placeholder="请输入操作人员"
-            clearable
-            style="width: 200px"
-            @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-          />
-          <DictSelect
-            dict-type="sys_notice_type"
-            v-model="query.noticeType"
-            placeholder="公告类型"
-            clearable
-            style="width: 200px"
-            @change="
-              (v: unknown) => onFilterChange('noticeType', v, { handleRefresh, updateState })
-            "
-          />
-        </template>
-        <template #search>
-          <ZxSearch
-            v-model="query.noticeTitle"
-            placeholder="搜索公告标题"
-            :loading="loading"
-            search-mode="click"
-            @search="() => onSearch({ handleRefresh, updateState })"
-            @clear="() => onSearch({ handleRefresh, updateState })"
-          />
-        </template>
-      </ZxListToolbar>
+    <template #form="listForm">
+      <template v-if="listForm.mode === 'request'">
+        <DictStatus :types="['sys_notice_status', 'sys_notice_type']" />
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
+            <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:notice:add']"
+              >新增</ZxButton
+            >
+            <ZxButton :disabled="single" @click="handleUpdate" v-hasPermi="['system:notice:edit']"
+              >修改</ZxButton
+            >
+            <ZxButton
+              plain
+              type="danger"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['system:notice:remove']"
+              :loading="handleDeletePending"
+              >删除</ZxButton
+            >
+          </template>
+          <template #filters>
+            <zx-input
+              v-model="listForm.draft.createBy"
+              placeholder="请输入操作人员"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => listForm.search()"
+            />
+            <DictSelect
+              dict-type="sys_notice_type"
+              v-model="listForm.draft.noticeType"
+              placeholder="公告类型"
+              clearable
+              style="width: 200px"
+              @change="() => listForm.search()"
+            />
+          </template>
+          <template #search>
+            <ZxSearch
+              v-model="listForm.draft.noticeTitle"
+              placeholder="搜索公告标题"
+              :loading="listForm.loading"
+              search-mode="click"
+              @search="() => listForm.search()"
+              @clear="() => listForm.search()"
+            />
+          </template>
+        </ZxListToolbar>
+      </template>
     </template>
 
     <template #table="{ grid }">
@@ -106,22 +106,23 @@
     </template>
   </ZxGridList>
 
-  <NoticeDlg ref="noticeDlgRef" @success="gridListRef?.refresh()" />
+  <NoticeDlg ref="noticeDlgRef" @success="gridListRef?.reload()" />
 </template>
 
 <script setup lang="ts" name="NoticeList">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { getCurrentInstance, ref } from 'vue';
-import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { GridListPagerState, GridListSortItem, ZxGridListRequestInstance } from '@zxio/zxui';
 import type { NoticeRecord } from '@/api/system/notice';
 import type { GetSystemNoticeListSystemNoticeListGetData } from '@/api/_generated/types.gen';
 type ListQuery = NonNullable<GetSystemNoticeListSystemNoticeListGetData['query']> & {
   dateRange?: string[] | null;
 };
-type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
-type ListActions = {
-  handleRefresh: ZxGridListInstance['refresh'];
-  updateState: ZxGridListInstance['updateState'];
+type ListLoadParams = {
+  query?: ListQuery;
+  pager?: GridListPagerState;
+  sort?: readonly GridListSortItem[];
 };
 import { listNotice, delNotice } from '@/api/system/notice';
 import { parseTime } from '@/utils/ruoyi';
@@ -136,37 +137,17 @@ const { sys_notice_status, sys_notice_type } = proxy.useDict(
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<ZxGridListInstance | null>(null);
+const gridListRef = ref<ZxGridListRequestInstance | null>(null);
 const noticeDlgRef = ref<InstanceType<typeof NoticeDlg> | null>(null);
 
 async function loadNoticeData(params: ListLoadParams) {
-  try {
-    return await listNotice({
-      ...params.query,
-      page: params.pager?.page,
-      pageSize: params.pager?.size,
-    });
-  } catch {
-    return { data: [], total: 0 };
-  }
-}
-
-function onFilterChange(
-  field: string,
-  value: unknown,
-  { handleRefresh, updateState }: ListActions
-) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-
-function onSearch({
-  handleRefresh,
-}: {
-  handleRefresh: ListActions['handleRefresh'];
-  updateState?: ListActions['updateState'];
-}) {
-  handleRefresh();
+  const query = {
+    ...params.query,
+    page: params.pager?.page,
+    pageSize: params.pager?.size,
+    sort: params.sort,
+  };
+  return listNotice(query);
 }
 
 function handleSelectionChange(selection: NoticeRecord[]) {
@@ -196,7 +177,7 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(
       .confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？')
       .then(() => delNotice(noticeIds))
       .then(() => {
-        gridListRef.value?.refresh();
+        gridListRef.value?.reload();
       })
       .catch(() => {});
   }

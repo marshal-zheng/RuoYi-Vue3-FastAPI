@@ -1,65 +1,71 @@
 <template>
   <ZxContentWrap fill>
     <ZxGridList ref="gridListRef" :load-data="loadPostData" :load-on-mounted="true" fill>
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <DictStatus :types="['sys_normal_disable']" />
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:post:add']"
-              >新增</ZxButton
-            >
-            <ZxButton
-              icon="Edit"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['system:post:edit']"
-              >修改</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['system:post:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton
-              icon="Download"
-              @click="() => handleExport(query)"
-              v-hasPermi="['system:post:export']"
-              >导出</ZxButton
-            >
-          </template>
-          <template #filters>
-            <zx-input
-              v-model="query.postCode"
-              placeholder="请输入岗位编码"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-            <DictSelect
-              dict-type="sys_normal_disable"
-              v-model="query.status"
-              placeholder="岗位状态"
-              clearable
-              style="width: 200px"
-              @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.postName"
-              placeholder="搜索岗位名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <DictStatus :types="['sys_normal_disable']" />
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Plus"
+                @click="handleAdd"
+                v-hasPermi="['system:post:add']"
+                >新增</ZxButton
+              >
+              <ZxButton
+                icon="Edit"
+                :disabled="single"
+                @click="handleUpdate"
+                v-hasPermi="['system:post:edit']"
+                >修改</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['system:post:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+              <ZxButton
+                icon="Download"
+                @click="() => handleExport()"
+                v-hasPermi="['system:post:export']"
+                >导出</ZxButton
+              >
+            </template>
+            <template #filters>
+              <zx-input
+                v-model="listForm.draft.postCode"
+                placeholder="请输入岗位编码"
+                clearable
+                style="width: 200px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <DictSelect
+                dict-type="sys_normal_disable"
+                v-model="listForm.draft.status"
+                placeholder="岗位状态"
+                clearable
+                style="width: 200px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.postName"
+                placeholder="搜索岗位名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
       <template #table="{ grid }">
         <el-table
@@ -110,16 +116,18 @@
 </template>
 
 <script setup lang="ts">
+import { normalizeGridParams } from '@/utils/grid-params';
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { getCurrentInstance, ref } from 'vue';
-import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { GridListPagerState, GridListSortItem, ZxGridListRequestInstance } from '@zxio/zxui';
 import type { PostRecord } from '@/api/system/post';
 import type { PostPageQueryModel } from '@/api/_generated/types.gen';
 type ListQuery = PostPageQueryModel & { dateRange?: string[] | null };
-type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
-type ListActions = {
-  handleRefresh: ZxGridListInstance['refresh'];
-  updateState: ZxGridListInstance['updateState'];
+type ListLoadParams = {
+  query?: ListQuery;
+  pager?: GridListPagerState;
+  sort?: readonly GridListSortItem[];
 };
 import { parseTime } from '@/utils/ruoyi';
 import { listPost, delPost } from '@/api/system/post';
@@ -131,41 +139,21 @@ const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<ZxGridListInstance | null>(null);
+const gridListRef = ref<ZxGridListRequestInstance | null>(null);
 const postDlgRef = ref<InstanceType<typeof PostDlg> | null>(null);
 
 async function loadPostData(params: ListLoadParams) {
-  try {
-    return await listPost({
-      ...params.query,
-      page: params.pager?.page,
-      pageSize: params.pager?.size,
-    });
-  } catch {
-    return { data: [], total: 0 };
-  }
-}
-
-function onFilterChange(
-  field: string,
-  value: unknown,
-  { handleRefresh, updateState }: ListActions
-) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-
-function onSearch({
-  handleRefresh,
-}: {
-  handleRefresh: ListActions['handleRefresh'];
-  updateState?: ListActions['updateState'];
-}) {
-  handleRefresh();
+  const query = {
+    ...params.query,
+    page: params.pager?.page,
+    pageSize: params.pager?.size,
+    sort: params.sort,
+  };
+  return listPost(query);
 }
 
 function handleRefresh() {
-  gridListRef.value?.refresh();
+  gridListRef.value?.reload();
 }
 
 function handleSelectionChange(selection: PostRecord[]) {
@@ -201,7 +189,10 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(
   }
 );
 
-function handleExport(query: ListQuery) {
+function handleExport() {
+  const applied = gridListRef.value?.applied;
+  if (!applied) return;
+  const query = normalizeGridParams({ query: applied.query, sort: applied.sort });
   proxy.download('system/post/export', query, `post_${new Date().getTime()}.xlsx`);
 }
 </script>

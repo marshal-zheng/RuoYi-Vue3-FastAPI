@@ -7,45 +7,47 @@
     :load-on-mounted="true"
     fill
   >
-    <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-      <ZxListToolbar aria-label="列表操作与筛选">
-        <template #actions>
-          <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:project:add']"
-            >新增</ZxButton
-          >
-          <ZxButton
-            plain
-            type="danger"
-            :disabled="multiple"
-            @click="handleDelete"
-            v-hasPermi="['system:project:remove']"
-            :loading="handleDeletePending"
-            >删除</ZxButton
-          >
-        </template>
-        <template #filters>
-          <el-date-picker
-            v-model="query.dateRange"
-            value-format="YYYY-MM-DD"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            style="width: 240px"
-            @change="(v: unknown) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-          />
-        </template>
-        <template #search>
-          <ZxSearch
-            v-model="query.projectDesc"
-            placeholder="搜索工程描述"
-            :loading="loading"
-            search-mode="click"
-            @search="() => onSearch({ handleRefresh, updateState })"
-            @clear="() => onSearch({ handleRefresh, updateState })"
-          />
-        </template>
-      </ZxListToolbar>
+    <template #form="listForm">
+      <template v-if="listForm.mode === 'request'">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
+            <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:project:add']"
+              >新增</ZxButton
+            >
+            <ZxButton
+              plain
+              type="danger"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['system:project:remove']"
+              :loading="handleDeletePending"
+              >删除</ZxButton
+            >
+          </template>
+          <template #filters>
+            <el-date-picker
+              v-model="listForm.draft.dateRange"
+              value-format="YYYY-MM-DD"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              style="width: 240px"
+              @change="() => listForm.search()"
+            />
+          </template>
+          <template #search>
+            <ZxSearch
+              v-model="listForm.draft.projectDesc"
+              placeholder="搜索工程描述"
+              :loading="listForm.loading"
+              search-mode="click"
+              @search="() => listForm.search()"
+              @clear="() => listForm.search()"
+            />
+          </template>
+        </ZxListToolbar>
+      </template>
     </template>
 
     <template #table="{ grid }">
@@ -98,7 +100,7 @@
     </template>
   </ZxGridList>
 
-  <ProjectDlg ref="projectDlgRef" @success="gridListRef?.refresh()" />
+  <ProjectDlg ref="projectDlgRef" @success="gridListRef?.reload()" />
 
   <!-- 工程详情对话框 -->
   <ZxDialog
@@ -131,18 +133,19 @@
 </template>
 
 <script setup lang="ts" name="ProjectList">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { getCurrentInstance, ref } from 'vue';
-import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { GridListPagerState, GridListSortItem, ZxGridListRequestInstance } from '@zxio/zxui';
 import type { ProjectRecord } from '@/api/system/project';
 import type { GetSystemProjectListProjectListGetData } from '@/api/_generated/types.gen';
 type ListQuery = NonNullable<GetSystemProjectListProjectListGetData['query']> & {
   dateRange?: string[] | null;
 };
-type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
-type ListActions = {
-  handleRefresh: ZxGridListInstance['refresh'];
-  updateState: ZxGridListInstance['updateState'];
+type ListLoadParams = {
+  query?: ListQuery;
+  pager?: GridListPagerState;
+  sort?: readonly GridListSortItem[];
 };
 import { listProject, getProject, delProject } from '@/api/system/project';
 import { parseTime, serializeDateRange } from '@/utils/ruoyi';
@@ -152,7 +155,7 @@ const proxy = getCurrentInstance()!.proxy!;
 
 const ids = ref<number[]>([]);
 const multiple = ref(true);
-const gridListRef = ref<ZxGridListInstance | null>(null);
+const gridListRef = ref<ZxGridListRequestInstance | null>(null);
 const projectDlgRef = ref<InstanceType<typeof ProjectDlg> | null>(null);
 const detailOpen = ref(false);
 const detailData = ref<Partial<ProjectRecord>>({});
@@ -162,33 +165,13 @@ function queryTransform(query: ListQuery) {
 }
 
 async function loadProjectData(params: ListLoadParams) {
-  try {
-    return await listProject({
-      ...params.query,
-      page: params.pager?.page,
-      pageSize: params.pager?.size,
-    });
-  } catch {
-    return { data: [], total: 0 };
-  }
-}
-
-function onFilterChange(
-  field: string,
-  value: unknown,
-  { handleRefresh, updateState }: ListActions
-) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-
-function onSearch({
-  handleRefresh,
-}: {
-  handleRefresh: ListActions['handleRefresh'];
-  updateState?: ListActions['updateState'];
-}) {
-  handleRefresh();
+  const query = {
+    ...params.query,
+    page: params.pager?.page,
+    pageSize: params.pager?.size,
+    sort: params.sort,
+  };
+  return listProject(query);
 }
 
 function handleSelectionChange(selection: ProjectRecord[]) {
@@ -224,7 +207,7 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(
       .confirm('是否确认删除工程编号为"' + projectIds + '"的数据项？')
       .then(() => delProject(projectIds))
       .then(() => {
-        gridListRef.value?.refresh();
+        gridListRef.value?.reload();
       })
       .catch(() => {});
   }

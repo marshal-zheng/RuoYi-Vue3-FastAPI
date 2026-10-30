@@ -8,38 +8,38 @@
       :load-on-mounted="false"
       class="import-table-grid"
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #filters>
-            <zx-input
-              v-model="query.tableName"
-              placeholder="请输入表名称"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-            <zx-input
-              v-model="query.tableComment"
-              placeholder="请输入表描述"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxButton
-              type="primary"
-              icon="Search"
-              :loading="loading"
-              @click="() => onSearch({ handleRefresh, updateState })"
-            >
-              搜索
-            </ZxButton>
-            <ZxButton icon="Refresh" @click="() => onReset({ handleRefresh, updateState })">
-              重置
-            </ZxButton>
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #filters>
+              <zx-input
+                v-model="listForm.draft.tableName"
+                placeholder="请输入表名称"
+                clearable
+                style="width: 200px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <zx-input
+                v-model="listForm.draft.tableComment"
+                placeholder="请输入表描述"
+                clearable
+                style="width: 200px"
+                @keyup.enter="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxButton
+                type="primary"
+                icon="Search"
+                :loading="listForm.loading"
+                @click="() => listForm.search()"
+              >
+                搜索
+              </ZxButton>
+              <ZxButton icon="Refresh" @click="() => listForm.reset()"> 重置 </ZxButton>
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -63,6 +63,7 @@
 </template>
 
 <script setup>
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { ElMessage } from 'element-plus';
 import { listDbTable, importTable } from '@/api/tool/gen';
 import { useDialog } from '@zxio/zxui/hooks';
@@ -101,7 +102,7 @@ function show() {
 
 // Dialog content is lazy-mounted; its opened event owns the first request.
 function loadTables() {
-  return gridListRef.value?.refresh();
+  return gridListRef.value?.reset();
 }
 
 /** 单击选择行 */
@@ -115,17 +116,8 @@ function handleSelectionChange(selection) {
 }
 
 /** 搜索 */
-function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  handleRefresh();
-}
 
 /** 重置 */
-function onReset({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  updateState('query', {});
-  handleRefresh();
-}
 
 /** 导入按钮操作 */
 function handleImportTable() {

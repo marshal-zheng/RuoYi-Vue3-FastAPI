@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
-import { defineComponent, h, type App } from 'vue';
+import { defineComponent, h, reactive, type App } from 'vue';
 import { flushPromises, mount } from '@vue/test-utils';
-import type { ZxGridListInstance } from '@zxio/zxui';
+import type { ZxGridListRequestInstance } from '@zxio/zxui';
 import ConfigList from '@/views/system/config/components/ConfigList.vue';
 import { listConfig } from '@/api/system/config';
 import { handleTree } from '@/utils/ruoyi';
@@ -17,8 +17,8 @@ const slotStub = { template: '<div><slot /><slot name="filters" /></div>' };
 const selectStub = { name: 'FilterSelect', template: '<button />' };
 
 function globalOptions(
-  updateState: ZxGridListInstance['updateState'],
-  refresh: ZxGridListInstance['refresh']
+  draft: Record<string, unknown>,
+  search: ZxGridListRequestInstance['search']
 ) {
   return {
     plugins: [
@@ -35,7 +35,7 @@ function globalOptions(
         name: 'ZxGridList',
         props: ['loadData'],
         setup(_props, { slots }) {
-          return () => h('div', slots.form?.({ query: {}, loading: false, updateState, refresh }));
+          return () => h('div', slots.form?.({ mode: 'request', draft, loading: false, search }));
         },
       }),
       ZxListToolbar: slotStub,
@@ -60,20 +60,20 @@ function globalOptions(
 
 describe('GridList public query contract', () => {
   it.each([{ component: ConfigList, field: 'configType', value: 'N' }])(
-    'updates query.$field before refreshing a filter',
+    'writes draft.$field before applying a filter',
     async ({ component, field, value }) => {
-      const updateState = vi.fn<ZxGridListInstance['updateState']>();
-      const refresh = vi.fn<ZxGridListInstance['refresh']>();
-      const wrapper = mount(component, {
-        global: globalOptions(updateState, refresh),
+      const draft = reactive<Record<string, unknown>>({});
+      const search = vi.fn<ZxGridListRequestInstance['search']>(() => {
+        expect(draft[field]).toBe(value);
+        return Promise.resolve({ kind: 'not-started', reason: 'test' });
       });
+      const wrapper = mount(component, {
+        global: globalOptions(draft, search),
+      });
+      wrapper.findComponent({ name: 'FilterSelect' }).vm.$emit('update:modelValue', value);
       wrapper.findComponent({ name: 'FilterSelect' }).vm.$emit('change', value);
       await flushPromises();
-      expect(updateState).toHaveBeenCalledWith(`query.${field}`, value);
-      expect(refresh).toHaveBeenCalledOnce();
-      expect(updateState.mock.invocationCallOrder[0]).toBeLessThan(
-        refresh.mock.invocationCallOrder[0]
-      );
+      expect(search).toHaveBeenCalledOnce();
       wrapper.unmount();
     }
   );
@@ -86,17 +86,19 @@ describe('GridList public query contract', () => {
       pageSize: 20,
     });
     const wrapper = mount(ConfigList, {
-      global: globalOptions(vi.fn(), vi.fn()),
+      global: globalOptions({}, vi.fn()),
     });
     await wrapper.findComponent({ name: 'ZxGridList' }).props('loadData')({
       query: { configName: 'database', configType: 'N' },
-      pager: { page: 3, size: 20, total: 0 },
+      pager: { page: 3, size: 20 },
+      sort: [{ field: 'createTime', order: 'desc' }],
     });
     expect(listConfig).toHaveBeenCalledWith({
       configName: 'database',
       configType: 'N',
       page: 3,
       pageSize: 20,
+      sort: [{ field: 'createTime', order: 'desc' }],
     });
     wrapper.unmount();
   });

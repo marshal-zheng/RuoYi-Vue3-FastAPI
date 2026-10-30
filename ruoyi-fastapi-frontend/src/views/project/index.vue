@@ -7,68 +7,73 @@
       class="project-grid"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton
-              type="primary"
-              icon="Plus"
-              data-testid="project-add-button"
-              @click="handleAdd"
-              v-hasPermi="['project:project:add']"
-              >新增</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['project:project:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton
-              icon="Download"
-              :disabled="multiple"
-              @click="handleBatchExport"
-              v-hasPermi="['project:project:query']"
-              >批量导出</ZxButton
-            >
-            <ZxButton icon="Upload" @click="handleImportClick" v-hasPermi="['project:project:add']"
-              >导入工程</ZxButton
-            >
-            <input
-              ref="importFileInputRef"
-              type="file"
-              accept=".zip"
-              style="display: none"
-              @change="handleImportFileChange"
-            />
-          </template>
-          <template #filters>
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 240px"
-              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.projectName"
-              placeholder="搜索工程名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Plus"
+                data-testid="project-add-button"
+                @click="handleAdd"
+                v-hasPermi="['project:project:add']"
+                >新增</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['project:project:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+              <ZxButton
+                icon="Download"
+                :disabled="multiple"
+                @click="handleBatchExport"
+                v-hasPermi="['project:project:query']"
+                >批量导出</ZxButton
+              >
+              <ZxButton
+                icon="Upload"
+                @click="handleImportClick"
+                v-hasPermi="['project:project:add']"
+                >导入工程</ZxButton
+              >
+              <input
+                ref="importFileInputRef"
+                type="file"
+                accept=".zip"
+                style="display: none"
+                @change="handleImportFileChange"
+              />
+            </template>
+            <template #filters>
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                style="width: 240px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.projectName"
+                placeholder="搜索工程名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -83,7 +88,9 @@
               :data-testid="`project-card-${project.projectId}`"
               shadow="hover"
               :body-style="{ padding: '0' }"
-              :class="{ 'project-card--selected': ids.includes(project.projectId) }"
+              :class="{
+                'project-card--selected': ids.includes(project.projectId),
+              }"
             >
               <div
                 v-if="ids.includes(project.projectId)"
@@ -247,6 +254,7 @@
 </template>
 
 <script setup name="Project">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import {
@@ -285,17 +293,8 @@ async function loadProjectData(params) {
   return response;
 }
 
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
-  handleRefresh();
-}
-
-function onSearch({ handleRefresh }) {
-  handleRefresh();
-}
-
 function refreshList() {
-  gridListRef.value && gridListRef.value.refresh();
+  gridListRef.value && gridListRef.value.reload();
 }
 
 function handleAdd() {

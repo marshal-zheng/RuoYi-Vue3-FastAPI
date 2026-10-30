@@ -1,3 +1,4 @@
+import { normalizeGridParams } from './grid-params';
 import { observeFeedback } from '@/utils/feedback/channel';
 /**
  * @zxio/http 全局 HTTP 客户端配置
@@ -171,7 +172,9 @@ const notifier: HttpNotifier = {
     return showMessage({ type, message: content });
   },
   modal(type, options) {
-    return ElMessageBox.alert(options.content, options.title || '提示', { type });
+    return ElMessageBox.alert(options.content, options.title || '提示', {
+      type,
+    });
   },
 };
 
@@ -337,45 +340,6 @@ const gridListPlugin = createGridListPlugin({
 
 const hasValue = (value: unknown): boolean => value !== null && value !== undefined && value !== '';
 
-const normalizeGridParams = (params: Record<string, unknown>): Record<string, unknown> => {
-  const normalizedParams: Record<string, unknown> = { ...(params || {}) };
-  const pager = normalizedParams.pager as Record<string, unknown> | undefined;
-  if (pager && typeof pager === 'object') {
-    if (hasValue(pager.page)) normalizedParams.page = pager.page;
-    if (hasValue(pager.size)) normalizedParams.pageSize = pager.size;
-    delete normalizedParams.pager;
-  }
-
-  const query = normalizedParams.query as Record<string, unknown> | undefined;
-  if (query && typeof query === 'object') {
-    const queryPayload = { ...query };
-
-    if (queryPayload.sortProp) {
-      normalizedParams.orderByColumn = queryPayload.sortProp;
-      delete queryPayload.sortProp;
-    }
-    if (queryPayload.sortOrder) {
-      const orderMap: Record<string, string> = {
-        ascending: 'asc',
-        descending: 'desc',
-      };
-      normalizedParams.isAsc = orderMap[queryPayload.sortOrder as string] || queryPayload.sortOrder;
-      delete queryPayload.sortOrder;
-    }
-    if (typeof queryPayload.isAsc === 'string') {
-      const orderMap: Record<string, string> = {
-        ascending: 'asc',
-        descending: 'desc',
-      };
-      queryPayload.isAsc = orderMap[queryPayload.isAsc] || queryPayload.isAsc;
-    }
-    Object.assign(normalizedParams, queryPayload);
-    delete normalizedParams.query;
-  }
-
-  return normalizedParams;
-};
-
 const beforeRequestTransform: HttpTransformHook = {
   async beforeRequest(config, options) {
     assertRequestScope(options);
@@ -391,7 +355,7 @@ const beforeRequestTransform: HttpTransformHook = {
 
     if (requestConfig.method?.toLowerCase() === 'get' && isRecord(requestConfig.params)) {
       const params = requestConfig.params as Record<string, unknown>;
-      if (params.pager || params.query || hasValue(params.page)) {
+      if (params.pager || params.query || params.sort !== undefined || hasValue(params.page)) {
         requestConfig.params = normalizeGridParams(params);
       }
     }

@@ -6,43 +6,45 @@
     :load-on-mounted="true"
     fill
   >
-    <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-      <DictStatus :types="['sys_normal_disable']" />
-      <ZxListToolbar aria-label="列表操作与筛选">
-        <template #actions>
-          <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:menu:add']"
-            >新增</ZxButton
-          >
-          <ZxButton @click="toggleExpandAll">展开/折叠</ZxButton>
-        </template>
-        <template #filters>
-          <zx-input
-            v-model="query.menuName"
-            placeholder="请输入菜单名称"
-            clearable
-            style="width: 200px"
-            @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-          />
-          <DictSelect
-            dict-type="sys_normal_disable"
-            v-model="query.status"
-            placeholder="菜单状态"
-            clearable
-            style="width: 200px"
-            @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
-          />
-        </template>
-        <template #search>
-          <ZxSearch
-            v-model="query.menuName"
-            placeholder="搜索菜单名称"
-            :loading="loading"
-            search-mode="click"
-            @search="() => onSearch({ handleRefresh, updateState })"
-            @clear="() => onSearch({ handleRefresh, updateState })"
-          />
-        </template>
-      </ZxListToolbar>
+    <template #form="listForm">
+      <template v-if="listForm.mode === 'request'">
+        <DictStatus :types="['sys_normal_disable']" />
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
+            <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:menu:add']"
+              >新增</ZxButton
+            >
+            <ZxButton @click="toggleExpandAll">展开/折叠</ZxButton>
+          </template>
+          <template #filters>
+            <zx-input
+              v-model="listForm.draft.menuName"
+              placeholder="请输入菜单名称"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => listForm.search()"
+            />
+            <DictSelect
+              dict-type="sys_normal_disable"
+              v-model="listForm.draft.status"
+              placeholder="菜单状态"
+              clearable
+              style="width: 200px"
+              @change="() => listForm.search()"
+            />
+          </template>
+          <template #search>
+            <ZxSearch
+              v-model="listForm.draft.menuName"
+              placeholder="搜索菜单名称"
+              :loading="listForm.loading"
+              search-mode="click"
+              @search="() => listForm.search()"
+              @clear="() => listForm.search()"
+            />
+          </template>
+        </ZxListToolbar>
+      </template>
     </template>
 
     <template #table="{ grid }">
@@ -123,22 +125,28 @@
     </template>
   </ZxGridList>
 
-  <MenuDrawer ref="menuDrawerRef" @success="gridListRef?.refresh()" />
+  <MenuDrawer ref="menuDrawerRef" @success="gridListRef?.reload()" />
 </template>
 
 <script setup lang="ts" name="MenuList">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { resolveNavigationIcon } from '@/icons/navigation';
-import type { GridListState, ZxGridListInstance, ActionItem } from '@zxio/zxui';
+import type {
+  GridListPagerState,
+  GridListSortItem,
+  ZxGridListRequestInstance,
+  ActionItem,
+} from '@zxio/zxui';
 import type { MenuRecord } from '@/api/system/menu';
 import type { GetSystemMenuListSystemMenuListGetData } from '@/api/_generated/types.gen';
 type ListQuery = NonNullable<GetSystemMenuListSystemMenuListGetData['query']> & {
   dateRange?: string[] | null;
 };
-type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
-type ListActions = {
-  handleRefresh: ZxGridListInstance['refresh'];
-  updateState: ZxGridListInstance['updateState'];
+type ListLoadParams = {
+  query?: ListQuery;
+  pager?: GridListPagerState;
+  sort?: readonly GridListSortItem[];
 };
 import { ref, nextTick, getCurrentInstance } from 'vue';
 import { listMenu, delMenu } from '@/api/system/menu';
@@ -150,39 +158,18 @@ const { parseTime } = proxy;
 
 const isExpandAll = ref(false);
 const refreshTable = ref(true);
-const gridListRef = ref<InstanceType<(typeof import('@zxio/zxui'))['ZxGridList']> | null>(null);
+const gridListRef = ref<ZxGridListRequestInstance | null>(null);
 const menuDrawerRef = ref<InstanceType<typeof MenuDrawer> | null>(null);
 
 async function loadMenuData(params: ListLoadParams) {
   const query = {
+    sort: params.sort,
     menuName: params.query?.menuName,
     status: params.query?.status,
   };
-  try {
-    const response = await listMenu(query);
-    const tree = proxy.handleTree(response.items, 'menuId');
-    return { data: tree || [], total: 0 };
-  } catch {
-    return { data: [], total: 0 };
-  }
-}
-
-function onFilterChange(
-  field: string,
-  value: unknown,
-  { handleRefresh, updateState }: ListActions
-) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-
-function onSearch({
-  handleRefresh,
-}: {
-  handleRefresh: ListActions['handleRefresh'];
-  updateState?: ListActions['updateState'];
-}) {
-  handleRefresh();
+  const response = await listMenu(query);
+  const tree = proxy.handleTree(response.items, 'menuId');
+  return { data: tree || [], total: 0 };
 }
 
 function handleAdd(row?: MenuRecord) {
@@ -211,7 +198,7 @@ const { run: handleDelete } = useOperation(async (row: MenuRecord) => {
     .confirm('是否确认删除名称为"' + row.menuName + '"的数据项?')
     .then(() => delMenu(row.menuId))
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch(() => {});
 });

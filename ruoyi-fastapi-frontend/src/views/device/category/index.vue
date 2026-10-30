@@ -6,50 +6,52 @@
       :query-transform="queryTransform"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton
-              type="primary"
-              icon="Plus"
-              @click="handleAdd"
-              v-hasPermi="['device:category:add']"
-              >新增</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['device:category:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-          </template>
-          <template #filters>
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 308px; margin-left: 8px"
-              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.name"
-              placeholder="搜索分类名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Plus"
+                @click="handleAdd"
+                v-hasPermi="['device:category:add']"
+                >新增</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['device:category:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+            </template>
+            <template #filters>
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                style="width: 308px; margin-left: 8px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.name"
+                placeholder="搜索分类名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -96,6 +98,7 @@
 </template>
 
 <script setup name="DeviceCategory">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import { listDeviceCategory, delDeviceCategory } from '@/api/device/category';
@@ -118,16 +121,6 @@ function queryTransform(query) {
 async function loadCategoryData(params) {
   const response = await listDeviceCategory(params);
   return response;
-}
-
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState(`query.${key}`, value);
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  handleRefresh();
 }
 
 function handleAdd() {
@@ -157,6 +150,6 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(async (
 });
 
 function refreshList() {
-  gridListRef.value && gridListRef.value.refresh();
+  gridListRef.value && gridListRef.value.reload();
 }
 </script>

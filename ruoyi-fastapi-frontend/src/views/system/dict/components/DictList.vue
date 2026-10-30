@@ -49,51 +49,52 @@
       :key="queryScope?.key"
       ref="gridListRef"
       :load-data="loadDictData"
+      :query-context="gridQueryContext"
       :query-transform="queryTransform"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #filters>
-            <zx-input
-              v-model="query.dictType"
-              placeholder="字典类型"
-              clearable
-              style="width: 240px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-            <DictSelect
-              v-model="query.status"
-              dict-type="sys_normal_disable"
-              placeholder="字典状态"
-              clearable
-              style="width: 240px; margin-left: 8px"
-              @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
-            />
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 308px; margin-left: 8px"
-              @change="
-                (v: unknown) => onFilterChange('dateRange', v, { handleRefresh, updateState })
-              "
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.dictName"
-              placeholder="搜索字典名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #filters>
+              <zx-input
+                v-model="listForm.draft.dictType"
+                placeholder="字典类型"
+                clearable
+                style="width: 240px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <DictSelect
+                v-model="listForm.draft.status"
+                dict-type="sys_normal_disable"
+                placeholder="字典状态"
+                clearable
+                style="width: 240px; margin-left: 8px"
+                @change="() => listForm.search()"
+              />
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                style="width: 308px; margin-left: 8px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.dictName"
+                placeholder="搜索字典名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -156,23 +157,25 @@
 </template>
 
 <script setup lang="ts">
+import { normalizeGridParams } from '@/utils/grid-params';
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
 import { useOperation } from '@/utils/operation';
-import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { GridListPagerState, GridListSortItem, ZxGridListRequestInstance } from '@zxio/zxui';
 import type { TypeRecord } from '@/api/system/dict/type';
 import type { DictTypePageQueryModel } from '@/api/_generated/types.gen';
 type ListQuery = DictTypePageQueryModel & { dateRange?: string[] | null };
-type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
-type ListActions = {
-  handleRefresh: ZxGridListInstance['refresh'];
-  updateState: ZxGridListInstance['updateState'];
+type ListLoadParams = {
+  query?: ListQuery;
+  pager?: GridListPagerState;
+  sort?: readonly GridListSortItem[];
 };
 import { ref, getCurrentInstance, watch } from 'vue';
 import { parseTime, serializeDateRange } from '@/utils/ruoyi';
 import { listType } from '@/api/system/dict/type';
 import { useDictManagement, useDictManagementList } from '@/queries/system/dict-management';
 import DictSelect from '@/components/business/DictSelect/index.vue';
-import { queryScope } from '@/queries/context';
+import { queryScope, gridQueryContext } from '@/queries/context';
 import type { RequestOptions } from '@zxio/http';
 import DictDlg from './DictDlg.vue';
 
@@ -182,7 +185,7 @@ const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<ZxGridListInstance | null>(null);
+const gridListRef = ref<ZxGridListRequestInstance | null>(null);
 const dictDlgRef = ref<InstanceType<typeof DictDlg> | null>(null);
 const { deleteTypes: delType, refreshCache } = useDictManagement(handleRefresh);
 
@@ -194,34 +197,19 @@ function queryTransform(query: ListQuery) {
 /** GridList 数据加载函数 */
 const { loadData: loadDictData, status: listStatus } = useDictManagementList(
   async (params: ListLoadParams, options: RequestOptions) => {
-    return await listType(
-      {
-        ...params.query,
-        page: params.pager?.page,
-        pageSize: params.pager?.size,
-      },
-      options
-    );
+    const query = {
+      ...params.query,
+      sort: params.sort,
+      page: params.pager?.page,
+      pageSize: params.pager?.size,
+    };
+    return listType(query, options);
   }
 );
 
-function onFilterChange(key: string, value: unknown, { handleRefresh, updateState }: ListActions) {
-  updateState(`query.${key}`, value);
-  handleRefresh();
-}
-
-function onSearch({
-  handleRefresh,
-}: {
-  handleRefresh: ListActions['handleRefresh'];
-  updateState?: ListActions['updateState'];
-}) {
-  handleRefresh();
-}
-
 /** 刷新列表 */
 function handleRefresh() {
-  return gridListRef.value?.refresh();
+  return gridListRef.value?.reload();
 }
 
 /** 多选框选中数据 */
@@ -262,11 +250,14 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(
 
 /** 导出按钮操作 */
 function handleExport() {
-  const snapshot = gridListRef.value?.getStateSnapshot();
+  const snapshot = gridListRef.value?.applied;
   if (!snapshot) return;
   proxy.download(
     'system/dict/type/export',
-    queryTransform(snapshot.query as ListQuery),
+    normalizeGridParams({
+      query: queryTransform(snapshot.query as ListQuery),
+      sort: snapshot.sort,
+    }),
     `dict_${new Date().getTime()}.xlsx`
   );
 }
@@ -274,7 +265,6 @@ function handleExport() {
 watch(
   queryScope,
   () => {
-    gridListRef.value?.updateState('list', []);
     ids.value = [];
     single.value = true;
     multiple.value = true;

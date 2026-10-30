@@ -17,64 +17,71 @@
       :key="queryScope?.key"
       ref="gridListRef"
       :load-data="loadDictData"
-      :initial-state="initialState"
+      :query-context="gridQueryContext"
+      :defaults="defaults"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:dict:add']"
-              >新增</ZxButton
-            >
-            <ZxButton
-              icon="Edit"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['system:dict:edit']"
-              >修改</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['system:dict:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:dict:export']"
-              >导出</ZxButton
-            >
-            <ZxButton icon="Close" @click="handleClose">关闭</ZxButton>
-          </template>
-          <template #filters>
-            <DictTypeSelect
-              v-model="query.dictType"
-              placeholder="字典名称"
-              style="width: 200px"
-              @change="(v) => onFilterChange('dictType', v, { handleRefresh, updateState })"
-            />
-            <DictSelect
-              v-model="query.status"
-              dict-type="sys_normal_disable"
-              placeholder="数据状态"
-              clearable
-              style="width: 200px"
-              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.dictLabel"
-              placeholder="搜索字典标签"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Plus"
+                @click="handleAdd"
+                v-hasPermi="['system:dict:add']"
+                >新增</ZxButton
+              >
+              <ZxButton
+                icon="Edit"
+                :disabled="single"
+                @click="handleUpdate"
+                v-hasPermi="['system:dict:edit']"
+                >修改</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['system:dict:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+              <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:dict:export']"
+                >导出</ZxButton
+              >
+              <ZxButton icon="Close" @click="handleClose">关闭</ZxButton>
+            </template>
+            <template #filters>
+              <DictTypeSelect
+                v-model="listForm.draft.dictType"
+                placeholder="字典名称"
+                style="width: 200px"
+                @change="() => listForm.search()"
+              />
+              <DictSelect
+                v-model="listForm.draft.status"
+                dict-type="sys_normal_disable"
+                placeholder="数据状态"
+                clearable
+                style="width: 200px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.dictLabel"
+                placeholder="搜索字典标签"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -228,6 +235,8 @@
 </template>
 
 <script setup name="Data">
+import { normalizeGridParams } from '@/utils/grid-params';
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useAIContextHost } from '@/ai-context/host';
 import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
 import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
@@ -241,7 +250,7 @@ import { useOperation } from '@/utils/operation';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 
 import { useDictManagement, useDictManagementList } from '@/queries/system/dict-management';
-import { queryScope } from '@/queries/context';
+import { queryScope, gridQueryContext } from '@/queries/context';
 import DictSelect from '@/components/business/DictSelect/index.vue';
 import DictTypeSelect from '@/components/business/DictTypeSelect/index.vue';
 import { useDictTypeDetailQuery } from '@/queries/system/use-dict-query';
@@ -258,7 +267,7 @@ const {
   updateItem: updateData,
   deleteItems: delData,
 } = useDictManagement(refreshList);
-const initialState = ref({ query: {} });
+const defaults = ref({ query: {} });
 
 const ids = ref([]);
 const single = ref(true);
@@ -317,6 +326,7 @@ const { loadData: loadDictData, status: listStatus } = useDictManagementList(
     const response = await listData(
       {
         ...params.query,
+        sort: params.sort,
         page: params.pager?.page,
         pageSize: params.pager?.size,
       },
@@ -331,12 +341,12 @@ watch(
   defaultDictType,
   (type) => {
     if (!type) return;
-    initialState.value = {
-      ...initialState.value,
-      query: { ...initialState.value.query, dictType: type },
+    defaults.value = {
+      ...defaults.value,
+      query: { ...defaults.value.query, dictType: type },
     };
-    gridListRef.value?.updateState('query.dictType', type);
-    refreshList();
+    gridListRef.value?.setDraft({ dictType: type });
+    void gridListRef.value?.search();
   },
   { immediate: true }
 );
@@ -389,19 +399,12 @@ function reset() {
 }
 /** 刷新列表 */
 function refreshList() {
-  return gridListRef.value?.refresh();
+  return gridListRef.value?.reload();
 }
 
 /** 筛选变化 */
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState(`query.${key}`, value);
-  handleRefresh();
-}
 
 /** 搜索 */
-function onSearch({ handleRefresh }) {
-  handleRefresh();
-}
 
 /** 返回按钮操作 */
 function handleClose() {
@@ -502,11 +505,11 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(async (
 });
 /** 导出按钮操作 */
 function handleExport() {
-  const snapshot = gridListRef.value?.getStateSnapshot();
+  const snapshot = gridListRef.value?.applied;
   if (!snapshot) return;
   proxy.download(
     'system/dict/data/export',
-    snapshot.query,
+    normalizeGridParams({ query: snapshot.query, sort: snapshot.sort }),
     `dict_data_${new Date().getTime()}.xlsx`
   );
 }
@@ -516,7 +519,6 @@ watch(
   () => {
     opening++;
     retireEditor();
-    gridListRef.value?.updateState('list', []);
     ids.value = [];
     single.value = true;
     multiple.value = true;

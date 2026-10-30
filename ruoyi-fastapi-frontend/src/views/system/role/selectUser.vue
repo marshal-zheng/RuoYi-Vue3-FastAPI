@@ -40,7 +40,7 @@
       :pagination="pagination"
       :status="listStatus"
       @page-change="handlePageChange"
-      @refresh="getList"
+      @reload="getList"
     >
       <template #table="{ grid, renderEmpty }">
         <el-table
@@ -91,6 +91,7 @@
 </template>
 
 <script setup name="SelectUser">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { computed, getCurrentInstance, nextTick, reactive, ref, shallowRef, watch } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
 import { useOperation } from '@/utils/operation';

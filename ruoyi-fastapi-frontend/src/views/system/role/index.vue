@@ -8,7 +8,7 @@
       :pagination="pagination"
       :status="listStatus"
       @page-change="handlePageChange"
-      @refresh="refreshList"
+      @reload="refreshList"
       fill
     >
       <template #form>
@@ -163,6 +163,7 @@
 </template>
 
 <script setup name="Role">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { computed, getCurrentInstance, reactive, ref, shallowReactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuery } from '@tanstack/vue-query';

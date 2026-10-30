@@ -7,35 +7,37 @@
       :load-on-mounted="true"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #filters>
-            <zx-input
-              v-model="query.ipaddr"
-              placeholder="请输入登录地址"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-            <zx-input
-              v-model="query.userName"
-              placeholder="请输入用户名称"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.userName"
-              placeholder="搜索用户名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #filters>
+              <zx-input
+                v-model="listForm.draft.ipaddr"
+                placeholder="请输入登录地址"
+                clearable
+                style="width: 200px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <zx-input
+                v-model="listForm.draft.userName"
+                placeholder="请输入用户名称"
+                clearable
+                style="width: 200px"
+                @keyup.enter="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.userName"
+                placeholder="搜索用户名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
       <template #table="{ grid }">
         <el-table v-loading="grid.loading" :data="grid.list || []" style="width: 100%">
@@ -107,6 +109,7 @@
 </template>
 
 <script setup name="Online">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { forceLogout, list as initData } from '@/api/monitor/online';
 
@@ -116,8 +119,9 @@ const gridListRef = ref(null);
 
 async function loadOnlineData(params) {
   const query = {
-    page: params.page,
-    pageSize: params.size,
+    page: params.pager?.page,
+    pageSize: params.pager?.size,
+    sort: params.sort,
     ipaddr: params.query?.ipaddr,
     userName: params.query?.userName,
   };
@@ -125,9 +129,6 @@ async function loadOnlineData(params) {
   return response;
 }
 
-function onSearch({ handleRefresh }) {
-  handleRefresh();
-}
 /** 强退按钮操作 */
 const { run: handleForceLogout, pending: handleForceLogoutPending } = useOperation(async (row) => {
   await proxy.$modal
@@ -136,7 +137,7 @@ const { run: handleForceLogout, pending: handleForceLogoutPending } = useOperati
       return forceLogout(row.tokenId);
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch(() => {});
 });

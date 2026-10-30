@@ -1,4 +1,5 @@
-import { readonly, shallowRef } from 'vue';
+import { readonly, shallowRef, watch } from 'vue';
+import type { GridListQueryContext } from '@zxio/zxui/grid-list';
 import { AbortError, type RequestOptions } from '@zxio/http';
 import { queryClient } from './client';
 
@@ -59,3 +60,12 @@ export function isRequestScopeCurrent(options?: RequestOptions): boolean {
 export function assertRequestScope(options?: RequestOptions): void {
   if (!isRequestScopeCurrent(options)) throw new AbortError({ message: '会话已结束，请重新登录' });
 }
+
+/** Notify only after the session scope has advanced; GridList clears all old-domain facts. */
+export const gridQueryContext: GridListQueryContext = {
+  capture: () => ({
+    version: queryScope.value?.key ?? `inactive:${generation}`,
+    ready: !!queryScope.value,
+  }),
+  subscribe: (listener) => watch(queryScope, () => listener(), { flush: 'sync' }),
+};

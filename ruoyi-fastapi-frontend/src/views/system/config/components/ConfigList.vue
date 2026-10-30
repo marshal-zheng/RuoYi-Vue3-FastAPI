@@ -7,81 +7,85 @@
     :load-on-mounted="true"
     fill
   >
-    <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-      <DictStatus :types="['sys_yes_no']" />
-      <ZxListToolbar aria-label="列表操作与筛选">
-        <template #actions>
-          <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:config:add']"
-            >新增</ZxButton
-          >
-          <ZxButton
-            icon="Edit"
-            :disabled="single"
-            @click="handleUpdate"
-            v-hasPermi="['system:config:edit']"
-            >修改</ZxButton
-          >
-          <ZxButton
-            plain
-            type="danger"
-            icon="Delete"
-            :disabled="multiple"
-            @click="handleDelete"
-            v-hasPermi="['system:config:remove']"
-            :loading="handleDeletePending"
-            >删除</ZxButton
-          >
-          <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:config:export']"
-            >导出</ZxButton
-          >
-          <ZxButton
-            icon="Refresh"
-            @click="handleRefreshCache"
-            v-hasPermi="['system:config:remove']"
-            :loading="handleRefreshCachePending"
-            >刷新缓存</ZxButton
-          >
-        </template>
-        <template #filters>
-          <zx-input
-            v-model="query.configKey"
-            placeholder="请输入参数键名"
-            clearable
-            style="width: 200px"
-            @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-          />
-          <DictSelect
-            v-model="query.configType"
-            dict-type="sys_yes_no"
-            placeholder="系统内置"
-            clearable
-            style="width: 200px"
-            @change="
-              (v: unknown) => onFilterChange('configType', v, { handleRefresh, updateState })
-            "
-          />
-          <el-date-picker
-            v-model="query.dateRange"
-            value-format="YYYY-MM-DD"
-            type="daterange"
-            range-separator="-"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            style="width: 240px"
-            @change="(v: unknown) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-          />
-        </template>
-        <template #search>
-          <ZxSearch
-            v-model="query.configName"
-            placeholder="搜索参数名称"
-            :loading="loading"
-            search-mode="click"
-            @search="() => onSearch({ handleRefresh, updateState })"
-            @clear="() => onSearch({ handleRefresh, updateState })"
-          />
-        </template>
-      </ZxListToolbar>
+    <template #form="listForm">
+      <template v-if="listForm.mode === 'request'">
+        <DictStatus :types="['sys_yes_no']" />
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
+            <ZxButton
+              type="primary"
+              icon="Plus"
+              @click="handleAdd"
+              v-hasPermi="['system:config:add']"
+              >新增</ZxButton
+            >
+            <ZxButton
+              icon="Edit"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['system:config:edit']"
+              >修改</ZxButton
+            >
+            <ZxButton
+              plain
+              type="danger"
+              icon="Delete"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['system:config:remove']"
+              :loading="handleDeletePending"
+              >删除</ZxButton
+            >
+            <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:config:export']"
+              >导出</ZxButton
+            >
+            <ZxButton
+              icon="Refresh"
+              @click="handleRefreshCache"
+              v-hasPermi="['system:config:remove']"
+              :loading="handleRefreshCachePending"
+              >刷新缓存</ZxButton
+            >
+          </template>
+          <template #filters>
+            <zx-input
+              v-model="listForm.draft.configKey"
+              placeholder="请输入参数键名"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => listForm.search()"
+            />
+            <DictSelect
+              v-model="listForm.draft.configType"
+              dict-type="sys_yes_no"
+              placeholder="系统内置"
+              clearable
+              style="width: 200px"
+              @change="() => listForm.search()"
+            />
+            <el-date-picker
+              v-model="listForm.draft.dateRange"
+              value-format="YYYY-MM-DD"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              style="width: 240px"
+              @change="() => listForm.search()"
+            />
+          </template>
+          <template #search>
+            <ZxSearch
+              v-model="listForm.draft.configName"
+              placeholder="搜索参数名称"
+              :loading="listForm.loading"
+              search-mode="click"
+              @search="() => listForm.search()"
+              @clear="() => listForm.search()"
+            />
+          </template>
+        </ZxListToolbar>
+      </template>
     </template>
 
     <template #table="{ grid }">
@@ -138,16 +142,18 @@
 </template>
 
 <script setup lang="ts">
+import { normalizeGridParams } from '@/utils/grid-params';
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
 import { useOperation } from '@/utils/operation';
-import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { GridListPagerState, GridListSortItem, ZxGridListRequestInstance } from '@zxio/zxui';
 import type { ConfigRecord } from '@/api/system/config';
 import type { ConfigPageQueryModel } from '@/api/_generated/types.gen';
 type ListQuery = ConfigPageQueryModel & { dateRange?: string[] | null };
-type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
-type ListActions = {
-  handleRefresh: ZxGridListInstance['refresh'];
-  updateState: ZxGridListInstance['updateState'];
+type ListLoadParams = {
+  query?: ListQuery;
+  pager?: GridListPagerState;
+  sort?: readonly GridListSortItem[];
 };
 import { ref, getCurrentInstance } from 'vue';
 import { parseTime } from '@/utils/ruoyi';
@@ -162,7 +168,7 @@ const { sys_yes_no } = proxy.useDict('sys_yes_no');
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<ZxGridListInstance | null>(null);
+const gridListRef = ref<ZxGridListRequestInstance | null>(null);
 const configDlgRef = ref<InstanceType<typeof ConfigDlg> | null>(null);
 
 /** 使用 GridList 的 queryTransform 处理日期范围 */
@@ -172,38 +178,18 @@ function queryTransform(query: ListQuery) {
 
 /** GridList 数据加载函数 */
 async function loadConfigData(params: ListLoadParams) {
-  try {
-    return await listConfig({
-      ...params.query,
-      page: params.pager?.page,
-      pageSize: params.pager?.size,
-    });
-  } catch {
-    return { data: [], total: 0 };
-  }
-}
-
-function onFilterChange(
-  field: string,
-  value: unknown,
-  { handleRefresh, updateState }: ListActions
-) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-
-function onSearch({
-  handleRefresh,
-}: {
-  handleRefresh: ListActions['handleRefresh'];
-  updateState?: ListActions['updateState'];
-}) {
-  handleRefresh();
+  const query = {
+    ...params.query,
+    page: params.pager?.page,
+    pageSize: params.pager?.size,
+    sort: params.sort,
+  };
+  return listConfig(query);
 }
 
 /** 刷新列表 */
 function handleRefresh() {
-  gridListRef.value?.refresh();
+  gridListRef.value?.reload();
 }
 
 /** 多选框选中数据 */
@@ -237,7 +223,7 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(
       .confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
       .then(() => delConfig(configIds))
       .then(() => {
-        gridListRef.value?.refresh();
+        gridListRef.value?.reload();
       })
       .catch(() => {});
   }
@@ -245,11 +231,14 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(
 
 /** 导出按钮操作 */
 function handleExport() {
-  const snapshot = gridListRef.value?.getStateSnapshot();
+  const snapshot = gridListRef.value?.applied;
   if (!snapshot) return;
   proxy.download(
     'system/config/export',
-    queryTransform(snapshot.query as ListQuery),
+    normalizeGridParams({
+      query: queryTransform(snapshot.query as ListQuery),
+      sort: snapshot.sort,
+    }),
     `config_${new Date().getTime()}.xlsx`
   );
 }

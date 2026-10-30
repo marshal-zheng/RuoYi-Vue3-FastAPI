@@ -2,96 +2,99 @@
   <ZxContentWrap fill>
     <ZxGridList
       ref="gridListRef"
+      :defaults="defaults"
       :load-data="loadLogininforData"
       :show-pagination="true"
       :load-on-mounted="true"
       fill
     >
-      <template #form="{ query, refresh: handleRefresh, updateState }">
-        <DictStatus :types="['sys_common_status']" />
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['monitor:logininfor:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              @click="handleClean"
-              v-hasPermi="['monitor:logininfor:remove']"
-              :loading="handleCleanPending"
-              >清空</ZxButton
-            >
-            <ZxButton
-              type="primary"
-              icon="Unlock"
-              :disabled="single"
-              @click="handleUnlock"
-              v-hasPermi="['monitor:logininfor:unlock']"
-              :loading="handleUnlockPending"
-              >解锁</ZxButton
-            >
-            <ZxButton
-              icon="Download"
-              @click="() => handleExport(query)"
-              v-hasPermi="['monitor:logininfor:export']"
-              >导出</ZxButton
-            >
-          </template>
-          <template #filters>
-            <zx-input
-              v-model="query.ipaddr"
-              placeholder="请输入登录地址"
-              clearable
-              style="width: 240px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-            <zx-input
-              v-model="query.userName"
-              placeholder="请输入用户名称"
-              clearable
-              style="width: 240px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-            <DictSelect
-              dict-type="sys_common_status"
-              v-model="query.status"
-              placeholder="登录状态"
-              clearable
-              style="width: 240px"
-              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-            />
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-              style="width: 308px"
-              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <DictStatus :types="['sys_common_status']" />
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['monitor:logininfor:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                @click="handleClean"
+                v-hasPermi="['monitor:logininfor:remove']"
+                :loading="handleCleanPending"
+                >清空</ZxButton
+              >
+              <ZxButton
+                type="primary"
+                icon="Unlock"
+                :disabled="single"
+                @click="handleUnlock"
+                v-hasPermi="['monitor:logininfor:unlock']"
+                :loading="handleUnlockPending"
+                >解锁</ZxButton
+              >
+              <ZxButton
+                icon="Download"
+                @click="() => handleExport()"
+                v-hasPermi="['monitor:logininfor:export']"
+                >导出</ZxButton
+              >
+            </template>
+            <template #filters>
+              <zx-input
+                v-model="listForm.draft.ipaddr"
+                placeholder="请输入登录地址"
+                clearable
+                style="width: 240px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <zx-input
+                v-model="listForm.draft.userName"
+                placeholder="请输入用户名称"
+                clearable
+                style="width: 240px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <DictSelect
+                dict-type="sys_common_status"
+                v-model="listForm.draft.status"
+                placeholder="登录状态"
+                clearable
+                style="width: 240px"
+                @change="() => listForm.search()"
+              />
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
+                style="width: 308px"
+                @change="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
-      <template #table="{ grid, refresh: handleRefresh, updateState }">
+      <template #table="{ grid }">
         <el-table
           ref="logininforRef"
           v-loading="grid.loading"
           :data="grid.list || []"
           @selection-change="handleSelectionChange"
-          :default-sort="defaultSort"
-          @sort-change="(c) => onSortChange(c, { updateState, handleRefresh })"
+          ref="sortTableRef"
+          @sort-change="onSortChange"
         >
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="访问编号" align="center" prop="infoId" />
@@ -152,6 +155,8 @@
 </template>
 
 <script setup name="Logininfor">
+import { useGridTableSort } from '@/composables/useGridTableSort';
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { list, delLogininfor, cleanLogininfor, unlockLogininfor } from '@/api/monitor/logininfor';
 
@@ -162,30 +167,15 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const selectName = ref('');
-const defaultSort = ref({ prop: 'loginTime', order: 'descending' });
+const defaults = { sort: [{ field: 'loginTime', order: 'desc' }] };
 const gridListRef = ref(null);
+const { sortTableRef, onSortChange } = useGridTableSort(gridListRef);
 
 /** 使用 GridList 的 queryTransform 处理日期范围 */
 
 /** GridList 数据加载函数 - 不处理参数转换 */
 async function loadLogininforData(params) {
-  try {
-    return await list(params);
-  } catch {
-    return { data: [], total: 0 };
-  }
-}
-function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-function onSearch({ handleRefresh }) {
-  handleRefresh();
-}
-function onSortChange(c, { updateState, handleRefresh }) {
-  updateState('query.orderByColumn', c.prop);
-  updateState('query.isAsc', c.order);
-  handleRefresh();
+  return await list(params);
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
@@ -203,7 +193,7 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(async (
       return delLogininfor(infoIds);
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch(() => {});
 });
@@ -215,7 +205,7 @@ const { run: handleClean, pending: handleCleanPending } = useOperation(async () 
       return cleanLogininfor();
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch(() => {});
 });
@@ -230,14 +220,17 @@ const { run: handleUnlock, pending: handleUnlockPending } = useOperation(async (
     .then(() => {})
     .catch(() => {});
 });
-function handleExport(query) {
+function handleExport() {
+  const applied = gridListRef.value?.applied;
+  if (!applied) return;
+  const query = applied.query;
   const params = proxy.addDateRange(
     {
       ipaddr: query?.ipaddr,
       userName: query?.userName,
       status: query?.status,
-      orderByColumn: query?.orderByColumn,
-      isAsc: query?.isAsc,
+      orderByColumn: applied.sort[0]?.field,
+      isAsc: applied.sort[0]?.order,
     },
     query?.dateRange || []
   );

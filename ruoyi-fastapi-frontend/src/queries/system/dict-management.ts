@@ -38,14 +38,18 @@ export function useDictManagement(refreshList: () => unknown) {
 export function useDictManagementList<P, R>(
   load: (params: P, options: RequestOptions) => Promise<R>
 ) {
-  const status = shallowReactive({ loading: false, error: null as unknown, hasData: false });
-  let lastSuccess: { identity: string; result: R } | undefined;
+  const status = shallowReactive({
+    loading: false,
+    error: null as unknown,
+    hasData: false,
+  });
+  let hasResult = false;
   let generation = 0;
   watch(
     queryScope,
     () => {
       generation++;
-      lastSuccess = undefined;
+      hasResult = false;
       status.loading = false;
       status.error = null;
       status.hasData = false;
@@ -55,24 +59,21 @@ export function useDictManagementList<P, R>(
   async function loadData(params: P): Promise<R> {
     const scope = queryScope.value;
     if (!scope) throw new AbortError({ message: '会话已结束，请重新登录' });
-    const identity = JSON.stringify([scope.key, params]);
     const request = ++generation;
     status.loading = true;
     status.error = null;
-    status.hasData = lastSuccess?.identity === identity;
+    status.hasData = hasResult;
     try {
       const result = await load(params, scopeRequestOptions(scope));
       if (scope !== queryScope.value) throw new AbortError({ message: '会话已结束，请重新登录' });
       if (request === generation) {
-        lastSuccess = { identity, result };
+        hasResult = true;
         status.hasData = true;
       }
       return result;
     } catch (error) {
       if (request === generation) status.error = error;
-      // Keep this request view's last result for the same scope and filters; never cache options here.
-      if (lastSuccess?.identity === identity && scope === queryScope.value)
-        return lastSuccess.result;
+      // GridList retains its displayed result; a failed read remains a failed operation.
       throw error;
     } finally {
       if (request === generation) status.loading = false;

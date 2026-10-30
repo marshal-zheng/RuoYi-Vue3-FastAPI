@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { queryClient } from './client';
 import {
+  gridQueryContext,
   endQuerySession,
   setQuerySession,
   queryScope,
@@ -14,6 +15,18 @@ beforeEach(() => {
 });
 
 describe('application query scope', () => {
+  it('notifies GridList only after the domain has changed, including readiness edges', () => {
+    const captures: ReturnType<typeof gridQueryContext.capture>[] = [];
+    const stop = gridQueryContext.subscribe(() => captures.push(gridQueryContext.capture()));
+    const first = setQuerySession(1, [], []);
+    endQuerySession();
+    const second = setQuerySession(1, [], []);
+    stop();
+    expect(captures.map((capture) => capture.ready)).toEqual([true, false, true]);
+    expect(captures[0].version).toBe(first.key);
+    expect(captures[2].version).toBe(second.key);
+    expect(first.key).not.toBe(second.key);
+  });
   it('removes only its old scope and rejects a queued request after logout', () => {
     const first = setQuerySession(1, ['admin'], ['read']);
     const options = scopeRequestOptions(first);

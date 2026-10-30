@@ -22,7 +22,7 @@
       :pagination="pagination"
       :status="listStatus"
       @page-change="handlePageChange"
-      @refresh="refreshRoles"
+      @reload="refreshRoles"
       fill
     >
       <template #table="{ grid, renderEmpty }">
@@ -58,6 +58,7 @@
 </template>
 
 <script setup name="AuthRole">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { computed, getCurrentInstance, nextTick, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useQuery } from '@tanstack/vue-query';

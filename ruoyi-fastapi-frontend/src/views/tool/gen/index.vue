@@ -8,70 +8,72 @@
       :load-on-mounted="true"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton
-              type="primary"
-              icon="Download"
-              :disabled="multiple"
-              @click="handleGenTableClick"
-              v-hasPermi="['tool:gen:code']"
-              :loading="handleGenTablePending"
-              >生成</ZxButton
-            >
-            <ZxButton icon="Plus" @click="openCreateTable" v-hasRole="['admin']">创建</ZxButton>
-            <ZxButton icon="Upload" @click="openImportTable" v-hasPermi="['tool:gen:import']"
-              >导入</ZxButton
-            >
-            <ZxButton
-              icon="Edit"
-              :disabled="single"
-              @click="handleEditTable"
-              v-hasPermi="['tool:gen:edit']"
-              >修改</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['tool:gen:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-          </template>
-          <template #filters>
-            <zx-input
-              v-model="query.tableComment"
-              placeholder="请输入表描述"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-            />
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 240px"
-              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.tableName"
-              placeholder="搜索表名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Download"
+                :disabled="multiple"
+                @click="handleGenTableClick"
+                v-hasPermi="['tool:gen:code']"
+                :loading="handleGenTablePending"
+                >生成</ZxButton
+              >
+              <ZxButton icon="Plus" @click="openCreateTable" v-hasRole="['admin']">创建</ZxButton>
+              <ZxButton icon="Upload" @click="openImportTable" v-hasPermi="['tool:gen:import']"
+                >导入</ZxButton
+              >
+              <ZxButton
+                icon="Edit"
+                :disabled="single"
+                @click="handleEditTable"
+                v-hasPermi="['tool:gen:edit']"
+                >修改</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['tool:gen:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+            </template>
+            <template #filters>
+              <zx-input
+                v-model="listForm.draft.tableComment"
+                placeholder="请输入表描述"
+                clearable
+                style="width: 200px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                style="width: 240px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.tableName"
+                placeholder="搜索表名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -184,6 +186,7 @@
 </template>
 
 <script setup name="Gen">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { listTable, previewTable, delTable, genCode, synchDb } from '@/api/tool/gen';
 import { useDialog } from '@zxio/zxui/hooks';
@@ -225,7 +228,7 @@ onActivated(() => {
   const time = route.query.t;
   if (time != null && time != uniqueId.value) {
     uniqueId.value = time;
-    gridListRef.value?.refresh();
+    gridListRef.value?.reload();
   }
 });
 
@@ -234,19 +237,8 @@ async function loadTableData(params) {
   return listTable(params);
 }
 
-function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState(`query.${field}`, value);
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
-function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
 function handleRefresh() {
-  gridListRef.value?.refresh();
+  gridListRef.value?.reload();
 }
 
 /** 生成代码操作 */
@@ -321,7 +313,7 @@ function handleSelectionChange(selection) {
 /** 修改按钮操作 */
 function handleEditTable(row) {
   const tableId = row?.tableId || ids.value[0];
-  const currentPage = gridListRef.value?.getStateSnapshot()?.pager?.page || 1;
+  const currentPage = gridListRef.value?.applied?.pager?.page || 1;
   router.push({
     path: '/tool/gen-edit/index/' + tableId,
     query: { page: currentPage },

@@ -4,72 +4,74 @@
       ref="gridListRef"
       :load-data="loadOperlogData"
       :query-transform="queryTransform"
-      :initial-state="initialState"
+      :defaults="defaults"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <DictStatus :types="['sys_oper_type', 'sys_common_status']" />
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #filters>
-            <slot
-              name="filters"
-              :query="query"
-              :loading="loading"
-              :refresh="handleRefresh"
-              :updateState="updateState"
-            >
-              <zx-input
-                v-model="query.title"
-                placeholder="系统模块"
-                clearable
-                style="width: 200px; margin-left: 8px"
-                @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <DictStatus :types="['sys_oper_type', 'sys_common_status']" />
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #filters>
+              <slot
+                name="filters"
+                :draft="listForm.draft"
+                :loading="listForm.loading"
+                :search="listForm.search"
+                :set-draft="listForm.setDraft"
+              >
+                <zx-input
+                  v-model="listForm.draft.title"
+                  placeholder="系统模块"
+                  clearable
+                  style="width: 200px; margin-left: 8px"
+                  @keyup.enter="() => listForm.search()"
+                />
+                <OperTypeSelector
+                  v-model="listForm.draft.businessType"
+                  placeholder="类型"
+                  style="width: 160px; margin-left: 8px"
+                  @change="() => listForm.search()"
+                />
+                <OperStatusSelector
+                  v-model="listForm.draft.status"
+                  placeholder="状态"
+                  style="width: 160px; margin-left: 8px"
+                  @change="() => listForm.search()"
+                />
+                <el-date-picker
+                  v-model="listForm.draft.dateRange"
+                  value-format="YYYY-MM-DD HH:mm:ss"
+                  type="daterange"
+                  range-separator="-"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
+                  style="margin-left: 8px; width: 308px"
+                  @change="() => listForm.search()"
+                />
+              </slot>
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.operName"
+                placeholder="搜索操作人员"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
               />
-              <OperTypeSelector
-                v-model="query.businessType"
-                placeholder="类型"
-                style="width: 160px; margin-left: 8px"
-                @change="(v) => onFilterChange('businessType', v, { handleRefresh, updateState })"
-              />
-              <OperStatusSelector
-                v-model="query.status"
-                placeholder="状态"
-                style="width: 160px; margin-left: 8px"
-                @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-              />
-              <el-date-picker
-                v-model="query.dateRange"
-                value-format="YYYY-MM-DD HH:mm:ss"
-                type="daterange"
-                range-separator="-"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-                style="margin-left: 8px; width: 308px"
-                @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-              />
-            </slot>
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.operName"
-              placeholder="搜索操作人员"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
-      <template #table="{ grid, refresh: handleRefresh, updateState }">
+      <template #table="{ grid }">
         <el-table
           v-loading="grid.loading"
           :data="grid.list || []"
           @selection-change="(val) => onSelectionChange(val)"
-          :default-sort="defaultSort"
-          @sort-change="(c) => onSortChange(c, { updateState, handleRefresh })"
+          ref="sortTableRef"
+          @sort-change="onSortChange"
         >
           <el-table-column type="selection" width="50" />
           <el-table-column label="日志编号" prop="operId" />
@@ -141,6 +143,9 @@
 </template>
 
 <script setup>
+import { useGridTableSort } from '@/composables/useGridTableSort';
+import { ZxGridList } from '@zxio/zxui/grid-list';
+import { normalizeGridParams } from '@/utils/grid-params';
 import { useOperation } from '@/utils/operation';
 import { list, delOperlog, cleanOperlog } from '@/api/monitor/operlog';
 import { parseTime, serializeDateRange } from '@/utils/ruoyi';
@@ -152,18 +157,15 @@ const { sys_oper_type, sys_common_status } = proxy.useDict('sys_oper_type', 'sys
 
 const props = defineProps({ module: { type: String, default: '' } });
 const gridListRef = ref();
+const { sortTableRef, onSortChange } = useGridTableSort(gridListRef);
 const ids = ref([]);
-const defaultSort = ref({ prop: 'operTime', order: 'descending' });
 const detailDialogRef = ref();
 
-const initialState = computed(() => ({
+const defaults = computed(() => ({
   query: {
     title: props.module || '',
   },
-  pager: {
-    page: 1,
-    size: 10,
-  },
+  sort: [{ field: 'operTime', order: 'desc' }],
 }));
 
 function queryTransform(query) {
@@ -173,27 +175,10 @@ function queryTransform(query) {
 async function loadOperlogData(params) {
   return list({
     ...params.query,
+    sort: params.sort,
     page: params.pager?.page,
     pageSize: params.pager?.size,
   });
-}
-
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState(`query.${key}`, value);
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
-function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
-function onSortChange(column, { updateState, handleRefresh }) {
-  updateState('query.orderByColumn', column.order ? column.prop : undefined);
-  updateState('query.isAsc', column.order || undefined);
-  updateState('pager.page', 1);
-  handleRefresh();
 }
 
 function onSelectionChange(selection) {
@@ -214,7 +199,7 @@ const { run: deleteSelected } = useOperation(async () => {
       return delOperlog(operIds);
     })
     .then(() => {
-      gridListRef.value && gridListRef.value.refresh();
+      gridListRef.value && gridListRef.value.reload();
     })
     .catch(() => {});
 });
@@ -226,23 +211,26 @@ const { run: cleanAll } = useOperation(async () => {
       return cleanOperlog();
     })
     .then(() => {
-      gridListRef.value && gridListRef.value.refresh();
+      gridListRef.value && gridListRef.value.reload();
     })
     .catch(() => {});
 });
 
 function exportCurrent() {
-  const snapshot = gridListRef.value?.getStateSnapshot();
+  const snapshot = gridListRef.value?.applied;
   if (!snapshot) return;
   proxy.download(
     'monitor/operlog/export',
-    queryTransform(snapshot.query),
+    normalizeGridParams({
+      query: queryTransform(snapshot.query),
+      sort: snapshot.sort,
+    }),
     `operlog_${new Date().getTime()}.xlsx`
   );
 }
 
 function refresh() {
-  gridListRef.value && gridListRef.value.refresh();
+  gridListRef.value && gridListRef.value.reload();
 }
 
 const emit = defineEmits(['selection-change']);

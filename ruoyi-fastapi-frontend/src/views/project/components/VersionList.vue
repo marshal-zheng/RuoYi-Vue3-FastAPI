@@ -1,56 +1,64 @@
 <template>
   <div class="version-list" data-testid="version-list" data-zx-fill>
-    <ZxGridList ref="versionGridListRef" :load-data="loadVersionData" class="version-grid" fill>
+    <ZxGridList
+      ref="versionGridListRef"
+      :load-data="loadVersionData"
+      :query-context="versionContext"
+      class="version-grid"
+      fill
+    >
       <!-- 工具栏：左-操作 | 中-筛选 | 右-搜索 -->
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <!-- <ZxButton
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <!-- <ZxButton
               type="primary"
               icon="Plus"
               @click="handleAddVersion"
               v-hasPermi="['project:version:add']"
               >新增</ZxButton
             > -->
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="() => handleDeleteVersion(null, versionGridListRef?.refresh)"
-              v-hasPermi="['project:version:remove']"
-              >删除</ZxButton
-            >
-          </template>
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="() => handleDeleteVersion(null, versionGridListRef?.reload)"
+                v-hasPermi="['project:version:remove']"
+                >删除</ZxButton
+              >
+            </template>
 
-          <template #filters>
-            <!-- <el-date-picker
-              v-model="query.dateRange"
+            <template #filters>
+              <!-- <el-date-picker
+              v-model="listForm.draft.dateRange"
               value-format="YYYY-MM-DD"
               type="daterange"
               range-separator="-"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               style="width: 240px"
-              @change="v => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+              @change="() => listForm.search()"
             /> -->
-          </template>
+            </template>
 
-          <template #search>
-            <ZxSearch
-              v-model="query.versionName"
-              placeholder="搜索版本名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.versionName"
+                placeholder="搜索版本名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <!-- 表格内容 -->
-      <template #table="{ grid, refresh: handleRefresh }">
+      <template #table="{ grid, reload: handleRefresh }">
         <el-table
           v-loading="grid.loading"
           :data="grid.list"
@@ -213,6 +221,7 @@
 </template>
 
 <script setup name="VersionList">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 
@@ -242,6 +251,18 @@ const props = defineProps({
 });
 
 const versionGridListRef = ref(null);
+const versionContext = {
+  capture: () => ({
+    version: String(props.projectId ?? 'none'),
+    ready: !!props.projectId,
+  }),
+  subscribe: (notify) =>
+    watch(
+      () => props.projectId,
+      () => notify(),
+      { flush: 'sync' }
+    ),
+};
 const detailDialogRef = ref(null);
 const cloneDialogRef = ref(null);
 const previewDialogRef = ref(null);
@@ -295,19 +316,15 @@ watch(
   () => props.projectId,
   (value) => {
     if (value && versionGridListRef.value) {
-      versionGridListRef.value.refresh();
+      versionGridListRef.value.reset();
     }
   },
-  { immediate: true }
+  { flush: 'sync' }
 );
 
 /** 筛选变化处理 */
 
 /** 搜索处理 */
-function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  handleRefresh();
-}
 
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
@@ -425,7 +442,7 @@ const { run: handleDeleteVersion } = useOperation(async (row, handleRefresh) => 
         if (handleRefresh) {
           handleRefresh();
         } else if (versionGridListRef.value) {
-          versionGridListRef.value.refresh();
+          versionGridListRef.value.reload();
         }
       } catch (error) {
         console.error('删除版本失败:', error);
@@ -491,7 +508,7 @@ const { run: handleSaveEditVersion, pending: handleSaveEditVersionPending } = us
 
     // 刷新列表
     if (versionGridListRef.value) {
-      versionGridListRef.value.refresh();
+      versionGridListRef.value.reload();
     }
   }
 );
@@ -510,7 +527,7 @@ const { run: handleLockVersion, pending: handleLockVersionPending } = useOperati
           if (handleRefresh) {
             handleRefresh();
           } else if (versionGridListRef.value) {
-            versionGridListRef.value.refresh();
+            versionGridListRef.value.reload();
           }
         } catch (error) {
           console.error('固化版本失败:', error);
@@ -533,7 +550,7 @@ const { run: handleUnlockVersion } = useOperation(async (row, handleRefresh) => 
         if (handleRefresh) {
           handleRefresh();
         } else if (versionGridListRef.value) {
-          versionGridListRef.value.refresh();
+          versionGridListRef.value.reload();
         }
       } catch (error) {
         console.error('解除固化失败:', error);
@@ -547,7 +564,7 @@ function handleCloneVersion(row) {
   cloneDialogRef.value?.open(row, () => {
     // 克隆成功后刷新列表
     if (versionGridListRef.value) {
-      versionGridListRef.value.refresh();
+      versionGridListRef.value.reload();
     }
   });
 }

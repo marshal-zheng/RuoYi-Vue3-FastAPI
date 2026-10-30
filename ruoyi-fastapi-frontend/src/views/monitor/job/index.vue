@@ -7,69 +7,75 @@
       :load-on-mounted="true"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <DictStatus :types="['sys_job_group', 'sys_job_status', 'sys_job_executor']" />
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['monitor:job:add']"
-              >新增</ZxButton
-            >
-            <ZxButton
-              icon="Edit"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['monitor:job:edit']"
-              >修改</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['monitor:job:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton
-              icon="Download"
-              @click="() => handleExport(query)"
-              v-hasPermi="['monitor:job:export']"
-              >导出</ZxButton
-            >
-            <ZxButton icon="Operation" @click="handleJobLog" v-hasPermi="['monitor:job:query']"
-              >日志</ZxButton
-            >
-          </template>
-          <template #filters>
-            <DictSelect
-              dict-type="sys_job_group"
-              v-model="query.jobGroup"
-              placeholder="请选择任务组名"
-              clearable
-              style="width: 200px"
-              @change="(v) => onFilterChange('jobGroup', v, { handleRefresh, updateState })"
-            />
-            <DictSelect
-              dict-type="sys_job_status"
-              v-model="query.status"
-              placeholder="请选择任务状态"
-              clearable
-              style="width: 200px"
-              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.jobName"
-              placeholder="搜索任务名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <DictStatus :types="['sys_job_group', 'sys_job_status', 'sys_job_executor']" />
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Plus"
+                @click="handleAdd"
+                v-hasPermi="['monitor:job:add']"
+                >新增</ZxButton
+              >
+              <ZxButton
+                icon="Edit"
+                :disabled="single"
+                @click="handleUpdate"
+                v-hasPermi="['monitor:job:edit']"
+                >修改</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['monitor:job:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+              <ZxButton
+                icon="Download"
+                @click="() => handleExport()"
+                v-hasPermi="['monitor:job:export']"
+                >导出</ZxButton
+              >
+              <ZxButton icon="Operation" @click="handleJobLog" v-hasPermi="['monitor:job:query']"
+                >日志</ZxButton
+              >
+            </template>
+            <template #filters>
+              <DictSelect
+                dict-type="sys_job_group"
+                v-model="listForm.draft.jobGroup"
+                placeholder="请选择任务组名"
+                clearable
+                style="width: 200px"
+                @change="() => listForm.search()"
+              />
+              <DictSelect
+                dict-type="sys_job_status"
+                v-model="listForm.draft.status"
+                placeholder="请选择任务状态"
+                clearable
+                style="width: 200px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.jobName"
+                placeholder="搜索任务名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -357,6 +363,8 @@
 </template>
 
 <script setup name="Job">
+import { normalizeGridParams } from '@/utils/grid-params';
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { shallowReactive } from 'vue';
 
 import { useOperation } from '@/utils/operation';
@@ -415,20 +423,7 @@ const open = toRef(jobDialog.state, 'visible');
 
 /** GridList 数据加载函数 */
 async function loadJobData(params) {
-  try {
-    return await listJob(params);
-  } catch {
-    return { data: [], total: 0 };
-  }
-}
-
-function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-
-function onSearch({ handleRefresh }) {
-  handleRefresh();
+  return await listJob(params);
 }
 
 /** 任务组名字典翻译 */
@@ -563,12 +558,12 @@ const { run: submitForm, pending: submitFormPending } = useOperation(async () =>
     if (data.jobId !== undefined) {
       await updateJob({ ...payload, jobId: data.jobId }).then(() => {
         open.value = false;
-        gridListRef.value?.refresh();
+        gridListRef.value?.reload();
       });
     } else {
       await addJob(payload).then(() => {
         open.value = false;
-        gridListRef.value?.refresh();
+        gridListRef.value?.reload();
       });
     }
   }
@@ -581,13 +576,16 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(async (
     .confirm('是否确认删除定时任务编号为"' + jobIds + '"的数据项?')
     .then(() => delJob(jobIds))
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch(() => {});
 });
 
 /** 导出按钮操作 */
-function handleExport(query) {
+function handleExport() {
+  const applied = gridListRef.value?.applied;
+  if (!applied) return;
+  const query = normalizeGridParams({ query: applied.query, sort: applied.sort });
   proxy.download('monitor/job/export', query, `job_${new Date().getTime()}.xlsx`);
 }
 </script>

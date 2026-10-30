@@ -9,75 +9,77 @@
       fill
     >
       <!-- 工具栏：左-操作 | 中-筛选 | 右-搜索 -->
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <DictStatus :types="['sys_normal_disable']" />
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton
-              type="primary"
-              icon="Plus"
-              @click="handleAddProtocol"
-              v-hasPermi="['protocol:add']"
-              >新增</ZxButton
-            >
-            <ZxUpload
-              ref="importUploadRef"
-              v-model="importFileList"
-              :auto-upload="false"
-              :limit="50"
-              :multiple="true"
-              accept=".xlsx,.xls,.csv,.json"
-              button-text="导入协议"
-              :max-size="10 * 1024 * 1024"
-              :show-file-list="false"
-              :show-tip="false"
-              v-hasPermi="['protocol:add']"
-              @change="handleImportFileChange"
-            >
-              <ZxButton icon="Upload">导入协议</ZxButton>
-            </ZxUpload>
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleBatchDelete"
-              v-hasPermi="['protocol:remove']"
-              >批量删除</ZxButton
-            >
-          </template>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <DictStatus :types="['sys_normal_disable']" />
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Plus"
+                @click="handleAddProtocol"
+                v-hasPermi="['protocol:add']"
+                >新增</ZxButton
+              >
+              <ZxUpload
+                ref="importUploadRef"
+                v-model="importFileList"
+                :auto-upload="false"
+                :limit="50"
+                :multiple="true"
+                accept=".xlsx,.xls,.csv,.json"
+                button-text="导入协议"
+                :max-size="10 * 1024 * 1024"
+                :show-file-list="false"
+                :show-tip="false"
+                v-hasPermi="['protocol:add']"
+                @change="handleImportFileChange"
+              >
+                <ZxButton icon="Upload">导入协议</ZxButton>
+              </ZxUpload>
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleBatchDelete"
+                v-hasPermi="['protocol:remove']"
+                >批量删除</ZxButton
+              >
+            </template>
 
-          <template #filters>
-            <ProtocolTypeSelector
-              v-model="query.protocolType"
-              placeholder="请选择协议类型"
-              clearable
-              style="width: 200px"
-              @change="(v) => onFilterChange('protocolType', v, { handleRefresh, updateState })"
-            />
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 240px"
-              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
-          </template>
+            <template #filters>
+              <ProtocolTypeSelector
+                v-model="listForm.draft.protocolType"
+                placeholder="请选择协议类型"
+                clearable
+                style="width: 200px"
+                @change="() => listForm.search()"
+              />
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                style="width: 240px"
+                @change="() => listForm.search()"
+              />
+            </template>
 
-          <template #search>
-            <ZxSearch
-              v-model="query.protocolName"
-              placeholder="搜索协议名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.protocolName"
+                placeholder="搜索协议名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <!-- 表格内容 -->
@@ -143,6 +145,7 @@
 </template>
 
 <script setup name="Protocol">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import {
@@ -184,15 +187,8 @@ async function loadProtocolData(params) {
 }
 
 /** 筛选条件变化处理 */
-function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
 
 /** 搜索处理 */
-function onSearch({ handleRefresh }) {
-  handleRefresh();
-}
 
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
@@ -240,7 +236,7 @@ const { run: handleDelete } = useOperation(async (row) => {
       return delProtocolBatch(protocolIds);
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch((err) => {
       if (err?.message === 'no_ids') return;
@@ -266,7 +262,7 @@ const handleProtocolSaveSuccess = async (data) => {
       await addProtocol(data);
     }
     protocolDrawerRef.value?.close();
-    gridListRef.value?.refresh();
+    gridListRef.value?.reload();
   } catch (error) {
     throw error;
   }
@@ -353,7 +349,7 @@ async function doImportFiles(fileList) {
 
   // 刷新列表
   if (successCount > 0) {
-    gridListRef.value?.refresh();
+    gridListRef.value?.reload();
   }
 }
 </script>

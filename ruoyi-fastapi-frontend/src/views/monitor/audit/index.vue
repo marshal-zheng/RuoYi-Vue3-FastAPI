@@ -2,88 +2,91 @@
   <ZxContentWrap fill>
     <ZxGridList
       ref="gridListRef"
+      :defaults="defaults"
       :load-data="loadAuditData"
       :query-transform="queryTransform"
       :show-pagination="true"
       :load-on-mounted="true"
       fill
     >
-      <template #form="{ query, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['monitor:audit:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              @click="handleClean"
-              v-hasPermi="['monitor:audit:remove']"
-              :loading="handleCleanPending"
-              >清空</ZxButton
-            >
-          </template>
-          <template #filters>
-            <TableNameSelector
-              v-model="query.tableName"
-              clearable
-              filterable
-              style="width: 200px"
-              @change="(v) => onFilterChange('tableName', v, { handleRefresh, updateState })"
-            />
-            <zx-select
-              v-model="query.action"
-              :options="actionOptions"
-              placeholder="动作类型"
-              clearable
-              style="width: 160px"
-              @change="(v) => onFilterChange('action', v, { handleRefresh, updateState })"
-            />
-            <zx-input
-              v-model="query.operatorName"
-              placeholder="请输入操作人"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => onSearch({ handleRefresh })"
-            />
-            <zx-input
-              v-model="query.requestId"
-              placeholder="请输入请求ID"
-              clearable
-              style="width: 220px"
-              @keyup.enter="() => onSearch({ handleRefresh })"
-            />
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD HH:mm:ss"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
-              style="width: 308px"
-              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['monitor:audit:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                @click="handleClean"
+                v-hasPermi="['monitor:audit:remove']"
+                :loading="handleCleanPending"
+                >清空</ZxButton
+              >
+            </template>
+            <template #filters>
+              <TableNameSelector
+                v-model="listForm.draft.tableName"
+                clearable
+                filterable
+                style="width: 200px"
+                @change="() => listForm.search()"
+              />
+              <zx-select
+                v-model="listForm.draft.action"
+                :options="actionOptions"
+                placeholder="动作类型"
+                clearable
+                style="width: 160px"
+                @change="() => listForm.search()"
+              />
+              <zx-input
+                v-model="listForm.draft.operatorName"
+                placeholder="请输入操作人"
+                clearable
+                style="width: 200px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <zx-input
+                v-model="listForm.draft.requestId"
+                placeholder="请输入请求ID"
+                clearable
+                style="width: 220px"
+                @keyup.enter="() => listForm.search()"
+              />
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD HH:mm:ss"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
+                style="width: 308px"
+                @change="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
-      <template #table="{ grid, refresh: handleRefresh, updateState }">
+      <template #table="{ grid }">
         <el-table
           ref="auditRef"
           v-loading="grid.loading"
           :data="grid.list || []"
           @selection-change="handleSelectionChange"
-          :default-sort="defaultSort"
-          @sort-change="(c) => onSortChange(c, { updateState, handleRefresh })"
+          ref="sortTableRef"
+          @sort-change="onSortChange"
         >
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="审计ID" align="center" prop="auditId" />
@@ -140,6 +143,8 @@
 </template>
 
 <script setup name="AuditLog">
+import { useGridTableSort } from '@/composables/useGridTableSort';
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import { list, delAuditLog, cleanAuditLog } from '@/api/monitor/audit';
@@ -148,8 +153,9 @@ import TableNameSelector from '@/components/business/Monitor/selector/TableNameS
 const { proxy } = getCurrentInstance();
 const ids = ref([]);
 const multiple = ref(true);
-const defaultSort = ref({ prop: 'createTime', order: 'descending' });
+const defaults = { sort: [{ field: 'createTime', order: 'desc' }] };
 const gridListRef = ref(null);
+const { sortTableRef, onSortChange } = useGridTableSort(gridListRef);
 
 const actionOptions = [
   { label: 'READ', value: 'READ' },
@@ -165,25 +171,9 @@ function queryTransform(query) {
 
 /** GridList 数据加载函数 - 不处理参数转换 */
 async function loadAuditData(params) {
-  try {
-    return await list(params);
-  } catch {
-    return { data: [], total: 0 };
-  }
+  return await list(params);
 }
 
-function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
-}
-function onSearch({ handleRefresh }) {
-  handleRefresh();
-}
-function onSortChange(c, { updateState, handleRefresh }) {
-  updateState('query.orderByColumn', c.prop);
-  updateState('query.isAsc', c.order);
-  handleRefresh();
-}
 function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.auditId);
   multiple.value = !selection.length;
@@ -196,7 +186,7 @@ const { run: handleDelete, pending: handleDeletePending } = useOperation(async (
       return delAuditLog(auditIds);
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch(() => {});
 });
@@ -207,7 +197,7 @@ const { run: handleClean, pending: handleCleanPending } = useOperation(async () 
       return cleanAuditLog();
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      gridListRef.value?.reload();
     })
     .catch(() => {});
 });

@@ -7,7 +7,7 @@
     :status="listStatus"
     :show-pagination="false"
     fill
-    @refresh="refreshList"
+    @reload="refreshList"
   >
     <template #form>
       <DictStatus :types="['sys_normal_disable']" />
@@ -104,6 +104,7 @@
 </template>
 
 <script setup lang="ts" name="DeptList">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { computed, getCurrentInstance, nextTick, reactive, ref, watch } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
 import type { ActionItem } from '@zxio/zxui';

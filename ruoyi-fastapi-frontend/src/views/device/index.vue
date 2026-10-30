@@ -1,84 +1,90 @@
 <template>
   <ZxContentWrap fill>
     <ZxGridList ref="gridListRef" :load-data="loadDeviceData" fill>
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['device:list:add']"
-              >新加</ZxButton
-            >
-            <ZxUpload
-              ref="uploadRef"
-              v-model="importFileList"
-              :auto-upload="false"
-              :multiple="true"
-              :limit="50"
-              accept=".zip,.json"
-              button-text="导入设备"
-              :max-size="20 * 1024 * 1024"
-              :show-file-list="false"
-              :show-tip="false"
-              :loading="importing"
-              v-hasPermi="['device:list:add']"
-              @change="handleImportFileChange"
-            >
-              <ZxButton icon="Upload">导入设备</ZxButton>
-            </ZxUpload>
-            <ZxButton
-              icon="Download"
-              :disabled="multiple"
-              :loading="exporting"
-              @click="handleBatchExport"
-              v-hasPermi="['device:list:list']"
-              >批量导出</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['device:list:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-          </template>
-          <template #filters>
-            <el-select
-              v-model="query.busType"
-              placeholder="请选择总线类型"
-              clearable
-              style="width: 160px"
-              @change="(v) => onFilterChange('busType', v, { handleRefresh, updateState })"
-            >
-              <el-option label="RS422" value="RS422" />
-              <el-option label="RS485" value="RS485" />
-              <el-option label="CAN" value="CAN" />
-              <el-option label="LAN" value="LAN" />
-              <el-option label="1553B" value="1553B" />
-            </el-select>
-            <el-date-picker
-              v-model="query.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 240px"
-              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="query.deviceName"
-              placeholder="搜索设备名称"
-              :loading="loading"
-              search-mode="click"
-              @search="() => onSearch({ handleRefresh, updateState })"
-              @clear="() => onSearch({ handleRefresh, updateState })"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #form="listForm">
+        <template v-if="listForm.mode === 'request'">
+          <ZxListToolbar aria-label="列表操作与筛选">
+            <template #actions>
+              <ZxButton
+                type="primary"
+                icon="Plus"
+                @click="handleAdd"
+                v-hasPermi="['device:list:add']"
+                >新加</ZxButton
+              >
+              <ZxUpload
+                ref="uploadRef"
+                v-model="importFileList"
+                :auto-upload="false"
+                :multiple="true"
+                :limit="50"
+                accept=".zip,.json"
+                button-text="导入设备"
+                :max-size="20 * 1024 * 1024"
+                :show-file-list="false"
+                :show-tip="false"
+                :loading="importing"
+                v-hasPermi="['device:list:add']"
+                @change="handleImportFileChange"
+              >
+                <ZxButton icon="Upload">导入设备</ZxButton>
+              </ZxUpload>
+              <ZxButton
+                icon="Download"
+                :disabled="multiple"
+                :loading="exporting"
+                @click="handleBatchExport"
+                v-hasPermi="['device:list:list']"
+                >批量导出</ZxButton
+              >
+              <ZxButton
+                plain
+                type="danger"
+                icon="Delete"
+                :disabled="multiple"
+                @click="handleDelete"
+                v-hasPermi="['device:list:remove']"
+                :loading="handleDeletePending"
+                >删除</ZxButton
+              >
+            </template>
+            <template #filters>
+              <el-select
+                v-model="listForm.draft.busType"
+                placeholder="请选择总线类型"
+                clearable
+                style="width: 160px"
+                @change="() => listForm.search()"
+              >
+                <el-option label="RS422" value="RS422" />
+                <el-option label="RS485" value="RS485" />
+                <el-option label="CAN" value="CAN" />
+                <el-option label="LAN" value="LAN" />
+                <el-option label="1553B" value="1553B" />
+              </el-select>
+              <el-date-picker
+                v-model="listForm.draft.dateRange"
+                value-format="YYYY-MM-DD"
+                type="daterange"
+                range-separator="-"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                style="width: 240px"
+                @change="() => listForm.search()"
+              />
+            </template>
+            <template #search>
+              <ZxSearch
+                v-model="listForm.draft.deviceName"
+                placeholder="搜索设备名称"
+                :loading="listForm.loading"
+                search-mode="click"
+                @search="() => listForm.search()"
+                @clear="() => listForm.search()"
+              />
+            </template>
+          </ZxListToolbar>
+        </template>
       </template>
 
       <template #table="{ grid }">
@@ -144,6 +150,7 @@
 </template>
 
 <script setup name="Device">
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { useOperation } from '@/utils/operation';
 import { ElMessage } from 'element-plus';
 import { listDevice, delDevice, importDeviceBatch } from '@/api/device/device';
@@ -177,19 +184,8 @@ async function loadDeviceData(params) {
   return response;
 }
 
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState(`query.${key}`, value);
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
-function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
 function refreshList() {
-  gridListRef.value && gridListRef.value.refresh();
+  gridListRef.value && gridListRef.value.reload();
 }
 
 function handleSelectionChange(selection) {

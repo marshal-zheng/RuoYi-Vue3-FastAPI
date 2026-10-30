@@ -39,49 +39,52 @@
       <ZxGridList
         ref="gridListRef"
         :load-data="loadMessageData"
-        :initial-state="initialState"
+        :defaults="defaults"
+        :default-page-size="50"
         class="zx-grid-list--simple"
       >
-        <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <el-input
-                v-model="query.keyword"
-                placeholder="搜索节点或端口"
-                clearable
-                size="small"
-                style="width: 180px"
-                @keyup.enter="() => onSearch({ handleRefresh, updateState })"
-              />
-              <el-select
-                v-model="query.protocolType"
-                placeholder="协议类型"
-                clearable
-                size="small"
-                style="width: 140px"
-                popper-class="sim-popper-dark"
-                @change="(v) => onFilterChange('protocolType', v, { handleRefresh, updateState })"
-              >
-                <el-option label="全部" value="" />
-                <el-option label="LAN" value="LAN" />
-                <el-option label="RS422" value="RS422" />
-                <el-option label="RS485" value="RS485" />
-                <el-option label="CAN" value="CAN" />
-                <el-option label="1553B" value="1553B" />
-              </el-select>
+        <template #form="listForm">
+          <template v-if="listForm.mode === 'request'">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <el-input
+                  v-model="listForm.draft.keyword"
+                  placeholder="搜索节点或端口"
+                  clearable
+                  size="small"
+                  style="width: 180px"
+                  @keyup.enter="() => listForm.search()"
+                />
+                <el-select
+                  v-model="listForm.draft.protocolType"
+                  placeholder="协议类型"
+                  clearable
+                  size="small"
+                  style="width: 140px"
+                  popper-class="sim-popper-dark"
+                  @change="() => listForm.search()"
+                >
+                  <el-option label="全部" value="" />
+                  <el-option label="LAN" value="LAN" />
+                  <el-option label="RS422" value="RS422" />
+                  <el-option label="RS485" value="RS485" />
+                  <el-option label="CAN" value="CAN" />
+                  <el-option label="1553B" value="1553B" />
+                </el-select>
+              </div>
+              <div>
+                <ZxSearch
+                  v-model="listForm.draft.search"
+                  placeholder="搜索报文"
+                  size="small"
+                  :loading="listForm.loading"
+                  search-mode="click"
+                  @search="() => listForm.search()"
+                  @clear="() => listForm.search()"
+                />
+              </div>
             </div>
-            <div>
-              <ZxSearch
-                v-model="query.search"
-                placeholder="搜索报文"
-                size="small"
-                :loading="loading"
-                search-mode="click"
-                @search="() => onSearch({ handleRefresh, updateState })"
-                @clear="() => onSearch({ handleRefresh, updateState })"
-              />
-            </div>
-          </div>
+          </template>
         </template>
 
         <template #table="{ grid }">
@@ -214,7 +217,8 @@
                         <span>跨网段</span>
                       </div>
                       <div class="text-zx-text-secondary">
-                        {{ scope.row.sourceSegment }} → {{ scope.row.targetSegment }}
+                        {{ scope.row.sourceSegment }} →
+                        {{ scope.row.targetSegment }}
                       </div>
                       <div v-if="scope.row.routingHops" class="text-zx-text-secondary">
                         {{ scope.row.routingHops }} 跳
@@ -236,6 +240,7 @@
 </template>
 
 <script setup>
+import { ZxGridList } from '@zxio/zxui/grid-list';
 import { ref, watch, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Right, Warning, Connection, Link } from '@element-plus/icons-vue';
@@ -281,15 +286,11 @@ const localMessages = ref([]);
 const isLoading = ref(false);
 const enhancedMessagesCache = new Map(); // 缓存增强后的数据
 
-const initialState = {
+const defaults = {
   query: {
     keyword: '',
     protocolType: '',
     search: '',
-  },
-  pager: {
-    page: 1,
-    size: 50,
   },
 };
 
@@ -328,7 +329,7 @@ watch(
 
       // 刷新表格数据（nextTick 确保 gridListRef 已就绪）
       nextTick(() => {
-        gridListRef.value?.refresh?.();
+        gridListRef.value?.reload?.();
       });
     }
   },
@@ -352,7 +353,7 @@ watch(
         return enhanced;
       });
       nextTick(() => {
-        gridListRef.value?.refresh?.();
+        gridListRef.value?.reload?.();
       });
     }
   },
@@ -489,15 +490,6 @@ async function loadMessageData(params) {
   const list = filteredData.slice(start, end);
 
   return { list, total };
-}
-
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
-  handleRefresh();
-}
-
-function onSearch({ handleRefresh }) {
-  handleRefresh();
 }
 
 /**
@@ -662,7 +654,9 @@ function handleExport() {
     ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
   ].join('\n');
 
-  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8' });
+  const blob = new Blob(['\ufeff' + csvContent], {
+    type: 'text/csv;charset=utf-8',
+  });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
@@ -677,7 +671,7 @@ function handleExport() {
 }
 
 function refresh() {
-  gridListRef.value?.refresh?.();
+  gridListRef.value?.reload?.();
 }
 
 defineExpose({

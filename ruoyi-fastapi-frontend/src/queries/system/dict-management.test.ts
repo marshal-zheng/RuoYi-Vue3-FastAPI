@@ -9,7 +9,7 @@ beforeEach(() => {
 });
 
 describe('dictionary management request view', () => {
-  it('retains the same-filter result on refresh failure and retries only the read', async () => {
+  it('reports refresh failure without republishing old rows as success', async () => {
     const rows = { items: [{ dictId: 1 }], total: 1 };
     const error = new Error('read failed after write');
     const load = vi
@@ -20,7 +20,7 @@ describe('dictionary management request view', () => {
     const scope = effectScope();
     const list = scope.run(() => useDictManagementList(load))!;
     expect(await list.loadData({ page: 1 })).toBe(rows);
-    expect(await list.loadData({ page: 1 })).toBe(rows);
+    await expect(list.loadData({ page: 1 })).rejects.toBe(error);
     expect(list.status.error).toBe(error);
     expect(list.status.hasData).toBe(true);
     expect(await list.loadData({ page: 1 })).toEqual({ items: [], total: 0 });
@@ -37,14 +37,14 @@ describe('dictionary management request view', () => {
     const list = scope.run(() => useDictManagementList(load))!;
     await list.loadData({ page: 1 });
     await expect(list.loadData({ page: 2 })).rejects.toThrow('offline');
-    expect(list.status.hasData).toBe(false);
+    expect(list.status.hasData).toBe(true);
     endQuerySession();
     setQuerySession(2, [], []);
     await expect(list.loadData({ page: 1 })).rejects.toThrow('offline');
     expect(list.status.hasData).toBe(false);
     scope.stop();
   });
-  it('does not replace the current fallback snapshot when an older read completes late', async () => {
+  it('keeps current status when an older read completes late', async () => {
     let finishOld!: (value: { items: string[]; total: number }) => void;
     const load = vi
       .fn()
@@ -58,11 +58,12 @@ describe('dictionary management request view', () => {
     const scope = effectScope();
     const list = scope.run(() => useDictManagementList(load))!;
     const old = list.loadData({ page: 1 });
-    const current = await list.loadData({ page: 1 });
+    await list.loadData({ page: 1 });
     finishOld({ items: ['before-write'], total: 1 });
     await old;
     load.mockRejectedValueOnce(new Error('refresh failed'));
-    expect(await list.loadData({ page: 1 })).toBe(current);
+    await expect(list.loadData({ page: 1 })).rejects.toThrow('refresh failed');
+    expect(list.status.hasData).toBe(true);
     scope.stop();
   });
 });
