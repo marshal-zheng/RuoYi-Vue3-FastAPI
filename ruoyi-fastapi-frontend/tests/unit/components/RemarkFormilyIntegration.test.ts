@@ -16,6 +16,12 @@ import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
 
 type Values = { remark: RemarkValue };
 const OVER_LIMIT = '备注正文最多 5,000 个字符，当前输入已保留';
+const referenced = (ids: string | null) =>
+  (ids ?? '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((id) => document.querySelector(`[id="${id}"]`)?.textContent?.trim())
+    .join(' ');
 let host: ReturnType<typeof createRemarkFieldTestHost>;
 beforeEach(() => {
   host = createRemarkFieldTestHost('remark-formily-probe');
@@ -185,6 +191,11 @@ describe('real Formily and RemarkEditor public integration', () => {
       // The echoed value keeps the reason that names the limit, shown once.
       expect(wrapper.get('.zx-schema-field__messages').text()).toBe(OVER_LIMIT);
       expect(wrapper.text().match(/备注正文最多/g)).toHaveLength(1);
+      // The editing surface carries the field's name, reason and state.
+      const surface = wrapper.get('[contenteditable]').element;
+      expect(referenced(surface.getAttribute('aria-labelledby'))).toBe('备注');
+      expect(referenced(surface.getAttribute('aria-describedby'))).toContain(OVER_LIMIT);
+      expect(surface.getAttribute('aria-invalid')).toBe('true');
       const field = context().form.query('remark').take()!;
       field.visible = false;
       await flushPromises();
@@ -208,7 +219,7 @@ describe('real Formily and RemarkEditor public integration', () => {
         const { remarkRef, remarkRule } = useRemarkField();
         return () =>
           h(ElForm, { ref: form, model, rules: { remark: [remarkRule] } }, () =>
-            h(ElFormItem, { prop: 'remark' }, () =>
+            h(ElFormItem, { label: '备注', prop: 'remark' }, () =>
               h(RemarkEditor, {
                 ref: remarkRef,
                 modelValue: model.remark,
@@ -230,6 +241,10 @@ describe('real Formily and RemarkEditor public integration', () => {
       await vi.waitFor(() => expect(wrapper.find('.el-form-item__error').exists()).toBe(true));
       expect(wrapper.get('.el-form-item__error').text()).toBe(OVER_LIMIT);
       expect(wrapper.text().match(/备注正文最多/g)).toHaveLength(1);
+      // The native form item names the editing surface and marks it invalid.
+      const surface = wrapper.get('[contenteditable]').element;
+      expect(referenced(surface.getAttribute('aria-labelledby'))).toBe('备注');
+      expect(surface.getAttribute('aria-invalid')).toBe('true');
     } finally {
       wrapper.unmount();
     }

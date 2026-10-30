@@ -26,3 +26,12 @@
 - text-editor：独立仓库 `1d11d37`。同仓有其他工作线的未提交改动和与之配套的依赖安装，因此在隔离快照中按已提交的 `package.json` 构建。新包与 `aicontext.20261027.2` 的依赖和导出完全一致；会一并带入该仓已提交的代码块改动，备注字段不涉及代码块。
 
 安装命令 `YARN_ENABLE_NETWORK=0 corepack yarn install --mode=skip-build`，`yarn.lock` 只变更这两个条目。验证见 ZXUI 仓库 `docs/reports/2026-10-29-schema-form-field-feedback.md` 的"后续"一节。
+
+## 第三轮：备注编辑区的无障碍关联（2026-10-30）
+
+text-editor 换成 `zxio-text-editor-1.0.0-feedback.20261030.tgz`（包内版本仍为 `1.0.0-remark-ai.20261023.2`，SHA-256 `812c80610adfb0fa8d637c7c5d0dc7d106e093797c9ea029932fcf79ce7ae97f`），schema-form 与 zxui 不变。
+
+- **编辑器：** 宿主传入的 `aria-label`、`aria-labelledby`、`aria-describedby`、`aria-invalid`、`aria-required` 挂在可编辑区上，不再落在外层容器。schema 表单的备注因此有了名称"备注"、描述（反馈行）和错误状态。
+- **业务侧：** 原生 `ElFormItem` 不给子控件传关联，`<label for>` 也不能为可编辑区命名，所以 `RemarkEditor` 取表单项的 `labelId` 作为 `aria-labelledby`，校验失败时传 `aria-invalid`；schema 字段传入的关联优先。
+
+来源：text-editor 独立仓库的修复提交 `450cbd6`。该仓 `1d11d37` 之后已有公式、Mermaid、查找替换等其他工作线的提交，会带入新的大型依赖，所以本包以 `1d11d37` 为基础，只打上 `450cbd6` 的改动，在隔离快照中构建。新包与上一版的依赖和导出完全一致，`yarn.lock` 只变更 text-editor 条目。

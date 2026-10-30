@@ -1,7 +1,7 @@
 <template>
   <ZxTextEditorField
     ref="field"
-    v-bind="$attrs"
+    v-bind="{ ...formItemRelations, ...$attrs }"
     :model-value="editorValue"
     :disabled="disabled"
     :ai="ai"
@@ -46,6 +46,13 @@ const emit = defineEmits<{
   'edit-state': [RemarkEditState];
 }>();
 const { formItem } = useFormItem();
+// A native ElFormItem passes no relations to its control, and <label for> cannot
+// name the editing surface: use the item label and validation state. Schema
+// fields pass their own relations, which take precedence.
+const formItemRelations = computed(() => ({
+  ...(formItem?.hasLabel ? { 'aria-labelledby': formItem.labelId } : {}),
+  ...(formItem?.validateState === 'error' ? { 'aria-invalid': true } : {}),
+}));
 const field = ref<InstanceType<typeof ZxTextEditorField>>();
 const editPending = ref(false);
 // The editor reports why it refuses submission; its form item shows the reason.
