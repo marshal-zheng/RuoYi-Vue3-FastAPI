@@ -6,15 +6,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { serializeDateRange } from '@/utils/ruoyi';
 
 const cases = [
-  {
-    name: 'configuration',
-    file: 'src/views/system/config/components/ConfigList.vue',
-    load: 'loadConfigData',
-    export: 'handleExport',
-    url: 'system/config/export',
-    query: { configName: 'filtered', configKey: 'test.key', configType: 'N' },
-    dateRange: ['2026-10-01', '2026-10-16'],
-  },
+  // Configuration is covered by the real mounted TableRender request-page suite.
   {
     name: 'dictionary type',
     file: 'src/views/system/dict/components/DictList.vue',

@@ -36,7 +36,7 @@ vi.mock('@/utils/permission', () => ({
 }));
 const mounted: ReturnType<typeof shallowMount>[] = [];
 const confirm = vi.fn<() => Promise<unknown>>();
-function page(component: typeof AuthRole, props = {}) {
+function page(component: vue.Component, props = {}) {
   const wrapper = shallowMount(
     { ...component, render: () => null },
     {
@@ -60,7 +60,17 @@ function page(component: typeof AuthRole, props = {}) {
         setupState: {
           cancelAuthUser(row: { userId: number; userName: string }): Promise<void>;
           cancelAuthUserAll(): Promise<void>;
-          handleSelectionChange(rows: { roleId?: number; userId?: number }[]): void;
+          handleSelectionChange(
+            rows:
+              | { roleId?: number; userId?: number }[]
+              | {
+                  scope: string;
+                  scopeRef: string;
+                  keys: number[];
+                  loadedRows: object[];
+                  missingKeys: number[];
+                }
+          ): void;
           handleSave(): Promise<void>;
           show(): void;
           handleSelectUser(): Promise<void>;
@@ -142,7 +152,13 @@ it('role page revokes only the selected relation(s) with numeric route ID', asyn
 it('selector submits an incremental array using numeric role ID', async () => {
   const s = page(SelectUser, { roleId: '20' });
   s.show();
-  s.handleSelectionChange([{ userId: 42 }, { userId: 43 }]);
+  s.handleSelectionChange({
+    scope: 'explicit',
+    scopeRef: 'unit',
+    keys: [42, 43],
+    loadedRows: [],
+    missingKeys: [42, 43],
+  });
   await s.handleSelectUser();
   expect(api.grant.mock.calls[0][0]).toEqual({ roleId: 20, userIds: [42, 43] });
 });

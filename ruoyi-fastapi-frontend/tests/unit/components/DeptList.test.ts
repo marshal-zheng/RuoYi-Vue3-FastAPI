@@ -32,25 +32,17 @@ const search = defineComponent({
   template: '<button />',
 });
 const grid = defineComponent({
-  name: 'DeptGrid',
-  props: ['mode', 'rows', 'status', 'loadData'],
-  emits: ['refresh'],
+  name: 'ZxTableRender',
+  props: ['definition', 'domainKey', 'applied', 'displayed', 'query', 'rows', 'status'],
+  emits: ['query-intent', 'update:query'],
   setup(props, { slots }) {
     return () =>
       h('div', [
-        slots.form?.({ query: {} }),
-        slots.table?.({
-          grid: { list: props.rows, loading: props.status?.loading },
-          renderEmpty: () => h('span', 'query-empty-presentation'),
+        slots['toolbar-extra']?.(),
+        slots['cell-operations']?.({
+          row: { deptId: 2, parentId: 1, deptName: 'Child' },
         }),
       ]);
-  },
-});
-const table = defineComponent({
-  name: 'DeptTable',
-  props: ['data'],
-  setup(_, { slots }) {
-    return () => h('div', [slots.default?.(), slots.empty?.()]);
   },
 });
 const mounted: ReturnType<typeof mount>[] = [];
@@ -67,7 +59,7 @@ function mountList() {
       },
       directives: { hasPermi: () => {}, loading: () => {} },
       stubs: {
-        ZxGridList: grid,
+        ZxTableRender: grid,
         ZxListToolbar: slot,
         DictSelect: filter,
         ZxSearch: search,
@@ -75,18 +67,6 @@ function mountList() {
         ZxButton: slot,
         DeptDlg: true,
         DictStatus: true,
-        ElTable: table,
-        ElTableColumn: defineComponent({
-          setup(_, { slots }) {
-            return () =>
-              h(
-                'div',
-                slots.default?.({
-                  row: { deptId: 2, parentId: 1, deptName: 'Child' },
-                })
-              );
-          },
-        }),
         DictTag: true,
         ZxMoreAction: true,
       },
@@ -94,6 +74,14 @@ function mountList() {
   });
   mounted.push(wrapper);
   return wrapper;
+}
+function submit(wrapper: ReturnType<typeof mountList>, query: object) {
+  const table = wrapper.findComponent(grid);
+  table.vm.$emit('query-intent', {
+    kind: 'search',
+    domainKey: table.props('domainKey'),
+    input: { query, pager: null, sort: [] },
+  });
 }
 beforeEach(() => {
   vi.resetAllMocks();
@@ -149,29 +137,25 @@ describe('department list resource integration', () => {
     vi.mocked(listDept).mockResolvedValue({ items: rows as never });
     const wrapper = mountList();
     await flushPromises();
-    expect(wrapper.findComponent(grid).props('mode')).toBe('controlled');
-    expect(wrapper.findComponent(grid).props('loadData')).toBeUndefined();
+    expect(wrapper.findComponent(grid).props('definition').request).toBeUndefined();
     expect(wrapper.findComponent(grid).props('rows')).toEqual([
       { ...rows[0], children: [rows[1]] },
     ]);
     expect(rows[0]).not.toHaveProperty('children');
-    expect(wrapper.text()).toContain('query-empty-presentation');
   });
   it('keeps edits local until submit and normalizes the submitted filters', async () => {
     const wrapper = mountList();
     await flushPromises();
     expect(listDept).toHaveBeenCalledTimes(1);
-    wrapper.findAllComponents(filter)[0].vm.$emit('update:modelValue', '  研发  ');
+    wrapper.findComponent(grid).vm.$emit('update:query', { deptName: '  研发  ' });
     await nextTick();
     expect(listDept).toHaveBeenCalledTimes(1);
-    wrapper.findComponent(search).vm.$emit('search');
+    submit(wrapper, { deptName: '  研发  ' });
     await flushPromises();
     expect(vi.mocked(listDept).mock.calls.at(-1)?.[0]).toEqual({
       deptName: '研发',
     });
-    const select = wrapper.findAllComponents(filter)[1];
-    select.vm.$emit('update:modelValue', '1');
-    select.vm.$emit('change', '1');
+    submit(wrapper, { deptName: '  研发  ', status: '1' });
     await flushPromises();
     expect(vi.mocked(listDept).mock.calls.at(-1)?.[0]).toEqual({
       deptName: '研发',
@@ -181,24 +165,26 @@ describe('department list resource integration', () => {
   it('keeps successful rows and reports a same-filter refresh failure', async () => {
     const wrapper = mountList();
     await flushPromises();
+    const displayed = wrapper.findComponent(grid).props('displayed');
     vi.mocked(listDept).mockRejectedValueOnce(new Error('refresh failed'));
-    wrapper.findComponent(grid).vm.$emit('refresh');
+    submit(wrapper, {});
     await flushPromises();
+    expect(wrapper.findComponent(grid).props('displayed')).toBe(displayed);
     expect(wrapper.findComponent(grid).props('rows')).toMatchObject([{ deptName: 'Root' }]);
     expect(wrapper.findComponent(grid).props('status')).toMatchObject({
       error: expect.objectContaining({ message: 'refresh failed' }),
       loading: false,
     });
   });
-  it('reports a first failure through status and the public empty renderer', async () => {
+  it('reports a first failure without publishing empty success', async () => {
     vi.mocked(listDept).mockRejectedValueOnce(new Error('read failed'));
     const wrapper = mountList();
     await flushPromises();
+    expect(wrapper.findComponent(grid).props('displayed')).toBeNull();
     expect(wrapper.findComponent(grid).props('status')).toMatchObject({
       error: expect.objectContaining({ message: 'read failed' }),
       loading: false,
     });
-    expect(wrapper.text()).toContain('query-empty-presentation');
   });
   it('exposes a paused read without reporting empty success', async () => {
     onlineManager.setOnline(false);

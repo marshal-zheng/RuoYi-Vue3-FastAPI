@@ -1,318 +1,221 @@
 <template>
   <ZxContentWrap fill>
-    <ZxGridList
+    <ZxTableRender
       v-if="queryScope"
-      :key="queryScope.key"
-      mode="controlled"
+      ref="tableRef"
+      v-model:query="draft"
+      :definition="definition"
+      :domain-key="domainKey"
+      :applied="applied"
+      :displayed="publication?.displayed ?? null"
       :rows="roleRows"
       :pagination="pagination"
       :status="listStatus"
-      @page-change="handlePageChange"
-      @reload="refreshList"
-      fill
+      @query-intent="queryIntent"
     >
-      <template #form>
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:role:add']"
-              >新增</ZxButton
-            >
-            <ZxButton
-              icon="Edit"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['system:role:edit']"
-              >修改</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['system:role:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:role:export']"
-              >导出</ZxButton
-            >
-          </template>
-          <template #filters>
-            <zx-input
-              v-model="draft.roleKey"
-              placeholder="请输入权限字符"
-              clearable
-              style="width: 240px"
-              @keyup.enter="onSearch"
-            />
-            <DictSelect
-              dict-type="sys_normal_disable"
-              v-model="draft.status"
-              placeholder="角色状态"
-              clearable
-              style="width: 160px"
-              @change="onSearch"
-            />
-            <el-date-picker
-              v-model="draft.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 240px"
-              @change="onSearch"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="draft.roleName"
-              placeholder="搜索角色名称"
-              :loading="listStatus.loading"
-              search-mode="click"
-              @search="onSearch"
-              @clear="onSearch"
-            />
-          </template>
-        </ZxListToolbar>
+      <template #role-status="{ logicalValue, commit, controlAttrs }">
+        <DictSelect
+          dict-type="sys_normal_disable"
+          :model-value="logicalValue ?? undefined"
+          v-bind="controlAttrs"
+          placeholder="角色状态"
+          clearable
+          @update:model-value="commit"
+        />
       </template>
-      <template #table="{ grid, renderEmpty }">
-        <el-table
-          ref="roleTableRef"
-          row-key="roleId"
-          :data="grid.list || []"
-          @selection-change="handleSelectionChange"
-        >
-          <template #empty>
-            <component :is="renderEmpty" />
-          </template>
-          <el-table-column
-            type="selection"
-            width="55"
-            :selectable="(row) => Number(row.roleId) !== 1"
-          />
-          <el-table-column label="角色编号" prop="roleId" width="120" />
-          <el-table-column
-            label="角色名称"
-            prop="roleName"
-            :show-overflow-tooltip="true"
-            width="150"
-          />
-          <el-table-column
-            label="权限字符"
-            prop="roleKey"
-            :show-overflow-tooltip="true"
-            width="150"
-          />
-          <el-table-column label="显示顺序" prop="roleSort" width="100" />
-          <el-table-column label="状态" width="100">
-            <template #default="scope">
-              <el-switch
-                :model-value="scope.row.status"
-                active-value="0"
-                inactive-value="1"
-                :loading="statusOperations.get(scope.row.roleId)?.pending.value"
-                :disabled="!canEditRole(scope.row) || statusOperations.has(scope.row.roleId)"
-                @change="(value) => handleStatusChange(value, scope.row)"
-              />
-            </template>
-          </el-table-column>
-          <el-table-column label="创建时间" prop="createTime" min-width="180">
-            <template #default="scope">
-              <span>{{ parseTime(scope.row.createTime) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="180" fixed="right" class-name="small-padding">
-            <template #default="scope">
-              <div class="op-col__wrap">
-                <ZxButton
-                  link
-                  type="primary"
-                  v-if="scope.row.roleId !== 1"
-                  @click="handleUpdate(scope.row)"
-                  v-hasPermi="['system:role:edit']"
-                  >修改</ZxButton
-                >
-                <zx-button
-                  link
-                  type="primary"
-                  v-if="scope.row.roleId !== 1"
-                  @click="handleAuthUser(scope.row)"
-                  v-hasPermi="['system:role:edit']"
-                  >分配用户</zx-button
-                >
-                <ZxMoreAction
-                  v-if="scope.row.roleId !== 1 && getRoleMoreActionList().length"
-                  :list="getRoleMoreActionList()"
-                  @select="handleRoleMoreActionSelect($event, scope.row)"
-                />
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
+      <template #cell-status="{ row }">
+        <el-switch
+          :model-value="row.status ?? undefined"
+          active-value="0"
+          inactive-value="1"
+          :aria-label="`${row.roleName}状态`"
+          :loading="statusOperations.get(row.roleId)?.pending.value"
+          :disabled="!canEditRole(row) || statusOperations.has(row.roleId)"
+          @change="(value: string | number | boolean) => handleStatusChange(value, row)"
+        />
       </template>
-    </ZxGridList>
-
-    <!-- 添加或修改角色抽屉 -->
-    <RoleFormDrawer ref="roleFormDrawerRef" @success="handleDrawerSuccess" />
-
-    <!-- 分配角色数据权限抽屉 -->
-    <RoleDataScopeDrawer ref="roleDataScopeDrawerRef" @success="handleDrawerSuccess" />
+    </ZxTableRender>
+    <RoleFormDrawer ref="roleFormDrawerRef" @success="clearSelection" />
+    <RoleDataScopeDrawer ref="roleDataScopeDrawerRef" @success="clearSelection" />
   </ZxContentWrap>
 </template>
 
-<script setup name="Role">
-import { ZxGridList } from '@zxio/zxui/grid-list';
-import { computed, getCurrentInstance, reactive, ref, shallowReactive, watch } from 'vue';
+<script setup lang="ts" name="Role">
+import { computed, getCurrentInstance, ref, shallowReactive, shallowRef, toRaw, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuery } from '@tanstack/vue-query';
+import {
+  defineTableRender,
+  type TableApplied,
+  type TableDisplayed,
+  type TableQueryIntent,
+} from '@zxio/table-render/core';
+import { ZxTableRender, type TableRenderInstance } from '@zxio/table-render/ui';
+import '@zxio/table-render/style';
+import type { RoleRecord } from '@/api/system/role';
 import { queryScope } from '@/queries/context';
+import { queryClient } from '@/queries/client';
 import {
   captureRoleCommand,
   normalizeRoleFilters,
   roleCommands,
   roleListOptions,
+  type RoleFilters,
 } from '@/queries/system/role';
 import { useSystemListNavigation } from '@/store/modules/system-list-navigation';
 import { useOperation } from '@/utils/operation';
-import { parseTime } from '@/utils/ruoyi';
 import { checkPermi } from '@/utils/permission';
+import DictSelect from '@/components/business/DictSelect/index.vue';
 import RoleFormDrawer from './components/RoleFormDrawer.vue';
 import RoleDataScopeDrawer from './components/RoleDataScopeDrawer.vue';
 
+type Query = Pick<RoleFilters, 'roleName' | 'roleKey' | 'status'> & { dateRange?: string[] };
+function logicalFilters(filters: RoleFilters): Query {
+  return {
+    ...(filters.roleName ? { roleName: filters.roleName } : {}),
+    ...(filters.roleKey ? { roleKey: filters.roleKey } : {}),
+    ...(filters.status ? { status: filters.status } : {}),
+    ...(filters.beginTime || filters.endTime
+      ? { dateRange: [filters.beginTime ?? '', filters.endTime ?? ''] }
+      : {}),
+  };
+}
 const router = useRouter();
-const { proxy } = getCurrentInstance();
-const ids = ref([]);
-const single = ref(true);
-const multiple = ref(true);
-const roleTableRef = ref(null);
-const roleFormDrawerRef = ref(null);
-const roleDataScopeDrawerRef = ref(null);
+const proxy = getCurrentInstance()!.proxy!;
+const roleFormDrawerRef = shallowRef<InstanceType<typeof RoleFormDrawer>>();
+const roleDataScopeDrawerRef = shallowRef<InstanceType<typeof RoleDataScopeDrawer>>();
 const listNavigation = useSystemListNavigation();
 const restored = listNavigation.take('roles');
 const submitted = ref(normalizeRoleFilters(restored?.filters));
-const draft = reactive({
-  ...submitted.value,
-  ...(submitted.value.beginTime || submitted.value.endTime
-    ? { dateRange: [submitted.value.beginTime, submitted.value.endTime] }
-    : {}),
-});
+const draft = ref<Query>(logicalFilters(submitted.value));
 const currentPage = ref(restored?.page ?? 1);
 const pageSize = ref(restored?.size ?? 10);
-const emptyRows = Object.freeze([]);
-const roleQuery = useQuery(() =>
+const queryOptions = computed(() =>
   roleListOptions(queryScope.value, {
     ...submitted.value,
     page: currentPage.value,
     pageSize: pageSize.value,
   })
 );
-const roleRows = computed(() => roleQuery.data.value?.items ?? emptyRows);
+const roleQuery = useQuery(queryOptions);
+const domainKey = computed(() => queryScope.value?.key ?? 'unavailable');
+const applied = computed<TableApplied<Query>>(() => ({
+  domainKey: domainKey.value,
+  query: logicalFilters(submitted.value),
+  pager: { page: currentPage.value, size: pageSize.value },
+  sort: [],
+}));
+const publication = shallowRef<{
+  rows: readonly RoleRecord[];
+  total: number;
+  displayed: TableDisplayed<Query>;
+} | null>(null);
+let revision = 0;
+let lastPublication: { key: string; updatedAt: number; result: unknown } | undefined;
+watch(
+  [roleQuery.data, roleQuery.dataUpdatedAt, queryOptions],
+  ([result]) => {
+    if (
+      !queryScope.value ||
+      !result ||
+      toRaw(queryClient.getQueryData(queryOptions.value.queryKey)) !== toRaw(result)
+    ) {
+      publication.value = null;
+      return;
+    }
+    const key = JSON.stringify(queryOptions.value.queryKey);
+    const updatedAt = roleQuery.dataUpdatedAt.value;
+    if (
+      publication.value &&
+      lastPublication?.key === key &&
+      lastPublication.updatedAt === updatedAt &&
+      lastPublication.result === toRaw(result)
+    )
+      return;
+    lastPublication = { key, updatedAt, result: toRaw(result) };
+    publication.value = {
+      rows: result.items,
+      total: result.total,
+      displayed: {
+        domainKey: domainKey.value,
+        revision: ++revision,
+        input: {
+          query: logicalFilters(submitted.value),
+          pager: { page: currentPage.value, size: pageSize.value },
+          sort: [],
+        },
+      },
+    };
+    const lastPage = Math.max(1, Math.ceil(result.total / pageSize.value));
+    if (currentPage.value > lastPage) currentPage.value = lastPage;
+  },
+  { immediate: true, flush: 'post' }
+);
+const roleRows = computed(() => publication.value?.rows ?? []);
 const pagination = computed(() => ({
   page: currentPage.value,
   size: pageSize.value,
-  total: roleQuery.data.value?.total ?? 0,
+  total: publication.value?.total ?? 0,
 }));
 const listStatus = computed(() => ({
   loading: roleQuery.isLoading.value,
-  refreshing: roleQuery.isFetching.value && roleQuery.data.value !== undefined,
+  refreshing: roleQuery.isFetching.value && publication.value !== null,
   error: roleQuery.error.value,
   paused: roleQuery.fetchStatus.value === 'paused',
 }));
-const statusOperations = shallowReactive(new Map());
-function clearSelection() {
-  roleTableRef.value?.clearSelection();
-  handleSelectionChange([]);
-}
-watch(roleRows, clearSelection);
-watch(roleQuery.data, (result) => {
-  if (!result) return;
-  const lastPage = Math.max(1, Math.ceil(result.total / pageSize.value));
-  if (currentPage.value > lastPage) currentPage.value = lastPage;
-});
+const statusOperations = shallowReactive(new Map<number, ReturnType<typeof useOperation>>());
 watch(
   queryScope,
   () => {
-    Object.keys(draft).forEach((key) => delete draft[key]);
+    draft.value = {};
     submitted.value = {};
     currentPage.value = 1;
     pageSize.value = 10;
+    publication.value = null;
     statusOperations.clear();
     clearSelection();
   },
   { flush: 'sync' }
 );
-
-function onSearch() {
-  const next = normalizeRoleFilters(draft);
+function queryIntent(intent: TableQueryIntent<Query>) {
+  if (!queryScope.value || intent.domainKey !== domainKey.value) return;
+  const next = normalizeRoleFilters(intent.input.query);
+  const page = intent.input.pager?.page ?? 1;
+  const size = intent.input.pager?.size ?? pageSize.value;
   const unchanged =
-    currentPage.value === 1 &&
-    Object.keys(next).length === Object.keys(submitted.value).length &&
-    Object.entries(next).every(([key, value]) => submitted.value[key] === value);
+    page === currentPage.value &&
+    size === pageSize.value &&
+    JSON.stringify(next) === JSON.stringify(submitted.value);
   submitted.value = next;
-  currentPage.value = 1;
-  clearSelection();
-  if (unchanged) refreshList();
-}
-function handlePageChange({ page, size }) {
-  currentPage.value = size === pageSize.value ? page : 1;
+  currentPage.value = page;
   pageSize.value = size;
-  clearSelection();
+  if (unchanged) refreshList();
 }
 function refreshList() {
   if (queryScope.value) void roleQuery.refetch({ cancelRefetch: false });
 }
-function handleExport() {
-  if (!queryScope.value) return;
-  proxy.download('system/role/export', { ...submitted.value }, `role_${Date.now()}.xlsx`);
+function clearSelection() {
+  tableRef.value?.clearSelection();
 }
-function handleSelectionChange(selection) {
-  ids.value = selection.filter((item) => Number(item.roleId) !== 1).map((item) => item.roleId);
-  single.value = ids.value.length !== 1;
-  multiple.value = ids.value.length === 0;
+function canEditRole(row: Pick<RoleRecord, 'roleId'>) {
+  return row.roleId !== 1 && checkPermi(['system:role:edit']);
 }
-function canEditRole(row) {
-  return Number(row.roleId) !== 1 && checkPermi(['system:role:edit']);
-}
-const deleteOperation = useOperation(async (command, message) => {
-  try {
-    await proxy.$modal.confirm(message);
-    await roleCommands.deleteRoles(command);
-    if (queryScope.value === command.scope) clearSelection();
-  } catch {
-    // Confirmation cancellation and HTTP feedback complete this operation.
-  }
-});
-const handleDeletePending = deleteOperation.pending;
-function handleDelete(row = {}) {
+function handleStatusChange(status: string | number | boolean, row: RoleRecord) {
   const scope = queryScope.value;
-  const selected = row.roleId ? [row.roleId] : [...ids.value];
-  if (
-    !scope ||
-    !checkPermi(['system:role:remove']) ||
-    !selected.length ||
-    selected.some((id) => Number(id) === 1)
-  )
-    return;
-  return deleteOperation.run(
-    captureRoleCommand(selected, scope),
-    `是否确认删除角色编号为“${selected.join(',')}”的数据项？`
-  );
-}
-function handleStatusChange(status, row) {
-  const scope = queryScope.value;
-  if (!scope || !canEditRole(row) || status === row.status) return Promise.resolve();
+  if (!scope || !canEditRole(row) || status === row.status || (status !== '0' && status !== '1'))
+    return Promise.resolve();
   const existing = statusOperations.get(row.roleId);
   if (existing) return existing.run();
-  const command = captureRoleCommand({ roleId: row.roleId, status }, scope);
-  const text = status === '0' ? '启用' : '停用';
+  const command = captureRoleCommand({ roleId: row.roleId, status } as const, scope);
   const operation = useOperation(async () => {
     try {
-      await proxy.$modal.confirm(`确认${text}角色“${row.roleName}”吗？`);
+      await proxy.$modal.confirm(
+        `确认${status === '0' ? '启用' : '停用'}角色“${row.roleName}”吗？`
+      );
+      if (!canEditRole(row)) return;
       await roleCommands.changeStatus(command);
     } catch {
-      // Query rows remain server-owned on cancellation and failure.
+      // Confirmation cancellation and HTTP feedback leave server-owned rows intact.
     } finally {
       if (statusOperations.get(row.roleId) === operation) statusOperations.delete(row.roleId);
     }
@@ -320,45 +223,142 @@ function handleStatusChange(status, row) {
   statusOperations.set(row.roleId, operation);
   return operation.run();
 }
-function handleAuthUser(row) {
+function handleAuthUser(row: RoleRecord) {
   if (!canEditRole(row)) return;
   listNavigation.remember('roles', {
-    filters: submitted.value,
+    filters: Object.fromEntries(
+      Object.entries(submitted.value).filter(
+        (entry): entry is [string, string] => typeof entry[1] === 'string'
+      )
+    ),
     page: currentPage.value,
     size: pageSize.value,
   });
-  router.push('/system/role-auth/user/' + row.roleId);
+  return router.push('/system/role-auth/user/' + row.roleId);
 }
-function handleAdd() {
-  return roleFormDrawerRef.value?.open().catch(() => {
-    // The editor owns read feedback.
+function openRole(id?: number) {
+  return roleFormDrawerRef.value?.open(id).catch(() => {
+    /* The editor owns read feedback. */
   });
 }
-function handleUpdate(row = {}) {
-  const roleId = row.roleId || ids.value[0];
-  if (!roleId || !canEditRole({ roleId })) return;
-  return roleFormDrawerRef.value?.open(roleId).catch(() => {
-    // The editor owns read feedback.
-  });
-}
-function handleDataScope(row) {
-  if (!canEditRole(row)) return;
+function openDataScope(row: RoleRecord) {
   return roleDataScopeDrawerRef.value?.open(row.roleId).catch(() => {
-    // The editor owns read feedback.
+    /* The editor owns read feedback. */
   });
 }
-function handleDrawerSuccess() {
-  clearSelection();
-}
-function getRoleMoreActionList() {
-  const actions = [];
-  if (checkPermi(['system:role:edit'])) actions.push({ label: '数据权限', eventTag: 'dataScope' });
-  if (checkPermi(['system:role:remove'])) actions.push({ label: '删除', eventTag: 'delete' });
-  return actions;
-}
-function handleRoleMoreActionSelect(item, row) {
-  if (item.eventTag === 'dataScope') handleDataScope(row);
-  if (item.eventTag === 'authUser') handleAuthUser(row);
-  if (item.eventTag === 'delete') handleDelete(row);
-}
+const definition = defineTableRender<RoleRecord, Query>()({
+  key: 'role-management',
+  title: '角色管理',
+  rowKey: 'roleId',
+  layout: { fill: true, inlineLimit: 3 },
+  selection: { mode: 'multiple', selectable: (row) => row.roleId !== 1 },
+  pagination: { pageSize: 10 },
+  search: [
+    { key: 'roleName', label: '角色名称', control: 'text', placement: 'keyword' },
+    {
+      key: 'roleKey',
+      label: '权限字符',
+      control: 'text',
+      placement: 'inline',
+      placeholder: '请输入权限字符',
+    },
+    {
+      key: 'status',
+      label: '角色状态',
+      control: { slot: 'role-status' },
+      placement: 'inline',
+      trigger: 'change',
+    },
+    {
+      key: 'dateRange',
+      label: '创建日期',
+      control: 'date-range',
+      placement: 'inline',
+      trigger: 'change',
+    },
+  ],
+  columns: [
+    { key: 'roleId', label: '角色编号', prop: 'roleId', width: 120 },
+    { key: 'roleName', label: '角色名称', prop: 'roleName', minWidth: 150 },
+    { key: 'roleKey', label: '权限字符', prop: 'roleKey', minWidth: 150 },
+    { key: 'roleSort', label: '显示顺序', prop: 'roleSort', width: 100 },
+    { key: 'status', label: '状态', prop: 'status', width: 100 },
+    { key: 'createTime', label: '创建时间', prop: 'createTime', type: 'datetime', width: 180 },
+    {
+      key: 'operations',
+      label: '操作',
+      type: 'actions',
+      fixed: 'right',
+      width: 220,
+      hideable: false,
+    },
+  ],
+  actions: {
+    toolbar: [
+      {
+        id: 'add',
+        label: '新增',
+        icon: 'Plus',
+        tone: 'primary',
+        visible: () => checkPermi(['system:role:add']),
+        run: () => openRole(),
+      },
+      {
+        id: 'export',
+        label: '导出',
+        icon: 'Download',
+        visible: () => checkPermi(['system:role:export']),
+        run: ({ applied }) =>
+          applied &&
+          proxy.download(
+            'system/role/export',
+            normalizeRoleFilters(applied.query),
+            `role_${Date.now()}.xlsx`
+          ),
+      },
+    ],
+    batch: [
+      {
+        id: 'edit-selected',
+        label: '修改',
+        icon: 'Edit',
+        visible: () => checkPermi(['system:role:edit']),
+        disabled: ({ loadedRows, missingKeys }) =>
+          loadedRows.length !== 1 || missingKeys.length > 0 || !canEditRole(loadedRows[0]),
+        run: ({ loadedRows }) => openRole(loadedRows[0].roleId),
+      },
+      {
+        id: 'delete-selected',
+        label: '删除',
+        icon: 'Delete',
+        tone: 'danger',
+        visible: () => checkPermi(['system:role:remove']),
+        disabled: ({ keys }) => keys.some((id) => Number(id) === 1),
+        confirm: ({ keys }) => `是否确认删除角色编号为“${keys.join(',')}”的数据项？`,
+        run: ({ keys }) => roleCommands.deleteRoles(captureRoleCommand(keys)),
+      },
+    ],
+    row: [
+      { id: 'edit', label: '修改', visible: canEditRole, run: (row) => openRole(row.roleId) },
+      { id: 'auth-user', label: '分配用户', visible: canEditRole, run: handleAuthUser },
+      {
+        id: 'data-scope',
+        label: '数据权限',
+        visible: canEditRole,
+        overflow: true,
+        run: openDataScope,
+      },
+      {
+        id: 'delete',
+        label: '删除',
+        tone: 'danger',
+        overflow: true,
+        visible: (row) => row.roleId !== 1 && checkPermi(['system:role:remove']),
+        confirm: (row) => `是否确认删除角色编号为“${row.roleId}”的数据项？`,
+        run: (row) => roleCommands.deleteRoles(captureRoleCommand(row.roleId)),
+      },
+    ],
+  },
+});
+const tableRef = shallowRef<TableRenderInstance<typeof definition, RoleRecord, Query>>();
 </script>

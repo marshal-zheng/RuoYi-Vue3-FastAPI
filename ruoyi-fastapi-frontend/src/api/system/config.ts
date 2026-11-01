@@ -9,8 +9,12 @@ import type {
 import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询参数列表
-export function listConfig(query?: ConfigPageQueryModel) {
+export function listConfig(
+  query?: ConfigPageQueryModel,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'requestOptions'>
+) {
   return request<HttpOffsetPage<ConfigRecord>>({
+    ...config,
     url: '/system/config/list',
     method: 'get',
     params: query,

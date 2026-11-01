@@ -1,27 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import * as vue from 'vue';
-import { defineComponent, h, onMounted, type App } from 'vue';
-import { createPinia } from 'pinia';
 import { flushPromises, mount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
+import ElementPlus from 'element-plus';
+import { createShortcutRuntime } from '@zxio/keybindings';
+import { createShortcutPlugin } from '@zxio/keybindings/vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
-import { ElTable, ElTableColumn } from 'element-plus';
+import type { TableRenderInstance } from '@zxio/table-render/ui';
+import RolePage from '@/views/system/role/index.vue';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
-import type { RoleFilters } from '@/queries/system/role';
-import RolePage from '@/views/system/role/index.vue';
-
-interface RolePageState {
-  draft: RoleFilters & { dateRange: string[] | null };
-  submitted: RoleFilters;
-  refreshList(): void;
-  onSearch(): void;
-  handleExport(): void;
-  handleAuthUser(row: { roleId: number }): void;
-  handleStatusChange(
-    status: '0' | '1',
-    row: { roleId: number; status: '0' | '1' }
-  ): Promise<void> | undefined;
-}
 
 const api = vi.hoisted(() => ({
   listRole: vi.fn(),
@@ -32,10 +19,19 @@ const api = vi.hoisted(() => ({
   navigate: vi.fn(),
   permission: vi.fn(),
   openEditor: vi.fn(),
+  actionConfirm: vi.fn(),
+  message: vi.fn(),
 }));
 vi.mock('@/api/system/role', () => api);
 vi.mock('@/utils/permission', () => ({ checkPermi: api.permission }));
 vi.mock('vue-router', () => ({ useRouter: () => ({ push: api.navigate }) }));
+vi.mock('@zxio/zxui/theme-provider', async (original) => ({
+  ...(await original<object>()),
+  useThemeFeedback: () => ({
+    ok: true,
+    value: { confirm: api.actionConfirm, message: api.message },
+  }),
+}));
 vi.mock('@/views/system/role/components/RoleFormDrawer.vue', () => ({
   default: {
     setup(_: unknown, { expose }: { expose: (value: unknown) => void }) {
@@ -47,95 +43,48 @@ vi.mock('@/views/system/role/components/RoleFormDrawer.vue', () => ({
 vi.mock('@/views/system/role/components/RoleDataScopeDrawer.vue', () => ({
   default: { render: () => null },
 }));
-const Layout = defineComponent({
-  setup(_, { slots }) {
-    return () =>
-      h(
-        'section',
-        Object.values(slots).map((slot) => slot?.())
-      );
-  },
-});
-const Grid = defineComponent({
-  props: ['mode', 'rows', 'pagination', 'status', 'loadData'],
-  emits: ['refresh', 'page-change'],
-  setup(props, { slots }) {
-    onMounted(() => props.loadData?.({ query: {}, pager: { page: 1, size: 10 } }));
-    return () => h('section', slots.form?.({ query: {}, loading: false }));
-  },
-});
-const TableGrid = defineComponent({
-  props: ['mode', 'rows', 'pagination', 'status'],
-  emits: ['refresh', 'page-change'],
-  setup(props, { slots }) {
-    return () =>
-      h('section', slots.table?.({ grid: { list: props.rows }, renderEmpty: () => null }));
-  },
-});
-const Button = defineComponent({
-  emits: ['click'],
-  setup(_, { emit, slots }) {
-    return () =>
-      h('button', { onClick: (event: MouseEvent) => emit('click', event) }, slots.default?.());
-  },
-});
-let pinia = createPinia();
 const mounted: ReturnType<typeof mount>[] = [];
-function page({ realTable = false } = {}) {
-  const wrapper = mount(RolePage, {
-    global: {
-      plugins: [
-        pinia,
-        [VueQueryPlugin, { queryClient }],
-        (app: App) => {
-          app.config.globalProperties.$modal = {
-            confirm: api.confirm,
-            alert: vi.fn(),
-            alertError: vi.fn(),
-            alertSuccess: vi.fn(),
-            alertWarning: vi.fn(),
-            prompt: vi.fn(),
-            loading: vi.fn(),
-            closeLoading: vi.fn(),
-          };
-          app.config.globalProperties.download = api.download;
-        },
-      ],
-      directives: { hasPermi: () => {}, loading: () => {} },
-      stubs: {
-        ZxContentWrap: Layout,
-        ZxListToolbar: Layout,
-        ZxGridList: realTable ? TableGrid : Grid,
-        ZxButton: realTable ? Button : true,
-        ZxInput: true,
-        ZxSearch: true,
-        DictSelect: true,
-        ElDatePicker: true,
-        ElTable: realTable ? ElTable : true,
-        ElTableColumn: realTable ? ElTableColumn : true,
-        ElSwitch: true,
-        ZxMoreAction: true,
-      },
-    },
-  });
-  mounted.push(wrapper);
-  return {
-    wrapper,
-    state: wrapper.vm as unknown as RolePageState,
-    grid: () => wrapper.findComponent(Grid),
-  };
-}
-function deferred<T>() {
-  let resolve!: (value: T) => void;
-  const promise = new Promise<T>((done) => (resolve = done));
-  return { resolve, promise };
-}
+let pinia = createPinia();
 const result = (roleName = 'server') => ({
   items: [{ roleId: 20, roleName, roleKey: 'server', status: '0' }],
   total: 31,
   page: 1,
   pageSize: 10,
 });
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((done) => {
+    resolve = done;
+  });
+  return { resolve, promise };
+}
+function page() {
+  const wrapper = mount(RolePage, {
+    global: {
+      plugins: [
+        pinia,
+        ElementPlus,
+        [VueQueryPlugin, { queryClient }],
+        createShortcutPlugin(createShortcutRuntime({ appId: 'role-page-test', platform: 'mac' })),
+      ],
+      config: {
+        globalProperties: { $modal: { confirm: api.confirm }, download: api.download } as never,
+      },
+      stubs: { ZxContentWrap: { template: '<section><slot /></section>' }, DictSelect: true },
+    },
+  });
+  mounted.push(wrapper);
+  const grid = () => wrapper.getComponent({ name: 'ZxTableRender' });
+  const table = () =>
+    grid().vm as unknown as TableRenderInstance<
+      never,
+      { roleId: number },
+      { roleName?: string; roleKey?: string; status?: string; dateRange?: string[] }
+    >;
+  const button = (label: string) =>
+    wrapper.findAll('button').find((node) => node.text().trim() === label)!;
+  return { wrapper, grid, table, button };
+}
 beforeEach(() => {
   vi.resetAllMocks();
   pinia = createPinia();
@@ -144,60 +93,51 @@ beforeEach(() => {
   api.listRole.mockResolvedValue(result());
   api.permission.mockReturnValue(true);
   api.changeRoleStatus.mockResolvedValue({});
+  api.delRole.mockResolvedValue({});
   api.confirm.mockResolvedValue(undefined);
   api.openEditor.mockResolvedValue(undefined);
-  for (const key of ['ref', 'getCurrentInstance']) vi.stubGlobal(key, vue[key as keyof typeof vue]);
-  vi.stubGlobal('useRouter', () => ({ push: api.navigate }));
+  api.actionConfirm.mockResolvedValue({ ok: true, value: 'confirm' });
 });
 afterEach(() => {
-  mounted.splice(0).forEach((w) => w.unmount());
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
   endQuerySession();
   queryClient.clear();
-  vi.unstubAllGlobals();
 });
 
-describe('role list resource ownership', () => {
-  it('replaces action nodes when a refresh puts a different role at the same row index', async () => {
+describe('role list with real TableRender and Vue Query', () => {
+  it('keeps row action identity tied to role IDs after refresh', async () => {
     api.listRole.mockResolvedValue({
       ...result(),
-      items: [{ roleId: 82, roleName: '角色 82', roleKey: 'role82', status: '0' }],
+      items: [{ roleId: 82, roleName: '角色82', roleKey: '82', status: '0' }],
     });
-    const { wrapper, state } = page({ realTable: true });
+    const { wrapper, table } = page();
     await flushPromises();
-    const oldRow = wrapper.get('tbody tr');
-    const oldEdit = oldRow.findAll('button').find((button) => button.text() === '修改')!;
-    expect(oldRow.text()).toContain('角色 82');
-
+    const old = wrapper.get('tbody [data-zx-action-id="edit"]').element;
     api.listRole.mockResolvedValue({
       ...result(),
-      items: [{ roleId: 85, roleName: '角色 85', roleKey: 'role85', status: '0' }],
+      items: [{ roleId: 85, roleName: '角色85', roleKey: '85', status: '0' }],
     });
-    state.refreshList();
+    await table().reload();
     await flushPromises();
-
-    const newRow = wrapper.get('tbody tr');
-    const newEdit = newRow.findAll('button').find((button) => button.text() === '修改')!;
-    expect(newRow.text()).toContain('角色 85');
-    // A pointer/focus held on 82's action must not become an action on role 85.
-    expect(newEdit.element).not.toBe(oldEdit.element);
-    expect(wrapper.element.contains(oldEdit.element)).toBe(false);
-    await newEdit.trigger('click');
+    const edit = wrapper.get('tbody [data-zx-action-id="edit"]');
+    expect(edit.element).not.toBe(old);
+    expect(wrapper.element.contains(old)).toBe(false);
+    await edit.trigger('click');
     expect(api.openEditor).toHaveBeenCalledWith(85);
   });
-
-  it('uses submitted filters for paging/export and resets a new search to page one', async () => {
-    const { state, grid } = page();
+  it('pages and exports submitted filters, preserving an unsent draft', async () => {
+    const { table, button } = page();
     await flushPromises();
-    expect(grid().props('mode')).toBe('controlled');
-    Object.assign(state.draft, {
+    table().setDraft({
       roleName: ' selected ',
       roleKey: ' key ',
       status: '1',
       dateRange: ['2026-10-01', '2026-10-17'],
     });
-    state.onSearch();
     await flushPromises();
-    grid().vm.$emit('page-change', { page: 3, size: 10 });
+    await table().search();
+    await flushPromises();
+    await table().requery({ page: 3 });
     await flushPromises();
     const filters = {
       roleName: 'selected',
@@ -206,110 +146,109 @@ describe('role list resource ownership', () => {
       beginTime: '2026-10-01',
       endTime: '2026-10-17',
     };
-    expect(api.listRole.mock.calls.at(-1)?.[0]).toEqual({
-      ...filters,
-      page: 3,
-      pageSize: 10,
-    });
-    state.draft.roleName = 'unsent';
-    state.handleExport();
+    expect(api.listRole.mock.calls.at(-1)?.[0]).toEqual({ ...filters, page: 3, pageSize: 10 });
+    table().setDraft({ roleName: 'unsent' });
+    await flushPromises();
+    await button('导出').trigger('click');
     expect(api.download).toHaveBeenLastCalledWith(
       'system/role/export',
       filters,
       expect.any(String)
     );
-    state.onSearch();
+    await table().search();
     await flushPromises();
-    expect(grid().props('pagination').page).toBe(1);
-    expect(api.listRole.mock.calls.at(-1)?.[0].roleName).toBe('unsent');
+    expect(api.listRole.mock.calls.at(-1)?.[0]).toMatchObject({ roleName: 'unsent', page: 1 });
   });
-
-  it('shows initial and refresh failures with retry while retaining only same-key rows', async () => {
+  it('retries initial/refresh failures and retains rows only for the same query key', async () => {
     api.listRole.mockRejectedValue(new Error('failed'));
-    const { grid, state } = page();
+    const { grid, table } = page();
     await flushPromises();
-    expect(grid().props('status')?.error).toBeTruthy();
+    expect(grid().props('status').error).toBeTruthy();
     api.listRole.mockResolvedValue(result());
-    grid().vm.$emit('refresh');
+    await table().reload();
     await flushPromises();
     expect(grid().props('rows')[0].roleName).toBe('server');
     api.listRole.mockRejectedValue(new Error('refresh failed'));
-    grid().vm.$emit('refresh');
+    await table().reload();
     await flushPromises();
     expect(grid().props('status').error).toBeTruthy();
     expect(grid().props('rows')[0].roleName).toBe('server');
-    state.draft.roleName = 'other';
-    state.onSearch();
+    table().setDraft({ roleName: 'other' });
+    await flushPromises();
+    await table().search();
     await flushPromises();
     expect(grid().props('rows')).toEqual([]);
   });
-
-  it('keeps latest search result when an earlier request resolves last', async () => {
-    const { grid, state } = page();
+  it('ignores an older request that resolves after the latest search', async () => {
+    const { grid, table } = page();
     await flushPromises();
     const old = deferred<ReturnType<typeof result>>();
     api.listRole.mockReturnValueOnce(old.promise).mockResolvedValueOnce(result('new'));
-    state.draft.roleName = 'old';
-    state.onSearch();
+    table().setDraft({ roleName: 'old' });
     await flushPromises();
-    state.draft.roleName = 'new';
-    state.onSearch();
+    await table().search();
+    await flushPromises();
+    table().setDraft({ roleName: 'new' });
+    await flushPromises();
+    await table().search();
     await flushPromises();
     old.resolve(result('old'));
     await flushPromises();
     expect(grid().props('rows')[0].roleName).toBe('new');
+    expect(table().displayed?.input.query).toEqual({ roleName: 'new' });
   });
-
-  it('locks status by role ID and captures the target without mutating cached rows', async () => {
-    const { grid, state } = page();
+  it('locks status by ID without mutating rows and discards confirmation after domain change', async () => {
+    const { wrapper, grid } = page();
     await flushPromises();
     const row = Object.freeze(grid().props('rows')[0]);
     const confirmed = deferred<void>();
     api.confirm.mockReturnValue(confirmed.promise);
-    const saving = state.handleStatusChange('1', row);
-    state.handleStatusChange('1', { ...row });
+    const toggle = wrapper.getComponent({ name: 'ElSwitch' });
+    toggle.vm.$emit('change', '1');
+    toggle.vm.$emit('change', '1');
     await flushPromises();
     expect(api.confirm).toHaveBeenCalledTimes(1);
     expect(row.status).toBe('0');
+    setQuerySession(3, [], []);
     confirmed.resolve();
-    await saving;
     await flushPromises();
-    expect(api.changeRoleStatus.mock.calls[0].slice(0, 2)).toEqual([20, '1']);
-  });
-
-  it('does not offer status writes for the administrator role or without edit permission', async () => {
-    const { state } = page();
-    await flushPromises();
-    await state.handleStatusChange('1', { roleId: 1, status: '0' });
-    api.permission.mockReturnValue(false);
-    await state.handleStatusChange('1', { roleId: 20, status: '0' });
-    expect(api.confirm).not.toHaveBeenCalled();
     expect(api.changeRoleStatus).not.toHaveBeenCalled();
   });
-
-  it('restores only submitted list state after authorization and discards an expired confirmation', async () => {
+  it('protects administrator selection/status and rechecks permission after delete confirmation', async () => {
+    api.listRole.mockResolvedValue({
+      ...result(),
+      items: [{ roleId: 1, roleName: 'admin', status: '0' }, ...result().items],
+    });
+    const { wrapper, table, button } = page();
+    await flushPromises();
+    expect(wrapper.findAllComponents({ name: 'ElSwitch' })[0].props('disabled')).toBe(true);
+    await wrapper.get('thead input[type="checkbox"]').setValue(true);
+    expect(table().selection.keys).toEqual([20]);
+    const confirm = deferred<{ ok: true; value: 'confirm' }>();
+    api.actionConfirm.mockReturnValue(confirm.promise);
+    await button('删除').trigger('click');
+    api.permission.mockReturnValue(false);
+    confirm.resolve({ ok: true, value: 'confirm' });
+    await flushPromises();
+    expect(api.delRole).not.toHaveBeenCalled();
+  });
+  it('restores submitted navigation filters/page and not an unsent draft', async () => {
     const before = page();
     await flushPromises();
-    before.state.draft.roleName = 'selected';
-    before.state.onSearch();
+    before.table().setDraft({ roleName: 'selected' });
     await flushPromises();
-    before.grid().vm.$emit('page-change', { page: 2, size: 10 });
+    await before.table().search();
     await flushPromises();
-    before.state.draft.roleName = 'unsent';
-    before.state.handleAuthUser({ roleId: 20 });
+    await before.table().requery({ page: 2 });
+    await flushPromises();
+    before.table().setDraft({ roleName: 'unsent' });
+    await flushPromises();
+    await before.wrapper.get('tbody [data-zx-action-id="auth-user"]').trigger('click');
     expect(api.navigate).toHaveBeenCalledWith('/system/role-auth/user/20');
     before.wrapper.unmount();
     const after = page();
     await flushPromises();
-    expect(after.state.draft.roleName).toBe('selected');
-    expect(after.grid().props('pagination').page).toBe(2);
-    const confirmed = deferred<void>();
-    api.confirm.mockReturnValue(confirmed.promise);
-    const saving = after.state.handleStatusChange('1', after.grid().props('rows')[0]);
-    setQuerySession(3, [], []);
-    confirmed.resolve();
-    await saving;
-    expect(api.changeRoleStatus).not.toHaveBeenCalled();
-    expect(after.state.submitted).toEqual({});
+    expect(after.table().draft.roleName).toBe('selected');
+    expect(after.table().applied?.pager?.page).toBe(2);
   });
 });

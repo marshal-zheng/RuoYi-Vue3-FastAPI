@@ -20,7 +20,9 @@ function loadThemeCompiler(frontendRoot: string, workspaceRoot?: string) {
   // The public source facet keeps Vite tooling and browser components on the same revision.
   // tsx belongs to the prepared ZXUI checkout; nothing is globally registered.
   const { require: requireSource } = compilerRequire('tsx/cjs/api');
-  const sourcePackageRequire = createRequire(path.resolve(workspaceRoot, 'packages/theme-compiler/package.json'));
+  const sourcePackageRequire = createRequire(
+    path.resolve(workspaceRoot, 'packages/theme-compiler/package.json')
+  );
   return requireSource(
     sourcePackageRequire.resolve('@zxio/theme-compiler/vite/source'),
     sourcePackageRequire.resolve('@zxio/theme-compiler/package.json')
@@ -65,6 +67,7 @@ export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot:
       '@zxio/dashboard-widgets',
       '@zxio/http',
       '@zxio/schema-form',
+      '@zxio/table-render',
       '@zxio/text-editor',
       '@zxio/theme-tailwind',
       '@zxio/vue-query',

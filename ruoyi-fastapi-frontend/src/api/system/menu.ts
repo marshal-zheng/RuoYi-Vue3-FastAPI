@@ -8,7 +8,6 @@ export interface MenuItem {
   menuId: number;
   parentId: number;
   menuName: string;
-  [key: string]: unknown;
 }
 
 export interface MenuTreeNode {
@@ -18,8 +17,12 @@ export interface MenuTreeNode {
 }
 
 // 查询菜单列表
-export function listMenu(query?: NonNullable<GetSystemMenuListSystemMenuListGetData['query']>) {
-  return request<HttpCollection<MenuItem>>({
+export function listMenu(
+  query?: NonNullable<GetSystemMenuListSystemMenuListGetData['query']>,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'requestOptions'>
+) {
+  return request<HttpCollection<MenuRecord>>({
+    ...config,
     url: '/system/menu/list',
     method: 'get',
     params: query,

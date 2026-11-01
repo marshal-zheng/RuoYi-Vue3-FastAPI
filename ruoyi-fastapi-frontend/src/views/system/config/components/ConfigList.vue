@@ -1,250 +1,181 @@
 <template>
-  <ZxGridList
-    ref="gridListRef"
-    :load-data="loadConfigData"
-    :query-transform="queryTransform"
-    :show-pagination="true"
-    :load-on-mounted="true"
-    fill
-  >
-    <template #form="listForm">
-      <template v-if="listForm.mode === 'request'">
-        <DictStatus :types="['sys_yes_no']" />
-        <ZxListToolbar aria-label="列表操作与筛选">
-          <template #actions>
-            <ZxButton
-              type="primary"
-              icon="Plus"
-              @click="handleAdd"
-              v-hasPermi="['system:config:add']"
-              >新增</ZxButton
-            >
-            <ZxButton
-              icon="Edit"
-              :disabled="single"
-              @click="handleUpdate"
-              v-hasPermi="['system:config:edit']"
-              >修改</ZxButton
-            >
-            <ZxButton
-              plain
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['system:config:remove']"
-              :loading="handleDeletePending"
-              >删除</ZxButton
-            >
-            <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:config:export']"
-              >导出</ZxButton
-            >
-            <ZxButton
-              icon="Refresh"
-              @click="handleRefreshCache"
-              v-hasPermi="['system:config:remove']"
-              :loading="handleRefreshCachePending"
-              >刷新缓存</ZxButton
-            >
-          </template>
-          <template #filters>
-            <zx-input
-              v-model="listForm.draft.configKey"
-              placeholder="请输入参数键名"
-              clearable
-              style="width: 200px"
-              @keyup.enter="() => listForm.search()"
-            />
-            <DictSelect
-              v-model="listForm.draft.configType"
-              dict-type="sys_yes_no"
-              placeholder="系统内置"
-              clearable
-              style="width: 200px"
-              @change="() => listForm.search()"
-            />
-            <el-date-picker
-              v-model="listForm.draft.dateRange"
-              value-format="YYYY-MM-DD"
-              type="daterange"
-              range-separator="-"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 240px"
-              @change="() => listForm.search()"
-            />
-          </template>
-          <template #search>
-            <ZxSearch
-              v-model="listForm.draft.configName"
-              placeholder="搜索参数名称"
-              :loading="listForm.loading"
-              search-mode="click"
-              @search="() => listForm.search()"
-              @clear="() => listForm.search()"
-            />
-          </template>
-        </ZxListToolbar>
-      </template>
+  <ZxTableRender ref="tableRef" :definition="definition" :query-context="gridQueryContext">
+    <template #toolbar-extra><DictStatus :types="['sys_yes_no']" /></template>
+    <template #config-type="{ logicalValue, commit, controlAttrs }">
+      <DictSelect
+        dict-type="sys_yes_no"
+        :model-value="logicalValue ?? undefined"
+        v-bind="controlAttrs"
+        placeholder="系统内置"
+        clearable
+        @update:model-value="commit"
+      />
     </template>
-
-    <template #table="{ grid }">
-      <el-table
-        v-loading="grid.loading"
-        :data="grid.list || []"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="参数主键" prop="configId" />
-        <el-table-column label="参数名称" prop="configName" :show-overflow-tooltip="true" />
-        <el-table-column label="参数键名" prop="configKey" :show-overflow-tooltip="true" />
-        <el-table-column label="参数键值" prop="configValue" :show-overflow-tooltip="true" />
-        <el-table-column label="系统内置" prop="configType">
-          <template #default="scope">
-            <dict-tag :options="sys_yes_no" :value="scope.row.configType" />
-          </template>
-        </el-table-column>
-        <el-table-column label="备注" prop="remarkText" :show-overflow-tooltip="true">
-          <template #default="scope"
-            ><RemarkDisplay :value="scope.row.remark" :text="scope.row.remarkText" summary
-          /></template>
-        </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="180">
-          <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="150" class-name="small-padding fixed-width">
-          <template #default="scope">
-            <el-button
-              link
-              type="primary"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['system:config:edit']"
-              >修改</el-button
-            >
-            <el-button
-              link
-              type="danger"
-              @click="handleDelete(scope.row)"
-              v-hasPermi="['system:config:remove']"
-              :loading="handleDeletePending"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </template>
-  </ZxGridList>
-
-  <!-- 添加或修改参数配置对话框 -->
-  <ConfigDlg ref="configDlgRef" @confirm="handleRefresh" />
+    <template #cell-configType="{ row }"
+      ><dict-tag :options="sys_yes_no" :value="row.configType ?? undefined"
+    /></template>
+    <template #cell-remark="{ row }"
+      ><RemarkDisplay :value="row.remark" :text="row.remarkText" summary
+    /></template>
+  </ZxTableRender>
+  <ConfigDlg ref="configDlgRef" @confirm="tableRef?.reload()" />
 </template>
 
 <script setup lang="ts">
-import { normalizeGridParams } from '@/utils/grid-params';
-import { ZxGridList } from '@zxio/zxui/grid-list';
-import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
-import { useOperation } from '@/utils/operation';
-import type { GridListPagerState, GridListSortItem, ZxGridListRequestInstance } from '@zxio/zxui';
-import type { ConfigRecord } from '@/api/system/config';
+import { getCurrentInstance, shallowRef } from 'vue';
+import { defineTableRender } from '@zxio/table-render/core';
+import { ZxTableRender, type TableRenderInstance } from '@zxio/table-render/ui';
+import '@zxio/table-render/style';
+import { listConfig, delConfig, refreshCache, type ConfigRecord } from '@/api/system/config';
 import type { ConfigPageQueryModel } from '@/api/_generated/types.gen';
-type ListQuery = ConfigPageQueryModel & { dateRange?: string[] | null };
-type ListLoadParams = {
-  query?: ListQuery;
-  pager?: GridListPagerState;
-  sort?: readonly GridListSortItem[];
-};
-import { ref, getCurrentInstance } from 'vue';
-import { parseTime } from '@/utils/ruoyi';
+import { gridQueryContext, requireQueryScope, scopeRequestOptions } from '@/queries/context';
+import { checkPermi } from '@/utils/permission';
+import { normalizeGridParams } from '@/utils/grid-params';
 import { serializeDateRange } from '@/utils/ruoyi';
-import { listConfig, delConfig, refreshCache } from '@/api/system/config';
-import ConfigDlg from './ConfigDlg.vue';
+import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
 import DictSelect from '@/components/business/DictSelect/index.vue';
+import ConfigDlg from './ConfigDlg.vue';
 
+type Query = Pick<ConfigPageQueryModel, 'configName' | 'configKey' | 'configType'> & {
+  dateRange?: string[];
+};
 const proxy = getCurrentInstance()!.proxy!;
 const { sys_yes_no } = proxy.useDict('sys_yes_no');
-
-const ids = ref<number[]>([]);
-const single = ref(true);
-const multiple = ref(true);
-const gridListRef = ref<ZxGridListRequestInstance | null>(null);
-const configDlgRef = ref<InstanceType<typeof ConfigDlg> | null>(null);
-
-/** 使用 GridList 的 queryTransform 处理日期范围 */
-function queryTransform(query: ListQuery) {
-  return serializeDateRange(query);
-}
-
-/** GridList 数据加载函数 */
-async function loadConfigData(params: ListLoadParams) {
-  const query = {
-    ...params.query,
-    page: params.pager?.page,
-    pageSize: params.pager?.size,
-    sort: params.sort,
-  };
-  return listConfig(query);
-}
-
-/** 刷新列表 */
-function handleRefresh() {
-  gridListRef.value?.reload();
-}
-
-/** 多选框选中数据 */
-function handleSelectionChange(selection: ConfigRecord[]) {
-  ids.value = selection.map((item) => item.configId);
-  single.value = selection.length !== 1;
-  multiple.value = !selection.length;
-}
-
-/** 新增按钮操作 */
-function handleAdd() {
-  return configDlgRef.value?.open().catch(() => {
-    /* 当前读取已负责反馈。 */
-  });
-}
-
-/** 修改按钮操作 */
-function handleUpdate(row?: ConfigRecord) {
-  const id = row?.configId || ids.value[0];
-  if (!id) return;
+const configDlgRef = shallowRef<InstanceType<typeof ConfigDlg>>();
+function open(id?: number) {
   return configDlgRef.value?.open(id).catch(() => {
-    /* 当前读取已负责反馈。 */
+    /* The editor owns read feedback. */
   });
 }
-
-/** 删除按钮操作 */
-const { run: handleDelete, pending: handleDeletePending } = useOperation(
-  async (row?: ConfigRecord) => {
-    const configIds = row?.configId || ids.value.join(',');
-    await proxy.$modal
-      .confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
-      .then(() => delConfig(configIds))
-      .then(() => {
-        gridListRef.value?.reload();
-      })
-      .catch(() => {});
-  }
-);
-
-/** 导出按钮操作 */
-function handleExport() {
-  const snapshot = gridListRef.value?.applied;
-  if (!snapshot) return;
-  proxy.download(
-    'system/config/export',
-    normalizeGridParams({
-      query: queryTransform(snapshot.query as ListQuery),
-      sort: snapshot.sort,
-    }),
-    `config_${new Date().getTime()}.xlsx`
-  );
-}
-
-/** 刷新缓存按钮操作 */
-const { run: handleRefreshCache, pending: handleRefreshCachePending } = useOperation(async () => {
-  await refreshCache();
+const definition = defineTableRender<ConfigRecord, Query>()({
+  key: 'config-management',
+  title: '参数配置',
+  rowKey: 'configId',
+  layout: { fill: true, inlineLimit: 3 },
+  selection: { mode: 'multiple' },
+  pagination: { pageSize: 10 },
+  search: [
+    { key: 'configName', label: '参数名称', control: 'text', placement: 'keyword' },
+    {
+      key: 'configKey',
+      label: '参数键名',
+      control: 'text',
+      placement: 'inline',
+      placeholder: '请输入参数键名',
+    },
+    {
+      key: 'configType',
+      label: '系统内置',
+      control: { slot: 'config-type' },
+      placement: 'inline',
+      trigger: 'change',
+    },
+    {
+      key: 'dateRange',
+      label: '创建日期',
+      control: 'date-range',
+      placement: 'inline',
+      trigger: 'change',
+    },
+  ],
+  columns: [
+    { key: 'configId', label: '参数主键', prop: 'configId', width: 100 },
+    { key: 'configName', label: '参数名称', prop: 'configName', minWidth: 180 },
+    { key: 'configKey', label: '参数键名', prop: 'configKey', minWidth: 180 },
+    { key: 'configValue', label: '参数键值', prop: 'configValue', minWidth: 150 },
+    { key: 'configType', label: '系统内置', prop: 'configType', width: 100 },
+    { key: 'remark', label: '备注', prop: 'remarkText', minWidth: 180 },
+    { key: 'createTime', label: '创建时间', prop: 'createTime', type: 'datetime', width: 180 },
+    {
+      key: 'operations',
+      label: '操作',
+      type: 'actions',
+      fixed: 'right',
+      width: 150,
+      hideable: false,
+    },
+  ],
+  request: async ({ query, pager, sort }, { signal }) => {
+    const result = await listConfig(
+      normalizeGridParams({ query: serializeDateRange(query), pager, sort }),
+      { signal, requestOptions: scopeRequestOptions(requireQueryScope()) }
+    );
+    return {
+      list: result.items,
+      pager: { total: result.total, page: result.page, size: result.pageSize },
+    };
+  },
+  actions: {
+    toolbar: [
+      {
+        id: 'add',
+        label: '新增',
+        tone: 'primary',
+        icon: 'Plus',
+        visible: () => checkPermi(['system:config:add']),
+        run: () => open(),
+      },
+      {
+        id: 'export',
+        label: '导出',
+        icon: 'Download',
+        visible: () => checkPermi(['system:config:export']),
+        disabled: ({ applied }) => !applied,
+        run: ({ applied }) =>
+          applied &&
+          proxy.download(
+            'system/config/export',
+            normalizeGridParams({ query: serializeDateRange(applied.query), sort: applied.sort }),
+            `config_${Date.now()}.xlsx`
+          ),
+      },
+      {
+        id: 'cache',
+        label: '刷新缓存',
+        icon: 'Refresh',
+        visible: () => checkPermi(['system:config:remove']),
+        run: () => refreshCache(),
+      },
+    ],
+    batch: [
+      {
+        id: 'edit-selected',
+        label: '修改',
+        icon: 'Edit',
+        visible: () => checkPermi(['system:config:edit']),
+        disabled: ({ loadedRows, missingKeys }) =>
+          loadedRows.length !== 1 || missingKeys.length > 0,
+        run: ({ loadedRows }) => open(loadedRows[0].configId),
+      },
+      {
+        id: 'delete-selected',
+        label: '删除',
+        tone: 'danger',
+        icon: 'Delete',
+        visible: () => checkPermi(['system:config:remove']),
+        confirm: ({ keys }) => `是否确认删除参数编号为“${keys.join(',')}”的数据项？`,
+        run: ({ keys }) => delConfig(keys.join(',')),
+        reloadAfter: true,
+      },
+    ],
+    row: [
+      {
+        id: 'edit',
+        label: '修改',
+        visible: () => checkPermi(['system:config:edit']),
+        run: (row) => open(row.configId),
+      },
+      {
+        id: 'delete',
+        label: '删除',
+        tone: 'danger',
+        visible: () => checkPermi(['system:config:remove']),
+        confirm: (row) => `是否确认删除参数编号为“${row.configId}”的数据项？`,
+        run: (row) => delConfig(row.configId),
+        reloadAfter: true,
+      },
+    ],
+  },
 });
+const tableRef = shallowRef<TableRenderInstance<typeof definition, ConfigRecord, Query>>();
 </script>

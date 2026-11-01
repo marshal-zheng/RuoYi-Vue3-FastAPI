@@ -1,160 +1,207 @@
 <template>
-  <ZxGridList
+  <ZxTableRender
     v-if="queryScope"
-    :key="queryScope.key"
-    mode="controlled"
+    ref="refTable"
+    v-model:query="draft"
+    :definition="definition"
+    :domain-key="domainKey"
+    :applied="applied"
+    :displayed="publication?.displayed ?? null"
     :rows="deptRows"
     :status="listStatus"
-    :show-pagination="false"
-    fill
-    @reload="refreshList"
+    @query-intent="queryIntent"
   >
-    <template #form>
+    <template #toolbar-extra>
       <DictStatus :types="['sys_normal_disable']" />
-      <ZxListToolbar aria-label="列表操作与筛选">
-        <template #actions>
-          <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:dept:add']"
-            >新增</ZxButton
-          >
-          <ZxButton @click="toggleExpandAll">展开/折叠</ZxButton>
-        </template>
-        <template #filters>
-          <zx-input
-            v-model="draft.deptName"
-            placeholder="请输入部门名称"
-            clearable
-            style="width: 200px"
-            @keyup.enter="onSearch"
-          />
-          <DictSelect
-            dict-type="sys_normal_disable"
-            v-model="draft.status"
-            placeholder="部门状态"
-            clearable
-            style="width: 200px"
-            @change="onSearch"
-          />
-        </template>
-        <template #search>
-          <ZxSearch
-            v-model="draft.deptName"
-            placeholder="搜索部门名称"
-            :loading="listStatus.loading"
-            search-mode="click"
-            @search="onSearch"
-            @clear="onSearch"
-          />
-        </template>
-      </ZxListToolbar>
+      <ZxButton type="primary" @click="handleAdd()" v-hasPermi="['system:dept:add']">新增</ZxButton>
+      <ZxButton @click="toggleExpandAll">展开/折叠</ZxButton>
     </template>
-
-    <template #table="{ grid, renderEmpty }">
-      <el-table
-        v-if="refreshTable"
-        :data="grid.list || []"
-        row-key="deptId"
-        :default-expand-all="isExpandAll"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-      >
-        <template #empty>
-          <component :is="renderEmpty" />
-        </template>
-        <el-table-column prop="deptName" label="部门名称"></el-table-column>
-        <el-table-column prop="orderNum" label="排序"></el-table-column>
-        <el-table-column prop="status" label="状态">
-          <template #default="scope">
-            <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
-          </template>
-        </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="200">
-          <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="200" class-name="small-padding fixed-width">
-          <template #default="scope">
-            <div class="op-col__wrap">
-              <zx-button
-                link
-                type="primary"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['system:dept:edit']"
-                >修改</zx-button
-              >
-              <zx-button
-                link
-                type="primary"
-                @click="handleAdd(scope.row)"
-                v-hasPermi="['system:dept:add']"
-                >新增</zx-button
-              >
-              <ZxMoreAction
-                v-if="scope.row.parentId != 0"
-                :list="getMoreActionList(scope.row)"
-                @select="handleMoreActionSelect($event, scope.row)"
-              />
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+    <template #department-status="{ logicalValue, commit, controlAttrs }">
+      <DictSelect
+        dict-type="sys_normal_disable"
+        :model-value="logicalValue"
+        v-bind="controlAttrs"
+        placeholder="部门状态"
+        clearable
+        style="width: 200px"
+        @update:model-value="commit"
+      />
     </template>
-  </ZxGridList>
-
+    <template #cell-status="{ row }"
+      ><dict-tag :options="sys_normal_disable" :value="row.status ?? undefined"
+    /></template>
+    <template #cell-operations="{ row }">
+      <div class="op-col__wrap">
+        <zx-button link type="primary" @click="handleUpdate(row)" v-hasPermi="['system:dept:edit']"
+          >修改</zx-button
+        >
+        <zx-button link type="primary" @click="handleAdd(row)" v-hasPermi="['system:dept:add']"
+          >新增</zx-button
+        >
+        <ZxMoreAction
+          v-if="row.parentId != 0"
+          :list="getMoreActionList(row)"
+          @select="handleMoreActionSelect($event, row)"
+        />
+      </div>
+    </template>
+  </ZxTableRender>
   <DeptDlg ref="deptDlgRef" />
 </template>
 
 <script setup lang="ts" name="DeptList">
-import { ZxGridList } from '@zxio/zxui/grid-list';
-import { computed, getCurrentInstance, nextTick, reactive, ref, watch } from 'vue';
+import { defineTableRender } from '@zxio/table-render/core';
+import { ZxTableRender } from '@zxio/table-render/ui';
+import '@zxio/table-render/style';
+import type { TableApplied, TableDisplayed, TableQueryIntent } from '@zxio/table-render/core';
+import type { TableRenderInstance } from '@zxio/table-render/ui';
+import { queryClient } from '@/queries/client';
+import { computed, getCurrentInstance, ref, shallowRef, toRaw, watch } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
 import type { ActionItem } from '@zxio/zxui';
 import type { DeptRecord } from '@/api/system/dept';
 import { useOperation } from '@/utils/operation';
-import { handleTree, parseTime } from '@/utils/ruoyi';
+import { handleTree } from '@/utils/ruoyi';
 import { queryScope, type QueryScope } from '@/queries/context';
 import {
   captureDeptCommand,
   deptCommands,
   deptListOptions,
   normalizeDeptFilters,
+  type DeptFilters,
 } from '@/queries/system/dept';
 import DeptDlg from './DeptDlg.vue';
 
 const proxy = getCurrentInstance()!.proxy!;
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
-const isExpandAll = ref(true);
-const refreshTable = ref(true);
+type DeptRow = DeptRecord & { children?: DeptRow[] };
 const deptDlgRef = ref<InstanceType<typeof DeptDlg> | null>(null);
-const draft = reactive<{ deptName?: string; status?: '0' | '1' }>({});
+const draft = ref<DeptFilters>({});
 const submitted = ref(normalizeDeptFilters({}));
-const departmentQuery = useQuery(() => deptListOptions(queryScope.value, submitted.value));
-// handleTree attaches children in place; native cache records stay flat and immutable.
-const deptRows = computed(() =>
-  handleTree(
-    (departmentQuery.data.value?.items ?? []).map((row) => ({ ...row })),
-    'deptId'
-  )
+const queryOptions = computed(() => deptListOptions(queryScope.value, submitted.value));
+const departmentQuery = useQuery(queryOptions);
+const domainKey = computed(() => queryScope.value?.key ?? 'unavailable');
+const applied = computed<TableApplied<DeptFilters> | null>(() =>
+  queryScope.value
+    ? {
+        domainKey: domainKey.value,
+        query: submitted.value,
+        pager: null,
+        sort: [],
+      }
+    : null
 );
+const publication = shallowRef<{
+  rows: DeptRow[];
+  displayed: TableDisplayed<DeptFilters>;
+} | null>(null);
+let revision = 0;
+let lastPublication: { key: string; updatedAt: number; result: unknown } | undefined;
+watch(
+  [departmentQuery.data, departmentQuery.dataUpdatedAt, queryOptions],
+  ([result]) => {
+    if (
+      !result ||
+      !applied.value ||
+      toRaw(queryClient.getQueryData(queryOptions.value.queryKey)) !== toRaw(result)
+    )
+      return;
+    const key = JSON.stringify([domainKey.value, queryOptions.value.queryKey]);
+    const updatedAt = departmentQuery.dataUpdatedAt.value;
+    if (
+      publication.value &&
+      lastPublication?.key === key &&
+      lastPublication.updatedAt === updatedAt &&
+      lastPublication.result === toRaw(result)
+    )
+      return;
+    lastPublication = { key, updatedAt, result: toRaw(result) };
+    // handleTree attaches children in place; native cache records stay flat and immutable.
+    publication.value = {
+      rows: handleTree(
+        result.items.map((row) => ({ ...row })),
+        'deptId'
+      ),
+      displayed: {
+        domainKey: domainKey.value,
+        revision: ++revision,
+        input: { query: { ...submitted.value }, pager: null, sort: [] },
+      },
+    };
+  },
+  { immediate: true, flush: 'post' }
+);
+const deptRows = computed(() => publication.value?.rows ?? []);
 const listStatus = computed(() => ({
   loading: departmentQuery.isLoading.value,
-  refreshing: departmentQuery.isFetching.value && departmentQuery.data.value !== undefined,
+  refreshing: departmentQuery.isFetching.value && publication.value !== null,
   error: departmentQuery.error.value,
   paused: departmentQuery.fetchStatus.value === 'paused',
 }));
+const definition = defineTableRender<DeptRow, DeptFilters>()({
+  key: 'department-management',
+  title: '部门管理',
+  rowKey: 'deptId',
+  pagination: false,
+  tree: { children: 'children', defaultExpandAll: true },
+  layout: { fill: true },
+  search: [
+    {
+      key: 'deptName',
+      label: '部门名称',
+      control: 'text',
+      placement: 'keyword',
+      toLogical: (value) => String(value ?? '').trim() || undefined,
+    },
+    {
+      key: 'status',
+      label: '部门状态',
+      control: { slot: 'department-status' },
+      placement: 'inline',
+      trigger: 'change',
+    },
+  ],
+  columns: [
+    {
+      key: 'deptName',
+      label: '部门名称',
+      prop: 'deptName',
+      minWidth: 200,
+      hideable: false,
+    },
+    { key: 'orderNum', label: '排序', prop: 'orderNum', width: 90 },
+    { key: 'status', label: '状态', prop: 'status', width: 100 },
+    {
+      key: 'createTime',
+      label: '创建时间',
+      prop: 'createTime',
+      type: 'datetime',
+      width: 200,
+    },
+    {
+      key: 'operations',
+      label: '操作',
+      type: 'custom',
+      width: 200,
+      fixed: 'right',
+      hideable: false,
+    },
+  ],
+});
+const refTable = shallowRef<TableRenderInstance<typeof definition, DeptRow, DeptFilters>>();
 watch(
   queryScope,
   () => {
-    draft.deptName = undefined;
-    draft.status = undefined;
+    draft.value = {};
     submitted.value = normalizeDeptFilters({});
+    publication.value = null;
   },
   { flush: 'sync' }
 );
-
-function onSearch() {
-  const nextFilters = normalizeDeptFilters(draft);
+function queryIntent(intent: TableQueryIntent<DeptFilters>) {
+  if (!queryScope.value || intent.domainKey !== domainKey.value) return;
+  const nextFilters = normalizeDeptFilters(intent.input.query);
   const unchanged =
-    Object.keys(nextFilters).length === Object.keys(submitted.value).length &&
     nextFilters.deptName === submitted.value.deptName &&
     nextFilters.status === submitted.value.status;
   submitted.value = nextFilters;
@@ -170,11 +217,18 @@ function handleAdd(row?: DeptRecord) {
   });
 }
 function toggleExpandAll() {
-  refreshTable.value = false;
-  isExpandAll.value = !isExpandAll.value;
-  nextTick(() => {
-    refreshTable.value = true;
-  });
+  const keys: number[] = [];
+  function visit(rows: readonly DeptRow[]) {
+    for (const row of rows) {
+      if (row.children?.length) {
+        keys.push(row.deptId);
+        visit(row.children);
+      }
+    }
+  }
+  visit(deptRows.value);
+  const expanded = refTable.value?.expandedKeys ?? [];
+  refTable.value?.setExpandedKeys(keys.every((key) => expanded.includes(key)) ? [] : keys);
 }
 function handleUpdate(row: DeptRecord) {
   return deptDlgRef.value?.open({ deptId: row.deptId }).catch(() => {

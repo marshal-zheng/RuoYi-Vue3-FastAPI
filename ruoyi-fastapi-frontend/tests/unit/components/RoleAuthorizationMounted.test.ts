@@ -43,7 +43,7 @@ const slots = {
 };
 const route = vue.reactive({ params: { userId: '42', roleId: '20' } });
 const close = vi.fn();
-function page(component: typeof AuthRole, props = {}) {
+function page(component: vue.Component, props = {}) {
   const wrapper = mount(component, {
     props,
     global: {
@@ -220,7 +220,12 @@ it('selector shows the newest search and never lets an older response replace it
   state(wrapper).show();
   await flushPromises();
   state(wrapper).queryParams.userName = 'latest';
-  state(wrapper).handleQuery();
+  await vue.nextTick();
+  await (
+    wrapper.findComponent({ name: 'ZxTableRender' }).vm as unknown as {
+      search(): Promise<unknown>;
+    }
+  ).search();
   await flushPromises();
   latest.resolve(users(20));
   await flushPromises();
@@ -256,7 +261,7 @@ it('recovers a failed first role read and keeps edited selection through backgro
   });
   await state(wrapper).handleSave();
   expect(api.assign).not.toHaveBeenCalled();
-  grid.vm.$emit('refresh');
+  grid.vm.$emit('reload');
   await flushPromises();
   const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[0]!.setValue(false);
@@ -265,7 +270,7 @@ it('recovers a failed first role read and keeps edited selection through backgro
     user: { userId: 42 },
     roles: roles.map((row) => ({ ...row, flag: true })),
   } as never);
-  grid.vm.$emit('refresh');
+  grid.vm.$emit('reload');
   await flushPromises();
   await state(wrapper).handleSave();
   expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({
@@ -278,7 +283,7 @@ it('keeps allocated rows and shows refresh failure, then exposes paused reads se
   await flushPromises();
   vi.mocked(allocatedUserList).mockRejectedValueOnce(new Error('refresh failed'));
   const grid = wrapper.findComponent(ZxGridList);
-  grid.vm.$emit('refresh');
+  grid.vm.$emit('reload');
   await flushPromises();
   expect(wrapper.findComponent({ name: 'ElTable' }).props('data')).toHaveLength(10);
   expect(grid.props('status')).toMatchObject({
@@ -298,7 +303,7 @@ it('selector retries a failed read and keeps selection when a later page fails',
   await flushPromises();
   const grid = wrapper.findComponent(ZxGridList);
   expect(grid.props('status')).toMatchObject({ error: expect.any(Error) });
-  grid.vm.$emit('refresh');
+  grid.vm.$emit('reload');
   await flushPromises();
   const table = wrapper.findComponent({ name: 'ElTable' });
   await table.findAll('tbody input[type=checkbox]')[1]!.setValue(true);
@@ -307,7 +312,7 @@ it('selector retries a failed read and keeps selection when a later page fails',
   grid.vm.$emit('page-change', { page: 2, size: 10 });
   await flushPromises();
   expect(state(wrapper).userIds).toEqual([2]);
-  grid.vm.$emit('refresh');
+  grid.vm.$emit('reload');
   await flushPromises();
   await state(wrapper).handleSelectUser();
   expect(api.grant.mock.calls.at(-1)?.[0]).toEqual({
@@ -329,7 +334,7 @@ it('resets selection and filters on reopen and ignores a previous opening respon
   await flushPromises();
   old.resolve(users(1));
   await flushPromises();
-  expect(state(wrapper).queryParams.userName).toBe('');
+  expect(state(wrapper).queryParams.userName).toBeUndefined();
   expect(state(wrapper).userIds).toEqual([]);
   expect(wrapper.findComponent({ name: 'ElTable' }).props('data')?.[0]?.userId).toBe(20);
 });
@@ -476,7 +481,12 @@ it('retains selected users through a different search and closes on role identit
   await flushPromises();
   vi.mocked(unallocatedUserList).mockResolvedValueOnce(users(20));
   state(wrapper).queryParams.userName = 'other';
-  state(wrapper).handleQuery();
+  await vue.nextTick();
+  await (
+    wrapper.findComponent({ name: 'ZxTableRender' }).vm as unknown as {
+      search(): Promise<unknown>;
+    }
+  ).search();
   await flushPromises();
   await table.findAll('tbody input[type=checkbox]')[0]!.setValue(true);
   await flushPromises();

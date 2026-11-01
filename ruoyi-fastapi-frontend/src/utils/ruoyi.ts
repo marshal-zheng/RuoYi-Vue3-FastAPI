@@ -238,7 +238,8 @@ export function handleTree<T extends object>(
   const roots = data.filter((node) => !nodeIds.has(String(Reflect.get(node, config.parentId))));
   const attachChildren = (node: T): void => {
     const descendants = childrenByParent.get(String(Reflect.get(node, config.id)));
-    Reflect.set(node, config.childrenList, descendants);
+    if (descendants) Reflect.set(node, config.childrenList, descendants);
+    else Reflect.deleteProperty(node, config.childrenList);
     descendants?.forEach(attachChildren);
   };
   roots.forEach(attachChildren);

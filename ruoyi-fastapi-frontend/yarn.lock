@@ -5160,6 +5160,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zxio/table-render@file:./vendor/zxio-table-render-0.1.0-optimization.20261101.tgz::locator=vfadmin%40workspace%3A.":
+  version: 0.1.0
+  resolution: "@zxio/table-render@file:./vendor/zxio-table-render-0.1.0-optimization.20261101.tgz#./vendor/zxio-table-render-0.1.0-optimization.20261101.tgz::hash=16ba57&locator=vfadmin%40workspace%3A."
+  peerDependencies:
+    "@zxio/page-agent": ^0.1.0
+    "@zxio/schema-form": ^0.1.0-0
+    "@zxio/zxui": ^3.0.0-next.0
+    element-plus: 2.14.7
+    vue: ^3.5.0
+  peerDependenciesMeta:
+    "@zxio/page-agent":
+      optional: true
+  checksum: 10c0/be8b99706e2876747e3617b022a32b3e83db40e8d7d950594ebbc1e5474bb88764a165ec6300768ab0106a6859f6cb19d754290fcdde68e99ac26351f422c597
+  languageName: node
+  linkType: hard
+
 "@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-feedback.20261030.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0-remark-ai.20261023.2
   resolution: "@zxio/text-editor@file:./vendor/zxio-text-editor-1.0.0-feedback.20261030.tgz#./vendor/zxio-text-editor-1.0.0-feedback.20261030.tgz::hash=a59556&locator=vfadmin%40workspace%3A."
@@ -5392,9 +5408,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-completion.20261028.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-table-render.20261101.tgz::locator=vfadmin%40workspace%3A.":
   version: 3.0.0-next.0
-  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-completion.20261028.tgz#./vendor/zxio-zxui-3.0.0-next.0-completion.20261028.tgz::hash=b460a9&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-table-render.20261101.tgz#./vendor/zxio-zxui-3.0.0-next.0-table-render.20261101.tgz::hash=0f6618&locator=vfadmin%40workspace%3A."
   dependencies:
     "@element-plus/icons-vue": "npm:^2.3.1"
     "@floating-ui/dom": "npm:^1.6.0"
@@ -5415,7 +5431,7 @@ __metadata:
   peerDependencies:
     element-plus: 2.14.7
     vue: ^3.5.0
-  checksum: 10c0/9f8f5d782cc28591b899d13ab796ceb65572817b51284d75575f3d4c3eed711ff63ec4ed9629e1bf4363769a249ab1fe8902cbb2cd01ff44e0ad4bc66cad5ad9
+  checksum: 10c0/b9cc2cc29720c089f27d8c7d9bc264462955d6b6f01c531d5263216b0f28e5ce5794cf62ac7d7d7e02efa66234bfbf3176eaca375de26efefda7c889b758a3e3
   languageName: node
   linkType: hard
 
@@ -15253,6 +15269,7 @@ __metadata:
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
     "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz"
+    "@zxio/table-render": "file:./vendor/zxio-table-render-0.1.0-optimization.20261101.tgz"
     "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-feedback.20261030.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-dashboard-theme.20261026.tgz"
@@ -15268,7 +15285,7 @@ __metadata:
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz"
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz"
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
-    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-completion.20261028.tgz"
+    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-table-render.20261101.tgz"
     ajv: "npm:^8.20.0"
     autoprefixer: "npm:^10.4.21"
     axios: "npm:1.20.0"

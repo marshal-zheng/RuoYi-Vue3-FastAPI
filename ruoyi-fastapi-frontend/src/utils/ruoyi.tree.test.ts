@@ -19,6 +19,9 @@ describe('tree construction with API identifiers', () => {
     expect(tree).toEqual([root]);
     expect(root.children).toEqual([child]);
     expect(root.children?.[0]).toBe(child);
+    expect(child).not.toHaveProperty('children');
+    handleTree([root]);
+    expect(root).not.toHaveProperty('children');
   });
 
   it('supports custom keys and identifiers which resemble object prototype properties', () => {
