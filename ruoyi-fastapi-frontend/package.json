@@ -50,7 +50,6 @@
     "url": "https://gitee.com/insistence2022/RuoYi-Vue3-FastAPI.git"
   },
   "dependencies": {
-    "@ant-design/icons-vue": "^7.0.1",
     "@antv/g2plot": "^2.4.31",
     "@antv/hierarchy": "^0.6.11",
     "@antv/layout": "^0.2.5",
@@ -99,7 +98,6 @@
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz",
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz",
     "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-completion.20261028.tgz",
-    "ant-design-vue": "^4.1.1",
     "axios": "1.20.0",
     "clipboard": "2.0.11",
     "dexie": "^4.4.2",
