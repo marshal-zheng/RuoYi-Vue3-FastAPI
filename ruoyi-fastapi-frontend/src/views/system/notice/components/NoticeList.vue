@@ -37,7 +37,12 @@
             />
             <DictSelect
               dict-type="sys_notice_type"
-              v-model="listForm.draft.noticeType"
+              :model-value="
+                typeof listForm.draft.noticeType === 'string'
+                  ? listForm.draft.noticeType
+                  : undefined
+              "
+              @update:model-value="listForm.draft.noticeType = $event"
               placeholder="公告类型"
               clearable
               style="width: 200px"

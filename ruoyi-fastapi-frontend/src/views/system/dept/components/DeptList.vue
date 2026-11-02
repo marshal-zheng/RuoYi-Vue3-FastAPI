@@ -4,12 +4,12 @@
     ref="refTable"
     v-model:query="draft"
     :definition="definition"
-    :domain-key="domainKey"
-    :applied="applied"
-    :displayed="publication?.displayed ?? null"
+    :domain-key="resourceList.domainKey.value"
+    :applied="resourceList.applied.value"
+    :displayed="resourceList.displayed.value"
     :rows="deptRows"
-    :status="listStatus"
-    @query-intent="queryIntent"
+    :status="resourceList.status.value"
+    @query-intent="resourceList.onQueryIntent"
   >
     <template #toolbar-extra>
       <DictStatus :types="['sys_normal_disable']" />
@@ -46,6 +46,7 @@
       </div>
     </template>
   </ZxTableRender>
+  <el-alert v-if="deleteError" :title="deleteError" type="error" :closable="false" />
   <DeptDlg ref="deptDlgRef" />
 </template>
 
@@ -53,23 +54,16 @@
 import { defineTableRender } from '@zxio/table-render/core';
 import { ZxTableRender } from '@zxio/table-render/ui';
 import '@zxio/table-render/style';
-import type { TableApplied, TableDisplayed, TableQueryIntent } from '@zxio/table-render/core';
 import type { TableRenderInstance } from '@zxio/table-render/ui';
-import { queryClient } from '@/queries/client';
-import { computed, getCurrentInstance, ref, shallowRef, toRaw, watch } from 'vue';
-import { useQuery } from '@tanstack/vue-query';
+import { computed, getCurrentInstance, ref, shallowRef } from 'vue';
+import { useResourceCommand, useResourceList } from '@zxio/vue-query/ui';
 import type { ActionItem } from '@zxio/zxui';
+import { ElMessage } from 'element-plus';
 import type { DeptRecord } from '@/api/system/dept';
-import { useOperation } from '@/utils/operation';
+import { dataClient } from '@/queries/client';
 import { handleTree } from '@/utils/ruoyi';
-import { queryScope, type QueryScope } from '@/queries/context';
-import {
-  captureDeptCommand,
-  deptCommands,
-  deptListOptions,
-  normalizeDeptFilters,
-  type DeptFilters,
-} from '@/queries/system/dept';
+import { queryScope } from '@/queries/context';
+import { departmentResource, normalizeDeptFilters, type DeptFilters } from '@/queries/system/dept';
 import DeptDlg from './DeptDlg.vue';
 
 const proxy = getCurrentInstance()!.proxy!;
@@ -77,67 +71,25 @@ const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 type DeptRow = DeptRecord & { children?: DeptRow[] };
 const deptDlgRef = ref<InstanceType<typeof DeptDlg> | null>(null);
 const draft = ref<DeptFilters>({});
-const submitted = ref(normalizeDeptFilters({}));
-const queryOptions = computed(() => deptListOptions(queryScope.value, submitted.value));
-const departmentQuery = useQuery(queryOptions);
-const domainKey = computed(() => queryScope.value?.key ?? 'unavailable');
-const applied = computed<TableApplied<DeptFilters> | null>(() =>
-  queryScope.value
-    ? {
-        domainKey: domainKey.value,
-        query: submitted.value,
-        pager: null,
-        sort: [],
-      }
-    : null
-);
-const publication = shallowRef<{
-  rows: DeptRow[];
-  displayed: TableDisplayed<DeptFilters>;
-} | null>(null);
-let revision = 0;
-let lastPublication: { key: string; updatedAt: number; result: unknown } | undefined;
-watch(
-  [departmentQuery.data, departmentQuery.dataUpdatedAt, queryOptions],
-  ([result]) => {
-    if (
-      !result ||
-      !applied.value ||
-      toRaw(queryClient.getQueryData(queryOptions.value.queryKey)) !== toRaw(result)
-    )
-      return;
-    const key = JSON.stringify([domainKey.value, queryOptions.value.queryKey]);
-    const updatedAt = departmentQuery.dataUpdatedAt.value;
-    if (
-      publication.value &&
-      lastPublication?.key === key &&
-      lastPublication.updatedAt === updatedAt &&
-      lastPublication.result === toRaw(result)
-    )
-      return;
-    lastPublication = { key, updatedAt, result: toRaw(result) };
-    // handleTree attaches children in place; native cache records stay flat and immutable.
-    publication.value = {
-      rows: handleTree(
-        result.items.map((row) => ({ ...row })),
-        'deptId'
-      ),
-      displayed: {
-        domainKey: domainKey.value,
-        revision: ++revision,
-        input: { query: { ...submitted.value }, pager: null, sort: [] },
-      },
-    };
-  },
-  { immediate: true, flush: 'post' }
-);
-const deptRows = computed(() => publication.value?.rows ?? []);
-const listStatus = computed(() => ({
-  loading: departmentQuery.isLoading.value,
-  refreshing: departmentQuery.isFetching.value && publication.value !== null,
-  error: departmentQuery.error.value,
-  paused: departmentQuery.fetchStatus.value === 'paused',
-}));
+const resourceList = useResourceList(departmentResource, 'list', {
+  client: dataClient,
+  initialInput: { query: {} as DeptFilters, pager: null, sort: [] },
+  input: (input) => normalizeDeptFilters(input.query),
+  project: (data, input) => ({
+    // handleTree mutates its argument; rows belong to this table, never the shared cache.
+    rows: handleTree(
+      data.items.map((row) => ({ ...row })),
+      'deptId'
+    ) as DeptRow[],
+    pagination: {
+      page: 1,
+      size: Math.max(1, data.items.length),
+      total: data.items.length,
+    },
+    logicalInput: { ...input, query: normalizeDeptFilters(input.query) },
+  }),
+});
+const deptRows = resourceList.rows;
 const definition = defineTableRender<DeptRow, DeptFilters>()({
   key: 'department-management',
   title: '部门管理',
@@ -189,27 +141,6 @@ const definition = defineTableRender<DeptRow, DeptFilters>()({
   ],
 });
 const refTable = shallowRef<TableRenderInstance<typeof definition, DeptRow, DeptFilters>>();
-watch(
-  queryScope,
-  () => {
-    draft.value = {};
-    submitted.value = normalizeDeptFilters({});
-    publication.value = null;
-  },
-  { flush: 'sync' }
-);
-function queryIntent(intent: TableQueryIntent<DeptFilters>) {
-  if (!queryScope.value || intent.domainKey !== domainKey.value) return;
-  const nextFilters = normalizeDeptFilters(intent.input.query);
-  const unchanged =
-    nextFilters.deptName === submitted.value.deptName &&
-    nextFilters.status === submitted.value.status;
-  submitted.value = nextFilters;
-  if (unchanged) refreshList();
-}
-function refreshList() {
-  if (queryScope.value) void departmentQuery.refetch({ cancelRefetch: false });
-}
 function handleAdd(row?: DeptRecord) {
   const data = row ? { parentId: row.deptId } : {};
   return deptDlgRef.value?.open(data).catch(() => {
@@ -236,19 +167,32 @@ function handleUpdate(row: DeptRecord) {
   });
 }
 
-const deleteOperation = useOperation(async (id: number, name: string, scope: QueryScope) => {
-  const command = captureDeptCommand(id, scope);
-  try {
-    await proxy.$modal.confirm('是否确认删除名称为"' + name + '"的数据项?');
-    await deptCommands.deleteDept(command);
-  } catch {
-    // Confirmation cancellation and write errors leave the server-owned rows intact.
-  }
+const deleteCommand = useResourceCommand(departmentResource, 'delete', {
+  client: dataClient,
+  beforeExecute: async (id) => {
+    try {
+      await proxy.$modal.confirm(`是否确认删除部门（ID ${id}）？`);
+      return true;
+    } catch {
+      return false;
+    }
+  },
 });
-function handleDelete(row: DeptRecord) {
-  const scope = queryScope.value;
-  if (!scope) return;
-  return deleteOperation.run(row.deptId, row.deptName ?? '', scope);
+const deleteError = computed(() => {
+  const receipt = deleteCommand.receipt.value;
+  if (receipt?.kind === 'unknown') return '删除结果未确认，请刷新核对，勿重复删除。';
+  if (receipt?.kind === 'rejected')
+    return receipt.error instanceof Error ? receipt.error.message : '删除被拒绝';
+  return '';
+});
+async function handleDelete(row: DeptRecord) {
+  const receipt = await deleteCommand.run(row.deptId);
+  if (receipt?.kind !== 'succeeded' || !receipt.applicable) return;
+  const refresh = await receipt.refresh;
+  if (!dataClient.isCurrent(receipt.scope)) return;
+  if (refresh.kind === 'failed' || refresh.kind === 'paused')
+    ElMessage.warning('删除已成功，部分数据未刷新，请重试读取。');
+  else ElMessage.success('删除成功');
 }
 function getMoreActionList(row: DeptRecord) {
   const actions = [];

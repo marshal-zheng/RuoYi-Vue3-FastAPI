@@ -1,0 +1,32 @@
+{
+  "fullTypecheck": {
+    "command": "yarn type-check",
+    "exitCode": 0,
+    "diagnostics": 0
+  },
+  "installedRegressions": {
+    "files": 11,
+    "passed": 130,
+    "failed": 0
+  },
+  "eslint": {
+    "files": 5,
+    "exitCode": 0,
+    "warnings": 0
+  },
+  "treeInterfaceRootCause": "Installed exports are present; VTU child.vm is the internal proxy of a packed render-function SFC. Read the production parent template ref instead.",
+  "packageUpdates": false,
+  "sha256": {
+    "node_modules/@zxio/table-render/ui.mjs": "86fdd471364dc7ba33c2aadd9efa9c10d1c4a6609db35b9f71408097f4105e5e",
+    "node_modules/@zxio/table-render/src/ui/contracts.d.ts": "aabf9c977f7a71e51db6b2c6ad4a03a6c5d9ba9b85e1f877bd9295f1db97cd09",
+    "package.json": "799c19ed06f6d86cae9328c6cb79d295b6d3338e4c22edd0d26b019518baddce",
+    "yarn.lock": "59ff515b559270ec333b71a358c6ddacc180ab337004df55e9f8d24f6622f21a"
+  },
+  "sourceTreeRegression": {
+    "passed": 1,
+    "failed": 0
+  },
+  "diffCheck": {
+    "exitCode": 0
+  }
+}

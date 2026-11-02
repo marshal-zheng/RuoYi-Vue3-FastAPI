@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-11-02T01:39:54.591Z",
+  "mode": "installed",
+  "marker": "codex_res_vyld2sf",
+  "mocks": false,
+  "checks": {
+    "treeExpandCollapse": {
+      "collapsed": true,
+      "expanded": true,
+      "extraReads": 0
+    },
+    "productionRouteSaveRefresh": true,
+    "sharedReads": {
+      "treeSubscribers": 2,
+      "treeRequests": 1,
+      "detailEditors": 2,
+      "detailRequests": 1
+    },
+    "independentDraftsBeforeSave": true,
+    "saveRefresh": {
+      "writes": 1,
+      "listUpdated": true,
+      "bothTreesUpdated": true,
+      "otherDraftPreserved": true,
+      "realHttpPersisted": true
+    },
+    "reopenLoadsSavedSnapshot": true,
+    "runtimeMode": {
+      "mode": "installed",
+      "zxuiSourceImports": 0
+    }
+  },
+  "cleanup": {
+    "deleted": 2,
+    "verifiedAbsent": true
+  },
+  "createdId": 206,
+  "passed": true,
+  "ownSessionEnded": true,
+  "pageErrors": [],
+  "requestCounts": {
+    "GET /system/ai/text-field/status": 5,
+    "GET /system/user/list": 1,
+    "GET /system/user/deptTree": 3,
+    "GET /system/dict/data/type/sys_normal_disable": 5,
+    "GET /system/dept/list": 8,
+    "POST /system/dept": 2,
+    "GET /system/dept/:id": 6,
+    "GET /system/dept/list/exclude/:id": 4,
+    "PUT /system/dept": 2,
+    "DELETE /system/dept/:id": 2
+  }
+}

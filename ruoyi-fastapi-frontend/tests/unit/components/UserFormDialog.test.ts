@@ -26,12 +26,9 @@ import {
   userDetailOptions,
   userListOptions,
 } from '@/queries/system/user';
-import {
-  captureDeptCommand,
-  deptCommands,
-  deptKeys,
-  userDeptTreeOptions,
-} from '@/queries/system/dept';
+import { departmentResource } from '@/queries/system/dept';
+import { dataClient } from '@/queries/client';
+const userDeptTreeOptions = () => dataClient.options(departmentResource, 'userTree', undefined);
 
 vi.mock('@/api/system/user', () => ({
   getUser: vi.fn(),
@@ -260,7 +257,7 @@ describe('UserFormDialog', () => {
   });
 
   it('updates the native collapsed department label after an asynchronous edit and keeps keyboard selection', async () => {
-    const scope = setQuerySession(1, [], []);
+    setQuerySession(1, [], []);
     const response = deferred();
     vi.mocked(getUser).mockReturnValueOnce(response.promise);
     vi.mocked(deptTreeSelect).mockResolvedValueOnce({
@@ -290,7 +287,9 @@ describe('UserFormDialog', () => {
     vi.mocked(deptTreeSelect).mockResolvedValueOnce({
       items: [{ id: 1, label: 'Root', children: [{ id: 9, label: '新部门' }] }],
     });
-    await queryClient.invalidateQueries({ queryKey: deptKeys.userTree(scope) });
+    await queryClient.invalidateQueries({
+      queryKey: userDeptTreeOptions().queryKey,
+    });
     await flushPromises();
     expect(tree.props('data')).toEqual([
       { id: 1, label: 'Root', children: [{ id: 9, label: '新部门' }] },
@@ -300,7 +299,9 @@ describe('UserFormDialog', () => {
     expect(selectedLabel()).toBe('新部门');
     expect(model.nickName).toBe('尚未保存的输入');
     vi.mocked(deptTreeSelect).mockRejectedValueOnce(new Error('部门刷新失败'));
-    await queryClient.invalidateQueries({ queryKey: deptKeys.userTree(scope) });
+    await queryClient.invalidateQueries({
+      queryKey: userDeptTreeOptions().queryKey,
+    });
     await flushPromises();
     expect(wrapper.text()).toContain('部门列表刷新失败');
     expect(selectedLabel()).toBe('新部门');
@@ -366,7 +367,7 @@ describe('UserFormDialog', () => {
   });
 
   it('shares department reads and follows department writes without replacing the user draft', async () => {
-    const scope = setQuerySession(1, [], []);
+    setQuerySession(1, [], []);
     vi.mocked(deptTreeSelect).mockResolvedValue({
       items: [{ id: 9, label: '原部门' }],
     });
@@ -381,7 +382,7 @@ describe('UserFormDialog', () => {
     const shared = mount(
       defineComponent({
         setup() {
-          useQuery(() => userDeptTreeOptions(scope));
+          useQuery(() => userDeptTreeOptions());
           return () => h('div');
         },
       }),
@@ -400,14 +401,19 @@ describe('UserFormDialog', () => {
     vi.mocked(deptTreeSelect).mockResolvedValue({
       items: [{ id: 9, label: '新部门' }],
     });
-    await deptCommands.updateDept(captureDeptCommand({ deptId: 9, deptName: '新部门' }));
+    await dataClient.execute(departmentResource, 'update', {
+      deptId: 9,
+      deptName: '新部门',
+    });
     await flushPromises();
     expect(deptTreeSelect).toHaveBeenCalledTimes(2);
     expect(tree.props('data')).toEqual([{ id: 9, label: '新部门' }]);
     expect(model.nickName).toBe('尚未保存的输入');
     expect(model.deptId).toBe(9);
     vi.mocked(deptTreeSelect).mockRejectedValueOnce(new Error('部门网络不可用'));
-    await queryClient.invalidateQueries({ queryKey: deptKeys.all(scope) });
+    await queryClient.invalidateQueries({
+      queryKey: userDeptTreeOptions().queryKey,
+    });
     await flushPromises();
     expect(wrapper.text()).toContain('部门列表刷新失败');
     expect(tree.props('data')).toEqual([{ id: 9, label: '新部门' }]);
@@ -890,7 +896,11 @@ it('locks an uncertain creation, reconciles its captured username, then edits by
       ? { posts: [], roles: [] }
       : {
           ...detail(99),
-          data: { ...detail(99).data, userName: 'created_user', nickName: 'Created' },
+          data: {
+            ...detail(99).data,
+            userName: 'created_user',
+            nickName: 'Created',
+          },
         }
   );
   vi.mocked(addUser).mockRejectedValueOnce(new Error('response lost'));
@@ -955,7 +965,12 @@ it('keeps uncertainty after ambiguous lookup or mismatched authority until an ex
     password: 'Secret123',
   });
   await shell.props('confirm')();
-  vi.mocked(listUser).mockResolvedValueOnce({ items: [], total: 0, page: 1, pageSize: 100 });
+  vi.mocked(listUser).mockResolvedValueOnce({
+    items: [],
+    total: 0,
+    page: 1,
+    pageSize: 100,
+  });
   const reconcile = () =>
     wrapper
       .findAll('button')
@@ -1116,11 +1131,17 @@ it('reconciles from a new request after an uncertain write and invalidates list 
     silentError: true,
     signal: expect.any(AbortSignal),
   });
-  old.resolve({ ...detail(42), data: { ...detail(42).data, nickName: 'Before write' } });
+  old.resolve({
+    ...detail(42),
+    data: { ...detail(42).data, nickName: 'Before write' },
+  });
   await background;
   await flushPromises();
   expect(formOf(wrapper).reconciliationRequired).toBe(true);
-  fresh.resolve({ ...detail(42), data: { ...detail(42).data, nickName: 'After write' } });
+  fresh.resolve({
+    ...detail(42),
+    data: { ...detail(42).data, nickName: 'After write' },
+  });
   await flushPromises();
   expect(formOf(wrapper).reconciliationRequired).toBe(false);
   expect(formOf(wrapper).read().nickName).toBe('After write');

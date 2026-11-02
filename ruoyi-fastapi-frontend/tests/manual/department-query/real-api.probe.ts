@@ -15,7 +15,7 @@ const source = process.env.VITE_ZXUI_LOCAL === 'true';
 const baseURL = process.env.CODEX_DEPT_API_BASE || 'http://127.0.0.1:8088';
 const evidencePath = resolve(
   process.env.CODEX_DEPT_EVIDENCE ||
-    `../docs/reports/evidence/2026-10-17-department-query-convergence/${source ? 'source' : 'installed'}-actual.json`
+    `../docs/reports/evidence/2026-11-02-department-resources/${source ? 'source' : 'installed'}-actual.json`
 );
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -70,15 +70,15 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
       timestamp: new Date().toISOString(),
       mode: source ? 'source' : 'installed',
       marker,
-      transport: 'Actual business deptCommands/query factories/request/http to loopback FastAPI',
+      transport: 'Actual departmentResource/DataClient/native Query/HTTP to loopback FastAPI',
       mocks: false,
       uiRendered: false,
       checks: {},
       cleanup: { created: 0, deleted: 0, verifiedAbsent: false },
     };
     let stage = 'backend-preflight';
-    let commands: typeof import('@/queries/system/dept').deptCommands | undefined;
-    let capture: typeof import('@/queries/system/dept').captureDeptCommand | undefined;
+    let data: typeof import('@/queries/client').dataClient | undefined;
+    let resource: typeof import('@/queries/system/dept').departmentResource | undefined;
     let deptApi: typeof import('@/api/system/dept') | undefined;
     let client: QueryClient | undefined;
     let context: typeof import('@/queries/context') | undefined;
@@ -105,8 +105,20 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
       const { http } = await import('@/utils/http');
       http.axiosInstance.defaults.baseURL = baseURL;
       client.mount();
-      commands = domain.deptCommands;
-      capture = domain.captureDeptCommand;
+      data = (await import('@/queries/client')).dataClient;
+      resource = domain.departmentResource;
+      const resourceClient = data;
+      const department = resource;
+      const write = async <K extends keyof typeof department.commands>(
+        name: K,
+        input: Parameters<(typeof department.commands)[K]['run']>[0]
+      ) => {
+        const receipt = await resourceClient.execute(department, name, input);
+        assert(receipt.kind === 'succeeded', `Write ${name}: ${receipt.kind}`);
+        const refresh = await receipt.refresh;
+        assert(['refreshed', 'invalidated'].includes(refresh.kind), `Refresh: ${refresh.kind}`);
+        return receipt.data;
+      };
       http.axiosInstance.interceptors.request.use((config) => {
         requests.push({
           method: config.method || 'get',
@@ -151,10 +163,10 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
         userTreePermission: 'system:user:list',
         permissionDataUnchanged: true,
       };
-      const listOptions = domain.deptListOptions(scope, {
+      const listOptions = resourceClient.options(department, 'list', {
         deptName: `  ${marker}  `,
       });
-      const treeOptions = domain.userDeptTreeOptions(scope);
+      const treeOptions = resourceClient.options(department, 'userTree', undefined);
       const activeClient = client;
       const observe = <T, TKey extends QueryKey>(
         options: UseQueryOptions<T, Error, T, T, TKey>
@@ -181,25 +193,21 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
       evidence.checks.coldSharing = { treeSubscribers: 2, treeRequests: 1 };
 
       stage = 'create-parent-child';
-      const parent = await commands.createDept(
-        capture({
-          parentId: 0,
-          deptName: `${marker}_parent`,
-          orderNum: 0,
-          status: '0',
-        })
-      );
+      const parent = await write('create', {
+        parentId: 0,
+        deptName: `${marker}_parent`,
+        orderNum: 0,
+        status: '0',
+      });
       assert(Number.isSafeInteger(parent.deptId), 'Create parent did not return an identity');
       ownedIds.push(parent.deptId);
       evidence.cleanup.created++;
-      const child = await commands.createDept(
-        capture({
-          parentId: parent.deptId,
-          deptName: `${marker}_child`,
-          orderNum: 0,
-          status: '0',
-        })
-      );
+      const child = await write('create', {
+        parentId: parent.deptId,
+        deptName: `${marker}_child`,
+        orderNum: 0,
+        status: '0',
+      });
       assert(Number.isSafeInteger(child.deptId), 'Create child did not return an identity');
       ownedIds.push(child.deptId);
       evidence.cleanup.created++;
@@ -248,7 +256,7 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
       await client.fetchQuery(userOptions);
       const beforeUsers = requests.filter((entry) => entry.path === '/system/user/list').length;
       const renamed = `${marker}_new`;
-      await commands.updateDept(capture({ deptId: child.deptId, deptName: renamed }));
+      await write('update', { deptId: child.deptId, deptName: renamed });
       await until(
         () =>
           list.getCurrentResult().data?.items.find((row) => row.deptId === child.deptId)
@@ -269,7 +277,7 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
       };
 
       stage = 'disable-enable-normal-filter';
-      await commands.updateDept(capture({ deptId: child.deptId, status: '1' }));
+      await write('update', { deptId: child.deptId, status: '1' });
       await until(
         () =>
           !hasTreeNode(child.deptId) &&
@@ -277,7 +285,7 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
             '1',
         'disabled child removed from normal-only user tree'
       );
-      await commands.updateDept(capture({ deptId: child.deptId, status: '0' }));
+      await write('update', { deptId: child.deptId, status: '0' });
       await until(() => hasTreeNode(child.deptId), 'enabled child restored to user tree');
       evidence.checks.status = {
         disabledRetainedInManagement: true,
@@ -287,14 +295,24 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
 
       stage = 'server-exclusion-and-editor';
       const excluded = await client.fetchQuery(
-        domain.deptExcludeChildOptions(scope, parent.deptId)
+        resourceClient.options(department, 'excludeChild', parent.deptId)
       );
       assert(
         !excluded.items.some((row) => ownedIds.includes(row.deptId)),
         'Exclusion included self or descendant'
       );
-      const editor = await domain.readDeptEditor(scope, child.deptId);
-      assert(editor.data?.deptName === renamed, 'Editor detail snapshot was not current');
+      const editor = await resourceClient.read(department, 'detail', child.deptId);
+      assert(
+        editor.kind === 'loaded' && editor.data.deptName === renamed,
+        'Editor detail was not current'
+      );
+      const firstDraft = domain.departmentDraft(editor.data);
+      const secondDraft = domain.departmentDraft(editor.data);
+      firstDraft.deptName = `${marker}_draft`;
+      assert(
+        secondDraft.deptName === renamed && editor.data.deptName === renamed,
+        'Draft mutation leaked'
+      );
       evidence.checks.excludeAndEditor = {
         selfAndDescendantExcluded: true,
         editorReadUsesRealDetail: true,
@@ -325,7 +343,7 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
       evidence.failure = { stage, ...safeFailure(error) };
     } finally {
       stops.forEach((stop) => stop());
-      if (deptApi && commands && capture && auth?.getToken()) {
+      if (deptApi && data && resource && auth?.getToken()) {
         try {
           // Recover own IDs even if a create response was lost after the backend committed.
           const remaining = await deptApi.listDept({ deptName: marker });
@@ -333,7 +351,9 @@ describe.skipIf(!enabled)('opt-in real local department lifecycle', () => {
           for (const row of owned.sort(
             (a, b) => String(b.ancestors).length - String(a.ancestors).length
           )) {
-            await commands.deleteDept(capture(row.deptId));
+            const receipt = await data.execute(resource, 'delete', row.deptId);
+            assert(receipt.kind === 'succeeded', `Cleanup: ${receipt.kind}`);
+            await receipt.refresh;
             evidence.cleanup.deleted++;
           }
           const after = await deptApi.listDept({ deptName: marker });

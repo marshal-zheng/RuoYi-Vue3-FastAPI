@@ -1,23 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { skipToken, useQuery, VueQueryPlugin } from '@tanstack/vue-query';
-import { defineComponent, unref } from 'vue';
+import { useQuery, VueQueryPlugin } from '@tanstack/vue-query';
+import { defineComponent } from 'vue';
 import { flushPromises, mount } from '@vue/test-utils';
-import { isAbortError, isQueryRequest } from '@zxio/http';
+import { isCommandRequest, isQueryRequest } from '@zxio/http';
+import { useResourceQuery } from '@zxio/vue-query/resources';
 import * as api from '@/api/system/dept';
 import * as userApi from '@/api/system/user';
 import type { MenuTreeNode } from '@/api/system/menu';
 import type { HttpCollection } from '@/types/http-contract';
-import request from '@/utils/request';
-import { queryClient } from '../client';
+import { dataClient, queryClient } from '../client';
 import { endQuerySession, setQuerySession } from '../context';
 import { userKeys } from './user';
-import * as deptDomain from './dept';
+import { departmentResource as departments, copyUserDeptTree, normalizeDeptFilters } from './dept';
 
 vi.mock('@/utils/request', () => ({ default: vi.fn() }));
-
-function domain() {
-  return deptDomain;
-}
 const wrappers: ReturnType<typeof mount>[] = [];
 const collection = (deptName = '研发'): HttpCollection<api.DeptRecord> => ({
   items: [{ deptId: 7, parentId: 1, deptName, orderNum: 0, status: '0' }],
@@ -31,7 +27,6 @@ function deferred<T>() {
   });
   return { promise, resolve, reject };
 }
-
 beforeEach(() => {
   vi.resetAllMocks();
   endQuerySession();
@@ -44,50 +39,25 @@ afterEach(() => {
   queryClient.clear();
 });
 
-describe('department API request scope', () => {
-  it.each([
-    ['addDept', { parentId: 1, deptName: '研发', orderNum: 0 }],
-    ['updateDept', { deptId: 7, deptName: '研发' }],
-    ['delDept', 7],
-  ] as const)('forwards captured write scope through %s', async (name, input) => {
-    vi.mocked(request).mockResolvedValue({ deptId: 7 });
-    const options = { context: { 'ruoyi.query-scope': '1:1' } };
-    await Reflect.apply(api[name], undefined, [input, options]);
-    expect(request).toHaveBeenCalledWith(expect.any(Object), options);
-  });
-});
-
-describe('public department resource', () => {
-  it('copies native tree nodes recursively without mutating the shared cached tree', async () => {
-    const dept = domain();
-    expect(dept).toHaveProperty('copyUserDeptTree', expect.any(Function));
+describe('department resource integration', () => {
+  it('copies tree nodes recursively without changing shared cache data', () => {
     const cached: MenuTreeNode[] = [{ id: 1, label: '总部', children: [{ id: 7, label: '研发' }] }];
     Object.freeze(cached[0].children![0]);
     Object.freeze(cached[0].children);
     Object.freeze(cached[0]);
     Object.freeze(cached);
-    const projection = dept.copyUserDeptTree(cached);
-    expect(projection).toEqual(cached);
-    expect(projection[0]).not.toBe(cached[0]);
-    expect(projection[0].children![0]).not.toBe(cached[0].children![0]);
-    projection[0].children![0].label = '选择器本地状态';
+    const view = copyUserDeptTree(cached);
+    view[0].children![0].label = '本地选择';
     expect(cached[0].children![0].label).toBe('研发');
-    expect(dept.copyUserDeptTree([])).toEqual([]);
   });
 
-  it('uses a submitted filter snapshot for the key and scoped flat request', async () => {
-    const dept = domain();
-    const scope = setQuerySession(1, [], []);
+  it('uses one normalized snapshot for the resource key and scoped HTTP arguments', async () => {
     const draft = { deptName: ' 研发 ', status: '0', page: 2, parentId: 999 };
-    const options = dept.deptListOptions(scope, draft);
+    const options = dataClient.options(departments, 'list', draft);
     draft.deptName = 'later';
     const rows = collection();
     const list = vi.spyOn(api, 'listDept').mockResolvedValue(rows);
-    expect(dept.normalizeDeptFilters(draft)).toEqual({
-      deptName: 'later',
-      status: '0',
-    });
-    expect(dept.normalizeDeptFilters({ deptName: ' ', status: '' })).toEqual({});
+    expect(normalizeDeptFilters({ deptName: ' ', status: '' })).toEqual({});
     expect(await queryClient.fetchQuery(options)).toBe(rows);
     expect(list).toHaveBeenCalledWith(
       { deptName: '研发', status: '0' },
@@ -95,185 +65,175 @@ describe('public department resource', () => {
     );
     expect(isQueryRequest(list.mock.calls[0][1]?.requestOptions)).toBe(true);
     expect(options.queryKey).toEqual(
-      dept.deptListOptions(scope, { deptName: '研发', status: '0' }).queryKey
+      dataClient.options(departments, 'list', { deptName: '研发', status: '0' }).queryKey
     );
     expect(rows.items[0]).not.toHaveProperty('children');
   });
 
-  it('keeps endpoint and authorization variants separate and disables invalid conditions', async () => {
-    const dept = domain();
-    const scope = setQuerySession(1, [], []);
-    const list = vi.spyOn(api, 'listDept').mockResolvedValue(collection());
-    const exclude = vi.spyOn(api, 'listDeptExcludeChild').mockResolvedValue(collection());
-    const detail = vi.spyOn(api, 'getDept').mockResolvedValue(collection().items[0]);
-    const tree = vi.spyOn(userApi, 'deptTreeSelect').mockResolvedValue({
+  it('keeps permission-specific endpoints separate and prevents invalid reads', async () => {
+    vi.spyOn(api, 'listDept').mockResolvedValue(collection());
+    vi.spyOn(api, 'listDeptExcludeChild').mockResolvedValue(collection());
+    vi.spyOn(api, 'getDept').mockResolvedValue(collection().items[0]);
+    vi.spyOn(userApi, 'deptTreeSelect').mockResolvedValue({
       items: [{ id: 7, label: '研发' }],
     });
-    const options = [
-      dept.deptListOptions(scope),
-      dept.deptExcludeChildOptions(scope, 7),
-      dept.deptDetailOptions(scope, 7),
-      dept.userDeptTreeOptions(scope),
+    const reads = [
+      dataClient.read(departments, 'list', {}),
+      dataClient.read(departments, 'excludeChild', 7),
+      dataClient.read(departments, 'detail', '7'),
+      dataClient.read(departments, 'userTree', undefined),
     ];
-    expect(new Set(options.map((item) => JSON.stringify(item.queryKey))).size).toBe(4);
-    await queryClient.fetchQuery(dept.deptParentOptions(scope));
-    await queryClient.fetchQuery(dept.deptParentOptions(scope, 7));
-    await queryClient.fetchQuery(dept.deptDetailOptions(scope, '7'));
-    expect(await queryClient.fetchQuery(dept.userDeptTreeOptions(scope))).toEqual([
-      { id: 7, label: '研发' },
-    ]);
-    expect(list).toHaveBeenCalledOnce();
-    expect(exclude).toHaveBeenCalledWith(7, expect.any(Object));
-    expect(detail).toHaveBeenCalledWith(7, expect.any(Object));
-    expect(isQueryRequest(tree.mock.calls[0][0]?.options)).toBe(true);
-    for (const disabled of [
-      unref(dept.deptListOptions(null)),
-      unref(dept.deptDetailOptions(scope, 0)),
-      unref(dept.deptExcludeChildOptions(scope, 'invalid')),
-      unref(dept.userDeptTreeOptions(null)),
-    ]) {
-      expect(disabled.queryFn).toBe(skipToken);
-      expect(disabled.enabled).toBe(false);
-    }
+    expect((await Promise.all(reads)).every((result) => result.kind === 'loaded')).toBe(true);
+    expect(
+      new Set(
+        queryClient
+          .getQueryCache()
+          .getAll()
+          .map((query) => query.queryHash)
+      ).size
+    ).toBe(4);
+    expect((await dataClient.read(departments, 'detail', 0)).kind).toBe('not-started');
+    expect((await dataClient.read(departments, 'excludeChild', 'invalid')).kind).toBe(
+      'not-started'
+    );
+    endQuerySession();
+    expect((await dataClient.read(departments, 'list', {})).kind).toBe('not-started');
+    expect(api.getDept).toHaveBeenCalledTimes(1);
   });
 
-  it('shares the user department endpoint between concurrent native readers', async () => {
-    const dept = domain();
-    const scope = setQuerySession(1, [], []);
+  it('shares one real adapter invocation between native and resource readers', async () => {
     const response = deferred<Awaited<ReturnType<typeof userApi.deptTreeSelect>>>();
     const tree = vi.spyOn(userApi, 'deptTreeSelect').mockReturnValue(response.promise);
-    const first = queryClient.fetchQuery(dept.userDeptTreeOptions(scope));
-    const second = queryClient.fetchQuery(dept.userDeptTreeOptions(scope));
-    expect(tree).toHaveBeenCalledOnce();
-    response.resolve({ items: [{ id: 7, label: '研发' }] });
-    expect(await first).toEqual(await second);
-  });
-
-  it.each(['createDept', 'updateDept', 'deleteDept'] as const)(
-    '%s invalidates every department variant and user lists from the public command',
-    async (name) => {
-      const dept = domain();
-      const scope = setQuerySession(1, [], []);
-      vi.spyOn(api, 'addDept').mockResolvedValue(collection().items[0]);
-      vi.spyOn(api, 'updateDept').mockResolvedValue(collection().items[0]);
-      vi.spyOn(api, 'delDept').mockResolvedValue(null);
-      const affected = [
-        dept.deptListOptions(scope).queryKey,
-        dept.deptDetailOptions(scope, 7).queryKey,
-        dept.deptExcludeChildOptions(scope, 7).queryKey,
-        dept.userDeptTreeOptions(scope).queryKey,
-        [...userKeys.lists(scope), 'probe'],
-      ];
-      affected.forEach((key) => queryClient.setQueryData(key, []));
-      const userDetailKey = userKeys.detail(scope, 7);
-      queryClient.setQueryData(userDetailKey, {});
-      const command = dept.captureDeptCommand({
-        parentId: 1,
-        deptName: '研发',
-        orderNum: 0,
-        deptId: 7,
-      });
-      if (name === 'deleteDept') await dept.deptCommands.deleteDept(dept.captureDeptCommand(7));
-      else await dept.deptCommands[name](command);
-      await flushPromises();
-      for (const key of affected) expect(queryClient.getQueryState(key)?.isInvalidated).toBe(true);
-      expect(queryClient.getQueryState(userDetailKey)?.isInvalidated).toBe(false);
-    }
-  );
-
-  it('keeps the successful write independent from failed list and tree refreshes', async () => {
-    const dept = domain();
-    const scope = setQuerySession(1, [], []);
-    const listRead = vi.spyOn(api, 'listDept').mockResolvedValue(collection());
-    const treeRead = vi.spyOn(userApi, 'deptTreeSelect').mockResolvedValue({
-      items: [{ id: 7, label: '研发' }],
-    });
-    let list!: ReturnType<typeof useQuery<HttpCollection<api.DeptRecord>>>;
-    let tree!: ReturnType<typeof useQuery<readonly { id: number; label: string }[]>>;
+    let native: unknown, resource: unknown;
     wrappers.push(
       mount(
         defineComponent({
           setup() {
-            list = useQuery(dept.deptListOptions(scope));
-            tree = useQuery(dept.userDeptTreeOptions(scope));
+            const a = useQuery(dataClient.options(departments, 'userTree', undefined));
+            const b = useResourceQuery(departments, 'userTree', undefined, {
+              client: dataClient,
+            });
+            native = a;
+            resource = b;
             return () => null;
           },
         }),
         { global: { plugins: [[VueQueryPlugin, { queryClient }]] } }
       )
     );
+    const imperative = dataClient.read(departments, 'userTree', undefined);
+    expect(tree).toHaveBeenCalledTimes(1);
+    response.resolve({ items: [{ id: 7, label: '研发' }] });
+    expect((await imperative).kind).toBe('loaded');
     await flushPromises();
-    const pendingList = deferred<HttpCollection<api.DeptRecord>>();
-    const pendingTree = deferred<Awaited<ReturnType<typeof userApi.deptTreeSelect>>>();
-    listRead.mockReturnValue(pendingList.promise);
-    treeRead.mockReturnValue(pendingTree.promise);
-    const saved = { ...collection().items[0], deptName: '已保存' };
-    vi.spyOn(api, 'updateDept').mockResolvedValue(saved);
-    expect(
-      await dept.deptCommands.updateDept(dept.captureDeptCommand({ deptId: 7, deptName: '已保存' }))
-    ).toBe(saved);
-    await flushPromises();
-    expect(list.isFetching.value).toBe(true);
-    expect(tree.isFetching.value).toBe(true);
-    pendingList.reject(new Error('列表刷新失败'));
-    pendingTree.reject(new Error('部门树刷新失败'));
-    await flushPromises();
-    expect(list.error.value?.message).toBe('列表刷新失败');
-    expect(tree.error.value?.message).toBe('部门树刷新失败');
-    expect(list.data.value?.items[0].deptName).toBe('研发');
-    expect(tree.data.value?.[0].label).toBe('研发');
+    expect((native as { data: { value: unknown } }).data.value).toEqual(
+      (resource as { data: { value: unknown } }).data.value
+    );
   });
 
-  it('copies a captured DTO and rejects an expired scope before sending', async () => {
-    const dept = domain();
-    const scope = setQuerySession(1, [], []);
-    const write = vi.spyOn(api, 'updateDept').mockResolvedValue(collection().items[0]);
-    const input = { deptId: 7, deptName: '提交时名称' };
-    const command = dept.captureDeptCommand(input, scope);
-    input.deptName = '之后编辑';
-    expect(command.input.deptName).toBe('提交时名称');
+  it.each(['create', 'update', 'delete'] as const)(
+    '%s invalidates department collections and actual native user lists',
+    async (name) => {
+      const scope = setQuerySession(1, [], []);
+      vi.spyOn(api, 'addDept').mockResolvedValue(collection().items[0]);
+      vi.spyOn(api, 'updateDept').mockResolvedValue(collection().items[0]);
+      vi.spyOn(api, 'delDept').mockResolvedValue(null);
+      const keys = [
+        dataClient.options(departments, 'list', {}).queryKey,
+        dataClient.options(departments, 'excludeChild', 7).queryKey,
+        dataClient.options(departments, 'userTree', undefined).queryKey,
+        [...userKeys.lists(scope), 'probe'],
+      ];
+      keys.forEach((key) => queryClient.setQueryData(key, []));
+      const untouched = dataClient.options(departments, 'detail', 8).queryKey;
+      queryClient.setQueryData(untouched, collection().items[0]);
+      const receipt =
+        name === 'delete'
+          ? await dataClient.execute(departments, name, 7)
+          : name === 'create'
+            ? await dataClient.execute(departments, name, {
+                parentId: 1,
+                deptName: '研发',
+                orderNum: 0,
+              })
+            : await dataClient.execute(departments, name, {
+                deptId: 7,
+                deptName: '研发',
+              });
+      expect(receipt.kind).toBe('succeeded');
+      await receipt.refresh;
+      for (const key of keys) expect(queryClient.getQueryState(key)?.isInvalidated).toBe(true);
+      expect(queryClient.getQueryState(untouched)?.isInvalidated).toBe(false);
+      const call =
+        name === 'create'
+          ? vi.mocked(api.addDept).mock.calls[0]
+          : name === 'update'
+            ? vi.mocked(api.updateDept).mock.calls[0]
+            : vi.mocked(api.delDept).mock.calls[0];
+      expect(isCommandRequest(call[1])).toBe(true);
+      expect(call[1]?.retry).toBe(false);
+      expect(call[2]).toBeInstanceOf(AbortSignal);
+    }
+  );
+
+  it('reports confirmed save separately from a failed refresh and preserves old rows', async () => {
+    const list = vi.spyOn(api, 'listDept').mockResolvedValue(collection());
+    let query!: ReturnType<
+      typeof useResourceQuery<typeof departments.reads, typeof departments.commands, 'list'>
+    >;
+    wrappers.push(
+      mount(
+        defineComponent({
+          setup() {
+            query = useResourceQuery(departments, 'list', {}, { client: dataClient });
+            return () => null;
+          },
+        })
+      )
+    );
+    await flushPromises();
+    list.mockRejectedValue(new Error('refresh failed'));
+    vi.spyOn(api, 'updateDept').mockResolvedValue(collection('saved').items[0]);
+    const receipt = await dataClient.execute(departments, 'update', {
+      deptId: 7,
+      deptName: 'saved',
+    });
+    expect(receipt.kind).toBe('succeeded');
+    expect((await receipt.refresh).kind).toBe('failed');
+    expect(query.data.value?.items[0].deptName).toBe('研发');
+    expect(api.updateDept).toHaveBeenCalledTimes(1);
+  });
+
+  it('captures confirmation input, rejects an expired scope, and never sends the write', async () => {
+    const confirm = deferred<boolean>();
+    const write = vi.spyOn(api, 'updateDept');
+    const input = { deptId: 7, deptName: 'captured' };
+    const before = vi.fn<
+      (input: Readonly<{ deptId: number; deptName?: string | null }>) => Promise<boolean>
+    >(() => confirm.promise);
+    const pending = dataClient.execute(departments, 'update', input, {
+      beforeExecute: before,
+    });
+    input.deptName = 'later';
+    expect(before.mock.calls[0][0]).toMatchObject({ deptName: 'captured' });
     setQuerySession(2, [], []);
-    await expect(dept.deptCommands.updateDept(command)).rejects.toSatisfy(isAbortError);
+    confirm.resolve(true);
+    expect((await pending).kind).toBe('not-started');
     expect(write).not.toHaveBeenCalled();
   });
 
-  it('does not invalidate successful reads when the write itself fails', async () => {
-    const dept = domain();
-    const scope = setQuerySession(1, [], []);
-    const key = dept.userDeptTreeOptions(scope).queryKey;
-    queryClient.setQueryData(key, [{ id: 7, label: '研发' }]);
-    vi.spyOn(api, 'updateDept').mockRejectedValue(new Error('写入失败'));
-    await expect(
-      dept.deptCommands.updateDept(dept.captureDeptCommand({ deptId: 7, deptName: '已保存' }))
-    ).rejects.toThrow('写入失败');
+  it.each([
+    [422, 'rejected'],
+    [500, 'unknown'],
+    [0, 'unknown'],
+  ] as const)('classifies HTTP %s without invalidation or write retry', async (status, kind) => {
+    const key = dataClient.options(departments, 'userTree', undefined).queryKey;
+    queryClient.setQueryData(key, []);
+    const write = vi
+      .spyOn(api, 'updateDept')
+      .mockRejectedValue(Object.assign(new Error('failure'), { status }));
+    expect((await dataClient.execute(departments, 'update', { deptId: 7 })).kind).toBe(kind);
     expect(queryClient.getQueryState(key)?.isInvalidated).toBe(false);
-  });
-
-  it('reads current editor detail without repeating a completed sibling after parent cancellation', async () => {
-    const dept = domain();
-    const scope = setQuerySession(1, [], []);
-    const oldDetail = { ...collection().items[0], deptName: '旧快照' };
-    queryClient.setQueryData(dept.deptDetailOptions(scope, 7).queryKey, oldDetail);
-    const detail = vi.spyOn(api, 'getDept').mockResolvedValue(collection().items[0]);
-    const firstParent = deferred<HttpCollection<api.DeptRecord>>();
-    const parent = vi
-      .spyOn(api, 'listDeptExcludeChild')
-      .mockReturnValueOnce(firstParent.promise)
-      .mockResolvedValueOnce(collection('替代读取'));
-    const opening = dept.readDeptEditor(scope, 7);
-    await flushPromises();
-    await queryClient.cancelQueries({
-      queryKey: dept.deptExcludeChildOptions(scope, 7).queryKey,
-    });
-    const result = await opening;
-    expect(result.data?.deptName).toBe('研发');
-    expect(result.options.items[0].deptName).toBe('替代读取');
-    expect(detail).toHaveBeenCalledOnce();
-    expect(parent).toHaveBeenCalledTimes(2);
-    firstParent.resolve(collection('旧读取'));
-    const creation = vi.spyOn(api, 'listDept').mockResolvedValue(collection());
-    expect((await dept.readDeptEditor(scope)).data).toBeUndefined();
-    expect(creation).toHaveBeenCalledOnce();
-    await expect(dept.readDeptEditor(scope, 0)).rejects.toSatisfy(isAbortError);
+    expect(write).toHaveBeenCalledTimes(1);
   });
 });

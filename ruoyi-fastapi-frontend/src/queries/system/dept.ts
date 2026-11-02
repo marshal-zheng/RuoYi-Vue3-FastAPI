@@ -1,19 +1,18 @@
-import { queryOptions, skipToken } from '@tanstack/vue-query';
-import { AbortError, queryRequest, type RequestOptions } from '@zxio/http';
-import { invalidateQueryGroups, type QueryGroupFilter } from '@zxio/vue-query/core';
+import { commandRequest, queryRequest, type RequestOptions } from '@zxio/http';
+import {
+  defineCommand,
+  defineRead,
+  defineResource,
+  type ResourceContext,
+} from '@zxio/vue-query/resources';
+import { invalidateQueryGroups } from '@zxio/vue-query/core';
+import type { DeepReadonly } from 'vue';
 import * as api from '@/api/system/dept';
 import { deptTreeSelect } from '@/api/system/user';
 import type { MenuTreeNode } from '@/api/system/menu';
 import type { DeptCreateModel, DeptQueryModel, DeptUpdateModel } from '@/api/_generated/types.gen';
-import type { HttpCollection } from '@/types/http-contract';
 import { queryClient } from '../client';
-import {
-  assertRequestScope,
-  requireQueryScope,
-  scopeRequestOptions,
-  type QueryScope,
-} from '../context';
-import { readEditorResource } from '../editor-read';
+import { queryScope, scopeRequestOptions } from '../context';
 import { userKeys } from './user';
 
 export type DeptFilters = {
@@ -21,7 +20,6 @@ export type DeptFilters = {
   status?: NonNullable<DeptQueryModel['status']>;
 };
 
-/** Submitted department filters are shared by the request and its resource identity. */
 export function normalizeDeptFilters(input: Readonly<Record<string, unknown>> = {}): DeptFilters {
   const filters: DeptFilters = {};
   const deptName = typeof input.deptName === 'string' ? input.deptName.trim() : '';
@@ -30,202 +28,122 @@ export function normalizeDeptFilters(input: Readonly<Record<string, unknown>> = 
   return filters;
 }
 
-function departmentId(input: unknown): number | undefined {
+function departmentId(input: number | string | undefined): number {
   const id = Number(input);
-  return Number.isSafeInteger(id) && id > 0 ? id : undefined;
+  return Number.isSafeInteger(id) && id > 0 ? id : 0;
 }
 
-export const deptKeys = {
-  all: (scope: QueryScope) => ['ruoyi', scope.key, 'departments'] as const,
-  lists: (scope: QueryScope) => [...deptKeys.all(scope), 'list'] as const,
-  list: (scope: QueryScope, filters: DeptFilters) => [...deptKeys.lists(scope), filters] as const,
-  details: (scope: QueryScope) => [...deptKeys.all(scope), 'detail'] as const,
-  detail: (scope: QueryScope, id: number) => [...deptKeys.details(scope), id] as const,
-  parentOptions: (scope: QueryScope) => [...deptKeys.all(scope), 'parent-options'] as const,
-  excludeChild: (scope: QueryScope, id: number) =>
-    [...deptKeys.parentOptions(scope), 'exclude', id] as const,
-  userTree: (scope: QueryScope) => [...deptKeys.all(scope), 'user-tree'] as const,
-};
+function readConfig({ signal, scope }: ResourceContext) {
+  const context = queryRequest(signal, scopeRequestOptions(scope));
+  return { signal: context.signal, requestOptions: context.options };
+}
 
-export function deptListOptions(
-  scope: QueryScope | null,
-  input: Readonly<Record<string, unknown>> = {}
+async function write<T>(
+  context: ResourceContext,
+  execute: (options: RequestOptions, signal: AbortSignal) => Promise<T>
 ) {
-  const filters = normalizeDeptFilters(input);
-  return queryOptions<HttpCollection<api.DeptRecord>>({
-    queryKey: scope
-      ? deptKeys.list(scope, filters)
-      : (['ruoyi', 'disabled', 'departments', 'list', filters] as const),
-    queryFn: scope
-      ? ({ signal }) => {
-          const context = queryRequest(signal, scopeRequestOptions(scope));
-          return api.listDept(filters, {
-            signal: context.signal,
-            requestOptions: context.options,
-          });
-        }
-      : skipToken,
-    enabled: scope !== null,
-    staleTime: 30_000,
-    retry: false,
-  });
+  let data: T;
+  try {
+    const transport = commandRequest(context.signal, scopeRequestOptions(context.scope));
+    data = await execute(transport.options, transport.signal);
+  } catch (error) {
+    const failure = error as {
+      status?: number;
+      response?: { status?: number };
+      name?: string;
+    };
+    const status = failure?.status ?? failure?.response?.status ?? 0;
+    // A real 4xx rejection is definite; transport loss/timeout and 5xx do not prove rollback.
+    if (
+      (status >= 400 && status < 500 && status !== 408) ||
+      failure?.name === 'RequestPreparationError'
+    )
+      return { kind: 'rejected' as const, error };
+    return { kind: 'unknown' as const, error };
+  }
+  // Actual user-list consumers still use native Query and embed department names.
+  // Keep their existing domain effect; department reads use the resource's declared effects.
+  const session = queryScope.value;
+  if (context.isCurrent() && session?.key === context.scope.key) {
+    const report = (error: unknown) =>
+      window.dispatchEvent(new CustomEvent('ruoyi:query-coordination-error', { detail: error }));
+    try {
+      void invalidateQueryGroups(queryClient, [{ queryKey: userKeys.lists(session) }]).catch(
+        report
+      );
+    } catch (error) {
+      report(error);
+    }
+  }
+  return { kind: 'succeeded' as const, data };
 }
 
-export function deptDetailOptions(scope: QueryScope | null, input: unknown) {
-  const id = departmentId(input);
-  const ready = scope !== null && id !== undefined;
-  return queryOptions({
-    queryKey: ready
-      ? deptKeys.detail(scope, id)
-      : (['ruoyi', scope?.key ?? 'disabled', 'departments', 'detail', 0] as const),
-    queryFn: ready
-      ? ({ signal }) => {
-          const context = queryRequest(signal, scopeRequestOptions(scope));
-          return api.getDept(id, {
-            signal: context.signal,
-            requestOptions: context.options,
-          });
-        }
-      : skipToken,
-    enabled: ready,
-    staleTime: 0,
-    retry: false,
-  });
-}
+export const departmentResource = defineResource({
+  name: 'ruoyi-departments',
+  reads: {
+    list: defineRead({
+      normalize: normalizeDeptFilters,
+      staleTime: 30_000,
+      run: (filters, context) => api.listDept(filters, readConfig(context)),
+    }),
+    detail: defineRead({
+      normalize: departmentId,
+      enabled: (id) => id > 0,
+      run: (id, context) => api.getDept(id, readConfig(context)),
+    }),
+    excludeChild: defineRead({
+      normalize: departmentId,
+      enabled: (id) => id > 0,
+      staleTime: 30_000,
+      run: (id, context) => api.listDeptExcludeChild(id, readConfig(context)),
+    }),
+    // User-tree permissions and normal-department filtering are server-owned and differ from list.
+    userTree: defineRead({
+      staleTime: 30_000,
+      run: async (_: void, { signal, scope }) =>
+        (await deptTreeSelect(queryRequest(signal, scopeRequestOptions(scope)))).items,
+    }),
+  },
+  commands: (self) => {
+    const collections = () => [self.read('list'), self.read('excludeChild'), self.read('userTree')];
+    return {
+      create: defineCommand({
+        run: (input: DeptCreateModel, context) =>
+          write(context, (options, signal) => api.addDept(input, options, signal)),
+        effects: collections,
+      }),
+      update: defineCommand({
+        run: (input: DeptUpdateModel, context) =>
+          write(context, (options, signal) => api.updateDept(input, options, signal)),
+        effects: ({ input }) => [...collections(), self.read('detail', input.deptId)],
+      }),
+      delete: defineCommand({
+        run: (input: number, context) =>
+          write(context, (options, signal) => api.delDept(input, options, signal)),
+        effects: ({ input }) => [...collections(), self.read('detail', input)],
+      }),
+    };
+  },
+});
 
-export function deptExcludeChildOptions(scope: QueryScope | null, input: unknown) {
-  const id = departmentId(input);
-  const ready = scope !== null && id !== undefined;
-  return queryOptions<HttpCollection<api.DeptRecord>>({
-    queryKey: ready
-      ? deptKeys.excludeChild(scope, id)
-      : ([
-          'ruoyi',
-          scope?.key ?? 'disabled',
-          'departments',
-          'parent-options',
-          'exclude',
-          0,
-        ] as const),
-    queryFn: ready
-      ? ({ signal }) => {
-          const context = queryRequest(signal, scopeRequestOptions(scope));
-          return api.listDeptExcludeChild(id, {
-            signal: context.signal,
-            requestOptions: context.options,
-          });
-        }
-      : skipToken,
-    enabled: ready,
-    staleTime: 30_000,
-    retry: false,
-  });
-}
-
-/** Creation uses the unfiltered management list; editing uses the server's exclusion contract. */
-export function deptParentOptions(scope: QueryScope | null, id?: number | string) {
-  return id === undefined ? deptListOptions(scope) : deptExcludeChildOptions(scope, id);
-}
-
-/** The user endpoint has a different permission and normal-department policy from management. */
-export function userDeptTreeOptions(scope: QueryScope | null) {
-  return queryOptions({
-    queryKey: scope
-      ? deptKeys.userTree(scope)
-      : (['ruoyi', 'disabled', 'departments', 'user-tree'] as const),
-    queryFn: scope
-      ? async ({ signal }): Promise<readonly MenuTreeNode[]> => {
-          const response = await deptTreeSelect(queryRequest(signal, scopeRequestOptions(scope)));
-          return response.items;
-        }
-      : skipToken,
-    enabled: scope !== null,
-    staleTime: 30_000,
-    retry: false,
-  });
-}
-
-/** Native tree controls may attach node metadata; each view owns its mutable projection. */
-export function copyUserDeptTree(items: readonly MenuTreeNode[]): MenuTreeNode[] {
-  return items.map((item) => ({
+/** Native tree controls attach metadata; each view owns a mutable projection, never cached nodes. */
+export function copyUserDeptTree(items: DeepReadonly<MenuTreeNode[]>): MenuTreeNode[] {
+  return items.map(({ children, ...item }) => ({
     ...item,
-    ...(item.children ? { children: copyUserDeptTree(item.children) } : {}),
+    ...(children ? { children: copyUserDeptTree(children) } : {}),
   }));
 }
 
-/** An opening consumes each resource once; cancellation rejoins only that resource's replacement. */
-export async function readDeptEditor(
-  scope: QueryScope | null,
-  id?: number | string,
-  openingSignal?: AbortSignal
-): Promise<{
-  data: api.DeptRecord | undefined;
-  options: HttpCollection<api.DeptRecord>;
-}> {
-  if (!scope || (id !== undefined && departmentId(id) === undefined)) {
-    throw new AbortError({ message: '部门编辑条件已失效' });
-  }
-  const [data, options] = await Promise.all([
-    id === undefined
-      ? Promise.resolve(undefined)
-      : readEditorResource(
-          scope,
-          () => queryClient.fetchQuery(deptDetailOptions(scope, id)),
-          openingSignal
-        ),
-    readEditorResource(
-      scope,
-      () => queryClient.fetchQuery(deptParentOptions(scope, id)),
-      openingSignal
-    ),
-  ]);
-  return { data, options };
+/** Copy only editable DTO fields once; server metadata never becomes an editor's save payload. */
+export function departmentDraft(data: DeepReadonly<api.DeptRecord>) {
+  return {
+    deptId: data.deptId,
+    parentId: data.parentId ?? undefined,
+    deptName: data.deptName ?? undefined,
+    orderNum: data.orderNum ?? undefined,
+    leader: data.leader ?? undefined,
+    phone: data.phone ?? undefined,
+    email: data.email ?? undefined,
+    status: data.status ?? undefined,
+  };
 }
-
-export interface DeptCommand<T> {
-  readonly scope: QueryScope;
-  readonly input: T;
-}
-
-/** Capture DTO fields and authorization before a confirmation or deferred mutation. */
-export function captureDeptCommand<T extends object | number | string>(
-  input: T,
-  scope = requireQueryScope()
-): DeptCommand<T> {
-  const snapshot = input !== null && typeof input === 'object' ? { ...input } : input;
-  return { scope, input: snapshot as T };
-}
-
-export const deptEffects = (scope: QueryScope): readonly QueryGroupFilter[] => [
-  { queryKey: deptKeys.all(scope) },
-  // User rows embed department names; a rename also changes this existing display.
-  { queryKey: userKeys.lists(scope) },
-];
-
-async function write<T>(
-  scope: QueryScope,
-  execute: (options: RequestOptions) => Promise<T>
-): Promise<T> {
-  const options = scopeRequestOptions(scope);
-  assertRequestScope(options);
-  const result = await execute(options);
-  try {
-    void invalidateQueryGroups(queryClient, deptEffects(scope)).catch(reportCoordinationError);
-  } catch (error) {
-    reportCoordinationError(error);
-  }
-  return result;
-}
-
-function reportCoordinationError(error: unknown): void {
-  window.dispatchEvent(new CustomEvent('ruoyi:query-coordination-error', { detail: error }));
-}
-
-export const deptCommands = {
-  createDept: ({ scope, input }: DeptCommand<DeptCreateModel>) =>
-    write(scope, (options) => api.addDept(input, options)),
-  updateDept: ({ scope, input }: DeptCommand<DeptUpdateModel>) =>
-    write(scope, (options) => api.updateDept(input, options)),
-  deleteDept: ({ scope, input }: DeptCommand<number | string>) =>
-    write(scope, (options) => api.delDept(input, options)),
-};

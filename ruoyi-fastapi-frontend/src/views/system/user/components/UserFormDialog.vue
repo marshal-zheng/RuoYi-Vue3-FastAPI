@@ -24,7 +24,7 @@
       <el-button link type="primary" @click="handleRetry">重试</el-button>
     </el-alert>
     <template v-if="session">
-      <span v-if="departmentQuery.isPaused.value" role="status">部门列表等待网络连接</span>
+      <span v-if="departmentQuery.paused.value" role="status">部门列表等待网络连接</span>
       <el-alert
         v-else-if="departmentQuery.error.value"
         :title="departmentQuery.data.value ? '部门列表刷新失败，保留当前选择' : '部门列表读取失败'"
@@ -61,6 +61,9 @@
 import { computed, markRaw, nextTick, ref, shallowRef, watch } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { useQuery } from '@tanstack/vue-query';
+import { useResourceQuery } from '@zxio/vue-query/resources';
+import { useResourceView } from '@zxio/vue-query/ui';
+import { dataClient } from '@/queries/client';
 import { queryRequest, type HttpError } from '@zxio/http';
 import { ZxSchemaForm, type Save, type SchemaFormInstance } from '@zxio/schema-form/formily';
 import '@zxio/schema-form/style.css';
@@ -94,7 +97,7 @@ import {
   scopeRequestOptions,
   type QueryScope,
 } from '@/queries/context';
-import { copyUserDeptTree, userDeptTreeOptions } from '@/queries/system/dept';
+import { copyUserDeptTree, departmentResource } from '@/queries/system/dept';
 import {
   createUserSchema,
   initialUser,
@@ -145,11 +148,13 @@ const detailQuery = useQuery(() =>
   )
 );
 const editorQuery = computed(() => (requestedId.value === undefined ? createQuery : detailQuery));
-const departmentQuery = useQuery(() =>
-  userDeptTreeOptions(
-    visible.value && editorScope.value === queryScope.value ? editorScope.value : null
-  )
-);
+const departmentQuery = useResourceQuery(departmentResource, 'userTree', undefined, {
+  client: dataClient,
+  active: () => visible.value && editorScope.value === queryScope.value,
+});
+const departmentView = useResourceView(departmentQuery, {
+  isEmpty: (items) => items.length === 0,
+});
 const deptOptions = computed(() => copyUserDeptTree(departmentQuery.data.value ?? []));
 const selectedDeptCache = computed(() =>
   selectedDepartment.value && selectedDepartment.value.id === values.value?.deptId
@@ -322,7 +327,7 @@ function createSession(
       creating: userId === undefined,
       departments: () => deptOptions.value,
       departmentCache: () => selectedDeptCache.value,
-      departmentLoading: () => departmentQuery.isLoading.value,
+      departmentLoading: () => departmentView.loading.value,
       posts: () => postOptions.value,
       roles: () => roleOptions.value,
       statuses: () => statusOptions.value,
@@ -434,8 +439,7 @@ function retryResource() {
     void editorQuery.value.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {});
 }
 function retryDepartments() {
-  if (departmentQuery.isEnabled.value)
-    void departmentQuery.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {});
+  if (departmentQuery.enabled.value) void departmentQuery.refresh().catch(() => {});
 }
 function submit() {
   if (

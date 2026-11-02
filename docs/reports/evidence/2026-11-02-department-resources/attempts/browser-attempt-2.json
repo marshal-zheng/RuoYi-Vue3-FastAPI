@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-11-02T01:26:35.067Z",
+  "marker": "codex_res_vykvxvf",
+  "mocks": false,
+  "checks": {},
+  "cleanup": {
+    "deleted": 0,
+    "verifiedAbsent": true
+  },
+  "passed": false,
+  "failure": {
+    "stage": "production-route",
+    "message": "page.evaluate: Error: Create: not-started\n    at eval (eval at evaluate (:302:30), <anonymous>:10:39)\n    at async <anonymous>:328:30"
+  },
+  "ownSessionEnded": true,
+  "pageErrors": [],
+  "requestCounts": {
+    "GET /system/ai/text-field/status": 3,
+    "GET /system/user/list": 1,
+    "GET /system/user/deptTree": 1,
+    "GET /system/dict/data/type/sys_normal_disable": 3,
+    "GET /system/dept/list": 4
+  }
+}

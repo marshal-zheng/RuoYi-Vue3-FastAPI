@@ -1,0 +1,18 @@
+{
+  "sourceRegression": {
+    "files": 8,
+    "passed": 119
+  },
+  "installedRegression": {
+    "filesPassed": 7,
+    "passed": 118,
+    "failed": 1,
+    "failure": "Existing installed ZxTableRender lacks expandedKeys; source mode passes"
+  },
+  "eslint": "passed, zero warnings",
+  "diffCheck": "passed",
+  "fullTypecheck": "3 diagnostics in unchanged DictList/NoticeList/PostList",
+  "sourceCommit": "1b7c3236666f862afc44c23b1c72f49c7dffdb55",
+  "supersededBy": "installed/validation.json",
+  "correction": "The earlier missing expandedKeys attribution was incorrect; the installed API is present. The parent template-ref test and actual installed browser now pass."
+}

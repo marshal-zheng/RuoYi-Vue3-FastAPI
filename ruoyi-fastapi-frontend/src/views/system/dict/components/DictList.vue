@@ -65,7 +65,10 @@
                 @keyup.enter="() => listForm.search()"
               />
               <DictSelect
-                v-model="listForm.draft.status"
+                :model-value="
+                  typeof listForm.draft.status === 'string' ? listForm.draft.status : undefined
+                "
+                @update:model-value="listForm.draft.status = $event"
                 dict-type="sys_normal_disable"
                 placeholder="字典状态"
                 clearable

@@ -5,6 +5,7 @@ import ElementPlus from 'element-plus';
 import { createShortcutRuntime } from '@zxio/keybindings';
 import { createShortcutPlugin } from '@zxio/keybindings/vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
+import type { TableRenderInstance } from '@zxio/table-render/ui';
 import DeptList from '@/views/system/dept/components/DeptList.vue';
 import { listDept } from '@/api/system/dept';
 import { queryClient } from '@/queries/client';
@@ -52,11 +53,12 @@ it('preserves cached records and the table instance, clears expansion while the 
   mounted.push(wrapper);
   await flushPromises();
   const table = wrapper.getComponent({ name: 'ElTable' });
-  const list = wrapper.getComponent({ name: 'ZxTableRender' });
-  const api = list.vm as unknown as {
-    expandedKeys: number[];
-    setExpandedKeys(keys: number[]): void;
-  };
+  // The public API is the parent's template ref. VTU child.vm is only the
+  // internal proxy for a packed SFC whose setup returns a render function.
+  const api = wrapper.vm.$refs.refTable as Pick<
+    TableRenderInstance<unknown, unknown, unknown>,
+    'expandedKeys' | 'setExpandedKeys'
+  >;
   const instance = table.vm;
   expect(api.expandedKeys).toEqual([1]);
   expect(table.props('data')).toEqual([{ ...rows[0], children: [rows[1]] }]);

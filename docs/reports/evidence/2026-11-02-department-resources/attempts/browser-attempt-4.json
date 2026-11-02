@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-11-02T01:28:44.116Z",
+  "marker": "codex_res_vykypg3",
+  "mocks": false,
+  "checks": {
+    "productionRouteSaveRefresh": true
+  },
+  "cleanup": {
+    "deleted": 1,
+    "verifiedAbsent": true
+  },
+  "createdId": 202,
+  "passed": false,
+  "failure": {
+    "stage": "two-editor-sharing",
+    "message": "expect(locator).toHaveCount(expected) failed\n\nLocator:  getByPlaceholder('请输入部门名称', { exact: true })\nExpected: 2\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"to.have.count\" with timeout 5000ms\n  - waiting for getByPlaceholder('请输入部门名称', { exact: true })\n    9 × locator resolved to 0 elements\n      - unexpected value \"0\"\n"
+  },
+  "ownSessionEnded": true,
+  "pageErrors": [],
+  "requestCounts": {
+    "GET /system/ai/text-field/status": 4,
+    "GET /system/user/list": 1,
+    "GET /system/user/deptTree": 2,
+    "GET /system/dict/data/type/sys_normal_disable": 5,
+    "GET /system/dept/list": 7,
+    "POST /system/dept": 1,
+    "GET /system/dept/:id": 3,
+    "GET /system/dept/list/exclude/:id": 3,
+    "PUT /system/dept": 1,
+    "DELETE /system/dept/:id": 1
+  }
+}

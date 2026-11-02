@@ -53,11 +53,12 @@ export function getDept(
 }
 
 // 新增部门
-export function addDept(data: DeptCreateModel, options?: RequestOptions) {
+export function addDept(data: DeptCreateModel, options?: RequestOptions, signal?: AbortSignal) {
   return request<DeptRecord>(
     {
       url: '/system/dept',
       method: 'post',
+      signal,
       data: data,
       feedback: { mode: 'auto', key: 'system.dept.create' },
     },
@@ -66,11 +67,12 @@ export function addDept(data: DeptCreateModel, options?: RequestOptions) {
 }
 
 // 修改部门
-export function updateDept(data: DeptUpdateModel, options?: RequestOptions) {
+export function updateDept(data: DeptUpdateModel, options?: RequestOptions, signal?: AbortSignal) {
   return request<DeptRecord>(
     {
       url: '/system/dept',
       method: 'put',
+      signal,
       data: data,
       feedback: { mode: 'auto', key: 'system.dept.update' },
     },
@@ -79,11 +81,12 @@ export function updateDept(data: DeptUpdateModel, options?: RequestOptions) {
 }
 
 // 删除部门
-export function delDept(deptId: number | string, options?: RequestOptions) {
+export function delDept(deptId: number | string, options?: RequestOptions, signal?: AbortSignal) {
   return request<null>(
     {
       url: '/system/dept/' + deptId,
       method: 'delete',
+      signal,
       feedback: { mode: 'auto', key: 'system.dept.delete' },
     },
     options

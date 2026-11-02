@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-11-02T01:25:04.127Z",
+  "marker": "codex_res_vyktzpb",
+  "mocks": false,
+  "checks": {
+    "productionRouteSaveRefresh": true
+  },
+  "cleanup": {
+    "failure": "page.evaluate: Execution context was destroyed, most likely because of a navigation"
+  },
+  "createdId": 200,
+  "passed": false,
+  "failure": {
+    "stage": "two-editor-sharing",
+    "message": "expect(locator).toContainText(expected) failed\n\nLocator: getByTestId('tree-left')\nExpected substring: \"codex_res_vyktzpb_route\"\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"to.have.text\" with timeout 5000ms\n  - waiting for getByTestId('tree-left')\n"
+  },
+  "pageErrors": [],
+  "requestCounts": {}
+}

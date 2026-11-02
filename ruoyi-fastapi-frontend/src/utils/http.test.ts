@@ -204,8 +204,8 @@ describe('http contract client', () => {
         transforms: [
           {},
           {
-            afterResponse: (response: ResponseFixture) =>
-              afterResponse(responseOf(response), options, context),
+            afterResponse: (response: ResponseFixture, overrides?: RequestOptions) =>
+              afterResponse(responseOf(response), { ...options, ...overrides }, context),
             onError: async (fixture: ErrorFixture) => {
               const error: AxiosError = {
                 name: 'AxiosError',
@@ -892,6 +892,43 @@ describe('http contract client', () => {
       },
     };
     await rawOnError(failure, options).catch(() => undefined);
+    expect(presentProblemFeedback).not.toHaveBeenCalled();
+    expect(ElMessage).not.toHaveBeenCalled();
+    await rawOnError(expiredAuthError, options).catch(() => undefined);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(ElMessage).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps command feedback local while preserving authentication recovery', async () => {
+    const { clientConfig, rawOnError } = await loadModule();
+    const { commandRequest } = await import('@zxio/http');
+    const { setQuerySession, scopeRequestOptions } = await import('@/queries/context');
+    const scope = setQuerySession(1, [], []);
+    const options = commandRequest(
+      new AbortController().signal,
+      scopeRequestOptions(scope)
+    ).options;
+    await clientConfig.transforms[1].afterResponse(
+      {
+        status: 200,
+        data: { deptId: 7 },
+        headers: {},
+        config: { method: 'put', feedback: { mode: 'auto', key: 'system.dept.update' } },
+      },
+      options
+    );
+    expect(presentSuccessFeedback).not.toHaveBeenCalled();
+    await rawOnError(
+      {
+        ...expiredAuthError,
+        response: {
+          ...expiredAuthError.response,
+          status: 422,
+          data: { status: 422, detail: 'invalid' },
+        },
+      },
+      options
+    ).catch(() => undefined);
     expect(presentProblemFeedback).not.toHaveBeenCalled();
     expect(ElMessage).not.toHaveBeenCalled();
     await rawOnError(expiredAuthError, options).catch(() => undefined);

@@ -5094,12 +5094,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/http@file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/http@file:./vendor/zxio-http-1.0.0-resources.20261102.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@zxio/http@file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz#./vendor/zxio-http-1.0.0-query.final.20261016.tgz::hash=ace4bb&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/http@file:./vendor/zxio-http-1.0.0-resources.20261102.tgz#./vendor/zxio-http-1.0.0-resources.20261102.tgz::hash=3bf806&locator=vfadmin%40workspace%3A."
   peerDependencies:
     axios: ^1.18.0
-  checksum: 10c0/32b496008e424d1be2176105d97b5b1b1022f55c0c0485f7eb7c5b12f14b6b009442d15d5c33f5a6882617b374c93bf47d688a700963da610040f93483f9b608
+  checksum: 10c0/ae60613287afb3a2a32f5a420a501b5438cdb2d3afbb522d6f8bec50b7a36fc2b70a3070923be28bec93bb7e0a2b63213b37a7bdddbc19e8307795957f2bbe99
   languageName: node
   linkType: hard
 
@@ -5121,9 +5121,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-department-resources.20261102.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0-remark-a.20261022.1
-  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz#./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz::hash=c3aa76&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-department-resources.20261102.tgz#./vendor/zxio-schema-form-0.1.0-department-resources.20261102.tgz::hash=80ba91&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@formily/core": 2.3.7
     "@formily/reactive": 2.3.7
@@ -5141,7 +5141,7 @@ __metadata:
       optional: true
     "@formily/vue":
       optional: true
-  checksum: 10c0/7b7ad64d80d6ea72d2e9847697f427fd001a7c1331ecdec7bb25be28b57ac5995389800347de7f08f882dc7c23e96147fc3de77ad6a0e7ee85c8bcd255bfc6c7
+  checksum: 10c0/21cd634eb7f5db71bcd8fab88a1041f24fde4c29077531123aaaa0cbcbf268129d17dbe0e924f7da8be106a17fa18710597e55ccab552bee53d36285ff6e3190
   languageName: node
   linkType: hard
 
@@ -5394,17 +5394,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/vue-query@file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/vue-query@file:./vendor/zxio-vue-query-1.0.0-resources.20261102.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@zxio/vue-query@file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz#./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz::hash=e269a0&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/vue-query@file:./vendor/zxio-vue-query-1.0.0-resources.20261102.tgz#./vendor/zxio-vue-query-1.0.0-resources.20261102.tgz::hash=257ca1&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@tanstack/vue-query": ^5.92.5
     "@zxio/zxui": ^3.0.0-next.0
-    vue: ~3.5.40
+    vue: ~3.5.44
   peerDependenciesMeta:
     "@zxio/zxui":
       optional: true
-  checksum: 10c0/dfcfd780a351d3330808723d2e07928432d4c98360def226c809b0dcda853349a854da4540828c318f6e7cb118fdb3e2f641ee4b706bcd121a59605930e9eea7
+  checksum: 10c0/87ca1ed9f8f7cef5030c149ed1e076b4a18dfa1f46575aed456010ec330294cee85f66c418d0aaf0677544877549abad465f8a266a200be7cd7eb5e6bf59c4b5
   languageName: node
   linkType: hard
 
@@ -15267,8 +15267,8 @@ __metadata:
     "@zxio/chart": "file:./vendor/zxio-chart-2.0.0-dashboard-committed.20261019.tgz"
     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-theme.20261026.tgz"
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
-    "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-feedback.20261029.2.tgz"
+    "@zxio/http": "file:./vendor/zxio-http-1.0.0-resources.20261102.tgz"
+    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-department-resources.20261102.tgz"
     "@zxio/table-render": "file:./vendor/zxio-table-render-0.1.0-optimization.20261101.tgz"
     "@zxio/text-editor": "file:./vendor/zxio-text-editor-1.0.0-feedback.20261030.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-dashboard-theme.20261026.tgz"
@@ -15284,7 +15284,7 @@ __metadata:
     "@zxio/theme-tech-blue": "file:./vendor/zxio-theme-tech-blue-1.0.0-dashboard-theme.20261026.tgz"
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-dashboard-theme.20261026.tgz"
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-theme.20261026.tgz"
-    "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
+    "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-resources.20261102.tgz"
     "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-table-render.20261101.tgz"
     ajv: "npm:^8.20.0"
     autoprefixer: "npm:^10.4.21"

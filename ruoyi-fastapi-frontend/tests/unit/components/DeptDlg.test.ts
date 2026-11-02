@@ -2,7 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import { onlineManager, useQuery, VueQueryPlugin } from '@tanstack/vue-query';
 import { isAbortError } from '@zxio/http';
-import { deptDetailOptions, deptExcludeChildOptions } from '@/queries/system/dept';
+import { departmentResource } from '@/queries/system/dept';
+import { dataClient } from '@/queries/client';
+const deptDetailOptions = (_scope: unknown, id: number) =>
+  dataClient.options(departmentResource, 'detail', id);
+const deptExcludeChildOptions = (_scope: unknown, id: number) =>
+  dataClient.options(departmentResource, 'excludeChild', id);
 import { defineComponent, h, nextTick, type ComponentCustomProperties } from 'vue';
 import DeptDlg from '@/views/system/dept/components/DeptDlg.vue';
 import { addDept, getDept, listDept, listDeptExcludeChild, updateDept } from '@/api/system/dept';
@@ -21,9 +26,16 @@ vi.mock('@/api/system/dept', () => ({
 vi.mock('@/utils/dict', () => ({
   useDict: () => ({ sys_normal_disable: [] }),
 }));
-const feedback = vi.hoisted(() => ({ error: vi.fn(), recovery: vi.fn() }));
+const feedback = vi.hoisted(() => ({
+  error: vi.fn(),
+  recovery: vi.fn(),
+  success: vi.fn(),
+  warning: vi.fn(),
+}));
 vi.mock('@/utils/http', () => ({ presentRequestError: feedback.recovery }));
-vi.mock('element-plus', () => ({ ElMessage: { error: feedback.error } }));
+vi.mock('element-plus', () => ({
+  ElMessage: { error: feedback.error, success: feedback.success, warning: feedback.warning },
+}));
 const shell = defineComponent({
   name: 'DeptShell',
   inheritAttrs: false,
@@ -175,7 +187,9 @@ describe('department editor resource lifecycle', () => {
     await e.api.open({ deptId: 11 });
     e.model().deptName = 'typing';
     vi.mocked(listDeptExcludeChild).mockRejectedValueOnce(new Error('parent refresh failed'));
-    await queryClient.refetchQueries({ queryKey: deptExcludeChildOptions(scope, 11).queryKey });
+    await queryClient.refetchQueries({
+      queryKey: deptExcludeChildOptions(scope, 11).queryKey,
+    });
     await flushPromises();
     expect(e.wrapper.text()).toContain('上级部门刷新失败');
     expect(e.model().deptName).toBe('typing');
@@ -224,6 +238,39 @@ describe('department editor resource lifecycle', () => {
       { deptName: 'Renamed root' },
     ]);
   });
+  it('shares two editor reads while each form keeps its own draft through a save refresh', async () => {
+    const response = deferred<ReturnType<typeof detail>>();
+    vi.mocked(getDept).mockReturnValueOnce(response.promise);
+    const left = mountDialog();
+    const right = mountDialog();
+    const opening = Promise.all([left.api.open({ deptId: 11 }), right.api.open({ deptId: 11 })]);
+    await flushPromises();
+    expect(getDept).toHaveBeenCalledTimes(1);
+    response.resolve(detail(11));
+    await opening;
+    left.model().deptName = 'saved left';
+    right.model().deptName = 'unsaved right';
+    vi.mocked(updateDept).mockResolvedValue({ ...detail(11), deptName: 'saved left' });
+    vi.mocked(getDept).mockResolvedValue({ ...detail(11), deptName: 'saved left' });
+    expect(await left.shell().props('confirm')(left.model())).toBe(true);
+    expect(right.model().deptName).toBe('unsaved right');
+    expect(updateDept).toHaveBeenCalledTimes(1);
+    await right.api.close();
+    await right.api.open({ deptId: 11 });
+    expect(right.model().deptName).toBe('saved left');
+  });
+
+  it('accepts a confirmed save when refresh fails, with one write and read-only recovery feedback', async () => {
+    const editor = mountDialog();
+    await editor.api.open({ deptId: 11 });
+    vi.mocked(updateDept).mockResolvedValue(detail(11));
+    vi.mocked(listDeptExcludeChild).mockRejectedValue(new Error('refresh failed'));
+    expect(await editor.shell().props('confirm')(editor.model())).toBe(true);
+    expect(updateDept).toHaveBeenCalledTimes(1);
+    expect(feedback.warning).toHaveBeenCalledWith(expect.stringContaining('保存已成功'));
+    expect(feedback.success).not.toHaveBeenCalled();
+  });
+
   it('closes on authorization changes and rejects an old confirm callback', async () => {
     const e = mountDialog();
     await e.api.open({ deptId: 11 });

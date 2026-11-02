@@ -1,7 +1,7 @@
 import { readonly, shallowRef, watch } from 'vue';
 import type { GridListQueryContext } from '@zxio/zxui/grid-list';
 import { AbortError, type RequestOptions } from '@zxio/http';
-import { queryClient } from './client';
+import { dataClient, queryClient } from './client';
 
 export interface QueryScope {
   readonly key: string;
@@ -16,6 +16,7 @@ let generation = 0;
 
 export function endQuerySession(): void {
   const previous = currentScope.value;
+  dataClient.replaceScope(null);
   currentScope.value = null;
   if (!previous) return;
   const filters = { queryKey: ['ruoyi', previous.key] };
@@ -40,6 +41,7 @@ export function setQuerySession(
     authorization,
   });
   currentScope.value = scope;
+  dataClient.replaceScope({ key: scope.key });
   return scope;
 }
 
@@ -48,7 +50,7 @@ export function requireQueryScope(): QueryScope {
   return currentScope.value;
 }
 
-export function scopeRequestOptions(scope: QueryScope): RequestOptions {
+export function scopeRequestOptions(scope: Pick<QueryScope, 'key'>): RequestOptions {
   return { context: { [SCOPE_CONTEXT]: scope.key } };
 }
 

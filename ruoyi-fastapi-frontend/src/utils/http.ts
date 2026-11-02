@@ -8,6 +8,7 @@ import {
   createHttpClient,
   isAbortError,
   isQueryRequest,
+  isCommandRequest,
   resolveHttpError,
   type HttpError,
   type HttpClientImpl,
@@ -429,7 +430,11 @@ const afterResponseTransform: HttpTransformHook = {
       return response;
     }
 
-    if (isRequestScopeCurrent(options) && !readConfigFlag(config, 'silentSuccess')) {
+    if (
+      isRequestScopeCurrent(options) &&
+      !isCommandRequest(options) &&
+      !readConfigFlag(config, 'silentSuccess')
+    ) {
       presentSuccessFeedback({
         status: response.status,
         payload,
@@ -460,7 +465,8 @@ const afterResponseTransform: HttpTransformHook = {
     if (isRequestScopeCurrent(options)) {
       const authFailure =
         status === 401 || problem.errorCode === 20001 || problem.errorCode === 20002;
-      if (authFailure || !isQueryRequest(options)) presentRequestError(requestError, config);
+      if (authFailure || (!isQueryRequest(options) && !isCommandRequest(options)))
+        presentRequestError(requestError, config);
     }
     throw requestError;
   },

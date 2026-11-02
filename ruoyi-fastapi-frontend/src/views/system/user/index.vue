@@ -244,6 +244,9 @@ import { ZxGridList } from '@zxio/zxui/grid-list';
 import { computed, getCurrentInstance, reactive, ref, shallowReactive, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuery } from '@tanstack/vue-query';
+import { useResourceQuery } from '@zxio/vue-query/resources';
+import { useResourceView } from '@zxio/vue-query/ui';
+import { dataClient } from '@/queries/client';
 import { queryScope } from '@/queries/context';
 import {
   captureUserCommand,
@@ -251,7 +254,7 @@ import {
   userCommands,
   userListOptions,
 } from '@/queries/system/user';
-import { copyUserDeptTree, userDeptTreeOptions } from '@/queries/system/dept';
+import { copyUserDeptTree, departmentResource } from '@/queries/system/dept';
 import { useOperation } from '@/utils/operation';
 import useAppStore from '@/store/modules/app';
 import { useSystemListNavigation } from '@/store/modules/system-list-navigation';
@@ -290,7 +293,12 @@ const userQuery = useQuery(() =>
     pageSize: pageSize.value,
   })
 );
-const departmentQuery = useQuery(() => userDeptTreeOptions(queryScope.value));
+const departmentQuery = useResourceQuery(departmentResource, 'userTree', undefined, {
+  client: dataClient,
+});
+const departmentView = useResourceView(departmentQuery, {
+  isEmpty: (items) => items.length === 0,
+});
 const userRows = computed(() => userQuery.data.value?.items ?? emptyRows);
 const pagination = computed(() => ({
   page: currentPage.value,
@@ -305,9 +313,9 @@ const listStatus = computed(() => ({
 }));
 const deptOptions = computed(() => copyUserDeptTree(departmentQuery.data.value ?? emptyRows));
 const deptStatus = computed(() => ({
-  loading: departmentQuery.isLoading.value,
+  loading: departmentView.loading.value,
   error: departmentQuery.error.value,
-  paused: departmentQuery.fetchStatus.value === 'paused',
+  paused: departmentQuery.paused.value,
 }));
 const columns = ref([
   { key: 0, label: '用户编号', visible: true },
@@ -371,7 +379,7 @@ function refreshList() {
   if (queryScope.value) void userQuery.refetch({ cancelRefetch: false });
 }
 function refreshDepartments() {
-  if (queryScope.value) void departmentQuery.refetch({ cancelRefetch: false });
+  if (queryScope.value) void departmentQuery.refresh();
 }
 function handleExport() {
   if (!queryScope.value) return;

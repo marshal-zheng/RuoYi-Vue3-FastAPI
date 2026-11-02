@@ -14,7 +14,9 @@ import * as roleApi from '@/api/system/role';
 import { queryClient } from '../client';
 import { endQuerySession, setQuerySession } from '../context';
 import * as userDomain from './user';
-import { userDeptTreeOptions } from './dept';
+import { departmentResource } from './dept';
+import { dataClient } from '../client';
+const userDeptTreeOptions = () => dataClient.options(departmentResource, 'userTree', undefined);
 
 vi.mock('@/api/system/user', () => ({
   listUser: vi.fn(),
@@ -110,9 +112,7 @@ describe('public user resource', () => {
     vi.mocked(api.deptTreeSelect).mockResolvedValue({
       items: [{ id: 1, label: '研发' }],
     });
-    expect(await queryClient.fetchQuery(userDeptTreeOptions(scope))).toEqual([
-      { id: 1, label: '研发' },
-    ]);
+    expect(await queryClient.fetchQuery(userDeptTreeOptions())).toEqual([{ id: 1, label: '研发' }]);
   });
 
   it('returns a successful write before refresh and retains rows when the read fails', async () => {

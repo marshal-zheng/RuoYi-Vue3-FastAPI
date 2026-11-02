@@ -67,6 +67,7 @@ function mountList() {
         ZxButton: slot,
         DeptDlg: true,
         DictStatus: true,
+        ElAlert: true,
         DictTag: true,
         ZxMoreAction: true,
       },

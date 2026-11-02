@@ -1,0 +1,30 @@
+{
+  "purpose": "Validate task-only staged snapshot without unrelated Page Agent/dashboard/backend changes",
+  "baseCommit": "36355065359dbe0de0488bfeb95e82ff428e66aa",
+  "dependencyChanges": [
+    "@zxio/http",
+    "@zxio/schema-form",
+    "@zxio/vue-query"
+  ],
+  "schemaForm": {
+    "artifact": "ruoyi-fastapi-frontend/vendor/zxio-schema-form-0.1.0-department-resources.20261102.tgz",
+    "sha256": "fa17178dba73d28f807d88e78a99b32b0b1f5a4170f710fcf693993a072faa6b",
+    "sourceCommit": "1b7c3236666f862afc44c23b1c72f49c7dffdb55",
+    "reason": "The committed old schema-form package lacks isValueShape required by the committed TableRender package",
+    "sourceDirtyChangesIncluded": false,
+    "runtimeFilesCompared": 11,
+    "runtimeIdenticalToPreviouslyBrowserValidatedPackage": true
+  },
+  "checks": {
+    "immutableInstall": "passed",
+    "fixturePreparation": "node tests/fixtures/ui-convergence/prepare.mjs; generated files excluded",
+    "fullTypecheck": "passed, exit 0",
+    "installedTests": {
+      "files": 11,
+      "passed": 130,
+      "failed": 0
+    },
+    "taskCodeEslint": "passed, zero warnings"
+  },
+  "unrelatedWorkingChanges": "preserved; package.json and yarn.lock are staged selectively"
+}

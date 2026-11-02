@@ -1,6 +1,6 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
-    <span v-if="editorQuery.isPaused.value || parentQuery.isPaused.value" aria-live="polite">
+    <span v-if="editorQuery.paused.value || parentQuery.paused.value" aria-live="polite">
       部门读取等待网络连接
     </span>
     <el-alert
@@ -22,6 +22,7 @@
     <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
       <el-button link type="primary" @click="handleRetry">重试</el-button>
     </el-alert>
+    <el-alert v-if="saveError" :title="saveError" type="error" :closable="false" />
     <el-form
       v-show="!loadError"
       ref="formRef"
@@ -81,27 +82,17 @@
 </template>
 
 <script setup lang="ts" name="DeptDlg">
-import { useEditorRead } from '@/utils/editor-read';
+import { computed, onScopeDispose, ref, shallowRef, watch } from 'vue';
+import { ElMessage, type FormInstance } from 'element-plus';
+import { AbortError } from '@zxio/http';
+import { useResourceQuery } from '@zxio/vue-query/resources';
+import { useResourceCommand, useResourceDetail } from '@zxio/vue-query/ui';
 import { useDict } from '@/utils/dict';
-import type { FormInstance } from 'element-plus';
-const formRef = ref<FormInstance>();
-
-import type { DeptRecord } from '@/api/system/dept';
-import {
-  captureDeptCommand,
-  deptCommands,
-  deptDetailOptions,
-  deptParentOptions,
-  readDeptEditor,
-} from '@/queries/system/dept';
+import { dataClient } from '@/queries/client';
+import { departmentResource, departmentDraft } from '@/queries/system/dept';
 import { queryScope, requireQueryScope, type QueryScope } from '@/queries/context';
-import { useQuery } from '@tanstack/vue-query';
 import { handleTree } from '@/utils/ruoyi';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
-import { computed, ref, shallowRef, watch } from 'vue';
-
-// 保留异步字典返回的 ref，避免复制请求完成前的空数组。
-const { sys_normal_disable: sys_normal_disable } = useDict('sys_normal_disable');
 
 interface DeptForm {
   deptId?: number;
@@ -113,14 +104,28 @@ interface DeptForm {
   email?: string;
   status?: '0' | '1';
 }
-
+const formRef = ref<FormInstance>();
+const { sys_normal_disable } = useDict('sys_normal_disable');
 const emit = defineEmits(['success']);
-
 const detailLoading = ref(false);
-let requestedData: Partial<DeptForm> | undefined;
+const loadError = ref('');
+const saveError = ref('');
+const uncertain = ref(false);
 const requestedId = ref<number>();
 const editorScope = shallowRef<QueryScope | null>(null);
-
+let requestedData: Partial<DeptForm> | undefined;
+let opening: AbortController | undefined;
+let snapshotCurrent: () => boolean = () => false;
+const detail = useResourceDetail(departmentResource, 'detail', {
+  client: dataClient,
+  snapshot: departmentDraft,
+});
+const createCommand = useResourceCommand(departmentResource, 'create', {
+  client: dataClient,
+});
+const updateCommand = useResourceCommand(departmentResource, 'update', {
+  client: dataClient,
+});
 const formRules = {
   parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
   deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
@@ -134,40 +139,31 @@ const formRules = {
   ],
   phone: [
     {
-      pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+      pattern: /^1[3-9][0-9]\d{8}$/,
       message: '请输入正确的手机号码',
       trigger: 'blur',
     },
   ],
 };
-
 const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
   useFormDialog<DeptForm>({
     columns: 2,
     loading: detailLoading,
-    formRef: formRef,
-    title: (data: DeptForm) => (data?.deptId ? '修改部门' : '添加部门'),
-
-    defaultData: () => ({
-      deptId: undefined,
-      parentId: undefined,
-      deptName: undefined,
-      orderNum: 0,
-      leader: undefined,
-      phone: undefined,
-      email: undefined,
-      status: '0',
-    }),
-    onConfirm: async (data: DeptForm) => {
-      const scope = editorScope.value;
+    formRef,
+    title: (data) => (data?.deptId ? '修改部门' : '添加部门'),
+    defaultData: () => ({ orderNum: 0, status: '0' }),
+    onConfirm: async (data) => {
       if (
         !state.visible ||
-        !scope ||
-        scope !== queryScope.value ||
+        !snapshotCurrent() ||
         detailLoading.value ||
-        loadError.value
+        loadError.value ||
+        uncertain.value
       )
         return false;
+      const scope = editorScope.value;
+      const current = () =>
+        state.visible && state.data === data && scope === queryScope.value && snapshotCurrent();
       const payload = {
         parentId: data.parentId,
         deptName: data.deptName,
@@ -177,108 +173,155 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
         email: data.email,
         status: data.status,
       };
-      if (data.deptId !== undefined) {
-        await deptCommands.updateDept(
-          captureDeptCommand({ ...payload, deptId: data.deptId }, scope)
-        );
-      } else {
-        if (
-          payload.parentId === undefined ||
-          payload.deptName === undefined ||
-          payload.orderNum === undefined
-        )
-          return false;
-        await deptCommands.createDept(
-          captureDeptCommand(
-            {
-              ...payload,
-              parentId: payload.parentId,
-              deptName: payload.deptName,
-              orderNum: payload.orderNum,
-            },
-            scope
-          )
-        );
+      saveError.value = '';
+      const receipt =
+        data.deptId !== undefined
+          ? await updateCommand.run({ ...payload, deptId: data.deptId })
+          : payload.parentId !== undefined &&
+              payload.deptName !== undefined &&
+              payload.orderNum !== undefined
+            ? await createCommand.run({
+                ...payload,
+                parentId: payload.parentId,
+                deptName: payload.deptName,
+                orderNum: payload.orderNum,
+              })
+            : null;
+      if (!current() || !receipt?.applicable) return false;
+      if (receipt.kind !== 'succeeded') {
+        uncertain.value = receipt.kind === 'unknown';
+        saveError.value =
+          receipt.kind === 'unknown'
+            ? '保存结果未确认，请关闭后重新打开核对，勿重复提交。'
+            : receipt.kind === 'rejected' && receipt.error instanceof Error
+              ? receipt.error.message
+              : '当前条件下未提交保存，请重试。';
+        if (uncertain.value) setDisabled(true);
+        return false;
       }
-      if (scope !== queryScope.value || state.data !== data) return false;
+      // Refresh is a separate receipt: its failure must never turn a confirmed save into a retryable write.
+      const refresh = await receipt.refresh;
+      if (!current()) return false;
+      if (refresh.kind === 'failed' || refresh.kind === 'paused')
+        ElMessage.warning('保存已成功，部分数据未刷新，请在提示处重试读取。');
+      else ElMessage.success('保存成功');
       emit('success');
       return true;
     },
   });
-
-const {
-  error: loadError,
-  run: runRead,
-  cancel: cancelRead,
-} = useEditorRead(() => state.visible, detailLoading);
-
-const activeScope = computed(() =>
-  state.visible && editorScope.value === queryScope.value ? editorScope.value : null
+const active = () => state.visible && editorScope.value === queryScope.value;
+const editorQuery = useResourceQuery(departmentResource, 'detail', requestedId, {
+  client: dataClient,
+  active: () => active() && requestedId.value !== undefined,
+});
+const createParents = useResourceQuery(
+  departmentResource,
+  'list',
+  {},
+  {
+    client: dataClient,
+    active: () => active() && requestedId.value === undefined,
+  }
 );
-const editorQuery = useQuery(() => deptDetailOptions(activeScope.value, requestedId.value));
-const parentQuery = useQuery(() => deptParentOptions(activeScope.value, requestedId.value));
+const editParents = useResourceQuery(departmentResource, 'excludeChild', requestedId, {
+  client: dataClient,
+  active: () => active() && requestedId.value !== undefined,
+});
+const parentQuery = computed(() => (requestedId.value === undefined ? createParents : editParents));
 const deptOptions = computed(() =>
   handleTree(
-    (parentQuery.data.value?.items ?? []).map((row: DeptRecord) => ({
-      ...row,
-    })),
+    (parentQuery.value.data.value?.items ?? []).map((row) => ({ ...row })),
     'deptId'
   )
+);
+function cancelOpening() {
+  opening?.abort();
+  opening = undefined;
+  detail.close();
+  snapshotCurrent = () => false;
+  detailLoading.value = false;
+}
+onScopeDispose(cancelOpening);
+watch(
+  () => state.visible,
+  (visible) => {
+    if (!visible) cancelOpening();
+  },
+  { flush: 'sync' }
 );
 watch(
   queryScope,
   () => {
-    cancelRead();
+    cancelOpening();
     editorScope.value = null;
     state.visible = false;
   },
   { flush: 'sync' }
 );
-
-function openDialog(seed?: Partial<DeptForm>) {
+async function openDialog(seed?: Partial<DeptForm>) {
   const scope = requireQueryScope();
+  cancelOpening();
+  const abort = new AbortController();
+  opening = abort;
   editorScope.value = scope;
   requestedData = seed ? { ...seed } : undefined;
   requestedId.value = seed?.deptId;
-  return runRead(async (read) => {
-    open(seed);
-    setDisabled(true);
-    const response = await readDeptEditor(scope, seed?.deptId, read.signal);
-    if (!read.isCurrent() || scope !== queryScope.value) return;
-    const data = response.data;
-    // Copy the initial detail once; later observer updates only affect choices and status.
-    open(
-      seed?.deptId && data
-        ? {
-            deptId: data.deptId ?? undefined,
-            parentId: data.parentId ?? undefined,
-            deptName: data.deptName ?? undefined,
-            orderNum: data.orderNum ?? undefined,
-            leader: data.leader ?? undefined,
-            phone: data.phone ?? undefined,
-            email: data.email ?? undefined,
-            status: data.status ?? undefined,
-          }
-        : seed
-    );
+  loadError.value = '';
+  saveError.value = '';
+  uncertain.value = false;
+  open(seed);
+  const model = state.data;
+  const current = () =>
+    !abort.signal.aborted && state.visible && state.data === model && scope === queryScope.value;
+  setDisabled(true);
+  detailLoading.value = true;
+  try {
+    const [loaded, parents] = await Promise.all([
+      seed?.deptId !== undefined
+        ? detail.loadSnapshot(seed.deptId)
+        : Promise.resolve({
+            kind: 'loaded' as const,
+            draft: seed ?? {},
+            isCurrent: current,
+          }),
+      seed?.deptId !== undefined
+        ? dataClient.read(departmentResource, 'excludeChild', seed.deptId, {
+            signal: abort.signal,
+          })
+        : dataClient.read(departmentResource, 'list', {}, { signal: abort.signal }),
+    ]);
+    if (!current()) throw new AbortError({ message: '编辑读取已结束' });
+    for (const result of [loaded, parents]) {
+      if (result.kind === 'failed') throw result.error;
+      if (result.kind !== 'loaded')
+        throw new Error(
+          result.kind === 'paused' ? '部门读取等待网络连接，请重试' : '部门读取已中断，请重试'
+        );
+    }
+    if (loaded.kind !== 'loaded') return;
+    Object.assign(model, loaded.draft);
+    snapshotCurrent = () => current() && loaded.isCurrent();
     setDisabled(false);
-  });
+  } catch (error) {
+    if (current())
+      loadError.value = error instanceof Error ? error.message : '部门读取失败，请重试';
+    throw error;
+  } finally {
+    if (current()) detailLoading.value = false;
+  }
 }
 function closeDialog() {
-  cancelRead();
+  cancelOpening();
   return close();
 }
 function handleRetry() {
-  return openDialog(requestedData).catch(() => {
-    /* 当前读取已负责反馈。 */
-  });
+  return openDialog(requestedData).catch(() => {});
 }
 function retryParentOptions() {
-  if (parentQuery.isEnabled.value) void parentQuery.refetch({ cancelRefetch: false });
+  void parentQuery.value.refresh();
 }
 function retryDetail() {
-  if (editorQuery.isEnabled.value) void editorQuery.refetch({ cancelRefetch: false });
+  void editorQuery.refresh();
 }
-
 defineExpose({ open: openDialog, close: closeDialog });
 </script>

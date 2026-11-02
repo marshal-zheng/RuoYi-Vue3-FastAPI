@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-11-02T01:27:36.058Z",
+  "marker": "codex_res_vykx8xm",
+  "mocks": false,
+  "checks": {
+    "productionRouteSaveRefresh": true
+  },
+  "cleanup": {
+    "deleted": 1,
+    "verifiedAbsent": true
+  },
+  "createdId": 201,
+  "passed": false,
+  "failure": {
+    "stage": "two-editor-sharing",
+    "message": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('tree-left') to be visible\u001b[22m\n"
+  },
+  "ownSessionEnded": true,
+  "pageErrors": [],
+  "requestCounts": {
+    "GET /system/ai/text-field/status": 4,
+    "GET /system/user/list": 1,
+    "GET /system/user/deptTree": 1,
+    "GET /system/dict/data/type/sys_normal_disable": 4,
+    "GET /system/dept/list": 6,
+    "POST /system/dept": 1,
+    "GET /system/dept/:id": 2,
+    "GET /system/dept/list/exclude/:id": 2,
+    "PUT /system/dept": 1,
+    "DELETE /system/dept/:id": 1
+  }
+}
